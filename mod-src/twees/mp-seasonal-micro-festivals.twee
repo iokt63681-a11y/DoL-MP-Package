@@ -1,127 +1,123 @@
-/* 任务 C：3个小型节令（春分/夏至后夜/初雪 × 3段）+ 6段区域瞬时事件 + Hub（共16段） */
+/* 3个小型节令（春分/夏至后夜/初雪 × 3段）+ 6段区域瞬时事件（先登记后前往）+ 便条册（共18段） */
 
 :: MP Micro Festivals Hub [nobr]
-<<set $outside to 1>><<set $location to "high">><<effects>>
+<<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-高街布告栏下方的窄木槽里插着几枚按节气更换的竹签水牌，旁边还钉着六张来自镇外秘境的巡检便条。塞拉路过布告栏时顺手替最左边那枚木签拨正了红绳，说这些不写进大日历的小节令，往往只有老街坊和跑夜路的人才会凑在一起搭把手。
-微凉的街风吹动便条边角，露出上面用炭笔写就的集合地点。你把竹签与便条依次看了一遍。
-<br><br>
-<<getouticon>><<link [[退回高街路口 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "high">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-<br>
-<<walkicon>><<link [[查看全年主节日水牌 (0:02)|MP Town Festivals Hub]]>><<pass 2>><</link>>
-<br>
+<<set $mpMicroNotice to ($mpMicroNotice or {})>>
+高街布告栏下方的窄木槽里插着几枚按节气更换的竹签水牌，旁边还挂着一册镇外六处秘境的巡检便条夹。塞拉路过时顺手替最左边那枚竹签拨正了红绳，说这些不写进大日历的小节令，往往只有老街坊和跑夜路的人才会凑在一起搭把手。
 <<set _m to Time.date.month>><<set _d to Time.date.day>>
+<<if not ((_m is 3 and _d gte 14 and _d lte 24) or (_m is 6 and _d gte 20 and _d lte 30) or (_m is 12 and _d gte 1) or _m is 1 or (_m is 2 and _d lte 10))>>
+水牌上眼下没有临近的小节令，只有几枚空竹签在微风里轻轻相碰。
+<</if>>
+<br><br>
+<<getouticon>><<link [[退回高街路口 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+
+<<investigateicon>><<link [[翻看秘境巡检便条夹 (0:02)|MP Micro Region Notices 1]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[布告栏侧面的半日节令铜牌 (0:02)|MP Town Festivals 3 Hub]]>><<pass 2>><</link>>
+<br>
 <<if _m is 3 and _d gte 14 and _d lte 24>>
-	<<link [[春分：神殿分苗木牌 (0:04)|MP Festival Vernal 1]]>><<pass 4>><</link>>
+	<<link [[春分：去神殿分苗木牌 (0:04)|MP Festival Vernal 1]]>><<pass 4>><</link>>
 	<br>
 <</if>>
 <<if _m is 6 and _d gte 20 and _d lte 30>>
-	<<link [[夏至后夜：海礁漂灯 (0:04)|MP Festival Midsummer 1]]>><<pass 4>><</link>>
+	<<link [[夏至后夜：去海礁放漂灯 (0:04)|MP Festival Midsummer 1]]>><<pass 4>><</link>>
 	<br>
 <</if>>
 <<if (_m is 12 and _d gte 1) or _m is 1 or (_m is 2 and _d lte 10)>>
-	<<link [[初雪：孤儿院封窗纸 (0:04)|MP Festival FirstSnow 1]]>><<pass 4>><</link>>
+	<<link [[初雪：去孤儿院封北窗 (0:04)|MP Festival FirstSnow 1]]>><<pass 4>><</link>>
 	<br>
 <</if>>
-<<if not ((_m is 3 and _d gte 14 and _d lte 24) or (_m is 6 and _d gte 20 and _d lte 30) or (_m is 12 and _d gte 1) or _m is 1 or (_m is 2 and _d lte 10))>>
-	水牌上没有临近的小节令，只有几枚空竹签在风里轻轻相碰。
-	<br>
-<</if>>
-<<investigateicon>><<link [[雾角岛：雾钟失准的铜舌 (0:04)|MP Region Micro Foghorn Bell]]>><<pass 4>><</link>>
+
+:: MP Micro Region Notices 1 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>>
+<<set $mpMicroNotice to ($mpMicroNotice or {})>>
+便条夹前半册钉着来自海岸、地底机括与沉没修道院的三张炭笔便条。你凑近辨认上面的字迹，记下地点后便可改日亲自过去查看。
+<br><br>
+<<getouticon>><<link [[合上便条夹回水牌前 (0:02)|MP Micro Festivals Hub]]>><<pass 2>><</link>>
 <br>
-<<investigateicon>><<link [[机括城：三号油杯的凝脂 (0:04)|MP Region Micro Clockwork Oil]]>><<pass 4>><</link>>
+<<walkicon>><<link [[翻到便条夹后半册 (0:02)|MP Micro Region Notices 2]]>><<pass 2>><</link>>
 <br>
-<<investigateicon>><<link [[古修院：长明石龛的断芯 (0:04)|MP Region Micro Abbey Wick]]>><<pass 4>><</link>>
+<div id="micro-notice-1">
+<<investigateicon>><<link "抄下雾角岛铜钟便条 (0:02)">><<pass 2>><<set $mpMicroNotice["foghorn_bell"] to 1>><<replace "#micro-notice-1">>你折角记下雾角栈桥铜钟被海藻缠住的方位。<span class="green">改日去雾角灯塔岛时可顺路查看。</span><</replace>><</link>>
 <br>
-<<investigateicon>><<link [[温室苑：喷淋支管的白碱 (0:04)|MP Region Micro Glasshouse Nozzle]]>><<pass 4>><</link>>
+<<link "抄下机括城油杯便条 (0:02)">><<pass 2>><<set $mpMicroNotice["clockwork_oil"] to 1>><<replace "#micro-notice-1">>你记下三号主轴滴油杯凝脂堵塞的位置。<span class="green">改日去钟塔地底机括城时可顺路处理。</span><</replace>><</link>>
 <br>
-<<investigateicon>><<link [[货运站：夜班道岔的铁楔 (0:04)|MP Region Micro Blackiron Wedge]]>><<pass 4>><</link>>
+<<link "抄下古修院断芯便条 (0:02)">><<pass 2>><<set $mpMicroNotice["abbey_wick"] to 1>><<replace "#micro-notice-1">>你记下修道院外庭引路石龛灯芯结炭的线索。<span class="green">改日去沉没修道院时可顺路拨亮。</span><</replace>><</link>>
+</div>
+
+:: MP Micro Region Notices 2 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>>
+<<set $mpMicroNotice to ($mpMicroNotice or {})>>
+便条夹后半册钉着来自秘密温室、黑铁货运站与深林古石环的三张巡检便条。纸角沾着泥点与松脂，记着几处亟待搭手的小麻烦。
+<br><br>
+<<getouticon>><<link [[合上便条夹回水牌前 (0:02)|MP Micro Festivals Hub]]>><<pass 2>><</link>>
 <br>
-<<investigateicon>><<link [[古石环：月泉石槽的落叶 (0:04)|MP Region Micro Druid Conduit]]>><<pass 4>><</link>>
+<<walkicon>><<link [[翻回便条夹前半册 (0:02)|MP Micro Region Notices 1]]>><<pass 2>><</link>>
+<br>
+<div id="micro-notice-2">
+<<investigateicon>><<link "抄下温室苑喷嘴便条 (0:02)">><<pass 2>><<set $mpMicroNotice["glasshouse_nozzle"] to 1>><<replace "#micro-notice-2">>你记下温室北侧藤架喷淋嘴结碱的方位。<span class="green">改日去秘密温室庄园时可顺路疏通。</span><</replace>><</link>>
+<br>
+<<link "抄下货运站铁楔便条 (0:02)">><<pass 2>><<set $mpMicroNotice["blackiron_wedge"] to 1>><<replace "#micro-notice-2">>你记下二号副股道扳道器卡入铁楔的位置。<span class="green">改日去黑铁货运站时可顺路敲松。</span><</replace>><</link>>
+<br>
+<<link "抄下古石环石槽便条 (0:02)">><<pass 2>><<set $mpMicroNotice["druid_conduit"] to 1>><<replace "#micro-notice-2">>你记下月泉引水石槽被枯枝松脂堵塞的线索。<span class="green">改日去德鲁伊石环时可顺路清开。</span><</replace>><</link>>
+</div>
 
 /* ==================== 1. 春分 (Vernal Equinox · 3段) ==================== */
 
 :: MP Festival Vernal 1 [nobr]
 <<set $outside to 1>><<set $location to "temple">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-春分清晨的露水还挂在狼街神殿后园的药草垄上，昼夜平分的第一缕阳光刚好切过日晷正中的铜针。乔丹端着两只装满春播香草幼苗的浅木盘走出来，准备按惯例分给镇上的花圃与孤儿院，却发现温室育苗床最北侧那排耐寒迷迭香的根土里混进了白石粉，若不趁移栽前筛洗干净，种下去不出三天就会烧根枯萎。
-<<if Weather.precipitation is "rain">>蒙蒙春雨打湿了石阶，泥土的气息比平日更加浓郁。<<else>>微暖的春风拂过新抽芽的藤蔓，带来一阵清爽的青草香。<</if>>
+春分清晨的露水挂在神殿后园的药草垄上。乔丹端着两盘春播香草幼苗走出来，准备分给花圃与孤儿院，却发现北侧那排迷迭香根土里混进了白石粉，若不趁移栽前筛洗干净，种下去很快就会枯萎。
+<<if Weather.precipitation is "rain">>蒙蒙春雨打湿了石阶，泥土气息格外浓郁。<</if>>
 <br><br>
-<<getouticon>><<link [[先回狼街神殿前庭 (0:02)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[退回狼街神殿前庭 (0:02)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<tendingicon>><<link [[蹲在泉边筛洗迷迭香根 (0:08)|MP Festival Vernal 2]]>>
-	<<if ($tending or 0) gte 260 or ($science or 0) gte 250>>
-		<<set $mpMicroFestClues["vernal_clean"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["vernal_clean"] to 0>><<stress 3>><<tiredness 2>>
-	<</if>>
+	<<if ($tending or 0) gte 260 or ($science or 0) gte 250>><<set $mpMicroFestClues["vernal_clean"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["vernal_clean"] to 0>><<stress 3>><<tiredness 2>><</if>>
 	<<pass 8>>
 <</link>>
 <br>
-<<investigateicon>><<link [[查验育苗床边的白石粉袋 (0:06)|MP Festival Vernal 2]]>>
-	<<if ($skulduggery or 0) gte 250 or ($willpower or 0) gte 420>>
-		<<set $mpMicroFestClues["vernal_powder"] to 1>><<stress -1>>
-	<<else>>
-		<<stress 3>><<tiredness 1>>
-	<</if>>
+<<investigateicon>><<link [[查验苗床边的白石粉袋 (0:06)|MP Festival Vernal 2]]>>
+	<<if ($skulduggery or 0) gte 250 or ($willpower or 0) gte 420>><<set $mpMicroFestClues["vernal_powder"] to 1>><<stress -1>><<else>><<stress 3>><<tiredness 1>><</if>>
 	<<pass 6>>
 <</link>>
 
 :: MP Festival Vernal 2 [nobr]
 <<set $outside to 1>><<set $location to "park">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-你帮乔丹把整理妥当的春分幼苗木盘一路抬到公园中心的圆形花坛。诺艾尔已经在花坛边备好了松软的腐叶土，还有几名高街商铺的学徒正等着领走象征开春平顺的青苗。
-<<if $mpMicroFestClues["vernal_clean"] is 1>>
-	经过你刚才在泉边的细致冲洗，二十株迷迭香幼苗的须根洁白完好，叶片在春光下挺拔翠绿。诺艾尔接过木盘时欣喜地向你点了点头。
-<<elseif $mpMicroFestClues["vernal_powder"] is 1>>
-	你将在后园发现的半袋误放的建筑白石粉交给花匠核对，查清了只是修墙工匠放错了麻袋，及时换上了旁边备用的新苗。
-<<else>>
-	有几株幼苗的须根还是沾了些石粉，叶尖微微发蔫，你不得不和诺艾尔一起挑出受损的苗株重新修剪。
-<</if>>
-就在分苗过半时，一阵急促的春风吹翻了花坛边的铜制立鸡蛋平衡架，几枚绘着春分彩纹的熟鸡蛋眼看就要滚下石阶。
+你帮乔丹把春分幼苗木盘抬到公园花坛，诺艾尔已备好了腐叶土。
+<<if $mpMicroFestClues["vernal_clean"] is 1>>洗净的迷迭香须根洁白完好，诺艾尔欣喜地向你点头。<<elseif $mpMicroFestClues["vernal_powder"] is 1>>你把误放的白石粉交给花匠核对，及时换上了备用新苗。<<else>>几株幼苗叶尖发蔫，你和诺艾尔挑出受损苗株重新修剪。<</if>>
+一阵春风忽然吹翻花坛边的立蛋铜架，几枚彩绘熟蛋眼看就要滚下石阶。
 <br><br>
 <<getouticon>><<link [[顺公园石径离开 (0:03)|Park]]>><<set $outside to 1>><<set $location to "park">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<runicon>><<link [[俯身抄住滚落的彩绘蛋 (0:05)|MP Festival Vernal 3]]>>
-	<<if ($athletics or 0) gte 250 or ($danceskill or 0) gte 250>>
-		<<set $mpMicroFestClues["vernal_egg"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["vernal_egg"] to 0>><<stress 3>><<pain 1>>
-	<</if>>
+	<<if ($athletics or 0) gte 250 or ($danceskill or 0) gte 250>><<set $mpMicroFestClues["vernal_egg"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["vernal_egg"] to 0>><<stress 3>><<pain 1>><</if>>
 	<<pass 5>>
 <</link>>
 <br>
-<<socialiseicon>><<link [[招呼学徒们围拢挡住石阶 (0:05)|MP Festival Vernal 3]]>>
-	<<if ($english or 0) gte 240 or ($willpower or 0) gte 420>>
-		<<set $mpMicroFestClues["vernal_egg"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["vernal_egg"] to 0>><<stress 3>>
-	<</if>>
+<<link [[招呼学徒围拢挡住石阶 (0:05)|MP Festival Vernal 3]]>>
+	<<if ($english or 0) gte 240 or ($willpower or 0) gte 420>><<set $mpMicroFestClues["vernal_egg"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["vernal_egg"] to 0>><<stress 3>><</if>>
 	<<pass 5>>
 <</link>>
 
 :: MP Festival Vernal 3 [nobr]
-<<set $outside to 1>><<set $location to "high">><<effects>>
+<<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-傍晚的春分小集散去时，高街钟塔下的长桌上摆满了各家领完青苗后回赠的春菜馅饼与接骨木花蜜水。
+傍晚春分小集散去时，高街长桌上摆满了街坊回赠的春菜馅饼与接骨木花蜜水。
 <<if $mpMicroFestClues["vernal_egg"] is 1>>
-	完好无损的彩绘立蛋稳稳竖在黄铜支架正中，乔丹与诺艾尔把分苗剩余的两小盆带花迷迭香和节令补贴一并塞进了你的手提篮里。
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_vernal_reward")>>
-		<<money 600>>
-		<span class="gold">你收下了 £6 春分护苗补贴。</span>
-	<<else>>
-		你喝了一杯清甜的接骨木花蜜水，浑身暖融融的。
-	<</if>>
-	<<stress -5>><<tiredness -2>><<lstress>><<ltiredness>>
+	彩绘立蛋稳稳竖在铜架上，乔丹与诺艾尔把两小盆迷迭香放进你的提篮。<span class="green">春播分苗顺顺当当地落下了帷幕。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_vernal_reward")>><<money 600>><span class="gold">你收下了 £6 护苗补贴。</span><</if>>
+	<<stress -5>><<tiredness -2>>
 <<else>>
-	虽然碎了两枚彩绘蛋，手背还在石阶边擦红了一块，但春播的香草苗总算全部按时分到了街坊手中。诺艾尔塞给你一只温热的春菜馅饼聊作慰藉。
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_vernal_reward")>>
-		<<money 300>>
-	<</if>>
-	<<stress -2>><<lstress>>
+	虽然碎了两枚彩绘蛋、手背擦红一块，但香草苗总算按时分完。<span class="teal">诺艾尔塞给你一只热馅饼暖手。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_vernal_reward")>><<money 300>><</if>>
+	<<stress -2>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回高街主路 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "high">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回高街主路 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<walkicon>><<link [[回到小节令水牌前 (0:02)|MP Micro Festivals Hub]]>><<pass 2>><</link>>
 
@@ -130,80 +126,54 @@
 :: MP Festival Midsummer 1 [nobr]
 <<set $outside to 1>><<set $location to "searocks">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-夏至过后的第一个夜晚，白昼漫长余温未散，直到晚上九点海平线上才彻底合拢暮色。按照旧港与海滩的习俗，守夜的水手和镇民会在退潮后的海礁浅湾放出一排装在贝壳里的蜂蜡小漂灯，借着回流测试夏夜暗潮的走向。然而今晚东南风偏急，刚点亮的十几盏贝壳灯全被横浪推向了尖锐的牡蛎礁石区。
-<<if ($upperwet or 0) gte 1 or ($lowerwet or 0) gte 1>>夏夜微温的海风吹过你湿润的衣角，带来一阵咸爽的凉意。<</if>>
+夏至后的第一个夜晚，海平线直到九点才合拢暮色。镇民在退潮的海礁浅湾放出一排贝壳蜂蜡漂灯测试夏夜暗潮，然而东南风偏急，十几盏贝壳灯全被横浪推向了尖锐的牡蛎礁区。
 <br><br>
-<<getouticon>><<link [[先退回海礁步道 (0:02)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[退回海礁步道 (0:02)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<swimicon>><<link [[蹚入浅湾拨转回流木挡 (0:08)|MP Festival Midsummer 2]]>>
-	<<if ($swimmingskill or 0) gte 250 or ($athletics or 0) gte 260>>
-		<<set $mpMicroFestClues["midsummer_tide"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["midsummer_tide"] to 0>><<stress 4>><<tiredness 2>>
-	<</if>>
+	<<if ($swimmingskill or 0) gte 250 or ($athletics or 0) gte 260>><<set $mpMicroFestClues["midsummer_tide"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["midsummer_tide"] to 0>><<stress 4>><<tiredness 2>><</if>>
 	<<pass 8>>
 <</link>>
 <br>
 <<investigateicon>><<link [[在礁石背风侧重布导流绳 (0:07)|MP Festival Midsummer 2]]>>
-	<<if ($skulduggery or 0) gte 250 or ($science or 0) gte 250>>
-		<<set $mpMicroFestClues["midsummer_tide"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["midsummer_tide"] to 0>><<stress 3>><<pain 1>>
-	<</if>>
+	<<if ($skulduggery or 0) gte 250 or ($science or 0) gte 250>><<set $mpMicroFestClues["midsummer_tide"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["midsummer_tide"] to 0>><<stress 3>><<pain 1>><</if>>
 	<<pass 7>>
 <</link>>
 
 :: MP Festival Midsummer 2 [nobr]
 <<set $outside to 1>><<set $location to "beach">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-点点暖黄的蜂蜡漂灯顺着浅湾绕过海角，缓缓汇聚到海滩南侧的木栈桥下。格威岚正守在沙滩边的篝火桶旁，手里拿着记潮板记录漂灯靠岸的先后次序，罗宾也在旁边帮忙把熄灭的贝壳灯捞起来重新添蜡。
-<<if $mpMicroFestClues["midsummer_tide"] is 1>>
-	借着你刚才调整过的导流角度，十九盏贝壳灯一盏不落地顺着平缓的水道漂进浅滩，灯影在墨蓝色的海面上拉出一条完整的星带。
-<<else>>
-	有几盏贝壳灯在牡蛎石边磕翻熄灭了，剩下的漂灯稀稀落落地晃到栈桥下，你连忙挽起裤腿帮罗宾把打湿的灯芯挑出来。
-<</if>>
-此时海风忽然卷起沙滩上未捆紧的一叠记潮油纸，眼看就要飘进篝火桶的火星里。
+暖黄的蜂蜡漂灯顺着浅湾绕过海角，汇聚到海滩南侧木栈桥下。格威岚拿着记潮板守在篝火桶旁，罗宾也在岸边捞起熄灭的贝壳灯添蜡。
+<<if $mpMicroFestClues["midsummer_tide"] is 1>>十九盏贝壳灯一盏不落地漂进浅滩，在海面拉出一条星带。<<else>>有几盏灯在牡蛎石边磕灭了，你挽起裤腿帮罗宾挑出打湿的灯芯。<</if>>
+海风忽然卷起未捆紧的一叠记潮油纸，眼看就要飘进篝火火星里。
 <br><br>
 <<getouticon>><<link [[从海滩步道离开 (0:03)|Beach]]>><<set $outside to 1>><<set $location to "beach">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<runicon>><<link [[疾步跃起按住记潮油纸 (0:05)|MP Festival Midsummer 3]]>>
-	<<if ($athletics or 0) gte 250 or ($danceskill or 0) gte 250>>
-		<<set $mpMicroFestClues["midsummer_notes"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["midsummer_notes"] to 0>><<stress 3>><<pain 1>>
-	<</if>>
+	<<if ($athletics or 0) gte 250 or ($danceskill or 0) gte 250>><<set $mpMicroFestClues["midsummer_notes"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["midsummer_notes"] to 0>><<stress 3>><<pain 1>><</if>>
 	<<pass 5>>
 <</link>>
 <br>
 <<tendingicon>><<link [[用湿竹篓罩住飞散纸页 (0:05)|MP Festival Midsummer 3]]>>
-	<<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>>
-		<<set $mpMicroFestClues["midsummer_notes"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["midsummer_notes"] to 0>><<stress 3>>
-	<</if>>
+	<<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<set $mpMicroFestClues["midsummer_notes"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["midsummer_notes"] to 0>><<stress 3>><</if>>
 	<<pass 5>>
 <</link>>
 
 :: MP Festival Midsummer 3 [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-午夜前的海风渐渐转凉，帮忙测完夏夜潮位的众人回到海风咖啡馆的露台下，分喝格威岚提前冰镇好的薄荷柠檬饮。
+午夜前海风转凉，众人回到海风咖啡馆露台下分喝冰镇薄荷柠檬饮。
 <<if $mpMicroFestClues["midsummer_tide"] is 1 and $mpMicroFestClues["midsummer_notes"] is 1>>
-	今晚的暗潮海图记录得格外完整，格威岚把渔具铺给的测潮红封分了一份给你，罗宾也笑着把一枚洗净的珍珠母贝壳灯座塞进你口袋留作纪念。
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_midsummer_reward")>>
-		<<money 650>>
-		<span class="gold">你领到了 £6.50 夏夜测潮补贴。</span>
-	<</if>>
-	<<stress -5>><<tiredness -2>><<lstress>><<ltiredness>>
+	暗潮海图记录完整，罗宾把一枚珍珠母贝壳灯座塞进你口袋留念。<span class="green">整晚的测潮差事办得滴水不漏。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_midsummer_reward")>><<money 650>><span class="gold">你领到了 £6.50 夏夜测潮补贴。</span><</if>>
+	<<stress -5>><<tiredness -2>>
 <<else>>
-	虽然记潮纸被火星燎焦了一角，好在主要潮位数据都保住了。你喝下冰凉清爽的柠檬饮，海风吹散了奔跑后的燥热。
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_midsummer_reward")>>
-		<<money 350>>
-	<</if>>
-	<<stress -3>><<lstress>>
+	记潮纸虽被燎焦一角，好在主要潮位数据都保住了。<span class="teal">冰凉柠檬饮吹散了奔跑后的燥热。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_midsummer_reward")>><<money 350>><</if>>
+	<<stress -3>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[走出咖啡馆回高街 (0:03)|High Street]]>><<set $outside to 1>><<set $location to "high">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[走出咖啡馆回高街 (0:03)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<walkicon>><<link [[返回小节令水牌前 (0:02)|MP Micro Festivals Hub]]>><<pass 2>><</link>>
 
@@ -212,209 +182,170 @@
 :: MP Festival FirstSnow 1 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-入冬的第一场细雪在傍晚悄然落满孤儿院的青石屋瓦。院里的孩子们按照往年习俗熬了一小锅滚烫的麦粉浆糊，准备赶在夜里北风刮起前，把走廊与宿舍北窗的木框缝隙全部糊上厚牛皮防风纸。然而顶楼天窗的铁搭扣被冻霜卡死，冷风正顺着楼梯井直往下灌，浆糊盆端到走廊不一会儿就结了层硬皮。
-<<if Weather.isFreezing or Weather.isSnow>>窗外雪粒子簌簌落下，走廊里的哈气清晰可见。<</if>>
+入冬第一场细雪落满孤儿院屋瓦。孩子们熬了一锅麦粉浆糊准备给北窗糊防风牛皮纸，然而顶楼天窗铁搭扣被冻霜卡死，冷风直往楼梯井灌，浆糊盆不一会儿就结了硬皮。
 <br><br>
-<<getouticon>><<link [[先回孤儿院大厅 (0:02)|Orphanage]]>><<set $outside to 0>><<set $location to "orphanage">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[退回孤儿院大厅 (0:02)|Orphanage]]>><<set $outside to 0>><<set $location to "orphanage">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<tendingicon>><<link [[兑入热盐水重调防冻浆糊 (0:07)|MP Festival FirstSnow 2]]>>
-	<<if ($housekeeping or 0) gte 250 or ($science or 0) gte 240>>
-		<<set $mpMicroFestClues["firstsnow_paste"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["firstsnow_paste"] to 0>><<stress 3>><<tiredness 2>>
-	<</if>>
+<<tendingicon>><<link [[兑入热盐水重调浆糊 (0:07)|MP Festival FirstSnow 2]]>>
+	<<if ($housekeeping or 0) gte 250 or ($science or 0) gte 240>><<set $mpMicroFestClues["firstsnow_paste"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["firstsnow_paste"] to 0>><<stress 3>><<tiredness 2>><</if>>
 	<<pass 7>>
 <</link>>
 <br>
-<<runicon>><<link [[踩上木梯撬合顶楼天窗扣 (0:06)|MP Festival FirstSnow 2]]>>
-	<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>>
-		<<set $mpMicroFestClues["firstsnow_paste"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["firstsnow_paste"] to 0>><<stress 3>><<pain 2>>
-	<</if>>
+<<runicon>><<link [[踩木梯撬合天窗铁扣 (0:06)|MP Festival FirstSnow 2]]>>
+	<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>><<set $mpMicroFestClues["firstsnow_paste"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["firstsnow_paste"] to 0>><<stress 3>><<pain 2>><</if>>
 	<<pass 6>>
 <</link>>
 
 :: MP Festival FirstSnow 2 [nobr]
-<<set $outside to 1>><<set $location to "high">><<effects>>
+<<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-封好孤儿院的北窗后，你拎着剩下的防风纸卷与木炭篮来到高街与宅邸街交界的守夜岗棚。林恩正带着几名街坊往路灯底座的供气阀外包裹防冻草绳，面包房师傅也推着保温木车出来给扫雪人分发刚出炉的烤红薯。
-<<if $mpMicroFestClues["firstsnow_paste"] is 1>>
-	因为孤儿院那边封窗顺利，你不仅提前赶到街口搭手，还带了一罐加了白矾的耐寒浆糊帮岗棚把漏风的玻璃窗角全部封严。
-<<else>>
-	你在孤儿院返工耽搁了一会儿，赶到高街时手指已经冻得通红，林恩连忙先递给你半只热红薯暖手。
-<</if>>
-这时一辆送煤的平板马车在结了薄冰的石板坡道上打滑，车尾两袋无烟块煤眼看就要滑落砸中路边的热汤桶。
+封好孤儿院北窗后，你拎着剩余纸卷来到宅邸街交界的守夜岗棚。林恩正带着街坊给路灯供气阀裹草绳。
+<<if $mpMicroFestClues["firstsnow_paste"] is 1>>你用耐寒浆糊帮岗棚把漏风窗角也封得严严实实。<<else>>你在孤儿院返工耽搁片刻，林恩递给你半只热红薯暖手。<</if>>
+这时一辆送煤平板马车在结冰坡道上打滑，车尾两袋无烟煤眼看就要砸中路边的热汤桶。
 <br><br>
-<<getouticon>><<link [[退回宅邸街步道 (0:02)|Domus Street]]>><<set $outside to 1>><<set $location to "domus">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[退回宅邸街步道 (0:02)|Domus Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<fisticon>><<link [[抓起木楔塞住打滑车轮 (0:05)|MP Festival FirstSnow 3]]>>
-	<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 260>>
-		<<set $mpMicroFestClues["firstsnow_cart"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["firstsnow_cart"] to 0>><<stress 4>><<pain 2>>
-	<</if>>
+	<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 260>><<set $mpMicroFestClues["firstsnow_cart"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["firstsnow_cart"] to 0>><<stress 4>><<pain 2>><</if>>
 	<<pass 5>>
 <</link>>
 <br>
-<<tendingicon>><<link [[往车轮下猛撒一铲粗煤渣 (0:05)|MP Festival FirstSnow 3]]>>
-	<<if ($tending or 0) gte 240 or ($skulduggery or 0) gte 240>>
-		<<set $mpMicroFestClues["firstsnow_cart"] to 1>><<stress -2>>
-	<<else>>
-		<<set $mpMicroFestClues["firstsnow_cart"] to 0>><<stress 3>><<tiredness 2>>
-	<</if>>
+<<tendingicon>><<link [[往车轮下撒一铲粗煤渣 (0:05)|MP Festival FirstSnow 3]]>>
+	<<if ($tending or 0) gte 240 or ($skulduggery or 0) gte 240>><<set $mpMicroFestClues["firstsnow_cart"] to 1>><<stress -2>><<else>><<set $mpMicroFestClues["firstsnow_cart"] to 0>><<stress 3>><<tiredness 2>><</if>>
 	<<pass 5>>
 <</link>>
 
 :: MP Festival FirstSnow 3 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>>
 <<set $mpMicroFestClues to ($mpMicroFestClues or {})>>
-初雪夜渐渐深沉，孤儿院厨房的铁炉上煨着一大锅姜丝红糖水，封严实了的木窗外再也听不见鬼哭般的穿堂风声。
+初雪夜渐深，孤儿院厨房铁炉上煨着姜丝红糖水，封严的木窗外再无穿堂寒风。
 <<if $mpMicroFestClues["firstsnow_paste"] is 1 and $mpMicroFestClues["firstsnow_cart"] is 1>>
-	送煤车夫为了感谢你稳住车轮，特意往孤儿院煤仓多卸了两袋上等无烟块煤，还把市政厅发的初雪清道补贴分了一份给你。罗宾捧着热腾腾的姜汤迎上来，眼里满是欢喜。
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_firstsnow_reward")>>
-		<<money 600>>
-		<span class="gold">你领到了 £6 初雪防寒补贴。</span>
-	<</if>>
-	<<stress -6>><<tiredness -2>><<lstress>><<ltiredness>>
+	车夫特意往煤仓多卸了两袋上等块煤，罗宾捧着热姜汤笑盈盈地迎上来。<span class="green">孤儿院与街口岗棚都备足了过冬暖意。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_firstsnow_reward")>><<money 600>><span class="gold">你领到了 £6 初雪防寒补贴。</span><</if>>
+	<<stress -6>><<tiredness -2>>
 <<else>>
-	虽然在冰坡上滑了一下磕痛了膝盖，好在孤儿院的窗户都已经封得严严实实。你坐在温暖的炉边喝完一碗热姜汤，冻僵的四肢渐渐回暖。
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_firstsnow_reward")>>
-		<<money 300>>
-	<</if>>
-	<<stress -3>><<lstress>>
+	你虽在冰坡上滑了一下磕痛膝盖，好在北窗都已封严。<span class="teal">喝完热姜汤后，冻僵的四肢渐渐回暖。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_firstsnow_reward")>><<money 300>><</if>>
+	<<stress -3>>
 <</if>>
 <br><br>
 <<getouticon>><<link [[回孤儿院卧室歇息 (0:02)|Bedroom]]>><<set $outside to 0>><<set $location to "bedroom">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<walkicon>><<link [[返回高街节令水牌 (0:03)|MP Micro Festivals Hub]]>><<pass 3>><</link>>
 
-/* ==================== 4. 6段区域瞬时事件 (1段1瞬间、必含检查、失败不扣钱) ==================== */
+/* ==================== 4. 6段区域瞬时事件 (由各区域入口触发并返回区域入口) ==================== */
 
 :: MP Region Micro Foghorn Bell [nobr]
 <<set $outside to 1>><<set $location to "sea">><<effects>>
-雾角灯塔栈桥尽头的自动报雾铜钟被海藻缠住了连杆，每当大浪涌过浮筒，钟舌只能发出一声沉闷的哑响。浓雾里一艘近海驳船正在栈桥外侧摸索航向，急需清脆的钟声校准礁盘距离。
-<<if Weather.precipitation is "rain">>冰冷的雨点打在铜钟外壁上，湿滑的铁架很难抓稳。<</if>>
+雾角灯塔栈桥尽头的自动报雾铜钟被海藻缠住了连杆，每当大浪涌过浮筒，钟舌只能发出沉闷哑响。浓雾里一艘驳船正在栈桥外摸索航向。
 <br><br>
-<<walkicon>><<link [[退回雾角灯塔岛 (0:03)|MP Region Foghorn Island]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[回高街雾钟便条 (0:04)|MP Micro Festivals Hub]]>><<pass 4>><</link>>
+<<getouticon>><<link [[退回雾角灯塔岛 (0:03)|MP Region Foghorn Island]]>><<pass 3>><</link>>
 <br>
 <div id="micro-foghorn-bell">
 <<investigateicon>><<link "探身割断连杆海藻 (0:06)">><<pass 6>><<replace "#micro-foghorn-bell">>
 <<set $skulduggerydifficulty to 300>><<skulduggerycheck "silent">>
 <<if $skulduggerysuccess is 1 or ($athletics or 0) gte 280>>
-<span class="green">你一手扣紧栈桥铁环，趁浪头落下的间隙用小刀利落地割断缠死连杆的墨绿海带，顺手从钟座卡槽里抠出一枚被海浪冲上来的旧港银币。</span>铜钟顿时重新敲响了洪亮的警示音。
+你扣紧铁环割断墨绿海带，铜钟重新敲响洪亮警示音。<span class="green">你在钟座卡槽里摸到一枚旧港银币。</span>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("micro_region_foghorn_bell")>><<money 300>><</if>>
-<<stress -3>><<lstress>>
+<<stress -3>>
 <<else>>
-<span class="red">咸滑的海藻让你刀尖一偏，浪头扑上栈桥打湿了你的半边衣袖，指节还在铜钟边缘磕青了一块。</span>
-<<pain 2>><<stress 4>><<gpain>><<gstress>>
+咸滑海藻让刀尖一偏，浪头扑湿了半边衣袖。<span class="red">你的指节在铜钟边缘磕青了一块。</span>
+<<pain 2>><<stress 4>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Region Micro Clockwork Oil [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>>
-钟塔地底机括城的三号主传动轴旁，一只黄铜滴油杯的滤网被凝固的陈年鲸油堵死了，底下的轴承因干磨发出了刺耳的尖啸，火星正往检修格栅下直掉。
+钟塔地底机括城三号主传动轴旁，黄铜滴油杯滤网被陈年鲸油堵死，底下轴承干磨发出刺耳尖啸，火星直往格栅下掉。
 <br><br>
-<<walkicon>><<link [[退回地底机括城 (0:03)|MP Region Clockwork Undercity]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[回高街机括便条 (0:04)|MP Micro Festivals Hub]]>><<pass 4>><</link>>
+<<getouticon>><<link [[退回地底机括城 (0:03)|MP Region Clockwork Undercity]]>><<pass 3>><</link>>
 <br>
 <div id="micro-clockwork-oil">
 <<tendingicon>><<link "拆下铜滤网用热汽冲通 (0:06)">><<pass 6>><<replace "#micro-clockwork-oil">>
 <<if ($science or 0) gte 260 or ($maths or 0) gte 260>>
-<span class="green">你先旋紧副油路阀门，垫着麻布拧下滚烫的黄铜滤网，借旁边泄压阀的一缕白汽将凝脂冲得干干净净，还在油杯底座暗槽里摸到了检修工留下的备用铜牌补贴。</span>
+你旋紧副阀拧下滤网，借泄压白汽将凝脂冲净。<span class="green">你在底座暗槽摸到了备用铜牌补贴。</span>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("micro_region_clockwork_oil")>><<money 350>><</if>>
-<<stress -3>><<lstress>>
+<<stress -3>>
 <<else>>
-<span class="red">你没算准副阀泄压的时机，拧开铜盖时滚烫的机油溅在手背上，呛人的油烟熏得你连退两步。</span>
-<<pain 3>><<stress 4>><<gpain>><<gstress>>
+你没算准泄压时机，拧盖时热油溅在手背上。<span class="red">呛人油烟熏得你连退两步。</span>
+<<pain 3>><<stress 4>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Region Micro Abbey Wick [nobr]
 <<set $outside to 1>><<set $location to "temple">><<effects>>
-沉没修道院外庭中段的引路石龛里，长明铜灯的灯芯结了一团厚厚的黑炭花，火苗缩成绿豆大小，将通往底层石阶的路映得鬼影重重。
+沉没修道院外庭中段的引路石龛里，长明铜灯的灯芯结了厚厚一团黑炭花，火苗缩成绿豆大小，石阶上一片幽暗。
 <br><br>
-<<walkicon>><<link [[退回修道院外庭 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[回高街修院便条 (0:04)|MP Micro Festivals Hub]]>><<pass 4>><</link>>
+<<getouticon>><<link [[退回修道院外庭 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><</link>>
 <br>
 <div id="micro-abbey-wick">
 <<tendingicon>><<link "用铜镊挑去灯芯黑炭花 (0:05)">><<pass 5>><<replace "#micro-abbey-wick">>
 <<if ($history or 0) gte 250 or ($willpower or 0) gte 440>>
-<span class="green">你屏息用石龛边的双股铜镊夹去炭花，又把浸在没药油里的亚麻芯往上拨出半寸，橘黄的灯火顿时照亮了整段石阶，也映出了底座下压着的一枚奉献银币。</span>
+你用双股铜镊夹去炭花，把浸在没药油里的亚麻芯拨高半寸。<span class="green">灯火照亮了底座下压着的奉纳银币。</span>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("micro_region_abbey_wick")>><<money 300>><</if>>
-<<stress -3>><<lstress>>
+<<stress -3>>
 <<else>>
-<span class="red">你的手腕微微一抖，铜镊把灯芯压进了滚烫的灯油里，石龛瞬间暗了下去，阴冷的穿堂风让你后背一阵发毛。</span>
-<<stress 5>><<tiredness 1>><<gstress>>
+你手腕微抖，铜镊把灯芯压进了灯油里，石龛瞬间暗下。<span class="red">阴冷穿堂风让你后背一阵发毛。</span>
+<<stress 5>><<tiredness 1>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Region Micro Glasshouse Nozzle [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
-秘密温室庄园的北侧藤架下，一只恒温喷淋铜嘴被水碱堵偏了方向，温热水柱没有洒向兰花根部，反而正对着过道旁的园艺记录簿直喷。
+秘密温室庄园北侧藤架下，一只恒温喷淋铜嘴被水碱堵偏了方向，温热水柱正对着过道旁的园艺记录簿直喷。
 <br><br>
-<<walkicon>><<link [[退回秘密温室入口 (0:03)|MP Region Glasshouse Manor]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[回高街温室便条 (0:04)|MP Micro Festivals Hub]]>><<pass 4>><</link>>
+<<getouticon>><<link [[退回秘密温室入口 (0:03)|MP Region Glasshouse Manor]]>><<pass 3>><</link>>
 <br>
 <div id="micro-glasshouse-nozzle">
 <<tendingicon>><<link "用细铜针疏通喷淋孔 (0:06)">><<pass 6>><<replace "#micro-glasshouse-nozzle">>
 <<if ($tending or 0) gte 260 or ($housekeeping or 0) gte 250>>
-<span class="green">你先半关支管角阀，用标牌上的细铜针挑去喷孔白碱，水雾重新化作均匀的细雨笼罩花架，老花匠感激地把记录簿夹层里的采买零钱分给了你。</span>
+你半关角阀挑去白碱，水雾重新化作细雨笼罩花架。<span class="green">老花匠把夹层里的采买零钱分给了你。</span>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("micro_region_glasshouse_nozzle")>><<money 350>><</if>>
-<<stress -3>><<lstress>>
+<<stress -3>>
 <<else>>
-<span class="red">你没关角阀便伸手去拧喷嘴，一股温水迎面喷了你满脸，衣领湿透了一大片。</span>
-<<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+你没关角阀便去拧喷嘴，温水迎面喷了满脸。<span class="red">你的衣领与肩头湿透了一大片。</span>
+<<stress 4>><<tiredness 2>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Region Micro Blackiron Wedge [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-黑铁货运站二号副股道的扳道器滑槽里卡进了一块脱落的生铁制动楔，导致通往防雨棚的道岔无法合拢，巡道老工正苦于手头没有窄头撬具。
+黑铁货运站二号副股道的扳道器滑槽里卡进了一块生铁制动楔，导致道岔无法合拢，巡道老工正苦于手头没有窄头撬具。
 <br><br>
-<<walkicon>><<link [[退回货运站入口 (0:03)|MP Region Blackiron Yard]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[回高街站场便条 (0:04)|MP Micro Festivals Hub]]>><<pass 4>><</link>>
+<<getouticon>><<link [[退回货运站入口 (0:03)|MP Region Blackiron Yard]]>><<pass 3>><</link>>
 <br>
 <div id="micro-blackiron-wedge">
 <<fisticon>><<link "用道钉锤斜敲铁楔震松 (0:06)">><<pass 6>><<replace "#micro-blackiron-wedge">>
 <<if ($physique or 10000) gte 11600 or ($skulduggery or 0) gte 260>>
-<span class="green">你看准滑槽受力点，用道钉锤沿着铁楔背面斜敲两下，卡死的制动楔当即弹了出来。巡道老工连声称赞，把夜班检车津贴分了你一份。</span>
+你看准受力点斜敲两下，卡死的制动楔当即弹了出来。<span class="green">巡道老工把夜班检车津贴分了你一份。</span>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("micro_region_blackiron_wedge")>><<money 350>><</if>>
-<<stress -3>><<lstress>>
+<<stress -3>>
 <<else>>
-<span class="red">重锤砸偏在冰冷的钢轨面上，震得你虎口发麻，制动楔反而卡得更深了。</span>
-<<pain 3>><<stress 4>><<gpain>><<gstress>>
+重锤砸偏在冰冷钢轨面上，制动楔反而卡得更深。<span class="red">反震力道震得你虎口发麻。</span>
+<<pain 3>><<stress 4>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Region Micro Druid Conduit [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-德鲁伊石环通往月泉的青石引水浅槽被昨晚狂风刮落的一团枯松枝与松脂块堵住了，清冽的冷泉漫过石沿，把周围的药草根泡在了积水里。
+德鲁伊石环通往月泉的青石引水浅槽被狂风刮落的枯松枝与松脂块堵住，冷泉漫过石沿泡湿了周围的药草根。
 <br><br>
-<<walkicon>><<link [[退回古石环空地 (0:03)|MP Region Druid Circle]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[回高街石环便条 (0:04)|MP Micro Festivals Hub]]>><<pass 4>><</link>>
+<<getouticon>><<link [[退回古石环空地 (0:03)|MP Region Druid Circle]]>><<pass 3>><</link>>
 <br>
 <div id="micro-druid-conduit">
 <<tendingicon>><<link "用骨柄短刀清开松脂块 (0:06)">><<pass 6>><<replace "#micro-druid-conduit">>
 <<if ($tending or 0) gte 260 or ($athletics or 0) gte 260>>
-<span class="green">你顺着石槽纹理撬起凝结的松脂与枯枝，不仅让冷泉重新欢快地流入月牙池，还在槽底摸到了一小块成色极佳的琥珀原石与几枚古币。</span>
+你顺着石槽纹理撬起凝结的松脂，冷泉重新流入月牙池。<span class="green">你在槽底摸到了一小块琥珀与古币。</span>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("micro_region_druid_conduit")>><<money 300>><</if>>
-<<stress -3>><<lstress>>
+<<stress -3>>
 <<else>>
-<span class="red">粘稠的松脂粘满了你的手指，冰冷的泉水溅湿了鞋袜，你费了半天劲只清开了一条细缝。</span>
-<<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+粘稠松脂粘满手指，冰冷泉水溅湿了鞋袜。<span class="red">你费尽气力只清开了一条细缝。</span>
+<<stress 4>><<tiredness 2>>
 <</if>>
 <</replace>><</link>>
 </div>

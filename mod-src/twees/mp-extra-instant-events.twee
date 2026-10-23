@@ -1,0 +1,297 @@
+/* 12段城镇与荒野瞬时事件（雨天×3、雪天×3、集市散场×3、深夜巷口×3）+ 2段分页Hub = 14段 */
+
+:: MP Extra Instant Events Hub [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>>
+高街布告栏侧面的铁夹下压着几张刚刚记下的街巷与山野急报，前半页记着雨天与雪天的路况，后半页记着晚集散场与深夜巷口的异动。
+<br><br>
+<<getouticon>><<link [[返回城镇额外见闻录 (0:02)|MP Town Extra Stories Hub]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[翻看集市与夜巷急报 (0:02)|MP Extra Instant Events Hub 2]]>><<pass 2>><</link>>
+<br>
+<<if Weather.precipitation is "rain">>
+	<<investigateicon>><<link [[雨天：高街帆布雨棚 (0:04)|MP Extra Instant Rain Awning]]>><<pass 4>><</link>>
+	<br>
+	<<link [[雨天：码头排水铁栅 (0:04)|MP Extra Instant Rain Gutter]]>><<pass 4>><</link>>
+	<br>
+<</if>>
+<<if Weather.isSnow>>
+	<<link [[雪天：神殿结冰石阶 (0:04)|MP Extra Instant Snow Steps]]>><<pass 4>><</link>>
+	<br>
+<</if>>
+<<if Weather.precipitation isnot "rain" and !Weather.isSnow>>
+	<span class="teal">急报夹上今天没有雨雪路况，只有几张已经过时的旧纸条。</span>
+<</if>>
+
+:: MP Extra Instant Events Hub 2 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>>
+你翻开急报夹的后半页，上面按地点标着山林雨雪、黄昏散集与深夜暗巷的几桩突发小事。
+<br><br>
+<<getouticon>><<link [[翻回急报夹前半页 (0:02)|MP Extra Instant Events Hub]]>><<pass 2>><</link>>
+<br>
+<<if Weather.precipitation isnot "none" or Weather.isSnow>>
+	<<investigateicon>><<link [[雨雪：林间药篓与冻槽 (0:04)|MP Extra Instant Rain HerbBasket]]>><<pass 4>><</link>>
+	<br>
+<</if>>
+<<if Time.dayState is "day" or Time.dayState is "dusk">>
+	<<link [[集市：鱼市秤砣与布车 (0:04)|MP Extra Instant Market Scale]]>><<pass 4>><</link>>
+	<br>
+<</if>>
+<<if Time.dayState is "night">>
+	<<link [[夜巷：暗巷风灯与墙瓦 (0:04)|MP Extra Instant NightAlley Lantern]]>><<pass 4>><</link>>
+	<br>
+<</if>>
+<<if Weather.precipitation is "none" and !Weather.isSnow and Time.dayState is "dawn">>
+	<span class="teal">急报夹后半页今天没有新的动静，只有几张被风掀起的旧纸角。</span>
+<</if>>
+
+:: MP Extra Instant Rain Awning [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>>
+高街面包房外的帆布遮雨棚积满雨水，横杆吱呀弯曲，眼看就要砸翻底下的热食木车。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[顺路去码头看排水栅 (0:04)|MP Extra Instant Rain Gutter]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-rain-awning">
+<<investigateicon>><<link "撑起备用木杆顶住帆布角 (0:05)">><<pass 5>><<replace "#mp-extra-instant-rain-awning">>
+<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>>
+	你顶起木杆斜斜一撑，哗啦一声将积水导流进排水沟。<span class="green">面包师傅感激地塞给你两枚硬币与一只热牛角包。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_rain_awning")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	横杆猛地一滑，积水兜头浇了你满身，手掌还被木刺擦破了皮。<span class="red">你淋得透湿，只得狼狈退到屋檐下。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant Rain Gutter [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+暴雨如注，码头三号栈桥的排水铁栅被一团缠着麻绳的浮木堵死，浑浊积水正往货仓门槛漫去。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Docks]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[顺路去林口看采药径 (0:05)|MP Extra Instant Rain HerbBasket]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-rain-gutter">
+<<investigateicon>><<link "用铁钩挑开排水栅浮木 (0:05)">><<pass 5>><<replace "#mp-extra-instant-rain-gutter">>
+<<if ($athletics or 0) gte 250 or ($tending or 0) gte 250>>
+	你踩稳石沿一钩挑起浮木团，积水顿时打着旋涡排入港湾。<span class="green">你在麻绳团里摸到了一枚沉甸甸的旧银元。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_rain_gutter")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	铁钩在湿滑铁栅上打滑，腥咸积水溅了你满裤腿，手腕也扭了一下。<span class="red">你没能钩起浮木，裤脚湿透发沉。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant Rain HerbBasket [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+林间山雨骤急，一名采药学徒背篓的藤扣崩断，刚采的紫苏与甘草顺着泥水石坡往下滑去。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去神殿石阶看看 (0:05)|MP Extra Instant Snow Steps]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-rain-herbbasket">
+<<investigateicon>><<link "跨步拦在石坡下拢住药束 (0:06)">><<pass 5>><<replace "#mp-extra-instant-rain-herbbasket">>
+<<if ($tending or 0) gte 250 or ($athletics or 0) gte 250>>
+	你借着树根稳住下盘，用衣摆将滑落的药束尽数兜住。<span class="green">学徒连声道谢，分了你一份采药铜板。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_rain_herbbasket")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	泥水石坡滑得像抹了油，你脚下一软摔坐进湿泥里，药草也被冲进了溪流。<span class="red">你的衣摆沾满湿泥，手肘磕青了一块。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant Snow Steps [nobr]
+<<set $outside to 1>><<set $location to "temple">><<effects>>
+狼街神殿门前的石阶结了一层透明薄冰，一名捧着香烛篮的老妇人脚下一滑，身体直往后仰。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Temple]]>><<set $outside to 1>><<set $location to "temple">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去农场地头看看 (0:05)|MP Extra Instant Snow Trough]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-snow-steps">
+<<investigateicon>><<link "疾步上前揽住老妇臂弯 (0:04)">><<pass 5>><<replace "#mp-extra-instant-snow-steps">>
+<<if ($athletics or 0) gte 250 or ($danceskill or 0) gte 250>>
+	你踏实雪窝一步上前，稳稳托住老妇后背并接住了香烛篮。<span class="green">老妇人把篮底的祈福银币塞进你手心道谢。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_snow_steps")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	你在薄冰上跟着滑了半步，虽然替老妇垫了一下，自己的膝盖却重重磕在石阶上。<span class="red">膝盖磕得钻心疼，香烛也撒了一地。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant Snow Trough [nobr]
+<<set $outside to 1>><<set $location to "farm">><<effects>>
+寒潮冻裂了农场地头的饮马木槽，冰水顺着裂缝外溢，两匹挽马焦躁地刨着蹄子不敢靠近。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Farmland]]>><<set $outside to 1>><<set $location to "farm">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去深林小径看看 (0:05)|MP Extra Instant Snow Pine]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-snow-trough">
+<<investigateicon>><<link "用草绳混黄泥封堵木槽裂口 (0:06)">><<pass 5>><<replace "#mp-extra-instant-snow-trough">>
+<<if ($tending or 0) gte 250 or ($housekeeping or 0) gte 250>>
+	你把麻绳拧成紧股塞进冰缝，再用干草捆扎紧，挽马终于低头安静饮水。<span class="green">车夫把省下的草料津贴分了你一份。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_snow_trough")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	刺骨冰水冻得你十指僵硬，草绳没塞紧又崩了开来，冷水溅湿了你的袖口。<span class="red">双手冻得通红发僵，木槽仍在漏水。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant Snow Pine [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+积雪压弯了一截碗口粗的冷杉枯枝，横悬在猎人小径半空，树皮纤维正发出濒临折断的脆响。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去黄昏码头鱼市 (0:05)|MP Extra Instant Market Scale]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-snow-pine">
+<<investigateicon>><<link "用长木杆从侧面震落积雪 (0:05)">><<pass 5>><<replace "#mp-extra-instant-snow-pine">>
+<<if ($athletics or 0) gte 260 or ($skulduggery or 0) gte 250>>
+	你退开三步用长杆巧劲一敲，枝头积雪哗啦卸下，枯枝安全弹回林冠。<span class="green">雪堆下露出了一只猎人遗落的皮钱袋。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_snow_pine")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	枯枝提前咔嚓折断，松散雪块混着松针砸了你一头一脸，冰渣直往领口里钻。<span class="red">你被雪块砸得脖颈冰凉，狼狈地抖落雪渣。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant Market Scale [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+黄昏鱼市散场时，鱼贩收摊不慎碰翻了木桌，一枚雕花黄铜秤砣顺着斜坡滚进了栈桥石缝。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Docks]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去高街晚集摊位 (0:04)|MP Extra Instant Market Crate]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-market-scale">
+<<investigateicon>><<link "用细铁丝下探勾住秤砣鼻 (0:05)">><<pass 5>><<replace "#mp-extra-instant-market-scale">>
+<<if ($skulduggery or 0) gte 250 or ($maths or 0) gte 250>>
+	你折弯铁丝末端，顺着石缝一勾便将黄铜秤砣提了上来。<span class="green">鱼贩欢喜地抓出几枚亮闪闪的银币塞给你。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_market_scale")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	石缝边缘粗糙湿滑，铁丝卡在贝壳间扯不出来，你的指尖还被石棱刮破了。<span class="red">秤砣越卡越深，手指还添了一道擦伤。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant Market Crate [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>>
+高街晚集收摊之际，一辆装载亚麻布匹的板车麻绳突然崩断，最上面两卷白布眼看就要滚进泥水沟。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去收成街口看看 (0:04)|MP Extra Instant Market Mule]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-market-crate">
+<<investigateicon>><<link "双臂合抱托住滑落布卷 (0:05)">><<pass 5>><<replace "#mp-extra-instant-market-crate">>
+<<if ($housekeeping or 0) gte 250 or ($physique or 10000) gte 11500>>
+	你半蹲卸力，稳稳接住沉甸甸的亚麻布卷，没有沾上一星泥点。<span class="green">布商连声称谢，当场点出搬运赏钱递给你。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_market_crate")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	布卷分量比预想沉得多，冲力撞得你胸口发闷，白布边角还是擦过了泥地。<span class="red">你被撞得连退两步，手臂酸麻不已。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant Market Mule [nobr]
+<<set $outside to 1>><<set $location to "pub">><<effects>>
+收成街散集人潮里，一头驮着酒桶的老骡被爆竹声惊扰，横在巷口把车辕卡进了木栅栏。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去麋鹿街暗巷 (0:04)|MP Extra Instant NightAlley Lantern]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-market-mule">
+<<investigateicon>><<link "轻抚骡颈解开缠绕缰绳 (0:06)">><<pass 5>><<replace "#mp-extra-instant-market-mule">>
+<<if ($tending or 0) gte 250 or ($willpower or 0) gte 440>>
+	你挡住人群嘈杂视线，顺着鬃毛轻拍安抚，三两下解开了死结。<span class="green">酒馆掌柜笑着塞给你一封压惊红封。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_market_mule")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	受惊老骡甩头喷出一口粗气，车辕猛晃撞在你腰侧，疼得你倒吸一口凉气。<span class="red">腰侧被木辕磕痛，你只得先退到路边。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant NightAlley Lantern [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>>
+深夜的麋鹿街暗巷里，唯一一盏防风煤气灯因气阀松动忽明忽暗，阴影深处隐约有人影窥探。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去倒钩街后巷 (0:04)|MP Extra Instant NightAlley Gate]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-nightalley-lantern">
+<<investigateicon>><<link "拧紧供气铜阀拨高火苗 (0:05)">><<pass 5>><<replace "#mp-extra-instant-nightalley-lantern">>
+<<if ($skulduggery or 0) gte 250 or ($science or 0) gte 250>>
+	你迅速旋正气压旋钮，澄澈灯火瞬间照亮整条暗巷，窥探黑影仓皇退去。<span class="green">你在灯柱底座下捡到了黑影遗落的钱夹。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_night_lantern")>><<money 300>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	滚烫的铜阀烫得你指尖一缩，煤气灯噗地熄灭，浓重黑暗顿时将你吞没。<span class="red">黑暗中冷风袭来，你惊出一身冷汗。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant NightAlley Gate [nobr]
+<<set $outside to 1>><<set $location to "barb">><<effects>>
+倒钩街后巷的抄近道铁栅门被人从外侧用铁丝反扣，身后不远处的拐角传来了杂乱的醉汉脚步声。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转去多瑙河街侧巷 (0:04)|MP Extra Instant NightAlley Footsteps]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-nightalley-gate">
+<<investigateicon>><<link "用发夹挑开外侧缠绕铁丝 (0:05)">><<pass 5>><<replace "#mp-extra-instant-nightalley-gate">>
+<<if ($skulduggery or 0) gte 260 or ($athletics or 0) gte 260>>
+	你屏息探指穿过铁栅，三两下拧断反扣铁丝推门闪出，将醉汉甩在身后。<span class="green">你在门闩槽里摸到了早先路人藏起的零钱。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_night_gate")>><<money 250>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	铁丝拧得极死，扎破了你的指腹，你不得不转身翻越旁边的矮砖墙绕路脱身。<span class="red">翻墙时衣角被砖棱挂破，手掌火辣辣地疼。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Extra Instant NightAlley Footsteps [nobr]
+<<set $outside to 1>><<set $location to "avery_mansion">><<effects>>
+多瑙河街侧巷的青砖墙头忽然传来两声急促瓦响，一只系着暗扣的绒布包从墙上滑落到你脚边。
+<br><br>
+<<getouticon>><<link [[离开此处赶路 (0:02)|Danube Street]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[返回布告栏急报夹 (0:04)|MP Extra Instant Events Hub]]>><<pass 4>><</link>>
+<br>
+<div id="mp-extra-instant-nightalley-footsteps">
+<<investigateicon>><<link "拾起绒布包闪入冬青树影 (0:05)">><<pass 5>><<replace "#mp-extra-instant-nightalley-footsteps">>
+<<if ($skulduggery or 0) gte 260 or ($danceskill or 0) gte 250>>
+	你足尖一点退入树篱暗影，赶在巡夜家丁追出前收好布包从容离开。<span class="green">布包里装着几枚成色极佳的银元。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("instant_night_footsteps")>><<money 300>><</if>>
+	<<stress -3>><<lstress>>
+<<else>>
+	墙头碎瓦紧接着砸落下来，擦过你的肩头，你连忙丢开布包快步退回主街。<span class="red">肩头被碎瓦砸痛，你空手退出了侧巷。</span>
+	<<pain 2>><<stress 4>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>

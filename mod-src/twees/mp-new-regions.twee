@@ -1,4 +1,4 @@
-/* 八大全新可探索地区 / 互通场景节点与场景池路由 / V4 检定与发现门控规范 */
+/* 八大探索区域与发现检定系统（V6精修版：含Search每日门控、便条线索接入、深层探索入口与原版UI规范） */
 
 :: MP Region Pool Router [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>>
@@ -49,37 +49,17 @@
 <<if $willpower gte 450 or $athletics gte 250>>你稳住呼吸踩实湿滑的礁盘，在浓雾里辨清了近处的方向。<<else>>湿冷的狂风吹得你步履微晃，视线被浓雾遮去了大半。<</if>>
 <<if Weather.precipitation is "rain">>冷雨混着海浪拍在礁石上，灯塔顶部的雾角每隔半分钟便发出一声低沉的长鸣。<</if>>
 <br><br>
-<<if $mpKnown["foghorn_pier"]>>
-	<<walkicon>><<link [[前往雾角栈桥 (0:06)|MP Region Foghorn Pier]]>><<pass 6>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["foghorn_keeper"]>>
-	<<walkicon>><<link [[前往守塔人旧居 (0:08)|MP Region Foghorn Keeper]]>><<pass 8>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["foghorn_wreck"]>>
-	<<walkicon>><<link [[前往断桅沉船滩 (0:12)|MP Region Foghorn Wreck]]>><<pass 12>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["foghorn_echo"]>>
-	<<walkicon>><<link [[前往海蚀回音廊 (0:09)|MP Region Foghorn Echo]]>><<pass 9>><</link>>
-	<br>
-<</if>>
 <<getouticon>><<link [[返回海礁 (0:18)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 18>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<<walkicon>><<link [[前往雾角栈桥 (0:06)|MP Region Foghorn Pier]]>><<pass 6>><</link>>
+<br>
+<<if $mpMicroNotice and $mpMicroNotice["foghorn_bell"]>>
+	<<investigateicon>><<link [[去栈桥头看报雾铜钟 (0:04)|MP Region Micro Foghorn Bell]]>><<pass 4>><</link>>
+	<br>
+<</if>>
 <<investigateicon>><<link [[留意礁岸动静 (0:06)|MP Region Foghorn Island Scout]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向守船老汉打听 (0:05)|MP Region Foghorn Island Ask]]>><<pass 5>><</link>>
-<br>
-<<investigateicon>><<link "仰看灯塔旋转光束 (0:03)">><<pass 3>><<replace "#obs-entry-foghorn">>
-<<if $science gte 240 or $willpower gte 420>>
-你默数着灯塔透镜旋转两周的间隔，借着光束扫过东侧崖壁的瞬间，看清了退潮水位线与暗礁栈道的走向。<<stress -2>><<lstress>>
-<<else>>
-海雾太浓，光束在半空晕成一团惨白的光雾，你仰头看了片刻只觉得脖颈发凉。<<stress 2>><<tiredness 1>><<gstress>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-entry-foghorn"></div>
+<<link [[向守船老汉打听 (0:05)|MP Region Foghorn Island Ask]]>><<pass 5>><</link>>
 
 :: MP Region Foghorn Island Scout [nobr]
 <<set $outside to 1>><<set $location to "sea">><<effects>>
@@ -94,18 +74,18 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpKnown["foghorn_keeper"]>>
 		<<set $mpKnown["foghorn_keeper"] to 1>>
-		<span class="green">你在岩壁苔藓间发现一排半掩的铁扶手，石阶直通半山腰的守塔人旧居。</span><<stress -2>><<lstress>>
+		你在岩壁苔藓间发现一排半掩的铁扶手，<span class="green">石阶直通半山腰的守塔人旧居。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["foghorn_wreck"]>>
 		<<set $mpKnown["foghorn_wreck"] to 1>>
-		<span class="green">你顺着退潮露出的礁脊往东眺望，看清了布满商船肋木的断桅沉船滩。</span><<stress -2>><<lstress>>
+		你顺着退潮露出的礁脊往东眺望，<span class="green">看清了布满商船肋木的断桅沉船滩。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["foghorn_echo"]>>
 		<<set $mpKnown["foghorn_echo"] to 1>>
-		<span class="green">你循着岩壁深处的低沉风鸣摸索过去，找到了绝壁下方的海蚀回音廊入口。</span><<stress -2>><<lstress>>
+		你循着岩壁深处的低沉风鸣摸索过去，<span class="green">找到了绝壁下方的海蚀回音廊入口。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">你将岛屿四周的铁索与退潮礁径复查了一遍，没有发现新的暗哨。</span><<stress -2>><<lstress>>
+		你将岛屿四周的铁索与退潮礁径复查了一遍，<span class="teal">没有发现新的暗哨。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">浓雾忽然合拢，湿滑的页岩让你脚下一滑，小腿磕在礁石棱角上，只能退回栈道边。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
+	浓雾忽然合拢，湿滑的页岩让你脚下一滑，小腿磕在礁石棱角上，<span class="red">只能退回栈道边。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -113,18 +93,18 @@
 <<if $athletics gte 300 or $swimmingskill gte 260>>
 	<<if !$mpKnown["foghorn_keeper"]>>
 		<<set $mpKnown["foghorn_keeper"] to 1>>
-		<span class="green">你借着高处视野看见半山腰亮着防风灯影，一条铁链石阶正通向守塔人旧居。</span><<stress -2>><<lstress>>
+		你借着高处视野看见半山腰亮着防风灯影，<span class="green">一条铁链石阶正通向守塔人旧居。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["foghorn_wreck"]>>
 		<<set $mpKnown["foghorn_wreck"] to 1>>
-		<span class="green">你站在礁脊高处俯瞰东侧浅湾，几具庞大的沉船木肋在退潮沙地上清晰可见。</span><<stress -2>><<lstress>>
+		你站在礁脊高处俯瞰东侧浅湾，<span class="green">几具庞大的沉船木肋在退潮沙地上清晰可见。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["foghorn_echo"]>>
 		<<set $mpKnown["foghorn_echo"] to 1>>
-		<span class="green">你听见南侧绝壁下方传来阵阵管风琴般的潮音，顺着石槽看清了海蚀回音廊。</span><<stress -2>><<lstress>>
+		你听见南侧绝壁下方传来阵阵管风琴般的潮音，<span class="green">顺着石槽看清了海蚀回音廊。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">海风吹散了一缕薄雾，岛上的三条隐秘小径都已在你的掌握之中。</span><<stress -2>><<lstress>>
+		海风吹散了一缕薄雾，<span class="teal">岛上的三条隐秘小径都已在你的掌握之中。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">横风夹着浪沫扑面打来，你在湿滑的礁盘上晃了晃，没敢再往险处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	横风夹着浪沫扑面打来，你在湿滑的礁盘上晃了晃，<span class="red">没敢再往险处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -137,42 +117,42 @@
 <<walkicon>><<link [[告别老汉回岛口 (0:02)|MP Region Foghorn Island]]>><<pass 2>><</link>>
 <br>
 <div id="mp-region-foghorn-island-ask-choices">
-<<socialiseicon>><<link "温言向老汉问路 (0:05)">><<pass 5>><<replace "#mp-region-foghorn-island-ask-choices">>
+<<link "温言向老汉问路 (0:05)">><<pass 5>><<replace "#mp-region-foghorn-island-ask-choices">>
 <<set $seductiondifficulty to 4200>><<seductioncheck>>
 <<if $seductionrating gte $seductionrequired or $english gte 260>>
 	<<if !$mpKnown["foghorn_keeper"]>>
 		<<set $mpKnown["foghorn_keeper"] to 1>>
-		<span class="green">「维斯交代过让我照看生面孔，」老汉抬起烟斗指了指岩壁上方，「顺着那道铁索往上爬，半山腰有间守塔人旧居可以避风。」</span><<stress -2>><<lstress>>
+		「维斯交代过让我照看生面孔，」老汉抬起烟斗指了指岩壁上方，「顺着那道铁索往上爬，<span class="green">半山腰有间守塔人旧居可以避风。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["foghorn_wreck"]>>
 		<<set $mpKnown["foghorn_wreck"] to 1>>
-		<span class="green">「想淘旧货就趁退潮往东走，」老汉压低嗓音提醒道，「礁盘后面那片断桅沉船滩，常有早年商船留下的锡匣。」</span><<stress -2>><<lstress>>
+		「想淘旧货就趁退潮往东走，」老汉压低嗓音提醒道，「礁盘后面那片断桅沉船滩，<span class="green">常有早年商船留下的锡匣。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["foghorn_echo"]>>
 		<<set $mpKnown["foghorn_echo"] to 1>>
-		<span class="green">「绝壁底下那阵嗡鸣来自海蚀回音廊，」老汉朝南侧努了努嘴，「顺着退潮石槽就能钻进去。」</span><<stress -2>><<lstress>>
+		「绝壁底下那阵嗡鸣来自海蚀回音廊，」老汉朝南侧努了努嘴，<span class="green">「顺着退潮石槽就能钻进去。」</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">老汉吧嗒了一口旱烟，说岛上的几处去处你都已经比他还熟了。</span><<stress -2>><<lstress>>
+		老汉吧嗒了一口旱烟，<span class="teal">说岛上的几处去处你都已经比他还熟了。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">「雾大浪急，少往不熟的崖根底下乱跑，」老汉拧紧油壶盖转过身去，让你在冷风里碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	「雾大浪急，少往不熟的崖根底下乱跑，」老汉拧紧油壶盖转过身去，<span class="red">让你在冷风里碰了一鼻子灰。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "提起旧港行话套近乎 (0:05)">><<pass 5>><<replace "#mp-region-foghorn-island-ask-choices">>
+<<link "提起旧港行话套近乎 (0:05)">><<pass 5>><<replace "#mp-region-foghorn-island-ask-choices">>
 <<if $skulduggery gte 260 or $swimmingskill gte 250>>
 	<<if !$mpKnown["foghorn_keeper"]>>
 		<<set $mpKnown["foghorn_keeper"] to 1>>
-		<span class="green">老汉听出你懂旧港水路规矩，指了指崖壁铁索说上面的守塔人旧居还留着干柴。</span><<stress -2>><<lstress>>
+		老汉听出你懂旧港水路规矩，<span class="green">指了指崖壁铁索说上面的守塔人旧居还留着干柴。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["foghorn_wreck"]>>
 		<<set $mpKnown["foghorn_wreck"] to 1>>
-		<span class="green">老汉见你识得潮汐暗语，低声告诉你东边礁脊后藏着一片断桅沉船滩。</span><<stress -2>><<lstress>>
+		老汉见你识得潮汐暗语，<span class="green">低声告诉你东边礁脊后藏着一片断桅沉船滩。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["foghorn_echo"]>>
 		<<set $mpKnown["foghorn_echo"] to 1>>
-		<span class="green">老汉冲你点了点头，指点你趁退潮顺着南面石槽去探探海蚀回音廊。</span><<stress -2>><<lstress>>
+		老汉冲你点了点头，<span class="green">指点你趁退潮顺着南面石槽去探探海蚀回音廊。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">老汉笑着拍了拍煤油桶，提醒你今晚潮水稳当，去哪处礁滩都安全。</span><<stress -2>><<lstress>>
+		老汉笑着拍了拍煤油桶，提醒你今晚潮水稳当，<span class="teal">去哪处礁滩都安全。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">你说的几个港口切口不够地道，老汉警惕地眯起眼，只让你老实待在栈桥边等船。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你说的几个港口切口不够地道，老汉警惕地眯起眼，<span class="red">只让你老实待在栈桥边等船。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -183,17 +163,17 @@
 青石垒成的古老栈桥延伸入迷雾笼罩的海面，系船柱上缠绕着潮湿的缆绳与墨绿海草。浪涌拍击着桥墩木桩，激起一阵细碎的白色水沫。
 <<if $athletics gte 260 or $physique gte 11000>>你踩稳湿滑的青石条，任凭海风吹拂衣角。<<else>>湿滑的青苔让你每迈一步都不得不抓紧系船铁环。<</if>>
 <br><br>
+<<getouticon>><<link [[顺栈桥退回岛口 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["foghorn_keeper"]>>
 	<<walkicon>><<link [[沿铁索上旧居 (0:06)|MP Region Foghorn Keeper]]>><<pass 6>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[顺栈桥退回岛口 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[蹲下细查暗槽 (0:08)|MP Region Foghorn Pier Search]]>><<pass 8>><</link>>
 <br>
 <<tendingicon>><<link [[在栈桥背风处歇脚 (0:08)|MP Region Foghorn Pier Rest]]>><<pass 8>><</link>>
 <br>
-<<socialiseicon>><<link "比对系船柱刻痕 (0:03)">><<pass 3>><<replace "#obs-foghorn-pier">>
+<<link "比对系船柱刻痕 (0:03)">><<pass 3>><<replace "#obs-foghorn-pier">>
 <<if $athletics gte 260 or $skulduggery gte 240>>
 你抹开青苔，看见柱身上六道新刻的粉笔痕，绳结是走私船惯用的双套结。刻痕末端指向半山腰的守塔人旧居。
 <<set $mpKnown["foghorn_keeper"] to 1>>
@@ -224,9 +204,15 @@
 		<<money 300>>
 		<<stress -3>>
 	<<else>>
-		你从槽底拈出一只铜扣皮袋，里面是两枚磨亮的旧港银币；袋口沾着守塔人常用的松脂，说明有人常来这里。
-		<<money 200>>
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_foghorn_pier>>
+			<<set $daily.mpRegionLoot_foghorn_pier to 1>>
+			你从槽底拈出一只铜扣皮袋，里面是两枚磨亮的旧港银币；袋口沾着守塔人常用的松脂，说明有人常来这里。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 200>><<stress -2>>
+		<<else>>
+			<span class="teal">暗槽今日已被你翻检过，只剩潮湿的牡蛎碎壳与松脂印痕。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	浪头漫过台阶，牡蛎壳在你指腹上划开一道口子。你缩回手，暗槽里的匣子仍卡在原处。
@@ -234,7 +220,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "比对缆绳系法 (0:06)">><<pass 6>><<replace "#foghorn-pier-choices">>
+<<link "比对缆绳系法 (0:06)">><<pass 6>><<replace "#foghorn-pier-choices">>
 <<if $science gte 240 or $athletics gte 260>>
 	<<set $mpKnown["foghorn_keeper"] to 1>>
 	你认出这是走私船的双套结，绳尾的六道刻痕与守塔人旧居门框上的划痕一致。
@@ -255,16 +241,16 @@
 <div id="mp-region-foghorn-pier-rest-choices">
 <<tendingicon>><<link "拢紧衣领背风调息 (0:10)">><<pass 10>><<replace "#mp-region-foghorn-pier-rest-choices">>
 <<if $willpower gte 420 or $physique gte 11500>>
-<span class="green">你随着潮水拍岸的节拍放缓呼吸，冰凉的海风渐渐吹散了额角的燥热。紧绷的肩背松弛下来，四肢恢复了不少力气。</span>
+你随着潮水拍岸的节拍放缓呼吸，冰凉的海风渐渐吹散了额角的燥热。紧绷的肩背松弛下来，<span class="green">四肢恢复了不少力气。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">咸湿的冷风顺着石缝直往领口里灌，冻得你指尖发麻。你缩在石阶上打了个寒颤，反而觉得更加疲乏。</span>
+咸湿的冷风顺着石缝直往领口里灌，冻得你指尖发麻。你缩在石阶上打了个寒颤，<span class="red">反而觉得更加疲乏。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "拧干裤脚沾染浪沫 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-pier-rest-choices">>
-<span class="teal">你把裤脚溅上的咸水拧净，借着桥墩挡风处活动了发酸的脚踝。</span>
+<<link "拧干裤脚沾染浪沫 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-pier-rest-choices">>
+你把裤脚溅上的咸水拧净，<span class="teal">借着桥墩挡风处活动了发酸的脚踝。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -275,17 +261,17 @@
 半嵌在岩壁里的守塔人石屋隔绝了外海的风浪，石砌壁炉旁摆放着防风煤油灯与历年的潮汐手札。厚重的橡木窗板合拢着，屋里留着淡淡的松木烟气。
 <<if $history gte 260 or $housekeeping gte 240>>你扫了一眼桌上的值班记录，立刻看出了壁炉砖缝里的异样。<<else>>昏暗的石屋陈设简陋，壁炉角落积着一层薄灰。<</if>>
 <br><br>
+<<getouticon>><<link [[沿石阶退回岛口 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["foghorn_wreck"]>>
 	<<walkicon>><<link [[沿暗阶下断桅滩 (0:08)|MP Region Foghorn Wreck]]>><<pass 8>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿石阶退回岛口 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[细查壁炉砖缝 (0:10)|MP Region Foghorn Keeper Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[去旧居壁炉边小憩 (0:08)|MP Region Foghorn Keeper Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "翻看潮汐手札 (0:03)">><<pass 3>><<replace "#obs-foghorn-keeper">>
+<<link "翻看潮汐手札 (0:03)">><<pass 3>><<replace "#obs-foghorn-keeper">>
 <<if $history gte 260 or $housekeeping gte 240>>
 你翻到一页被撕去大半的潮汐记录，残角写着“退潮后把箱子挪去断桅滩”。炉灰里还埋着半枚黄铜星盘。
 <<set $mpKnown["foghorn_wreck"] to 1>>
@@ -315,8 +301,15 @@
 		<<if ($mpFragSmugglerRing or 0) lt 3>><<set $mpFragSmugglerRing to ($mpFragSmugglerRing or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你拉开木桌暗抽屉，在旧海图下找到一本被海水泡皱的潮汐簿，夹着半张标有断桅滩的草图。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_foghorn_keeper>>
+			<<set $daily.mpRegionLoot_foghorn_keeper to 1>>
+			你拉开木桌暗抽屉，在旧海图下找到一本被海水泡皱的潮汐簿，夹着半张标有断桅滩的草图。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">木桌暗抽屉今日已被你翻过，只余下几片潮湿的旧海图纸屑。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	烟道里落下一蓬陈年煤灰，迷得眼眶发酸，手背也在石棱上蹭破了皮。你空手退回屋中央。
@@ -324,7 +317,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "读值班记录 (0:06)">><<pass 6>><<replace "#foghorn-keeper-choices">>
+<<link "读值班记录 (0:06)">><<pass 6>><<replace "#foghorn-keeper-choices">>
 <<if $history gte 260 or $english gte 240>>
 	<<set $mpKnown["foghorn_wreck"] to 1>>
 	你顺着墨迹读出一行交接记录：守塔人把几只锡箱搬去了东边的断桅沉船滩。
@@ -345,16 +338,16 @@
 <div id="mp-region-foghorn-keeper-rest-choices">
 <<tendingicon>><<link "拨拢炉膛残余木炭 (0:10)">><<pass 10>><<replace "#mp-region-foghorn-keeper-rest-choices">>
 <<if $housekeeping gte 220 or $willpower gte 400>>
-<span class="green">你顺手拨拢炉膛里的余烬，让干燥的暖意在石屋内重新弥漫开来。厚实的岩墙挡住了外海的风啸，你的困倦消退了大半。</span>
+你顺手拨拢炉膛里的余烬，让干燥的暖意在石屋内重新弥漫开来。厚实的岩墙挡住了外海的风啸，<span class="green">你的困倦消退了大半。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">炉膛里的余烬很快彻底冷透，窗板缝隙漏进来的阴冷穿堂风吹得你脖子发僵。你坐立不安地熬了一会儿，精神愈发紧绷。</span>
+炉膛里的余烬很快彻底冷透，窗板缝隙漏进来的阴冷穿堂风吹得你脖子发僵。你坐立不安地熬了一会儿，<span class="red">精神愈发紧绷。</span>
 <<stress 4>><<pain 1>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "烘烤微潮的袖口 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-keeper-rest-choices">>
-<span class="teal">你将微潮的袖口凑在壁炉余温旁烘干，松木烟香让呼吸平顺下来。</span>
+<<link "烘烤微潮的袖口 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-keeper-rest-choices">>
+你将微潮的袖口凑在壁炉余温旁烘干，<span class="teal">松木烟香让呼吸平顺下来。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -365,17 +358,17 @@
 退潮后露出的弧形卵石滩上，几艘早年触礁的商船肋木斜插在黑色湿沙之中。断裂的橡木船舷挂满藤壶，浅水洼里倒映着铅灰色的天光。
 <<if $athletics gte 300 or $swimmingskill gte 280>>你轻巧地跃过积水的礁石坑，稳稳落在一截干燥的龙骨旁。<<else>>松散的湿卵石在脚下滚动，走起来颇费力气。<</if>>
 <br><br>
+<<getouticon>><<link [[沿卵石滩退回岛口 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["foghorn_echo"]>>
 	<<walkicon>><<link [[沿礁脊去回音廊 (0:09)|MP Region Foghorn Echo]]>><<pass 9>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿卵石滩退回岛口 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[钻进船长室残骸 (0:12)|MP Region Foghorn Wreck Search]]>><<pass 12>><</link>>
 <br>
 <<tendingicon>><<link [[靠沉船肋木下歇脚 (0:08)|MP Region Foghorn Wreck Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "眺望退潮礁脊 (0:03)">><<pass 3>><<replace "#obs-foghorn-wreck">>
+<<link "眺望退潮礁脊 (0:03)">><<pass 3>><<replace "#obs-foghorn-wreck">>
 <<if $swimmingskill gte 260 or $athletics gte 300>>
 退潮后的礁脊上留着一串新鲜靴印，径直通向崖底的海蚀回音廊；印边还有一小片被踩碎的白色盐晶。
 <<set $mpKnown["foghorn_echo"] to 1>>
@@ -406,9 +399,15 @@
 		<<money 400>>
 		<<stress -3>>
 	<<else>>
-		你从底舱湿沙槽里扒出一只铜扣皮袋，里面是几枚被海水洗亮的旧银币，约 £3；袋里还夹着一小片舱单。
-		<<money 300>>
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_foghorn_wreck>>
+			<<set $daily.mpRegionLoot_foghorn_wreck to 1>>
+			你从底舱湿沙槽里扒出一只铜扣皮袋，里面是几枚被海水洗亮的旧银币，约 £3；袋里还夹着一小片舱单。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 250>><<stress -2>>
+		<<else>>
+			<span class="teal">底舱湿沙槽今日已被你淘过一遍，只剩被浪冲刷的碎贝壳。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	腐朽的橡木横梁突然下沉，你连忙抽身，手腕还是被生锈船钉刮出一道红痕。锡盒没能取出来。
@@ -416,7 +415,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "辨湿沙靴印 (0:06)">><<pass 6>><<replace "#foghorn-wreck-choices">>
+<<link "辨湿沙靴印 (0:06)">><<pass 6>><<replace "#foghorn-wreck-choices">>
 <<if $athletics gte 280 or $swimmingskill gte 240>>
 	<<set $mpKnown["foghorn_echo"] to 1>>
 	你蹲下比对靴印深浅，顺着退潮水线一路追到回音廊入口，还在石缝里捡到一枚铜扣。
@@ -437,16 +436,16 @@
 <div id="mp-region-foghorn-wreck-rest-choices">
 <<tendingicon>><<link "垫平船舷内侧干沙 (0:10)">><<pass 10>><<replace "#mp-region-foghorn-wreck-rest-choices">>
 <<if $athletics gte 260 or $willpower gte 440>>
-<span class="green">你把酸痛的双腿伸展在细沙上，听着头顶海鸥掠过薄雾的鸣叫。均匀的呼吸渐渐驱散了跋涉的酸楚。</span>
+你把酸痛的双腿伸展在细沙上，<span class="green">听着头顶海鸥掠过薄雾的鸣叫。均匀的呼吸渐渐驱散了跋涉的酸楚。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">涨潮的冷浪突然漫过船舷底部，冰凉的海水浸湿了你的鞋跟。你狼狈地起身挪开，非但没歇好，反而平添了几分烦躁。</span>
+涨潮的冷浪突然漫过船舷底部，冰凉的海水浸湿了你的鞋跟。你狼狈地起身挪开，非但没歇好，<span class="red">反而平添了几分烦躁。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "抖落鞋里的湿沙粒 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-wreck-rest-choices">>
-<span class="teal">你解开鞋扣抖净里面的细黑湿沙，靠着厚实的橡木肋骨缓过一口气。</span>
+<<link "抖落鞋里的湿沙粒 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-wreck-rest-choices">>
+你解开鞋扣抖净里面的细黑湿沙，<span class="teal">靠着厚实的橡木肋骨缓过一口气。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -461,9 +460,11 @@
 <br>
 <<investigateicon>><<link [[循声探查气孔 (0:12)|MP Region Foghorn Echo Search]]>><<pass 12>><</link>>
 <br>
-<<tendingicon>><<link [[坐回音廊高台养神 (0:08)|MP Region Foghorn Echo Rest]]>><<pass 8>><</link>>
+<<link [[坐回音廊高台养神 (0:08)|MP Region Foghorn Echo Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "贴壁辨听回声 (0:03)">><<pass 3>><<replace "#obs-foghorn-echo">>
+<<investigateicon>><<link [[循低频潮音探向暗穴 (0:08)|MP Extra Deep Foghorn 1]]>><<pass 8>><</link>>
+<br>
+<<link "贴壁辨听回声 (0:03)">><<pass 3>><<replace "#obs-foghorn-echo">>
 <<if $willpower gte 460 or $science gte 260>>
 你避开层层叠叠的假回声，听出最深处有一处干燥石龛；风从龛口灌入时，会带出一声极轻的金属颤音。
 <<else>>
@@ -491,8 +492,15 @@
 		<<if ($mpFragSmugglerRing or 0) lt 3>><<set $mpFragSmugglerRing to ($mpFragSmugglerRing or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你从气孔内侧夹出几枚黑珍珠母贝与一枚旧钱币；槽壁上还留着指甲划出的六道短痕。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_foghorn_echo>>
+			<<set $daily.mpRegionLoot_foghorn_echo to 1>>
+			你从气孔内侧夹出几枚黑珍珠母贝与一枚旧钱币；槽壁上还留着指甲划出的六道短痕。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">螺旋气孔内侧今日已被你探过，只留下湿咸的海风回响。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	气孔里骤然喷出一股夹着盐粒的水雾，啸声震得耳膜生疼。你踉跄后退，没能取出槽里的东西。
@@ -500,7 +508,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "听辨风鸣方位 (0:06)">><<pass 6>><<replace "#foghorn-echo-choices">>
+<<link "听辨风鸣方位 (0:06)">><<pass 6>><<replace "#foghorn-echo-choices">>
 <<if $science gte 260 or $willpower gte 460>>
 	你顺着共鸣最稳的那道石缝摸过去，发现一处被盐晶半封的干龛，里面有一枚刻着船锚的铜扣。
 	<<stress -1>>
@@ -520,16 +528,16 @@
 <div id="mp-region-foghorn-echo-rest-choices">
 <<tendingicon>><<link "顺着风鸣节律吐纳 (0:10)">><<pass 10>><<replace "#mp-region-foghorn-echo-rest-choices">>
 <<if $willpower gte 450 or $danceskill gte 260>>
-<span class="green">你顺应着石拱间悠长的风鸣节律吐纳，杂乱的思绪随着潮音一点点沉淀下来。紧绷的心弦随之舒展。</span>
+你顺应着石拱间悠长的风鸣节律吐纳，<span class="green">杂乱的思绪随着潮音一点点沉淀下来。紧绷的心弦随之舒展。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">石壁间忽高忽低的怪异风声像有人在耳边低语，吵得你心烦意乱。你勉强坐了片刻便匆匆起身。</span>
+石壁间忽高忽低的怪异风声像有人在耳边低语，<span class="red">吵得你心烦意乱。你勉强坐了片刻便匆匆起身。</span>
 <<stress 5>><<tiredness 1>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "擦净脸颊上的盐霜 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-echo-rest-choices">>
-<span class="teal">你用干净手帕抹去脸颊上的海雾盐霜，在平石台上舒展了紧绷的肩背。</span>
+<<link "擦净脸颊上的盐霜 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-echo-rest-choices">>
+你用干净手帕抹去脸颊上的海雾盐霜，<span class="teal">在平石台上舒展了紧绷的肩背。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -541,37 +549,17 @@
 <<if $science gte 260 or $maths gte 260>>你借着煤气壁灯看清了主传动轴的转向，稳稳踏上检修平台。<<else>>错综复杂的铜管与轰鸣声让你一时难以分清深处的布局。<</if>>
 <<if ($tiredness or 0) gte 800>>地底温热的蒸汽与规律的擒纵声交织在一起，让你略微疲惫的眼皮有些发沉。<</if>>
 <br><br>
-<<if $mpKnown["clockwork_corridor"]>>
-	<<walkicon>><<link [[前往齿轮回廊 (0:05)|MP Region Clockwork Corridor]]>><<pass 5>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["clockwork_steam"]>>
-	<<walkicon>><<link [[前往蒸汽压力室 (0:07)|MP Region Clockwork Steam]]>><<pass 7>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["clockwork_astro"]>>
-	<<walkicon>><<link [[前往停摆天文台 (0:10)|MP Region Clockwork Astro]]>><<pass 10>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["clockwork_vault"]>>
-	<<walkicon>><<link [[前往档案馆密库 (0:12)|MP Region Clockwork Vault]]>><<pass 12>><</link>>
-	<br>
-<</if>>
-<<getouticon>><<link [[返回高街 (0:10)|High Street]]>><<set $outside to 1>><<set $location to "high">><<pass 10>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回高街 (0:10)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 10>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<<walkicon>><<link [[前往齿轮回廊 (0:05)|MP Region Clockwork Corridor]]>><<pass 5>><</link>>
+<br>
+<<if $mpMicroNotice and $mpMicroNotice["clockwork_oil"]>>
+	<<investigateicon>><<link [[去三号轴看滴油铜杯 (0:04)|MP Region Micro Clockwork Oil]]>><<pass 4>><</link>>
+	<br>
+<</if>>
 <<investigateicon>><<link [[观察管线走向 (0:06)|MP Region Clockwork Undercity Scout]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向检修学徒打听 (0:05)|MP Region Clockwork Undercity Ask]]>><<pass 5>><</link>>
-<br>
-<<investigateicon>><<link "贴听主传动轴节拍 (0:03)">><<pass 3>><<replace "#obs-entry-clockwork">>
-<<if $maths gte 240 or $science gte 240>>
-你从齿轮咬合的轻重音里听出三号副轴负载偏高，那正是通往深处机括房的动力主干线。<<stress -2>><<lstress>>
-<<else>>
-重型黄铜轮齿的撞击声震得你耳膜发麻，没能分辨出各条副轴的去向。<<stress 2>><<tiredness 1>><<gstress>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-entry-clockwork"></div>
+<<link [[向检修学徒打听 (0:05)|MP Region Clockwork Undercity Ask]]>><<pass 5>><</link>>
 
 :: MP Region Clockwork Undercity Scout [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>>
@@ -586,18 +574,18 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpKnown["clockwork_steam"]>>
 		<<set $mpKnown["clockwork_steam"] to 1>>
-		<span class="green">你顺着主排气管上的红色箭头一路追索，在回廊西侧找到了通往蒸汽压力室的铸铁阀门通道。</span><<stress -2>><<lstress>>
+		你顺着主排气管上的红色箭头一路追索，<span class="green">在回廊西侧找到了通往蒸汽压力室的铸铁阀门通道。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["clockwork_astro"]>>
 		<<set $mpKnown["clockwork_astro"] to 1>>
-		<span class="green">你对照立柱上的黄道刻度盘，发现了铁旋梯上方直通停摆天文台的升降暗门。</span><<stress -2>><<lstress>>
+		你对照立柱上的黄道刻度盘，<span class="green">发现了铁旋梯上方直通停摆天文台的升降暗门。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["clockwork_vault"]>>
 		<<set $mpKnown["clockwork_vault"] to 1>>
-		<span class="green">你拨开下垂的电缆束，在钟塔配重井后方找到了通向档案馆密库的防爆铁廊。</span><<stress -2>><<lstress>>
+		你拨开下垂的电缆束，<span class="green">在钟塔配重井后方找到了通向档案馆密库的防爆铁廊。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">地底管廊的各处阀门与暗门都已核对清楚，水银表读数十分平稳。</span><<stress -2>><<lstress>>
+		地底管廊的各处阀门与暗门都已核对清楚，<span class="teal">水银表读数十分平稳。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">上方泄压管突然喷出一团灼热的白雾，烫得你缩手撞在铁栏杆上，没能看清管线深处的去向。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
+	上方泄压管突然喷出一团灼热的白雾，烫得你缩手撞在铁栏杆上，<span class="red">没能看清管线深处的去向。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -605,18 +593,18 @@
 <<if $science gte 280 or $maths gte 280>>
 	<<if !$mpKnown["clockwork_steam"]>>
 		<<set $mpKnown["clockwork_steam"] to 1>>
-		<span class="green">你根据分压表的读数变化，推算出西侧三号支管后方正是主蒸汽压力室。</span><<stress -2>><<lstress>>
+		你根据分压表的读数变化，<span class="green">推算出西侧三号支管后方正是主蒸汽压力室。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["clockwork_astro"]>>
 		<<set $mpKnown["clockwork_astro"] to 1>>
-		<span class="green">你顺着星象铜环的垂直拉杆抬头望去，认出了通往停摆天文台的检修旋梯。</span><<stress -2>><<lstress>>
+		你顺着星象铜环的垂直拉杆抬头望去，<span class="green">认出了通往停摆天文台的检修旋梯。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["clockwork_vault"]>>
 		<<set $mpKnown["clockwork_vault"] to 1>>
-		<span class="green">你按立柱上的罗马数字编码排摸，找到了隐藏在配重井后的档案馆密库。</span><<stress -2>><<lstress>>
+		你按立柱上的罗马数字编码排摸，<span class="green">找到了隐藏在配重井后的档案馆密库。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">你复算了一遍三组传动轴的齿比，确认机括城的所有暗门均已就位。</span><<stress -2>><<lstress>>
+		你复算了一遍三组传动轴的齿比，<span class="teal">确认机括城的所有暗门均已就位。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">刻度盘上的齿痕被机油糊住大半，你在昏黄壁灯下算错了两格传动比。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	刻度盘上的齿痕被机油糊住大半，<span class="red">你在昏黄壁灯下算错了两格传动比。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -629,23 +617,23 @@
 <<walkicon>><<link [[告别学徒回城口 (0:02)|MP Region Clockwork Undercity]]>><<pass 2>><</link>>
 <br>
 <div id="mp-region-clockwork-undercity-ask-choices">
-<<socialiseicon>><<link "轻声向学徒请教 (0:05)">><<pass 5>><<replace "#mp-region-clockwork-undercity-ask-choices">>
+<<link "轻声向学徒请教 (0:05)">><<pass 5>><<replace "#mp-region-clockwork-undercity-ask-choices">>
 <<set $seductiondifficulty to 4400>><<seductioncheck>>
 <<if $seductionrating gte $seductionrequired or $english gte 260>>
 	<<if !$mpKnown["clockwork_steam"]>>
 		<<set $mpKnown["clockwork_steam"] to 1>>
-		<span class="green">「塞拉师父提起过你，」学徒指了指冒白雾的紫铜总管，「顺着三号管廊往里走就是蒸汽压力室，当心别碰红线阀门。」</span><<stress -2>><<lstress>>
+		「塞拉师父提起过你，」学徒指了指冒白雾的紫铜总管，「顺着三号管廊往里走就是蒸汽压力室，<span class="green">当心别碰红线阀门。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["clockwork_astro"]>>
 		<<set $mpKnown["clockwork_astro"] to 1>>
-		<span class="green">「上面那间停摆天文台还留着早年的发条浑天仪，」学徒压低声音指向铁旋梯顶端，「从检修井就能上去。」</span><<stress -2>><<lstress>>
+		「上面那间停摆天文台还留着早年的发条浑天仪，」学徒压低声音指向铁旋梯顶端，<span class="green">「从检修井就能上去。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["clockwork_vault"]>>
 		<<set $mpKnown["clockwork_vault"] to 1>>
-		<span class="green">「最里头那扇字码防爆门后面是档案馆密库，」学徒左右看了一眼，「早年市政工程的底图全锁在里头。」</span><<stress -2>><<lstress>>
+		「最里头那扇字码防爆门后面是档案馆密库，」学徒左右看了一眼，<span class="green">「早年市政工程的底图全锁在里头。」</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">学徒擦了擦手上的机油，说这底下的四处机房你全都已经认全了。</span><<stress -2>><<lstress>>
+		学徒擦了擦手上的机油，<span class="teal">说这底下的四处机房你全都已经认全了。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">「下面机括重地，外人别乱晃悠，」学徒拎起油壶快步走开，没给你留下半句准话。</span><<stress 4>><<gstress>>
+	「下面机括重地，外人别乱晃悠，」学徒拎起油壶快步走开，<span class="red">没给你留下半句准话。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -653,18 +641,18 @@
 <<if $science gte 260 or $maths gte 260>>
 	<<if !$mpKnown["clockwork_steam"]>>
 		<<set $mpKnown["clockwork_steam"] to 1>>
-		<span class="green">学徒见你一眼看穿了主轴油路，痛快地指出了西侧通往蒸汽压力室的近道。</span><<stress -2>><<lstress>>
+		学徒见你一眼看穿了主轴油路，<span class="green">痛快地指出了西侧通往蒸汽压力室的近道。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["clockwork_astro"]>>
 		<<set $mpKnown["clockwork_astro"] to 1>>
-		<span class="green">学徒听你报准了星轨铜环的齿数，笑着指向铁旋梯上方的停摆天文台。</span><<stress -2>><<lstress>>
+		学徒听你报准了星轨铜环的齿数，<span class="green">笑着指向铁旋梯上方的停摆天文台。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["clockwork_vault"]>>
 		<<set $mpKnown["clockwork_vault"] to 1>>
-		<span class="green">学徒佩服你在机械上的眼力，悄悄把配重井后档案馆密库的位置告诉了你。</span><<stress -2>><<lstress>>
+		学徒佩服你在机械上的眼力，<span class="green">悄悄把配重井后档案馆密库的位置告诉了你。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">学徒与你核对完今日的水银表压，示意各条管廊都畅通无阻。</span><<stress -2>><<lstress>>
+		学徒与你核对完今日的水银表压，<span class="teal">示意各条管廊都畅通无阻。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">你把主轴齿数报差了一格，学徒狐疑地打量了你一眼，合上手札不肯多谈。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你把主轴齿数报差了一格，学徒狐疑地打量了你一眼，<span class="red">合上手札不肯多谈。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -675,17 +663,17 @@
 两侧石壁嵌满了缓慢转动的黄铜从动轮，地面铺着防滑的铸铁格栅。每过三秒，两米高的主擒纵叉便发出一声清脆的金属咬合声。
 <<if $science gte 250 or $athletics gte 250>>你踩着擒纵轮停顿的节拍穿行，避开了甩出机油的轴承。<<else>>飞转的齿轮近在咫尺，震得你耳膜嗡嗡作响。<</if>>
 <br><br>
+<<getouticon>><<link [[沿铁梯退回机括城口 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["clockwork_steam"]>>
 	<<walkicon>><<link [[沿机油痕去压力室 (0:07)|MP Region Clockwork Steam]]>><<pass 7>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿铁梯退回机括城口 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[俯身查看检修槽 (0:09)|MP Region Clockwork Corridor Search]]>><<pass 9>><</link>>
 <br>
 <<tendingicon>><<link [[靠回廊石柱旁歇息 (0:08)|MP Region Clockwork Corridor Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "数擒纵咬合声 (0:03)">><<pass 3>><<replace "#obs-clockwork-corridor">>
+<<link "数擒纵咬合声 (0:03)">><<pass 3>><<replace "#obs-clockwork-corridor">>
 <<if $science gte 250 or $maths gte 250>>
 你数准主擒纵叉每三秒一次的停顿，发现轴承旁有一道新上的机油痕，顺着它能看到蒸汽压力室的检修门。
 <<set $mpKnown["clockwork_steam"] to 1>>
@@ -715,8 +703,15 @@
 		<<if ($mpFragCrownGear or 0) lt 3>><<set $mpFragCrownGear to ($mpFragCrownGear or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你用铁钩从排油槽滤网上挑起一只油纸包，里面是两枚机工藏起的银币和一小截刻着编号的铜丝。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_clockwork_corridor>>
+			<<set $daily.mpRegionLoot_clockwork_corridor to 1>>
+			你用铁钩从排油槽滤网上挑起一只油纸包，里面是两枚机工藏起的银币和一小截刻着编号的铜丝。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 200>><<stress -2>>
+		<<else>>
+			<span class="teal">排油槽滤网今日已被你挑检过，只余下温热的润滑油渍。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	从动轮突然加速回咬，滚烫的润滑油溅在手背上，你猛地抽手后退，槽底的东西没摸到。
@@ -724,7 +719,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "读检修铭牌 (0:06)">><<pass 6>><<replace "#clockwork-corridor-choices">>
+<<link "读检修铭牌 (0:06)">><<pass 6>><<replace "#clockwork-corridor-choices">>
 <<if $science gte 260 or $maths gte 260>>
 	<<set $mpKnown["clockwork_steam"] to 1>>
 	你顺着铭牌上的红色箭头读出管线走向，确认西侧阀门通道通向蒸汽压力室。
@@ -745,16 +740,16 @@
 <div id="mp-region-clockwork-corridor-rest-choices">
 <<tendingicon>><<link "贴着恒温护栏暖背 (0:10)">><<pass 10>><<replace "#mp-region-clockwork-corridor-rest-choices">>
 <<if $willpower gte 430 or $science gte 250>>
-<span class="green">规律沉稳的擒纵摆动声渐渐与你的心跳重合，地底恒温的暖气烘干了衣角潮意。你紧绷的神经安定下来。</span>
+规律沉稳的擒纵摆动声渐渐与你的心跳重合，<span class="green">地底恒温的暖气烘干了衣角潮意。你紧绷的神经安定下来。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">刺耳的金属摩擦声在耳边反复回荡，震得脚底铁栅微微发麻。你捂着耳朵坐了一会儿，只觉得太阳穴隐隐作痛。</span>
+刺耳的金属摩擦声在耳边反复回荡，震得脚底铁栅微微发麻。你捂着耳朵坐了一会儿，<span class="red">只觉得太阳穴隐隐作痛。</span>
 <<stress 4>><<pain 1>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "擦去鞋底沾的机油 (0:06)">><<pass 6>><<replace "#mp-region-clockwork-corridor-rest-choices">>
-<span class="teal">你在防滑铁格栅边缘刮净鞋底机油，借着地底恒温暖意歇了歇腿。</span>
+<<link "擦去鞋底沾的机油 (0:06)">><<pass 6>><<replace "#mp-region-clockwork-corridor-rest-choices">>
+你在防滑铁格栅边缘刮净鞋底机油，<span class="teal">借着地底恒温暖意歇了歇腿。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -765,17 +760,17 @@
 粗大的紫铜管道在拱室中央交汇，水银压力表的指针随着白雾喷吐轻轻颤动。空气里弥漫着温热的黄铜与冷凝水气息。
 <<if $science gte 280 or $physique gte 11500>>你避开正在泄压的法兰气口，沿着干燥的检修铁廊稳步前行。<<else>>闷热的蒸汽扑面而来，熏得你额头沁出一层细汗。<</if>>
 <br><br>
+<<getouticon>><<link [[沿铁廊退回机括城口 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["clockwork_astro"]>>
 	<<walkicon>><<link [[沿干管去天文台 (0:10)|MP Region Clockwork Astro]]>><<pass 10>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿铁廊退回机括城口 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[靠近备用冷凝管 (0:10)|MP Region Clockwork Steam Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[去隔热铜管边暖手 (0:08)|MP Region Clockwork Steam Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看压力表回摆 (0:03)">><<pass 3>><<replace "#obs-clockwork-steam">>
+<<link "看压力表回摆 (0:03)">><<pass 3>><<replace "#obs-clockwork-steam">>
 <<if $science gte 280 or $physique gte 11500>>
 你盯住水银柱的细微回摆，判断出备用管正在缓慢泄压；管壁上的粉笔箭头指向停摆天文台。
 <<set $mpKnown["clockwork_astro"] to 1>>
@@ -806,8 +801,15 @@
 		<<money 400>>
 		<<stress -3>>
 	<<else>>
-		你从仪表墙后的锡盒里翻出两枚封装完好的旧银元和一张标着“天文台”的管线草图。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_clockwork_steam>>
+			<<set $daily.mpRegionLoot_clockwork_steam to 1>>
+			你从仪表墙后的锡盒里翻出两枚封装完好的旧银元和一张标着“天文台”的管线草图。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 200>><<stress -2>>
+		<<else>>
+			<span class="teal">仪表墙后的锡盒今日已被你翻过，里面只剩几圈旧垫片。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	法兰接缝里窜出一股滚烫余压，灼得手指剧痛，扳手也砸在脚背上。你只好退回来。
@@ -815,7 +817,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "对照管线图 (0:06)">><<pass 6>><<replace "#clockwork-steam-choices">>
+<<link "对照管线图 (0:06)">><<pass 6>><<replace "#clockwork-steam-choices">>
 <<if $science gte 280 or $maths gte 260>>
 	<<set $mpKnown["clockwork_astro"] to 1>>
 	你把冷凝水痕和管线图对上，找到了通往停摆天文台的升降暗门。
@@ -836,16 +838,16 @@
 <div id="mp-region-clockwork-steam-rest-choices">
 <<tendingicon>><<link "倚着石棉垫管烘手 (0:10)">><<pass 10>><<replace "#mp-region-clockwork-steam-rest-choices">>
 <<if $physique gte 11500 or $willpower gte 440>>
-<span class="green">温和的热力顺着后背传遍全身，驱散了深入地底积累的寒意与疲乏。你靠着石壁舒舒服服地歇够了力气。</span>
+温和的热力顺着后背传遍全身，<span class="green">驱散了深入地底积累的寒意与疲乏。你靠着石壁舒舒服服地歇够了力气。</span>
 <<tiredness -5>><<stress -4>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">三号锅炉的水银表突然越过红线发出尖锐嘶鸣，闷热的白雾瞬间充斥四周，呛得你喘不过气来。你狼狈地逃开锅炉边。</span>
+三号锅炉的水银表突然越过红线发出尖锐嘶鸣，闷热的白雾瞬间充斥四周，<span class="red">呛得你喘不过气来。你狼狈地逃开锅炉边。</span>
 <<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "松开闷热的领口扣 (0:06)">><<pass 6>><<replace "#mp-region-clockwork-steam-rest-choices">>
-<span class="teal">你解开领口第一枚纽扣透了透气，温热的铜管把指尖烘得暖融融的。</span>
+<<link "松开闷热的领口扣 (0:06)">><<pass 6>><<replace "#mp-region-clockwork-steam-rest-choices">>
+你解开领口第一枚纽扣透了透气，<span class="teal">温热的铜管把指尖烘得暖融融的。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -856,17 +858,17 @@
 地底穹顶下悬挂着一座靠发条驱动的黄铜天球仪，镶嵌在圆环上的荧光石映射着地面星轨。四周石桌上散落着半打磨好的水晶透镜。
 <<if $maths gte 280 or $history gte 280>>你认出了浑天仪基座上的黄道十二宫刻度。<<else>>繁复交错的星轨铜环让你看得眼花缭乱。<</if>>
 <br><br>
+<<getouticon>><<link [[沿铁旋梯退回机括城口 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["clockwork_vault"]>>
 	<<walkicon>><<link [[沿配重井去密库 (0:12)|MP Region Clockwork Vault]]>><<pass 12>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿铁旋梯退回机括城口 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[检查浑天仪底座 (0:13)|MP Region Clockwork Astro Search]]>><<pass 13>><</link>>
 <br>
 <<tendingicon>><<link [[坐真皮观测椅小憩 (0:08)|MP Region Clockwork Astro Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "对黄道刻度 (0:03)">><<pass 3>><<replace "#obs-clockwork-astro">>
+<<link "对黄道刻度 (0:03)">><<pass 3>><<replace "#obs-clockwork-astro">>
 <<if $maths gte 280 or $history gte 280>>
 你发现天蝎座刻度被反复摩挲得发亮，底座侧面还有一道新添划痕，正对着档案馆密库的防爆门方向。
 <<set $mpKnown["clockwork_vault"] to 1>>
@@ -896,8 +898,15 @@
 		<<if ($mpFragCrownGear or 0) lt 3>><<set $mpFragCrownGear to ($mpFragCrownGear or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你旋开观测台扶手下的黄铜储物筒，倒出两枚成色极好的银币和一小卷画着齿轮比的手稿。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_clockwork_astro>>
+			<<set $daily.mpRegionLoot_clockwork_astro to 1>>
+			你旋开观测台扶手下的黄铜储物筒，倒出两枚成色极好的银币和一小卷画着齿轮比的手稿。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">观测台扶手下的黄铜筒今日已空，只剩一点细碎铜屑。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	断裂的发条钢带从主轴上弹开，抽在手腕上，底座机括死死卡住。你揉着手腕退回来。
@@ -905,7 +914,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "比照星图底稿 (0:07)">><<pass 7>><<replace "#clockwork-astro-choices">>
+<<link "比照星图底稿 (0:07)">><<pass 7>><<replace "#clockwork-astro-choices">>
 <<if $maths gte 280 or $history gte 280>>
 	<<set $mpKnown["clockwork_vault"] to 1>>
 	你把星图底稿和铜环刻度对上，推出一组开锁顺序，尽头正是档案馆密库的十二号柜。
@@ -926,16 +935,16 @@
 <div id="mp-region-clockwork-astro-rest-choices">
 <<tendingicon>><<link "仰看穹顶荧光星宿 (0:10)">><<pass 10>><<replace "#mp-region-clockwork-astro-rest-choices">>
 <<if $willpower gte 460 or $history gte 260>>
-<span class="green">静谧的星辉让你纷乱的思绪慢慢澄澈下来，连日奔波的倦意随着深长的呼吸一扫而空。</span>
+静谧的星辉让你纷乱的思绪慢慢澄澈下来，<span class="green">连日奔波的倦意随着深长的呼吸一扫而空。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">观测椅下方的调节齿轮突然滑脱一格，椅背猛地后仰晃动，吓得你一身冷汗，半点睡意也没剩下。</span>
+观测椅下方的调节齿轮突然滑脱一格，椅背猛地后仰晃动，吓得你一身冷汗，<span class="red">半点睡意也没剩下。</span>
 <<stress 4>><<pain 1>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "揉按发酸的眉心 (0:06)">><<pass 6>><<replace "#mp-region-clockwork-astro-rest-choices">>
-<span class="teal">你合上眼帘轻轻揉按发胀的太阳穴，在静谧的星轨铜环下平复了心绪。</span>
+<<link "揉按发酸的眉心 (0:06)">><<pass 6>><<replace "#mp-region-clockwork-astro-rest-choices">>
+你合上眼帘轻轻揉按发胀的太阳穴，<span class="teal">在静谧的星轨铜环下平复了心绪。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -950,9 +959,11 @@
 <br>
 <<investigateicon>><<link [[细看十二号卷宗柜 (0:14)|MP Region Clockwork Vault Search]]>><<pass 14>><</link>>
 <br>
-<<tendingicon>><<link [[坐密库矮凳上调息 (0:08)|MP Region Clockwork Vault Rest]]>><<pass 8>><</link>>
+<<link [[坐密库矮凳上调息 (0:08)|MP Region Clockwork Vault Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看柜脚滑轨 (0:03)">><<pass 3>><<replace "#obs-clockwork-vault">>
+<<investigateicon>><<link [[查验十二号柜后暗门 (0:08)|MP Extra Deep Clockwork 1]]>><<pass 8>><</link>>
+<br>
+<<link "看柜脚滑轨 (0:03)">><<pass 3>><<replace "#obs-clockwork-vault">>
 <<if $maths gte 300 or $skulduggery gte 320>>
 你注意到 A 到 M 号柜的滑轨磨损并不均匀，十二号柜底座有一道被反复拉开的亮痕。
 <<else>>
@@ -981,8 +992,15 @@
 		<<money 500>>
 		<<stress -3>>
 	<<else>>
-		你从差分机摇柄旁的铁盒里摸出两张早年兑付券和一枚旧银币，券面盖着市政厅的褪色印章。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_clockwork_vault>>
+			<<set $daily.mpRegionLoot_clockwork_vault to 1>>
+			你从差分机摇柄旁的铁盒里摸出两张早年兑付券和一枚旧银币，券面盖着市政厅的褪色印章。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">差分机旁的铁盒今日已被你查过，只余下几截空白纸带。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	双层底板的防盗弹簧回弹夹住指尖，密库顶部的警报铜铃轻响一声。你连忙抽手退到门边。
@@ -990,7 +1008,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "摇差分机手柄 (0:08)">><<pass 8>><<replace "#clockwork-vault-choices">>
+<<link "摇差分机手柄 (0:08)">><<pass 8>><<replace "#clockwork-vault-choices">>
 <<if $maths gte 300 or $science gte 280>>
 	差分机咔嗒吐出一截纸带，上面打着一组柜号和一个人名，末尾还标着“未归档”。
 	<<stress -1>>
@@ -1010,16 +1028,16 @@
 <div id="mp-region-clockwork-vault-rest-choices">
 <<tendingicon>><<link "半掩防爆重门静坐 (0:10)">><<pass 10>><<replace "#mp-region-clockwork-vault-rest-choices">>
 <<if $willpower gte 480 or $control gte 300>>
-<span class="green">隔绝一切外人打扰的金属密室给了你充足的安全感，平稳的呼吸让你疲惫的四肢渐渐恢复了活力。</span>
+隔绝一切外人打扰的金属密室给了你充足的安全感，<span class="green">平稳的呼吸让你疲惫的四肢渐渐恢复了活力。</span>
 <<tiredness -5>><<stress -6>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">密闭铁库里的空气有些沉闷，排风管传来的低频震动让你胸口发闷。你坐了没多久便起身推开条门缝透气。</span>
+密闭铁库里的空气有些沉闷，<span class="red">排风管传来的低频震动让你胸口发闷。你坐了没多久便起身推开条门缝透气。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "理顺凌乱的衣襟 (0:06)">><<pass 6>><<replace "#mp-region-clockwork-vault-rest-choices">>
-<span class="teal">你坐在干燥的皮垫矮凳上理顺衣襟，安静的铁库让你恢复了定力。</span>
+<<link "理顺凌乱的衣襟 (0:06)">><<pass 6>><<replace "#mp-region-clockwork-vault-rest-choices">>
+你坐在干燥的皮垫矮凳上理顺衣襟，<span class="teal">安静的铁库让你恢复了定力。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -1031,37 +1049,17 @@
 <<if $willpower gte 450 or $history gte 260>>你借着石灯微光看清了脚下的青苔石阶，心神保持着笃定。<<else>>幽暗石廊间回荡的水滴声让你不自觉屏住了呼吸。<</if>>
 <<if Time.dayState is "night">>地底深处隐约传来低沉的晚祷余音，石龛里的没药残香愈发幽冷。<</if>>
 <br><br>
-<<if $mpKnown["abbey_steps"]>>
-	<<walkicon>><<link [[前往静默石阶 (0:06)|MP Region Abbey Steps]]>><<pass 6>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["abbey_confess"]>>
-	<<walkicon>><<link [[前往告解回音壁 (0:05)|MP Region Abbey Confess]]>><<pass 5>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["abbey_scriptorium"]>>
-	<<walkicon>><<link [[前往灰烬藏经阁 (0:11)|MP Region Abbey Scriptorium]]>><<pass 11>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["abbey_ferry"]>>
-	<<walkicon>><<link [[前往暗河渡口 (0:08)|MP Region Abbey Ferry]]>><<pass 8>><</link>>
-	<br>
-<</if>>
 <<getouticon>><<link [[返回狼街神殿 (0:12)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 12>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<<walkicon>><<link [[前往静默石阶 (0:06)|MP Region Abbey Steps]]>><<pass 6>><</link>>
+<br>
+<<if $mpMicroNotice and $mpMicroNotice["abbey_wick"]>>
+	<<investigateicon>><<link [[去引路石龛挑亮灯芯 (0:04)|MP Region Micro Abbey Wick]]>><<pass 4>><</link>>
+	<br>
+<</if>>
 <<investigateicon>><<link [[辨认石廊痕迹 (0:06)|MP Region Sunken Abbey Scout]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向守墓苦修打听 (0:05)|MP Region Sunken Abbey Ask]]>><<pass 5>><</link>>
-<br>
-<<investigateicon>><<link "细看柱廊古教铭文 (0:03)">><<pass 3>><<replace "#obs-entry-abbey">>
-<<if $history gte 240 or $english gte 240>>
-你拂去石柱基座上的白霜，认出上面记载着修道院沉降前藏经阁与地下渡口的方位训诫。<<stress -2>><<lstress>>
-<<else>>
-剥蚀大半的古拉丁字母在摇晃的灯影下模糊难辨，你看久了只觉得眼眶发酸。<<stress 2>><<tiredness 1>><<gstress>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-entry-abbey"></div>
+<<link [[向守墓苦修打听 (0:05)|MP Region Sunken Abbey Ask]]>><<pass 5>><</link>>
 
 :: MP Region Sunken Abbey Scout [nobr]
 <<set $outside to 1>><<set $location to "temple">><<effects>>
@@ -1076,18 +1074,18 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpKnown["abbey_confess"]>>
 		<<set $mpKnown["abbey_confess"] to 1>>
-		<span class="green">你拨开垂落的藤蔓，在石阶西侧发现了通往告解回音壁的胡桃木侧门。</span><<stress -2>><<lstress>>
+		你拨开垂落的藤蔓，<span class="green">在石阶西侧发现了通往告解回音壁的胡桃木侧门。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["abbey_scriptorium"]>>
 		<<set $mpKnown["abbey_scriptorium"] to 1>>
-		<span class="green">你顺着带有焦痕的石砌拱廊往里探看，找到了昔日大火中幸存的灰烬藏经阁入口。</span><<stress -2>><<lstress>>
+		你顺着带有焦痕的石砌拱廊往里探看，<span class="green">找到了昔日大火中幸存的灰烬藏经阁入口。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["abbey_ferry"]>>
 		<<set $mpKnown["abbey_ferry"] to 1>>
-		<span class="green">你循着潺潺的流水声走下侧廊暗阶，发现了连通旧港水网的地下暗河渡口。</span><<stress -2>><<lstress>>
+		你循着潺潺的流水声走下侧廊暗阶，<span class="green">发现了连通旧港水网的地下暗河渡口。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">石廊两侧的旧拱门与暗阶都已探明，长明灯焰在微风中安稳跳动。</span><<stress -2>><<lstress>>
+		石廊两侧的旧拱门与暗阶都已探明，<span class="teal">长明灯焰在微风中安稳跳动。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">石廊顶部的蝙蝠受惊扑翅掠过，灯焰摇晃间你的脚踝在碎石堆上崴了一下，只好退回旋梯下。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
+	石廊顶部的蝙蝠受惊扑翅掠过，灯焰摇晃间你的脚踝在碎石堆上崴了一下，<span class="red">只好退回旋梯下。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -1095,18 +1093,18 @@
 <<if $history gte 280 or $english gte 260>>
 	<<if !$mpKnown["abbey_confess"]>>
 		<<set $mpKnown["abbey_confess"] to 1>>
-		<span class="green">你读出石楣上的忏悔室箴言，顺着指向推开了告解回音壁的雕花木门。</span><<stress -2>><<lstress>>
+		你读出石楣上的忏悔室箴言，<span class="green">顺着指向推开了告解回音壁的雕花木门。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["abbey_scriptorium"]>>
 		<<set $mpKnown["abbey_scriptorium"] to 1>>
-		<span class="green">你沿着地砖上搬运书箱留下的旧滑痕寻去，找到了北侧的灰烬藏经阁。</span><<stress -2>><<lstress>>
+		你沿着地砖上搬运书箱留下的旧滑痕寻去，<span class="green">找到了北侧的灰烬藏经阁。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["abbey_ferry"]>>
 		<<set $mpKnown["abbey_ferry"] to 1>>
-		<span class="green">你顺着排水石槽边缘刻着的船锚古纹往下走，看清了地底的暗河渡口。</span><<stress -2>><<lstress>>
+		你顺着排水石槽边缘刻着的船锚古纹往下走，<span class="green">看清了地底的暗河渡口。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">你将修道院残碑上的方位铭文全部核对完毕，没有遗漏的隔间。</span><<stress -2>><<lstress>>
+		你将修道院残碑上的方位铭文全部核对完毕，<span class="teal">没有遗漏的隔间。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">石壁上的拉丁铭文被烟灰熏得模糊不清，你辨认了半天也没找准侧廊的方向。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	石壁上的拉丁铭文被烟灰熏得模糊不清，<span class="red">你辨认了半天也没找准侧廊的方向。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1119,23 +1117,23 @@
 <<walkicon>><<link [[告别苦修回外庭 (0:02)|MP Region Sunken Abbey]]>><<pass 2>><</link>>
 <br>
 <div id="mp-region-sunken-abbey-ask-choices">
-<<socialiseicon>><<link "垂眸礼貌请教 (0:05)">><<pass 5>><<replace "#mp-region-sunken-abbey-ask-choices">>
+<<link "垂眸礼貌请教 (0:05)">><<pass 5>><<replace "#mp-region-sunken-abbey-ask-choices">>
 <<set $seductiondifficulty to 4300>><<seductioncheck>>
 <<if $seductionrating gte $seductionrequired or $english gte 260>>
 	<<if !$mpKnown["abbey_confess"]>>
 		<<set $mpKnown["abbey_confess"] to 1>>
-		<span class="green">「阿什替你打过招呼了，」苦修士指向石阶右侧的拱门，「那扇雕花隔扇后面便是告解回音壁，说话须得留神。」</span><<stress -2>><<lstress>>
+		「阿什替你打过招呼了，」苦修士指向石阶右侧的拱门，「那扇雕花隔扇后面便是告解回音壁，<span class="green">说话须得留神。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["abbey_scriptorium"]>>
 		<<set $mpKnown["abbey_scriptorium"] to 1>>
-		<span class="green">「旧教团的泥金抄本都留在北侧的灰烬藏经阁里，」苦修士轻声提醒道，「从回音壁后面的石廊就能穿过去。」</span><<stress -2>><<lstress>>
+		「旧教团的泥金抄本都留在北侧的灰烬藏经阁里，」苦修士轻声提醒道，<span class="green">「从回音壁后面的石廊就能穿过去。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["abbey_ferry"]>>
 		<<set $mpKnown["abbey_ferry"] to 1>>
-		<span class="green">「若想走水路避开耳目，就顺着底层石阶去地下暗河渡口，」苦修士合掌低语，「石桩旁拴着一叶平底柏木舟。」</span><<stress -2>><<lstress>>
+		「若想走水路避开耳目，就顺着底层石阶去地下暗河渡口，」苦修士合掌低语，<span class="green">「石桩旁拴着一叶平底柏木舟。」</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">苦修士微微颔首，示意古修道院的石廊与渡口都已向你敞开。</span><<stress -2>><<lstress>>
+		苦修士微微颔首，<span class="teal">示意古修道院的石廊与渡口都已向你敞开。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">「静默之地，莫要喧哗，」苦修士垂下眼帘不再言语，任凭你在寒凉的石廊间独自摸索。</span><<stress 4>><<gstress>>
+	「静默之地，莫要喧哗，」苦修士垂下眼帘不再言语，<span class="red">任凭你在寒凉的石廊间独自摸索。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -1143,18 +1141,18 @@
 <<if $history gte 260 or $purity gte 500>>
 	<<if !$mpKnown["abbey_confess"]>>
 		<<set $mpKnown["abbey_confess"] to 1>>
-		<span class="green">苦修士听出你熟稔旧教礼仪，侧身让开去路，将告解回音壁的木门指给你看。</span><<stress -2>><<lstress>>
+		苦修士听出你熟稔旧教礼仪，侧身让开去路，<span class="green">将告解回音壁的木门指给你看。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["abbey_scriptorium"]>>
 		<<set $mpKnown["abbey_scriptorium"] to 1>>
-		<span class="green">苦修士感念你的虔诚，低声指点你穿过焦黑石廊前往北侧的灰烬藏经阁。</span><<stress -2>><<lstress>>
+		苦修士感念你的虔诚，<span class="green">低声指点你穿过焦黑石廊前往北侧的灰烬藏经阁。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["abbey_ferry"]>>
 		<<set $mpKnown["abbey_ferry"] to 1>>
-		<span class="green">苦修士见你通晓古训，轻声告知底层暗阶下有一处通往旧港的暗河渡口。</span><<stress -2>><<lstress>>
+		苦修士见你通晓古训，<span class="green">轻声告知底层暗阶下有一处通往旧港的暗河渡口。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">苦修士合掌还礼，叮嘱你在地底石廊行走时留神脚下青苔。</span><<stress -2>><<lstress>>
+		苦修士合掌还礼，<span class="teal">叮嘱你在地底石廊行走时留神脚下青苔。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">你背诵的古祝词停顿生涩，苦修士轻轻摇头，转身去擦拭另一盏石灯。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你背诵的古祝词停顿生涩，苦修士轻轻摇头，<span class="red">转身去擦拭另一盏石灯。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1165,17 +1163,17 @@
 覆满青苔的宽阔石阶一路向下延伸，两侧立着双手交叠祈祷的无面苦修士石像。裂开的穹顶缝隙漏下几缕幽冷的天光。
 <<if $athletics gte 260 or $willpower gte 440>>你扶着冰凉的石栏稳步拾级而下，呼吸保持着平稳。<<else>>无面石像低垂的轮廓在阴影里显得格外森冷。<</if>>
 <br><br>
+<<getouticon>><<link [[沿石阶退回修道院口 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["abbey_confess"]>>
 	<<walkicon>><<link [[沿侧门去回音壁 (0:05)|MP Region Abbey Confess]]>><<pass 5>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿石阶退回修道院口 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[俯身查看石兽 (0:10)|MP Region Abbey Steps Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[坐壁龛石台上歇脚 (0:08)|MP Region Abbey Steps Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "数石像手势 (0:03)">><<pass 3>><<replace "#obs-abbey-steps">>
+<<link "数石像手势 (0:03)">><<pass 3>><<replace "#obs-abbey-steps">>
 <<if $history gte 260 or $willpower gte 440>>
 你发现第三尊无面石像的双手是反叠的，指节朝向石阶西侧的胡桃木侧门；门缝里透出一线昏黄。
 <<set $mpKnown["abbey_confess"] to 1>>
@@ -1205,8 +1203,15 @@
 		<<if ($mpFragAbyssPage or 0) lt 3>><<set $mpFragAbyssPage to ($mpFragAbyssPage or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在石像底座的奉纳钵下翻出两枚旧银币和一张写着“回音壁”的蜡封纸条。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_abbey_steps>>
+			<<set $daily.mpRegionLoot_abbey_steps to 1>>
+			你在石像底座的奉纳钵下翻出两枚旧银币和一张写着“回音壁”的蜡封纸条。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 200>><<stress -2>>
+		<<else>>
+			<span class="teal">奉纳钵底座下今日已被你摸索过，只剩冰凉的陈年香灰。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	石兽口中的断齿刮伤手腕，腹腔里的冷蜘蛛网粘了一手。你急忙缩手，没摸到暗槽里的东西。
@@ -1214,7 +1219,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "辨认奉纳铭文 (0:06)">><<pass 6>><<replace "#abbey-steps-choices">>
+<<link "辨认奉纳铭文 (0:06)">><<pass 6>><<replace "#abbey-steps-choices">>
 <<if $history gte 260 or $purity gte 500>>
 	<<set $mpKnown["abbey_confess"] to 1>>
 	你读懂了奉纳钵上的拉丁短句，末尾提到“西侧告解隔扇”，并画着一个小小的十字。
@@ -1235,16 +1240,16 @@
 <div id="mp-region-abbey-steps-rest-choices">
 <<tendingicon>><<link "借着没药铜灯暖手 (0:10)">><<pass 10>><<replace "#mp-region-abbey-steps-rest-choices">>
 <<if $willpower gte 440 or $purity gte 450>>
-<span class="green">温和的檀香与宁静的石廊抚平了你内心的焦躁，紧绷的小腿肌肉慢慢放松下来。</span>
+温和的檀香与宁静的石廊抚平了你内心的焦躁，<span class="green">紧绷的小腿肌肉慢慢放松下来。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">石阶下方突然飘来一阵阴冷的穿堂风，吹得长明灯焰忽明忽暗，无面石像的影子晃得你心神不宁。</span>
+石阶下方突然飘来一阵阴冷的穿堂风，吹得长明灯焰忽明忽暗，<span class="red">无面石像的影子晃得你心神不宁。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "拍去衣摆上的青苔 (0:06)">><<pass 6>><<replace "#mp-region-abbey-steps-rest-choices">>
-<span class="teal">你轻轻拍净衣摆沾上的石阶青苔，在淡雅的没药暖光里缓了缓神。</span>
+<<link "拍去衣摆上的青苔 (0:06)">><<pass 6>><<replace "#mp-region-abbey-steps-rest-choices">>
+你轻轻拍净衣摆沾上的石阶青苔，<span class="teal">在淡雅的没药暖光里缓了缓神。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -1255,17 +1260,17 @@
 雕花胡桃木隔扇虽已斑驳，高挑的声学穹顶依然能将最轻微的耳语清晰传递。弧形石墙下摆着两排旧祈祷椅，隔间内幽暗僻静。
 <<if $skulduggery gte 260 or $willpower gte 450>>你放轻脚步踩过八角青石盘，没有激起半点多余的回音。<<else>>你轻微的脚步声在穹顶下被放大了数倍，显得格外清晰。<</if>>
 <br><br>
+<<getouticon>><<link [[沿侧门退回修道院口 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["abbey_scriptorium"]>>
 	<<walkicon>><<link [[沿石廊去藏经阁 (0:11)|MP Region Abbey Scriptorium]]>><<pass 11>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿侧门退回修道院口 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[闪进第三间告解室 (0:10)|MP Region Abbey Confess Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[入告解木隔间静坐 (0:08)|MP Region Abbey Confess Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "听隔间传声 (0:03)">><<pass 3>><<replace "#obs-abbey-confess">>
+<<link "听隔间传声 (0:03)">><<pass 3>><<replace "#obs-abbey-confess">>
 <<if $skulduggery gte 260 or $willpower gte 450>>
 你听见穹顶把远处翻书声送进第三间隔间，跪凳下方有一块木榫被反复摩挲得发亮；隔扇后连着藏经阁的石廊。
 <<set $mpKnown["abbey_scriptorium"] to 1>>
@@ -1296,8 +1301,15 @@
 		<<money 300>>
 		<<stress -3>>
 	<<else>>
-		你在隔间丝绒跪垫夹层里摸出两枚信徒遗落的旧银币和一张写着“北侧书架”的纸条。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_abbey_confess>>
+			<<set $daily.mpRegionLoot_abbey_confess to 1>>
+			你在隔间丝绒跪垫夹层里摸出两枚信徒遗落的旧银币和一张写着“北侧书架”的纸条。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">丝绒跪垫夹层今日已被你翻过，只余下淡淡的没药残香。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	木榫卡得极紧，刀尖一滑在胡桃木板上刮出刺耳锐响，声学穹顶把声音传遍四方。你连忙收手。
@@ -1305,7 +1317,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查看告解残页 (0:07)">><<pass 7>><<replace "#abbey-confess-choices">>
+<<link "查看告解残页 (0:07)">><<pass 7>><<replace "#abbey-confess-choices">>
 <<if $history gte 260 or $english gte 240>>
 	<<set $mpKnown["abbey_scriptorium"] to 1>>
 	你在传声孔后找到半张告解记录，末尾写着“灰烬藏经阁的抄经台”，墨迹被水晕开。
@@ -1326,16 +1338,16 @@
 <div id="mp-region-abbey-confess-rest-choices">
 <<tendingicon>><<link "靠着丝绒跪垫垂眸 (0:10)">><<pass 10>><<replace "#mp-region-abbey-confess-rest-choices">>
 <<if $willpower gte 450 or $purity gte 450>>
-<span class="green">声学穹顶将外间的杂音彻底隔绝，幽暗安宁的木隔间让你的呼吸渐趋平缓，身心疲惫消减了不少。</span>
+声学穹顶将外间的杂音彻底隔绝，幽暗安宁的木隔间让你的呼吸渐趋平缓，<span class="green">身心疲惫消减了不少。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">隔扇另一侧的传声孔里忽然飘来似有若无的风声，像是有人贴着木格低语，惊得你背脊发凉。</span>
+隔扇另一侧的传声孔里忽然飘来似有若无的风声，像是有人贴着木格低语，<span class="red">惊得你背脊发凉。</span>
 <<stress 5>><<tiredness 1>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "揉热发凉的手腕 (0:06)">><<pass 6>><<replace "#mp-region-abbey-confess-rest-choices">>
-<span class="teal">你在安静的胡桃木隔间里搓热手腕，外廊的寒气被彻底挡在门外。</span>
+<<link "揉热发凉的手腕 (0:06)">><<pass 6>><<replace "#mp-region-abbey-confess-rest-choices">>
+你在安静的胡桃木隔间里搓热手腕，<span class="teal">外廊的寒气被彻底挡在门外。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -1346,17 +1358,17 @@
 高大的石砌书架间保存着未被昔日大火波及的羊皮古卷与泥金抄本。青铜抄经台立在橡木长桌中央，栏杆上的萤石阅读灯泛着微光。
 <<if $history gte 280 or $english gte 280>>你辨认出书架侧面的古拉丁文分类编号，迅速理清了藏书布局。<<else>>焦黑的书架残骸与厚重的羊皮卷透着岁月的沉闷感。<</if>>
 <br><br>
+<<getouticon>><<link [[沿书架退回修道院口 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["abbey_ferry"]>>
 	<<walkicon>><<link [[沿暗阶去渡口 (0:08)|MP Region Abbey Ferry]]>><<pass 8>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿书架退回修道院口 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[走近青铜抄经台 (0:12)|MP Region Abbey Scriptorium Search]]>><<pass 12>><</link>>
 <br>
 <<tendingicon>><<link [[倚雪松书架边养神 (0:08)|MP Region Abbey Scriptorium Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "闻羊皮卷气味 (0:03)">><<pass 3>><<replace "#obs-abbey-scriptorium">>
+<<link "闻羊皮卷气味 (0:03)">><<pass 3>><<replace "#obs-abbey-scriptorium">>
 <<if $history gte 280 or $tending gte 240>>
 你闻到雪松油和潮气混在一起，最里侧书架后有一道被灰烬掩住的暗阶，水声正从下面传来。
 <<set $mpKnown["abbey_ferry"] to 1>>
@@ -1386,8 +1398,15 @@
 		<<if ($mpFragAbyssPage or 0) lt 3>><<set $mpFragAbyssPage to ($mpFragAbyssPage or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在压书机下方的木匣里翻出两枚未受火损的银币和一张标着“暗河渡口”的书签。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_abbey_scriptorium>>
+			<<set $daily.mpRegionLoot_abbey_scriptorium to 1>>
+			你在压书机下方的木匣里翻出两枚未受火损的银币和一张标着“暗河渡口”的书签。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">压书机下的木匣今日已被你检视过，只剩干脆的焦木碎屑。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	生锈铜螺杆纹丝不动，反倒震落书架顶层一块焦木，擦着肩膀砸在脚边。你惊魂未定地退开。
@@ -1395,7 +1414,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查书架编号 (0:07)">><<pass 7>><<replace "#abbey-scriptorium-choices">>
+<<link "查书架编号 (0:07)">><<pass 7>><<replace "#abbey-scriptorium-choices">>
 <<if $history gte 280 or $english gte 280>>
 	<<set $mpKnown["abbey_ferry"] to 1>>
 	你按古拉丁文编号排出书架顺序，末端的空档后藏着通往暗河渡口的石阶。
@@ -1416,16 +1435,16 @@
 <div id="mp-region-abbey-scriptorium-rest-choices">
 <<tendingicon>><<link "嗅着雪松木香平气 (0:10)">><<pass 10>><<replace "#mp-region-abbey-scriptorium-rest-choices">>
 <<if $history gte 250 or $willpower gte 450>>
-<span class="green">陈年羊皮纸与雪松木的幽香萦绕在鼻端，干燥恒温的藏经阁让你紧绷的肩颈彻底松弛下来。</span>
+陈年羊皮纸与雪松木的幽香萦绕在鼻端，<span class="green">干燥恒温的藏经阁让你紧绷的肩颈彻底松弛下来。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">空气中残留的陈年烟灰味呛得你喉咙发痒，接连咳嗽了好几声，非但没能歇息好，反而有些胸闷。</span>
+空气中残留的陈年烟灰味呛得你喉咙发痒，接连咳嗽了好几声，非但没能歇息好，<span class="red">反而有些胸闷。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "拂去肩头陈年浮灰 (0:06)">><<pass 6>><<replace "#mp-region-abbey-scriptorium-rest-choices">>
-<span class="teal">你拂去肩头落下的古卷浮灰，在淡淡的雪松木香里放松了脖颈。</span>
+<<link "拂去肩头陈年浮灰 (0:06)">><<pass 6>><<replace "#mp-region-abbey-scriptorium-rest-choices">>
+你拂去肩头落下的古卷浮灰，<span class="teal">在淡淡的雪松木香里放松了脖颈。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -1440,9 +1459,11 @@
 <br>
 <<investigateicon>><<link [[蹲到系船石桩边 (0:12)|MP Region Abbey Ferry Search]]>><<pass 12>><</link>>
 <br>
-<<tendingicon>><<link [[进平底柏木舟歇腿 (0:08)|MP Region Abbey Ferry Rest]]>><<pass 8>><</link>>
+<<link [[进平底柏木舟歇腿 (0:08)|MP Region Abbey Ferry Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看水面暗流 (0:03)">><<pass 3>><<replace "#obs-abbey-ferry">>
+<<investigateicon>><<link [[顺石锚铁链探向水下 (0:08)|MP Extra Deep Abbey 1]]>><<pass 8>><</link>>
+<br>
+<<link "看水面暗流 (0:03)">><<pass 3>><<replace "#obs-abbey-ferry">>
 <<if $swimmingskill gte 260 or $athletics gte 260>>
 你盯着水面看了一会儿，发现石桩下游有一道回水湾，水底隐约露出一只铅盒的边角。
 <<else>>
@@ -1471,8 +1492,15 @@
 		<<money 400>>
 		<<stress -3>>
 	<<else>>
-		你从回水湾鹅卵石缝里摸出两枚沉底旧港银币和一小截刻着渡口编号的铜链。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_abbey_ferry>>
+			<<set $daily.mpRegionLoot_abbey_ferry to 1>>
+			你从回水湾鹅卵石缝里摸出两枚沉底旧港银币和一小截刻着渡口编号的铜链。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">回水湾卵石缝今日已被你摸过一遍，只余下冰冷的河泥。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	湍急暗流猛地拽偏手臂，冰冷河水冻得手指痉挛，小臂也在石桩青苔上擦破了皮。
@@ -1480,7 +1508,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查看船头风灯 (0:06)">><<pass 6>><<replace "#abbey-ferry-choices">>
+<<link "查看船头风灯 (0:06)">><<pass 6>><<replace "#abbey-ferry-choices">>
 <<if $swimmingskill gte 240 or $housekeeping gte 240>>
 	你拨亮牛角风灯，在灯座下找到一张渡船排班纸，背面画着水下暗龛的位置。
 	<<stress -1>>
@@ -1500,16 +1528,16 @@
 <div id="mp-region-abbey-ferry-rest-choices">
 <<tendingicon>><<link "靠着干燥船板伸腿 (0:10)">><<pass 10>><<replace "#mp-region-abbey-ferry-rest-choices">>
 <<if $swimmingskill gte 240 or $willpower gte 440>>
-<span class="green">木舟随着平缓的暗河水流轻轻摇晃，潺潺水声洗去了你脑海中的杂念，四肢的酸软感渐渐消退。</span>
+木舟随着平缓的暗河水流轻轻摇晃，潺潺水声洗去了你脑海中的杂念，<span class="green">四肢的酸软感渐渐消退。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">河道深处忽然涌来一排暗浪，震得木舟撞在系船石桩上咚咚作响，晃得你胃里一阵翻腾。</span>
+河道深处忽然涌来一排暗浪，震得木舟撞在系船石桩上咚咚作响，<span class="red">晃得你胃里一阵翻腾。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "拢好被水汽打湿的发 (0:06)">><<pass 6>><<replace "#mp-region-abbey-ferry-rest-choices">>
-<span class="teal">你将水汽打湿的碎发拢到耳后，听着柏木舟下的轻柔水声歇息片刻。</span>
+<<link "拢好被水汽打湿的发 (0:06)">><<pass 6>><<replace "#mp-region-abbey-ferry-rest-choices">>
+你将水汽打湿的碎发拢到耳后，<span class="teal">听着柏木舟下的轻柔水声歇息片刻。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -1521,37 +1549,17 @@
 <<if $tending gte 260 or $science gte 260>>你顺着铜制喷淋管的走向望去，立刻摸清了前厅的园艺分区。<<else>>浓郁的花香与温润白雾交织在一起，遮住了温室深处的长廊。<</if>>
 <<if Weather.isFreezing>>穹顶外的寒霜与室内的温润兰香隔着一层玻璃，铜管壁上凝结着细密的水珠。<</if>>
 <br><br>
-<<if $mpKnown["glasshouse_orchid"]>>
-	<<walkicon>><<link [[前往雾化兰花厅 (0:06)|MP Region Glasshouse Orchid]]>><<pass 6>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["glasshouse_specimen"]>>
-	<<walkicon>><<link [[前往夜光标本廊 (0:07)|MP Region Glasshouse Specimen]]>><<pass 7>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["glasshouse_dome"]>>
-	<<walkicon>><<link [[前往穹顶露台 (0:05)|MP Region Glasshouse Dome]]>><<pass 5>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["glasshouse_cellar"]>>
-	<<walkicon>><<link [[前往地下酿造室 (0:09)|MP Region Glasshouse Cellar]]>><<pass 9>><</link>>
-	<br>
-<</if>>
-<<getouticon>><<link [[返回多瑙河街 (0:08)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回多瑙河街 (0:08)|Danube Street]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<<walkicon>><<link [[前往雾化兰花厅 (0:06)|MP Region Glasshouse Orchid]]>><<pass 6>><</link>>
+<br>
+<<if $mpMicroNotice and $mpMicroNotice["glasshouse_nozzle"]>>
+	<<investigateicon>><<link [[去北藤架疏通喷淋嘴 (0:04)|MP Region Micro Glasshouse Nozzle]]>><<pass 4>><</link>>
+	<br>
+<</if>>
 <<investigateicon>><<link [[查看花房水路 (0:06)|MP Region Glasshouse Manor Scout]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向守夜园丁打听 (0:05)|MP Region Glasshouse Manor Ask]]>><<pass 5>><</link>>
-<br>
-<<tendingicon>><<link "试探恒温铜管水温 (0:03)">><<pass 3>><<replace "#obs-entry-glasshouse">>
-<<if $tending gte 240 or $science gte 240>>
-你轻触主供水管的黄铜分流阀，从回水温度判断出地底酿造室与二楼露台的暖气正全负荷运转。<<stress -2>><<lstress>>
-<<else>>
-喷淋嘴忽然洒出一蓬温热水雾，打湿了你的刘海，让你没来得及看清分流阀上的刻字。<<stress 2>><<tiredness 1>><<gstress>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-entry-glasshouse"></div>
+<<link [[向守夜园丁打听 (0:05)|MP Region Glasshouse Manor Ask]]>><<pass 5>><</link>>
 
 :: MP Region Glasshouse Manor Scout [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
@@ -1566,18 +1574,18 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpKnown["glasshouse_specimen"]>>
 		<<set $mpKnown["glasshouse_specimen"] to 1>>
-		<span class="green">你顺着贴有拉丁学名的铜牌走过去，发现了隐藏在玻璃隔断后方的夜光标本廊。</span><<stress -2>><<lstress>>
+		你顺着贴有拉丁学名的铜牌走过去，<span class="green">发现了隐藏在玻璃隔断后方的夜光标本廊。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["glasshouse_dome"]>>
 		<<set $mpKnown["glasshouse_dome"] to 1>>
-		<span class="green">你绕到热带棕榈丛背后，找到了盘旋通往二层玻璃穹顶露台的铁艺旋梯。</span><<stress -2>><<lstress>>
+		你绕到热带棕榈丛背后，<span class="green">找到了盘旋通往二层玻璃穹顶露台的铁艺旋梯。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["glasshouse_cellar"]>>
 		<<set $mpKnown["glasshouse_cellar"] to 1>>
-		<span class="green">你移开育苗台侧面的藤编花篮，发现了通往恒温地下酿造室的石阶暗门。</span><<stress -2>><<lstress>>
+		你移开育苗台侧面的藤编花篮，<span class="green">发现了通往恒温地下酿造室的石阶暗门。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">温室庄园上下的玻璃隔门与地窖入口都已记熟，暖雾在花架间静静流淌。</span><<stress -2>><<lstress>>
+		温室庄园上下的玻璃隔门与地窖入口都已记熟，<span class="teal">暖雾在花架间静静流淌。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">花架深处的带刺蔷薇藤勾住了你的袖口，自动喷淋阀突然洒出一阵温水，惊得你连忙退回门厅。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
+	花架深处的带刺蔷薇藤勾住了你的袖口，自动喷淋阀突然洒出一阵温水，<span class="red">惊得你连忙退回门厅。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -1585,18 +1593,18 @@
 <<if $tending gte 280 or $science gte 260>>
 	<<if !$mpKnown["glasshouse_specimen"]>>
 		<<set $mpKnown["glasshouse_specimen"] to 1>>
-		<span class="green">你顺着荧光蕈类的分区标牌往东找，一眼看到了夜光标本廊的磨砂门。</span><<stress -2>><<lstress>>
+		你顺着荧光蕈类的分区标牌往东找，<span class="green">一眼看到了夜光标本廊的磨砂门。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["glasshouse_dome"]>>
 		<<set $mpKnown["glasshouse_dome"] to 1>>
-		<span class="green">你沿着通风温控索的走向抬头，在棕榈叶掩映下发现了通往穹顶露台的旋梯。</span><<stress -2>><<lstress>>
+		你沿着通风温控索的走向抬头，<span class="green">在棕榈叶掩映下发现了通往穹顶露台的旋梯。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["glasshouse_cellar"]>>
 		<<set $mpKnown["glasshouse_cellar"] to 1>>
-		<span class="green">你循着果木发酵的微甜酒气查探，在北角铁栅下找到了地下酿造室活板门。</span><<stress -2>><<lstress>>
+		你循着果木发酵的微甜酒气查探，<span class="green">在北角铁栅下找到了地下酿造室活板门。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">你将苗圃各区的温湿度标牌逐一核准，确认花房内没有异常动静。</span><<stress -2>><<lstress>>
+		你将苗圃各区的温湿度标牌逐一核准，<span class="teal">确认花房内没有异常动静。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">水雾在铜牌表面凝成了水珠，繁复的植物拉丁分类让你一时看花了眼。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	水雾在铜牌表面凝成了水珠，<span class="red">繁复的植物拉丁分类让你一时看花了眼。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1609,23 +1617,23 @@
 <<walkicon>><<link [[告别园丁回门厅 (0:02)|MP Region Glasshouse Manor]]>><<pass 2>><</link>>
 <br>
 <div id="mp-region-glasshouse-manor-ask-choices">
-<<socialiseicon>><<link "微笑着向园丁问路 (0:05)">><<pass 5>><<replace "#mp-region-glasshouse-manor-ask-choices">>
+<<link "微笑着向园丁问路 (0:05)">><<pass 5>><<replace "#mp-region-glasshouse-manor-ask-choices">>
 <<set $seductiondifficulty to 4300>><<seductioncheck>>
 <<if $seductionrating gte $seductionrequired or $english gte 260>>
 	<<if !$mpKnown["glasshouse_specimen"]>>
 		<<set $mpKnown["glasshouse_specimen"] to 1>>
-		<span class="green">「诺艾尔交代过让你进来采标本，」园丁指了指东侧的磨砂玻璃门，「穿过兰花架就是夜光标本廊。」</span><<stress -2>><<lstress>>
+		「诺艾尔交代过让你进来采标本，」园丁指了指东侧的磨砂玻璃门，<span class="green">「穿过兰花架就是夜光标本廊。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["glasshouse_dome"]>>
 		<<set $mpKnown["glasshouse_dome"] to 1>>
-		<span class="green">「想透透气的话，顺着中间那道铁旋梯往上走，」园丁抬头示意道，「二楼是玻璃穹顶露台，能看见整片庄园。」</span><<stress -2>><<lstress>>
+		「想透透气的话，顺着中间那道铁旋梯往上走，」园丁抬头示意道，「二楼是玻璃穹顶露台，<span class="green">能看见整片庄园。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["glasshouse_cellar"]>>
 		<<set $mpKnown["glasshouse_cellar"] to 1>>
-		<span class="green">「萃取好的花露原液都存在底下，」园丁压低声音指了指北角铁栅，「掀开活板门就能下到地下酿造室。」</span><<stress -2>><<lstress>>
+		「萃取好的花露原液都存在底下，」园丁压低声音指了指北角铁栅，<span class="green">「掀开活板门就能下到地下酿造室。」</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">园丁收起黄铜花剪，说花房上下的门道你都已经摸熟，只管自便。</span><<stress -2>><<lstress>>
+		园丁收起黄铜花剪，说花房上下的门道你都已经摸熟，<span class="teal">只管自便。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">「名贵兰草娇贵得很，外人别到处乱碰，」园丁冷淡地收起铜剪背过身去，没有理会你的询问。</span><<stress 4>><<gstress>>
+	「名贵兰草娇贵得很，外人别到处乱碰，」园丁冷淡地收起铜剪背过身去，<span class="red">没有理会你的询问。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -1633,18 +1641,18 @@
 <<if $tending gte 260 or $science gte 260>>
 	<<if !$mpKnown["glasshouse_specimen"]>>
 		<<set $mpKnown["glasshouse_specimen"] to 1>>
-		<span class="green">园丁见你懂夜光兰的习性，欣然指向东侧隔断后的夜光标本廊让你去细看。</span><<stress -2>><<lstress>>
+		园丁见你懂夜光兰的习性，<span class="green">欣然指向东侧隔断后的夜光标本廊让你去细看。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["glasshouse_dome"]>>
 		<<set $mpKnown["glasshouse_dome"] to 1>>
-		<span class="green">园丁听你提起高处通风的门道，顺手指向棕榈丛后通往穹顶露台的旋梯。</span><<stress -2>><<lstress>>
+		园丁听你提起高处通风的门道，<span class="green">顺手指向棕榈丛后通往穹顶露台的旋梯。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["glasshouse_cellar"]>>
 		<<set $mpKnown["glasshouse_cellar"] to 1>>
-		<span class="green">园丁见你识得蒸馏花露的器皿，低声告诉你北角花篮下藏着地下酿造室。</span><<stress -2>><<lstress>>
+		园丁见你识得蒸馏花露的器皿，<span class="green">低声告诉你北角花篮下藏着地下酿造室。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">园丁笑着递给你一片刚剪下的迷迭香叶，说今晚温室恒温一切正常。</span><<stress -2>><<lstress>>
+		园丁笑着递给你一片刚剪下的迷迭香叶，<span class="teal">说今晚温室恒温一切正常。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">你对兰花喷淋时辰的说法外行了些，园丁皱了皱眉，让你别站在温床风口处。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你对兰花喷淋时辰的说法外行了些，园丁皱了皱眉，<span class="red">让你别站在温床风口处。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1655,17 +1663,17 @@
 温暖湿润的玻璃厅堂内，数十种罕见的夜光银脉兰在锻铁藤架间吐露芳华。恒温铜管每隔片刻便喷出一缕细腻的水雾，石板地面光洁温润。
 <<if $tending gte 260 or $beauty gte 3500>>你轻巧地避开垂落的气根，没有惊扰花瓣上的露珠。<<else>>馥郁甜美的花香萦绕在呼吸间，让你脸颊微微发热。<</if>>
 <br><br>
+<<getouticon>><<link [[沿花径退回温室口 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["glasshouse_specimen"]>>
 	<<walkicon>><<link [[穿花架去标本廊 (0:07)|MP Region Glasshouse Specimen]]>><<pass 7>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿花径退回温室口 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[蹲看花坛排水格 (0:10)|MP Region Glasshouse Orchid Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[坐铁艺长椅上歇脚 (0:08)|MP Region Glasshouse Orchid Rest]]>><<pass 8>><</link>>
 <br>
-<<tendingicon>><<link "看兰花气根 (0:03)">><<pass 3>><<replace "#obs-glasshouse-orchid">>
+<<link "看兰花气根 (0:03)">><<pass 3>><<replace "#obs-glasshouse-orchid">>
 <<if $tending gte 260 or $science gte 260>>
 你发现靠东墙的银脉兰气根都朝同一条磨砂玻璃缝伸展，缝后隐约有标本瓶的幽蓝反光。
 <<set $mpKnown["glasshouse_specimen"] to 1>>
@@ -1695,8 +1703,15 @@
 		<<if ($mpFragBrideFlower or 0) lt 3>><<set $mpFragBrideFlower to ($mpFragBrideFlower or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在花神像倾斜的底座下摸出两枚宾客遗落的银币和一张写着“标本廊”的铜牌。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_glasshouse_orchid>>
+			<<set $daily.mpRegionLoot_glasshouse_orchid to 1>>
+			你在花神像倾斜的底座下摸出两枚宾客遗落的银币和一张写着“标本廊”的铜牌。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 200>><<stress -2>>
+		<<else>>
+			<span class="teal">花神像底座今日已被你探过，只剩湿润的白石英砂。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	花架上的血色猪笼草突然倾倒，粘稠液滴和花刺一起落在手背上。你连忙缩手退开。
@@ -1704,7 +1719,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "比对兰花标签 (0:06)">><<pass 6>><<replace "#glasshouse-orchid-choices">>
+<<link "比对兰花标签 (0:06)">><<pass 6>><<replace "#glasshouse-orchid-choices">>
 <<if $tending gte 260 or $science gte 260>>
 	<<set $mpKnown["glasshouse_specimen"] to 1>>
 	你读出一张标签背面的育种编号，和夜光标本廊门牌上的编号只差一位。
@@ -1725,16 +1740,16 @@
 <div id="mp-region-glasshouse-orchid-rest-choices">
 <<tendingicon>><<link "呼吸薄荷兰香舒神 (0:10)">><<pass 10>><<replace "#mp-region-glasshouse-orchid-rest-choices">>
 <<if $tending gte 240 or $willpower gte 430>>
-<span class="green">清甜的兰草与薄荷气息沁入心脾，恒温舒适的花房环境让你的疲乏与焦虑消散了大半。</span>
+清甜的兰草与薄荷气息沁入心脾，<span class="green">恒温舒适的花房环境让你的疲乏与焦虑消散了大半。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">夜光兰散发出的浓郁甜香有些过于醉人，熏得你头脑昏沉、心跳加快。你连忙起身走到通风口旁。</span>
+夜光兰散发出的浓郁甜香有些过于醉人，<span class="red">熏得你头脑昏沉、心跳加快。你连忙起身走到通风口旁。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "擦去睫毛上的水雾 (0:06)">><<pass 6>><<replace "#mp-region-glasshouse-orchid-rest-choices">>
-<span class="teal">你拭去睫毛上凝结的细密水珠，恒温花房的暖意让四肢松弛下来。</span>
+<<link "擦去睫毛上的水雾 (0:06)">><<pass 6>><<replace "#mp-region-glasshouse-orchid-rest-choices">>
+你拭去睫毛上凝结的细密水珠，<span class="teal">恒温花房的暖意让四肢松弛下来。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -1745,17 +1760,17 @@
 胡桃木高柜沿着长廊两侧排开，水晶瓶里浸泡着泛着幽蓝微光的珍稀植物标本与花露原液。中段的铜制解剖台上架着一具双筒显微镜。
 <<if $science gte 280 or $tending gte 260>>你对照展柜上的罗马数字签牌，一眼看出了珍品陈列的位置。<<else>>幽蓝色的荧光液体在暗处静静闪烁，透着几分诡秘。<</if>>
 <br><br>
+<<getouticon>><<link [[沿长廊退回温室口 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["glasshouse_dome"]>>
 	<<walkicon>><<link [[沿铁梯上穹顶露台 (0:05)|MP Region Glasshouse Dome]]>><<pass 5>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿长廊退回温室口 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[凑近第七号展柜 (0:11)|MP Region Glasshouse Specimen Search]]>><<pass 11>><</link>>
 <br>
 <<tendingicon>><<link [[倚胡桃木柜旁小憩 (0:08)|MP Region Glasshouse Specimen Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看标本签号 (0:03)">><<pass 3>><<replace "#obs-glasshouse-specimen">>
+<<link "看标本签号 (0:03)">><<pass 3>><<replace "#obs-glasshouse-specimen">>
 <<if $science gte 280 or $tending gte 260>>
 你发现展柜的罗马数字从六直接跳到八，七号的位置留着一道新擦痕，正对着通往穹顶露台的铁梯。
 <<set $mpKnown["glasshouse_dome"] to 1>>
@@ -1786,8 +1801,15 @@
 		<<money 300>>
 		<<stress -3>>
 	<<else>>
-		你在解剖台抽屉的标本签盒里翻出两枚备用银元和一张写着“穹顶茶会”的请柬残页。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_glasshouse_specimen>>
+			<<set $daily.mpRegionLoot_glasshouse_specimen to 1>>
+			你在解剖台抽屉的标本签盒里翻出两枚备用银元和一张写着“穹顶茶会”的请柬残页。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">解剖台抽屉的签盒今日已被你翻过，只剩几枚空白标本签。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	玻璃钟罩在底座上滑了一下，保存液挥发出的刺鼻药味呛得眼角泛泪。你连忙把钟罩按回原处。
@@ -1795,7 +1817,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "读第七号标签 (0:06)">><<pass 6>><<replace "#glasshouse-specimen-choices">>
+<<link "读第七号标签 (0:06)">><<pass 6>><<replace "#glasshouse-specimen-choices">>
 <<if $science gte 280 or $history gte 240>>
 	<<set $mpKnown["glasshouse_dome"] to 1>>
 	你认出七号标签背面有一行铅笔字：“穹顶茶会，风向标座”，字迹和园丁的登记簿一致。
@@ -1816,16 +1838,16 @@
 <div id="mp-region-glasshouse-specimen-rest-choices">
 <<tendingicon>><<link "凝望幽蓝荧光定神 (0:10)">><<pass 10>><<replace "#mp-region-glasshouse-specimen-rest-choices">>
 <<if $science gte 250 or $willpower gte 440>>
-<span class="green">安静幽邃的标本长廊隔绝了外界喧嚣，柔和的冷光让你纷乱的思绪渐渐平复下来。</span>
+安静幽邃的标本长廊隔绝了外界喧嚣，<span class="green">柔和的冷光让你纷乱的思绪渐渐平复下来。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">展柜里高大的深海鲸骨阴影在微光下显得森然可怖，看得你心里直发毛，根本无法安心歇息。</span>
+展柜里高大的深海鲸骨阴影在微光下显得森然可怖，看得你心里直发毛，<span class="red">根本无法安心歇息。</span>
 <<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "活动僵硬的肩颈 (0:06)">><<pass 6>><<replace "#mp-region-glasshouse-specimen-rest-choices">>
-<span class="teal">你倚着温润的胡桃木柜框转了转肩膀，幽蓝微光让紧绷的心神安定不少。</span>
+<<link "活动僵硬的肩颈 (0:06)">><<pass 6>><<replace "#mp-region-glasshouse-specimen-rest-choices">>
+你倚着温润的胡桃木柜框转了转肩膀，<span class="teal">幽蓝微光让紧绷的心神安定不少。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -1836,17 +1858,17 @@
 顺着铁艺旋梯登上二层环形露台，弧形玻璃穹顶将外面的天光云影尽收眼底。雕花围栏边摆着藤编茶几，悬空花槽里种满了垂吊迷迭香。
 <<if $athletics gte 260 or $tending gte 260>>你扶着铸铁栏杆稳步走上露台，清新的迷迭香气令人精神一振。<<else>>悬挑在半空的铁栅步道微微颤动，让你不由得放慢了脚步。<</if>>
 <br><br>
+<<getouticon>><<link [[沿旋梯退回温室口 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["glasshouse_cellar"]>>
 	<<walkicon>><<link [[沿暗梯下酿造室 (0:09)|MP Region Glasshouse Cellar]]>><<pass 9>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿旋梯退回温室口 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[攀上旋梯顶端 (0:12)|MP Region Glasshouse Dome Search]]>><<pass 12>><</link>>
 <br>
 <<tendingicon>><<link [[窝进藤编躺椅养神 (0:08)|MP Region Glasshouse Dome Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看风向标偏角 (0:03)">><<pass 3>><<replace "#obs-glasshouse-dome">>
+<<link "看风向标偏角 (0:03)">><<pass 3>><<replace "#obs-glasshouse-dome">>
 <<if $athletics gte 260 or $tending gte 260>>
 你发现风向标底座的铜轴被磨出一圈亮痕，旁边地砖有一道常被掀开的缝，下面透出地窖的酒气。
 <<set $mpKnown["glasshouse_cellar"] to 1>>
@@ -1876,8 +1898,15 @@
 		<<if ($mpFragBrideFlower or 0) lt 3>><<set $mpFragBrideFlower to ($mpFragBrideFlower or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在藤编茶几托盘暗层下摸出两枚贵客留下的小费银币和一张写着“地窖”的卡片。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_glasshouse_dome>>
+			<<set $daily.mpRegionLoot_glasshouse_dome to 1>>
+			你在藤编茶几托盘暗层下摸出两枚贵客留下的小费银币和一张写着“地窖”的卡片。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">藤编茶几暗层今日已被你查过，只余下一点干枯的茶末。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	旋梯最高一级铁踏板突然打滑，手肘磕在铸铁雕花栏杆上。你只好扶着栏杆退回露台。
@@ -1885,7 +1914,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查茶会礼单 (0:06)">><<pass 6>><<replace "#glasshouse-dome-choices">>
+<<link "查茶会礼单 (0:06)">><<pass 6>><<replace "#glasshouse-dome-choices">>
 <<if $housekeeping gte 250 or $history gte 240>>
 	<<set $mpKnown["glasshouse_cellar"] to 1>>
 	你在礼单末页找到一行小字：“酒窖第三桶，地窖暗梯”，旁边还画着风向标的简笔。
@@ -1906,16 +1935,16 @@
 <div id="mp-region-glasshouse-dome-rest-choices">
 <<tendingicon>><<link "嗅着迷迭清香闭目 (0:10)">><<pass 10>><<replace "#mp-region-glasshouse-dome-rest-choices">>
 <<if $willpower gte 450 or $housekeeping gte 250>>
-<span class="green">迷迭香的清爽气息混着茶几上残留的红茶暖香，让你紧绷的心弦缓缓舒展，四肢恢复了轻快。</span>
+迷迭香的清爽气息混着茶几上残留的红茶暖香，让你紧绷的心弦缓缓舒展，<span class="green">四肢恢复了轻快。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">顶棚换气扇突然灌进一股冷热交替的气流，吹得你连打两个喷嚏，藤椅扶手也硌得腰侧发酸。</span>
+顶棚换气扇突然灌进一股冷热交替的气流，吹得你连打两个喷嚏，<span class="red">藤椅扶手也硌得腰侧发酸。</span>
 <<stress 4>><<pain 1>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "抚平袖口褶皱歇息 (0:06)">><<pass 6>><<replace "#mp-region-glasshouse-dome-rest-choices">>
-<span class="teal">你陷在宽大的藤编躺椅里抚平袖口，迷迭香的草木清气令人神清气爽。</span>
+<<link "抚平袖口褶皱歇息 (0:06)">><<pass 6>><<replace "#mp-region-glasshouse-dome-rest-choices">>
+你陷在宽大的藤编躺椅里抚平袖口，<span class="teal">迷迭香的草木清气令人神清气爽。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -1930,9 +1959,11 @@
 <br>
 <<investigateicon>><<link [[走到第三只酒桶前 (0:14)|MP Region Glasshouse Cellar Search]]>><<pass 14>><</link>>
 <br>
-<<tendingicon>><<link [[坐地窖干草垛歇脚 (0:08)|MP Region Glasshouse Cellar Rest]]>><<pass 8>><</link>>
+<<link [[坐地窖干草垛歇脚 (0:08)|MP Region Glasshouse Cellar Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "听酒桶回声 (0:03)">><<pass 3>><<replace "#obs-glasshouse-cellar">>
+<<investigateicon>><<link [[步入橡木桶后冷香窖 (0:08)|MP Extra Deep Glasshouse 1]]>><<pass 8>><</link>>
+<br>
+<<link "听酒桶回声 (0:03)">><<pass 3>><<replace "#obs-glasshouse-cellar">>
 <<if $science gte 280 or $housekeeping gte 260>>
 你轻叩第三只橡木桶，回声比旁边几只空了一截；桶底箍上有一道被反复撬动的划痕。
 <<else>>
@@ -1961,8 +1992,15 @@
 		<<money 500>>
 		<<stress -3>>
 	<<else>>
-		你在实木酒架最底层的铁盒里翻出两枚酒窖管事藏起的银币和一张标着“第三桶”的私账页。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_glasshouse_cellar>>
+			<<set $daily.mpRegionLoot_glasshouse_cellar to 1>>
+			你在实木酒架最底层的铁盒里翻出两枚酒窖管事藏起的银币和一张标着“第三桶”的私账页。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">酒架底层的铁盒今日已被你翻检过，只剩潮湿的软木塞屑。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	木塞突然崩开，喷出一股辛辣发酵酒气，铜蒸馏器的热水管也烫到手腕。你呛得连连后退。
@@ -1970,7 +2008,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "看桶箍年份 (0:07)">><<pass 7>><<replace "#glasshouse-cellar-choices">>
+<<link "看桶箍年份 (0:07)">><<pass 7>><<replace "#glasshouse-cellar-choices">>
 <<if $science gte 280 or $housekeeping gte 260>>
 	你发现第三只桶的 1889 年箍圈和其余十二只不是同一批，箍下还塞着一小卷私账纸。
 	<<stress -1>>
@@ -1990,16 +2028,16 @@
 <div id="mp-region-glasshouse-cellar-rest-choices">
 <<tendingicon>><<link "背靠橡木酒桶缓劲 (0:10)">><<pass 10>><<replace "#mp-region-glasshouse-cellar-rest-choices">>
 <<if $willpower gte 460 or $tending gte 260>>
-<span class="green">温和醇厚的果木酒香让你的呼吸慢慢平顺下来，阴凉安静的地窖驱散了你身上的燥热与疲倦。</span>
+温和醇厚的果木酒香让你的呼吸慢慢平顺下来，<span class="green">阴凉安静的地窖驱散了你身上的燥热与疲倦。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">地窖角落冰窖渗出的寒气顺着地面蔓延过来，冻得你双脚发麻，浓重的酒气也熏得你额角突突直跳。</span>
+地窖角落冰窖渗出的寒气顺着地面蔓延过来，冻得你双脚发麻，<span class="red">浓重的酒气也熏得你额角突突直跳。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "搓热微凉的脚踝 (0:06)">><<pass 6>><<replace "#mp-region-glasshouse-cellar-rest-choices">>
-<span class="teal">你坐在松软的干草垛上揉了揉脚踝，果木酒香驱散了地底的微凉。</span>
+<<link "搓热微凉的脚踝 (0:06)">><<pass 6>><<replace "#mp-region-glasshouse-cellar-rest-choices">>
+你坐在松软的干草垛上揉了揉脚踝，<span class="teal">果木酒香驱散了地底的微凉。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2011,37 +2049,17 @@
 <<if $athletics gte 260 or $skulduggery gte 260>>你贴着货车阴影快步穿行，看清了脚下交错的枕木。<<else>>空旷的货运站里铁轨纵横，稍不留神就会踩响碎石。<</if>>
 <<if Weather.precipitation is "rain">>雨水顺着生锈的龙门吊铁架淌下，在枕木凹槽里积出一汪汪泛着油花的黑水。<</if>>
 <br><br>
-<<if $mpKnown["blackiron_siding"]>>
-	<<walkicon>><<link [[前往废弃调车场 (0:05)|MP Region Blackiron Siding]]>><<pass 5>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["blackiron_armored"]>>
-	<<walkicon>><<link [[前往三号装甲车 (0:08)|MP Region Blackiron Armored]]>><<pass 8>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["blackiron_signal"]>>
-	<<walkicon>><<link [[前往信号值班室 (0:06)|MP Region Blackiron Signal]]>><<pass 6>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["blackiron_platform"]>>
-	<<walkicon>><<link [[前往地下装卸台 (0:10)|MP Region Blackiron Platform]]>><<pass 10>><</link>>
-	<br>
-<</if>>
 <<getouticon>><<link [[返回麋鹿街 (0:09)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 9>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<<walkicon>><<link [[前往废弃调车场 (0:05)|MP Region Blackiron Siding]]>><<pass 5>><</link>>
+<br>
+<<if $mpMicroNotice and $mpMicroNotice["blackiron_wedge"]>>
+	<<investigateicon>><<link [[去二号股道撬制动楔 (0:04)|MP Region Micro Blackiron Wedge]]>><<pass 4>><</link>>
+	<br>
+<</if>>
 <<investigateicon>><<link [[顺着铁轨排摸 (0:06)|MP Region Blackiron Yard Scout]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向巡道老工打听 (0:05)|MP Region Blackiron Yard Ask]]>><<pass 5>><</link>>
-<br>
-<<investigateicon>><<link "查看扳道器指示牌 (0:03)">><<pass 3>><<replace "#obs-entry-blackiron">>
-<<if $skulduggery gte 240 or $athletics gte 240>>
-你蹲在扳道器旁比对钢轨顶面的亮痕，发现三号副线昨晚刚有重车碾过，枕木边还留着新滴的黄油。<<stress -2>><<lstress>>
-<<else>>
-冷风吹得信号提灯晃个不停，你没能从生锈的股道铭牌上看出哪条线还在启用。<<stress 2>><<tiredness 1>><<gstress>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-entry-blackiron"></div>
+<<link [[向巡道老工打听 (0:05)|MP Region Blackiron Yard Ask]]>><<pass 5>><</link>>
 
 :: MP Region Blackiron Yard Scout [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
@@ -2056,18 +2074,18 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpKnown["blackiron_armored"]>>
 		<<set $mpKnown["blackiron_armored"] to 1>>
-		<span class="green">你顺着副股道新磨亮的钢轨寻去，在防雨棚下找到了铆接厚钢板的三号装甲货车。</span><<stress -2>><<lstress>>
+		你顺着副股道新磨亮的钢轨寻去，<span class="green">在防雨棚下找到了铆接厚钢板的三号装甲货车。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["blackiron_signal"]>>
 		<<set $mpKnown["blackiron_signal"] to 1>>
-		<span class="green">你沿着电报线杆往北看，发现了可以俯瞰整片调车场的二层砖木信号值班室。</span><<stress -2>><<lstress>>
+		你沿着电报线杆往北看，<span class="green">发现了可以俯瞰整片调车场的二层砖木信号值班室。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["blackiron_platform"]>>
 		<<set $mpKnown["blackiron_platform"] to 1>>
-		<span class="green">你绕到卸货仓库后方的斜坡下，找到了连通港区暗渠的地下走私月台入口。</span><<stress -2>><<lstress>>
+		你绕到卸货仓库后方的斜坡下，<span class="green">找到了连通港区暗渠的地下走私月台入口。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">调车场各条股道与暗月台的方位都已摸清，远处探照灯按固定节拍扫过。</span><<stress -2>><<lstress>>
+		调车场各条股道与暗月台的方位都已摸清，<span class="teal">远处探照灯按固定节拍扫过。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">靴底踩滑了一块尖锐的道砟碎石，脚踝猛地一扭，远处巡逻哨的探照灯束也扫了过来。你连忙缩回红砖墙后。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
+	靴底踩滑了一块尖锐的道砟碎石，脚踝猛地一扭，<span class="red">远处巡逻哨的探照灯束也扫了过来。你连忙缩回红砖墙后。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -2075,18 +2093,18 @@
 <<if $athletics gte 280 or $science gte 250>>
 	<<if !$mpKnown["blackiron_armored"]>>
 		<<set $mpKnown["blackiron_armored"] to 1>>
-		<span class="green">你借着高处信号灯的反光，看清了停在北侧副线闷罐车后的三号装甲货车。</span><<stress -2>><<lstress>>
+		你借着高处信号灯的反光，<span class="green">看清了停在北侧副线闷罐车后的三号装甲货车。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["blackiron_signal"]>>
 		<<set $mpKnown["blackiron_signal"] to 1>>
-		<span class="green">你顺着架空电缆的汇集方向寻去，锁定了东头那座砖木结构的信号值班室。</span><<stress -2>><<lstress>>
+		你顺着架空电缆的汇集方向寻去，<span class="green">锁定了东头那座砖木结构的信号值班室。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["blackiron_platform"]>>
 		<<set $mpKnown["blackiron_platform"] to 1>>
-		<span class="green">你留意到三号仓库地面有一道延伸向地底的绞盘钢索，顺势找到了地下装卸台。</span><<stress -2>><<lstress>>
+		你留意到三号仓库地面有一道延伸向地底的绞盘钢索，<span class="green">顺势找到了地下装卸台。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">你站在给水塔阴影下把全场的股道走向又印证了一遍，心中了然。</span><<stress -2>><<lstress>>
+		你站在给水塔阴影下把全场的股道走向又印证了一遍，<span class="teal">心中了然。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">工业区的煤灰混着夜雾迷了眼睛，高处的线杆在黑暗中融成一片模糊黑影。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	工业区的煤灰混着夜雾迷了眼睛，<span class="red">高处的线杆在黑暗中融成一片模糊黑影。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2099,23 +2117,23 @@
 <<walkicon>><<link [[告别老工回场口 (0:02)|MP Region Blackiron Yard]]>><<pass 2>><</link>>
 <br>
 <div id="mp-region-blackiron-yard-ask-choices">
-<<socialiseicon>><<link "上前搭话打听车皮 (0:05)">><<pass 5>><<replace "#mp-region-blackiron-yard-ask-choices">>
+<<link "上前搭话打听车皮 (0:05)">><<pass 5>><<replace "#mp-region-blackiron-yard-ask-choices">>
 <<set $seductiondifficulty to 4400>><<seductioncheck>>
 <<if $seductionrating gte $seductionrequired or $english gte 260>>
 	<<if !$mpKnown["blackiron_armored"]>>
 		<<set $mpKnown["blackiron_armored"] to 1>>
-		<span class="green">「林恩提过你会来查车皮，」老工用扳手点了点北侧副线，「那节铆钢板的三号装甲货车就停在闷罐车后面。」</span><<stress -2>><<lstress>>
+		「林恩提过你会来查车皮，」老工用扳手点了点北侧副线，<span class="green">「那节铆钢板的三号装甲货车就停在闷罐车后面。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["blackiron_signal"]>>
 		<<set $mpKnown["blackiron_signal"] to 1>>
-		<span class="green">「想查发报底单就上东头那座信号塔值班室，」老工压低声音道，「外侧铁梯的插销没锁死。」</span><<stress -2>><<lstress>>
+		「想查发报底单就上东头那座信号塔值班室，」老工压低声音道，<span class="green">「外侧铁梯的插销没锁死。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["blackiron_platform"]>>
 		<<set $mpKnown["blackiron_platform"] to 1>>
-		<span class="green">「黑市夜班货都不走明面，」老工朝三号仓库地底指了指，「顺着货运滑道下去就是地下走私月台。」</span><<stress -2>><<lstress>>
+		「黑市夜班货都不走明面，」老工朝三号仓库地底指了指，<span class="green">「顺着货运滑道下去就是地下走私月台。」</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">老工拎起信号灯照了照枕木，说场站里这几处地方今晚都没锁。</span><<stress -2>><<lstress>>
+		老工拎起信号灯照了照枕木，<span class="teal">说场站里这几处地方今晚都没锁。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">「调车重地，闲杂人等快走开，」老工拎起信号灯晃了晃，板着脸不肯多说半句。</span><<stress 4>><<gstress>>
+	「调车重地，闲杂人等快走开，」老工拎起信号灯晃了晃，<span class="red">板着脸不肯多说半句。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -2123,18 +2141,18 @@
 <<if $skulduggery gte 260 or $physique gte 11500>>
 	<<if !$mpKnown["blackiron_armored"]>>
 		<<set $mpKnown["blackiron_armored"] to 1>>
-		<span class="green">老工接过卷烟夹在耳后，用下巴朝防雨棚下的三号装甲货车努了努嘴。</span><<stress -2>><<lstress>>
+		老工接过卷烟夹在耳后，<span class="green">用下巴朝防雨棚下的三号装甲货车努了努嘴。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["blackiron_signal"]>>
 		<<set $mpKnown["blackiron_signal"] to 1>>
-		<span class="green">老工见你懂货运站夜班规矩，指了指东面二楼亮着微光的信号值班室。</span><<stress -2>><<lstress>>
+		老工见你懂货运站夜班规矩，<span class="green">指了指东面二楼亮着微光的信号值班室。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["blackiron_platform"]>>
 		<<set $mpKnown["blackiron_platform"] to 1>>
-		<span class="green">老工左右看了一眼，低声告诉你卸货仓斜坡底下就是连通暗渠的地下装卸台。</span><<stress -2>><<lstress>>
+		老工左右看了一眼，<span class="green">低声告诉你卸货仓斜坡底下就是连通暗渠的地下装卸台。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">老工冲你点了点头，提醒你巡逻哨刚换过班，正是进出车厢的好时候。</span><<stress -2>><<lstress>>
+		老工冲你点了点头，提醒你巡逻哨刚换过班，<span class="teal">正是进出车厢的好时候。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">老工摆了摆手没接，审视了你两眼后低头继续拧他的道岔螺栓。</span><<stress 3>><<tiredness 1>><<gstress>>
+	老工摆了摆手没接，<span class="red">审视了你两眼后低头继续拧他的道岔螺栓。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2145,17 +2163,17 @@
 布满道岔扳手的铁轨汇集区里，枯黄的野草从枕木缝隙间钻出地面。几节脱轨的敞篷煤车歪斜在止冲挡旁，铁壳在风里发出沉闷的轻响。
 <<if $physique gte 11500 or $athletics gte 260>>你利落地跨过生锈的道岔拉杆，落脚悄无声息。<<else>>横七竖八的枕木与铁拉杆很容易绊住脚踝。<</if>>
 <br><br>
+<<getouticon>><<link [[沿铁轨退回货运站口 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["blackiron_armored"]>>
 	<<walkicon>><<link [[沿副线去装甲车 (0:08)|MP Region Blackiron Armored]]>><<pass 8>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿铁轨退回货运站口 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[蹲到七号扳道器旁 (0:10)|MP Region Blackiron Siding Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[进敞篷车厢角歇息 (0:08)|MP Region Blackiron Siding Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看道岔磨痕 (0:03)">><<pass 3>><<replace "#obs-blackiron-siding">>
+<<link "看道岔磨痕 (0:03)">><<pass 3>><<replace "#obs-blackiron-siding">>
 <<if $athletics gte 260 or $physique gte 11500>>
 你看见七号道岔的拉杆上有一层新抹的黄油，油迹一路延伸到防雨棚下的三号装甲货车。
 <<set $mpKnown["blackiron_armored"] to 1>>
@@ -2185,8 +2203,15 @@
 		<<if ($mpFragLedgerKey or 0) lt 3>><<set $mpFragLedgerKey to ($mpFragLedgerKey or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在缓冲器下方的防水布袋里翻出两枚铁路工人的银币和一张写着“三号车”的油污纸条。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_blackiron_siding>>
+			<<set $daily.mpRegionLoot_blackiron_siding to 1>>
+			你在缓冲器下方的防水布袋里翻出两枚铁路工人的银币和一张写着“三号车”的油污纸条。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 200>><<stress -2>>
+		<<else>>
+			<span class="teal">缓冲器下的防水袋今日已被你翻过，只余下半块干硬油泥。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	生锈的扳道弹簧突然回弹，沉重铁柄擦着膝盖砸下，虎口震得发麻。你只好空手退开。
@@ -2194,7 +2219,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "比对车皮编号 (0:06)">><<pass 6>><<replace "#blackiron-siding-choices">>
+<<link "比对车皮编号 (0:06)">><<pass 6>><<replace "#blackiron-siding-choices">>
 <<if $maths gte 240 or $science gte 240>>
 	<<set $mpKnown["blackiron_armored"] to 1>>
 	你发现脱轨煤车的编号跳过了三号，而棚下那节铆钢板的货车正挂着缺失的号牌。
@@ -2215,16 +2240,16 @@
 <div id="mp-region-blackiron-siding-rest-choices">
 <<tendingicon>><<link "靠着干燥木箱避风 (0:10)">><<pass 10>><<replace "#mp-region-blackiron-siding-rest-choices">>
 <<if $physique gte 11500 or $willpower gte 430>>
-<span class="green">厚重的车体隔开了外面的寒流，你抱膝靠在干燥的木箱边缓了口气，紧绷的小腿渐渐恢复了力气。</span>
+厚重的车体隔开了外面的寒流，你抱膝靠在干燥的木箱边缓了口气，<span class="green">紧绷的小腿渐渐恢复了力气。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">车厢底板缝隙里钻出阵阵刺骨的穿堂冷风，煤灰味呛得你鼻腔发酸。你缩在角落里非但没歇好，反而浑身僵冷。</span>
+车厢底板缝隙里钻出阵阵刺骨的穿堂冷风，煤灰味呛得你鼻腔发酸。你缩在角落里非但没歇好，<span class="red">反而浑身僵冷。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "拍净裤腿上的煤灰 (0:06)">><<pass 6>><<replace "#mp-region-blackiron-siding-rest-choices">>
-<span class="teal">你拍掉裤腿上蹭到的黑煤灰，在挡风的车厢角落里安稳地歇过了脚力。</span>
+<<link "拍净裤腿上的煤灰 (0:06)">><<pass 6>><<replace "#mp-region-blackiron-siding-rest-choices">>
+你拍掉裤腿上蹭到的黑煤灰，<span class="teal">在挡风的车厢角落里安稳地歇过了脚力。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2235,17 +2260,17 @@
 特种装甲货车的外壳铆接着双层厚钢板，车厢内部焊着一排带锁的铁枪架与铅封保险柜。车顶透气百叶窗滤入几缕昏暗的光线。
 <<if $skulduggery gte 280 or $physique gte 12000>>你借着微光看清了枪架后方的暗锁结构。<<else>>狭窄幽暗的钢铁车厢里弥漫着浓重的枪油与铁锈味。<</if>>
 <br><br>
+<<getouticon>><<link [[沿车钩退回货运站口 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["blackiron_signal"]>>
 	<<walkicon>><<link [[沿铁梯去信号室 (0:06)|MP Region Blackiron Signal]]>><<pass 6>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿车钩退回货运站口 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[凑近车内铁枪架 (0:12)|MP Region Blackiron Armored Search]]>><<pass 12>><</link>>
 <br>
 <<tendingicon>><<link [[坐押运折叠床小憩 (0:08)|MP Region Blackiron Armored Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看枪架暗锁 (0:03)">><<pass 3>><<replace "#obs-blackiron-armored">>
+<<link "看枪架暗锁 (0:03)">><<pass 3>><<replace "#obs-blackiron-armored">>
 <<if $skulduggery gte 280 or $physique gte 12000>>
 你发现枪架后方的暗锁旁有一道新刮痕，锁孔里还卡着半截电报线；线头指向信号值班室。
 <<set $mpKnown["blackiron_signal"] to 1>>
@@ -2276,8 +2301,15 @@
 		<<money 400>>
 		<<stress -3>>
 	<<else>>
-		你在押运员折叠床下的帆布包里摸出两张零钞和一张写着“信号室”的交接单。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_blackiron_armored>>
+			<<set $daily.mpRegionLoot_blackiron_armored to 1>>
+			你在押运员折叠床下的帆布包里摸出两张零钞和一张写着“信号室”的交接单。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">折叠床下的帆布包今日已被你查过，只剩几枚生锈铁钉。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	枪架上的防盗铁链突然哗啦作响，沉重铁锁砸在手背上。你疼得松手退向车门。
@@ -2285,7 +2317,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查押运交接单 (0:07)">><<pass 7>><<replace "#blackiron-armored-choices">>
+<<link "查押运交接单 (0:07)">><<pass 7>><<replace "#blackiron-armored-choices">>
 <<if $maths gte 260 or $history gte 240>>
 	<<set $mpKnown["blackiron_signal"] to 1>>
 	你从交接单的复写纸痕迹里读出一组信号室呼号，末尾写着“夜间发报”。
@@ -2306,16 +2338,16 @@
 <div id="mp-region-blackiron-armored-rest-choices">
 <<tendingicon>><<link "拉掩铆钉钢门静坐 (0:10)">><<pass 10>><<replace "#mp-region-blackiron-armored-rest-choices">>
 <<if $willpower gte 450 or $physique gte 12000>>
-<span class="green">密不透风的厚钢板车厢将外界的动静彻底隔绝，结实的帆布床让你安心地恢复了不少体力。</span>
+密不透风的厚钢板车厢将外界的动静彻底隔绝，<span class="green">结实的帆布床让你安心地恢复了不少体力。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">车底车轴间突然传来一阵老鼠抓挠铁网的刺耳声响，闷热的铁车厢也让你胸口发堵，怎么也静不下心。</span>
+车底车轴间突然传来一阵老鼠抓挠铁网的刺耳声响，闷热的铁车厢也让你胸口发堵，<span class="red">怎么也静不下心。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "揉松紧绷的手指 (0:06)">><<pass 6>><<replace "#mp-region-blackiron-armored-rest-choices">>
-<span class="teal">你在结实的帆布折叠床上伸展手指，厚钢板隔开了外面的寒风。</span>
+<<link "揉松紧绷的手指 (0:06)">><<pass 6>><<replace "#mp-region-blackiron-armored-rest-choices">>
+你在结实的帆布折叠床上伸展手指，<span class="teal">厚钢板隔开了外面的寒风。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2326,17 +2358,17 @@
 高出地面两层的砖木信号楼内，十六根铸铁联锁拉杆一字排开。角落的老式摩尔斯电报机旁压着未裁断的纸带，四面玻璃窗可将整片调车场尽收眼底。
 <<if $science gte 260 or $maths gte 260>>你扫了一眼联锁拉杆上的编号牌，迅速看懂了股道切换的指向。<<else>>密密麻麻的信号灯盘与拉杆让你不敢轻易触碰。<</if>>
 <br><br>
+<<getouticon>><<link [[沿铁梯退回货运站口 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["blackiron_platform"]>>
 	<<walkicon>><<link [[沿滑道下装卸台 (0:10)|MP Region Blackiron Platform]]>><<pass 10>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿铁梯退回货运站口 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[蹲到联锁机箱前 (0:10)|MP Region Blackiron Signal Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[坐信号室高椅歇脚 (0:08)|MP Region Blackiron Signal Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "听纸带节奏 (0:03)">><<pass 3>><<replace "#obs-blackiron-signal">>
+<<link "听纸带节奏 (0:03)">><<pass 3>><<replace "#obs-blackiron-signal">>
 <<if $science gte 260 or $maths gte 260>>
 你听出电报纸带重复着同一组短码，对照墙上的呼号表，它指向仓库地底的地下装卸台。
 <<set $mpKnown["blackiron_platform"] to 1>>
@@ -2366,8 +2398,15 @@
 		<<if ($mpFragLedgerKey or 0) lt 3>><<set $mpFragLedgerKey to ($mpFragLedgerKey or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在电报机抽屉底层锡盒里找到两枚值班员银币和一张写着“三号仓库滑道”的纸带。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_blackiron_signal>>
+			<<set $daily.mpRegionLoot_blackiron_signal to 1>>
+			你在电报机抽屉底层锡盒里找到两枚值班员银币和一张写着“三号仓库滑道”的纸带。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">电报机抽屉底层的锡盒今日已空，只剩几截废电报纸带。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	改锥碰到电报机蓄电铜片，一串电火花麻得指尖剧痛。你立刻甩手后退。
@@ -2375,7 +2414,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "梳理拉杆编号 (0:07)">><<pass 7>><<replace "#blackiron-signal-choices">>
+<<link "梳理拉杆编号 (0:07)">><<pass 7>><<replace "#blackiron-signal-choices">>
 <<if $maths gte 260 or $science gte 260>>
 	<<set $mpKnown["blackiron_platform"] to 1>>
 	你把十六根联锁拉杆的编号排开，发现第 12 与 13 号之间多出一组不在图上的道岔，正通地下月台。
@@ -2396,16 +2435,16 @@
 <div id="mp-region-blackiron-signal-rest-choices">
 <<tendingicon>><<link "俯瞰寂静站场放神 (0:10)">><<pass 10>><<replace "#mp-region-blackiron-signal-rest-choices">>
 <<if $willpower gte 440 or $athletics gte 260>>
-<span class="green">开阔的视野让你不必担心有人从暗处靠近，木楼内温暖干燥，你靠在窗框边很快恢复了精神。</span>
+开阔的视野让你不必担心有人从暗处靠近，木楼内温暖干燥，<span class="green">你靠在窗框边很快恢复了精神。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">窗外悬挑铁廊上的弧光探照灯罩被风吹得哐当作响，刺耳的噪音吵得你心烦意乱，根本无法静心休息。</span>
+窗外悬挑铁廊上的弧光探照灯罩被风吹得哐当作响，刺耳的噪音吵得你心烦意乱，<span class="red">根本无法静心休息。</span>
 <<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "喝口温水润湿喉咙 (0:06)">><<pass 6>><<replace "#mp-region-blackiron-signal-rest-choices">>
-<span class="teal">你坐在干燥的信号楼窗边润了润嗓子，开阔的视野让人心里格外踏实。</span>
+<<link "喝口温水润湿喉咙 (0:06)">><<pass 6>><<replace "#mp-region-blackiron-signal-rest-choices">>
+你坐在干燥的信号楼窗边润了润嗓子，<span class="teal">开阔的视野让人心里格外踏实。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2420,9 +2459,11 @@
 <br>
 <<investigateicon>><<link [[绕到起重滑轮后 (0:14)|MP Region Blackiron Platform Search]]>><<pass 14>><</link>>
 <br>
-<<tendingicon>><<link [[坐樟木货箱间养神 (0:08)|MP Region Blackiron Platform Rest]]>><<pass 8>><</link>>
+<<link [[坐樟木货箱间养神 (0:08)|MP Region Blackiron Platform Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看滑轮配重 (0:03)">><<pass 3>><<replace "#obs-blackiron-platform">>
+<<investigateicon>><<link [[沿水闸暗轨探向盲段 (0:08)|MP Extra Deep Blackiron 1]]>><<pass 8>><</link>>
+<br>
+<<link "看滑轮配重 (0:03)">><<pass 3>><<replace "#obs-blackiron-platform">>
 <<if $skulduggery gte 300 or $athletics gte 280>>
 你发现配重铁箱的销轴上有一道新鲜黄油，箱盖边角还沾着樟木屑；旁边的水闸门半开着。
 <<else>>
@@ -2451,8 +2492,15 @@
 		<<money 500>>
 		<<stress -3>>
 	<<else>>
-		你在樟木货箱底部的防潮袋里摸出两枚暗市银元和一张写着“账册在城里”的油纸。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_blackiron_platform>>
+			<<set $daily.mpRegionLoot_blackiron_platform to 1>>
+			你在樟木货箱底部的防潮袋里摸出两枚暗市银元和一张写着“账册在城里”的油纸。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">樟木货箱底部的防潮袋今日已被你翻过，只余下干燥木屑。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	起重滑轮铁链猛地滑脱一寸，配重铁箱重重磕在石台上，夹伤手指。你忍痛退到立柱后。
@@ -2460,7 +2508,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "听水闸铜钟 (0:07)">><<pass 7>><<replace "#blackiron-platform-choices">>
+<<link "听水闸铜钟 (0:07)">><<pass 7>><<replace "#blackiron-platform-choices">>
 <<if $athletics gte 280 or $swimmingskill gte 240>>
 	你数准暗浪撞钟的间隔，在两次钟声之间摸到水闸后一处干燥石台，台上放着一枚铜扣。
 	<<stress -1>>
@@ -2480,16 +2528,16 @@
 <div id="mp-region-blackiron-platform-rest-choices">
 <<tendingicon>><<link "嗅着樟木清香调息 (0:10)">><<pass 10>><<replace "#mp-region-blackiron-platform-rest-choices">>
 <<if $willpower gte 460 or $skulduggery gte 280>>
-<span class="green">淡淡的樟木清香掩去了地底的潮气，隐蔽的货箱死角让你安心地缓过劲来，体力恢复了不少。</span>
+淡淡的樟木清香掩去了地底的潮气，隐蔽的货箱死角让你安心地缓过劲来，<span class="green">体力恢复了不少。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">水闸门的铜钟被暗浪冲得叮当乱响，像是有暗哨正在靠近，吓得你立刻绷紧身体站了起来。</span>
+水闸门的铜钟被暗浪冲得叮当乱响，像是有暗哨正在靠近，<span class="red">吓得你立刻绷紧身体站了起来。</span>
 <<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "扎紧松脱的鞋带 (0:06)">><<pass 6>><<replace "#mp-region-blackiron-platform-rest-choices">>
-<span class="teal">你蹲在樟木货箱旁重新系紧鞋带，淡淡的木香掩去了水闸的潮气。</span>
+<<link "扎紧松脱的鞋带 (0:06)">><<pass 6>><<replace "#mp-region-blackiron-platform-rest-choices">>
+你蹲在樟木货箱旁重新系紧鞋带，<span class="teal">淡淡的木香掩去了水闸的潮气。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2501,37 +2549,17 @@
 <<if $tending gte 260 or $willpower gte 450>>你顺着石柱上的螺旋符文辨清了林间方位。<<else>>浓重的林雾在巨石间流转，让人很难看清石环外围的去路。<</if>>
 <<if Time.dayState is "night">>林冠间漏下清冷的星辉，石柱凹槽里的湿苔泛着极淡的银绿微光。<</if>>
 <br><br>
-<<if $mpKnown["druid_pillars"]>>
-	<<walkicon>><<link [[前往迷雾石柱群 (0:06)|MP Region Druid Pillars]]>><<pass 6>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["druid_moonwell"]>>
-	<<walkicon>><<link [[前往月泉祭坛 (0:05)|MP Region Druid Moonwell]]>><<pass 5>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["druid_rootcave"]>>
-	<<walkicon>><<link [[前往古根地穴 (0:08)|MP Region Druid Rootcave]]>><<pass 8>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["druid_watchtower"]>>
-	<<walkicon>><<link [[前往林冠瞭望台 (0:07)|MP Region Druid Watchtower]]>><<pass 7>><</link>>
-	<br>
-<</if>>
 <<getouticon>><<link [[返回深林 (0:14)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 14>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<<walkicon>><<link [[前往迷雾石柱群 (0:06)|MP Region Druid Pillars]]>><<pass 6>><</link>>
+<br>
+<<if $mpMicroNotice and $mpMicroNotice["druid_conduit"]>>
+	<<investigateicon>><<link [[去月泉石槽清松脂块 (0:04)|MP Region Micro Druid Conduit]]>><<pass 4>><</link>>
+	<br>
+<</if>>
 <<investigateicon>><<link [[辨认林间兽径 (0:06)|MP Region Druid Circle Scout]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向巡林猎手打听 (0:05)|MP Region Druid Circle Ask]]>><<pass 5>><</link>>
-<br>
-<<tendingicon>><<link "辨认腐殖土上脚印 (0:03)">><<pass 3>><<replace "#obs-entry-druid">>
-<<if $tending gte 240 or $history gte 240>>
-你拨开石环边缘的落叶，认出那是巡林猎犬与采药人常走的踏痕，分别通向北侧冷泉与古橡树根。<<stress -2>><<lstress>>
-<<else>>
-湿润的苔藓很快回弹掩去了浅印，你在林雾里看了半晌也没分清哪条是新踩出来的路。<<stress 2>><<tiredness 1>><<gstress>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-entry-druid"></div>
+<<link [[向巡林猎手打听 (0:05)|MP Region Druid Circle Ask]]>><<pass 5>><</link>>
 
 :: MP Region Druid Circle Scout [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
@@ -2546,18 +2574,18 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpKnown["druid_moonwell"]>>
 		<<set $mpKnown["druid_moonwell"] to 1>>
-		<span class="green">你顺着青石板上的引水浅槽往北走，在迷雾深处找到了清澈见底的月泉祭坛。</span><<stress -2>><<lstress>>
+		你顺着青石板上的引水浅槽往北走，<span class="green">在迷雾深处找到了清澈见底的月泉祭坛。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["druid_rootcave"]>>
 		<<set $mpKnown["druid_rootcave"] to 1>>
-		<span class="green">你绕到合抱粗的千年古橡树后方，发现了盘结树根下方干燥温暖的古根地穴入口。</span><<stress -2>><<lstress>>
+		你绕到合抱粗的千年古橡树后方，<span class="green">发现了盘结树根下方干燥温暖的古根地穴入口。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["druid_watchtower"]>>
 		<<set $mpKnown["druid_watchtower"] to 1>>
-		<span class="green">你仰头顺着树干上的藤编软梯望去，找到了架设在树冠分叉处的守林人瞭望台。</span><<stress -2>><<lstress>>
+		你仰头顺着树干上的藤编软梯望去，<span class="green">找到了架设在树冠分叉处的守林人瞭望台。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">石环四周的冷泉、树穴与瞭望台路径均已记熟，林间只有风吹松针的轻响。</span><<stress -2>><<lstress>>
+		石环四周的冷泉、树穴与瞭望台路径均已记熟，<span class="teal">林间只有风吹松针的轻响。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">带刺的荆棘丛划破了你的小腿，林间浓雾让你转了半圈又回到原处，白白耗费了不少力气。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
+	带刺的荆棘丛划破了你的小腿，林间浓雾让你转了半圈又回到原处，<span class="red">白白耗费了不少力气。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -2565,18 +2593,18 @@
 <<if $tending gte 280 or $athletics gte 280>>
 	<<if !$mpKnown["druid_moonwell"]>>
 		<<set $mpKnown["druid_moonwell"] to 1>>
-		<span class="green">你听见北面石柱后传来叮咚泉响，拨开白雾便望见了月泉祭坛的白石池。</span><<stress -2>><<lstress>>
+		你听见北面石柱后传来叮咚泉响，<span class="green">拨开白雾便望见了月泉祭坛的白石池。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["druid_rootcave"]>>
 		<<set $mpKnown["druid_rootcave"] to 1>>
-		<span class="green">你顺着古橡树根部散发的安神草药香摸索，找到了树根环抱的古根地穴。</span><<stress -2>><<lstress>>
+		你顺着古橡树根部散发的安神草药香摸索，<span class="green">找到了树根环抱的古根地穴。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["druid_watchtower"]>>
 		<<set $mpKnown["druid_watchtower"] to 1>>
-		<span class="green">你顺着猎手钉在树干上的木桩脚蹬抬头，发现了高出林海的林冠瞭望台。</span><<stress -2>><<lstress>>
+		你顺着猎手钉在树干上的木桩脚蹬抬头，<span class="green">发现了高出林海的林冠瞭望台。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">你核对了一遍石柱上的月相符文，对这片古老石环的地形已了如指掌。</span><<stress -2>><<lstress>>
+		你核对了一遍石柱上的月相符文，<span class="teal">对这片古老石环的地形已了如指掌。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">落叶与湿泥堵住了半截石槽，你在盘错的树根间走了几步便失去了方向。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	落叶与湿泥堵住了半截石槽，<span class="red">你在盘错的树根间走了几步便失去了方向。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2589,23 +2617,23 @@
 <<walkicon>><<link [[告别猎手回石环 (0:02)|MP Region Druid Circle]]>><<pass 2>><</link>>
 <br>
 <div id="mp-region-druid-circle-ask-choices">
-<<socialiseicon>><<link "温和开口请教路径 (0:05)">><<pass 5>><<replace "#mp-region-druid-circle-ask-choices">>
+<<link "温和开口请教路径 (0:05)">><<pass 5>><<replace "#mp-region-druid-circle-ask-choices">>
 <<set $seductiondifficulty to 4300>><<seductioncheck>>
 <<if $seductionrating gte $seductionrequired or $english gte 260>>
 	<<if !$mpKnown["druid_moonwell"]>>
 		<<set $mpKnown["druid_moonwell"] to 1>>
-		<span class="green">「阿什说你会来采药，」猎手抬手指向正北的主石柱，「穿过那两根挂槲寄生的石柱就是月泉祭坛。」</span><<stress -2>><<lstress>>
+		「阿什说你会来采药，」猎手抬手指向正北的主石柱，<span class="green">「穿过那两根挂槲寄生的石柱就是月泉祭坛。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["druid_rootcave"]>>
 		<<set $mpKnown["druid_rootcave"] to 1>>
-		<span class="green">「若是遇到林间起暴雾，就钻进东侧古橡树底下的古根地穴，」猎手拍了拍猎犬，「里头干燥又挡风。」</span><<stress -2>><<lstress>>
+		「若是遇到林间起暴雾，就钻进东侧古橡树底下的古根地穴，」猎手拍了拍猎犬，<span class="green">「里头干燥又挡风。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["druid_watchtower"]>>
 		<<set $mpKnown["druid_watchtower"] to 1>>
-		<span class="green">「西南角那棵最高的老橡树上搭着守林人瞭望台，」猎手抬头示意道，「顺着木桩脚蹬就能爬上去。」</span><<stress -2>><<lstress>>
+		「西南角那棵最高的老橡树上搭着守林人瞭望台，」猎手抬头示意道，<span class="green">「顺着木桩脚蹬就能爬上去。」</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">猎手摸了摸猎犬的耳朵，说这片石环四周的小路你都已经走熟了。</span><<stress -2>><<lstress>>
+		猎手摸了摸猎犬的耳朵，<span class="teal">说这片石环四周的小路你都已经走熟了。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">「深林里雾大路滑，外人别往禁地深处乱闯，」猎手吹了声口哨唤走猎犬，没有给你指路。</span><<stress 4>><<gstress>>
+	「深林里雾大路滑，外人别往禁地深处乱闯，」猎手吹了声口哨唤走猎犬，<span class="red">没有给你指路。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -2613,18 +2641,18 @@
 <<if $tending gte 260 or $history gte 250>>
 	<<if !$mpKnown["druid_moonwell"]>>
 		<<set $mpKnown["druid_moonwell"] to 1>>
-		<span class="green">猎手见你认得林间止血草，感激地指向北面石柱后清澈的月泉祭坛。</span><<stress -2>><<lstress>>
+		猎手见你认得林间止血草，<span class="green">感激地指向北面石柱后清澈的月泉祭坛。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["druid_rootcave"]>>
 		<<set $mpKnown["druid_rootcave"] to 1>>
-		<span class="green">猎犬亲昵地嗅了嗅你的手背，猎手便把东侧古橡树下的古根地穴指给了你。</span><<stress -2>><<lstress>>
+		猎犬亲昵地嗅了嗅你的手背，<span class="green">猎手便把东侧古橡树下的古根地穴指给了你。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["druid_watchtower"]>>
 		<<set $mpKnown["druid_watchtower"] to 1>>
-		<span class="green">猎手收下草叶替猎犬包好爪垫，抬头指点你顺着藤梯爬上林冠瞭望台。</span><<stress -2>><<lstress>>
+		猎手收下草叶替猎犬包好爪垫，<span class="green">抬头指点你顺着藤梯爬上林冠瞭望台。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">猎手向你微微颔首，说林子里的野兽今晚都很安静，可以放心穿行。</span><<stress -2>><<lstress>>
+		猎手向你微微颔首，说林子里的野兽今晚都很安静，<span class="teal">可以放心穿行。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">猎犬冲你低吠了一声，猎手按住狗头摇了摇头，显然对生面孔仍有戒心。</span><<stress 3>><<tiredness 1>><<gstress>>
+	猎犬冲你低吠了一声，猎手按住狗头摇了摇头，<span class="red">显然对生面孔仍有戒心。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2635,17 +2663,17 @@
 十二根高耸的风化花岗岩石柱在林间围成环阵，凹槽里的螺旋古符文在雨雾中泛着温润微光。两座主石柱之间拉着编满干枯槲寄生的麻绳。
 <<if $history gte 260 or $tending gte 260>>你看出石柱排列暗合冬至月相的方位。<<else>>高大的巨石阵在浓雾里投下沉重的阴影。<</if>>
 <br><br>
+<<getouticon>><<link [[沿兽径退回石环口 (0:04)|MP Region Druid Circle]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["druid_moonwell"]>>
 	<<walkicon>><<link [[沿水径去月泉 (0:05)|MP Region Druid Moonwell]]>><<pass 5>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿兽径退回石环口 (0:04)|MP Region Druid Circle]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[垫脚够主石柱 (0:10)|MP Region Druid Pillars Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[靠正北主石柱歇脚 (0:08)|MP Region Druid Pillars Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看石柱影线 (0:03)">><<pass 3>><<replace "#obs-druid-pillars">>
+<<link "看石柱影线 (0:03)">><<pass 3>><<replace "#obs-druid-pillars">>
 <<if $history gte 260 or $tending gte 260>>
 你发现正午影线落在两根挂槲寄生的石柱之间，影尖所指的浅草下有一条被踩实的引水小径。
 <<set $mpKnown["druid_moonwell"] to 1>>
@@ -2675,8 +2703,15 @@
 		<<if ($mpFragBrideFlower or 0) lt 3>><<set $mpFragBrideFlower to ($mpFragBrideFlower or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在槲寄生麻绳系着的小皮囊里翻出两枚祈愿银币和一片刻着月相的石片。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_druid_pillars>>
+			<<set $daily.mpRegionLoot_druid_pillars to 1>>
+			你在槲寄生麻绳系着的小皮囊里翻出两枚祈愿银币和一片刻着月相的石片。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 200>><<stress -2>>
+		<<else>>
+			<span class="teal">槲寄生麻绳下的小皮囊今日已被你查过，只剩几片干艾叶。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	石柱顶端的渡鸦旧巢受惊散落枯枝，粗糙花岗岩棱角刮破手指。你缩回手退下石台。
@@ -2684,7 +2719,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "读冬至刻痕 (0:06)">><<pass 6>><<replace "#druid-pillars-choices">>
+<<link "读冬至刻痕 (0:06)">><<pass 6>><<replace "#druid-pillars-choices">>
 <<if $history gte 260 or $tending gte 260>>
 	<<set $mpKnown["druid_moonwell"] to 1>>
 	你顺着冬至刻痕往下读，发现一组月相标记指向正北的月泉祭坛。
@@ -2705,16 +2740,16 @@
 <div id="mp-region-druid-pillars-rest-choices">
 <<tendingicon>><<link "背靠花岗岩壁避风 (0:10)">><<pass 10>><<replace "#mp-region-druid-pillars-rest-choices">>
 <<if $willpower gte 430 or $tending gte 250>>
-<span class="green">温润的花岗岩替你挡去了山风，草木与泥土的清香让你的呼吸渐渐平缓，一身疲乏消散了不少。</span>
+温润的花岗岩替你挡去了山风，草木与泥土的清香让你的呼吸渐渐平缓，<span class="green">一身疲乏消散了不少。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">树冠上积聚的冰凉露水突然成串滴落进你的衣领，冻得你激灵灵打了个寒颤，半点睡意也没留下。</span>
+树冠上积聚的冰凉露水突然成串滴落进你的衣领，冻得你激灵灵打了个寒颤，<span class="red">半点睡意也没留下。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "抖掉肩头的松针 (0:06)">><<pass 6>><<replace "#mp-region-druid-pillars-rest-choices">>
-<span class="teal">你抖落肩头沾着的松针与露水，靠着厚重的花岗岩柱缓匀了呼吸。</span>
+<<link "抖掉肩头的松针 (0:06)">><<pass 6>><<replace "#mp-region-druid-pillars-rest-choices">>
+你抖落肩头沾着的松针与露水，<span class="teal">靠着厚重的花岗岩柱缓匀了呼吸。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2725,17 +2760,17 @@
 终年不涸的林间冷泉汇聚在白石砌成的月牙池内，清澈的泉水从玉蝉雕刻的出水口潺潺流过。池边石案上摆着一只三足青铜爵。
 <<if $tending gte 280 or $purity gte 500>>你看出泉眼四周盛开的正是罕见的双生银丝花。<<else>>微凉的水雾笼罩着白石池面，透着沁人心脾的寒意。<</if>>
 <br><br>
+<<getouticon>><<link [[沿石径退回石环口 (0:04)|MP Region Druid Circle]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["druid_rootcave"]>>
 	<<walkicon>><<link [[沿细流去古根穴 (0:08)|MP Region Druid Rootcave]]>><<pass 8>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿石径退回石环口 (0:04)|MP Region Druid Circle]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[跪到月泉池沿 (0:10)|MP Region Druid Moonwell Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[坐月泉白石畔小憩 (0:08)|MP Region Druid Moonwell Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看泉眼水纹 (0:03)">><<pass 3>><<replace "#obs-druid-moonwell">>
+<<link "看泉眼水纹 (0:03)">><<pass 3>><<replace "#obs-druid-moonwell">>
 <<if $tending gte 280 or $purity gte 500>>
 你发现泉眼有一缕细流绕过白石池沿，渗向东南那棵古橡树的根须；树根下有一道被水冲亮的缝。
 <<set $mpKnown["druid_rootcave"] to 1>>
@@ -2766,8 +2801,15 @@
 		<<money 300>>
 		<<stress -3>>
 	<<else>>
-		你在出水口白石槽下摸出两枚被泉水冲亮的古银币和一片刻着橡树叶的铜片。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_druid_moonwell>>
+			<<set $daily.mpRegionLoot_druid_moonwell to 1>>
+			你在出水口白石槽下摸出两枚被泉水冲亮的古银币和一片刻着橡树叶的铜片。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">出水口白石槽下今日已被你摸过，只余下清冽的细白河砂。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	刺骨冷泉冻得五指发僵，脚下青苔一滑，险些栽进池中，手肘也磕在池沿。你只得退开。
@@ -2775,7 +2817,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查三足爵铭文 (0:06)">><<pass 6>><<replace "#druid-moonwell-choices">>
+<<link "查三足爵铭文 (0:06)">><<pass 6>><<replace "#druid-moonwell-choices">>
 <<if $history gte 260 or $purity gte 450>>
 	<<set $mpKnown["druid_rootcave"] to 1>>
 	你读出青铜爵腹部的奠酒短句，末尾提到“橡根之下，避雾之所”。
@@ -2796,16 +2838,16 @@
 <div id="mp-region-druid-moonwell-rest-choices">
 <<tendingicon>><<link "掬捧清冽泉水洗面 (0:10)">><<pass 10>><<replace "#mp-region-druid-moonwell-rest-choices">>
 <<if $willpower gte 440 or $purity gte 450>>
-<span class="green">甘冽微凉的泉水瞬间驱散了你眉宇间的燥热与阴霾，林间鸟鸣让你的心神彻底宁静下来。</span>
+甘冽微凉的泉水瞬间驱散了你眉宇间的燥热与阴霾，<span class="green">林间鸟鸣让你的心神彻底宁静下来。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">祭坛后方古橡树洞里的兽骨风铃突然被山风吹得哗啦乱响，幽冷的湿气让你后背直冒凉意。</span>
+祭坛后方古橡树洞里的兽骨风铃突然被山风吹得哗啦乱响，<span class="red">幽冷的湿气让你后背直冒凉意。</span>
 <<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "擦干指尖上的水珠 (0:06)">><<pass 6>><<replace "#mp-region-druid-moonwell-rest-choices">>
-<span class="teal">你用衣角擦干指尖清冽的泉水，白石池畔的宁静洗去了满身躁意。</span>
+<<link "擦干指尖上的水珠 (0:06)">><<pass 6>><<replace "#mp-region-druid-moonwell-rest-choices">>
+你用衣角擦干指尖清冽的泉水，<span class="teal">白石池畔的宁静洗去了满身躁意。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2816,17 +2858,17 @@
 数棵千年古橡树盘根错节，在地底围拢成一座天然的干燥洞穴。粗壮的苍白根须交汇处包裹着一颗散发微光的萤石球，石台上摆着五只陶瓮。
 <<if $tending gte 280 or $science gte 260>>你闻出陶瓮泥封里透出的是安神草药的香气。<<else>>盘结的树根如穹顶般笼罩头顶，空气温暖而幽暗。<</if>>
 <br><br>
+<<getouticon>><<link [[沿根缝退回石环口 (0:04)|MP Region Druid Circle]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["druid_watchtower"]>>
 	<<walkicon>><<link [[沿藤梯上瞭望台 (0:07)|MP Region Druid Watchtower]]>><<pass 7>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿根缝退回石环口 (0:04)|MP Region Druid Circle]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[蹲到药草石臼前 (0:12)|MP Region Druid Rootcave Search]]>><<pass 12>><</link>>
 <br>
 <<tendingicon>><<link [[坐古树干苔垫养神 (0:08)|MP Region Druid Rootcave Rest]]>><<pass 8>><</link>>
 <br>
-<<tendingicon>><<link "闻陶瓮药香 (0:03)">><<pass 3>><<replace "#obs-druid-rootcave">>
+<<link "闻陶瓮药香 (0:03)">><<pass 3>><<replace "#obs-druid-rootcave">>
 <<if $tending gte 280 or $science gte 260>>
 你辨出五只陶瓮里混着安神草和松脂，最里侧瓮底压着一小截藤梯绳头，绳头通向林冠瞭望台。
 <<set $mpKnown["druid_watchtower"] to 1>>
@@ -2857,8 +2899,15 @@
 		<<money 400>>
 		<<stress -3>>
 	<<else>>
-		你在青铜圆盾后方的暗渠口摸出两枚守林人银元和一张画着树冠平台的小皮图。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_druid_rootcave>>
+			<<set $daily.mpRegionLoot_druid_rootcave to 1>>
+			你在青铜圆盾后方的暗渠口摸出两枚守林人银元和一张画着树冠平台的小皮图。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">青铜圆盾后的暗渠口今日已被你探过，只剩潮湿的树根须。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	盘结树根下窜出几只受惊林鼠，石臼边缘磕伤指节。你连忙撒手退回萤石灯下。
@@ -2866,7 +2915,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "辨五瓮泥封 (0:07)">><<pass 7>><<replace "#druid-rootcave-choices">>
+<<link "辨五瓮泥封 (0:07)">><<pass 7>><<replace "#druid-rootcave-choices">>
 <<if $tending gte 280 or $science gte 260>>
 	<<set $mpKnown["druid_watchtower"] to 1>>
 	你发现第三只瓮的泥封上压着一枚藤梯纹，和瞭望台木柱的刻痕一致。
@@ -2887,16 +2936,16 @@
 <div id="mp-region-druid-rootcave-rest-choices">
 <<tendingicon>><<link "蜷在树根环抱处暖身 (0:10)">><<pass 10>><<replace "#mp-region-druid-rootcave-rest-choices">>
 <<if $tending gte 250 or $willpower gte 450>>
-<span class="green">温和的草木气息与柔和的萤石微光包裹着全身，厚实的树根隔绝了林间寒气，你安心地恢复了体力。</span>
+温和的草木气息与柔和的萤石微光包裹着全身，厚实的树根隔绝了林间寒气，<span class="green">你安心地恢复了体力。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">洞穴深处陶瓮里渗出的浓烈苦草药味熏得你有些反胃，树根缝隙滴下的泥水也弄脏了你的肩头。</span>
+洞穴深处陶瓮里渗出的浓烈苦草药味熏得你有些反胃，<span class="red">树根缝隙滴下的泥水也弄脏了你的肩头。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "理好蹭乱的衣角 (0:06)">><<pass 6>><<replace "#mp-region-druid-rootcave-rest-choices">>
-<span class="teal">你在冬暖夏凉的树根地穴里理好衣角，温润的萤石微光让人倍感安心。</span>
+<<link "理好蹭乱的衣角 (0:06)">><<pass 6>><<replace "#mp-region-druid-rootcave-rest-choices">>
+你在冬暖夏凉的树根地穴里理好衣角，<span class="teal">温润的萤石微光让人倍感安心。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2911,9 +2960,11 @@
 <br>
 <<investigateicon>><<link [[握住望远镜底座 (0:11)|MP Region Druid Watchtower Search]]>><<pass 11>><</link>>
 <br>
-<<tendingicon>><<link [[进狼皮值班室歇脚 (0:08)|MP Region Druid Watchtower Rest]]>><<pass 8>><</link>>
+<<link [[进狼皮值班室歇脚 (0:08)|MP Region Druid Watchtower Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看鸽笼方向 (0:03)">><<pass 3>><<replace "#obs-druid-watchtower">>
+<<investigateicon>><<link [[顺古藤梯降向树心穴 (0:08)|MP Extra Deep Druid 1]]>><<pass 8>><</link>>
+<br>
+<<link "看鸽笼方向 (0:03)">><<pass 3>><<replace "#obs-druid-watchtower">>
 <<if $athletics gte 280 or $tending gte 260>>
 你看见信鸽总朝西南一片林隙盘旋，那里有一缕极细的炊烟；笼底还卡着一小截磨断的皮绳。
 <<else>>
@@ -2941,8 +2992,15 @@
 		<<if ($mpFragBrideFlower or 0) lt 3>><<set $mpFragBrideFlower to ($mpFragBrideFlower or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在中层值班室柴火堆后的饼干盒里翻出两枚备用银币和一张标着“西南林隙”的草图。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_druid_watchtower>>
+			<<set $daily.mpRegionLoot_druid_watchtower to 1>>
+			你在中层值班室柴火堆后的饼干盒里翻出两枚备用银币和一张标着“西南林隙”的草图。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">柴火堆后的饼干盒今日已被你翻过，只余下几粒干松子壳。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	劲风吹晃树冠，木柱上的倒刺扎进掌心，信鸽笼里的灰鸽扑腾乱叫。你连忙缩手扶稳栏杆。
@@ -2950,7 +3008,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "用望远镜扫林线 (0:06)">><<pass 6>><<replace "#druid-watchtower-choices">>
+<<link "用望远镜扫林线 (0:06)">><<pass 6>><<replace "#druid-watchtower-choices">>
 <<if $athletics gte 280 or $science gte 240>>
 	你从镜筒里扫到西南林隙有一处新踩出的岔路，路旁插着一根系白布的木桩。
 	<<stress -1>>
@@ -2970,16 +3028,16 @@
 <div id="mp-region-druid-watchtower-rest-choices">
 <<tendingicon>><<link "裹紧狼皮软垫挡风 (0:10)">><<pass 10>><<replace "#mp-region-druid-watchtower-rest-choices">>
 <<if $athletics gte 260 or $willpower gte 450>>
-<span class="green">高出林冠的清爽山风吹散了满身闷热，松木壁板挡住了寒流，胸中的郁结一扫而空。</span>
+高出林冠的清爽山风吹散了满身闷热，松木壁板挡住了寒流，<span class="green">胸中的郁结一扫而空。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">狂风吹得整座木瞭望台咯吱摇晃，百叶窗框啪啪拍打着木墙，晃得你头晕眼花，半刻也坐不住。</span>
+狂风吹得整座木瞭望台咯吱摇晃，百叶窗框啪啪拍打着木墙，晃得你头晕眼花，<span class="red">半刻也坐不住。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "活动攀爬发酸的手腕 (0:06)">><<pass 6>><<replace "#mp-region-druid-watchtower-rest-choices">>
-<span class="teal">你靠在松木壁板上甩了甩攀爬发酸的手腕，林冠清风吹散了胸中闷气。</span>
+<<link "活动攀爬发酸的手腕 (0:06)">><<pass 6>><<replace "#mp-region-druid-watchtower-rest-choices">>
+你靠在松木壁板上甩了甩攀爬发酸的手腕，<span class="teal">林冠清风吹散了胸中闷气。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -2991,37 +3049,13 @@
 <<if $danceskill gte 260 or $beauty gte 3500>>你从容地调整呼吸，步伐优雅地融入了廊间的暗影。<<else>>华美帷幔后隐约传来的低笑声让你心跳不由得快了几拍。<</if>>
 <<if ($exposed or 0) gte 1>>微凉的穿堂风掠过你裸露的皮肤，你在丝绒帷幔的掩映下不由得加快了脚步。<</if>>
 <br><br>
-<<if $mpKnown["velvet_masque"]>>
-	<<walkicon>><<link [[前往假面回廊 (0:04)|MP Region Velvet Masque]]>><<pass 4>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["velvet_salon"]>>
-	<<walkicon>><<link [[前往试衣沙龙 (0:06)|MP Region Velvet Salon]]>><<pass 6>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["velvet_terrace"]>>
-	<<walkicon>><<link [[前往观海雅座 (0:07)|MP Region Velvet Terrace]]>><<pass 7>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["velvet_auction"]>>
-	<<walkicon>><<link [[前往拍卖暗厅 (0:09)|MP Region Velvet Auction]]>><<pass 9>><</link>>
-	<br>
-<</if>>
-<<getouticon>><<link [[返回康努达图斯街 (0:07)|Connudatus Street]]>><<set $outside to 1>><<set $location to "connudatus">><<pass 7>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回康努达图斯街 (0:07)|Connudatus Street]]>><<set $outside to 1>><<set $location to "town">><<pass 7>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[前往假面回廊 (0:04)|MP Region Velvet Masque]]>><<pass 4>><</link>>
 <br>
 <<investigateicon>><<link [[留意帷幔暗门 (0:06)|MP Region Velvet Mirage Scout]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向假面侍者打听 (0:05)|MP Region Velvet Mirage Ask]]>><<pass 5>><</link>>
-<br>
-<<socialiseicon>><<link "细听弦乐传来的方向 (0:03)">><<pass 3>><<replace "#obs-entry-velvet">>
-<<if $danceskill gte 240 or $skulduggery gte 240>>
-你顺着大提琴共鸣与侍者银盘进出的动静，分辨出东侧是更衣内室、西侧通往临海露台。<<stress -2>><<lstress>>
-<<else>>
-重重丝绒帷幔吸走了大半声响，你只听见模糊的碰杯声，分不清哪扇门后有人。<<stress 2>><<tiredness 1>><<gstress>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-entry-velvet"></div>
+<<link [[向假面侍者打听 (0:05)|MP Region Velvet Mirage Ask]]>><<pass 5>><</link>>
 
 :: MP Region Velvet Mirage Scout [nobr]
 <<set $outside to 0>><<set $location to "brothel">><<effects>>
@@ -3036,18 +3070,18 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpKnown["velvet_salon"]>>
 		<<set $mpKnown["velvet_salon"] to 1>>
-		<span class="green">你顺着带有金线刺绣的门帘往东看，发现了专供贵客更衣的镜面试衣沙龙入口。</span><<stress -2>><<lstress>>
+		你顺着带有金线刺绣的门帘往东看，<span class="green">发现了专供贵客更衣的镜面试衣沙龙入口。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["velvet_terrace"]>>
 		<<set $mpKnown["velvet_terrace"] to 1>>
-		<span class="green">你循着轻纱帷幔间透进来的海风声，找到了悬挑在峭壁外侧的露台观海雅座。</span><<stress -2>><<lstress>>
+		你循着轻纱帷幔间透进来的海风声，<span class="green">找到了悬挑在峭壁外侧的露台观海雅座。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["velvet_auction"]>>
 		<<set $mpKnown["velvet_auction"] to 1>>
-		<span class="green">你留意到地毯下方的黄铜地锁暗道，摸清了通往暗层最深处私人拍卖暗厅的阶梯。</span><<stress -2>><<lstress>>
+		你留意到地毯下方的黄铜地锁暗道，<span class="green">摸清了通往暗层最深处私人拍卖暗厅的阶梯。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">暗层各处屏风与暗门的动静都已掌握，执事的巡廊步点也全在你算计之中。</span><<stress -2>><<lstress>>
+		暗层各处屏风与暗门的动静都已掌握，<span class="teal">执事的巡廊步点也全在你算计之中。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">一名巡廊执事的目光突然扫向廊柱，你慌忙转身避让，脚跟在地毯边缘绊了一下，没能看清帷幔后的去路。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
+	一名巡廊执事的目光突然扫向廊柱，你慌忙转身避让，脚跟在地毯边缘绊了一下，<span class="red">没能看清帷幔后的去路。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -3055,18 +3089,18 @@
 <<if $danceskill gte 280 or $seductionskill gte 260>>
 	<<if !$mpKnown["velvet_salon"]>>
 		<<set $mpKnown["velvet_salon"] to 1>>
-		<span class="green">你看见捧着礼服匣的侍女转入东侧三折屏风，认出了里面的镜面试衣沙龙。</span><<stress -2>><<lstress>>
+		你看见捧着礼服匣的侍女转入东侧三折屏风，<span class="green">认出了里面的镜面试衣沙龙。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["velvet_terrace"]>>
 		<<set $mpKnown["velvet_terrace"] to 1>>
-		<span class="green">你顺着端冰桶侍者的去向望去，在西侧纱帘后找到了临海的观海雅座。</span><<stress -2>><<lstress>>
+		你顺着端冰桶侍者的去向望去，<span class="green">在西侧纱帘后找到了临海的观海雅座。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["velvet_auction"]>>
 		<<set $mpKnown["velvet_auction"] to 1>>
-		<span class="green">你借着壁镜反光看见两名戴假面的管事走下暗红拱门，摸清了私人拍卖暗厅的位置。</span><<stress -2>><<lstress>>
+		你借着壁镜反光看见两名戴假面的管事走下暗红拱门，<span class="green">摸清了私人拍卖暗厅的位置。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">你踏着弦乐节拍在回廊间转了半圈，确认四周没有执事起疑。</span><<stress -2>><<lstress>>
+		你踏着弦乐节拍在回廊间转了半圈，<span class="teal">确认四周没有执事起疑。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">侍者转过三折镀金屏风便不见了踪影，你在重重铜镜前反而差点撞上来客。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	侍者转过三折镀金屏风便不见了踪影，<span class="red">你在重重铜镜前反而差点撞上来客。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -3079,23 +3113,23 @@
 <<walkicon>><<link [[告别侍者回门廊 (0:02)|MP Region Velvet Mirage]]>><<pass 2>><</link>>
 <br>
 <div id="mp-region-velvet-mirage-ask-choices">
-<<socialiseicon>><<link "举步上前低声询问 (0:05)">><<pass 5>><<replace "#mp-region-velvet-mirage-ask-choices">>
+<<link "举步上前低声询问 (0:05)">><<pass 5>><<replace "#mp-region-velvet-mirage-ask-choices">>
 <<set $seductiondifficulty to 4200>><<seductioncheck>>
 <<if $seductionrating gte $seductionrequired or $english gte 260>>
 	<<if !$mpKnown["velvet_salon"]>>
 		<<set $mpKnown["velvet_salon"] to 1>>
-		<span class="green">「莫奈小姐关照过您的尺码，」侍者微微欠身指向东侧屏风，「屏风后面就是镜面试衣沙龙。」</span><<stress -2>><<lstress>>
+		「莫奈小姐关照过您的尺码，」侍者微微欠身指向东侧屏风，<span class="green">「屏风后面就是镜面试衣沙龙。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["velvet_terrace"]>>
 		<<set $mpKnown["velvet_terrace"] to 1>>
-		<span class="green">「若是觉得厅里闷，穿过西侧纱帘便是露台观海雅座，」侍者微笑着低语，「那里的海景最受贵客青睐。」</span><<stress -2>><<lstress>>
+		「若是觉得厅里闷，穿过西侧纱帘便是露台观海雅座，」侍者微笑着低语，<span class="green">「那里的海景最受贵客青睐。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["velvet_auction"]>>
 		<<set $mpKnown["velvet_auction"] to 1>>
-		<span class="green">「今晚的压轴拍品都在最里头的私人拍卖暗厅，」侍者压低声音指了指暗红拱门，「顺着环形阶梯下去便是。」</span><<stress -2>><<lstress>>
+		「今晚的压轴拍品都在最里头的私人拍卖暗厅，」侍者压低声音指了指暗红拱门，<span class="green">「顺着环形阶梯下去便是。」</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">侍者替你扶正领口，微笑着表示暗层四处厅堂随时欢迎你的光临。</span><<stress -2>><<lstress>>
+		侍者替你扶正领口，<span class="teal">微笑着表示暗层四处厅堂随时欢迎你的光临。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">「暗层规矩，不问来处，也不指去处，」侍者礼貌而疏离地端起托盘走开，让你无从问起。</span><<stress 4>><<gstress>>
+	「暗层规矩，不问来处，也不指去处，」侍者礼貌而疏离地端起托盘走开，<span class="red">让你无从问起。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -3103,18 +3137,18 @@
 <<if $danceskill gte 260 or $beauty gte 3800>>
 	<<if !$mpKnown["velvet_salon"]>>
 		<<set $mpKnown["velvet_salon"] to 1>>
-		<span class="green">侍者见你举止优雅合度，借着递杯的动作低声指出了东侧屏风后的试衣沙龙。</span><<stress -2>><<lstress>>
+		侍者见你举止优雅合度，<span class="green">借着递杯的动作低声指出了东侧屏风后的试衣沙龙。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["velvet_terrace"]>>
 		<<set $mpKnown["velvet_terrace"] to 1>>
-		<span class="green">侍者看出了你眼底的倦意，轻声引你往西侧吹得到海风的观海雅座走。</span><<stress -2>><<lstress>>
+		侍者看出了你眼底的倦意，<span class="green">轻声引你往西侧吹得到海风的观海雅座走。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["velvet_auction"]>>
 		<<set $mpKnown["velvet_auction"] to 1>>
-		<span class="green">侍者认出你懂得沙龙暗语，不动声色地指了指通往私人拍卖暗厅的暗红拱门。</span><<stress -2>><<lstress>>
+		侍者认出你懂得沙龙暗语，<span class="green">不动声色地指了指通往私人拍卖暗厅的暗红拱门。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">侍者向你轻轻举了举银盘，提醒你今晚后台与露台都没有外人打扰。</span><<stress -2>><<lstress>>
+		侍者向你轻轻举了举银盘，<span class="teal">提醒你今晚后台与露台都没有外人打扰。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">你的手势略显生疏，侍者只替你斟了半杯气泡水，便欠身退入了帷幔后。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你的手势略显生疏，侍者只替你斟了半杯气泡水，<span class="red">便欠身退入了帷幔后。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -3125,17 +3159,17 @@
 长廊两侧的暗红壁龛里陈列着十二副威尼斯金银雕花假面，往来宾客皆以面具遮面。远处隐约传来大提琴低柔的弦音，胡桃木衣帽架立在回廊尽头。
 <<if $danceskill gte 260 or $seductionskill gte 260>>你踏着弦乐节拍从容走过壁龛，姿态没有露出丝毫破绽。<<else>>银狐假面空洞的眼眶在壁灯下闪着微光，令人有些紧张。<</if>>
 <br><br>
+<<getouticon>><<link [[沿回廊退回天鹅绒口 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["velvet_salon"]>>
 	<<walkicon>><<link [[掀丝绒帘去沙龙 (0:06)|MP Region Velvet Salon]]>><<pass 6>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿回廊退回天鹅绒口 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[走近银狐壁龛 (0:09)|MP Region Velvet Masque Search]]>><<pass 9>><</link>>
 <br>
 <<tendingicon>><<link [[坐回廊丝绒凳小憩 (0:08)|MP Region Velvet Masque Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看面具眼孔 (0:03)">><<pass 3>><<replace "#obs-velvet-masque">>
+<<link "看面具眼孔 (0:03)">><<pass 3>><<replace "#obs-velvet-masque">>
 <<if $danceskill gte 260 or $seductionskill gte 260>>
 你发现银狐假面右侧眼孔有一圈新磨出的亮痕，壁龛后的丝绒帘比别处薄，透出试衣镜的反光。
 <<set $mpKnown["velvet_salon"] to 1>>
@@ -3165,8 +3199,15 @@
 		<<if ($mpFragVelvetCrest or 0) lt 3>><<set $mpFragVelvetCrest to ($mpFragVelvetCrest or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在香槟推车冰桶底下的信封里摸出两枚散碎筹码和一张写着“试衣沙龙”的卡片。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_velvet_masque>>
+			<<set $daily.mpRegionLoot_velvet_masque to 1>>
+			你在香槟推车冰桶底下的信封里摸出两枚散碎筹码和一张写着“试衣沙龙”的卡片。<span class="green">你把找到的物件妥善收好。</span>
+			<<money 200>><<stress -2>>
+		<<else>>
+			<span class="teal">香槟推车冰桶底今日已被你查过，只剩融化的冷水珠。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	壁龛上的银狐假面突然滑落，金属边缘划伤手背，脆响引得走廊尽头传来脚步声。你连忙空手退开。
@@ -3174,7 +3215,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "问侍者香槟年份 (0:06)">><<pass 6>><<replace "#velvet-masque-choices">>
+<<link "问侍者香槟年份 (0:06)">><<pass 6>><<replace "#velvet-masque-choices">>
 <<if $seductionskill gte 260 or $beauty gte 3500>>
 	<<set $mpKnown["velvet_salon"] to 1>>
 	侍者顺着你的话头提到东侧屏风后的镜面试衣沙龙，还压低声音说今晚有人在那里试衣。
@@ -3195,16 +3236,16 @@
 <div id="mp-region-velvet-masque-rest-choices">
 <<tendingicon>><<link "借衣帽架掩映静坐 (0:10)">><<pass 10>><<replace "#mp-region-velvet-masque-rest-choices">>
 <<if $danceskill gte 250 or $willpower gte 440>>
-<span class="green">悠扬舒缓的大提琴曲与温暖的灯光抚平了你的紧绷感，松软的坐垫让你很快歇过了力气。</span>
+悠扬舒缓的大提琴曲与温暖的灯光抚平了你的紧绷感，<span class="green">松软的坐垫让你很快歇过了力气。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">两名戴假面的宾客端着酒杯从衣帽架旁擦肩而过，审视的视线让你如芒在背，片刻也不敢放松。</span>
+两名戴假面的宾客端着酒杯从衣帽架旁擦肩而过，审视的视线让你如芒在背，<span class="red">片刻也不敢放松。</span>
 <<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "整理微乱的领口 (0:06)">><<pass 6>><<replace "#mp-region-velvet-masque-rest-choices">>
-<span class="teal">你借着衣帽架的阴影理正领口，大提琴的柔音让急促的心跳慢了下来。</span>
+<<link "整理微乱的领口 (0:06)">><<pass 6>><<replace "#mp-region-velvet-masque-rest-choices">>
+你借着衣帽架的阴影理正领口，<span class="teal">大提琴的柔音让急促的心跳慢了下来。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -3215,17 +3256,17 @@
 四壁镶嵌着斜角落地铜镜的私密沙龙内，衣架上挂满了高定丝绸与蕾丝礼裙。正中央的旋转试衣台铺着天鹅绒毯，梳妆台上摆着一排紫水晶香水瓶。
 <<if $beauty gte 3500 or $danceskill gte 260>>你走过落地铜镜前，借着多角度的镜面将四周动静尽收眼底。<<else>>重重叠叠的镜面映出无数道身影，让人有些分不清方向。<</if>>
 <br><br>
+<<getouticon>><<link [[沿镜廊退回天鹅绒口 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["velvet_terrace"]>>
 	<<walkicon>><<link [[穿纱帘去观海雅座 (0:07)|MP Region Velvet Terrace]]>><<pass 7>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿镜廊退回天鹅绒口 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[蹲到试衣台边 (0:11)|MP Region Velvet Salon Search]]>><<pass 11>><</link>>
 <br>
 <<tendingicon>><<link [[靠屏风贵妃榻养神 (0:08)|MP Region Velvet Salon Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看镜面角度 (0:03)">><<pass 3>><<replace "#obs-velvet-salon">>
+<<link "看镜面角度 (0:03)">><<pass 3>><<replace "#obs-velvet-salon">>
 <<if $beauty gte 3500 or $danceskill gte 260>>
 你借斜角铜镜看见西侧纱帘后有一道通往露台的门，门边地毯被反复踩出一道浅痕。
 <<set $mpKnown["velvet_terrace"] to 1>>
@@ -3256,8 +3297,15 @@
 		<<money 300>>
 		<<stress -3>>
 	<<else>>
-		你在三折屏风后的红珊瑚手包夹层里找出两枚金镑硬币和一张写着“露台雅座”的请柬。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_velvet_salon>>
+			<<set $daily.mpRegionLoot_velvet_salon to 1>>
+			你在三折屏风后的红珊瑚手包夹层里找出两枚金镑硬币和一张写着“露台雅座”的请柬。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">三折屏风后的手包夹层今日已被你翻过，只余下一缕脂粉香。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	裁缝人台腰封上的珠针扎破指尖，旋转台底座也发出一声闷响。你连忙缩手站起。
@@ -3265,7 +3313,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查衣架尺码牌 (0:06)">><<pass 6>><<replace "#velvet-salon-choices">>
+<<link "查衣架尺码牌 (0:06)">><<pass 6>><<replace "#velvet-salon-choices">>
 <<if $housekeeping gte 250 or $beauty gte 3500>>
 	<<set $mpKnown["velvet_terrace"] to 1>>
 	你在一件披风的尺码牌后找到一张露台邀请卡，卡角印着观海雅座的藤椅纹样。
@@ -3286,16 +3334,16 @@
 <div id="mp-region-velvet-salon-rest-choices">
 <<tendingicon>><<link "倚着白狐绒毯闭目 (0:10)">><<pass 10>><<replace "#mp-region-velvet-salon-rest-choices">>
 <<if $willpower gte 450 or $housekeeping gte 250>>
-<span class="green">柔和的暖光与淡雅的白麝香气包裹着全身，厚实的屏风挡住了所有视线，你的疲乏消退了大半。</span>
+柔和的暖光与淡雅的白麝香气包裹着全身，厚实的屏风挡住了所有视线，<span class="green">你的疲乏消退了大半。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">梳妆台上未拧紧的紫水晶香水瓶挥发出过于甜腻的浓香，熏得你太阳穴发胀，越躺越觉得心浮气躁。</span>
+梳妆台上未拧紧的紫水晶香水瓶挥发出过于甜腻的浓香，熏得你太阳穴发胀，<span class="red">越躺越觉得心浮气躁。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "放松紧绷的脚背 (0:06)">><<pass 6>><<replace "#mp-region-velvet-salon-rest-choices">>
-<span class="teal">你在松软的白狐绒毯上伸直脚背，三折丝绸屏风替你挡住了外间视线。</span>
+<<link "放松紧绷的脚背 (0:06)">><<pass 6>><<replace "#mp-region-velvet-salon-rest-choices">>
+你在松软的白狐绒毯上伸直脚背，<span class="teal">三折丝绸屏风替你挡住了外间视线。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -3306,17 +3354,17 @@
 悬挑在百尺峭壁外侧的半封闭露台装有遮风玻璃拱窗，轻纱帷幔随风微拂。汉白玉栏杆边摆着藤椅雅座，角落的铸铁火盆里燃着无烟银炭。
 <<if $willpower gte 450 or $athletics gte 260>>你走到汉白玉栏杆旁俯视夜海，心境开阔而沉稳。<<else>>百尺峭壁下翻涌的黑浪拍击岩壁，看得人微微眼晕。<</if>>
 <br><br>
+<<getouticon>><<link [[沿露台退回天鹅绒口 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["velvet_auction"]>>
 	<<walkicon>><<link [[沿铜门去拍卖厅 (0:09)|MP Region Velvet Auction]]>><<pass 9>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿露台退回天鹅绒口 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[扶住汉白玉栏杆 (0:12)|MP Region Velvet Terrace Search]]>><<pass 12>><</link>>
 <br>
 <<tendingicon>><<link [[坐铸铁火盆旁歇脚 (0:08)|MP Region Velvet Terrace Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "听峭壁风声 (0:03)">><<pass 3>><<replace "#obs-velvet-terrace">>
+<<link "听峭壁风声 (0:03)">><<pass 3>><<replace "#obs-velvet-terrace">>
 <<if $willpower gte 450 or $athletics gte 260>>
 你从风声里辨出一段被压低的谈话：拍卖暗厅的环形阶梯就在火盆后方的铜门里。
 <<set $mpKnown["velvet_auction"] to 1>>
@@ -3346,8 +3394,15 @@
 		<<if ($mpFragVelvetCrest or 0) lt 3>><<set $mpFragVelvetCrest to ($mpFragVelvetCrest or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在大理石花盆底下的防水银烟盒里翻出两枚零钞和一张写着“环形阶梯”的卡片。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_velvet_terrace>>
+			<<set $daily.mpRegionLoot_velvet_terrace to 1>>
+			你在大理石花盆底下的防水银烟盒里翻出两枚零钞和一张写着“环形阶梯”的卡片。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">花盆下的防水银烟盒今日已被你查过，只剩一点细白烟灰。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	冰凉的大理石柱头猛地卡死，火盆里飞出的银炭火星烫到手腕。你连忙缩手退回软垫边。
@@ -3355,7 +3410,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "看火盆灰烬 (0:06)">><<pass 6>><<replace "#velvet-terrace-choices">>
+<<link "看火盆灰烬 (0:06)">><<pass 6>><<replace "#velvet-terrace-choices">>
 <<if $history gte 240 or $housekeeping gte 250>>
 	<<set $mpKnown["velvet_auction"] to 1>>
 	你从灰烬里拨出半张没烧尽的拍卖目录，背面画着从露台通往暗厅的阶梯。
@@ -3376,16 +3431,16 @@
 <div id="mp-region-velvet-terrace-rest-choices">
 <<tendingicon>><<link "凑近无烟银炭暖肩 (0:10)">><<pass 10>><<replace "#mp-region-velvet-terrace-rest-choices">>
 <<if $willpower gte 460 or $danceskill gte 260>>
-<span class="green">银炭散发的融融暖意烘热了你的肩头，远处的海浪声将你的思绪洗涤得格外平静。</span>
+银炭散发的融融暖意烘热了你的肩头，<span class="green">远处的海浪声将你的思绪洗涤得格外平静。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">峭壁栈道铁门上的黄铜锁链被海风吹得哗啦乱撞，悬空的眩晕感让你手心出汗，怎么也坐不安稳。</span>
+峭壁栈道铁门上的黄铜锁链被海风吹得哗啦乱撞，悬空的眩晕感让你手心出汗，<span class="red">怎么也坐不安稳。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "拢紧被海风吹散的发 (0:06)">><<pass 6>><<replace "#mp-region-velvet-terrace-rest-choices">>
-<span class="teal">你凑在银炭火盆边拢好被海风吹散的头发，暖意顺着指尖传遍全身。</span>
+<<link "拢紧被海风吹散的发 (0:06)">><<pass 6>><<replace "#mp-region-velvet-terrace-rest-choices">>
+你凑在银炭火盆边拢好被海风吹散的头发，<span class="teal">暖意顺着指尖传遍全身。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -3402,7 +3457,7 @@
 <br>
 <<tendingicon>><<link [[进二楼包厢内小憩 (0:08)|MP Region Velvet Auction Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看传菜暗梯 (0:03)">><<pass 3>><<replace "#obs-velvet-auction">>
+<<link "看传菜暗梯 (0:03)">><<pass 3>><<replace "#obs-velvet-auction">>
 <<if $skulduggery gte 300 or $history gte 280>>
 你发现展台下方的传菜暗梯口有一道新擦痕，旁边的铜铃线被一根头发丝缠住，显然有人常从这里上下。
 <<else>>
@@ -3431,8 +3486,15 @@
 		<<money 500>>
 		<<stress -3>>
 	<<else>>
-		你在后台记账桌的象牙算盘下摸出两枚保证金银币和一张写着买家缩写的底价单。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_velvet_auction>>
+			<<set $daily.mpRegionLoot_velvet_auction to 1>>
+			你在后台记账桌的象牙算盘下摸出两枚保证金银币和一张写着买家缩写的底价单。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">记账桌象牙算盘下今日已被你翻过，只余下几滴干涸红蜡。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	展台下的配重铜铃突然被碰响，后台走廊传来执事询问的脚步声。你慌忙放下罩布退入暗影。
@@ -3440,7 +3502,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "翻后台记账桌 (0:07)">><<pass 7>><<replace "#velvet-auction-choices">>
+<<link "翻后台记账桌 (0:07)">><<pass 7>><<replace "#velvet-auction-choices">>
 <<if $maths gte 240 or $history gte 240>>
 	你在账册夹页里找到一个买家的缩写和一枚火漆印，印面和壁龛里的假面徽章一模一样。
 	<<stress -1>>
@@ -3460,16 +3522,16 @@
 <div id="mp-region-velvet-auction-rest-choices">
 <<tendingicon>><<link "拉拢双层金纱静坐 (0:10)">><<pass 10>><<replace "#mp-region-velvet-auction-rest-choices">>
 <<if $willpower gte 470 or $control gte 300>>
-<span class="green">厚重的金线纱帘将你的行踪完全隐匿，静谧奢华的包厢让你紧绷的身心彻底放松下来。</span>
+厚重的金线纱帘将你的行踪完全隐匿，<span class="green">静谧奢华的包厢让你紧绷的身心彻底放松下来。</span>
 <<tiredness -5>><<stress -6>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">壁柱后方的黄铜传菜梯突然发出一阵刺耳的滑轮摩擦声，惊得你从沙发上弹坐起来，心脏砰砰直跳。</span>
+壁柱后方的黄铜传菜梯突然发出一阵刺耳的滑轮摩擦声，惊得你从沙发上弹坐起来，<span class="red">心脏砰砰直跳。</span>
 <<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "揉按发沉的太阳穴 (0:06)">><<pass 6>><<replace "#mp-region-velvet-auction-rest-choices">>
-<span class="teal">你在金线纱帘后的真皮沙发上揉了揉太阳穴，幽静的环境令你精神一振。</span>
+<<link "揉按发沉的太阳穴 (0:06)">><<pass 6>><<replace "#mp-region-velvet-auction-rest-choices">>
+你在金线纱帘后的真皮沙发上揉了揉太阳穴，<span class="teal">幽静的环境令你精神一振。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -3481,37 +3543,13 @@
 <<if $science gte 260 or $maths gte 260>>你借着高窗透入的微光看清了廊柱上的导览铜牌。<<else>>封存多年的旧翼楼空旷幽静，每走一步木地板都会发出轻响。<</if>>
 <<if Weather.precipitation is "rain">>雨点敲打着高处的弧形采光天窗，将整座旧翼楼衬得愈发幽深。<</if>>
 <br><br>
-<<if $mpKnown["observatory_dome"]>>
-	<<walkicon>><<link [[前往折光穹顶室 (0:06)|MP Region Observatory Dome]]>><<pass 6>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["observatory_star"]>>
-	<<walkicon>><<link [[前往星图档案室 (0:08)|MP Region Observatory Star]]>><<pass 8>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["observatory_cabinet"]>>
-	<<walkicon>><<link [[前往标本陈列阁 (0:07)|MP Region Observatory Cabinet]]>><<pass 7>><</link>>
-	<br>
-<</if>>
-<<if $mpKnown["observatory_bridge"]>>
-	<<walkicon>><<link [[前往钟楼连廊 (0:04)|MP Region Observatory Bridge]]>><<pass 4>><</link>>
-	<br>
-<</if>>
-<<getouticon>><<link [[返回学校图书馆 (0:08)|School Library]]>><<set $outside to 0>><<set $location to "school">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回学院图书馆 (0:06)|School Library]]>><<set $outside to 0>><<set $location to "school">><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<link [[查看翼楼平面图 (0:06)|MP Region Observatory Wing Scout]]>><<pass 6>><</link>>
+<<walkicon>><<link [[前往折光穹顶室 (0:05)|MP Region Observatory Dome]]>><<pass 5>><</link>>
 <br>
-<<socialiseicon>><<link [[向值日图书员打听 (0:05)|MP Region Observatory Wing Ask]]>><<pass 5>><</link>>
+<<investigateicon>><<link [[查看旋梯痕迹 (0:06)|MP Region Observatory Wing Scout]]>><<pass 6>><</link>>
 <br>
-<<investigateicon>><<link "擦看浑天仪基座铭牌 (0:03)">><<pass 3>><<replace "#obs-entry-observatory">>
-<<if $science gte 240 or $history gte 240>>
-你抹去黄铜基座上的浮灰，看清了上面标注的『主穹顶、星图室、标本阁与钟塔连廊』四处旧翼楼分区。<<stress -2>><<lstress>>
-<<else>>
-铜牌表面氧化发乌，字迹细小繁复，你在昏暗的光线下没能认全上面的方位。<<stress 2>><<tiredness 1>><<gstress>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-entry-observatory"></div>
+<<link [[向值日学长打听 (0:05)|MP Region Observatory Wing Ask]]>><<pass 5>><</link>>
 
 :: MP Region Observatory Wing Scout [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
@@ -3526,18 +3564,18 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpKnown["observatory_star"]>>
 		<<set $mpKnown["observatory_star"] to 1>>
-		<span class="green">你顺着走廊北侧的樟木画筒架寻去，找到了收藏近百年潮汐记录的星图档案室。</span><<stress -2>><<lstress>>
+		你顺着走廊北侧的樟木画筒架寻去，<span class="green">找到了收藏近百年潮汐记录的星图档案室。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["observatory_cabinet"]>>
 		<<set $mpKnown["observatory_cabinet"] to 1>>
-		<span class="green">你拨开挂满星象图的绒布帘，发现了存放早期矿石与棱镜的标本陈列暗阁。</span><<stress -2>><<lstress>>
+		你拨开挂满星象图的绒布帘，<span class="green">发现了存放早期矿石与棱镜的标本陈列暗阁。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["observatory_bridge"]>>
 		<<set $mpKnown["observatory_bridge"] to 1>>
-		<span class="green">你推开二层步道尽头的木百叶门，找到了架设在屋顶飞扶壁之间的钟楼连廊。</span><<stress -2>><<lstress>>
+		你推开二层步道尽头的木百叶门，<span class="green">找到了架设在屋顶飞扶壁之间的钟楼连廊。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">旧翼楼的档案室、标本阁与屋顶连廊均已畅通，走廊里静谧无声。</span><<stress -2>><<lstress>>
+		旧翼楼的档案室、标本阁与屋顶连廊均已畅通，<span class="teal">走廊里静谧无声。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">走廊顶部的检修活门突然落下半截麻绳，扬起的陈年灰尘迷了你的眼睛，让你没能看清帘后的去向。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
+	走廊顶部的检修活门突然落下半截麻绳，扬起的陈年灰尘迷了你的眼睛，<span class="red">让你没能看清帘后的去向。</span><<stress 5>><<pain 2>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -3545,18 +3583,18 @@
 <<if $science gte 270 or $maths gte 270>>
 	<<if !$mpKnown["observatory_star"]>>
 		<<set $mpKnown["observatory_star"] to 1>>
-		<span class="green">你按平面图上的轴线距离折算步数，在北侧双开木门后找到了星图档案室。</span><<stress -2>><<lstress>>
+		你按平面图上的轴线距离折算步数，<span class="green">在北侧双开木门后找到了星图档案室。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["observatory_cabinet"]>>
 		<<set $mpKnown["observatory_cabinet"] to 1>>
-		<span class="green">你看出了平面图内侧夹壁的虚线标注，顺利找到了标本陈列暗阁的侧门。</span><<stress -2>><<lstress>>
+		你看出了平面图内侧夹壁的虚线标注，<span class="green">顺利找到了标本陈列暗阁的侧门。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["observatory_bridge"]>>
 		<<set $mpKnown["observatory_bridge"] to 1>>
-		<span class="green">你顺着图上标示的屋顶风速计引线寻去，发现了通向学园钟塔的钟楼连廊。</span><<stress -2>><<lstress>>
+		你顺着图上标示的屋顶风速计引线寻去，<span class="green">发现了通向学园钟塔的钟楼连廊。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">你将平面图上的缩微比例全部换算完毕，旧翼楼的格局已一清二楚。</span><<stress -2>><<lstress>>
+		你将平面图上的缩微比例全部换算完毕，<span class="teal">旧翼楼的格局已一清二楚。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">平面图用的是百年前的旧制英尺与缩写代号，你一时没能对上现存的走廊门牌。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	平面图用的是百年前的旧制英尺与缩写代号，<span class="red">你一时没能对上现存的走廊门牌。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -3569,23 +3607,23 @@
 <<walkicon>><<link [[告别图书员回门廊 (0:02)|MP Region Observatory Wing]]>><<pass 2>><</link>>
 <br>
 <div id="mp-region-observatory-wing-ask-choices">
-<<socialiseicon>><<link "轻声询问旧翼楼格局 (0:05)">><<pass 5>><<replace "#mp-region-observatory-wing-ask-choices">>
+<<link "轻声询问旧翼楼格局 (0:05)">><<pass 5>><<replace "#mp-region-observatory-wing-ask-choices">>
 <<set $seductiondifficulty to 4200>><<seductioncheck>>
 <<if $seductionrating gte $seductionrequired or $english gte 260>>
 	<<if !$mpKnown["observatory_star"]>>
 		<<set $mpKnown["observatory_star"] to 1>>
-		<span class="green">「悉尼提过你在查旧历法，」图书员指了指北面的双开木门，「里面就是星图档案室，铜画筒都按年份排好了。」</span><<stress -2>><<lstress>>
+		「悉尼提过你在查旧历法，」图书员指了指北面的双开木门，「里面就是星图档案室，<span class="green">铜画筒都按年份排好了。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["observatory_cabinet"]>>
 		<<set $mpKnown["observatory_cabinet"] to 1>>
-		<span class="green">「早年的自然科学矿石都在内侧的标本陈列暗阁，」图书员压低声音道，「从档案室侧门就能穿过去。」</span><<stress -2>><<lstress>>
+		「早年的自然科学矿石都在内侧的标本陈列暗阁，」图书员压低声音道，<span class="green">「从档案室侧门就能穿过去。」</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["observatory_bridge"]>>
 		<<set $mpKnown["observatory_bridge"] to 1>>
-		<span class="green">「想近看学园钟塔的话，顺着西侧石阶推开侧门就是钟楼连廊，」图书员叮嘱道，「上面风大，当心脚下。」</span><<stress -2>><<lstress>>
+		「想近看学园钟塔的话，顺着西侧石阶推开侧门就是钟楼连廊，」图书员叮嘱道，「上面风大，<span class="green">当心脚下。」</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">图书员合上借阅簿朝你一笑，说旧翼楼的几间内室你都已经找齐了。</span><<stress -2>><<lstress>>
+		图书员合上借阅簿朝你一笑，<span class="teal">说旧翼楼的几间内室你都已经找齐了。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">「旧翼楼正在清点封存书目，非诚心查阅者请勿入内，」图书员合上目录转身离去，没有向你透露更多。</span><<stress 4>><<gstress>>
+	「旧翼楼正在清点封存书目，非诚心查阅者请勿入内，」图书员合上目录转身离去，<span class="red">没有向你透露更多。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -3593,18 +3631,18 @@
 <<if $english gte 260 or $history gte 260>>
 	<<if !$mpKnown["observatory_star"]>>
 		<<set $mpKnown["observatory_star"] to 1>>
-		<span class="green">图书员见你准确报出了旧星历的索书号，立刻带你认清了北侧的星图档案室。</span><<stress -2>><<lstress>>
+		图书员见你准确报出了旧星历的索书号，<span class="green">立刻带你认清了北侧的星图档案室。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["observatory_cabinet"]>>
 		<<set $mpKnown["observatory_cabinet"] to 1>>
-		<span class="green">图书员听你问起早年光学棱镜的编号，顺手指向绒布帘后的标本陈列暗阁。</span><<stress -2>><<lstress>>
+		图书员听你问起早年光学棱镜的编号，<span class="green">顺手指向绒布帘后的标本陈列暗阁。</span><<stress -2>><<lstress>>
 	<<elseif !$mpKnown["observatory_bridge"]>>
 		<<set $mpKnown["observatory_bridge"] to 1>>
-		<span class="green">图书员赞许你的学识，告诉你推开二层尽头的百叶门就能走上钟楼连廊。</span><<stress -2>><<lstress>>
+		图书员赞许你的学识，<span class="green">告诉你推开二层尽头的百叶门就能走上钟楼连廊。</span><<stress -2>><<lstress>>
 	<<else>>
-		<span class="teal">图书员将一盏备用小铜灯借给你，让你在旧翼楼查阅时不必担心光线暗。</span><<stress -2>><<lstress>>
+		图书员将一盏备用小铜灯借给你，<span class="teal">让你在旧翼楼查阅时不必担心光线暗。</span><<stress -2>><<lstress>>
 	<</if>>
 <<else>>
-	<span class="red">你把星历编纂的年份说错了一纪，图书员推了推眼镜，只让你先回外馆查基础索引。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你把星历编纂的年份说错了一纪，图书员推了推眼镜，<span class="red">只让你先回外馆查基础索引。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -3615,17 +3653,17 @@
 可以开启天窗的半球形主厅中央，架设着一具巨型黄铜赤道仪与折光望远镜。地面铺着环形旋转滑轨，目镜下方放着厚重的观测记录簿。
 <<if $science gte 280 or $maths gte 280>>你一眼看懂了赤道仪配重箱与赤纬刻度盘的平衡结构。<<else>>庞大的黄铜望远镜直指穹顶天窗，透着精密而森严的气息。<</if>>
 <br><br>
+<<getouticon>><<link [[沿木梯退回翼楼口 (0:04)|MP Region Observatory Wing]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["observatory_star"]>>
 	<<walkicon>><<link [[沿回廊去星图室 (0:08)|MP Region Observatory Star]]>><<pass 8>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿木梯退回翼楼口 (0:04)|MP Region Observatory Wing]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[走到赤道仪北侧 (0:10)|MP Region Observatory Dome Search]]>><<pass 10>><</link>>
 <br>
 <<tendingicon>><<link [[登皮垫观测椅歇息 (0:08)|MP Region Observatory Dome Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看赤道仪配重 (0:03)">><<pass 3>><<replace "#obs-observatory-dome">>
+<<link "看赤道仪配重 (0:03)">><<pass 3>><<replace "#obs-observatory-dome">>
 <<if $science gte 280 or $maths gte 280>>
 你发现配重铁匣比旁边的黄铜砝码轻了一截，匣底滑轨上有一道常被拉开的亮痕，正对着星图档案室。
 <<set $mpKnown["observatory_star"] to 1>>
@@ -3655,8 +3693,15 @@
 		<<if ($mpFragCrownGear or 0) lt 3>><<set $mpFragCrownGear to ($mpFragCrownGear or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在环形步道小铁桌的火漆盒下摸出两枚学长遗落的银币和一张写着“1894 号筒”的纸条。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_observatory_dome>>
+			<<set $daily.mpRegionLoot_observatory_dome to 1>>
+			你在环形步道小铁桌的火漆盒下摸出两枚学长遗落的银币和一张写着“1894 号筒”的纸条。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">小铁桌火漆盒下今日已被你查过，只剩几块碎火漆片。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	地面旋转滑轨里的铜配件卡住鞋底，膝盖磕在赤道仪铁架上。你疼得倒吸一口凉气。
@@ -3664,7 +3709,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "读观测记录簿 (0:06)">><<pass 6>><<replace "#observatory-dome-choices">>
+<<link "读观测记录簿 (0:06)">><<pass 6>><<replace "#observatory-dome-choices">>
 <<if $science gte 280 or $maths gte 280>>
 	<<set $mpKnown["observatory_star"] to 1>>
 	你翻到一页夜间观测记录，末行写着“1894 号筒已移入星图室”，旁边画着一个小箭头。
@@ -3685,16 +3730,16 @@
 <div id="mp-region-observatory-dome-rest-choices">
 <<tendingicon>><<link "仰望天窗云影放神 (0:10)">><<pass 10>><<replace "#mp-region-observatory-dome-rest-choices">>
 <<if $science gte 250 or $willpower gte 440>>
-<span class="green">开阔安静的半球形厅堂隔绝了教学楼的嘈杂，平稳的呼吸让你满身压力消减了大半。</span>
+开阔安静的半球形厅堂隔绝了教学楼的嘈杂，<span class="green">平稳的呼吸让你满身压力消减了大半。</span>
 <<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">天窗缝隙漏进来的穿堂冷风吹得望远镜铜筒嗡嗡轻颤，高脚椅摇晃不止，让你始终无法安心合眼。</span>
+天窗缝隙漏进来的穿堂冷风吹得望远镜铜筒嗡嗡轻颤，高脚椅摇晃不止，<span class="red">让你始终无法安心合眼。</span>
 <<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "活动微酸的脖颈 (0:06)">><<pass 6>><<replace "#mp-region-observatory-dome-rest-choices">>
-<span class="teal">你靠在观测椅柔软的皮垫上仰头活动脖颈，穹顶室里安静得落针可闻。</span>
+<<link "活动微酸的脖颈 (0:06)">><<pass 6>><<replace "#mp-region-observatory-dome-rest-choices">>
+你靠在观测椅柔软的皮垫上仰头活动脖颈，<span class="teal">穹顶室里安静得落针可闻。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -3705,17 +3750,17 @@
 高达天花板的樟木画筒架占满了整间档案室，铜管里收藏着近百年来的雾月潮汐记录与古星图。中央的绘图斜桌上铺着半张月相蚀变图。
 <<if $history gte 280 or $maths gte 260>>你顺着年份标签看去，一眼锁定了最早的『1894』号铜画筒。<<else>>成百上千只铜管画筒密密麻麻，看得人眼花缭乱。<</if>>
 <br><br>
+<<getouticon>><<link [[沿木廊退回翼楼口 (0:04)|MP Region Observatory Wing]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["observatory_cabinet"]>>
 	<<walkicon>><<link [[穿侧门去陈列阁 (0:07)|MP Region Observatory Cabinet]]>><<pass 7>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿木廊退回翼楼口 (0:04)|MP Region Observatory Wing]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[踩上木踏脚凳 (0:12)|MP Region Observatory Star Search]]>><<pass 12>><</link>>
 <br>
 <<tendingicon>><<link [[靠樟木画筒架小憩 (0:08)|MP Region Observatory Star Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看画筒编号 (0:03)">><<pass 3>><<replace "#obs-observatory-star">>
+<<link "看画筒编号 (0:03)">><<pass 3>><<replace "#obs-observatory-star">>
 <<if $history gte 280 or $maths gte 260>>
 你发现画筒架在 1893 与 1895 之间空出一格，空档后方的墙板上有一道新擦痕，通向标本陈列阁。
 <<set $mpKnown["observatory_cabinet"] to 1>>
@@ -3746,8 +3791,15 @@
 		<<money 300>>
 		<<stress -3>>
 	<<else>>
-		你在地球仪支架下的皮面笔记本夹层里翻出两枚旧书券和一张标着“陈列阁”的索书条。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_observatory_star>>
+			<<set $daily.mpRegionLoot_observatory_star to 1>>
+			你在地球仪支架下的皮面笔记本夹层里翻出两枚旧书券和一张标着“陈列阁”的索书条。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">地球仪下的笔记本夹层今日已被你翻过，只余下旧纸气息。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	画筒封盖锈得极死，上方架子一只空铜筒滚落下来砸在额角。你捂着额头退下踏脚凳。
@@ -3755,7 +3807,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查月相蚀变图 (0:06)">><<pass 6>><<replace "#observatory-star-choices">>
+<<link "查月相蚀变图 (0:06)">><<pass 6>><<replace "#observatory-star-choices">>
 <<if $history gte 280 or $maths gte 260>>
 	<<set $mpKnown["observatory_cabinet"] to 1>>
 	你从月相蚀变图的边缘读出一组日期，和标本陈列阁门牌上的收藏年份完全吻合。
@@ -3776,16 +3828,16 @@
 <div id="mp-region-observatory-star-rest-choices">
 <<tendingicon>><<link "嗅着书卷樟香静心 (0:10)">><<pass 10>><<replace "#mp-region-observatory-star-rest-choices">>
 <<if $history gte 250 or $willpower gte 440>>
-<span class="green">温和醇正的书卷气与樟木香驱散了你心头的浮躁，安静的档案室让你很快恢复了充沛的精力。</span>
+温和醇正的书卷气与樟木香驱散了你心头的浮躁，<span class="green">安静的档案室让你很快恢复了充沛的精力。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">角落那台缩微胶片阅读机的散热风扇突然嗡嗡作响，待机红灯在暗处不停闪烁，晃得你心烦意乱。</span>
+角落那台缩微胶片阅读机的散热风扇突然嗡嗡作响，待机红灯在暗处不停闪烁，<span class="red">晃得你心烦意乱。</span>
 <<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "拂平衣摆上的折痕 (0:06)">><<pass 6>><<replace "#mp-region-observatory-star-rest-choices">>
-<span class="teal">你拂平衣摆上的折痕靠着画筒架坐下，醇正的樟木书香令人心境澄明。</span>
+<<link "拂平衣摆上的折痕 (0:06)">><<pass 6>><<replace "#mp-region-observatory-star-rest-choices">>
+你拂平衣摆上的折痕靠着画筒架坐下，<span class="teal">醇正的樟木书香令人心境澄明。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -3796,17 +3848,17 @@
 内侧暗阁的玻璃展柜里陈列着早期自然科学标本、紫水晶簇与光学棱镜。东壁挂着一幅古生物化石石板，夜光萤石在暗处散发出柔和的浅绿微光。
 <<if $science gte 280 or $history gte 260>>你注意到最底层紫水晶簇的木底座留有合页缝隙。<<else>>形态各异的化石与矿石晶簇在幽暗中显得格外冷峻。<</if>>
 <br><br>
+<<getouticon>><<link [[沿暗阁退回翼楼口 (0:04)|MP Region Observatory Wing]]>><<pass 4>><</link>>
+<br>
 <<if $mpKnown["observatory_bridge"]>>
 	<<walkicon>><<link [[沿侧廊去钟塔连廊 (0:04)|MP Region Observatory Bridge]]>><<pass 4>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[沿暗阁退回翼楼口 (0:04)|MP Region Observatory Wing]]>><<pass 4>><</link>>
-<br>
 <<investigateicon>><<link [[蹲到最底层展柜 (0:11)|MP Region Observatory Cabinet Search]]>><<pass 11>><</link>>
 <br>
 <<tendingicon>><<link [[坐萤石展柜旁养神 (0:08)|MP Region Observatory Cabinet Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看底座合页 (0:03)">><<pass 3>><<replace "#obs-observatory-cabinet">>
+<<link "看底座合页 (0:03)">><<pass 3>><<replace "#obs-observatory-cabinet">>
 <<if $science gte 280 or $history gte 260>>
 你注意到紫水晶簇的木底座有一道合页缝，旁边地面有一串从钟楼连廊方向来的新鲜鞋印。
 <<set $mpKnown["observatory_bridge"] to 1>>
@@ -3837,8 +3889,15 @@
 		<<money 400>>
 		<<stress -3>>
 	<<else>>
-		你在旋转玻璃架的海螺化石螺口里摸出两枚绒布包裹的旧银币和一张写着“钟楼连廊”的标签。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_observatory_cabinet>>
+			<<set $daily.mpRegionLoot_observatory_cabinet to 1>>
+			你在旋转玻璃架的海螺化石螺口里摸出两枚绒布包裹的旧银币和一张写着“钟楼连廊”的标签。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">海螺化石螺口今日已被你探过，只剩一层细微的钙质白粉。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	锋利的水晶棱角划破指腹，镊子也在玻璃柜壁上磕出脆响。你连忙缩手合上柜门。
@@ -3846,7 +3905,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "查化石石板铭牌 (0:06)">><<pass 6>><<replace "#observatory-cabinet-choices">>
+<<link "查化石石板铭牌 (0:06)">><<pass 6>><<replace "#observatory-cabinet-choices">>
 <<if $science gte 280 or $history gte 260>>
 	<<set $mpKnown["observatory_bridge"] to 1>>
 	你读出一块化石石板的捐赠铭牌，末尾提到“钟楼连廊风速计”，字迹和展柜标签同源。
@@ -3867,16 +3926,16 @@
 <div id="mp-region-observatory-cabinet-rest-choices">
 <<tendingicon>><<link "沐浴浅绿微光调息 (0:10)">><<pass 10>><<replace "#mp-region-observatory-cabinet-rest-choices">>
 <<if $science gte 250 or $willpower gte 450>>
-<span class="green">静谧的暗阁与柔和的萤石荧光抚平了你紧绷的思绪，你靠着展柜安稳地歇过了乏味与疲倦。</span>
+静谧的暗阁与柔和的萤石荧光抚平了你紧绷的思绪，<span class="green">你靠着展柜安稳地歇过了乏味与疲倦。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">角落药水柜底层的福尔马林气味顺着柜缝渗出来，熏得你眼眶发涩、鼻腔刺痛，根本坐不住。</span>
+角落药水柜底层的福尔马林气味顺着柜缝渗出来，熏得你眼眶发涩、鼻腔刺痛，<span class="red">根本坐不住。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "搓热微凉的指尖 (0:06)">><<pass 6>><<replace "#mp-region-observatory-cabinet-rest-choices">>
-<span class="teal">你在浅绿色的萤石微光里搓热指尖，幽暗安静的陈列阁抚平了倦意。</span>
+<<link "搓热微凉的指尖 (0:06)">><<pass 6>><<replace "#mp-region-observatory-cabinet-rest-choices">>
+你在浅绿色的萤石微光里搓热指尖，<span class="teal">幽暗安静的陈列阁抚平了倦意。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
@@ -3893,7 +3952,7 @@
 <br>
 <<tendingicon>><<link [[坐拱窗石台上歇脚 (0:08)|MP Region Observatory Bridge Rest]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link "看风速计轴承 (0:03)">><<pass 3>><<replace "#obs-observatory-bridge">>
+<<link "看风速计轴承 (0:03)">><<pass 3>><<replace "#obs-observatory-bridge">>
 <<if $athletics gte 260 or $science gte 240>>
 你发现风速计轴承上油过多，旁边石兽背部有一道被反复摸过的浅槽，槽里卡着一小片铁皮。
 <<else>>
@@ -3921,8 +3980,15 @@
 		<<if ($mpFragCrownGear or 0) lt 3>><<set $mpFragCrownGear to ($mpFragCrownGear or 0) + 1>><</if>>
 		<<stress -3>>
 	<<else>>
-		你在风速计底座下的小皮匣里摸出两枚高年级学生藏起的银币和一张写着“连廊检修”的工单。
-		<<stress -2>>
+		<<if !$daily>><<set $daily to {}>><</if>>
+		<<if !$daily.mpRegionLoot_observatory_bridge>>
+			<<set $daily.mpRegionLoot_observatory_bridge to 1>>
+			你在风速计底座下的小皮匣里摸出两枚高年级学生藏起的银币和一张写着“连廊检修”的工单。<span class="green">你把找到的物件妥善收好。</span>
+			<<stress -2>>
+		<<else>>
+			<span class="teal">风速计底座下的小皮匣今日已被你翻过，只剩两枚旧铁垫圈。</span>
+			<<stress -1>>
+		<</if>>
 	<</if>>
 <<else>>
 	风速计旋转铜杯刮到手背，拱窗外寒风又吹得你重心不稳。你急忙缩回身子扶住石柱。
@@ -3930,7 +3996,7 @@
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "读修缮铭牌 (0:06)">><<pass 6>><<replace "#observatory-bridge-choices">>
+<<link "读修缮铭牌 (0:06)">><<pass 6>><<replace "#observatory-bridge-choices">>
 <<if $history gte 240 or $maths gte 240>>
 	你在连廊石柱上找到一块修缮铭牌，背面记着钟楼报时和一段“西侧石兽”的检修备注。
 	<<stress -1>>
@@ -3950,16 +4016,16 @@
 <div id="mp-region-observatory-bridge-rest-choices">
 <<tendingicon>><<link "合上迎风百叶静坐 (0:10)">><<pass 10>><<replace "#mp-region-observatory-bridge-rest-choices">>
 <<if $willpower gte 440 or $athletics gte 260>>
-<span class="green">温和的穿堂微风拂过脸颊，俯瞰学园屋顶的幽静景致让你紧绷的身心彻底放松下来。</span>
+温和的穿堂微风拂过脸颊，<span class="green">俯瞰学园屋顶的幽静景致让你紧绷的身心彻底放松下来。</span>
 <<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
 <<else>>
-<span class="red">不远处的学园钟塔突然敲响整点铜钟，浑厚的钟声在连廊拱顶间剧烈共鸣，震得你耳膜嗡嗡作响。</span>
+不远处的学园钟塔突然敲响整点铜钟，浑厚的钟声在连廊拱顶间剧烈共鸣，<span class="red">震得你耳膜嗡嗡作响。</span>
 <<stress 4>><<pain 1>><<gstress>><<gpain>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<socialiseicon>><<link "扣紧防风的袖口 (0:06)">><<pass 6>><<replace "#mp-region-observatory-bridge-rest-choices">>
-<span class="teal">你扣紧袖口坐在宽阔干燥的拱窗石台上，平缓的呼吸让体力渐渐回升。</span>
+<<link "扣紧防风的袖口 (0:06)">><<pass 6>><<replace "#mp-region-observatory-bridge-rest-choices">>
+你扣紧袖口坐在宽阔干燥的拱窗石台上，<span class="teal">平缓的呼吸让体力渐渐回升。</span>
 <<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
 <</replace>><</link>>
 </div>
