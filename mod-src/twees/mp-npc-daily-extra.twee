@@ -1,6 +1,5 @@
 /* 原版 NPC 日常关系线扩展 / 罗宾·伊甸·雷恩·布莱尔·艾弗里·黑狼 / 6 人 × 3 段 + 1 个入口 hub = 19 passages */
 /* 只做日常、关系、小礼物与跑腿，不写大主线，不含露骨内容，失败不扣存款 */
-
 :: MP Daily Extra Hub [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
@@ -112,13 +111,15 @@
 <<getouticon>><<link [[道别后回孤儿院走廊 (0:02)|Orphanage]]>><<set $mpDailyRobin to 3>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 2. Eden (伊甸) ==================== */
+<br>
+<<walkicon>><<link [[改日再去探望 (0:04)|MP Daily Robin 4]]>><<pass 4>><</link>>
 
 :: MP Daily Eden 1 [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 森林木屋的屋檐下堆着半人高的冷杉圆木，空气里飘着松脂与熏肉的浓郁气味。伊甸单手拎着沉重的宽刃劈柴斧，正将一段湿木桩架上树墩；旁边的烟熏木架下火苗有些发暗，几挂风干的鹿肉条需要添入新的干果木枝。
 瞥见你走近木屋，伊甸停下斧头，用下巴指了指脚边的竹篓：「既然来了就别闲着，要么把碎木抱进棚里，要么看着熏架别让火灭了。」
 <br><br>
-<<runicon>><<link [[拿副斧帮他劈干松木 (0:07)|MP Daily Eden 2]]>>
+<<runicon>><<link [[先退回去 (0:07)|MP Daily Eden 2]]>>
 	<<set $mpDailyEden to Math.max(($mpDailyEden or 0), 1)>><<pass 7>>
 	<<if ($physique or 0) gte 7800>>
 		<<stress -2>>
@@ -149,7 +150,7 @@
 午后的密林小径覆着厚厚的落叶，伊甸背着猎步枪走在前面，带你巡查溪流北岸的几处防兽绳套。在一处桦木林拐角，原本用来标记安全浅滩的刻痕界石被山洪冲歪进了泥坑，而灌木丛下的钢丝绳套也被野猪拱乱了机关簧片。
 林间雾气渐起，伊甸蹲下身按住草丛，示意你跟紧他的脚步。
 <br><br>
-<<sneakicon>><<link [[用猎刀重设绳套机关 (0:06)|MP Daily Eden 3]]>>
+<<sneakicon>><<link [[先退回去 (0:06)|MP Daily Eden 3]]>>
 	<<set $mpDailyEden to Math.max(($mpDailyEden or 0), 2)>><<pass 6>>
 	<<if ($skulduggery or 0) gte 260 or ($tending or 0) gte 260>>
 		<<stress -2>>
@@ -199,6 +200,8 @@
 <<getouticon>><<link [[趁天未黑回森林石径 (0:03)|Forest]]>><<set $mpDailyEden to 3>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 3. Wren (雷恩) ==================== */
+<br>
+<<walkicon>><<link [[改日再去探望 (0:04)|MP Daily Eden 4]]>><<pass 4>><</link>>
 
 :: MP Daily Wren 1 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
@@ -286,6 +289,8 @@
 <<getouticon>><<link [[走出酒馆返回丰收街 (0:02)|Harvest Street]]>><<set $mpDailyWren to 3>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 4. Briar (布莱尔) ==================== */
+<br>
+<<walkicon>><<link [[改日再去探望 (0:04)|MP Daily Wren 4]]>><<pass 4>><</link>>
 
 :: MP Daily Briar 1 [nobr]
 <<set $outside to 0>><<set $location to "brothel">><<effects>>
@@ -372,6 +377,8 @@
 <<getouticon>><<link [[从侧廊返回丰收街 (0:02)|Harvest Street]]>><<set $mpDailyBriar to 3>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 5. Avery (艾弗里) ==================== */
+<br>
+<<walkicon>><<link [[改日再去探望 (0:04)|MP Daily Briar 4]]>><<pass 4>><</link>>
 
 :: MP Daily Avery 1 [nobr]
 <<set $outside to 1>><<set $location to "avery_mansion">><<effects>>
@@ -459,6 +466,8 @@
 <<getouticon>><<link [[目送轿车后回峭壁街 (0:02)|Cliff Street]]>><<set $mpDailyAvery to 3>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 6. Black Wolf (黑狼) ==================== */
+<br>
+<<walkicon>><<link [[改日再去探望 (0:04)|MP Daily Avery 4]]>><<pass 4>><</link>>
 
 :: MP Daily BlackWolf 1 [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
@@ -470,7 +479,7 @@
 	<<if ($tending or 0) gte 270>>
 		<<stress -2>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_extra_blackwolf_1")>><<money 150>><</if>>
-		<<if $NPCName and $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" trust 1>><</if>>
+		<<if $NPCName and $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>>
 	<<else>>
 		<<pain 1>><<stress 3>>
 	<</if>>
@@ -501,7 +510,7 @@
 	<<if ($athletics or 0) gte 270 or ($physique or 0) gte 7800>>
 		<<stress -2>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_extra_blackwolf_2")>><<money 200>><</if>>
-		<<if $NPCName and $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" trust 1>><</if>>
+		<<if $NPCName and $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>>
 	<<else>>
 		<<pain 1>><<stress 3>><<tiredness 2>>
 	<</if>>
@@ -519,7 +528,7 @@
 <br>
 <<walkicon>><<link [[守住退路盯紧灌木 (0:05)|MP Daily BlackWolf 3]]>>
 	<<set $mpDailyBlackWolf to Math.max(($mpDailyBlackWolf or 0), 2)>><<pass 5>><<stress -1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" trust 1>><</if>>
+	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>>
 <</link>>
 
 :: MP Daily BlackWolf 3 [nobr]
@@ -532,7 +541,7 @@
 	<<if ($tending or 0) gte 260 or ($willpower or 0) gte 260>>
 		<<stress -4>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_extra_blackwolf_3")>><<money 250>><</if>>
-		<<if $NPCName and $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><<npcincr "Black Wolf" trust 1>><</if>>
+		<<if $NPCName and $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>>
 	<<else>>
 		<<stress -1>><<tiredness 1>>
 	<</if>>
@@ -544,3 +553,4 @@
 <</link>>
 <br>
 <<getouticon>><<link [[顺着林间石径返回外林 (0:03)|Forest]]>><<set $mpDailyBlackWolf to 3>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+

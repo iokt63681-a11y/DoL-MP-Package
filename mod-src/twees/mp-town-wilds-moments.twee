@@ -1,13 +1,14 @@
 /* 城镇与荒野日常瞬间 6处 × 4段 = 24段（集市/码头/学校/公园/森林/农场，1段1瞬间、必含双检定） */
-
 :: MP Moment Market 1 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 高街早集的果蔬摊前，一辆手推车的木轮卡进石板缝，满筐黄澄澄的柑橘眼看就要顺着斜坡滚进泥水沟。
 <br><br>
 <<getouticon>><<link [[返回高街集市 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-market-1">
-<<tendingicon>><<link "上前顶住车辕稳住木筐 (0:05)">><<pass 6>><<replace "#moment-market-1">>
+<<tendingicon>><<link "上前顶住车辕稳住木筐 (0:06)">><<pass 6>><<replace "#moment-market-1">>
 <<if ($physique or 10000) gte 11400 or ($athletics or 0) gte 240>>
 	果农感激地擦了擦汗，挑出两颗最饱满的甜柑橘和几枚铜币塞进你手里。<span class="green">你帮果农保住了整车柑橘。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_market_1")>><<money 250>><</if>>
@@ -17,21 +18,27 @@
 <<else>>
 	木筐边角磕在你的小腿上，几颗柑橘滚进水洼溅湿了你的裤脚。<span class="red">你被木筐磕痛了小腿。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Market 1]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[顺集市往铜器摊走 (0:03)|MP Moment Market 2]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "眼疾手快垫入木楔卡住车轮 (0:05)">><<pass 6>><<replace "#moment-market-1">>
+<<link "眼疾手快垫入木楔卡住车轮 (0:06)">><<pass 6>><<replace "#moment-market-1">>
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>>
-	<span class="green">你帮果农保住了整车柑橘。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_market_1_alt"] to 1>>
+	你顺着器物接缝的纹理巧劲一拨，没费多少力气便解开了死扣。<span class="green">你在细微处寻到了藏着的旧物与门道。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_market_1")>><<money 250>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[顺集市往铜器摊走 (0:03)|MP Moment Market 2]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">你被木筐磕痛了小腿。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_market_1_alt"] to 1>>
+	你暗中使力时指尖一滑，只摸到半截脱落的旧铜片。<span class="red">铜片边缘刮红了指腹，你只得先记下位置退开。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[顺集市往铜器摊走 (0:03)|MP Moment Market 2]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Market 1]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -41,6 +48,8 @@
 集市转角的旧铜器摊上摆着十几只停摆的铜怀表，唯独角落一只缺了表链的银壳表还在滴答走字。
 <br><br>
 <<getouticon>><<link [[返回高街集市 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-market-2">
 <<tendingicon>><<link "贴耳倾听擒纵轮咬合节拍 (0:06)">><<pass 6>><<replace "#moment-market-2">>
@@ -53,21 +62,27 @@
 <<else>>
 	摊主见你盯得仔细，当即坐地起价，你只得放下怀表作罢。<span class="red">摊主抬高了价码，未能成交。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Market 2]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[走向街中段绸布摊 (0:03)|MP Moment Market 3]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "与摊主闲聊试探收货来路 (0:06)">><<pass 6>><<replace "#moment-market-2">>
+<<link "主闲聊试探收货来路 (0:06)">><<pass 6>><<replace "#moment-market-2">>
 <<if ($english or 0) gte 250 or ($seductionskill or 0) gte 240>>
-	<span class="green">你淘到了暗藏夹层的银壳表。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_market_2_alt"] to 1>>
+	你借着旁侧的支点稳住重心，轻巧地将卡住的物件完整取出。<span class="green">你干净利落地化解了眼前的阻碍。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_market_2")>><<money 300>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[走向街中段绸布摊 (0:03)|MP Moment Market 3]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">摊主抬高了价码，未能成交。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_market_2_alt"] to 1>>
+	周围突然传来一阵响动，你匆忙缩手时衣角挂上了一层灰渍。<span class="red">你没能当场取走物件，只顺手摸到了外侧的暗记。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[走向街中段绸布摊 (0:03)|MP Moment Market 3]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Market 2]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -78,8 +93,10 @@
 <br><br>
 <<getouticon>><<link [[返回高街集市 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-market-3">
-<<tendingicon>><<link "纵身跃起抓住翻飞的绸匹 (0:05)">><<pass 6>><<replace "#moment-market-3">>
+<<tendingicon>><<link "纵身跃起抓住翻飞的绸匹 (0:06)">><<pass 6>><<replace "#moment-market-3">>
 <<if ($danceskill or 0) gte 240 or ($athletics or 0) gte 250>>
 	靛蓝丝绸毫发无损地卷回木轴，绣娘剪下一截精致丝带并包了手工钱谢你。<span class="green">你及时护住了名贵的靛蓝丝绸。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_market_3")>><<money 250>><</if>>
@@ -89,21 +106,27 @@
 <<else>>
 	粗糙的棚架麻绳擦过你的掌心，火辣辣地疼。<span class="red">麻绳勒红了你的手掌。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Market 3]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[走到集市尾端烤饼炉 (0:03)|MP Moment Market 4]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "帮绣娘压住布架重新打结 (0:05)">><<pass 6>><<replace "#moment-market-3">>
+<<link "娘压住布架重新打结 (0:06)">><<pass 6>><<replace "#moment-market-3">>
 <<if ($housekeeping or 0) gte 240 or ($willpower or 0) gte 420>>
-	<span class="green">你及时护住了名贵的靛蓝丝绸。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_market_3_alt"] to 1>>
+	你先拂去表面的浮尘与水渍，看清暗槽走向后一举得手。<span class="green">你凭着耐心与巧思拿到了里层的收存。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_market_3")>><<money 250>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[走到集市尾端烤饼炉 (0:03)|MP Moment Market 4]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">麻绳勒红了你的手掌。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_market_3_alt"] to 1>>
+	湿滑的边角让你借不上力，折腾片刻后手臂泛起阵阵酸麻。<span class="red">你记下了卡扣的朝向，打算换个法子再来。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[走到集市尾端烤饼炉 (0:03)|MP Moment Market 4]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Market 3]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -114,6 +137,8 @@
 <br><br>
 <<getouticon>><<link [[返回高街集市 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-market-4">
 <<tendingicon>><<link "搭把手抬起沉重的铸铁烤盘 (0:06)">><<pass 6>><<replace "#moment-market-4">>
 <<if ($physique or 10000) gte 11500 or ($housekeeping or 0) gte 240>>
@@ -121,25 +146,36 @@
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_market_4")>><<money 250>><</if>>
 	<<stress -2>><<lstress>>
 	<br><br>
-	<<getouticon>><<link [[返回高街集市 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<if Time.dayState is "night">>
+	<<getouticon>><<link [[顺夜色去商业巷口巡看 (0:04)|MP Night Event Alley 1]]>><<pass 4>><</link>>
+<<else>>
+	天色还早，你先回高街，打算入夜后再来。
+	<<getouticon>><<link [[先回高街 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<</if>>
 <<else>>
 	烤盘余温未散，隔着粗布仍烫红了你的指尖。<span class="red">你被滚烫的铁盘边沿烫了一下。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Market 4]]>><<pass 3>><</link>>
+	<br>
 	<<getouticon>><<link [[返回高街集市 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "帮他清点零钱匣并归拢纸袋 (0:06)">><<pass 6>><<replace "#moment-market-4">>
+<<link "清点零钱匣并归拢纸袋 (0:06)">><<pass 6>><<replace "#moment-market-4">>
 <<if ($maths or 0) gte 240 or ($english or 0) gte 240>>
-	<span class="green">热乎乎的烤饼香气扑鼻。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_market_4_alt"] to 1>>
+	你听准机括与风声的间隙果断出手，稳稳接住了滑落的物件。<span class="green">你把握住转瞬即逝的空档办妥了此事。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_market_4")>><<money 250>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[返回高街集市 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
-	<span class="red">你被滚烫的铁盘边沿烫了一下。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_market_4_alt"] to 1>>
+	冷风吹得你打了个寒噤，手里的工具在缝隙间卡了一下。<span class="red">你顾不上继续深翻，只先把外侧的线索收好。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<getouticon>><<link [[返回高街集市 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Market 4]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -149,6 +185,8 @@
 三号栈桥边的涌浪越来越急，一艘驳船的系船粗麻缆在石桩上磨断了大半股，船头正往石阶上猛撞。
 <br><br>
 <<getouticon>><<link [[返回旧港码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-docks-1">
 <<tendingicon>><<link "甩出备用缆绳套住副铁桩 (0:06)">><<pass 6>><<replace "#moment-docks-1">>
@@ -161,21 +199,27 @@
 <<else>>
 	浪花扑上栈桥打湿了你的裤腿，粗麻绳也擦破了你的虎口。<span class="red">海浪打湿衣裤，手掌被缆绳擦伤。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Docks 1]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[顺栈道去鱼市冰槽 (0:03)|MP Moment Docks 2]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "打水手双套结锁紧断缆 (0:06)">><<pass 6>><<replace "#moment-docks-1">>
+<<link "打水手双套结锁紧断缆 (0:06)">><<pass 6>><<replace "#moment-docks-1">>
 <<if ($skulduggery or 0) gte 250 or ($swimmingskill or 0) gte 240>>
-	<span class="green">你及时系牢了险些脱锚的驳船。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_docks_1_alt"] to 1>>
+	你顺着器物接缝的纹理巧劲一拨，没费多少力气便解开了死扣。<span class="green">你在细微处寻到了藏着的旧物与门道。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_docks_1")>><<money 280>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[顺栈道去鱼市冰槽 (0:03)|MP Moment Docks 2]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">海浪打湿衣裤，手掌被缆绳擦伤。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_docks_1_alt"] to 1>>
+	你暗中使力时指尖一滑，只摸到半截脱落的旧铜片。<span class="red">铜片边缘刮红了指腹，你只得先记下位置退开。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[顺栈道去鱼市冰槽 (0:03)|MP Moment Docks 2]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Docks 1]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -186,8 +230,10 @@
 <br><br>
 <<getouticon>><<link [[返回旧港码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-docks-2">
-<<tendingicon>><<link "趁搬运空档用铁钩挑出瓶子 (0:05)">><<pass 6>><<replace "#moment-docks-2">>
+<<tendingicon>><<link "趁搬运空档用铁钩挑出瓶子 (0:06)">><<pass 6>><<replace "#moment-docks-2">>
 <<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 240>>
 	瓶内除了一张早年水手留下的航标字条，还塞着几枚防潮银币。<span class="green">你从碎冰槽里取出了锡封漂流瓶。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_docks_2")>><<money 260>><</if>>
@@ -197,21 +243,27 @@
 <<else>>
 	刺骨的盐水碎冰冻得你五指发麻，铁箅子还刮破了指节。<span class="red">冰水刺骨，手指被铁栅刮伤。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Docks 2]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[走向起重机货场 (0:03)|MP Moment Docks 3]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "伸手探入碎冰槽拔出软木塞 (0:05)">><<pass 6>><<replace "#moment-docks-2">>
+<<link "探入碎冰槽拔出软木塞 (0:06)">><<pass 6>><<replace "#moment-docks-2">>
 <<if ($willpower or 0) gte 430 or ($science or 0) gte 240>>
-	<span class="green">你从碎冰槽里取出了锡封漂流瓶。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_docks_2_alt"] to 1>>
+	你借着旁侧的支点稳住重心，轻巧地将卡住的物件完整取出。<span class="green">你干净利落地化解了眼前的阻碍。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_docks_2")>><<money 260>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[走向起重机货场 (0:03)|MP Moment Docks 3]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">冰水刺骨，手指被铁栅刮伤。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_docks_2_alt"] to 1>>
+	周围突然传来一阵响动，你匆忙缩手时衣角挂上了一层灰渍。<span class="red">你没能当场取走物件，只顺手摸到了外侧的暗记。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[走向起重机货场 (0:03)|MP Moment Docks 3]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Docks 2]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -221,6 +273,8 @@
 港区二号蒸汽起重机的吊钩在半空摇晃，帆布货网的一角钩在了集装箱铁栓上，司炉工正急得探头张望。
 <br><br>
 <<getouticon>><<link [[返回旧港码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-docks-3">
 <<tendingicon>><<link "攀上集装箱铁梯拨开挂网 (0:06)">><<pass 6>><<replace "#moment-docks-3">>
@@ -233,21 +287,27 @@
 <<else>>
 	吊钩晃动带落一块木垫板擦过你的肩膀，震得你半边手臂发麻。<span class="red">落下的木板擦伤了你的肩头。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Docks 3]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[去引水栈桥看信号灯 (0:03)|MP Moment Docks 4]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "在地面拉动引导副绳脱钩 (0:06)">><<pass 6>><<replace "#moment-docks-3">>
+<<link "面拉动引导副绳脱钩 (0:06)">><<pass 6>><<replace "#moment-docks-3">>
 <<if ($physique or 10000) gte 11500 or ($science or 0) gte 250>>
-	<span class="green">你帮起重机解开了卡死的货网。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_docks_3_alt"] to 1>>
+	你先拂去表面的浮尘与水渍，看清暗槽走向后一举得手。<span class="green">你凭着耐心与巧思拿到了里层的收存。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_docks_3")>><<money 280>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[去引水栈桥看信号灯 (0:03)|MP Moment Docks 4]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">落下的木板擦伤了你的肩头。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_docks_3_alt"] to 1>>
+	湿滑的边角让你借不上力，折腾片刻后手臂泛起阵阵酸麻。<span class="red">你记下了卡扣的朝向，打算换个法子再来。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[去引水栈桥看信号灯 (0:03)|MP Moment Docks 4]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Docks 3]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -258,6 +318,8 @@
 <br><br>
 <<getouticon>><<link [[返回旧港码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-docks-4">
 <<tendingicon>><<link "旋开铜灯罩修剪烧焦灯芯 (0:06)">><<pass 6>><<replace "#moment-docks-4">>
 <<if ($housekeeping or 0) gte 240 or ($science or 0) gte 240>>
@@ -265,25 +327,36 @@
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_docks_4")>><<money 260>><</if>>
 	<<stress -2>><<lstress>>
 	<br><br>
-	<<getouticon>><<link [[返回旧港码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<if Time.dayState is "night">>
+	<<getouticon>><<link [[留到深夜去栈桥查看 (0:04)|MP Night Event Docks 1]]>><<pass 4>><</link>>
+<<else>>
+	天色还早，你先回码头，打算入夜后再来。
+	<<getouticon>><<link [[先回码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<</if>>
 <<else>>
 	滚烫的铜灯罩烫红了你的指尖，海风灌进领口让人直打哆嗦。<span class="red">灯罩烫伤手指，海风吹得你发冷。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Docks 4]]>><<pass 3>><</link>>
+	<br>
 	<<getouticon>><<link [[返回旧港码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "用铁丝扎紧防风灯底座挂钩 (0:06)">><<pass 6>><<replace "#moment-docks-4">>
+<<link "用铁丝扎紧防风灯底座挂钩 (0:06)">><<pass 6>><<replace "#moment-docks-4">>
 <<if ($skulduggery or 0) gte 250 or ($willpower or 0) gte 420>>
-	<span class="green">引水信号灯恢复了明亮光束。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_docks_4_alt"] to 1>>
+	你听准机括与风声的间隙果断出手，稳稳接住了滑落的物件。<span class="green">你把握住转瞬即逝的空档办妥了此事。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_docks_4")>><<money 260>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[返回旧港码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
-	<span class="red">灯罩烫伤手指，海风吹得你发冷。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_docks_4_alt"] to 1>>
+	冷风吹得你打了个寒噤，手里的工具在缝隙间卡了一下。<span class="red">你顾不上继续深翻，只先把外侧的线索收好。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<getouticon>><<link [[返回旧港码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Docks 4]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -294,8 +367,10 @@
 <br><br>
 <<getouticon>><<link [[返回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-school-1">
-<<tendingicon>><<link "一个箭步上前双手稳稳接住 (0:04)">><<pass 6>><<replace "#moment-school-1">>
+<<tendingicon>><<link "一个箭步上前双手稳稳接住 (0:06)">><<pass 6>><<replace "#moment-school-1">>
 <<if ($athletics or 0) gte 240 or ($danceskill or 0) gte 240>>
 	冷凝管完好无损地落在你手中，值日助教松了口气，把实验室多余的护手霜送给了你。<span class="green">你毫发无损地救下了实验器皿。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_school_1")>><<money 220>><</if>>
@@ -305,21 +380,27 @@
 <<else>>
 	你接管子时手肘撞在走廊储物柜门上，震得手臂一阵酸麻。<span class="red">手肘磕上铁柜，疼得直吸凉气。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment School 1]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[顺走廊去学校图书馆 (0:03)|MP Moment School 2]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "用书包垫在地面缓冲接取 (0:04)">><<pass 6>><<replace "#moment-school-1">>
+<<link "用书包垫在地面缓冲接取 (0:06)">><<pass 6>><<replace "#moment-school-1">>
 <<if ($science or 0) gte 240 or ($willpower or 0) gte 420>>
-	<span class="green">你毫发无损地救下了实验器皿。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_school_1_alt"] to 1>>
+	你顺着器物接缝的纹理巧劲一拨，没费多少力气便解开了死扣。<span class="green">你在细微处寻到了藏着的旧物与门道。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_school_1")>><<money 220>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[顺走廊去学校图书馆 (0:03)|MP Moment School 2]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">手肘磕上铁柜，疼得直吸凉气。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_school_1_alt"] to 1>>
+	你暗中使力时指尖一滑，只摸到半截脱落的旧铜片。<span class="red">铜片边缘刮红了指腹，你只得先记下位置退开。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[顺走廊去学校图书馆 (0:03)|MP Moment School 2]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment School 1]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Hallways]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -330,8 +411,10 @@
 <br><br>
 <<getouticon>><<link [[返回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-school-2">
-<<tendingicon>><<link "拨正导轨铜滑轮推顺木梯 (0:05)">><<pass 6>><<replace "#moment-school-2">>
+<<tendingicon>><<link "拨正导轨铜滑轮推顺木梯 (0:06)">><<pass 6>><<replace "#moment-school-2">>
 <<if ($science or 0) gte 250 or ($housekeeping or 0) gte 240>>
 	厚辞典顺利取下，书页间还夹着一张前人留下的购书礼券，学生连声道谢。<span class="green">你帮低年级学生取下了古籍辞典。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_school_2")>><<money 240>><</if>>
@@ -341,21 +424,27 @@
 <<else>>
 	顶层积灰扑面落下，沉重的辞典压得你手腕一酸差点脱手。<span class="red">灰尘迷眼且手腕被重书压酸。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment School 2]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[去泳池更衣廊查看 (0:03)|MP Moment School 3]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "踩上木梯替学生取下厚辞典 (0:05)">><<pass 6>><<replace "#moment-school-2">>
+<<link "踩上木梯替学生取下厚辞典 (0:06)">><<pass 6>><<replace "#moment-school-2">>
 <<if ($athletics or 0) gte 250 or ($history or 0) gte 250>>
-	<span class="green">你帮低年级学生取下了古籍辞典。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_school_2_alt"] to 1>>
+	你借着旁侧的支点稳住重心，轻巧地将卡住的物件完整取出。<span class="green">你干净利落地化解了眼前的阻碍。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_school_2")>><<money 240>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[去泳池更衣廊查看 (0:03)|MP Moment School 3]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">灰尘迷眼且手腕被重书压酸。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_school_2_alt"] to 1>>
+	周围突然传来一阵响动，你匆忙缩手时衣角挂上了一层灰渍。<span class="red">你没能当场取走物件，只顺手摸到了外侧的暗记。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[去泳池更衣廊查看 (0:03)|MP Moment School 3]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment School 2]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Hallways]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -365,6 +454,8 @@
 学校泳池更衣室尽头的蒸汽暖水阀没关严，滚烫白雾把整面衣柜镜都糊满了，地面瓷砖湿滑无比。
 <br><br>
 <<getouticon>><<link [[返回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-school-3">
 <<tendingicon>><<link "裹上干毛巾拧紧黄铜暖水阀 (0:06)">><<pass 6>><<replace "#moment-school-3">>
@@ -377,21 +468,27 @@
 <<else>>
 	湿滑瓷砖让你脚底一滑摔了个屁股墩，热水还溅湿了衣角。<span class="red">你在湿瓷砖上滑了一跤。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment School 3]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[去放学后的音乐教室 (0:03)|MP Moment School 4]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "推开高处气窗排散满屋白雾 (0:06)">><<pass 6>><<replace "#moment-school-3">>
+<<link "高处气窗排散满屋白雾 (0:06)">><<pass 6>><<replace "#moment-school-3">>
 <<if ($athletics or 0) gte 250 or ($willpower or 0) gte 420>>
-	<span class="green">更衣室恢复了干爽通透。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_school_3_alt"] to 1>>
+	你先拂去表面的浮尘与水渍，看清暗槽走向后一举得手。<span class="green">你凭着耐心与巧思拿到了里层的收存。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_school_3")>><<money 240>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[去放学后的音乐教室 (0:03)|MP Moment School 4]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">你在湿瓷砖上滑了一跤。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_school_3_alt"] to 1>>
+	湿滑的边角让你借不上力，折腾片刻后手臂泛起阵阵酸麻。<span class="red">你记下了卡扣的朝向，打算换个法子再来。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[去放学后的音乐教室 (0:03)|MP Moment School 4]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment School 3]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Hallways]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -402,6 +499,8 @@
 <br><br>
 <<getouticon>><<link [[返回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-school-4">
 <<tendingicon>><<link "拨正摆针游丝重新校准节拍 (0:06)">><<pass 6>><<replace "#moment-school-4">>
 <<if ($science or 0) gte 250 or ($danceskill or 0) gte 250>>
@@ -409,25 +508,36 @@
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_school_4")>><<money 220>><</if>>
 	<<stress -2>><<lstress>>
 	<br><br>
-	<<getouticon>><<link [[返回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<if Time.dayState is "night">>
+	<<getouticon>><<link [[夜深后回孤儿院走廊巡看 (0:04)|MP Night Event Orphanage 1]]>><<pass 4>><</link>>
+<<else>>
+	夜色未深，你先回孤儿院，打算晚些再出来。
+	<<getouticon>><<link [[先回孤儿院 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<</if>>
 <<else>>
 	摆针猛地弹回敲在你的指甲盖上，震得指尖发麻。<span class="red">回弹的摆针敲痛了你的指尖。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment School 4]]>><<pass 3>><</link>>
+	<br>
 	<<getouticon>><<link [[返回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "帮值日生盖好琴盖整理谱架 (0:06)">><<pass 6>><<replace "#moment-school-4">>
+<<link "日生盖好琴盖整理谱架 (0:06)">><<pass 6>><<replace "#moment-school-4">>
 <<if ($housekeeping or 0) gte 250 or ($english or 0) gte 240>>
-	<span class="green">清脆规律的节拍声令人心神宁静。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_school_4_alt"] to 1>>
+	你听准机括与风声的间隙果断出手，稳稳接住了滑落的物件。<span class="green">你把握住转瞬即逝的空档办妥了此事。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_school_4")>><<money 220>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[返回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
-	<span class="red">回弹的摆针敲痛了你的指尖。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_school_4_alt"] to 1>>
+	冷风吹得你打了个寒噤，手里的工具在缝隙间卡了一下。<span class="red">你顾不上继续深翻，只先把外侧的线索收好。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<getouticon>><<link [[返回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment School 4]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Hallways]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -437,6 +547,8 @@
 公园郁金香花圃外侧的低矮铸铁护栏被昨夜雨水冲松了根基，几株盛开的花茎正被倾斜的铁栏压弯。
 <br><br>
 <<getouticon>><<link [[返回公园步道 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-park-1">
 <<tendingicon>><<link "扶正铸铁护栏并用石块夯实 (0:06)">><<pass 6>><<replace "#moment-park-1">>
@@ -449,21 +561,27 @@
 <<else>>
 	花坛泥水溅满了你的鞋面，铸铁栏上的铁锈也蹭脏了手心。<span class="red">泥水弄脏了鞋面与手心。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Park 1]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[顺步道走向中心喷泉 (0:03)|MP Moment Park 2]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "用细麻绳将花茎扶直绑好 (0:06)">><<pass 6>><<replace "#moment-park-1">>
+<<link "用细麻绳将花茎扶直绑好 (0:06)">><<pass 6>><<replace "#moment-park-1">>
 <<if ($tending or 0) gte 250 or ($housekeeping or 0) gte 240>>
-	<span class="green">郁金香花丛重新挺立在阳光下。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_park_1_alt"] to 1>>
+	你顺着器物接缝的纹理巧劲一拨，没费多少力气便解开了死扣。<span class="green">你在细微处寻到了藏着的旧物与门道。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_park_1")>><<money 240>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[顺步道走向中心喷泉 (0:03)|MP Moment Park 2]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">泥水弄脏了鞋面与手心。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_park_1_alt"] to 1>>
+	你暗中使力时指尖一滑，只摸到半截脱落的旧铜片。<span class="red">铜片边缘刮红了指腹，你只得先记下位置退开。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[顺步道走向中心喷泉 (0:03)|MP Moment Park 2]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Park 1]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Park]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -474,8 +592,10 @@
 <br><br>
 <<getouticon>><<link [[返回公园步道 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-park-2">
-<<tendingicon>><<link "用细枝挑出铜币 (0:05)">><<pass 6>><<replace "#moment-park-2">>
+<<tendingicon>><<link "用细枝挑出铜币 (0:06)">><<pass 6>><<replace "#moment-park-2">>
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>>
 	喷泉水柱恢复了优美的弧线，你还从槽缝里一并抠出了几枚亮闪闪的银币。<span class="green">你疏通了喷泉并收获了池底银币。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_park_2")>><<money 260>><</if>>
@@ -485,21 +605,27 @@
 <<else>>
 	水柱突然喷涌而出，冰凉的水花溅湿了你的前襟。<span class="red">飞溅的泉水打湿了你的衣襟。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Park 2]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[走向避风长椅凉亭 (0:03)|MP Moment Park 3]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "踩上池沿清走排水槽的落叶 (0:05)">><<pass 6>><<replace "#moment-park-2">>
+<<link "踩上池沿清走排水槽的落叶 (0:06)">><<pass 6>><<replace "#moment-park-2">>
 <<if ($athletics or 0) gte 240 or ($housekeeping or 0) gte 240>>
-	<span class="green">你疏通了喷泉并收获了池底银币。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_park_2_alt"] to 1>>
+	你借着旁侧的支点稳住重心，轻巧地将卡住的物件完整取出。<span class="green">你干净利落地化解了眼前的阻碍。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_park_2")>><<money 260>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[走向避风长椅凉亭 (0:03)|MP Moment Park 3]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">飞溅的泉水打湿了你的衣襟。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_park_2_alt"] to 1>>
+	周围突然传来一阵响动，你匆忙缩手时衣角挂上了一层灰渍。<span class="red">你没能当场取走物件，只顺手摸到了外侧的暗记。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[走向避风长椅凉亭 (0:03)|MP Moment Park 3]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Park 2]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Park]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -510,8 +636,10 @@
 <br><br>
 <<getouticon>><<link [[返回公园步道 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-park-3">
-<<tendingicon>><<link "快步上前收拢吹散的速写纸 (0:05)">><<pass 6>><<replace "#moment-park-3">>
+<<tendingicon>><<link "快步上前收拢吹散的速写纸 (0:06)">><<pass 6>><<replace "#moment-park-3">>
 <<if ($athletics or 0) gte 240 or ($danceskill or 0) gte 240>>
 	匆匆折返找画夹的美术生千恩万谢，硬把买画材剩下的零钱塞进你手里。<span class="green">你将散落的画稿完璧归赵。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_park_3")>><<money 240>><</if>>
@@ -521,21 +649,27 @@
 <<else>>
 	钻进灌木丛捡画纸时，带刺的冬青枝刮破了你的手背。<span class="red">冬青刺在手背上划出了红痕。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Park 3]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[走到旧玻璃花房外侧 (0:03)|MP Moment Park 4]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "按页码将画稿归位 (0:05)">><<pass 6>><<replace "#moment-park-3">>
+<<link "按页码将画稿归位 (0:06)">><<pass 6>><<replace "#moment-park-3">>
 <<if ($english or 0) gte 240 or ($housekeeping or 0) gte 240>>
-	<span class="green">你将散落的画稿完璧归赵。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_park_3_alt"] to 1>>
+	你先拂去表面的浮尘与水渍，看清暗槽走向后一举得手。<span class="green">你凭着耐心与巧思拿到了里层的收存。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_park_3")>><<money 240>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[走到旧玻璃花房外侧 (0:03)|MP Moment Park 4]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">冬青刺在手背上划出了红痕。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_park_3_alt"] to 1>>
+	湿滑的边角让你借不上力，折腾片刻后手臂泛起阵阵酸麻。<span class="red">你记下了卡扣的朝向，打算换个法子再来。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[走到旧玻璃花房外侧 (0:03)|MP Moment Park 4]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Park 3]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Park]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -546,6 +680,8 @@
 <br><br>
 <<getouticon>><<link [[返回公园步道 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-park-4">
 <<tendingicon>><<link "用园艺长竹竿挑落风筝尾翼 (0:06)">><<pass 6>><<replace "#moment-park-4">>
 <<if ($tending or 0) gte 250 or ($science or 0) gte 240>>
@@ -553,25 +689,36 @@
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_park_4")>><<money 240>><</if>>
 	<<stress -2>><<lstress>>
 	<br><br>
-	<<getouticon>><<link [[返回公园步道 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<if Time.dayState is "night">>
+	<<getouticon>><<link [[宵禁后去公园喷泉边 (0:04)|MP Night Event Park 1]]>><<pass 4>><</link>>
+<<else>>
+	离宵禁还早，你先回公园长椅，打算入夜后再来。
+	<<getouticon>><<link [[先回公园 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<</if>>
 <<else>>
 	棉线突然绷断，你在石沿上晃了一下差点踩进泥坑。<span class="red">断线回弹擦痛了你的手指。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Park 4]]>><<pass 3>><</link>>
+	<br>
 	<<getouticon>><<link [[返回公园步道 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "踩着花坛石沿收拢缠绕棉线 (0:06)">><<pass 6>><<replace "#moment-park-4">>
+<<link "花坛石沿收拢缠绕棉线 (0:06)">><<pass 6>><<replace "#moment-park-4">>
 <<if ($athletics or 0) gte 250 or ($skulduggery or 0) gte 240>>
-	<span class="green">你巧妙取下了挂在尖顶的风筝。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_park_4_alt"] to 1>>
+	你听准机括与风声的间隙果断出手，稳稳接住了滑落的物件。<span class="green">你把握住转瞬即逝的空档办妥了此事。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_park_4")>><<money 240>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[返回公园步道 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
-	<span class="red">断线回弹擦痛了你的手指。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_park_4_alt"] to 1>>
+	冷风吹得你打了个寒噤，手里的工具在缝隙间卡了一下。<span class="red">你顾不上继续深翻，只先把外侧的线索收好。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<getouticon>><<link [[返回公园步道 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Park 4]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Park]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -581,6 +728,8 @@
 林间溪流上的踏脚青石被山洪冲松了一块，中间隔开半丈宽的急流，对岸树下长着几丛鲜嫩的野莓。
 <br><br>
 <<getouticon>><<link [[返回林间小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-forest-1">
 <<tendingicon>><<link "助跑两步轻巧跃过溪中急流 (0:06)">><<pass 6>><<replace "#moment-forest-1">>
@@ -593,21 +742,27 @@
 <<else>>
 	青石打滑，你的靴筒浸入冰凉刺骨的溪水里。<span class="red">溪水灌进鞋靴，冻得脚踝发凉。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Forest 1]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[顺兽径往古橡树走 (0:03)|MP Moment Forest 2]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "搬来枯木架稳松动的踏脚石 (0:06)">><<pass 6>><<replace "#moment-forest-1">>
+<<link "枯木架稳松动的踏脚石 (0:06)">><<pass 6>><<replace "#moment-forest-1">>
 <<if ($physique or 10000) gte 11500 or ($tending or 0) gte 240>>
-	<span class="green">你跨过山溪采到了鲜美野莓。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_forest_1_alt"] to 1>>
+	你顺着器物接缝的纹理巧劲一拨，没费多少力气便解开了死扣。<span class="green">你在细微处寻到了藏着的旧物与门道。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_forest_1")>><<money 250>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[顺兽径往古橡树走 (0:03)|MP Moment Forest 2]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">溪水灌进鞋靴，冻得脚踝发凉。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_forest_1_alt"] to 1>>
+	你暗中使力时指尖一滑，只摸到半截脱落的旧铜片。<span class="red">铜片边缘刮红了指腹，你只得先记下位置退开。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[顺兽径往古橡树走 (0:03)|MP Moment Forest 2]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Forest 1]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -618,8 +773,10 @@
 <br><br>
 <<getouticon>><<link [[返回林间小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-forest-2">
-<<tendingicon>><<link "放坚果再探手摸取 (0:05)">><<pass 6>><<replace "#moment-forest-2">>
+<<tendingicon>><<link "放坚果再探手摸取 (0:06)">><<pass 6>><<replace "#moment-forest-2">>
 <<if ($tending or 0) gte 250 or ($skulduggery or 0) gte 240>>
 	树洞里的红松鼠抱着坚果跑开，你顺利摸出了一枚古旧的纯银怀表链。<span class="green">你用坚果换出了松鼠藏匿的银表链。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_forest_2")>><<money 260>><</if>>
@@ -629,21 +786,27 @@
 <<else>>
 	护食的松鼠冲你吱吱叫着抓了一下你的手背，你只得连忙缩手。<span class="red">松鼠爪子在手背上留下一道白印。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Forest 2]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[深入猎道排查旧陷阱 (0:03)|MP Moment Forest 3]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "用细树枝拨开表层松塔查看 (0:05)">><<pass 6>><<replace "#moment-forest-2">>
+<<link "用细树枝拨开表层松塔查看 (0:06)">><<pass 6>><<replace "#moment-forest-2">>
 <<if ($science or 0) gte 240 or ($willpower or 0) gte 420>>
-	<span class="green">你用坚果换出了松鼠藏匿的银表链。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_forest_2_alt"] to 1>>
+	你借着旁侧的支点稳住重心，轻巧地将卡住的物件完整取出。<span class="green">你干净利落地化解了眼前的阻碍。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_forest_2")>><<money 260>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[深入猎道排查旧陷阱 (0:03)|MP Moment Forest 3]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">松鼠爪子在手背上留下一道白印。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_forest_2_alt"] to 1>>
+	周围突然传来一阵响动，你匆忙缩手时衣角挂上了一层灰渍。<span class="red">你没能当场取走物件，只顺手摸到了外侧的暗记。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[深入猎道排查旧陷阱 (0:03)|MP Moment Forest 3]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Forest 2]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -653,6 +816,8 @@
 林间猎道旁的腐殖落叶下露出一角生锈的捕兽铁夹，机簧还处于紧绷状态，路过行人极易误踩。
 <br><br>
 <<getouticon>><<link [[返回林间小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-forest-3">
 <<tendingicon>><<link "用粗木棍从侧拍击触发机簧 (0:06)">><<pass 6>><<replace "#moment-forest-3">>
@@ -665,21 +830,27 @@
 <<else>>
 	铁夹合拢时溅起一团枯叶碎石，震得你虎口发麻。<span class="red">机簧巨响惊飞林鸟，虎口震得生疼。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Forest 3]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[走向深林指路石龛 (0:03)|MP Moment Forest 4]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "踩住底座铁耳卸下弹簧卡扣 (0:06)">><<pass 6>><<replace "#moment-forest-3">>
+<<link "底座铁耳卸下弹簧卡扣 (0:06)">><<pass 6>><<replace "#moment-forest-3">>
 <<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>>
-	<span class="green">你安全拆除了暗藏的捕兽铁夹。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_forest_3_alt"] to 1>>
+	你先拂去表面的浮尘与水渍，看清暗槽走向后一举得手。<span class="green">你凭着耐心与巧思拿到了里层的收存。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_forest_3")>><<money 260>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[走向深林指路石龛 (0:03)|MP Moment Forest 4]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">机簧巨响惊飞林鸟，虎口震得生疼。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_forest_3_alt"] to 1>>
+	湿滑的边角让你借不上力，折腾片刻后手臂泛起阵阵酸麻。<span class="red">你记下了卡扣的朝向，打算换个法子再来。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[走向深林指路石龛 (0:03)|MP Moment Forest 4]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Forest 3]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -690,6 +861,8 @@
 <br><br>
 <<getouticon>><<link [[返回林间小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-forest-4">
 <<tendingicon>><<link "拂去湿泥用火重燃引路油灯 (0:06)">><<pass 6>><<replace "#moment-forest-4">>
 <<if ($housekeeping or 0) gte 240 or ($willpower or 0) gte 420>>
@@ -697,25 +870,36 @@
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_forest_4")>><<money 250>><</if>>
 	<<stress -2>><<lstress>>
 	<br><br>
-	<<getouticon>><<link [[返回林间小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<if Time.dayState is "night">>
+	<<getouticon>><<link [[入夜后往密林深处探看 (0:04)|MP Night Event Forest 1]]>><<pass 4>><</link>>
+<<else>>
+	天光还亮，你先退回林缘，打算入夜后再来。
+	<<getouticon>><<link [[先回森林 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<</if>>
 <<else>>
 	潮湿的火柴连续划断了两根，冷风吹得你鼻尖发酸。<span class="red">火柴受潮难燃，冷风吹得你直缩脖颈。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Forest 4]]>><<pass 3>><</link>>
+	<br>
 	<<getouticon>><<link [[返回林间小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "扶正石龛顶盖住林间穿堂风 (0:06)">><<pass 6>><<replace "#moment-forest-4">>
+<<link "石龛顶盖住林间穿堂风 (0:06)">><<pass 6>><<replace "#moment-forest-4">>
 <<if ($tending or 0) gte 250 or ($physique or 10000) gte 11400>>
-	<span class="green">指路石龛的灯火重新照亮迷雾。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_forest_4_alt"] to 1>>
+	你听准机括与风声的间隙果断出手，稳稳接住了滑落的物件。<span class="green">你把握住转瞬即逝的空档办妥了此事。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_forest_4")>><<money 250>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[返回林间小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
-	<span class="red">火柴受潮难燃，冷风吹得你直缩脖颈。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_forest_4_alt"] to 1>>
+	冷风吹得你打了个寒噤，手里的工具在缝隙间卡了一下。<span class="red">你顾不上继续深翻，只先把外侧的线索收好。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<getouticon>><<link [[返回林间小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Forest 4]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -725,6 +909,8 @@
 农场谷仓外侧的干草垛上，防雨油布被一阵狂风吹开了系绳，眼看阴云压顶就要淋湿整垛冬草。
 <br><br>
 <<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-farm-1">
 <<tendingicon>><<link "爬木梯重新拉紧油布四角 (0:06)">><<pass 6>><<replace "#moment-farm-1">>
@@ -737,21 +923,27 @@
 <<else>>
 	干草硬茬扎进了你的手腕袖口，刺痒难耐。<span class="red">干草碎茬扎得手腕皮肤发痒。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Farm 1]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[顺田埂去灌溉木槽 (0:03)|MP Moment Farm 2]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "在草垛底部打双股防风绳结 (0:06)">><<pass 6>><<replace "#moment-farm-1">>
+<<link "在草垛底部打双股防风绳结 (0:06)">><<pass 6>><<replace "#moment-farm-1">>
 <<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>>
-	<span class="green">你赶在落雨前护住了整垛干草。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_farm_1_alt"] to 1>>
+	你顺着器物接缝的纹理巧劲一拨，没费多少力气便解开了死扣。<span class="green">你在细微处寻到了藏着的旧物与门道。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_farm_1")>><<money 250>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[顺田埂去灌溉木槽 (0:03)|MP Moment Farm 2]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">干草碎茬扎得手腕皮肤发痒。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_farm_1_alt"] to 1>>
+	你暗中使力时指尖一滑，只摸到半截脱落的旧铜片。<span class="red">铜片边缘刮红了指腹，你只得先记下位置退开。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[顺田埂去灌溉木槽 (0:03)|MP Moment Farm 2]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Farm 1]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Farmland]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -761,6 +953,8 @@
 麦田边的木制引水槽分水闸被一团水草与枯枝堵死，浑浊渠水正往田埂小路上漫溢。
 <br><br>
 <<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<br>
 <br>
 <div id="moment-farm-2">
 <<tendingicon>><<link "用铁钩清走堵塞的枯枝 (0:06)">><<pass 6>><<replace "#moment-farm-2">>
@@ -773,21 +967,27 @@
 <<else>>
 	渠底淤泥湿滑，泥浆溅满了你的小腿与鞋面。<span class="red">你在渠边滑了一脚，裤管沾满泥浆。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Farm 2]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[走向牛棚木栏外侧 (0:03)|MP Moment Farm 3]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "提拉分水木闸调节两侧水位 (0:06)">><<pass 6>><<replace "#moment-farm-2">>
+<<link "提拉分水木闸调节两侧水位 (0:06)">><<pass 6>><<replace "#moment-farm-2">>
 <<if ($science or 0) gte 240 or ($athletics or 0) gte 240>>
-	<span class="green">引水渠恢复通畅，麦垄得到了浇灌。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_farm_2_alt"] to 1>>
+	你借着旁侧的支点稳住重心，轻巧地将卡住的物件完整取出。<span class="green">你干净利落地化解了眼前的阻碍。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_farm_2")>><<money 260>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[走向牛棚木栏外侧 (0:03)|MP Moment Farm 3]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">你在渠边滑了一脚，裤管沾满泥浆。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_farm_2_alt"] to 1>>
+	周围突然传来一阵响动，你匆忙缩手时衣角挂上了一层灰渍。<span class="red">你没能当场取走物件，只顺手摸到了外侧的暗记。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[走向牛棚木栏外侧 (0:03)|MP Moment Farm 3]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Farm 2]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Farmland]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -798,8 +998,10 @@
 <br><br>
 <<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-farm-3">
-<<tendingicon>><<link "抓苜蓿草引回奶牛 (0:05)">><<pass 6>><<replace "#moment-farm-3">>
+<<tendingicon>><<link "抓苜蓿草引回奶牛 (0:06)">><<pass 6>><<replace "#moment-farm-3">>
 <<if ($tending or 0) gte 250 or ($willpower or 0) gte 420>>
 	奶牛温顺地低头嚼起苜蓿草，木门重新落锁，挤奶女工笑着送给你一瓶鲜奶与工钱。<span class="green">你稳住奶牛锁好了牛棚围栏。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_farm_3")>><<money 250>><</if>>
@@ -809,21 +1011,27 @@
 <<else>>
 	木门被牛角顶得晃动，撞得你肩膀生疼。<span class="red">木门回撞震痛了你的肩膀。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Farm 3]]>><<pass 3>><</link>>
+	<br>
 	<<walkicon>><<link [[走到打谷场旧风车下 (0:03)|MP Moment Farm 4]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "顶住木门把铁插销敲回槽内 (0:05)">><<pass 6>><<replace "#moment-farm-3">>
+<<link "顶住木门把铁插销敲回槽内 (0:06)">><<pass 6>><<replace "#moment-farm-3">>
 <<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>>
-	<span class="green">你稳住奶牛锁好了牛棚围栏。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_farm_3_alt"] to 1>>
+	你先拂去表面的浮尘与水渍，看清暗槽走向后一举得手。<span class="green">你凭着耐心与巧思拿到了里层的收存。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_farm_3")>><<money 250>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[走到打谷场旧风车下 (0:03)|MP Moment Farm 4]]>><<pass 3>><</link>>
 <<else>>
-	<span class="red">木门回撞震痛了你的肩膀。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_farm_3_alt"] to 1>>
+	湿滑的边角让你借不上力，折腾片刻后手臂泛起阵阵酸麻。<span class="red">你记下了卡扣的朝向，打算换个法子再来。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<walkicon>><<link [[走到打谷场旧风车下 (0:03)|MP Moment Farm 4]]>><<pass 3>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Farm 3]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Farmland]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -834,6 +1042,8 @@
 <br><br>
 <<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
+<br>
+<br>
 <div id="moment-farm-4">
 <<tendingicon>><<link "顺着转向架解缠绕的副帆索 (0:06)">><<pass 6>><<replace "#moment-farm-4">>
 <<if ($skulduggery or 0) gte 250 or ($athletics or 0) gte 250>>
@@ -841,25 +1051,37 @@
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_farm_4")>><<money 260>><</if>>
 	<<stress -2>><<lstress>>
 	<br><br>
-	<<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<if Time.dayState is "night">>
+	<<getouticon>><<link [[退潮夜去海礁浅湾探看 (0:04)|MP Night Event SeaRocks 1]]>><<pass 4>><</link>>
+<<else>>
+	天色还早，你先回海礁步道，打算入夜后再来。
+	<<getouticon>><<link [[先回海礁步道 (0:02)|Sea Rocks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<</if>>
 <<else>>
 	粗糙的帆索磨红了你的指节，面粉灰也扑了一身。<span class="red">帆索擦伤指节，衣衫沾满面粉。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
+	<<walkicon>><<link [[调整呼吸再试 (0:03)|MP Moment Farm 4]]>><<pass 3>><</link>>
+	<br>
 	<<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<investigateicon>><<link "往转向木轮轴里抹上牛油膏 (0:06)">><<pass 6>><<replace "#moment-farm-4">>
+<<link "向木轮轴里抹上牛油膏 (0:06)">><<pass 6>><<replace "#moment-farm-4">>
 <<if ($housekeeping or 0) gte 240 or ($science or 0) gte 240>>
-	<span class="green">风车磨坊恢复了平稳运转。</span>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_farm_4_alt"] to 1>>
+	你听准机括与风声的间隙果断出手，稳稳接住了滑落的物件。<span class="green">你把握住转瞬即逝的空档办妥了此事。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("moment_farm_4")>><<money 260>><</if>>
-	<<stress -2>><<lstress>>
+	<<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
-	<span class="red">帆索擦伤指节，衣衫沾满面粉。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<<set $mpClues to ($mpClues or {})>><<set $mpClues["mp_moment_farm_4_alt"] to 1>>
+	冷风吹得你打了个寒噤，手里的工具在缝隙间卡了一下。<span class="red">你顾不上继续深翻，只先把外侧的线索收好。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
-	<<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[换个手法再试一次 (0:03)|MP Moment Farm 4]]>><<pass 3>><</link>>
+	<br>
+	<<getouticon>><<link [[先记下暗记退回原处 (0:03)|Farmland]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
+

@@ -1,5 +1,4 @@
 /* 城镇新支线 8 条 × 3 段 / Setup -> Step2 -> Resolve / 入口：MP Town Extra Stories Hub */
-
 :: MP Town Extra Stories Hub [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 高街布告栏最下面一排多了八张纸条，纸色比旁边的启事新，钉眼却已经生锈。每张纸只写一个地点和一句没头没尾的话，字迹各不相同。你把它们按街角的位置排开，发现正好绕城一圈。
@@ -29,35 +28,74 @@
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 裁缝铺的玻璃门被雨糊住，推门时带进一股湿羊毛的味道。蒸汽熨斗嘶嘶响，熨衣板上的布冒着白气。墙上挂着一排纸样，边角卷起，用大头针别着。衣架最里面挂着一件改过三次的深蓝礼服，腰衬里用粉笔写着三组尺寸。
 <br><br>
-<<set $skulduggerydifficulty to 270>><<skulduggerycheck>>
-<<if $skulduggerysuccess is 1>>
-	你用指甲挑开衬布边缘，抽出一张对折的改衣卡。<<set $mpExtraClues["tailor_card"] to 1>><<stress -1>>
-<<else>>
-	别针从指腹划过去，血珠落在衬布上，晕成一小点深色。<<pain 1>><<stress 3>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从侧门离开裁缝铺 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[问裁缝那三组尺寸的来历 (0:05)|MP Extra Tailor Dress Step2]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-tailor-dress">
+<<socialiseicon>><<link "问裁缝那三组尺寸的来历 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-tailor-dress">>
+<<set $skulduggerydifficulty to 270>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
+	<<set $mpExtraClues["tailor_card"] to 1>><span class="green">你用指甲挑开衬布边缘，抽出一张对折的改衣卡。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[顺着新线索继续查探 (0:04)|MP Extra Tailor Dress Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">别针从指腹划过去，血珠落在衬布上，晕成一小点深色。</span><<pain 1>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Tailor Dress]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Tailor Dress Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[翻柜台下的旧订单簿 (0:06)|MP Extra Tailor Dress Step2]]>><<pass 6>><</link>>
+<<link "翻柜台下的旧订单簿 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-tailor-dress">>
+<<if ($science or 0) gte 250 or ($tending or 0) gte 240>>
+	<<set $mpExtraClues["tailor_card"] to 1>><span class="green">你屏住呼吸顺着器物纹理摸索，没惊动四周便找准了关窍。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[循着眉目往下追查 (0:04)|MP Extra Tailor Dress Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">周围的气息让你有些分神，手背蹭上一层灰渍，只得先缩回手。</span><<pain 1>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Tailor Dress]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Tailor Dress Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Tailor Dress Step2 [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 柜台下面的订单簿用布绳捆着，纸页发黄，边缘被手指翻得发毛。你解开绳子，找到同一个姓氏的三张订单。
 <br><br>
-<<if ($history or 0) gte 300 or ($maths or 0) gte 300>>
-	你把三张订单的日期排开，发现每隔八年一次，正好是一场舞会举办的间隔。<<set $mpExtraClues["tailor_dates"] to 1>><<stress -2>>
-<<else>>
-	你盯着年份看了太久，把一九九五和一九九七记混了。<<tiredness 2>><<stress 3>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[把订单放回柜台 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[请门外的人进来 (0:05)|MP Extra Tailor Dress Resolve]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-tailor-dress-step2">
+<<socialiseicon>><<link "凑近请门外的人进来 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-tailor-dress-step2">>
+<<if ($history or 0) gte 300 or ($maths or 0) gte 300>>
+	<<set $mpExtraClues["tailor_dates"] to 1>><span class="green">你把三张订单的日期排开，发现每隔八年一次，正好是一场舞会举办的间隔。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[把前因后果彻底理清 (0:04)|MP Extra Tailor Dress Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你盯着年份看了太久，把一九九五和一九九七记混了。</span><<tiredness 2>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Tailor Dress Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Tailor Dress Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[拆开礼服第二层衬布 (0:06)|MP Extra Tailor Dress Resolve]]>><<pass 6>><</link>>
+<<link "低声拆开礼服第二层衬布 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-tailor-dress-step2">>
+<<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
+	<<set $mpExtraClues["tailor_dates"] to 1>><span class="green">你稳住呼吸沉住气观察片刻，在不起眼的夹缝间看清了端倪。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[带着发现上前印证 (0:04)|MP Extra Tailor Dress Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">冷风吹得你肩头微僵，稍一分神便错过了最佳时机。</span><<stress 4>><<tiredness 1>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Tailor Dress Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Tailor Dress Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Tailor Dress Resolve [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
@@ -83,44 +121,83 @@
 :: MP Extra Hospital Cart [nobr]
 <<set $outside to 0>><<set $location to "hospital">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
-凌晨三点十分，住院部旧走廊只剩应急灯亮着。地砖被拖把擦过，还留着一层薄水，鞋底踩上去会轻轻打滑。走廊尽头停着一辆不锈钢推车，轮子有一只磨出了平面，推起来会咯噔一下。扶手上夹着一张写着「床 6」的卡片，边角盖着护士站的蓝印。
-<br><br>
-<<if ($science or 0) gte 280 or ($skulduggery or 0) gte 280>>
-	你蹲下来看轮子，发现平面正好卡在地砖的接缝里。<<set $mpExtraClues["cart_slope"] to 1>><<stress -1>>
-<<else>>
-	你伸手去转轮子，推车突然往前一滑，车角撞在小腿上。<<pain 2>><<stress 3>>
-<</if>>
+凌晨三点十分，住院部旧走廊只剩应急灯亮着。地砖被拖把擦过，还留着一层薄水，鞋底踩上去会轻轻打滑。走廊尽头停着一辆不锈钢推车，轮子有一只磨出了平面，推起来会咯噔一下。扶手上夹着一张写着「6 号床」的卡片，边角盖着护士站的蓝印。
 <br><br>
 <<getouticon>><<link [[从旧走廊退出去 (0:02)|Hospital front]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<link [[问护士卡片是谁写的 (0:05)|MP Extra Hospital Cart Step2]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-hospital-cart">
+<<investigateicon>><<link "问护士卡片是谁写的 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-hospital-cart">>
+<<if ($science or 0) gte 280 or ($skulduggery or 0) gte 280>>
+	<<set $mpExtraClues["cart_slope"] to 1>><span class="green">你蹲下来看轮子，发现平面正好卡在地砖的接缝里。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[顺着新线索继续查探 (0:04)|MP Extra Hospital Cart Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你伸手去转轮子，推车突然往前一滑，车角撞在小腿上。</span><<pain 2>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Hospital Cart]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Hospital Cart Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<walkicon>><<link [[沿着推车的路线走一遍 (0:06)|MP Extra Hospital Cart Step2]]>><<pass 6>><</link>>
+<<link "沿着推车的路线走一遍 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-hospital-cart">>
+<<if ($history or 0) gte 250 or ($english or 0) gte 250>>
+	<<set $mpExtraClues["cart_slope"] to 1>><span class="green">你顺着旧痕与字迹细细比对，从边角不起眼的折痕里理出了脉络。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[循着眉目往下追查 (0:04)|MP Extra Hospital Cart Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你翻找得太急，指腹被粗糙的边角磨得发烫，也没能立刻认出眉目。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Hospital Cart]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Hospital Cart Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Hospital Cart Step2 [nobr]
 <<set $outside to 0>><<set $location to "hospital">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 两点五十五分，你躲在布草间的门后。夜班搬运工推着同一辆车从电梯口出来，车轮咯噔、咯噔，声音在空走廊里拖得很长。
 <br><br>
-<<set $skulduggerydifficulty to 290>><<skulduggerycheck>>
-<<if $skulduggerysuccess is 1>>
-	你趁搬运工去关暖气阀，贴着墙根挪到床边，看见门框胶痕下压着一小片纸。<<set $mpExtraClues["cart_names"] to 1>><<stress -1>>
-<<else>>
-	你的鞋底在水磨石上发出一声短促的尖叫。搬运工猛地回头，手电光扫过布草间门口。<<stress 4>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从消防通道离开 (0:02)|Hospital front]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[和搬运工聊聊床 6 (0:05)|MP Extra Hospital Cart Resolve]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-hospital-cart-step2">
+<<socialiseicon>><<link "凑近和搬运工聊聊6 号床 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-hospital-cart-step2">>
+<<set $skulduggerydifficulty to 290>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
+	<<set $mpExtraClues["cart_names"] to 1>><span class="green">你趁搬运工去关暖气阀，贴着墙根挪到床边，看见门框胶痕下压着一小片纸。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[把前因后果彻底理清 (0:04)|MP Extra Hospital Cart Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你的鞋底在水磨石上发出一声短促的尖叫。</span><<stress 4>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Hospital Cart Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Hospital Cart Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[翻看门框上的排班纸 (0:05)|MP Extra Hospital Cart Resolve]]>><<pass 5>><</link>>
+<<link "低声翻看门框上的排班纸 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-hospital-cart-step2">>
+<<if ($science or 0) gte 250 or ($tending or 0) gte 240>>
+	<<set $mpExtraClues["cart_names"] to 1>><span class="green">你屏住呼吸顺着器物纹理摸索，没惊动四周便找准了关窍。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[带着发现上前印证 (0:04)|MP Extra Hospital Cart Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">周围的气息让你有些分神，手背蹭上一层灰渍，只得先缩回手。</span><<pain 1>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Hospital Cart Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Hospital Cart Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Hospital Cart Resolve [nobr]
 <<set $outside to 0>><<set $location to "hospital">><<effects>>
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("mp_extra_hospital_payout")>><</if>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
-搬运工把车停在电梯口，没有急着走。他说床 6 以前住过一个老人，夜里睡不着，听见推车经过才肯闭眼。老人没有家属，走的那天只有值班护士在。后来医院改了病房，床 6 成了库房，推车却一直留着。
+搬运工把车停在电梯口，没有急着走。他说6 号床 以前住过一个老人，夜里睡不着，听见推车经过才肯闭眼。老人没有家属，走的那天只有值班护士在。后来医院改了病房，6 号床 成了库房，推车却一直留着。
 <br><br>
 <<if ($willpower or 0) gte 400>>
 	你帮搬运工把车推回库房，又把卡片上的名字一个个念给他听。<<if _first>><<money 600>><<else>><<stress -1>><</if>><<trauma -1>><<stress -3>>
@@ -134,42 +211,81 @@
 <br>
 <<socialiseicon>><<link [[帮罗宾把毯子送回病房 (0:04)|Hospital front]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[再看一眼床 6 的门 (0:03)|MP Extra Hospital Cart]]>><<pass 3>><</link>>
+<<walkicon>><<link [[再看一眼6 号床 的门 (0:03)|MP Extra Hospital Cart]]>><<pass 3>><</link>>
 
 :: MP Extra School Planes [nobr]
 <<set $outside to 1>><<set $location to "school">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 学校天台的水泥地上铺着一层细碎石，风一吹就发出沙沙声。水塔的鐵皮外壁被晒得发烫，手贴上去会立刻缩回来。天台边缘摆着一排纸飞机，从大到小，今天只剩十一只。
 <br><br>
-<<if ($athletics or 0) gte 280 or ($skulduggery or 0) gte 260>>
-	你赶在莱顿走到楼梯口前跨过碎石地，抽出最下面那只没被露水打湿的飞机。<<set $mpExtraClues["planes_note"] to 1>><<stress -1>>
-<<else>>
-	你跑得太急，鞋底在碎石上打滑，膝盖磕在矮墙边。莱顿推门上来时，你正扶着墙站起来。<<pain 2>><<stress 3>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从楼梯间下楼 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<link [[问莱顿天台的钥匙归谁 (0:05)|MP Extra School Planes Step2]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-school-planes">
+<<investigateicon>><<link "问莱顿天台的钥匙归谁 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-school-planes">>
+<<if ($athletics or 0) gte 280 or ($skulduggery or 0) gte 260>>
+	<<set $mpExtraClues["planes_note"] to 1>><span class="green">你赶在莱顿走到楼梯口前跨过碎石地，抽出最下面那只没被露水打湿的飞机。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[顺着新线索继续查探 (0:04)|MP Extra School Planes Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你跑得太急，鞋底在碎石上打滑，膝盖磕在矮墙边。</span><<pain 2>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra School Planes]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra School Planes Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<sneakicon>><<link [[躲在水塔后等折飞机的人 (0:07)|MP Extra School Planes Step2]]>><<pass 7>><</link>>
+<<link "躲在水塔后等折飞机的人 (0:07)">><<pass 7>><<replace "#side-act-mp-extra-school-planes">>
+<<if ($maths or 0) gte 250 or ($housekeeping or 0) gte 250>>
+	<<set $mpExtraClues["planes_note"] to 1>><span class="green">你按次序将前后的痕迹逐一印证，很快发现了藏在底下的暗记。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[循着眉目往下追查 (0:04)|MP Extra School Planes Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">杂乱的痕迹看得你眼眶发酸，一时没能把前后的线索对上。</span><<stress 3>><<tiredness 2>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra School Planes]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra School Planes Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra School Planes Step2 [nobr]
 <<set $outside to 1>><<set $location to "school">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 放学后，天台的门没有锁。你躲在水塔的阴影里，看着太阳从操场那排梧桐后面沉下去。六点十分，消防梯的尽头探出一只手，接着是一个穿校服的男生。
 <br><br>
-<<set $skulduggerydifficulty to 280>><<skulduggerycheck>>
-<<if $skulduggerysuccess is 1>>
-	你趁他弯腰捡飞机，贴着水塔底座挪到书包旁，看见里面有一叠没写完的信纸。<<set $mpExtraClues["planes_letter"] to 1>><<stress -1>>
-<<else>>
-	你的鞋跟碰到水塔的铁梯，发出一声清脆的响。男生猛地回头，把书包抱在胸前，退到消防梯边。<<stress 4>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从天台另一侧下楼 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[叫住男生把话说完 (0:05)|MP Extra School Planes Resolve]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-school-planes-step2">
+<<socialiseicon>><<link "凑近叫住男生把话说完 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-school-planes-step2">>
+<<set $skulduggerydifficulty to 280>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
+	<<set $mpExtraClues["planes_letter"] to 1>><span class="green">你趁他弯腰捡飞机，贴着水塔底座挪到书包旁，看见里面有一叠没写完的信纸。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[把前因后果彻底理清 (0:04)|MP Extra School Planes Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你的鞋跟碰到水塔的铁梯，发出一声清脆的响。</span><<stress 4>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra School Planes Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra School Planes Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[捡回吹落的那只飞机 (0:06)|MP Extra School Planes Resolve]]>><<pass 6>><</link>>
+<<link "捡回吹落的那只飞机 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-school-planes-step2">>
+<<if ($history or 0) gte 250 or ($english or 0) gte 250>>
+	<<set $mpExtraClues["planes_letter"] to 1>><span class="green">你顺着旧痕与字迹细细比对，从边角不起眼的折痕里理出了脉络。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[带着发现上前印证 (0:04)|MP Extra School Planes Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你翻找得太急，指腹被粗糙的边角磨得发烫，也没能立刻认出眉目。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra School Planes Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra School Planes Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra School Planes Resolve [nobr]
 <<set $outside to 1>><<set $location to "school">><<effects>>
@@ -197,35 +313,74 @@
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 神殿钟楼的木门比正殿的门窄一半，推开时门轴发出一声很长的呻吟。楼梯盘旋向上，每一级都积着薄灰，只有靠墙的一侧被鞋底磨得发亮。空气里有旧木头、鸽粪和蜡油混在一起的味道。钟绳下端系着三种不同的结，乔丹每天傍晚都会上来检查。
 <br><br>
-<<if ($history or 0) gte 300 or ($skulduggery or 0) gte 280>>
-	你比对绳结的走向，认出一个是渔夫的活结，一个是搬运工用的双套结，还有一个收尾很怪，像跟人学的。<<set $mpExtraClues["bell_knots"] to 1>><<stress -1>>
-<<else>>
-	你抓住绳子想看清结心，麻纤维从掌心猛地擦过，留下一道火辣辣的印子。<<pain 2>><<stress 3>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[退回神殿正厅 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[问乔丹是谁每天来系绳 (0:05)|MP Extra Temple Bell Step2]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-temple-bell">
+<<socialiseicon>><<link "问乔丹是谁每天来系绳 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-temple-bell">>
+<<if ($history or 0) gte 300 or ($skulduggery or 0) gte 280>>
+	<<set $mpExtraClues["bell_knots"] to 1>><span class="green">你比对绳结的走向，认出一个是渔夫的活结，一个是搬运工用的双套结，还有一个收尾很怪，像跟人学的。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[顺着新线索继续查探 (0:04)|MP Extra Temple Bell Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你抓住绳子想看清结心，麻纤维从掌心猛地擦过，留下一道火辣辣的印子。</span><<pain 2>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Temple Bell]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Temple Bell Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<walkicon>><<link [[顺着钟绳往塔顶看 (0:06)|MP Extra Temple Bell Step2]]>><<pass 6>><</link>>
+<<link "顺着钟绳往塔顶看 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-temple-bell">>
+<<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
+	<<set $mpExtraClues["bell_knots"] to 1>><span class="green">你稳住呼吸沉住气观察片刻，在不起眼的夹缝间看清了端倪。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[循着眉目往下追查 (0:04)|MP Extra Temple Bell Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">冷风吹得你肩头微僵，稍一分神便错过了最佳时机。</span><<stress 4>><<tiredness 1>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Temple Bell]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Temple Bell Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Temple Bell Step2 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 塔顶比下面冷，风从百叶窗的缝里钻进来，吹得钟绳轻轻摆。大钟挂在橡木横梁上，钟口朝下，内壁结着一层暗绿色的铜锈。钟舌被布条缠住，布已经发硬，边缘散开。
 <br><br>
-<<set $skulduggerydifficulty to 300>><<skulduggerycheck>>
-<<if $skulduggerysuccess is 1>>
-	你扶住横梁，伸手把缠在钟舌上的布条解开一角。<<set $mpExtraClues["bell_note"] to 1>><<stress -1>>
-<<else>>
-	你脚下的木梯横档突然裂开，整个人往下沉了半尺。你死死抓住钟绳，绳子上的蜡蹭了一手。<<pain 2>><<tiredness 2>><<stress 4>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[沿原路下塔 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[下楼问乔丹塔缝的事 (0:05)|MP Extra Temple Bell Resolve]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-temple-bell-step2">
+<<socialiseicon>><<link "下楼问乔丹塔缝的事 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-temple-bell-step2">>
+<<set $skulduggerydifficulty to 300>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
+	<<set $mpExtraClues["bell_note"] to 1>><span class="green">你扶住横梁，伸手把缠在钟舌上的布条解开一角。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[把前因后果彻底理清 (0:04)|MP Extra Temple Bell Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你脚下的木梯横档突然裂开，整个人往下沉了半尺。</span><<pain 2>><<tiredness 2>><<stress 4>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Temple Bell Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Temple Bell Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[在塔顶等系绳的人 (0:07)|MP Extra Temple Bell Resolve]]>><<pass 7>><</link>>
+<<link "在塔顶等系绳的人 (0:07)">><<pass 7>><<replace "#side-act-mp-extra-temple-bell-step2">>
+<<if ($maths or 0) gte 250 or ($housekeeping or 0) gte 250>>
+	<<set $mpExtraClues["bell_note"] to 1>><span class="green">你按次序将前后的痕迹逐一印证，很快发现了藏在底下的暗记。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[带着发现上前印证 (0:04)|MP Extra Temple Bell Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">杂乱的痕迹看得你眼眶发酸，一时没能把前后的线索对上。</span><<stress 3>><<tiredness 2>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Temple Bell Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Temple Bell Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Temple Bell Resolve [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>>
@@ -253,35 +408,74 @@
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 三号仓库的卷帘门只升起一半，海雾贴着地面往里爬。仓里堆着盐袋和缠着铁箍的木箱，叉车停在一排托盘旁边，钥匙还插在锁孔里。空气里有柴油、湿绳和生锈铁皮的味道。靠门那只木箱的朝向和昨天相反，箱底拖痕还新；雷恩说这批货由他经手。
 <br><br>
-<<if ($maths or 0) gte 280 or ($skulduggery or 0) gte 280>>
-	你顺着拖痕找到地面的排水坡度，又比了比滚轮的磨损方向。<<set $mpExtraClues["crate_slope"] to 1>><<stress -1>>
-<<else>>
-	你伸手去推箱子，滚轮卡在托盘边缘，箱角突然一沉，压住了你的指尖。<<pain 2>><<stress 3>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从卷帘门下离开 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[问雷恩货箱的提单 (0:05)|MP Extra Docks Crate Step2]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-docks-crate">
+<<socialiseicon>><<link "问雷恩货箱的提单 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-docks-crate">>
+<<if ($maths or 0) gte 280 or ($skulduggery or 0) gte 280>>
+	<<set $mpExtraClues["crate_slope"] to 1>><span class="green">你顺着拖痕找到地面的排水坡度，又比了比滚轮的磨损方向。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[顺着新线索继续查探 (0:04)|MP Extra Docks Crate Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你伸手去推箱子，滚轮卡在托盘边缘，箱角突然一沉，压住了你的指尖。</span><<pain 2>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Docks Crate]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Docks Crate Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<sneakicon>><<link [[夜里留在仓库看谁扶箱 (0:07)|MP Extra Docks Crate Step2]]>><<pass 7>><</link>>
+<<link "夜里留在仓库看谁扶箱 (0:07)">><<pass 7>><<replace "#side-act-mp-extra-docks-crate">>
+<<if ($science or 0) gte 250 or ($tending or 0) gte 240>>
+	<<set $mpExtraClues["crate_slope"] to 1>><span class="green">你屏住呼吸顺着器物纹理摸索，没惊动四周便找准了关窍。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[循着眉目往下追查 (0:04)|MP Extra Docks Crate Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">周围的气息让你有些分神，手背蹭上一层灰渍，只得先缩回手。</span><<pain 1>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Docks Crate]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Docks Crate Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Docks Crate Step2 [nobr]
 <<set $outside to 0>><<set $location to "docks">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 夜里十一点，仓库的灯只留了门口一盏。你躲在盐袋后面，听见卷帘门外有脚步，接着是钥匙串碰铁锁的声音。进来的是个上了年纪的装卸工，穿着洗得发白的工装，手里提着一只旧手推车。
 <br><br>
-<<set $skulduggerydifficulty to 290>><<skulduggerycheck>>
-<<if $skulduggerysuccess is 1>>
-	你趁他去关仓库小门，贴着盐袋挪到箱子侧面，看见旧标签下面压着一张褪色的提货单。<<set $mpExtraClues["crate_slip"] to 1>><<stress -1>>
-<<else>>
-	你后退时碰到一摞空桶，铁皮桶倒在地上，声音在仓库里滚了好几圈。<<stress 4>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从仓库侧门离开 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[第二天问老装卸工 (0:05)|MP Extra Docks Crate Resolve]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-docks-crate-step2">
+<<socialiseicon>><<link "第二天问老装卸工 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-docks-crate-step2">>
+<<set $skulduggerydifficulty to 290>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
+	<<set $mpExtraClues["crate_slip"] to 1>><span class="green">你趁他去关仓库小门，贴着盐袋挪到箱子侧面，看见旧标签下面压着一张褪色的提货单。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[把前因后果彻底理清 (0:04)|MP Extra Docks Crate Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你后退时碰到一摞空桶，铁皮桶倒在地上，声音在仓库里滚了好几圈。</span><<stress 4>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Docks Crate Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Docks Crate Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[检查箱盖上的粉笔名 (0:05)|MP Extra Docks Crate Resolve]]>><<pass 5>><</link>>
+<<link "检查箱盖上的粉笔名 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-docks-crate-step2">>
+<<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
+	<<set $mpExtraClues["crate_slip"] to 1>><span class="green">你稳住呼吸沉住气观察片刻，在不起眼的夹缝间看清了端倪。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[带着发现上前印证 (0:04)|MP Extra Docks Crate Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">冷风吹得你肩头微僵，稍一分神便错过了最佳时机。</span><<stress 4>><<tiredness 1>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Docks Crate Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Docks Crate Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Docks Crate Resolve [nobr]
 <<set $outside to 0>><<set $location to "docks">><<effects>>
@@ -309,35 +503,74 @@
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 住宅区的晾衣绳从这头拉到那头，横在两排窗户之间。绳子是绿色的塑料皮，中间有一段被晒得发白。风从巷口灌进来，绳上的衣夹互相碰撞，发出细碎的响声。绳中间晾着一件红毛衣，领口用同色线绣着两个字母；罗宾说这是他小时候的。
 <br><br>
-<<if ($willpower or 0) gte 300>>
-	你站在绳下等了一会儿，没有急着去碰。<<set $mpExtraClues["line_initials"] to 1>><<stress -1>>
-<<else>>
-	你伸手去翻领口，衣夹突然弹开，毛衣半边滑下绳子，袖子扫过你的脸。羊毛扎得你眼睛发酸。<<stress 3>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[沿住宅区巷子离开 (0:02)|Residential Alleyways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[问罗宾毛衣是谁家的 (0:05)|MP Extra Home Line Step2]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-home-line">
+<<socialiseicon>><<link "问罗宾毛衣是谁家的 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-home-line">>
+<<if ($willpower or 0) gte 300>>
+	<<set $mpExtraClues["line_initials"] to 1>><span class="green">你站在绳下等了一会儿，没有急着去碰。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[顺着新线索继续查探 (0:04)|MP Extra Home Line Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你伸手去翻领口，衣夹突然弹开，毛衣半边滑下绳子，袖子扫过你的脸。</span><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Home Line]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Home Line Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<sneakicon>><<link [[傍晚躲在巷口等收衣的人 (0:07)|MP Extra Home Line Step2]]>><<pass 7>><</link>>
+<<link "傍晚躲在巷口等收衣的人 (0:07)">><<pass 7>><<replace "#side-act-mp-extra-home-line">>
+<<if ($history or 0) gte 250 or ($english or 0) gte 250>>
+	<<set $mpExtraClues["line_initials"] to 1>><span class="green">你顺着旧痕与字迹细细比对，从边角不起眼的折痕里理出了脉络。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[循着眉目往下追查 (0:04)|MP Extra Home Line Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你翻找得太急，指腹被粗糙的边角磨得发烫，也没能立刻认出眉目。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Home Line]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Home Line Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Home Line Step2 [nobr]
 <<set $outside to 1>><<set $location to "home">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 傍晚六点，巷子里的灯一盏盏亮起来。一个老太太提着藤篮从巷口走进来，篮子里放着几件叠好的衣服。她走得很慢，每经过一户就抬头看门牌，看很久，再往前走。
 <br><br>
-<<set $skulduggerydifficulty to 270>><<skulduggerycheck>>
-<<if $skulduggerysuccess is 1>>
-	你贴着墙根跟到巷尾，看见她从篮底摸出一张旧照片。<<set $mpExtraClues["line_photo"] to 1>><<stress -1>>
-<<else>>
-	你踩到一片湿树叶，声音在安静的巷子里很响。老太太回过头，把篮子抱紧，退到墙边。<<stress 4>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从巷尾绕出去 (0:02)|Residential Alleyways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[和罗宾一起扶她坐下 (0:05)|MP Extra Home Line Resolve]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-home-line-step2">
+<<socialiseicon>><<link "和罗宾一起扶她坐下 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-home-line-step2">>
+<<set $skulduggerydifficulty to 270>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
+	<<set $mpExtraClues["line_photo"] to 1>><span class="green">你贴着墙根跟到巷尾，看见她从篮底摸出一张旧照片。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[把前因后果彻底理清 (0:04)|MP Extra Home Line Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你踩到一片湿树叶，声音在安静的巷子里很响。老太太回过头，把篮子抱紧，退到墙边。</span><<stress 4>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Home Line Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Home Line Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[看她篮底那张旧照片 (0:05)|MP Extra Home Line Resolve]]>><<pass 5>><</link>>
+<<link "低声看她篮底那张旧照片 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-home-line-step2">>
+<<if ($science or 0) gte 250 or ($tending or 0) gte 240>>
+	<<set $mpExtraClues["line_photo"] to 1>><span class="green">你屏住呼吸顺着器物纹理摸索，没惊动四周便找准了关窍。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[带着发现上前印证 (0:04)|MP Extra Home Line Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">周围的气息让你有些分神，手背蹭上一层灰渍，只得先缩回手。</span><<pain 1>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Home Line Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Home Line Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Home Line Resolve [nobr]
 <<set $outside to 1>><<set $location to "home">><<effects>>
@@ -365,35 +598,74 @@
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 咖啡馆储物间的门只有半人高，进去要低头。里面堆着糖浆桶、备用杯碟和几袋面粉，墙角立着一只粗麻布口袋，袋口卷了两折，用一根铜夹夹住。格威岚说这只袋子在储物间放了很久，从没见底。
 <br><br>
-<<if ($english or 0) gte 280 or ($history or 0) gte 280>>
-	你把铜勺抽出来，在袋底拨了拨，摸出几张边角发脆的船票。<<set $mpExtraClues["beans_tickets"] to 1>><<stress -1>>
-<<else>>
-	你伸手太深，袋底的硬衬突然裂开，豆子哗啦涌出来，滚了一地。你蹲下去捡，膝盖压碎了好几颗。<<stress 3>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[回到咖啡馆大堂 (0:02)|Cliff Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[问格威岚豆袋的来历 (0:05)|MP Extra Cafe Beans Step2]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-cafe-beans">
+<<socialiseicon>><<link "问格威岚豆袋的来历 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-cafe-beans">>
+<<if ($english or 0) gte 280 or ($history or 0) gte 280>>
+	<<set $mpExtraClues["beans_tickets"] to 1>><span class="green">你把铜勺抽出来，在袋底拨了拨，摸出几张边角发脆的船票。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[顺着新线索继续查探 (0:04)|MP Extra Cafe Beans Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你伸手太深，袋底的硬衬突然裂开，豆子哗啦涌出来，滚了一地。</span><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Cafe Beans]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Cafe Beans Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[把袋底那层硬衬拆开 (0:06)|MP Extra Cafe Beans Step2]]>><<pass 6>><</link>>
+<<link "低声把袋底那层硬衬拆开 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-cafe-beans">>
+<<if ($maths or 0) gte 250 or ($housekeeping or 0) gte 250>>
+	<<set $mpExtraClues["beans_tickets"] to 1>><span class="green">你按次序将前后的痕迹逐一印证，很快发现了藏在底下的暗记。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[循着眉目往下追查 (0:04)|MP Extra Cafe Beans Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">杂乱的痕迹看得你眼眶发酸，一时没能把前后的线索对上。</span><<stress 3>><<tiredness 2>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Cafe Beans]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Cafe Beans Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Cafe Beans Step2 [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 硬衬下面是一只扁铁盒，盒盖锈了一半，边角用胶布缠着。你打开盒盖，里面是一叠船票和一本薄薄的账本。
 <br><br>
-<<set $skulduggerydifficulty to 280>><<skulduggerycheck>>
-<<if $skulduggerysuccess is 1>>
-	你用铜勺柄挑开硬衬的最后一层缝线，从夹层里抽出一张没有日期的新船票。<<set $mpExtraClues["beans_blank"] to 1>><<stress -1>>
-<<else>>
-	铜勺柄一滑，划开你的虎口，血滴在船票上。你赶紧用袖子去擦，票面还是洇开一小片褐色。<<pain 2>><<stress 4>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从后门离开咖啡馆 (0:02)|Cliff Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[问格威岚认不认识写信的人 (0:05)|MP Extra Cafe Beans Resolve]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-cafe-beans-step2">
+<<socialiseicon>><<link "问格威岚认不认识写信的人 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-cafe-beans-step2">>
+<<set $skulduggerydifficulty to 280>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
+	<<set $mpExtraClues["beans_blank"] to 1>><span class="green">你用铜勺柄挑开硬衬的最后一层缝线，从夹层里抽出一张没有日期的新船票。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[把前因后果彻底理清 (0:04)|MP Extra Cafe Beans Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">铜勺柄一滑，划开你的虎口，血滴在船票上。</span><<pain 2>><<stress 4>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Cafe Beans Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Cafe Beans Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[按账本上的地址去找人 (0:06)|MP Extra Cafe Beans Resolve]]>><<pass 6>><</link>>
+<<link "按账本上的地址去找人 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-cafe-beans-step2">>
+<<if ($history or 0) gte 250 or ($english or 0) gte 250>>
+	<<set $mpExtraClues["beans_blank"] to 1>><span class="green">你顺着旧痕与字迹细细比对，从边角不起眼的折痕里理出了脉络。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[带着发现上前印证 (0:04)|MP Extra Cafe Beans Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你翻找得太急，指腹被粗糙的边角磨得发烫，也没能立刻认出眉目。</span><<stress 3>><<tiredness 1>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Cafe Beans Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Cafe Beans Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Cafe Beans Resolve [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
@@ -421,35 +693,74 @@
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 旧钟塔的基座被铁栅栏围着一半，墙面上的石灰剥落，露出下面深色的砖。靠近地面的地方有一排粉笔刻痕，每道只有指甲盖那么长，间距很匀。今天比昨天多了一道。每天下午四点，穿旧制服的邮差会在这里停一下，用粉笔添一道。
 <br><br>
-<<if ($maths or 0) gte 280 or ($history or 0) gte 280>>
-	你把数字按出现顺序排开，发现它们不像日期，也不像倒计时。<<set $mpExtraClues["marks_code"] to 1>><<stress -1>>
-<<else>>
-	你数到一半，被街上的电车铃打断，再低头时忘了前面几道的位置。<<tiredness 2>><<stress 3>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[沿高街离开钟塔 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[问邮差这些数字是什么 (0:05)|MP Extra Clock Marks Step2]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-clock-marks">
+<<socialiseicon>><<link "问邮差这些数字是什么 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-clock-marks">>
+<<if ($maths or 0) gte 280 or ($history or 0) gte 280>>
+	<<set $mpExtraClues["marks_code"] to 1>><span class="green">你把数字按出现顺序排开，发现它们不像日期，也不像倒计时。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[顺着新线索继续查探 (0:04)|MP Extra Clock Marks Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你数到一半，被街上的电车铃打断，再低头时忘了前面几道的位置。</span><<tiredness 2>><<stress 3>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Clock Marks]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Clock Marks Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<sneakicon>><<link [[摸一摸墙根那块凸砖 (0:06)|MP Extra Clock Marks Step2]]>><<pass 6>><</link>>
+<<link "摸一摸墙根那块凸砖 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-clock-marks">>
+<<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
+	<<set $mpExtraClues["marks_code"] to 1>><span class="green">你稳住呼吸沉住气观察片刻，在不起眼的夹缝间看清了端倪。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[循着眉目往下追查 (0:04)|MP Extra Clock Marks Step2]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">冷风吹得你肩头微僵，稍一分神便错过了最佳时机。</span><<stress 4>><<tiredness 1>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Clock Marks]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Clock Marks Step2]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Clock Marks Step2 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpExtraClues to ($mpExtraClues or {})>>
 邮差叫亚历克斯，外套袖口磨得发亮，邮袋里塞着一叠退回的信。他蹲下来，用粉笔在墙上补了一道，说这些数字是邮局的留交信箱号。信寄到旧地址，查无此人，就在局里压着。
 <br><br>
-<<set $skulduggerydifficulty to 290>><<skulduggerycheck>>
-<<if $skulduggerysuccess is 1>>
-	你帮他把凸砖整块取下来，露出后面的空洞。<<set $mpExtraClues["marks_letter"] to 1>><<stress -1>>
-<<else>>
-	你用力过猛，砖头从墙里掉出来，砸在脚背上。信捆跟着滑出，散了一地。<<pain 2>><<stress 4>>
-<</if>>
-<br><br>
 <<getouticon>><<link [[从钟塔围栏边离开 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<socialiseicon>><<link [[帮亚历克斯整理退回的信 (0:05)|MP Extra Clock Marks Resolve]]>><<pass 5>><</link>>
+<div id="side-act-mp-extra-clock-marks-step2">
+<<socialiseicon>><<link "帮亚历克斯整理退回的信 (0:05)">><<pass 5>><<replace "#side-act-mp-extra-clock-marks-step2">>
+<<set $skulduggerydifficulty to 290>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
+	<<set $mpExtraClues["marks_letter"] to 1>><span class="green">你帮他把凸砖整块取下来，露出后面的空洞。</span><<stress -1>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[把前因后果彻底理清 (0:04)|MP Extra Clock Marks Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">你用力过猛，砖头从墙里掉出来，砸在脚背上。信捆跟着滑出，散了一地。</span><<pain 2>><<stress 4>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[定神再试一次 (0:03)|MP Extra Clock Marks Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Clock Marks Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
 <br>
-<<investigateicon>><<link [[按信封地址去找收信人 (0:06)|MP Extra Clock Marks Resolve]]>><<pass 6>><</link>>
+<<link "按信封地址去找收信人 (0:06)">><<pass 6>><<replace "#side-act-mp-extra-clock-marks-step2">>
+<<if ($maths or 0) gte 250 or ($housekeeping or 0) gte 250>>
+	<<set $mpExtraClues["marks_letter"] to 1>><span class="green">你按次序将前后的痕迹逐一印证，很快发现了藏在底下的暗记。</span><<stress -2>><<lstress>>
+	<br><br>
+	<<walkicon>><<link [[带着发现上前印证 (0:04)|MP Extra Clock Marks Resolve]]>><<pass 4>><</link>>
+<<else>>
+	<span class="red">杂乱的痕迹看得你眼眶发酸，一时没能把前后的线索对上。</span><<stress 3>><<tiredness 2>><<gstress>>
+	<br><br>
+	<<walkicon>><<link [[换个角度再试 (0:03)|MP Extra Clock Marks Step2]]>><<pass 3>><</link>>
+	<br>
+	<<link [[先按现有线索过去看看 (0:05)|MP Extra Clock Marks Resolve]]>><<pass 5>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Extra Clock Marks Resolve [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
@@ -471,3 +782,4 @@
 <<socialiseicon>><<link [[帮亚历克斯把砖洞封好 (0:04)|High Street]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Alex")>><<npcincr Alex love 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<walkicon>><<link [[再看一眼墙上的刻痕 (0:03)|MP Extra Clock Marks]]>><<pass 3>><</link>>
+

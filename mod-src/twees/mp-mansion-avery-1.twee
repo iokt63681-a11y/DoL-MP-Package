@@ -1,5 +1,4 @@
 /* 宅邸与上流社交关系线（V6精修版：$location对齐、段落精简、原版UI规范） */
-
 :: MP Mansion Pool Router [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>>
@@ -50,7 +49,7 @@
 	<<set $mpAveryCufflinkReturned to 1>>你取出刻着字母『A』的纯银蓝宝袖扣递还。<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_avery_cufflink_return")>><<money 1000>><</if>><<stress -6>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 2>><<glove>><</if>>
 	<</replace>><</link>><br>
 <</if>>
-<<walkicon>><<link "退后半步婉拒同乘 (0:04)">><<pass 4>><<replace "#mansion-carinvite-choices">>
+<<walkicon>><<link "退半步婉拒同乘 (0:04)">><<pass 4>><<replace "#mansion-carinvite-choices">>
 <<if ($willpower or 0) gte 480>>
 <span class="green">你以晚间课业为由不卑不亢地推辞了同乘。</span><<willpower 2>><<stress -2>><<gwillpower>><<lstress>>
 <<else>>
@@ -155,7 +154,7 @@
 「来得正好。」布莱尔把一叠洒金请柬推到你面前，「今晚的贵客散场后要去天鹅绒暗层，替我把这些塞进他们的大衣口袋。」
 <<if ($exposed or 0) gte 1>>你衣衫不整地站在屏风边，布莱尔的目光在你肩上停了停。<<else>>布莱尔替你抚平袖口，指尖在你腕上轻轻一按。<</if>>
 <br><br>
-<<getouticon>><<link [[婉拒差事离开 (0:02)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[先退回去 (0:02)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<socialiseicon>><<link [[接过洒金请柬 (0:02)|MP Mansion Briar Cloakroom]]>><<pass 2>><</link>>
 <br>
@@ -167,44 +166,59 @@
 衣帽间在偏厅后面的窄廊尽头。两排大衣挂在黄铜架上，门边的保镖正低头擦火柴。
 你手里那叠请柬被掌心焐得发潮。
 <br><br>
-<<walkicon>><<link [[退回西侧偏厅 (0:02)|MP Mansion Briar VelvetLedger]]>><<pass 2>><</link>>
+<<walkicon>><<link [[先退回去 (0:02)|MP Mansion Briar VelvetLedger]]>><<pass 2>><</link>>
 <br>
 <<sneakicon>><<link [[塞进大衣内袋 (0:05)|MP Mansion Briar Distribute]]>><<pass 5>><</link>>
 <br>
 <<investigateicon>><<link [[看清保镖位置 (0:04)|MP Mansion Briar Observe]]>><<pass 4>><</link>>
 
 :: MP Mansion Briar Distribute [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-<<set $skulduggerydifficulty to ((($mpBriarCloakroomEdge or 0) is 1) ? 250 : 350)>>
-<<skulduggerycheck>>
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
+两排呢料大衣垂在黄铜挂架上，门边的保镖正背过身擦火柴点烟，袖口里的洒金请柬随时可以滑入大衣内袋。
+<br><br>
+<<getouticon>><<link [[从窄廊退出去 (0:03)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<div id="briar-dist-act">
+<<sneakicon>><<link "探手滑入首件大衣内袋 (0:04)">><<pass 4>><<replace "#briar-dist-act">>
+<<set $skulduggerydifficulty to ((($mpBriarCloakroomEdge or 0) is 1) ? 250 : 350)>><<skulduggerycheck "silent">>
 <<if $skulduggerysuccess is 1>>
 	<<set _sk to currentSkillValue("skulduggery")>>
-	<<if _sk gte 1000>><<set _reward to 1500>>
-	<<elseif _sk gte 800>><<set _reward to 1200>>
-	<<elseif _sk gte 600>><<set _reward to 1150>>
-	<<elseif _sk gte 400>><<set _reward to 1100>>
-	<<elseif _sk gte 200>><<set _reward to 1050>>
-	<<else>><<set _reward to 1000>><</if>>
-	你贴着大衣架侧身挪过去，指尖探进第一只口袋。请柬滑进衬里，保镖的火柴还没划亮。
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 400>><<set _reward to 1200>><<else>><<set _reward to 1000>><</if>>
+	<span class="green">请柬无声滑进丝绸衬里，保镖的火柴甚至还没划亮。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_briar_distribute_reward")>>
-		<<money _reward>>
-		你摸到布莱尔预先塞在末张信封里的赏金袋，掂了掂，里面大约有 £<<print Math.floor(_reward / 100)>>。
-	<<else>>
-		你把这批补充请柬也悉数放妥，没有留下半点声响。
+		<<money _reward>><span class="gold">你摸出布莱尔预留的赏金袋，约有 £<<print Math.floor(_reward / 100)>>。</span>
 	<</if>>
 	<<stress -3>><<lstress>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
 	<br><br>
-	<<getouticon>><<link [[从窄廊退出去 (0:03)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+	<<getouticon>><<link [[从窄廊从容离开 (0:03)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
-	你的指节撞上铜架，保镖猛地抬头。你只来得及把请柬塞回袖口。
-	<<stress 6>><<pain 2>><<gstress>><<gpain>>
+	<span class="red">指节不慎撞响铜衣架，保镖猛地回头，你只得把请柬缩回袖口。</span><<stress 6>><<pain 2>><<gstress>><<gpain>>
 	<br><br>
-	<<getouticon>><<link [[匆忙退出宅邸 (0:04)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[屏息再试一次 (0:03)|MP Mansion Briar Distribute]]>><<pass 3>><</link>>
 	<br>
-	<<runicon>><<link [[躲进帘幕后方 (0:04)|MP Mansion Briar Hide]]>><<pass 4>><</link>>
+	<<runicon>><<link [[闪身躲进帘幕后 (0:04)|MP Mansion Briar Hide]]>><<pass 4>><</link>>
 <</if>>
+<</replace>><</link>>
+<br>
+<<link "借挂衣架掩护分批塞入 (0:05)">><<pass 5>><<replace "#briar-dist-act">>
+<<if ($danceskill or 0) gte 280 or ($athletics or 0) gte 280>>
+	<span class="green">你借着挑拣披肩的动作侧身旋步，将请柬分批塞入内袋。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_briar_distribute_reward")>>
+		<<money 1100>><span class="gold">你收下了末张信封里的 £11 赏金。</span>
+	<</if>>
+	<<stress -2>><<lstress>>
+	<br><br>
+	<<getouticon>><<link [[从窄廊从容离开 (0:03)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+	<span class="red">衣架滑轮发出轻响，保镖狐疑地走近两步。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	<br><br>
+	<<runicon>><<link [[躲进帘幕后方 (0:04)|MP Mansion Briar Hide]]>><<pass 4>><</link>>
+	<br>
+	<<walkicon>><<link [[退回衣帽间外 (0:02)|MP Mansion Briar Cloakroom]]>><<pass 2>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP Mansion Briar Observe [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
@@ -291,7 +305,7 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
 主宴会厅餐具间堆满纯银高脚托盘。领班把侍者马甲塞给你：「三号桌银行家最挑剔，把这盘鱼子酱稳稳送过去！」
 <br><br>
-<<getouticon>><<link [[脱下马甲从后门溜走 (0:03)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[先退回去 (0:03)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="mansion-silvertray-choices">
 <<walkicon>><<link "端鱼子酱送往三号桌 (0:12)">><<pass 12>><<replace "#mansion-silvertray-choices">>
@@ -313,7 +327,7 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
 宅邸北侧铁门挂着防盗链，披黑雨披的保安打着手电走出岗亭：「过了访客时间，没手令不准在铁门外逗留！」
 <br><br>
-<<walkicon>><<link [[顺多瑙河街人行道离开 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<walkicon>><<link [[先退回去 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="mansion-guardrain-choices">
 <<sneakicon>><<link "趁保安回亭挑开侧门锁 (0:06)">><<pass 6>><<replace "#mansion-guardrain-choices">>

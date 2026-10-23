@@ -1,11 +1,12 @@
 /* 城镇后半年六节日 × 5 段 + 1 个入口 hub = 31 passages / 准备 -> 冲突 -> 选择 -> 结算 -> 余波 / 入口：MP Town Festivals 2 Hub */
-
 :: MP Town Festivals 2 Hub [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 高街布告栏左侧的铜框里换上了另外半年的六张节庆水牌，木牌用桐油刷过，边角分别烙着犁铧、日晷、潮钟、校徽、防风灯与双锤铜钟的印记。塞拉站在木架旁替最上面一块木牌换上新麻绳，说这六场节令横跨田垄、海岸、学园与神殿，每一场背后都有几桩没理顺的旧账。
 街口吹来的风带着一点新翻泥土与海盐的气息。你把六块木牌按时令翻看了一遍，每块木牌背面都用粉笔标着集合的街口与时辰。
+
 <br><br>
+
 <<link [[初春开犁节：旧界铜片 (0:04)|MP Festival Plough 1]]>><<pass 4>><</link>>
 <br>
 <<link [[夏季长日节：日晷白线 (0:04)|MP Festival Solstice 1]]>><<pass 4>><</link>>
@@ -17,77 +18,89 @@
 <<link [[秋末点灯节：受潮灯芯 (0:04)|MP Festival Lantern 1]]>><<pass 4>><</link>>
 <br>
 <<link [[年末钟声夜：钟塔钢销 (0:04)|MP Festival Chime 1]]>><<pass 4>><</link>>
+
 <br><br>
-<<link [[查看前半年节日水牌 (0:02)|MP Town Festivals Hub]]>><<pass 2>><</link>>
-<br>
 <<link [[离开布告栏回高街 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 1. 初春开犁节 (Plough) ==================== */
+<br>
+<<link [[查看前半年节日水牌 (0:02)|MP Town Festivals Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Plough 1 [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-初春的薄霜还挂在河湾农场的田埂枯草上，村里按照老规矩牵出了披红布的领头挽马，准备拉通开春的第一道犁沟。亚历克斯半蹲在重铁犁旁检查犁辕的插销，眉头却紧紧拧着——昨晚有人动过头犁的配重铁块，犁尖入土的角度偏了整整两寸。
-你蹲下身拨开犁头下方的冻土，指尖在一块松动的田界石下摸到了半片刻着字码的黄铜契片。不远处的木栅栏外，几名从高街来的农具商正探头张望，似乎早就笃定今天这第一犁会卡在石头上。
+初春的薄霜还挂在河湾农场的田埂枯草上，村里按照老规矩牵出了披红布的领头挽马。
+你蹲下身拨开犁头下方的冻土，指尖在一块松动的田界石下摸到了半片刻着字码的黄铜契片。
+
 <br><br>
+
 <<if ($tending or 0) gte 270>>
-	你顺着犁尖的磨损纹路一寸寸比对，帮亚历克斯把垫偏的木楔抽出来重新打紧，又把那半片黄铜契片悄悄收进掌心。亚历克斯试着推了推犁把，紧绷的肩膀顿时松了下来。<<set $mpFestivalClues["plough_wedge"] to 1>><<stress -2>>
+你顺着犁尖的磨损纹路一寸寸比对，帮亚历克斯把垫偏的木楔抽出来重新打紧。亚历克斯试着推了推犁把，紧绷的肩膀顿时松了下来。<<set $mpFestivalClues["plough_wedge"] to 1>><<stress -2>>
 <<else>>
 	冻土又硬又滑，你用力去扳配重铁块时手掌在生锈的铁棱上擦出一道红印，犁尖反而陷得更深了。亚历克斯叹了口气，让你先退到田埂边暖手。<<pain 1>><<stress 3>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[先回农场棚屋歇脚 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<tendingicon>><<link [[扶稳犁辕先试拉半垄 (0:05)|MP Festival Plough 2]]>><<pass 5>><</link>>
 <br>
 <<investigateicon>><<link [[带黄铜契片去高街 (0:05)|MP Festival Plough 2]]>><<set $mpFestivalClues["plough_shard"] to 1>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[先回农场棚屋歇脚 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Plough 2 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-上午的高街临时搭起了春耕铁器摊，炉火烧得噼啪作响。两名佃户正围着农具商的账桌争辩，说今年换新犁头的定金比去年足足贵了四成，而且交上去的旧铁料全被算成了废渣。农具商把算盘拨得震天响，一口咬定是铁矿涨了价。
-塞拉恰好提着工具匣从钟表铺出来，目光扫过摊位角落那只没盖严的木箱——里面整整齐齐码着刚从河湾农场收来的旧犁头，每只犁头背面都敲着早年工匠的铜印。农具商察觉到你们的视线，不动声色地往木箱前挪了半步。
+上午的高街临时搭起了春耕铁器摊，炉火烧得噼啪作响。
+塞拉恰好提着工具匣从钟表铺出来，目光扫过摊位角落那只没盖严的木箱——里面整整齐齐码着刚从河湾农场收来的旧犁头。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_plough_2")>><</if>>
 <<if ($maths or 0) gte 270>>
-	你拿过摊面上的定金底单，当场按旧犁头的净重与生铁折价一笔笔重算，指出对方在损耗栏里多扣了双份秤头钱。周围的佃户顿时哗然，农具商脸色发青，只得把多收的定金退回桌面。<<set $mpFestivalClues["plough_account"] to 1>><<if _first>><<money 250>><</if>><<stress -2>>
+你拿过摊面上的定金底单，当场按旧犁头的净重与生铁折价一笔笔重算。<<set $mpFestivalClues["plough_account"] to 1>><<if _first>><<money 250>><</if>><<stress -2>>
 <<else>>
 	账单上的生铁折算写得密密麻麻，你看了一会儿便被满纸的分数绕晕了头。农具商冷笑着把底单合上，催促不买的人别挡着摊位做生意。<<stress 3>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
+<br>
 <<socialiseicon>><<link [[把犁头铜印指给众人 (0:05)|MP Festival Plough 3]]>><<pass 5>><</link>>
 <br>
 <<walkicon>><<link [[押退回的犁头回农场 (0:05)|MP Festival Plough 3]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Plough 3 [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-正午刚过，西北天际忽然压下一片铅灰色的春雨云，冷风卷着细雨点打在刚翻开的黑土垄上。田头同时出了两桩急事：主垄中间横着一块埋在泥里的老树根，领头挽马拉得前蹄打滑；而坡下的春麦育苗棚被阵风掀开了一角油布，冰凉的雨水正往嫩苗畦里灌。
+正午刚过，西北天际忽然压下一片铅灰色的春雨云。
 亚历克斯拽着马缰分不开身，冲你大喊着让你拿主意。田埂边的帮工们手忙脚乱，不知该先往哪边扑。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_plough_3")>><</if>>
 <<if ($physique or 0) gte 7800 or ($athletics or 0) gte 280>>
-	你抄起铁镐跳进泥沟，看准老树根的受力节三镐劈断主根，紧接着飞奔下坡用麻绳把育苗棚的油布死死栓在木桩上。两边都没耽误，亚历克斯隔着雨幕朝你竖起了大拇指。<<set $mpFestivalClues["plough_saved"] to 1>><<if _first>><<money 350>><</if>><<stress -2>>
+你抄起铁镐跳进泥沟，看准老树根的受力节三镐劈断主根。两边都没耽误，亚历克斯隔着雨幕朝你竖起了大拇指。<<set $mpFestivalClues["plough_saved"] to 1>><<if _first>><<money 350>><</if>><<stress -2>>
 <<else>>
-	你在泥地里深一脚浅一脚地来回奔忙，撬树根时铁镐滑脱震麻了虎口，等赶到育苗棚边时已经有两畦麦苗被雨水冲歪。你浑身泥水地喘着粗气，好歹保住了剩下的大半棚。<<pain 2>><<stress 4>><<tiredness 3>>
+你在泥地里深一脚浅一脚地来回奔忙，撬树根时铁镐滑脱震麻了虎口。<<pain 2>><<stress 4>><<tiredness 3>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[回农场棚屋避雨 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<runicon>><<link [[合力拉通第一道犁沟 (0:06)|MP Festival Plough 4]]>><<pass 6>><</link>>
 <br>
 <<tendingicon>><<link [[替挽马擦雨水换干套 (0:05)|MP Festival Plough 4]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[回农场棚屋避雨 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Plough 4 [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-春雨在下午三点骤然放晴，湿润的黑土在阳光下泛着油亮的光泽。随着领头挽马一声长嘶，笔直的头道犁沟终于从河湾田头一直通到了谷仓坡下。村里的老人们围上来敲响铜锣，将象征丰年的红麦穗挂在犁架顶端。
+春雨在下午三点骤然放晴，湿润的黑土在阳光下泛着油亮的光泽。
 先前在集市上理亏的农具商也跟着马车赶到了田头，当众把克扣的旧犁头与修犁贴补交还给农场。亚历克斯擦去额头的汗水，当着众人的面请你在开犁册上签下名字。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_plough_4")>><</if>>
 <<set _sk to Math.max(($tending or 0), ($willpower or 0))>>
@@ -97,97 +110,112 @@
 <<else>>
 	你虽然累得手臂发酸，没能把契片的来历说全，但亚历克斯还是替你接过了话头，帮你保住了应得的那份劳务红封。<<if _first>><<money 300>><</if>><<stress 2>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[先行返回高街 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<walkicon>><<link [[端春麦饼去高街分食 (0:05)|MP Festival Plough 5]]>><<pass 5>><</link>>
 <br>
 <<socialiseicon>><<link [[在谷仓前分饮热麦茶 (0:05)|MP Festival Plough 5]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[先行返回高街 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Plough 5 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-暮色四合时，高街面包房外摆开了长桌，用去年冬藏的面粉与今日新汲的井水烤出了一盘盘滚烫的春麦圆饼。农夫与街坊们捧着陶碗围坐交谈，白天的争执在麦香与热汤里化开了大半。
+暮色四合时，高街面包房外摆开了长桌。农夫与街坊们捧着陶碗围坐交谈，白天的争执在麦香与热汤里化开了大半。
 亚历克斯把一只装着优选春麦种与干薄荷的小布袋塞进你怀里，塞拉也在一旁替你把那半片黄铜界契磨平了毛刺，栓上红绳给你做平安坠。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_plough_5")>><</if>>
 <<if ($english or 0) gte 250 or ($tending or 0) gte 250>>
-	你在长桌旁替老铁匠与佃户们斟满热麦茶，几句得体的劝和话让两边终于碰了碗。老铁匠高兴地拍着胸脯，塞给你几枚崭新的黄铜护具扣与零花钱。<<if _first>><<money 400>><</if>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Alex")>><<npcincr Alex love 1>><</if>><<stress -3>>
+你在长桌旁替老铁匠与佃户们斟满热麦茶，几句得体的劝和话让两边终于碰了碗。<<if _first>><<money 400>><</if>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Alex")>><<npcincr Alex love 1>><</if>><<stress -3>>
 <<else>>
 	你不善应酬热闹的敬酒词，坐在长桌尾端安静地啃完了一整块热麦饼，结果反倒被呛得连声咳嗽，引来亚历克斯善意的轻笑。<<stress 2>><<tiredness 1>>
 <</if>>
+
 <br><br>
-<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
-<br>
 <<getouticon>><<link [[沿着高街散步离开 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 2. 夏季长日节 (Solstice) ==================== */
+<br>
+<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Solstice 1 [nobr]
 <<set $outside to 1>><<set $location to "park">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-一年中白昼最长的清晨，公园中央的圆石日晷四周已经拉起了彩布凉棚。诺艾尔正捧着一盆怕晒的银叶薄荷站在树荫下，神色有些困惑——日晷铜盘上的正午刻度线被人用白漆往东涂改了一格，导致几个争抢树荫摊位的小贩从一大早就吵个不停。
+一年中白昼最长的清晨，公园中央的圆石日晷四周已经拉起了彩布凉棚。
 你走近石台细看，白漆还没完全干透，石座下方的草丛里掉着半截涂漆用的细毛刷。
+
 <br><br>
+
 <<if ($science or 0) gte 260>>
-	你借着晨光投下的晷针角度算出真正的子午线，用湿帕子蘸了一点草本酒精，轻轻擦去了那道伪造的白漆刻度。诺艾尔松了一口气，把一枝清凉的薄荷叶别在你的衣领上。<<set $mpFestivalClues["solstice_sundial"] to 1>><<stress -2>>
+你借着晨光投下的晷针角度算出真正的子午线，用湿帕子蘸了一点草本酒精。诺艾尔松了一口气，把一枝清凉的薄荷叶别在你的衣领上。<<set $mpFestivalClues["solstice_sundial"] to 1>><<stress -2>>
 <<else>>
 	你拿树枝去刮那道白漆，不仅没刮干净，反而把白漆蹭到了自己的袖口上。争抢摊位的小贩见状吵得更凶了，震得你太阳穴直跳。<<stress 4>><<tiredness 1>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[留在公园树荫下歇息 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<beachicon>><<link [[顺着白漆滴痕追去海滩 (0:05)|MP Festival Solstice 2]]>><<pass 5>><</link>>
 <br>
 <<parkicon>><<link [[帮诺艾尔搬草药进棚 (0:05)|MP Festival Solstice 2]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[留在公园树荫下歇息 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Solstice 2 [nobr]
 <<set $outside to 1>><<set $location to "beach">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-十一点的太阳把海滩晒得发白，木栈道边的柠檬冰水摊前围满了满头大汗的游客。格威岚正蹲在摊位后方检查一只翻倒的木制冰桶——遮阳篷的东南角揽绳被人割断了一半，帆布塌下来正好砸翻了存冰，只剩半桶碎冰在烈日下飞快融化。
+十一点的太阳把海滩晒得发白，木栈道边的柠檬冰水摊前围满了满头大汗的游客。
 旁边高价售卖瓶装汽水的流动摊主正摇着蒲扇看笑话，他的木车底座下却湿漉漉地滴着冰水。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_solstice_2")>><</if>>
 <<if ($skulduggery or 0) gte 270>>
-	你绕到流动木车背阴处，一眼看出底板暗格里藏着印有格威岚杂货铺记号的锡制冰匣，顺手把暗格插销一挑，冰匣当众滑落出来。格威岚笑眯眯地走上前拎回冰匣，分了你几枚亮晶晶的谢礼硬币。<<set $mpFestivalClues["solstice_ice"] to 1>><<if _first>><<money 250>><</if>><<stress -2>>
+你绕到流动木车背阴处，一眼看出底板暗格里藏着印有格威岚杂货铺记号的锡制冰匣。格威岚笑眯眯地走上前拎回冰匣，分了你几枚亮晶晶的谢礼硬币。<<set $mpFestivalClues["solstice_ice"] to 1>><<if _first>><<money 250>><</if>><<stress -2>>
 <<else>>
 	你刚靠近流动木车就被摊主警觉地挡住了去路，烈日晃得你眼花，没能找到藏冰的证据，只能在滚烫的沙地上白晒了一身汗。<<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[去海风里吹吹凉气 (0:02)|Beach]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<tendingicon>><<link [[帮格威岚支起遮阳篷 (0:05)|MP Festival Solstice 3]]>><<pass 5>><</link>>
 <br>
 <<walkicon>><<link [[拎备用碎冰回公园 (0:05)|MP Festival Solstice 3]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[去海风里吹吹凉气 (0:02)|Beach]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Solstice 3 [nobr]
 <<set $outside to 1>><<set $location to "park">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-正午十二点整，太阳悬在公园最高处，日晷的铜针几乎没有影子。长日节的传统竞走与花环传递即将开始，但负责敲响正午铜锣的守园人却中了暑，靠在长椅边脸色发白；与此同时，花圃那边的自动喷淋阀卡死了，水柱正对着挂满彩带的音响木箱直喷。
+正午十二点整，太阳悬在公园最高处，日晷的铜针几乎没有影子。长日节的传统竞走与花环传递即将开始，水柱正对着挂满彩带的音响木箱直喷。
 诺艾尔正忙着给守园人喂解暑药水，周围的游人还没察觉水柱快要漫过电线。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_solstice_3")>><</if>>
 <<if ($athletics or 0) gte 270 or ($tending or 0) gte 270>>
-	你一个箭步冲进水雾里，用湿毛巾裹住滚烫的黄铜阀门一把拧死，随即跃上石台替守园人准时敲响了正午的长日铜锣。清越的锣声传遍全园，人群里爆发出热烈的欢呼。<<set $mpFestivalClues["solstice_gong"] to 1>><<if _first>><<money 350>><</if>><<stress -2>>
+你一个箭步冲进水雾里，用湿毛巾裹住滚烫的黄铜阀门一把拧死。<<set $mpFestivalClues["solstice_gong"] to 1>><<if _first>><<money 350>><</if>><<stress -2>>
 <<else>>
 	你踩在湿草皮上滑了一跤，等费力拧紧阀门时裤腿已经湿透，正午铜锣也比钟塔慢了半拍才敲响。好在没有弄坏木箱，只是累得你气喘吁吁。<<pain 1>><<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
+<br>
 <<socialiseicon>><<link [[戴上花环绕草坪慢跑 (0:05)|MP Festival Solstice 4]]>><<pass 5>><</link>>
 <br>
 <<beachicon>><<link [[随游行队伍走向海滩 (0:06)|MP Festival Solstice 4]]>><<pass 6>><</link>>
-<br>
-<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Solstice 4 [nobr]
 <<set $outside to 1>><<set $location to "beach">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 傍晚七点，太阳依然高悬在海平面上方，金红色的晚霞将整片浅滩映得如同白昼。海滩搭起了长日篝火架，镇民们围着木栈道交换编织的香草花环与冰镇果酒。
 白天涂改日晷又偷藏碎冰的流动摊主被几个老街坊认了出来，正红着脸在更衣木屋旁赔不是。格威岚晃着两杯加了薄荷与碎冰的柠檬特饮走过来，把其中一杯递到你手里。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_solstice_4")>><</if>>
 <<set _sk to Math.max(($seductionskill or 0), ($willpower or 0))>>
@@ -197,19 +225,22 @@
 <<else>>
 	你站在一旁看格威岚三言两语把那摊主训得低下了头，自己也分到了一小份帮忙跑腿的茶水钱。<<if _first>><<money 300>><</if>><<stress 2>><<tiredness 1>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[返回高街街口 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<parkicon>><<link [[趁暮色回公园看花 (0:05)|MP Festival Solstice 5]]>><<pass 5>><</link>>
 <br>
 <<walkicon>><<link [[沿着浅滩踩水拾贝壳 (0:05)|MP Festival Solstice 5]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[返回高街街口 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Solstice 5 [nobr]
 <<set $outside to 1>><<set $location to "park">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 直到夜里十点，天边才终于合拢最后一缕紫蓝色的暮光。公园草坪上的彩灯一盏接一盏亮起，晚风吹散了白昼积攒的暑气。诺艾尔与罗宾并肩坐在喷泉石沿上，身旁放着一只装满冰镇甜莓茶的玻璃罐。
 见你走过来，罗宾笑着递给你一只编着干雏菊的草环，诺艾尔则往你手心里放了一小包晒干的安神薰衣草。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_solstice_5")>><</if>>
 <<if ($willpower or 0) gte 250>>
@@ -217,77 +248,89 @@
 <<else>>
 	连轴转了一整天的疲倦在夜风里涌上来，你靠着长椅背打了个盹，醒来时肩上多了一条罗宾搭过来的薄披肩。<<stress -1>><<tiredness 2>>
 <</if>>
+
 <br><br>
-<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
-<br>
 <<getouticon>><<link [[离开公园返回高街 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 3. 旧港潮汐节 (Tide) ==================== */
+<br>
+<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Tide 1 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-大潮退到年度最低点的清晨，旧港防波堤下露出了平时深埋水底的青石基座与一排系着铜牌的古老铁环。维斯正站在石阶尽头对照怀表与潮位尺，眉头微蹙——系在第三根石桩上的退潮浮标铁链被海底乱绳缠死了，再过半小时潮水回涌，浮标匣就会被暗流扯断。
+大潮退到年度最低点的清晨，旧港防波堤下露出了平时深埋水底的青石基座与一排系着铜牌的古老铁环。
 栈桥上方已经聚拢了不少赶来参加潮汐祭的老水手，海面弥漫着浓郁的海藻与铁锈腥气。
+
 <br><br>
+
 <<if ($swimmingskill or 0) gte 270 or ($athletics or 0) gte 270>>
-	你踩着湿滑的牡蛎石阶下到齐膝深的水线边，看准涌浪退去的空当一把割断缠死在石桩上的废渔网，将黄铜浮标链重新理顺。维斯低声赞了一句，把一枚刻着旧潮位的铜牌递给你保管。<<set $mpFestivalClues["tide_buoy"] to 1>><<stress -2>>
+你踩着湿滑的牡蛎石阶下到齐膝深的水线边，看准涌浪退去的空当一把割断缠死在石桩上的废渔网。维斯低声赞了一句，把一枚刻着旧潮位的铜牌递给你保管。<<set $mpFestivalClues["tide_buoy"] to 1>><<stress -2>>
 <<else>>
 	石阶上的绿苔滑得惊人，你刚伸手去拽铁链，脚底一滑差点跌进冰凉的潮水坑里，手背还被牡蛎壳划出一道白印。<<pain 2>><<stress 3>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回码头栈道 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<walkicon>><<link [[跟维斯去梅尔街船坞 (0:05)|MP Festival Tide 2]]>><<pass 5>><</link>>
 <br>
 <<investigateicon>><<link [[查看浮标链下石槽字 (0:05)|MP Festival Tide 2]]>><<set $mpFestivalClues["tide_carving"] to 1>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回码头栈道 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Tide 2 [nobr]
 <<set $outside to 1>><<set $location to "mer">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-梅尔街三号干船坞外挂起了彩旗，但悬挂在拱门中央的那口古铜退潮钟却迟迟没人敲响。两名白胡子老舵手正站在钟绳前争得面红耳赤：东港的船队说今年头筹该归跑外海的拖网船，西港的驳船队却拿着半张泛黄的旧港章程不肯让步。
+梅尔街三号干船坞外挂起了彩旗，但悬挂在拱门中央的那口古铜退潮钟却迟迟没人敲响。
 雷恩靠在旁边的缆桩上抛着一枚银币，朝你使了个眼色，示意那半张旧章程的背面其实写着补充条款。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_tide_2")>><</if>>
 <<if ($english or 0) gte 270>>
-	你上前接过那张泛黄的羊皮章程，当众念出背面小字：凡遇十年一遇的低潮日，由最先清通航道浮标的人执锤破钟。两名老舵手愣了片刻，双双把钟绳让到了你和维斯手里。<<set $mpFestivalClues["tide_charter"] to 1>><<if _first>><<money 300>><</if>><<stress -2>>
+你上前接过那张泛黄的羊皮章程，当众念出背面小字：凡遇十年一遇的低潮日。两名老舵手愣了片刻，双双把钟绳让到了你和维斯手里。<<set $mpFestivalClues["tide_charter"] to 1>><<if _first>><<money 300>><</if>><<stress -2>>
 <<else>>
 	章程上的古旧海事术语拗口难懂，你念得磕磕绊绊，反而让两边的船工吵得更起劲了，震得你耳朵嗡嗡作响。<<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
+<br>
 <<socialiseicon>><<link [[握住麻绳敲响退潮钟 (0:05)|MP Festival Tide 3]]>><<pass 5>><</link>>
 <br>
 <<sneakicon>><<link [[向雷恩打听船坞暗箱 (0:05)|MP Festival Tide 3]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Tide 3 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-浑厚的铜钟声荡过海面，紧接着潮水开始以肉眼可见的速度回涨。就在各船队准备起锚巡游时，防波堤外侧的航道灯塔浮筒忽然倾斜了半边——底部的配重铁匣被涨潮流冲进了一道海沟石缝，而码头岸边还有三筐祭海用的咸鱼干没搬上领航船。
+浑厚的铜钟声荡过海面，紧接着潮水开始以肉眼可见的速度回涨。
 海浪一波比一波高，维斯已经发动了快艇引擎，朝岸边的你伸出手。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_tide_3")>><</if>>
 <<if ($swimmingskill or 0) gte 280 or ($skulduggery or 0) gte 280>>
-	你抓着快艇舷绳探身入水，借着回流巧劲将撬棍插进石缝，一下别出卡死的配重铁匣；浮筒瞬间恢复笔直，你还顺手从铁匣夹层里摸出了一只封蜡完好的旧港航道铜盒。<<set $mpFestivalClues["tide_box"] to 1>><<if _first>><<money 400>><</if>><<stress -2>>
+你抓着快艇舷绳探身入水，借着回流巧劲将撬棍插进石缝。<<set $mpFestivalClues["tide_box"] to 1>><<if _first>><<money 400>><</if>><<stress -2>>
 <<else>>
 	冰冷的回流打得你重心不稳，你费了九牛二虎之力才和船工一起用绞盘拽正浮筒，膝盖在船帮上撞得生疼，那只夹层铜盒也滑进了深水沟。<<pain 2>><<stress 4>><<tiredness 3>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[先回栈桥擦干衣服 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<swimicon>><<link [[乘领航船回梅尔街 (0:06)|MP Festival Tide 4]]>><<pass 6>><</link>>
 <br>
 <<walkicon>><<link [[帮鱼档抬木箱去船坞 (0:05)|MP Festival Tide 4]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[先回栈桥擦干衣服 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Tide 4 [nobr]
 <<set $outside to 1>><<set $location to "mer">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 下午涨平的港湾里千帆并列，领航船在梅尔街石阶前缓缓靠岸。港务长官打开了从浮筒下起出的防水账匣，里面封存着近三年各船队缴纳的灯油公益金底单——原来有几笔款项被前任记账员记在了报废船只名下。
 维斯与雷恩站在人群外围，示意你把核对出来的差额当场报给老舵手们听。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_tide_4")>><</if>>
 <<set _sk to Math.max(($maths or 0), ($willpower or 0))>>
@@ -297,19 +340,22 @@
 <<else>>
 	你被几十双水手的眼睛盯着，报数时漏了一行小字，幸好维斯在旁补了一句才算圆场，你也领到了一份基础的辛劳赏金。<<if _first>><<money 320>><</if>><<stress 2>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[返回高街街口 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<walkicon>><<link [[去防波堤放祈愿木牌 (0:05)|MP Festival Tide 5]]>><<pass 5>><</link>>
 <br>
 <<socialiseicon>><<link [[在栈桥边分饮热茶 (0:05)|MP Festival Tide 5]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[返回高街街口 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Tide 5 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 入夜后的旧港水面上漂浮着上百块点着红烛的祈愿木牌，随着平缓的夜潮向远海漂去。防波堤尽头的雾角灯塔射出明亮的光束，一下下扫过寂静的船桅。
 维斯靠在石栏边，将一枚打磨光滑的古旧船锚铜章抛进你怀里；不远处的雷恩也朝你举了举锡酒壶，算是记下了你今天的人情。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_tide_5")>><</if>>
 <<if ($willpower or 0) gte 260>>
@@ -317,57 +363,66 @@
 <<else>>
 	夜里的海风吹得你打了个寒噤，你裹紧外套喝光了杯里的热姜茶，听着潮声缓了半晌才找回力气。<<stress -1>><<tiredness 2>>
 <</if>>
+
 <br><br>
-<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
-<br>
 <<getouticon>><<link [[离开码头返回高街 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 4. 学园开学祭 (Term) ==================== */
+<br>
+<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Term 1 [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-新学期开学祭的清晨，学校主走廊两侧摆满了各社团的招新木架与历年校史画框。西德尼正踮着脚在图书馆外墙对齐一排铜框照片，却发现一九九八年天文社与历史社联展的那张合影不翼而飞，背板上只留下一道新鲜的图钉刮痕。
+新学期开学祭的清晨，学校主走廊两侧摆满了各社团的招新木架与历年校史画框。
 走廊尽头的储物柜后传来几声压低的嗤笑，几张印错了社团教室门牌的传单散落在水磨石地面上。
+
 <br><br>
+
 <<if ($history or 0) gte 260>>
-	你对照两侧画框的编号与校史年表，立刻认出缺失的是旧钟塔修缮那年的纪念照，并且从背板夹缝里抽出了半张印着高街文具店字样的裁纸边角。西德尼感激地朝你点点头。<<set $mpFestivalClues["term_photo"] to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<stress -2>>
+你对照两侧画框的编号与校史年表，立刻认出缺失的是旧钟塔修缮那年的纪念照。<<set $mpFestivalClues["term_photo"] to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<stress -2>>
 <<else>>
 	你盯着满墙的旧照片看花了眼，不仅没理清缺失的年份，扶画框时还差点被松动的铜钉扎破手指。<<pain 1>><<stress 3>><<tiredness 1>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<walkicon>><<link [[拿裁纸边角去文具摊 (0:05)|MP Festival Term 2]]>><<pass 5>><</link>>
 <br>
 <<investigateicon>><<link [[帮西德尼核对传单 (0:05)|MP Festival Term 2]]>><<set $mpFestivalClues["term_flyer"] to 1>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Term 2 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-高街书店与文具摊前挤满了采购新课本的学生。莱顿正站在摊位前皱眉翻看一摞刚印出来的开学祭导览册——上面的图书馆志愿台与旧钟塔参观路线全被印反了，油印店老板却一口咬定是学校交来的底稿本来就写错了页码。
+高街书店与文具摊前挤满了采购新课本的学生。
 你在油印机的废纸篓旁瞥见了半张用红铅笔改过的拼版草纸，字迹歪斜张扬，倒有几分像惠特尼手下跟班的手笔。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_term_2")>><</if>>
 <<if ($maths or 0) gte 270 or ($english or 0) gte 270>>
-	你从废纸篓里抽出原稿底纸，将折页页码按正反八开顺序重新对折，当场证明是油印工装反了第三块蜡版，同时还从蜡版夹层里找回了那张被顺手夹走的校史旧照。莱顿难得露出一丝赞许，把多余的校务补助拨给了你。<<set $mpFestivalClues["term_plate"] to 1>><<if _first>><<money 250>><</if>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -2>>
+你从废纸篓里抽出原稿底纸，将折页页码按正反八开顺序重新对折。莱顿难得露出一丝赞许，把多余的校务补助拨给了你。<<set $mpFestivalClues["term_plate"] to 1>><<if _first>><<money 250>><</if>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -2>>
 <<else>>
 	你拿着导览册翻来覆去地比对页码，油墨蹭了一手黑也没说清哪一页装反了。莱顿不耐烦地摆摆手，让你先把重印的册子抱回学校。<<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
+<br>
 <<runicon>><<link [[抱导览册赶回学校 (0:05)|MP Festival Term 3]]>><<pass 5>><</link>>
 <br>
 <<socialiseicon>><<link [[去后巷找惠特尼问清 (0:05)|MP Festival Term 3]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Term 3 [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 午后的学园前院人声鼎沸，但在三楼通往天台的楼梯拐角，惠特尼正靠在栏杆上把一叠改过教室门牌的恶作剧传单折成纸飞机往下扔。与此同时，一楼礼堂后台的布景幕布卡在了滑轮槽里，西德尼正急得满头大汗。
 上课铃声还有五分钟就要响起，两边都到了最吃紧的关头。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_term_3")>><</if>>
 <<if ($skulduggery or 0) gte 270 or ($athletics or 0) gte 270>>
@@ -375,19 +430,22 @@
 <<else>>
 	你在楼梯间和礼堂后台来回折腾，既没拦住漫天乱飞的纸飞机，拉幕布绳时还被粗糙的麻绳磨红了掌心。<<pain 1>><<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<investigateicon>><<link [[把旧合影嵌回铜框 (0:05)|MP Festival Term 4]]>><<pass 5>><</link>>
 <br>
 <<socialiseicon>><<link [[帮西德尼主持迎新展 (0:06)|MP Festival Term 4]]>><<pass 6>><</link>>
-<br>
-<<getouticon>><<link [[退回学校走廊 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Term 4 [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 下午四点，礼堂的深红天鹅绒幕布准时拉开，主走廊的校史画框也全部归位。莱顿站在讲台前宣布开学祭社团评比结果，由于图书馆与校史展区的资料完整无缺，今年的最佳筹备奖落在了你们这组头上。
 西德尼站在幕布后方，手里捧着装有社团经费结余与纪念钢笔的木盒，眼底满是欣喜的光彩。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_term_4")>><</if>>
 <<set _sk to Math.max(($english or 0), ($willpower or 0))>>
@@ -397,19 +455,22 @@
 <<else>>
 	你在台上紧张得忘了一半词，好在西德尼小声在幕后提醒才顺利念完，你也分到了一份基础的社团劳务补贴。<<if _first>><<money 300>><</if>><<stress 2>><<tiredness 1>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[返回学校前院离开 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<walkicon>><<link [[与西德尼送展册回街 (0:05)|MP Festival Term 5]]>><<pass 5>><</link>>
 <br>
 <<shopicon>><<link [[去旧书摊交换书签 (0:05)|MP Festival Term 5]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[返回学校前院离开 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Term 5 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 放学后的高街洒满金黄的夕阳，三三两两的学生围在旧书摊前挑选夹有干花的开学祭黄铜书签。西德尼帮你把一摞借来的古籍装回木箱，惠特尼则叼着棒棒糖从街对面晃过去，顺手把一只折得方方正正的纸飞机弹进了你的书包侧袋。
 打开纸飞机一看，里面包着两枚游戏厅代币和一行潦草的“算你手快”。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_term_5")>><</if>>
 <<if ($history or 0) gte 250 or ($tending or 0) gte 250>>
@@ -417,57 +478,66 @@
 <<else>>
 	你蹲在书箱边理了半天书页，夕阳晒得后背发懒，虽然没挑出稀有版本，心里却觉得格外踏实。<<stress -1>><<tiredness 1>>
 <</if>>
+
 <br><br>
-<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
-<br>
 <<getouticon>><<link [[沿着高街散步离开 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 5. 秋末点灯节 (Lantern) ==================== */
+<br>
+<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Lantern 1 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 秋末寒雾初起的傍晚，神殿侧廊的长桌上整齐排列着上百盏黄铜防风灯，准备在入夜后分送去孤儿院与各条暗巷。约旦正拿着银剪修整棉灯芯，伸手一摸却发现最底下那箱送往孤儿院的灯芯被地窖潮气浸软了，点起来只会冒黑烟。
 距离点灯仪式只剩不到一个时辰，神殿外已经能听见孩子们盼望提灯的脚步声。
+
 <br><br>
+
 <<if ($housekeeping or 0) gte 260 or ($tending or 0) gte 260>>
 	你立刻端来干燥的香炉余灰与吸油棉纸，将受潮的灯芯一根根夹在温热的铜板间烘干，又浸上掺了松香的清油。约旦试着点亮一盏，火苗澄澈温暖，没有半点黑烟。<<set $mpFestivalClues["lantern_wick"] to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<stress -2>>
 <<else>>
 	你急着把灯芯凑到烛火边烘烤，不小心燎焦了三根棉芯，呛人的油烟味在侧廊里散开，急得你手心直冒汗。<<stress 3>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回神殿正厅 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<walkicon>><<link [[提第一批风灯去孤儿院 (0:05)|MP Festival Lantern 2]]>><<pass 5>><</link>>
 <br>
 <<templeicon>><<link [[帮约旦分装清油入壶 (0:05)|MP Festival Lantern 2]]>><<set $mpFestivalClues["lantern_oil"] to 1>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回神殿正厅 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Lantern 2 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-孤儿院走廊里冷风嗖嗖，罗宾正带着几个小孤儿在窗台边擦拭挂钩，准备挂上神殿送来的防风灯。然而贝利手下的一名管事却堵在楼梯口，冷冷地说灯油熏黑了墙壁还得花钱粉刷，除非有人能保证一点烟都不冒，否则今晚只准点走廊尽头那盏旧电灯。
+孤儿院走廊里冷风嗖嗖，罗宾正带着几个小孤儿在窗台边擦拭挂钩。然而贝利手下的一名管事却堵在楼梯口，冷冷地说灯油熏黑了墙壁还得花钱粉刷。
 几个孩子抱紧手里的纸灯笼，失望地低下了头，罗宾为难地看向你手里的铜灯箱。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_lantern_2")>><</if>>
 <<if ($willpower or 0) gte 270 or ($english or 0) gte 270>>
-	你当着管事的面旋亮一盏烘过松香的防风灯，将白瓷碟悬在灯罩上方半分钟——瓷碟底部洁白如新，连一丝灰印都没有，而且还能省下整晚的走廊电费。管事挑不出毛病，哼了一声转身下楼，街坊捐助的点灯善款也顺理成章交到了你手里。<<set $mpFestivalClues["lantern_clean"] to 1>><<if _first>><<money 250>><</if>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<stress -2>>
+你当着管事的面旋亮一盏烘过松香的防风灯，将白瓷碟悬在灯罩上方半分钟——瓷碟底部洁白如新。<<set $mpFestivalClues["lantern_clean"] to 1>><<if _first>><<money 250>><</if>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<stress -2>>
 <<else>>
-	你被管事刻薄的眼神盯得语气发虚，拧灯芯时手一抖，火苗窜高熏黑了一小块玻璃罩。管事趁机不依不饶，最后还是罗宾答应明早擦墙才算勉强放行。<<stress 4>><<tiredness 2>>
+你被管事刻薄的眼神盯得语气发虚，拧灯芯时手一抖。管事趁机不依不饶，最后还是罗宾答应明早擦墙才算勉强放行。<<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
+<br>
 <<templeicon>><<link [[回神殿取备用灯罩 (0:05)|MP Festival Lantern 3]]>><<pass 5>><</link>>
 <br>
 <<tendingicon>><<link [[和罗宾加固走廊挂钩 (0:05)|MP Festival Lantern 3]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Lantern 3 [nobr]
 <<set $outside to 1>><<set $location to "temple">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 暮色彻底沉下来时，神殿庭院外忽然刮起一阵夹着冷雨星的秋风。挂在连廊拱门上的主引火灯被风吹得剧烈摇晃，防风罩的卡扣松脱了一半；而庭院角落堆放的干松针引火包也快被雨星打湿了。
 约旦正在台阶上主持祝祷，阿什提着猎灯从侧门赶来，朝连廊高处指了指。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_lantern_3")>><</if>>
 <<if ($science or 0) gte 270 or ($tending or 0) gte 270>>
@@ -475,19 +545,22 @@
 <<else>>
 	你在冷风里够了两次才扣上灯罩，滚烫的铜边烫红了指尖，地上的松针包也湿了最外一层，好在主火种总算保住了。<<pain 2>><<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回神殿庭院歇脚 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<walkicon>><<link [[护送主火种回孤儿院 (0:06)|MP Festival Lantern 4]]>><<pass 6>><</link>>
 <br>
 <<socialiseicon>><<link [[替沿途老人点亮门灯 (0:05)|MP Festival Lantern 4]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回神殿庭院歇脚 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Lantern 4 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 晚上八点，从狼街神殿到宅邸街孤儿院的整条街巷亮起了一条蜿蜒的暖黄灯河。孤儿院原本阴冷的走廊、楼梯拐角与窗台全部挂上了澄澈的防风铜灯，孩子们围在暖光下分食烤栗子，连平时最偏僻的墙角都驱散了寒意。
 约旦将神殿今年拨给冬日照明的互助金匣交到你与罗宾手中，感谢你今晚两头奔忙。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_lantern_4")>><</if>>
 <<set _sk to Math.max(($willpower or 0), ($housekeeping or 0))>>
@@ -497,19 +570,22 @@
 <<else>>
 	你忙活了一整晚，登记灯数时漏算了两盏走廊灯，但罗宾及时帮你在册子上补齐，你也领到了应得的那份辛苦钱。<<if _first>><<money 300>><</if>><<stress 1>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[直接回孤儿院大厅 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<templeicon>><<link [[提灯送约旦回神殿 (0:05)|MP Festival Lantern 5]]>><<pass 5>><</link>>
 <br>
 <<walkicon>><<link [[在庭院石阶巡看夜灯 (0:05)|MP Festival Lantern 5]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[直接回孤儿院大厅 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Lantern 5 [nobr]
 <<set $outside to 1>><<set $location to "temple">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 夜深雾重，神殿外廊的古柏下只剩下长明灯静静燃烧，空气里弥漫着松香与檀木的余味。约旦站在石阶上替你理了理被夜露打湿的衣领，将一盏小巧的黄铜随身暖手灯放进你怀里；西德尼也从侧门探出头，塞给你一包还温着的烤甜栗。
 提着暖手灯走在回程的石板路上，原本幽暗的夜路显得格外安宁。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_lantern_5")>><</if>>
 <<if ($willpower or 0) gte 250>>
@@ -517,37 +593,43 @@
 <<else>>
 	你在微凉的夜雾里打了几个哈欠，虽然眼皮发沉，但怀里的暖手灯让你一路都没觉得冷。<<stress -2>><<tiredness 1>>
 <</if>>
+
 <br><br>
-<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
-<br>
 <<getouticon>><<link [[离开神殿返回高街 (0:03)|High Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 /* ==================== 6. 年末钟声夜 (Chime) ==================== */
+<br>
+<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Chime 1 [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
-年末最后一天的傍晚，高街钟表铺里摆满了待校对的怀表与钟摆组件。塞拉正伏在工作台前检查高街主钟塔的午夜报时连杆图纸，神色凝重——主擒纵轮下方最关键的一枚精钢止动销出现了裂纹，如果不在子夜前换上新销，整座钟塔的十二响迎新钟声就会卡死在第三响。
+年末最后一天的傍晚，高街钟表铺里摆满了待校对的怀表与钟摆组件。
 窗外飘着细碎的雪花，铺子角落的备用零件箱里堆着几十枚规格相近的铜铁销子。
+
 <br><br>
+
 <<if ($science or 0) gte 270 or ($maths or 0) gte 270>>
-	你拿起卡尺对照图纸上的公差刻度，在零件箱底层精准挑出那枚唯一匹配的硬化钢销，并帮塞拉涂好了防冻钟表油。塞拉紧锁的眉头舒展开来，朝你露出一抹安心的微笑。<<set $mpFestivalClues["chime_pin"] to 1>><<stress -2>>
+你拿起卡尺对照图纸上的公差刻度，并帮塞拉涂好了防冻钟表油。塞拉紧锁的眉头舒展开来，朝你露出一抹安心的微笑。<<set $mpFestivalClues["chime_pin"] to 1>><<stress -2>>
 <<else>>
 	你拿着卡尺量了半天，挑出来的两枚销子不是粗了半毫米就是短了一截，急得额角冒汗，最后还是塞拉亲自翻箱才找了出来。<<stress 3>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[走出钟表铺回高街 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<walkicon>><<link [[护送工具箱去钟塔下 (0:05)|MP Festival Chime 2]]>><<pass 5>><</link>>
 <br>
 <<investigateicon>><<link [[核对双钟的时差表 (0:05)|MP Festival Chime 2]]>><<set $mpFestivalClues["chime_chart"] to 1>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[走出钟表铺回高街 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Chime 2 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 晚上九点，高街钟塔下的小广场已经被卖热红酒、烤香肠和彩带的守夜摊位围得水泄不通。运送钟塔配重铁锤与检修梯的手推车被两家争抢街口位置的摊主堵在巷口，进退不得。
 林恩正站在路灯下维持秩序，见你和塞拉拎着工具箱赶来，朝堵路的木车抬了抬下巴。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_chime_2")>><</if>>
 <<if ($athletics or 0) gte 270 or ($seductionskill or 0) gte 270>>
@@ -555,19 +637,22 @@
 <<else>>
 	你在拥挤的人潮里喊得嗓子发干，推木车时还被洒在地上的热红酒滑了一下，费了老大劲才勉强把工具箱先拎进钟塔侧门。<<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
+<br>
 <<templeicon>><<link [[带怀表去神殿对时 (0:05)|MP Festival Chime 3]]>><<pass 5>><</link>>
 <br>
 <<sneakicon>><<link [[顺旋梯爬上主钟机房 (0:05)|MP Festival Chime 3]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
 
 :: MP Festival Chime 3 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 十一点半，按照全镇年末老规矩，狼街神殿的副钟必须在子夜与高街主钟同时敲响。然而漫天风雪遮住了两座钟塔之间的视线，平时用来传讯的塔顶红灯在雾雪里模糊不清。
 你站在神殿钟楼的石拱窗前，手里握着塞拉校准过的三问怀表，另一边则是通往高处风向连廊的狭窄铁梯。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_chime_3")>><</if>>
 <<if ($skulduggery or 0) gte 280 or ($maths or 0) gte 280>>
@@ -575,19 +660,22 @@
 <<else>>
 	风雪迷得你睁不开眼，你擦拭信号镜时手指冻得发僵，只能完全凭怀表读数匆忙打出预备手势，心里直打鼓。<<pain 1>><<stress 4>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[退回神殿大厅暖手 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<runicon>><<link [[子夜前赶回钟塔广场 (0:06)|MP Festival Chime 4]]>><<pass 6>><</link>>
 <br>
 <<templeicon>><<link [[在拱窗边听双钟齐鸣 (0:05)|MP Festival Chime 4]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[退回神殿大厅暖手 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Chime 4 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 午夜零点整，高街钟塔的巨型青铜主钟轰然敲响第一声，几乎在同一刹那，狼街神殿清越的副钟声穿透风雪遥相唱和。十二声浑厚悠长的钟鸣在全镇夜空回荡，没有半拍卡顿，广场上守夜的人群纷纷抛起彩带、举杯欢呼。
 塞拉站在钟塔石阶下，仰头听完最后一响余音，转过身将市政厅拨发的年末修钟红封递到了你面前。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_chime_4")>><</if>>
 <<set _sk to Math.max(($willpower or 0), ($science or 0))>>
@@ -597,19 +685,22 @@
 <<else>>
 	虽然最后两声钟鸣隔了半秒微弱的时差，但在满场欢呼声中无人苛责，你也顺利拿到了应得的修钟津贴。<<if _first>><<money 350>><</if>><<stress 1>><<tiredness 2>>
 <</if>>
+
 <br><br>
+<<getouticon>><<link [[从高街广场散场离开 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<templeicon>><<link [[踏初雪去神殿祈福 (0:05)|MP Festival Chime 5]]>><<pass 5>><</link>>
 <br>
 <<socialiseicon>><<link [[在街角共饮热果茶 (0:05)|MP Festival Chime 5]]>><<pass 5>><</link>>
-<br>
-<<getouticon>><<link [[从高街广场散场离开 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Festival Chime 5 [nobr]
 <<set $outside to 1>><<set $location to "temple">><<effects>>
 <<set $mpFestivalClues to ($mpFestivalClues or {})>>
 零点过后，细雪落在神殿与高街交界的青石板上，喧嚣的广场渐渐归于宁静。塞拉将那枚换下来的旧止动销系上银链送给你做新年信物，林恩则把一杯冒着热气的肉桂苹果茶塞进你手心。
 远处的灯火在雪幕中柔和地闪烁，旧一年的奔波与惊险似乎都随着那十二声钟鸣翻过了页。
+
 <br><br>
+
 <<set _first to true>>
 <<if window.dolmp && window.dolmp.claimUniqueReward>><<set _first to window.dolmp.claimUniqueReward("festival_chime_5")>><</if>>
 <<if ($willpower or 0) gte 260>>
@@ -617,7 +708,9 @@
 <<else>>
 	守夜的困意一阵阵涌上来，你靠在廊柱边喝完热茶，虽然眼角发酸，心头却暖融融的。<<stress -2>><<tiredness 1>>
 <</if>>
+
 <br><br>
-<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
-<br>
 <<getouticon>><<link [[踏着初雪返回高街 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[回到节日水牌前 (0:02)|MP Town Festivals 2 Hub]]>><<pass 2>><</link>>
+

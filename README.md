@@ -1,6 +1,6 @@
 # DoL-MP 整合包
 
-**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.2.0-dev7**
+**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.2.0-dev8**
 
 > **开发预览版**：城镇/荒野 12 条暗线、22 条小事、6 条长期零工已经并入；region bank 仍待下一批清理。稳定版仍是 v1.0.0。
 
@@ -16,7 +16,7 @@
 
 - 游戏本体（含 ModLoader）
 - 汉化包、官方图片包
-- DoL-MP v1.2.0-dev7 联机模组（含完整源码）
+- DoL-MP v1.2.0-dev8 联机模组（含完整源码）
 - 联机服务器（Node.js，依赖已内置）
 - 中文说明书 `说明书.md`
 
@@ -29,7 +29,7 @@
 | `game/Degrees of Lewdity.html` | 游戏本体（ModLoader 版，64MB） |
 | `mods/ModI18N-0.5.12.13-chs-1.0.1a.mod.zip` | 中文汉化包 |
 | `mods/GameOriginalImagePack-0.5.12.13.mod.zip` | 官方图片包 |
-| `mods/DoL-MP-v1.2.0-dev7.mod.zip` | DoL-MP 联机模组（可直接添加） |
+| `mods/DoL-MP-v1.2.0-dev8.mod.zip` | DoL-MP 联机模组（可直接添加） |
 | `mod-src/` | DoL-MP 模组源码（`boot.json` / JS / CSS / Twee / 图标） |
 | `server/` | 联机服务器（`server.js` + 已内置 `ws` 依赖） |
 | `start-game.bat` | 启动游戏 |
@@ -80,7 +80,18 @@ npm install
 
 ---
 
-## v1.2.0-dev7 更新要点
+## v1.2.0-dev8 更新要点
+
+- 55 个 twee，1723 个 passage
+- **旧支线去自动投骰**：31 处 `skulduggerycheck` 与 46 处属性检定移入动作
+- **双动作独立文案**：134 对动作各自成功/失败文本
+- **半日节令计分**：£6.50 / £3.50 / 不发钱三档
+- **每日限次**：关系日、信物鉴看、零工后续 42 段
+- **新增**：24 段关系日、32 段区域瞬间、20 段零工当班、16 段信物使用、12 段夜事件
+- **修复**：新文件未进 boot、Cottage 断链、夜间无门控、节令重复计分、每日旗标锁死重试、Bailey 阶段奖励丢失、Black Wolf trust
+- **新增 `keepsakeicon`**：藏品/脏物图标
+
+### v1.2.0-dev7 要点
 
 - 50 个 twee，1618 个 passage
 - **NPC 任务第 3/6/9 阶段真双选**：两个动作各用不同技能，各自成功/失败叙述
