@@ -1,0 +1,407 @@
+/* 宅邸与上流社交关系线 / 多瑙河街宅邸·秘密温室庄园 / 第一批 12 独立场景 */
+
+:: MP Mansion Pool Router [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>>
+<<set _mansionScenes to [
+	"MP Mansion Avery CarInvite",
+	"MP Mansion Avery GownCheck",
+	"MP Mansion Avery ChampagneToast",
+	"MP Mansion Quinn WineCellar",
+	"MP Mansion Briar VelvetLedger",
+	"MP Mansion Servant SilverTray",
+	"MP Mansion Gate GuardRain",
+	"MP Mansion Kitchen SculleryShift",
+	"MP Mansion Conservatory ColdDraft",
+	"MP Mansion Bailey DebtEnvoy",
+	"MP Mansion Auction GuestList",
+	"MP Mansion Glasshouse Cufflink"
+]>>
+<<set _pool to _mansionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
+<<if _pool.length is 0>>
+	<<set _pool to _mansionScenes>>
+	<<run _mansionScenes.forEach(function (n) { delete V.mpSeenScenes[n]; })>>
+<</if>>
+<<set _pick to _pool.random()>>
+<<set $mpSeenScenes[_pick] to 1>>
+<<include _pick>>
+
+:: MP Mansion Avery CarInvite [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Danube Street">>
+<</if>>
+多瑙河街十八号宅邸的雕花铁门前停着一辆擦得锃亮的黑色轿车，车头银立标在灰蒙蒙的街雾里泛着冷光。
+<<if Weather.precipitation is "rain">>侍者撑开黑绸长柄伞候在车门边，雨水顺着伞骨滴落在青石马道上。<<else>>微凉的穿堂风掠过修剪齐整的冬青树篱，吹散了空气中淡淡的雪茄烟味。<</if>>
+车窗降下一半，艾弗里抬起手腕看了一眼金表：「站在我身边的时候，别让我丢脸，先把你被风吹乱的衣领理好。」
+<<if ($exposed or 0) gte 1>>瞥见你衣衫不整的模样，艾弗里脸色一沉，一把将车后座的羊绒大衣甩在你肩上遮住皮肤。<<else>>艾弗里探身推开副驾驶侧门，用戴着小羊皮手套的指尖轻轻拨正了你的领口。<</if>>
+<br><br>
+<<socialiseicon>><<link [[顺从地坐进车内陪艾弗里核对晚宴行程 (0:08)|_exitPas]]>><<pass 8>><<stress -3>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+<br>
+<<if ($mpAveryCufflinkFound or 0) is 1 and ($mpAveryCufflinkReturned or 0) is 0>>
+	<<investigateicon>><<link [[拿出在温室花坛捡到的刻字纯银袖扣当面归还艾弗里 (0:05)|_exitPas]]>><<pass 5>><<set $mpAveryCufflinkReturned to 1>><<stress -6>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<npcincr Avery trust 1>><</if>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+	<br>
+<<else>>
+	<<walkicon>><<link [[刻意退后半步婉拒同乘却招来艾弗里冷淡的审视 (0:04)|_exitPas]]>><<pass 4>><<stress 4>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery rage 1>><</if>><<set $eventskip to 1>><<endevent>><</link>><<gstress>>
+	<br>
+<</if>>
+<<getouticon>><<link [[借口孤儿院还有门禁先行离开宅邸车道 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Avery GownCheck [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Danube Street">>
+<</if>>
+宅邸一楼门厅的枝形水晶吊灯将大理石地面照得如同白昼，落地穿衣镜旁立着两排挂满丝绸礼服的黄铜衣架。
+<<if Time.dayState is "night">>晚宴弦乐声从二楼回廊隐约漏下，几名端着银盘的侍女屏息从门厅外侧快步经过。<<else>>午后的阳光穿过彩绘高窗落在波斯地毯上，空气里浮动着淡淡的白茶香薰味。<</if>>
+<<if (($worn.upper.integrity or 100) lte 60) or (($worn.lower.integrity or 100) lte 60)>>你的衣角还留着撕裂的线头，在光洁如镜的门厅里显得格格不入。<<else>>你在穿衣镜前站定，将袖口与腰侧的折痕一一抚平。<</if>>
+艾弗里绕到你身后按住你的肩膀，对着镜面冷冷开口：「记住，今晚多瑙河街有头有脸的人物都在楼上，别让我丢脸。」
+<br><br>
+<<socialiseicon>><<link [[配合艾弗里的手势换上熨烫妥帖的备用礼服衬领 (0:10)|_exitPas]]>><<pass 10>><<stress -4>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+<br>
+<<if ($willpower or 0) gte 500>>
+	<<investigateicon>><<link [[迎着镜中艾弗里的视线直视回去并谈妥出场筹码 (0:06)|_exitPas]]>><<pass 6>><<willpower 2>><<money 1200>><<set $eventskip to 1>><<endevent>><</link>><<gwillpower>>
+	<br>
+<<else>>
+	<<walkicon>><<link [[因换装动作局促被艾弗里当着侍女的面冷声训斥 (0:06)|_exitPas]]>><<pass 6>><<stress 6>><<trauma 1>><<set $eventskip to 1>><<endevent>><</link>><<gstress>>
+	<br>
+<</if>>
+<<getouticon>><<link [[趁侍女拉开侧门时退回宅邸前院透气 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Avery ChampagneToast [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Danube Street">>
+<</if>>
+宅邸二楼弧形露台的汉白玉栏杆外正对着秘密温室庄园的玻璃穹顶，银质冰桶里的香槟冒着细密的气泡。
+<<if Weather.isFreezing>>露台角落的黄铜炭盆烧得正旺，驱散了夜风吹来的刺骨寒意。<<else>>晚风带着温室兰花的清甜掠过露台，吹动了垂落的香槟色纱帘。<</if>>
+艾弗里将一只高脚水晶杯递到你指间，指腹不经意般擦过你的指节：「待会儿奎因过来敬酒的时候，你知道该怎么应对——别让我丢脸。」
+<<if ($stress or 0) gte 3500>>冰凉的杯壁贴着你发烫的掌心，你借着抿酒的动作掩去了眼底的疲态。<<else>>你稳稳托住水晶杯底座，与艾弗里轻轻碰出一声清脆的鸣响。<</if>>
+<br><br>
+<<socialiseicon>><<link [[挽住艾弗里的小臂得体地向走来的名流举杯致意 (0:09)|_exitPas]]>><<pass 9>><<stress -5>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+<br>
+<<if $mpCompanion and $mpCompanion.isPartnerOnline>>
+	<<mphearticon>><<link [[借着去露台栏杆边吹风的空档与混入侍者中的同伴交换眼神 (0:05)|_exitPas]]>><<pass 5>><<stress -6>><<trauma -2>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+	<br>
+<<else>>
+	<<sneakicon>><<link [[借口不胜酒力将半杯香槟悄悄倒进汉白玉花盆 (0:04)|_exitPas]]>><<pass 4>><<skulduggery 2>><<stress -2>><<set $eventskip to 1>><<endevent>><</link>>
+	<br>
+<</if>>
+<<walkicon>><<link [[放下空酒杯顺着旋转石阶走回花园侧门 (0:03)|MP Region Glasshouse Manor]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Quinn WineCellar [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Danube Street">>
+<</if>>
+宅邸地下恒温酒窖的橡木酒架一直延伸到拱顶阴影深处，最里侧的品酒圆桌上摊开着一份多瑙河街市政修缮预算表。
+<<if Time.dayState is "night">>酒窖壁灯调得很暗，只有圆桌中央的银烛台照亮了酒杯里暗红的酒液。<<else>>通气孔透入一束微弱的日光，空气中弥漫着陈年橡木桶与软木塞的醇香。<</if>>
+奎因市长摘下金丝眼镜擦了擦，抬头看见你时迅速合上了文件夹：「怎么连孤儿院的学生都能随便进出酒窖了？把那瓶八二年的红酒递给我，别乱看桌上的东西。」
+<<if ($skulduggery or 0) gte 300>>你借着躬身递酒的角度，一眼扫清了预算表末尾标注的『秘密温室专项补贴』数额。<<else>>你垂下眼帘双手捧过红酒瓶，避开了奎因市长审视的目光。<</if>>
+<br><br>
+<<socialiseicon>><<link [[恭敬地替奎因市长醒酒并答应守口如瓶 (0:07)|_exitPas]]>><<pass 7>><<money 1000>><<stress -2>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Quinn")>><<npcincr Quinn love 1>><</if>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<if ($skulduggery or 0) gte 350>>
+	<<sneakicon>><<link [[趁奎因转身接电话时抽走夹在底层的温室拨款副联 (0:05)|MP Region Glasshouse Manor]]>><<pass 5>><<skulduggery 3>><<set $mpQuinnCellarNote to 1>><<set $eventskip to 1>><<endevent>><</link>>
+	<br>
+<<else>>
+	<<runicon>><<link [[后退时不小心撞响酒架被酒窖管家当场轰出并扣罚零钱 (0:05)|_exitPas]]>><<pass 5>><<money -400>><<stress 5>><<set $eventskip to 1>><<endevent>><</link>><<gstress>>
+	<br>
+<</if>>
+<<getouticon>><<link [[端着空托盘顺着酒窖石阶退回地面走廊 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Briar VelvetLedger [nobr]
+<<effects>>
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<set $mpBriarExit to ($mpReturnPassage or "Danube Street")>>
+<<if $mpBriarExit is "Start" or $mpBriarExit is "Start2" or $mpBriarExit.startsWith("MP ")>>
+	<<set $mpBriarExit to "Danube Street">>
+<</if>>
+宅邸西侧偏厅的丝绒屏风后燃着甜腻的龙涎香。布莱尔翘着腿坐在高背扶手椅上，指尖转着一支镶金钢笔。
+「来得正好。」布莱尔把一叠洒金请柬推到你面前，「今晚的贵客散场后要去天鹅绒暗层，替我把这些塞进他们的大衣口袋。」
+<<if ($exposed or 0) gte 1>>你衣衫不整地站在屏风边，布莱尔的目光在你肩上停了停。<<else>>布莱尔替你抚平袖口，指尖在你腕上轻轻一按。<</if>>
+<br><br>
+<<socialiseicon>><<link [[接过请柬 (0:02)|MP Mansion Briar Cloakroom]]>><<pass 2>><</link>>
+<br>
+<<brothelicon>><<link [[先问报酬 (0:02)|MP Mansion Briar Bargain]]>><<pass 2>><</link>>
+<br>
+<<getouticon>><<link [[婉拒 (0:02)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "danube">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Briar Cloakroom [nobr]
+<<effects>>
+<<set $outside to 0>><<set $location to "avery_mansion">>
+衣帽间在偏厅后面的窄廊尽头。两排大衣挂在黄铜架上，门边的保镖正低头擦火柴。
+你手里那叠请柬被掌心焐得发潮。
+<br><br>
+<<sneakicon>><<link [[塞进大衣内袋 (0:05)|MP Mansion Briar Distribute]]>><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[看清保镖位置 (0:04)|MP Mansion Briar Observe]]>><<pass 4>><</link>>
+<br>
+<<walkicon>><<link [[退回偏厅 (0:02)|MP Mansion Briar VelvetLedger]]>><<pass 2>><</link>>
+
+:: MP Mansion Briar Distribute [nobr]
+<<effects>>
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<set $skulduggerydifficulty to ((($mpBriarCloakroomEdge or 0) is 1) ? 250 : 350)>>
+<<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 1000>><<set _reward to 1500>>
+	<<elseif _sk gte 800>><<set _reward to 1200>>
+	<<elseif _sk gte 600>><<set _reward to 1150>>
+	<<elseif _sk gte 400>><<set _reward to 1100>>
+	<<elseif _sk gte 200>><<set _reward to 1050>>
+	<<else>><<set _reward to 1000>><</if>>
+	你贴着大衣架侧身挪过去，指尖探进第一只口袋。请柬滑进衬里，保镖的火柴还没划亮。
+	<<money _reward>><<stress -3>>
+	你摸到口袋里的钱袋，掂了掂，里面大约有 £<<print Math.floor(_reward / 100)>>。
+	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><</if>>
+	<br><br>
+	<<walkicon>><<link [[从窄廊退出去 (0:03)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+	你的指节撞上铜架，保镖猛地抬头。你只来得及把请柬塞回袖口。
+	<<stress 6>><<pain 2>>
+	<br><br>
+	<<runicon>><<link [[躲进帘幕后 (0:04)|MP Mansion Briar Hide]]>><<pass 4>><</link>>
+	<br>
+	<<getouticon>><<link [[退出宅邸 (0:04)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "danube">><<pass 4>><<set $eventskip to 1>><<endevent>><</link>><<gstress>>
+<</if>>
+
+:: MP Mansion Briar Observe [nobr]
+<<effects>>
+<<set $outside to 0>><<set $location to "avery_mansion">>
+你退到窄廊的阴影里，数着保镖来回的步子。他每走到第三只大衣架就会停下来点烟。
+<<if ($skulduggery or 0) gte 300 or ($athletics or 0) gte 300>>
+	你看准了他转身的空档，记下了盲区。再动手时，你能多争取几秒。
+	<<set $mpBriarCloakroomEdge to 1>><<stress -2>>
+<<else>>
+	你看了太久，保镖忽然朝窄廊这边瞥了一眼。你只好先退回偏厅。
+	<<stress 3>>
+<</if>>
+<br><br>
+<<walkicon>><<link [[回到衣帽间 (0:02)|MP Mansion Briar Cloakroom]]>><<pass 2>><</link>>
+<br>
+<<getouticon>><<link [[放弃这趟差事 (0:03)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Briar Hide [nobr]
+<<effects>>
+<<set $outside to 0>><<set $location to "avery_mansion">>
+帘幕后面是堆杂物的小隔间。保镖的脚步声在窄廊里停了一下，又慢慢走远。
+<<set _sk to currentSkillValue("skulduggery")>>
+<<if _sk gte 600>>
+	你趁他走远，把剩下的请柬塞进最近两件大衣，又从衣袋里摸出几张零钞。<<money 500>><<stress -2>>
+<<elseif _sk gte 300>>
+	你趁他走远，把剩下的请柬塞进最近两件大衣。<<money 200>><<stress -1>>
+<<else>>
+	你不敢再动，等脚步声彻底消失才从帘幕后出来。<<stress 2>><<trauma 1>>
+<</if>>
+<br><br>
+<<walkicon>><<link [[趁没人退回偏厅 (0:03)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Briar Bargain [nobr]
+<<effects>>
+<<set $outside to 0>><<set $location to "avery_mansion">>
+「报酬呢？」你没有立刻接那叠请柬。
+布莱尔笑了一声，把钢笔搁在茶几上：「先让我看看你值不值这个价。」
+<br><br>
+<<if ($seductionskill or 0) gte 350 or ($skulduggery or 0) gte 350>>
+	<<brothelicon>><<link [[顺着他的话抬价 (0:04)|MP Mansion Briar Deal]]>><<pass 4>><</link>>
+<<else>>
+	<<walkicon>><<link [[把请柬推回去 (0:02)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "danube">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<</if>>
+
+:: MP Mansion Briar Deal [nobr]
+<<effects>>
+<<set $outside to 0>><<set $location to "avery_mansion">>
+你把声音压低，替他把话说完。布莱尔的笑意慢慢收了，改成一种审视。
+<<set _sk to Math.max(currentSkillValue("seductionskill"), currentSkillValue("skulduggery"))>>
+<<if _sk gte 1000>>
+	<<set _reward to 2000>><<set _crest to 1>>
+<<elseif _sk gte 800>>
+	<<set _reward to 1600>><<set _crest to 1>>
+<<elseif _sk gte 600>>
+	<<set _reward to 1500>><<set _crest to 0>>
+<<elseif _sk gte 400>>
+	<<set _reward to 1400>><<set _crest to 0>>
+<<else>>
+	<<set _reward to 1200>><<set _crest to 0>><</if>>
+<<if _sk gte 350>>
+	他从礼盒底层数出几张钞票推过来，约莫 £<<print Math.floor(_reward / 100)>>。
+	<<money _reward>>
+	<<if _crest is 1>>他顿了顿，又摸出一枚天鹅绒暗层通行徽记，一起推到你手边。<<set $mpFragVelvetCrest to Math.min(3, ($mpFragVelvetCrest or 0) + 1)>><</if>>
+	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar trust 1>><</if>>
+<<else>>
+	他摇了摇头，把请柬收回抽屉。你在偏厅里站了片刻，只能离开。<<stress 4>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[离开偏厅 (0:03)|$mpBriarExit]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Servant SilverTray [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Danube Street">>
+<</if>>
+宅邸主宴会厅的餐具间里堆满了刚刚擦亮的纯银高脚托盘，领班正焦头烂额地清点着今晚临时雇来的帮工人数。
+<<if Time.dayState is "night">>前厅华尔兹舞曲正酣，不断有侍者端着空酒杯满头大汗地从双扇门退回来。<<else>>开席前的准备工作紧锣密鼓，银餐刀碰撞瓷盘的清脆声响此起彼伏。<</if>>
+领班把一套黑白侍者马甲塞进你怀里：「少废话，三号桌那位银行家最挑剔，端稳这盘开胃鱼子酱送过去，洒出一滴就从你工钱里扣！」
+<<if ($tiredness or 0) gte 1000>>沉甸甸的纯银托盘压得你手腕发酸，连踩在地毯上的脚步都有些发飘。<<else>>你深吸一口气系紧侍者马甲，单手稳稳托起银盘迈入灯火辉煌的宴会厅。<</if>>
+<br><br>
+<<if ($danceskill or 0) gte 250 or ($athletics or 0) gte 250>>
+	<<walkicon>><<link [[穿行于起舞的宾客之间稳稳送达银托盘领到全额赏金 (0:12)|_exitPas]]>><<pass 12>><<money 1500>><<stress -3>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+	<br>
+<<else>>
+	<<runicon>><<link [[被醉酒宾客撞歪手肘打翻酒杯遭领班克扣五镑赔偿 (0:12)|_exitPas]]>><<pass 12>><<money -500>><<stress 6>><<pain 2>><<set $eventskip to 1>><<endevent>><</link>><<gstress>><<gpain>>
+	<br>
+<</if>>
+<<socialiseicon>><<link [[留在餐具间专心替领班擦拭银酒具赚取稳妥工钱 (0:15)|_exitPas]]>><<pass 15>><<money 900>><<tiredness 3>><<set $eventskip to 1>><<endevent>><</link>><<gtiredness>>
+<br>
+<<getouticon>><<link [[趁领班转身训话时脱下马甲从后门溜走 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Gate GuardRain [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Danube Street">>
+<</if>>
+多瑙河街宅邸北侧的雕花铁门挂上了夜间防盗铁链，门房岗亭的玻璃窗后透出昏黄的台灯光亮。
+<<if Weather.precipitation is "rain">>倾盆冷雨顺着铸铁枪尖栏杆往下淌，你的衣摆很快被溅起的泥水打湿了大半。<<else>>夜雾弥漫在多瑙河街的石板路上，将岗亭外侧的感应路灯晕成一团白光。<</if>>
+一名披着黑雨披的宅邸保安打着强光手电走出岗亭：「已经过了访客时间了，没有主人的手令谁也不准在铁门外逗留！」
+<<if ($exposed or 0) gte 1>>手电光柱扫过树影的刹那，你慌忙缩进冬青树篱的死角，生怕暴露出不蔽体的窘态。<<else>>你压低帽檐站在路灯盲区里，打量着侧墙上方通往温室庄园的铁艺爬藤架。<</if>>
+<br><br>
+<<if ($skulduggery or 0) gte 300>>
+	<<sneakicon>><<link [[趁保安回岗亭登记时用铁丝挑开侧门小锁潜入温室 (0:06)|MP Region Glasshouse Manor]]>><<pass 6>><<skulduggery 3>><<stress -2>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+	<br>
+<<else>>
+	<<runicon>><<link [[强行攀爬湿滑的铁艺藤架却脚下一滑摔伤膝盖 (0:06)|_exitPas]]>><<pass 6>><<pain 6>><<stress 5>><<set $eventskip to 1>><<endevent>><</link>><<gpain>><<gstress>>
+	<br>
+<</if>>
+<<socialiseicon>><<link [[主动走上前礼貌询问温室花匠白天的招工时间 (0:04)|_exitPas]]>><<pass 4>><<stress -1>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[避开手电光束顺着多瑙河街人行道离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Kitchen SculleryShift [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Danube Street">>
+<</if>>
+宅邸半地下室的后厨洗碗间里热气腾腾，四口铜制大水槽里泡满了刚从宴会席撤下来的描金骨瓷盘。
+<<if Weather.isFreezing>>水槽冒出的滚烫白雾在冰冷的半高气窗上凝成水珠，倒让后厨成了整座宅邸最暖和的角落。<<else>>烤箱的余热混着柠檬洗洁精的气味充斥在狭窄的过道里，熏得人额头直冒细汗。<</if>>
+戴高帽的副厨长用木勺敲了敲不锈钢台面：「动作都麻利点！十点前把这三摞骨瓷盘擦干归柜，工钱现结，还管一顿热汤！」
+<<if ($pain or 0) gte 20>>温水漫过手背上的擦伤时带来一阵轻微的刺痛，你咬紧牙关没有放慢手里的抹布。<<else>>你挽起袖子系好防水皮围裙，将一只只描金瓷盘擦得光洁如新。<</if>>
+<br><br>
+<<walkicon>><<link [[埋头干满半小时将三摞骨瓷盘全部擦净领到工钱与热汤 (0:25)|_exitPas]]>><<pass 25>><<money 1100>><<stress -4>><<tiredness 3>><<set $eventskip to 1>><<endevent>><</link>><<lstress>><<gtiredness>>
+<br>
+<<if $mpCompanion and $mpCompanion.isPartnerOnline>>
+	<<mphearticon>><<link [[与同伴一人冲洗一人擦干提前完成差事并分食热奶油浓汤 (0:18)|_exitPas]]>><<pass 18>><<money 1400>><<stress -7>><<tiredness -2>><<set $eventskip to 1>><<endevent>><</link>><<lstress>><<ltiredness>>
+	<br>
+<<else>>
+	<<sneakicon>><<link [[趁副厨长去前厅送菜时偷吃盘里剩下的烤牛肉却被烫到舌尖 (0:05)|_exitPas]]>><<pass 5>><<pain 2>><<stress -2>><<set $eventskip to 1>><<endevent>><</link>><<gpain>>
+	<br>
+<</if>>
+<<getouticon>><<link [[解下防水皮围裙从后厨运菜坡道回到街面 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Conservatory ColdDraft [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "MP Region Glasshouse Manor")>>
+<<if _exitPas is "Start" or _exitPas is "Start2">>
+	<<set _exitPas to "MP Region Glasshouse Manor">>
+<</if>>
+连接多瑙河宅邸与秘密温室庄园的玻璃连廊顶棚被狂风掀开了一扇通气天窗，冰冷的气流正对着下方的名贵兰花直灌进来。
+<<if Weather.precipitation is "rain">>斜风夹着冷雨从天窗缺口泼洒而下，大理石步道上已经积起了一层薄水。<<else>>呼啸的夜风吹得连廊两侧的铁艺挂灯左右摇晃，温度计的水银柱正在往下掉。<</if>>
+老花匠急得在铸铁旋梯下直跺脚：「这批夜光兰要是冻坏了一株，主人非剥了我的皮不可！谁身手利索帮我爬上去把铜插销扣死？」
+<<if ($stress or 0) gte 3500>>呼啸的风声刮得你耳膜生疼，你扶住旋梯扶手定神看清了顶棚摇晃的铁窗框。<<else>>你试了试铸铁旋梯的稳固度，顺手接过了老花匠递来的防滑麻手套。<</if>>
+<br><br>
+<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 280>>
+	<<runicon>><<link [[蹬上旋梯顶着狂风一把拉合天窗扣死黄铜插销 (0:08)|MP Region Glasshouse Orchid]]>><<pass 8>><<physique 2>><<money 1000>><<stress -4>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+	<br>
+<<else>>
+	<<walkicon>><<link [[勉强爬到半途被冷风灌透衣领冻得直打哆嗦 (0:08)|_exitPas]]>><<pass 8>><<stress 5>><<pain 3>><<set $eventskip to 1>><<endevent>><</link>><<gstress>><<gpain>>
+	<br>
+<</if>>
+<<socialiseicon>><<link [[留在地面帮老花匠把怕冷的兰花盆栽搬进内厅 (0:10)|MP Region Glasshouse Orchid]]>><<pass 10>><<stress -3>><<tiredness 2>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+<br>
+<<getouticon>><<link [[顺着连廊尽头的侧门退回多瑙河街 (0:03)|Danube Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Bailey DebtEnvoy [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Danube Street">>
+<</if>>
+宅邸后巷的煤气路灯下停着一辆没有牌照的深灰轿车，贝利手下的一名黑衣清道夫正将一封火漆信函递给宅邸副管家。
+<<if Time.dayState is "night">>后巷静得能听见皮手套摩擦信封的沙沙声，两人的影子被路灯拉得格外面目森严。<<else>>白昼的后巷少有人走动，只有远处马道偶尔传来轿车驶过的引擎声。<</if>>
+清道夫压低嗓音冷冷说道：「转告你们主人，贝利说了，下周五之前孤儿院借调过来的那批人手必须按账册结清尾款。」
+<<if ($skulduggery or 0) gte 280>>你屏住呼吸贴在砖墙排水管后方，将两人交接信函时的暗语听得一字不漏。<<else>>你紧贴着潮湿的墙砖不敢乱动，直到副管家揣好信封快步退回宅邸角门。<</if>>
+<br><br>
+<<investigateicon>><<link [[等两人散去后摸到角门信箱旁记下火漆印鉴的编号 (0:06)|_exitPas]]>><<pass 6>><<willpower 2>><<set $mpMansionBaileyClue to 1>><<set $eventskip to 1>><<endevent>><</link>><<gwillpower>>
+<br>
+<<if ($skulduggery or 0) gte 380>>
+	<<sneakicon>><<link [[尾随副管家穿过温室暗廊顺走那封未拆的火漆副函 (0:07)|MP Region Glasshouse Manor]]>><<pass 7>><<skulduggery 3>><<stress -3>><<set $mpQuestBaileyRebellion to Math.min(8, ($mpQuestBaileyRebellion or 0) + 1)>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+	<br>
+<<else>>
+	<<runicon>><<link [[踩碎枯枝惊动清道夫被追出两条街险些挨棍 (0:07)|_exitPas]]>><<pass 7>><<stress 7>><<pain 3>><<set $eventskip to 1>><<endevent>><</link>><<gstress>><<gpain>>
+	<br>
+<</if>>
+<<walkicon>><<link [[趁清道夫上车前迅速退回多瑙河街主路 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Auction GuestList [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "MP Region Glasshouse Manor")>>
+<<if _exitPas is "Start" or _exitPas is "Start2">>
+	<<set _exitPas to "MP Region Glasshouse Manor">>
+<</if>>
+秘密温室庄园二层露台的藤编圆桌上遗落着一本皮面签到簿，正是多瑙河宅邸与峭壁天鹅绒暗层今晚联合夜宴的宾客底单。
+<<if Weather.precipitation is "rain">>玻璃穹顶外雨声如注，露台内侧的恒温风口吹出阵阵暖风，吹得签到簿纸页哗哗翻动。<<else>>夜色透过弧形玻璃洒在桌面上，签到簿旁还放着半杯未喝完的紫罗兰利口酒。<</if>>
+楼下兰花厅突然传来两名执事焦急的交谈声：「快去二楼露台找找！要是让外人看到今晚天鹅绒包厢的代号对应表，布莱尔大人非扒了我们的皮不可！」
+<<if ($exposed or 0) gte 1>>听见脚步声逼近旋梯，你连忙蹲到浓密的垂吊迷迭香花槽后方遮住身体。<<else>>你迅速上前两步翻开皮面签到簿，目光飞快掠过上面用金墨写下的名流代号。<</if>>
+<br><br>
+<<investigateicon>><<link [[快速默记下前三排权贵代号并将签到簿原样合拢 (0:05)|MP Region Glasshouse Dome]]>><<pass 5>><<willpower 2>><<stress -2>><<set $mpVelvetGuestListRead to 1>><<set $eventskip to 1>><<endevent>><</link>><<gwillpower>>
+<br>
+<<if ($skulduggery or 0) gte 340>>
+	<<sneakicon>><<link [[撕下夹在末页的不记名筹码兑换联揣入怀中 (0:04)|MP Region Glasshouse Dome]]>><<pass 4>><<money 1600>><<skulduggery 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<br>
+<<else>>
+	<<runicon>><<link [[慌忙躲避上楼执事时被铁艺花架刮破手背 (0:04)|_exitPas]]>><<pass 4>><<pain 4>><<stress 5>><<set $eventskip to 1>><<endevent>><</link>><<gpain>><<gstress>>
+	<br>
+<</if>>
+<<getouticon>><<link [[顺着外侧铁艺旋梯悄然滑回一楼标本廊 (0:03)|MP Region Glasshouse Specimen]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Mansion Glasshouse Cufflink [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">>
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "MP Region Glasshouse Orchid")>>
+<<if _exitPas is "Start" or _exitPas is "Start2">>
+	<<set _exitPas to "MP Region Glasshouse Orchid">>
+<</if>>
+温室庄园雾化兰花厅的大理石花坛排水槽边缘闪着一点银光，一枚刻着花体字母『A』的纯银蓝宝袖扣正卡在青苔石缝里。
+<<if Weather.isFreezing>>恒温铜管喷出的温热水雾笼罩着花坛四周，将那枚纯银袖扣烘得微微发暖。<<else>>细腻的喷淋水珠顺着银脉兰的叶片滚落，把袖扣表面的蓝宝石冲刷得晶莹剔透。<</if>>
+<<if ($stress or 0) gte 3500>>兰花清幽的香气随着水雾吸入肺腑，让你紧绷了一整天的太阳穴渐渐舒缓下来。<<else>>你蹲在大理石花坛边沿仔细端详，认出那正是艾弗里平时出席多瑙河街晚宴常戴的定制袖扣。<</if>>
+不远处的玻璃长廊外传来宾客散步的谈笑声，显然失主还没发现这枚袖扣落在了花坛排水槽里。
+<br><br>
+<<investigateicon>><<link [[小心翼翼地用指尖夹出那枚刻字纯银袖扣贴身收好 (0:04)|MP Region Glasshouse Orchid]]>><<pass 4>><<set $mpAveryCufflinkFound to 1>><<stress -4>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+<br>
+<<if ($skulduggery or 0) gte 300>>
+	<<sneakicon>><<link [[顺便拨开排水槽底部的浮沙摸出一枚遗落的旧银币 (0:04)|MP Region Glasshouse Orchid]]>><<pass 4>><<set $mpAveryCufflinkFound to 1>><<money 500>><<skulduggery 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<br>
+<<else>>
+	<<walkicon>><<link [[伸手去抠石缝时被花坛边缘的玫瑰刺扎痛指尖 (0:04)|MP Region Glasshouse Orchid]]>><<pass 4>><<pain 3>><<stress 2>><<set $eventskip to 1>><<endevent>><</link>><<gpain>>
+	<br>
+<</if>>
+<<getouticon>><<link [[退开大理石花坛返回温室庄园主入口 (0:02)|MP Region Glasshouse Manor]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>

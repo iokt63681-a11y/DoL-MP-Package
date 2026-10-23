@@ -43,7 +43,7 @@
     "Danube Street", "Connudatus Street", "Cliff Street", "Wolf Street", "High Street",
     "Starfish Street", "Nightingale Street", "Oxford Street", "Mer Street", "Elk Street",
     "Harvest Street", "Park", "Beach", "Sea Beach", "Sea Rocks", "Rocks", "Rocks Pool",
-    "Rocks Dive", "Beach Cave", "Beach Cave Entrance", "Forest", "Deep Forest",
+    "Rocks Dive", "Beach Cave", "Beach Cave Entrance", "Forest",
     "Hallways", "School", "School Hallways", "School Front", "School Front Courtyard",
     "School Library", "School Toilets", "Canteen", "Classroom", "Science Classroom",
     "Maths Classroom", "English Classroom", "History Classroom", "Swimming Pool",
@@ -307,7 +307,7 @@
     ["Hallways", "Swimming Pool", 2],
     ["Beach", "Sea Rocks", 3],
     ["Sea Rocks", "Beach Cave", 4],
-    ["Forest", "Deep Forest", 10],
+    ["Forest", 10],
     ["Forest", "Cottage", 10],
     ["Deep Forest", "Cottage", 5],
     ["Deep Forest", "Wolf Cave", 6],
@@ -1985,6 +1985,7 @@
     ["MP Region Sunken Abbey", "地下古修道院"],
     ["MP Region Abbey", "地下古修道院"],
     ["MP Region Glasshouse", "秘密温室庄园"],
+    ["MP Mansion", "多瑙河街宅邸"],
     ["MP Region Blackiron", "黑铁货运站"],
     ["MP Region Druid", "古德鲁伊石环"],
     ["MP Region Velvet", "峭壁天鹅绒暗层"],
@@ -2048,7 +2049,7 @@
     { name: "mp_world_curio_peddler", weight: 0.35, locs: ["High Street", "Connudatus Street", "Starfish Street", "Commercial Alleyways"], content: "<<include \"MP World Event Curio Peddler\">>" },
     { name: "mp_world_smuggler_drop", weight: 0.35, locs: ["Mer Street", "Elk Street", "Harvest Street", "Docks", "Industrial Alleyways"], minSkul: 150, content: "<<include \"MP World Event Smuggler Drop\">>" },
     { name: "mp_world_driftwood_chest", weight: 0.35, locs: ["Beach", "Sea Rocks", "Beach Cave"], content: "<<include \"MP World Event Driftwood Chest\">>" },
-    { name: "mp_world_forest_shrine", weight: 0.35, locs: ["Forest", "Deep Forest"], content: "<<include \"MP World Event Forest Shrine\">>" },
+    { name: "mp_world_forest_shrine", weight: 0.35, locs: ["Forest"], content: "<<include \"MP World Event Forest Shrine\">>" },
     { name: "mp_world_park_sketchbook", weight: 0.35, locs: ["Park", "Nightingale Street", "Oxford Street"], content: "<<include \"MP World Event Park Sketchbook\">>" },
     { name: "mp_world_temple_censer", weight: 0.35, locs: ["Wolf Street", "Temple"], content: "<<include \"MP World Event Temple Censer\">>" },
     { name: "mp_world_sewer_cache", weight: 0.4, locs: ["Sewers", "Commercial Alleyways", "Industrial Alleyways"], minSkul: 200, content: "<<include \"MP World Event Sewer Cache\">>" },
@@ -2066,7 +2067,7 @@
     { name: "mp_world_npc_noel_encounter", weight: 0.32, locs: ["Oxford Street", "Park", "School Library", "Hallways"], content: "<<include \"MP NPC Noel Street Encounter\">>" },
     { name: "mp_world_npc_lin_encounter", weight: 0.32, locs: ["Domus Street", "Barb Street", "Residential Alleyways", "Orphanage"], content: "<<include \"MP NPC Lin Street Encounter\">>" },
     { name: "mp_world_npc_monet_encounter", weight: 0.32, locs: ["Connudatus Street", "Cliff Street", "Ocean Breeze"], content: "<<include \"MP NPC Monet Street Encounter\">>" },
-    { name: "mp_world_npc_ash_encounter", weight: 0.32, locs: ["Forest", "Deep Forest", "Temple", "Sewers"], content: "<<include \"MP NPC Ash Street Encounter\">>" },
+    { name: "mp_world_npc_ash_encounter", weight: 0.32, locs: ["Forest", "Temple", "Sewers"], content: "<<include \"MP NPC Ash Street Encounter\">>" },
     { name: "mp_world_deep_router", weight: 0.45, locs: SAFE_PASSAGES, content: "<<include \"MP World Deep Router\">>" }
   ];
 
@@ -3795,7 +3796,7 @@
       passage: "MP Quest Beach Shipwreck"
     },
     {
-      locs: ["Forest", "Deep Forest"],
+      locs: ["Forest"],
       check: function (v) { return (Number(v.mpQuestManorRuins) || 0) < 7 && (!v.daily || !v.daily.mpQuestManorRuins); },
       hint: "密林深处的荆棘丛后隐约可见半截坍塌的石砌拱门。",
       icon: "img/misc/icon/forest.png",
@@ -3833,6 +3834,14 @@
       icon: "img/misc/icon/sneak.png",
       linkText: "顺着粉笔记号探索暗渠 (0:10)",
       passage: "MP Quest Sewers Market"
+    },
+    {
+      locs: ["Danube Street", "MP Region Glasshouse Manor"],
+      check: function (v) { return true; },
+      hint: "多瑙河街名流宅邸的雕花铁门与温室连廊间车马往来，隐约传来艾弗里与宴会宾客的交谈声。",
+      icon: "img/misc/icon/socialise.png",
+      linkText: "走近多瑙河街宅邸圈层 (0:05)",
+      passage: "MP Mansion Pool Router"
     },
     {
       locs: ["Danube Street"],
@@ -4114,7 +4123,7 @@
       key: "ash",
       name: "阿什",
       title: "林间与古墓守灯人",
-      locs: ["Forest", "Deep Forest", "Temple", "Sewers"],
+      locs: ["Forest", "Temple", "Sewers"],
       hours: [6, 23],
       hint: "提着防风油灯的阿什正站在石径旁，替脚边的猎犬解开荆棘。",
       icon: "img/misc/icon/forest.png",
