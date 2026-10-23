@@ -1,8 +1,8 @@
 # DoL-MP 整合包
 
-**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.1.0-dev2**
+**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.1.0-dev3**
 
-> **开发预览版**：这一版是内容整改中的预览包，town/wilds/main/region bank 还在继续重写；稳定版仍是 v1.0.0。
+> **开发预览版**：这一版是内容整改中的预览包，town/wilds/region bank 还在继续重写；稳定版仍是 v1.0.0。
 
 > **18+ 成人内容警告**：本仓库包含成人向文字游戏及其模组，仅面向成年人。请勿向未成年人传播。
 >
@@ -16,7 +16,7 @@
 
 - 游戏本体（含 ModLoader）
 - 汉化包、官方图片包
-- DoL-MP v1.1.0-dev2 联机模组（含完整源码）
+- DoL-MP v1.1.0-dev3 联机模组（含完整源码）
 - 联机服务器（Node.js，依赖已内置）
 - 中文说明书 `说明书.md`
 
@@ -29,7 +29,7 @@
 | `game/Degrees of Lewdity.html` | 游戏本体（ModLoader 版，64MB） |
 | `mods/ModI18N-0.5.12.13-chs-1.0.1a.mod.zip` | 中文汉化包 |
 | `mods/GameOriginalImagePack-0.5.12.13.mod.zip` | 官方图片包 |
-| `mods/DoL-MP-v1.1.0-dev2.mod.zip` | DoL-MP 联机模组（可直接添加） |
+| `mods/DoL-MP-v1.1.0-dev3.mod.zip` | DoL-MP 联机模组（可直接添加） |
 | `mod-src/` | DoL-MP 模组源码（`boot.json` / JS / CSS / Twee / 图标） |
 | `server/` | 联机服务器（`server.js` + 已内置 `ws` 依赖） |
 | `start-game.bat` | 启动游戏 |
@@ -80,12 +80,15 @@ npm install
 
 ---
 
-## v1.1.0-dev2 更新要点
+## v1.1.0-dev3 更新要点
 
 - 19 个 twee，约 768 个 passage
 - **new-regions 发现层**：8 区域 ×（hub + Scout + Ask），32 个 `$mpKnown`，0 个无条件"前往"
 - **world-events 长任务**：34 个事件扩成 100 段，54 个检查，接入 `$mpClues`/`$mpKnown`
 - **grand 长任务**：16 条长线 × 7 阶段拆成 112 段，47 个检查，32 个 `$mpClues`
+- **main 线索门控**：12 章 hub 改成 NPC 引路 + `$mpClues["main_eclipse_N"]`，不再旁白剧透
+- **联机同步修复**：同步事件身份（passage + phase + 事件名），选项按 `eventKey` 分组；去掉 `linkIndex` 兜底；`event_pick` 优先；新增 `event_resync`
+- **联机选项改为提议制**：第一次点击只发提议，队友看到「同意 / 不同意」；不同意则取消，不强制移动；房主移动不再强拉队友，先汇合再同步
 - **4 个 P0 修复**：未注册的 `workicon`、3 个不存在的返回目标、9 个错位的 `$mpKnown` key、`mpAmbient` 缺 case
 - **室内外补全**：740/768 个 passage 已设置 `$outside` / `$location`
 - 8 个新区域、6 个新 NPC、5 个软坏结局、5 个精英遭遇战

@@ -2091,6 +2091,7 @@
     if (S.syncMode && S.connected && S.room && !S._suppressEventPick) {
       send({
         t: "event_pick",
+        eventKey: currentEventKey(),
         name: S.lastEventPick.name,
         content: S.lastEventPick.content,
         passage: S.lastEventPick.passage,
@@ -3183,6 +3184,7 @@
     S._preTurnBackup = null;
     S.myVotedIndex = -1;
     S.currentVotes = [];
+    clearLinkProposalBox();
     var v = V();
     if (v) {
       v.eventskip = 1;
@@ -3477,6 +3479,14 @@
     return valid;
   }
 
+  function currentEventKey() {
+    var v = V();
+    var pas = (window.State && State.passage) || "";
+    var ph = v && v.phase !== undefined ? v.phase : "";
+    var ev = (S.lastEventPick && S.lastEventPick.name) || (v && v.eventPoolOverride) || "";
+    return pas + "#" + ph + "#" + ev;
+  }
+
   function bindPassageLinkInterceptor() {
     var host = document.getElementById("passages");
     if (!host || host._mpLinkBound) return;
@@ -3501,7 +3511,6 @@
       ev.preventDefault();
       ev.stopImmediatePropagation();
 
-      var forceCommit = (S.myVotedIndex === idx);
       S.myVotedIndex = idx;
       var txt = (a.textContent || "").trim();
       var targetPas = a.getAttribute("data-passage") || "";
@@ -3510,12 +3519,13 @@
       send({
         t: "link_vote",
         passage: (window.State && State.passage) || "",
+        eventKey: currentEventKey(),
         linkIndex: idx,
         linkKey: linkKey,
         linkText: txt,
         targetPassage: targetPas,
         eventContext: extractEventContext(),
-        force: forceCommit
+        force: false
       });
 
       renderLinkVoteBadges();
@@ -3549,6 +3559,79 @@
     });
   }
 
+  function clearLinkProposalBox() {
+    var old = document.getElementById("mp-link-proposal");
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+  }
+
+  function voteForKey(v) {
+    if (!v || !v.linkKey) return false;
+    var links = getPassageInternalLinks();
+    for (var i = 0; i < links.length; i++) {
+      var key = (links[i].getAttribute("data-passage") || "") + "\u0001" + (links[i].textContent || "").trim();
+      if (key === v.linkKey) {
+        S.myVotedIndex = i;
+        send({
+          t: "link_vote",
+          passage: (window.State && State.passage) || "",
+          eventKey: currentEventKey(),
+          linkIndex: i,
+          linkKey: key,
+          linkText: (links[i].textContent || "").trim(),
+          targetPassage: links[i].getAttribute("data-passage") || "",
+          eventContext: extractEventContext(),
+          force: false
+        });
+        renderLinkVoteBadges();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function renderLinkProposal() {
+    clearLinkProposalBox();
+    var votes = S.currentVotes || [];
+    if (!votes.length || !S.syncMode) return;
+    var host = document.getElementById("passages");
+    if (!host) return;
+    var mine = null, first = votes[0];
+    for (var i = 0; i < votes.length; i++) {
+      if (votes[i].id === S.id) { mine = votes[i]; break; }
+    }
+    var box = el("div", { id: "mp-link-proposal", class: "mp-link-proposal" });
+    box.style.cssText = "margin:8px 0 10px;padding:8px 10px;border:1px solid #7a5c2e;background:#2b2419;color:#e8dcc0;font-size:13px;line-height:1.6;";
+    box.appendChild(el("span", { text: (first.name || "队友") + " 提议：" }));
+    box.appendChild(el("b", { text: first.linkText || first.targetPassage || "某个选项" }));
+    if (!mine) {
+      var yes = el("button", { text: "同意" });
+      yes.style.cssText = "margin-left:10px;padding:2px 10px;cursor:pointer;";
+      yes.addEventListener("click", function (ev) {
+        ev.preventDefault(); ev.stopPropagation();
+        if (!voteForKey(first)) {
+          S.lastChannelTip = "同步未命中，正在重新校准事件";
+          renderChannelBar();
+          send({ t: "event_resync" });
+        }
+      });
+      var no = el("button", { text: "不同意" });
+      no.style.cssText = "margin-left:6px;padding:2px 10px;cursor:pointer;";
+      no.addEventListener("click", function (ev) {
+        ev.preventDefault(); ev.stopPropagation();
+        send({ t: "link_disagree", passage: (window.State && State.passage) || "", eventKey: currentEventKey() });
+        clearLinkProposalBox();
+        S.currentVotes = [];
+        S.myVotedIndex = -1;
+        renderLinkVoteBadges();
+      });
+      box.appendChild(yes);
+      box.appendChild(no);
+    } else {
+      box.appendChild(el("span", { text: "（已投，等待队友回应）" }));
+    }
+    host.insertBefore(box, host.firstChild);
+  }
+
   function executeCommittedLink(msg) {
     if (!msg) return;
     if (msg.prng) applySharedPrng(msg.prng);
@@ -3573,7 +3656,17 @@
         if (lk === msg.linkKey) { targetEl = links[li]; break; }
       }
     }
-    if (!targetEl) targetEl = links[msg.linkIndex];
+    if (!targetEl) {
+      S.lastChannelTip = "同步未命中，正在重新校准事件";
+      renderChannelBar();
+      if (msg.targetPassage) {
+        S._syncJumpPassage = msg.targetPassage;
+        enginePlay(msg.targetPassage);
+      } else {
+        send({ t: "event_resync" });
+      }
+      return;
+    }
     if (targetEl && !targetEl._mpMirroredLink) {
       S.bypassLinkIntercept = true;
       S._navByUs = true;
@@ -5526,6 +5619,7 @@
         if (S.combatId) break;
         var targetPas = msg.passage || "";
         if (!targetPas) break;
+        S.currentEventKey = msg.eventKey || "";
         var badPas = ["Start", "Start2", "Orphanage Intro", MP_COMBAT_PASSAGE, "MP Native Combat Finish"];
         if (badPas.indexOf(targetPas) >= 0 || targetPas.indexOf("MP Player Interact") === 0 || targetPas.indexOf("MP Companion") === 0) break;
 
@@ -5539,12 +5633,17 @@
         if (msg.eventContext) {
           applyEventContext(msg.eventContext);
         }
+        if (msg.name || msg.content) {
+          vj.eventPoolOverride = msg.name || "inline_event";
+          vj.eventPoolOverrideContent = msg.content || "";
+          vj.eventPoolOverridePrng = msg.prng || S.prng;
+        }
         if (msg.reason === "host_move" && SAFE_PASSAGES.indexOf(targetPas) >= 0 && vj) {
           vj.eventskip = 1;
         }
         S.myVotedIndex = -1;
         S.currentVotes = [];
-        if (curPas !== targetPas || msg.reason === "phase_change") {
+        if (curPas !== targetPas || msg.reason === "phase_change" || msg.forceEvent) {
           S._syncJumpPassage = targetPas;
           enginePlay(targetPas);
         }
@@ -5559,6 +5658,7 @@
         var vEv = V();
         if (msg.eventContext) applyEventContext(msg.eventContext);
         if (msg.prng) applySharedPrng(msg.prng);
+        S.currentEventKey = msg.eventKey || currentEventKey();
         vEv.eventforced = 1;
         vEv.mpForceEventOnce = 1;
         vEv.eventskip = 0;
@@ -5726,12 +5826,34 @@
         if (window.State && State.passage === msg.passage) {
           S.currentVotes = msg.votes || [];
           renderLinkVoteBadges();
+          renderLinkProposal();
         }
+        break;
+
+      case "link_cancel":
+        S.currentVotes = [];
+        S.myVotedIndex = -1;
+        clearLinkProposalBox();
+        renderLinkVoteBadges();
+        S.lastChannelTip = "队友不同意，本次同步取消";
+        renderChannelBar();
+        toast("队友不同意，本次同步取消", "mp-wait");
+        break;
+
+      case "host_moved":
+        S.lastChannelTip = (msg.fromName || "房主") + " 去了 " + (msg.passage || "别处") + "，先汇合再同步";
+        renderChannelBar();
+        toast(S.lastChannelTip, "mp-wait");
         break;
 
       case "link_commit":
         if (window.State && State.passage === msg.passage) {
           executeCommittedLink(msg);
+        } else if (msg.targetPassage) {
+          S._syncJumpPassage = msg.targetPassage;
+          enginePlay(msg.targetPassage);
+        } else {
+          send({ t: "event_resync" });
         }
         break;
 
@@ -6935,6 +7057,8 @@
         send({
           t: "event_trigger",
           passage: curPasNow,
+          eventKey: currentEventKey(),
+          prng: S.prng,
           phase: vNow ? vNow.phase : undefined,
           eventContext: extractEventContext(),
           priority: (nowInCombat || isRandomEvent) ? 2 : 1,
@@ -6965,6 +7089,9 @@
     S._lastInCombat = nowInCombat;
 
     sendState(true);
+    S.currentVotes = [];
+    S.myVotedIndex = -1;
+    clearLinkProposalBox();
     bindPassageLinkInterceptor();
     injectInlinePassageSections();
     enhanceNativeCombatDOM();

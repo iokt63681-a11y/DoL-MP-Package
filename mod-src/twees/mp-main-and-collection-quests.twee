@@ -1,8 +1,8 @@
-/* 12章主线《潮汐与雾月之蚀》与6条跨区域搜集支线 / 零副本·全差分 */
+/* 12章主线《潮汐与雾月之蚀》与6条跨区域搜集支线 / 线索门控·NPC引路 */
 
 :: MP Main Story Eclipse Hub [nobr]
-<<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<set $outside to 1>><<set $location to "town">><<effects>>
+<<set $mpClues to ($mpClues or {})>>
 <<set _stg to ($mpMainStoryEclipse or 0)>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -10,92 +10,126 @@
 <</if>>
 
 <<if _stg is 0>>
-	高街与孤儿院交界的石墙下，你循着那枚新近刻下的新月水波纹记号摸索过去，在松动的基石后方翻出了半页被扯下的孤儿院早年收养账册。纸页边缘盖着一枚带有钟摆与海浪图案的暗章，背面用铅笔写着高街钟表旧货铺的门牌与一组微缩音筒编号。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
+	<<set $outside to 1>><<set $location to "high">>
+	高街与孤儿院交界的石墙下，罗宾抱着洗衣篮停在拐角，朝墙根那枚新刻的新月记号努了努嘴。
+	「昨晚有人在这儿翻东西，」罗宾压低声音，「我好像看见半页孤儿院的旧账册。」
+	石墙下方的基石确实松了一块，缝里塞着被雨水泡软的纸角。
 	<br><br>
-	<<investigateicon>><<link [[核对孤儿院旧账册与钟表铺音筒编号 (0:14)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 14>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
+	<<investigateicon>><<link [[撬开基石 (0:05)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_1"] to 1>><<set $mpMainStoryEclipse to 1>><<pass 5>><</link>>
 	<br>
+	<<socialiseicon>><<link [[先问罗宾 (0:03)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_1"] to 1>><<set $mpMainStoryEclipse to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin trust 1>><</if>><<pass 3>><</link>>
 <</if>>
-<<if _stg is 1>>
-	你带着账册残页来到高街钟表铺后巷的检修井旁，顺着编号在排风栅格内侧找到了一枚密封的黄铜密文音筒。当你将音筒放在耳畔转动时，齿轮拨片打出的节拍与牛津街旧学园天文翼楼的星象刻度完全吻合。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
+<<if _stg is 1 and ($mpClues["main_eclipse_1"] or $mpMainStoryEclipse gte 1)>>
+	<<set $outside to 0>><<set $location to "high">>
+	高街钟表铺的铜铃在门后轻响。塞拉把放大镜推到额头上，接过你手里的账册残页。
+	「这组音筒编号不是给人看的，」她指尖点了点纸角，「是给旧学园天文翼楼的赤道仪校准用的。」
+	她把一枚黄铜音筒推回你手边，示意你天亮前别从正门进去。
 	<br><br>
-	<<investigateicon>><<link [[破译黄铜音筒上的星象刻度 (0:18)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 18>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<investigateicon>><<link [[校准赤道仪 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_2"] to 1>><<set $mpMainStoryEclipse to 2>><<pass 8>><</link>>
 <</if>>
-<<if _stg is 2>>
-	夜幕低垂时，你潜入牛津街旧学园天文翼楼的折光穹顶室，将黄铜音筒嵌入古老赤道仪的校准槽内。透过镜片折射出的星光在星图档案室的地板上投射出一道坐标，清晰地指向了圣堂地下古修道院的灰烬藏经阁。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
+<<if _stg is 2 and ($mpClues["main_eclipse_2"] or $mpMainStoryEclipse gte 2)>>
+	<<set $outside to 0>><<set $location to "school">>
+	天文翼楼的折光穹顶室里，诺艾尔正把一叠星图塞回柜子。
+	「赤道仪的刻度被人动过，」她看见你手里的音筒，压低声音，「和神殿地下那批旧碑文是同一套记号。」
+	她把一张写着「灰烬藏经阁」的便签夹进你的袖口。
 	<br><br>
-	<<investigateicon>><<link [[利用赤道仪折射星光定位修道院坐标 (0:22)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 22>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<investigateicon>><<link [[去藏经阁 (0:10)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_3"] to 1>><<set $mpMainStoryEclipse to 3>><<pass 10>><</link>>
 <</if>>
-<<if _stg is 3>>
-	你顺着神殿后方的古老旋梯下到圣堂地下古修道院。在灰烬藏经阁的残碑后方，你拓下了一段百年前『雾月结社』留下的碑文——上面记载着他们每隔十年便会在多瑙河秘密温室庄园举行一次决定小镇资金暗流的午夜集会。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
+<<if _stg is 3 and ($mpClues["main_eclipse_3"] or $mpMainStoryEclipse gte 3)>>
+	<<set $outside to 0>><<set $location to "temple">>
+	神殿后方的旋梯通向地下修道院。约旦提着一盏小灯站在灰烬藏经阁门口。
+	「你带来的账册和这里的碑文能对上，」他说，「但接下来的名字不该由我说出口。」
+	他把灯留给你，转身退回楼梯。
 	<br><br>
-	<<investigateicon>><<link [[拓印修道院残碑上的雾月结社记录 (0:16)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 16>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<investigateicon>><<link [[拓下碑文 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_4"] to 1>><<set $mpMainStoryEclipse to 4>><<pass 12>><</link>>
 <</if>>
-<<if _stg is 4>>
-	借着夜雾的掩护，你从冬青树篱的小门潜入多瑙河秘密温室庄园。在雾化兰花厅的玻璃穹顶下，你截获了一份刚刚签署的密件：一批关乎孤儿院地契与旧港控制权的铅封暗箱，正准备通过麋鹿街黑铁货运站的装甲货车连夜转运。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
+<<if _stg is 4 and ($mpClues["main_eclipse_4"] or $mpMainStoryEclipse gte 4)>>
+	<<set $outside to 0>><<set $location to "avery_mansion">>
+	多瑙河秘密温室的玻璃穹顶下，一名侍者正把一叠请柬塞进银盘。
+	「今晚的客人里有人提到黑铁货运站，」他低声说，「三号装甲车，午夜换班。」
+	你借着兰花架挡住身形，记下了车厢编号。
 	<br><br>
-	<<investigateicon>><<link [[在雾化兰花厅截获转运密件 (0:20)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 20>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<if ($skulduggery or 0) gte 300>>
+		<<sneakicon>><<link [[潜入货运站 (0:15)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_5"] to 1>><<set $mpMainStoryEclipse to 5>><<pass 15>><</link>>
+	<<else>>
+		<<walkicon>><<link [[绕到后门 (0:20)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_5"] to 1>><<set $mpMainStoryEclipse to 5>><<pass 20>><<stress 3>><</link>>
+	<</if>>
 <</if>>
-<<if _stg is 5>>
-	你沿着生锈的铁轨潜入麋鹿街黑铁货运站，在信号塔换班的短短数分钟内撬开了三号装甲货车的侧门。你在密封铁箱夹层里找到了一本完整的早年收养与债券总账，上面提及开启最终金库的信物被存放在深林古德鲁伊石环的月泉下。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
+<<if _stg is 5 and ($mpClues["main_eclipse_5"] or $mpMainStoryEclipse gte 5)>>
+	<<set $outside to 1>><<set $location to "docks">>
+	黑铁货运站的信号塔下，一名老码头工正往手心哈气。
+	「三号车昨晚拉走了一箱不该拉的东西，」他朝铁轨尽头抬了抬下巴，「司机说下一站在森林边的石环。」
+	你记下他说的月泉方位。
 	<br><br>
-	<<investigateicon>><<link [[潜入三号装甲货车搜寻铅封总账 (0:25)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 25>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<investigateicon>><<link [[去石环 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_6"] to 1>><<set $mpMainStoryEclipse to 6>><<pass 12>><</link>>
 <</if>>
-<<if _stg is 6>>
-	你穿过深林迷雾来到古德鲁伊石环，在月泉祭坛清冽的泉水底部摸到了半枚青铜新月徽章。另一半徽章则被标注为峭壁天鹅绒暗层即将举行的午夜假面拍卖会的压轴拍品。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
+<<if _stg is 6 and ($mpClues["main_eclipse_6"] or $mpMainStoryEclipse gte 6)>>
+	<<set $outside to 1>><<set $location to "forest">>
+	深林月泉的水面映着碎月。伊甸蹲在石环边磨刀，听见脚步声也没抬头。
+	「你找的那半枚徽章在泉底，」她用刀尖指了指水面，「另外半枚今晚会在峭壁的假面拍卖会上出现。」
+	她把一根细绳递给你。
 	<br><br>
-	<<investigateicon>><<link [[在深林月泉底部寻获半枚新月徽章 (0:19)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 19>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<if ($swimmingskill or 0) gte 250>>
+		<<link [[潜到泉底 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_7"] to 1>><<set $mpMainStoryEclipse to 7>><<pass 8>><</link>>
+	<<else>>
+		<<link [[用细绳慢慢捞 (0:14)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_7"] to 1>><<set $mpMainStoryEclipse to 7>><<pass 14>><<stress 2>><</link>>
+	<</if>>
 <</if>>
-<<if _stg is 7>>
-	你戴上银丝假面步入峭壁天鹅绒暗层的私人拍卖暗厅，借着灯光转换与声东击西之计，从后台保管匣中取回了另外半枚新月徽章。两半徽章合拢的瞬间，内壁浮现出旧钟塔地下机括城的主阀门深度图。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
+<<if _stg is 7 and ($mpClues["main_eclipse_7"] or $mpMainStoryEclipse gte 7)>>
+	<<set $outside to 0>><<set $location to "brothel">>
+	峭壁天鹅绒暗层的拍卖厅里，布莱尔隔着人群朝你举了举杯。
+	「压轴拍品在我后廊的保险柜里，」布莱尔用只有你能听见的声音说，「你要是能混进后台，我可以当没看见。」
+	后台的门边站着两名执事。
 	<br><br>
-	<<investigateicon>><<link [[在天鹅绒假面拍卖厅取回另一半徽章 (0:24)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 8>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 24>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_8")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<if ($seductionskill or 0) gte 350 or ($skulduggery or 0) gte 350>>
+		<<brothelicon>><<link [[混进后台 (0:10)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_8"] to 1>><<set $mpMainStoryEclipse to 8>><<pass 10>><</link>>
+	<<else>>
+		<<walkicon>><<link [[等执事换班 (0:16)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_8"] to 1>><<set $mpMainStoryEclipse to 8>><<pass 16>><<stress 2>><</link>>
+	<</if>>
 <</if>>
-<<if _stg is 8>>
-	你深入旧钟塔地下机括城的蒸汽压力室，将合二为一的新月徽章嵌入青铜主控盘。伴随着低沉轰鸣的齿轮合龙声，封锁地下暗河与外海航道的暗闸彻底升起，露出了通往雾角灯塔岛的秘密航标。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
+<<if _stg is 8 and ($mpClues["main_eclipse_8"] or $mpMainStoryEclipse gte 8)>>
+	<<set $outside to 0>><<set $location to "underground">>
+	旧钟塔地下机括城的蒸汽压力室里，铜管嗡嗡作响。你手里的两半徽章在控制盘前轻轻发烫。
+	墙上的刻度显示，主阀门的位置和账册最后一页的暗号一致。
 	<br><br>
-	<<investigateicon>><<link [[嵌入新月徽章重启机括城主控齿轮 (0:28)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 9>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 28>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_9")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<if ($maths or 0) gte 300>>
+		<<link [[校准主阀 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_9"] to 1>><<set $mpMainStoryEclipse to 9>><<pass 12>><</link>>
+	<<else>>
+		<<link [[按刻度慢慢试 (0:18)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_9"] to 1>><<set $mpMainStoryEclipse to 9>><<pass 18>><<stress 2>><</link>>
+	<</if>>
 <</if>>
-<<if _stg is 9>>
-	你在旧港区与下水道交汇的暗河渡口截断了结社的备用补给船，从船舱里搜出了雾角灯塔岛顶层铜门的开启手轮与航海海图。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
+<<if _stg is 9 and ($mpClues["main_eclipse_9"] or $mpMainStoryEclipse gte 9)>>
+	<<set $outside to 0>><<set $location to "sewers">>
+	旧港与下水道交汇的暗河渡口，一艘没有灯的小船靠在石阶下。
+	船头的守夜人认出了你手里的徽章，把一只防水油布包推过来。
+	「灯塔顶层的手轮和这张海图，」他说，「拿了就走吧，别回头。」
 	<br><br>
-	<<investigateicon>><<link [[在暗河渡口截获灯塔顶层铜门手轮 (0:21)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 10>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 21>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_10")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<investigateicon>><<link [[收下油布包 (0:06)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_10"] to 1>><<set $mpMainStoryEclipse to 10>><<pass 6>><</link>>
 <</if>>
-<<if _stg is 10>>
-	风暴欲来的黄昏，你解开海礁外侧的木舟划向海雾深处的雾角灯塔岛。穿过断桅沉船滩与海蚀回音廊，你一路拾级而上，站在了灯塔最顶层的青铜大门前。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
+<<if _stg is 10 and ($mpClues["main_eclipse_10"] or $mpMainStoryEclipse gte 10)>>
+	<<set $outside to 1>><<set $location to "searocks">>
+	风暴欲来的黄昏，你把木舟系在雾角灯塔岛南侧的系船石阶上。
+	断桅沉船滩的残骸在脚下咔咔作响，海蚀回音廊方向传来低沉的风鸣。
+	灯塔顶层的铜门在雾里只剩一个模糊的轮廓。
 	<br><br>
-	<<investigateicon>><<link [[顶着海风登上雾角灯塔岛顶层 (0:32)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 11>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 32>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_11")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<if ($athletics or 0) gte 300 or ($physique or 0) gte 12000>>
+		<<walkicon>><<link [[顶着海风登塔 (0:18)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_11"] to 1>><<set $mpMainStoryEclipse to 11>><<pass 18>><</link>>
+	<<else>>
+		<<walkicon>><<link [[沿背风面慢慢爬 (0:24)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_11"] to 1>><<set $mpMainStoryEclipse to 11>><<pass 24>><<stress 2>><</link>>
+	<</if>>
 <</if>>
-<<if _stg is 11>>
-	你转动手轮推开雾角灯塔顶层的青铜大门。在巨大的旋转透镜下，所有关于孤儿院早年地契、古董基金与走私暗网的原始契约尽数陈列在铁柜之中。你将铁证与基金彻底收归己有，用灯塔的光束向全镇宣告了旧日阴霾的终结。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
+<<if _stg is 11 and ($mpClues["main_eclipse_11"] or $mpMainStoryEclipse gte 11)>>
+	<<set $outside to 1>><<set $location to "sea">>
+	灯塔顶层的旋转透镜下，铁柜里的契约、账册和基金凭证码得整整齐齐。
+	你转动手轮，青铜门在身后合拢，光束扫过夜海。
 	<br><br>
-	<<investigateicon>><<link [[开启灯塔顶层铁柜迎来最终终局 (0:35)|MP Main Story Eclipse Resolve]]>><<set $mpMainStoryEclipse to 12>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpMainStoryEclipse to 1>><<pass 35>><<stress -6>><<willpower 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("main_eclipse_ch_12")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
-	<br>
+	<<investigateicon>><<link [[打开铁柜 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_12"] to 1>><<set $mpMainStoryEclipse to 12>><<pass 8>><</link>>
 <</if>>
 <<if _stg gte 12>>
-	雾角灯塔的光束在夜海中平稳地旋转着。『潮汐与雾月之蚀』的十二章暗流已由你亲手平息，无论是孤儿院的同伴还是镇上的故交，都因你的壮举而得以安宁。
+	<<set $outside to 1>><<set $location to "sea">>
+	灯塔的光束在夜海上平稳旋转。账册、契约与基金凭证都已收好，剩下的只是如何处置它们。
 	<br><br>
+	<<investigateicon>><<link [[整理线索 (0:03)|MP Main Story Eclipse Resolve]]>><<pass 3>><</link>>
 <</if>>
 <<getouticon>><<link [[收好线索返回 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
@@ -106,16 +140,16 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Orphanage">>
 <</if>>
-你将『潮汐与雾月之蚀』第 <<print ($mpMainStoryEclipse or 1)>> 章的关键物证收入防水暗袋，在脑海中将钟表铺、天文翼楼、地下修道院与雾角灯塔岛的脉络逐一印证。
+你将第 <<print ($mpMainStoryEclipse or 1)>> 章的物证收进防水暗袋。
 <<if ($mpMainStoryEclipse or 0) gte 12>>
-	至此，席卷全镇的雾月暗流已被你彻底查明并平息，无论前路如何，你都已牢牢握住了自己的命运。<<stress -15>><<trauma -10>><<control 25>>
-<<elseif Time.dayState is "night">>
-	夜风吹散了街角的薄雾，你压低衣领悄然退回安全地带。
+	灯塔顶层的铁柜已经打开，契约、账册和基金凭证都在你手里。你靠着栏杆，听着海风从透镜间穿过。
+	<<stress -15>><<trauma -10>><<control 25>>
 <<else>>
-	街面上人流如织，你收好贴身物证，若无其事地汇入人群之中。
+	你把刚才看到的细节在脑子里过了一遍，确定下一步该从哪里查起。
+	<<if Time.dayState is "night">>夜风从街角卷过，你把衣领拉高。<</if>>
 <</if>>
 <br><br>
-<<investigateicon>><<link [[回顾当前主线进展 (0:03)|MP Main Story Eclipse Hub]]>><<pass 3>><</link>>
+<<investigateicon>><<link [[整理线索 (0:03)|MP Main Story Eclipse Hub]]>><<pass 3>><</link>>
 <br>
 <<getouticon>><<link [[返回原处 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 

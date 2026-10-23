@@ -868,6 +868,11 @@ function handleLinkVote(client, msg) {
   if (!room) return;
   const passage = text(msg.passage || client.passage, 120);
   if (!passage) return;
+  const eventKey = text(msg.eventKey || passage, 240);
+  if (room.currentEventKey && eventKey !== room.currentEventKey) {
+    send(client.ws, { t: "event_resync" });
+    return;
+  }
 
   const peers = groupedPeersInPassage(room, passage);
   const linkIndex = clampNum(msg.linkIndex, 0, 500, 0);
@@ -876,7 +881,7 @@ function handleLinkVote(client, msg) {
   const linkKey = text(msg.linkKey || (targetPassage + "\u0001" + linkText), 240);
   const eventContext = validJsonSnapshot(msg.eventContext, 48000) || client.eventContext || null;
 
-  if (peers.length <= 1 || !room.syncMode || msg.force) {
+  if (peers.length <= 1 || !room.syncMode) {
     room.prng = genPrngPack();
     const bucket = room.linkVotes.get(passage);
     if (bucket) {
@@ -916,6 +921,7 @@ function handleLinkVote(client, msg) {
   bucket.votes.set(client.id, {
     id: client.id,
     name: client.name,
+    eventKey,
     linkIndex,
     linkKey,
     linkText,
@@ -955,6 +961,14 @@ function checkAndCommitLinkVote(room, passage, isTimeout) {
 
   const allVoted = peers.every((m) => bucket.votes.has(m.id));
   if (!allVoted && !isTimeout) return;
+  if (!allVoted && isTimeout) {
+    if (bucket.timer) clearTimeout(bucket.timer);
+    room.linkVotes.delete(passage);
+    for (const m of peers) {
+      send(m.ws, { t: "link_cancel", passage, eventKey: room.currentEventKey || "", reason: "timeout" });
+    }
+    return;
+  }
 
   if (bucket.timer) clearTimeout(bucket.timer);
   room.linkVotes.delete(passage);
@@ -966,8 +980,21 @@ function checkAndCommitLinkVote(room, passage, isTimeout) {
   const firstKey = keyOf(votesArr[0]);
   const unanimous = votesArr.every((v) => keyOf(v) === firstKey);
 
-  const winner = unanimous ? votesArr[0] : votesArr[crypto.randomInt(votesArr.length)];
-  const reason = unanimous ? "unanimous" : "random";
+  if (!unanimous) {
+    for (const m of peers) {
+      send(m.ws, {
+        t: "link_cancel",
+        passage,
+        eventKey: room.currentEventKey || "",
+        reason: "disagree",
+        votes: votesArr.map((v) => ({ id: v.id, name: v.name, linkKey: keyOf(v), linkText: v.linkText })),
+      });
+    }
+    return;
+  }
+
+  const winner = votesArr[0];
+  const reason = "unanimous";
 
   room.prng = genPrngPack();
 
@@ -975,6 +1002,7 @@ function checkAndCommitLinkVote(room, passage, isTimeout) {
     send(m.ws, {
       t: "link_commit",
       passage,
+      eventKey: winner.eventKey || room.currentEventKey || "",
       linkIndex: winner.linkIndex,
       linkKey: keyOf(winner),
       linkText: winner.linkText,
@@ -1598,6 +1626,10 @@ function handleEventTrigger(client, msg) {
   client.passage = passage;
   if (msg.phase !== undefined) client.phase = msg.phase;
   client.inCombat = !!msg.inCombat;
+  if (room.eventPickPending && room.eventPickPending.has(client.id)) return;
+  const eventKey = text(msg.eventKey || (passage + "#" + (msg.phase !== undefined ? msg.phase : "")), 240);
+  const triggerPrng = (msg.prng && typeof msg.prng === "object" && msg.prng.seedStr) ? msg.prng : null;
+  if (room.currentEventKey && eventKey === room.currentEventKey && now() - (room.currentEventAt || 0) < 1500) return;
   const eventContext = validJsonSnapshot(msg.eventContext, 48000) || client.eventContext || null;
   if (eventContext) client.eventContext = eventContext;
 
@@ -1606,6 +1638,8 @@ function handleEventTrigger(client, msg) {
     name: client.name,
     passage,
     phase: msg.phase,
+    eventKey,
+    prng: triggerPrng,
     eventContext,
     priority: clampNum(msg.priority, 1, 2, 1),
     inCombat: !!msg.inCombat,
@@ -1613,6 +1647,45 @@ function handleEventTrigger(client, msg) {
   });
   if (!room.eventTimer) {
     room.eventTimer = setTimeout(() => resolveEventArbitration(room), EVENT_ARBITRATION_MS);
+  }
+}
+
+function handleLinkDisagree(client, msg) {
+  const room = roomOf(client);
+  if (!room || !room.syncMode) return;
+  const passage = text(msg.passage || client.passage, 120);
+  if (!passage) return;
+  const bucket = room.linkVotes.get(passage);
+  if (bucket) {
+    if (bucket.timer) clearTimeout(bucket.timer);
+    room.linkVotes.delete(passage);
+  }
+  for (const m of groupedPeersInPassage(room, passage)) {
+    send(m.ws, { t: "link_cancel", passage, eventKey: room.currentEventKey || "", reason: "disagree", by: client.name });
+  }
+}
+
+function handleEventResync(client) {
+  const room = roomOf(client);
+  if (!room || !room.syncMode || !room.currentEventPassage) return;
+  send(client.ws, {
+    t: "sync_jump",
+    passage: room.currentEventPassage,
+    eventKey: room.currentEventKey,
+    prng: room.currentPrng || genPrngPack(),
+    forceEvent: true,
+    reason: "resync",
+  });
+  if (room.currentEventName || room.currentEventContent) {
+    send(client.ws, {
+      t: "sync_event",
+      name: room.currentEventName,
+      content: room.currentEventContent,
+      passage: room.currentEventPassage,
+      eventKey: room.currentEventKey,
+      prng: room.currentPrng,
+      reason: "resync",
+    });
   }
 }
 
@@ -1626,6 +1699,7 @@ function handleEventPick(client, msg) {
   if (!passage) return;
   const eventContext = validJsonSnapshot(msg.eventContext, 48000) || client.eventContext || null;
   const prng = (msg.prng && typeof msg.prng === "object" && msg.prng.seedStr) ? msg.prng : null;
+  const eventKey = text(msg.eventKey || (passage + "##" + name), 240);
 
   room.eventPickPending.set(client.id, {
     clientId: client.id,
@@ -1633,6 +1707,7 @@ function handleEventPick(client, msg) {
     name,
     content,
     passage,
+    eventKey,
     prng,
     eventContext,
     at: now(),
@@ -1667,6 +1742,12 @@ function resolveEventPick(room) {
   room.eventPickCooldownUntil = now() + 1200;
   const syncPrng = winner.prng || genPrngPack();
   room.prng = syncPrng;
+  room.currentEventKey = winner.eventKey || (winner.passage + "##" + winner.name);
+  room.currentEventPassage = winner.passage;
+  room.currentEventName = winner.name;
+  room.currentEventContent = winner.content || "";
+  room.currentPrng = syncPrng;
+  room.currentEventAt = now();
 
   for (const c of room.members) {
     if (c.id === winner.clientId) continue;
@@ -1675,6 +1756,7 @@ function resolveEventPick(room) {
       name: winner.name,
       content: winner.content || "",
       passage: winner.passage,
+      eventKey: room.currentEventKey,
       prng: syncPrng,
       eventContext: winner.eventContext || null,
       fromId: winner.clientId,
@@ -1757,6 +1839,7 @@ function resolveEventArbitration(room) {
   });
   room.eventPending.clear();
   if (!room.syncMode || entries.length === 0) return;
+  if (room.eventPickPending && room.eventPickPending.size > 0) return;
 
   const maxP = Math.max(...entries.map((e) => e.priority || 1));
   const top = entries.filter((e) => (e.priority || 1) === maxP);
@@ -1773,11 +1856,18 @@ function resolveEventArbitration(room) {
     return;
   }
 
-  room.prng = genPrngPack();
+  room.prng = winner.prng || genPrngPack();
+  room.currentEventKey = winner.eventKey || winner.passage;
+  room.currentEventPassage = winner.passage;
+  room.currentEventName = "";
+  room.currentEventContent = "";
+  room.currentPrng = room.prng;
+  room.currentEventAt = now();
   for (const c of room.members) {
     if (c.id === winner.clientId) continue;
     send(c.ws, {
       t: "sync_jump",
+      eventKey: room.currentEventKey,
       fromId: winner.clientId,
       fromName: winner.name,
       passage: winner.passage,
@@ -2596,7 +2686,7 @@ wss.on("connection", (ws, req) => {
               }
               room.linkVotes.clear();
               const badJump = new Set(["Start", "Start2", "Orphanage Intro", ""]);
-              if ((SAFE_PASSAGES.has(client.passage) || samePassagePhaseChanged) && !badJump.has(client.passage) && !client.passage.startsWith("MP ") && !client.inCombat) {
+              if (samePassagePhaseChanged && !badJump.has(client.passage) && !client.passage.startsWith("MP ") && !client.inCombat) {
                 room.prng = genPrngPack();
                 sendToRoom(room, {
                   t: "sync_jump",
@@ -2607,7 +2697,14 @@ wss.on("connection", (ws, req) => {
                   eventContext: client.eventContext || null,
                   prng: room.prng,
                   inCombat: false,
-                  reason: samePassagePhaseChanged ? "phase_change" : "host_move",
+                  reason: "phase_change",
+                }, client.id);
+              } else if (!samePassagePhaseChanged && SAFE_PASSAGES.has(client.passage) && !badJump.has(client.passage) && !client.passage.startsWith("MP ") && !client.inCombat) {
+                sendToRoom(room, {
+                  t: "host_moved",
+                  fromId: client.id,
+                  fromName: client.name,
+                  passage: client.passage,
                 }, client.id);
               }
             }
@@ -2839,6 +2936,7 @@ wss.on("connection", (ws, req) => {
         }
 
         case "link_vote": handleLinkVote(client, msg); break;
+        case "link_disagree": handleLinkDisagree(client, msg); break;
         case "attack_request": handleAttackRequest(client, msg); break;
         case "consensual_accept": handleConsensualAnswer(client, msg, true); break;
         case "consensual_decline": handleConsensualAnswer(client, msg, false); break;
@@ -2847,6 +2945,7 @@ wss.on("connection", (ws, req) => {
         case "combat_exit": handleCombatExit(client); break;
         case "event_trigger": handleEventTrigger(client, msg); break;
         case "event_pick": handleEventPick(client, msg); break;
+        case "event_resync": handleEventResync(client); break;
         case "inline_dom_event": handleInlineDomEvent(client, msg); break;
         case "combat_sync_init": handleCombatSyncInit(client, msg); break;
         case "combat_turn": handleCombatTurn(client, msg); break;
