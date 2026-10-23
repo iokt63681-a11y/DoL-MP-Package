@@ -82,14 +82,16 @@ npm install
 
 ## v1.2.0-dev4 更新要点
 
-- 23 个 twee，约 915 个 passage
+- 24 个 twee，约 944 个 passage
 - **城镇 6 条暗线重写**：42 段，10 处 `skulduggerycheck`，22/42 段含技能门槛，最终报酬防重复结算
 - **荒野 6 条暗线重写**：42 段，24/42 段含检定，6 条软坏结局分支，每条 4 种脱身方式
 - **城镇小事 12 条**：36 段，高街布告栏入口
 - **荒野小事 10 条**：30 段，公园猎人行会木牌入口
 - **长期零工 6 条**：19 段，咖啡馆/鱼档/桑拿/农场/钟表学徒/浆洗房；等级 0–5、每日一次、失败扣钱、Lv3 里程碑
-- **新内容可达性**：171/171 个新 passage 可从入口 BFS 到达
-- **联机安全页扩展**：`MP Job` / `MP Side` / `MP Wild` / `MP Livelihood` 纳入 `isSafePassage`
+- **零工伙伴 5 条**：17 段，格威岚/塞拉/Alex/约旦/罗宾，Lv2 后按地点出现
+- **信物收集 6 条**：18 段 + hub，扩成 3 段式，奖励压到 £8/£16/£25
+- **新内容可达性**：188/188 个新 passage 可从入口 BFS 到达
+- **联机安全页扩展**：`MP Job` / `MP Jobline` / `MP Side` / `MP Wild` / `MP Livelihood` 纳入 `isSafePassage`
 - **本轮修复**：最终报酬刷钱、`$mpClues` 未初始化、`tendingicon` 未注册、`$swimming`/`$seduction` 变量名、`Weather.precipitation` 字符串比较、`spa` ambient、荒野小事缺 `[nobr]`、boot 清单
 - 继续保留：main 12 章线索门控、grand 112 段、world-events 100 段、new-regions 发现层、联机事件身份与提议制
 
