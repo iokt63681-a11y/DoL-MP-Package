@@ -1079,6 +1079,28 @@
         });
       } catch (e) {}
     });
+
+    try {
+      if (!M.get("mpnpcincr")) {
+        M.add("mpnpcincr", {
+          handler: function () {
+            try {
+              var name = String((this.args && this.args[0]) || "");
+              var stat = String((this.args && this.args[1]) || "love");
+              var val = Number(this.args && this.args[2]) || 0;
+              if (!name) return;
+              var v = V();
+              if (!v) return;
+              if (!v.mpNpcs || typeof v.mpNpcs !== "object") v.mpNpcs = {};
+              var key = name.toLowerCase();
+              if (!v.mpNpcs[key] || typeof v.mpNpcs[key] !== "object") v.mpNpcs[key] = {};
+              var cur = Number(v.mpNpcs[key][stat]) || 0;
+              v.mpNpcs[key][stat] = cur + val;
+            } catch (e) {}
+          }
+        });
+      }
+    } catch (e) {}
   }
 
   /* ---------------- 组队天气、温度、血月与淋雨湿透（Wetness）同步系统 ---------------- */
