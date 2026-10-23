@@ -1,821 +1,401 @@
-/* =========================================================================
-   离线伴侣可恋爱 NPC 系统 — 常驻孤儿院与全镇日程、五重性格差分与八章多结局个人长支线
-   ========================================================================= */
+/* 同伴系统 / 孤儿院与小镇常驻伴侣互动 / 核心场景 */
 
 :: MP Companion Hub [nobr]
 <<effects>>
 <<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
+<<if $mpCompanion and $mpCompanion.isPartnerOnline and window.dolmp and window.dolmp.findOnlineCompanionPeer and window.dolmp.findOnlineCompanionPeer()>>
+	<<set _livePeer to window.dolmp.findOnlineCompanionPeer()>>
+	<<set $mpInteractTargetId to _livePeer.id>>
+	<<set $mpInteractTargetName to _livePeer.name>>
+	<<run window.dolmp.openNativeInteract(_livePeer)>>
+<<else>>
 <<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek", persona: "meek", love: 0, trust: 0, lust: 0, jealousy: 0, corruption: 0, stage: "stranger" })>>
-<<set $mpInteractTargetName to _comp.name>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas is "Orphanage Intro" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Orphanage">>
 <</if>>
 <<endevent>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
-<div id="mp-rel-header" class="mp-rel-banner"><<print window.dolmp && window.dolmp.renderRelationshipBannerHtml ? window.dolmp.renderRelationshipBannerHtml() : "">></div>
-<<if _comp.persona is "possessive">>
-	你刚走近，<<print _comp.name>>便停下了手里的动作，目光沉沉地锁在你身上。<<He>>上前一步替你理了理衣领，指尖在你的颈侧停留了片刻："你今天在外面待了好久……没有别人欺负你，或者乱碰你吧？只要待在我身边就安全了。"
-<<elseif _comp.persona is "corrupt">>
-	<<print _comp.name>>一看见你，嘴角便勾起一抹意味深长的笑意。<<He>>自然而然地贴近你的身侧，温热的指尖隔着布料在你的腰际轻轻画了个圈："我刚才还在想你什么时候会来找我呢，结果你就自己送上门了。"
-<<elseif _comp.attitude is "bratty">>
-	看到你走过来，<<print _comp.name>>故作矜持地扬了扬下巴，耳尖却微微泛红，顺手把自己怀里刚温好的热饮塞进你手里："怎么才过来？我可不是特意在这儿等你的，只是刚好顺路而已。"
-<<elseif _comp.attitude is "meek">>
-	听到你的脚步声，<<print _comp.name>>立刻抬起头，眼睛亮晶晶地迎了上来，小心翼翼地拉住你的衣袖："你来啦……我刚刚还在担心你在外面会不会遇到麻烦，看到你平安无事真是太好了。"
+<<if _comp.stage is "soulmate">>
+	<<if _comp.persona is "possessive">>
+		你刚走近<<print _comp.name>>身边，<<he>>便猛地抬起头，那双深邃的眼眸瞬间锁定了你。<<He>>快步上前扣住你的手腕将你拉进怀里，鼻尖贴着你的颈侧深深吸了一口气，确认你身上没有别人的气息后，才露出安心而痴迷的笑意："你终于回来了……离你哪怕只有几步远，我都会忍不住胡思乱想。"
+	<<elseif _comp.persona is "corrupt">>
+		<<print _comp.name>>倚在阴影交界处，胸前的银质誓约挂坠贴着锁骨微微晃动。见你走过来，<<he>>熟稔地伸手揽住你的腰肢，温热的指尖顺着你的后腰滑向臀线轻轻捏了一把，贴在你耳边低笑道："我还在想你能忍多久不来找我……看你这副眼神，也是想我想得紧了吧？"
+	<<else>>
+		听到你熟悉的脚步声，<<print _comp.name>>立刻放下手里的书卷迎上前来，自然而然地张开双臂将你紧紧拥入怀中。<<He>>用温热的掌心包裹住你微凉的指尖，在你的额头与唇角印下一吻："欢迎回来，亲爱的。只要看到你平安无事，我就放心了。"
+	<</if>>
+<<elseif _comp.stage is "lover">>
+	<<if _comp.persona is "bratty">>
+		<<print _comp.name>>双手抱胸靠在墙边，一看见你过来，嘴角便勾起一抹掩不住的笑意，嘴上却故意哼了一声："怎么才过来？我还以为你把自己的恋人忘在脑后了呢。"话音未落，<<he>>已经主动伸手把你拉到身边，十指紧扣地握住了你的手。
+	<<elseif _comp.persona is "meek">>
+		当<<print _comp.name>>看见你走近时，眼睛一下子亮了起来，白皙的脸颊浮起两朵柔和的红晕。<<He>>小跑着迎上来挽住你的手臂，软软地把脸贴在你的肩头蹭了蹭："太好了，正想着什么时候能见到你呢。"
+	<<else>>
+		看见你走过来，<<print _comp.name>>眼神瞬间柔和下来，主动伸手替你拂去肩头的微尘，顺势握住你的手将你带到身边坐下："累不累？刚好我这边有空，陪你待一会儿。"
+	<</if>>
+<<elseif _comp.stage is "crush">>
+	你走到<<print _comp.name>>身旁。<<He>>原本正低头整理着东西，一抬头撞进你的视线里，耳尖顿时红了一片，手指有些慌乱地抓紧了衣角，随后向你露出了一个既欢喜又羞怯的笑容："你、你来啦……快过来坐吧。"
+<<elseif _comp.stage is "friend">>
+	你走近<<print _comp.name>>所在的位置。看见你过来，<<he>>放松地笑了笑，往旁边挪出半个位置朝你招手："正好，我刚忙完手头的事，过来一起歇口气吧。"
 <<else>>
-	<<print _comp.name>>合上手里的笔记本，温和地朝你笑了笑，往旁边让出半个位置示意你坐下："你来了。累的话，先在我身边歇一会儿吧。"
+	你走到<<print _comp.name>>附近。听到动静，<<he>>转过头看了你一眼，神色间还带着几分初识的审视与客气，随后微微点头向你打了个招呼。
+<</if>>
+<<if $exposed gte 1>>
+	<br><span class="lewd">注意到你衣衫不整、春光外泄的模样，<<print _comp.name>>呼吸骤然一滞，连忙脱下外套或用身体替你挡住四周可能投来的视线，滚烫的指尖不可避免地擦过你裸露的肌肤。</span>
+<</if>>
+<<if $pain gte 30 or $stress gte 4000>>
+	<br><span class="teal">察觉到你眉宇间的疲惫与痛楚，<<print _comp.name>>立刻担忧地扶住你的手臂，动作轻柔地替你分担着身体的重量。</span>
 <</if>>
 <br><br>
-<<if $pain gte 25 or $stress gte 3000 or $trauma gte 1000>>
-	注意到你略显疲惫与狼狈的神色，<<his>>的眉头立刻蹙了起来，从口袋里掏出干净的手帕替你擦去额角的汗水，掌心传来令人安心的温度。
-	<br><br>
-<</if>>
-<<if _exitPas is "Orphanage" or _exitPas is "Bedroom">>
-	<<bedicon>><<link [[去<<his>>的孤儿院房间坐坐 (0:05)|MP Companion Room]]>><<pass 5>><</link>>
-	<br>
-<</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("companion_talk")>>
-	<<socialiseicon>><<link [[和<<him>>聊聊孤儿院与镇上的日常 (0:15)|MP Companion Talk]]>><<pass 15>><<stress -6>><<trauma -2>><</link>><<lstress>><<ltrauma>><<glove>>
+	<<socialiseicon>><<link [[促膝交谈近况 (0:07)|MP Companion Talk]]>><<pass 7>><<stress -6>><<trauma -3>><</link>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("companion_study")>>
-	<<schoolicon "library">><<link [[和<<him>>一起温习功课 (0:25)|MP Companion Study]]>><<pass 25>><<stress -4>><<school 2>><</link>><<gschool>><<glove>><<gtrust>>
+	<<schoolicon "library">><<link [[一起温习功课与笔记 (0:22)|MP Companion Study]]>><<pass 22>><<stress -4>><<tiredness 2>><</link>><<lstress>><<gtiredness>><<glove>>
 	<br>
 <</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("companion_cuddle")>>
-	<<loveicon "hug">><<link [[靠在<<him>>怀里拥抱温存 (0:15)|MP Companion Cuddle]]>><<pass 15>><<stress -8>><<trauma -4>><<tiredness -3>><</link>><<lstress>><<ltrauma>><<ltiredness>><<glove>>
+	<<loveicon "hug">><<link [[依偎在<<him>>怀里小憩 (0:16)|MP Companion Cuddle]]>><<pass 16>><<stress -8>><<tiredness -5>><<trauma -3>><</link>><<lstress>><<ltiredness>><<ltrauma>><<glove>>
 	<br>
 <</if>>
-<<if Time.hour gte 7 and Time.hour lte 9 and Time.weekDay gte 2 and Time.weekDay lte 6 and (_exitPas is "Orphanage" or _exitPas is "Bedroom" or _exitPas is "Domus Street") and (!$daily or !$daily.mpCompanionWalkSchool)>>
-	<<walkicon>><<link [[和<<him>>牵手一起去学校 (0:15)|MP Companion Walk School]]>><<set $daily.mpCompanionWalkSchool to 1>><<pass 15>><<stress -6>><</link>><<lstress>><<glove>>
+<<if !window.dolmp || window.dolmp.canDoDailyInteract("companion_walk")>>
+	<<walkicon>><<link [[约<<him>>在附近并肩散步 (0:25)|MP Companion Walk]]>><<pass 25>><<stress -10>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
-<<if (Time.weekDay is 1 or Time.weekDay is 7) and Time.hour gte 9 and Time.hour lte 17 and (!$daily or !$daily.mpCompanionStall)>>
-	<<Highicon>><<link [[帮<<him>>一起照看周末小摊 (0:45)|MP Companion Weekend Stall]]>><<set $daily.mpCompanionStall to 1>><<pass 45>><<money 1800>><<stress -6>><</link>><<lstress>><<glove>>
+<<if (_comp.love gte 10 or _comp.stage is "crush" or _comp.stage is "lover" or _comp.stage is "soulmate" or $promiscuity gte 15) and (!window.dolmp || window.dolmp.canDoDailyInteract("companion_kiss"))>>
+	<<loveicon "kiss">><<link [[捧起<<his>>的脸亲吻 (0:04)|MP Companion Kiss]]>><<pass 4>><<stress -6>><<arousal 800>><</link>><<promiscuous1>><<lstress>><<glove>><<garousal>>
 	<br>
 <</if>>
-<<if (_comp.love gte 10 or hasSexStat("promiscuity", 2) or $promiscuity gte 15) and (!window.dolmp || window.dolmp.canDoDailyInteract("companion_kiss"))>>
-	<<loveicon "kiss">><<link [[凑近亲吻<<him>> (0:10)|MP Companion Kiss]]>><<pass 10>><<stress -6>><<arousal 700>><</link>><<promiscuous1>><<lstress>><<glove>><<garousal>>
+<<if (_comp.love gte 18 or _comp.lust gte 15 or _comp.stage is "lover" or _comp.stage is "soulmate" or $promiscuity gte 35) and (!window.dolmp || window.dolmp.canDoDailyInteract("companion_lewd"))>>
+	<<brothelicon>><<link [[拉到背光处贴身耳鬓厮磨 (0:12)|MP Companion Lewd]]>><<pass 12>><<stress -8>><<arousal 1600>><</link>><<promiscuous2>><<lstress>><<glove>><<ggarousal>>
 	<br>
 <</if>>
-<<if (_comp.love gte 15 or _comp.lust gte 12 or hasSexStat("promiscuity", 3) or $promiscuity gte 35) and (!window.dolmp || window.dolmp.canDoDailyInteract("companion_lewd"))>>
-	<<brothelicon>><<link [[在暗处拉住<<his>>的手探入衣内 (0:15)|MP Companion Lewd Touch]]>><<pass 15>><<arousal 1400>><<stress -6>><</link>><<promiscuous2>><<lstress>><<ggarousal>>
-	<br>
-<</if>>
-<<if ($mpCompanionQuest or 0) lt 8 and (!$daily or !$daily.mpCompanionQuest)>>
-	<<investigateicon>><<link [[询问<<him>>最近藏在心里的事 (0:20)|MP Companion Storyline Hub]]>><<set $daily.mpCompanionQuest to 1>><<pass 20>><</link>>
-	<br>
-<</if>>
-<<brothelicon "stage">><<link [[与<<him>>深入温存|MP Player Interact]]>><</link>>
+<<brothelicon "stage">><<link [[与<<him>>亲密温存 (0:30)|MP Companion Combat Consensual]]>><<pass 30>><</link>><<promiscuous1>><<glove>><<garousal>>
 <br>
-<<socialiseicon "ask">><<link [[调整伴侣印象设定|MP Companion Customize]]>><</link>>
+<<if ($mpCompanionQuest or 0) lt 8 and (!$daily or !$daily.mpCompanionQuest)>>
+	<<investigateicon>><<link [[追查旧八音盒与早年收养档案的线索 (0:18)|MP Companion Quest Step]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpCompanionQuest to 1>><<pass 18>><</link>>
+	<br>
+<</if>>
+<<bedicon>><<link [[前往<<his>>的孤儿院房间 (0:03)|MP Companion Room]]>><<pass 3>><</link>>
 <br>
 <<getouticon>><<link [[返回|_exitPas]]>><<set $eventskip to 1>><<endevent>><</link>>
+<</if>>
 
 
 :: MP Companion Room [nobr]
 <<effects>>
 <<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
+<<if $mpCompanion and $mpCompanion.isPartnerOnline and window.dolmp and window.dolmp.findOnlineCompanionPeer and window.dolmp.findOnlineCompanionPeer()>>
+	<<set _livePeer to window.dolmp.findOnlineCompanionPeer()>>
+	<<set $mpInteractTargetId to _livePeer.id>>
+	<<set $mpInteractTargetName to _livePeer.name>>
+	<<run window.dolmp.openNativeInteract(_livePeer)>>
+<<else>>
 <<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek", persona: "meek", love: 0, trust: 0, lust: 0, jealousy: 0, corruption: 0, stage: "stranger" })>>
-<<set $mpInteractTargetName to _comp.name>>
 <<endevent>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
-你轻轻敲了敲房门，推门走进<<print _comp.name>>在孤儿院的房间。房间虽然不大，却被收拾得格外温馨整洁。窗台上摆着一只装着干花与海螺的玻璃瓶，书桌上叠着几本做满笔记的课本，床铺边还放着一只旧游戏机与双人手柄。
+你轻轻推开孤儿院走廊斜对面属于<<print _comp.name>>的房门。房间不算宽敞，却被收拾得井井有条：靠窗的木桌上摆着一盏暖黄的旧台灯与几本记满批注的笔记，床头叠着洗得发白却散发着阳光气息的棉被。
 <br><br>
-<<if _comp.persona is "possessive">>
-	<<print _comp.name>>反手替你关上房门，顺手落下了门锁。<<He>>从背后抱住你的腰，把下巴抵在你的肩膀上深吸了一口气："只要进了这个房间，外面那些讨厌的家伙就再也看不到你了……今晚留在这里陪我，好不好？"
-<<elseif _comp.persona is "corrupt">>
-	<<print _comp.name>>懒洋洋地半倚在床头，领口微敞，拍了拍自己身旁松软的床垫："门已经关好了，就算叫出声来，走廊外面也听不见的。"
-<<elseif _comp.attitude is "bratty">>
-	<<print _comp.name>>连忙把桌上一张画着你侧脸的草稿纸压到书本底下，装作若无其事地咳了一声："随便坐吧，床铺我刚整理过，你要是累了躺会儿也不是不行。"
+<<if _comp.stage is "soulmate" or _comp.stage is "lover">>
+	桌角显眼的位置摆放着你们一起收集的小物件，连枕头都并排摆着两只。<<print _comp.name>>听到开门声转过身来，反手将房门轻轻合拢落锁，眼底盛满了毫不掩饰的笑意与眷恋："进屋吧，把门锁上了，贝利和其他人都不会来打扰我们的。"
+<<elseif _comp.stage is "crush">>
+	看见你走进自己的私人房间，<<print _comp.name>>脸颊微热地 hurriedly 把床边一件贴身衣物塞进枕头底下，随后有些局促又期待地请你在床沿坐下："房、房间稍微有点乱，你别介意……"
 <<else>>
-	<<print _comp.name>>欣喜地迎上来替你挂好外套，又从保温壶里倒了一杯热可可递给你："快坐下暖和一会儿吧，我正想着去敲你的门呢。"
+	<<print _comp.name>>正在书桌前整理日用品，见你进来便停下手里的活计，拉过房间里唯一的一把木椅示意你坐下："有什么事进屋说吧，走廊上人多眼杂。"
 <</if>>
 <br><br>
-<<if !$daily or !$daily.mpCompGame>>
-	<<tvicon>><<link [[和<<him>>一起窝在床边打游戏 (0:30)|MP Companion Play Game]]>><<set $daily.mpCompGame to 1>><<pass 30>><<stress -10>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
+<<socialiseicon>><<link [[与<<him>>交谈互动 (0:04)|MP Companion Hub]]>><<pass 4>><</link>>
+<br>
+<<tvicon>><<link [[和<<him>>一起窝在床边打游戏 (0:25)|MP Companion Room Game]]>><<pass 25>><<stress -10>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
+<br>
+<<bedicon "zzz">><<link [[躺在<<his>>的床上休息一会儿 (0:30)|MP Companion Room Sleep]]>><<pass 30>><<tiredness -10>><<stress -8>><</link>><<ltiredness>><<lstress>><<glove>>
+<br>
+<<if _comp.stage is "lover" or _comp.stage is "soulmate" or _comp.lust gte 15>>
+	<<brothelicon>><<link [[反锁房门将<<him>>按在床铺间 (0:35)|MP Companion Combat Consensual]]>><<pass 35>><</link>><<promiscuous2>><<glove>><<ggarousal>>
 	<br>
 <</if>>
-<<if !$daily or !$daily.mpCompTea>>
-	<<foodicon "cocoa">><<link [[和<<him>>分享热可可与点心 (0:20)|MP Companion Room Cocoa]]>><<set $daily.mpCompTea to 1>><<pass 20>><<stress -8>><<tiredness -4>><</link>><<lstress>><<ltiredness>><<glove>>
-	<br>
+<<getouticon>><<link [[回到孤儿院走廊|Orphanage]]>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
-<<if !$daily or !$daily.mpCompTraumaCare>>
-	<<loveicon "hug">><<link [[伏在<<him>>膝头倾诉委屈 (0:25)|MP Companion Trauma Care]]>><<set $daily.mpCompTraumaCare to 1>><<pass 25>><<stress -14>><<trauma -10>><</link>><<lstress>><<ltrauma>><<glove>><<gtrust>>
-	<br>
-<</if>>
-<<if (_comp.love gte 12 or hasSexStat("promiscuity", 2) or $promiscuity gte 15) and (!$daily or !$daily.mpCompRoomBed)>>
-	<<bedicon "double">><<link [[把<<him>>按倒在床铺上亲热 (0:25)|MP Companion Room Bed]]>><<set $daily.mpCompRoomBed to 1>><<pass 25>><<arousal 1600>><<stress -8>><</link>><<promiscuous2>><<lstress>><<ggarousal>>
-	<br>
-<</if>>
-<<if Time.hour gte 20 or Time.hour lte 5>>
-	<<bedicon "zzz">><<link [[钻进<<his>>的被窝相拥过夜 (1:00)|MP Companion Room Sleep]]>><<pass 60>><<tiredness -15>><<stress -12>><<trauma -6>><</link>><<ltiredness>><<lstress>><<ltrauma>><<glove>>
-	<br>
-<</if>>
-<<if ($mpCompanionQuest or 0) lt 8 and (!$daily or !$daily.mpCompanionQuest)>>
-	<<investigateicon>><<link [[聊起<<he>>锁在抽屉里的旧木盒 (0:20)|MP Companion Storyline Hub]]>><<set $daily.mpCompanionQuest to 1>><<pass 20>><</link>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[返回伴侣互动|MP Companion Hub]]>><</link>>
-<br>
-<<getouticon>><<link [[回孤儿院大厅|Orphanage]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-:: MP Companion Customize [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-你可以在此调整离线伴侣的性格倾向与称呼。当你的联机队友在线进入房间时，该角色会自动同步并记住队友的昵称、外貌与性格数据。
-<br><br>
-当前伴侣称呼：<<print ($mpCompanion ? $mpCompanion.name : "艾琳")>>
-<br>
-当前性格倾向：<<print ($mpCompanion ? ($mpCompanion.attitude is "bratty" ? "傲娇护短" : $mpCompanion.attitude is "meek" ? "温柔依恋" : "沉稳冷静") : "温柔依恋")>>
-<br><br>
-<<socialiseicon>><<link [[性格设为：温柔依恋|MP Companion Hub]]>><<set $mpCompanion.attitude to "meek">><<if window.dolmp && window.dolmp.companion>><<set window.dolmp.companion.attitude to "meek">><</if>><</link>>
-<br>
-<<socialiseicon "angry">><<link [[性格设为：傲娇护短|MP Companion Hub]]>><<set $mpCompanion.attitude to "bratty">><<if window.dolmp && window.dolmp.companion>><<set window.dolmp.companion.attitude to "bratty">><</if>><</link>>
-<br>
-<<socialiseicon "ask">><<link [[性格设为：沉稳冷静|MP Companion Hub]]>><<set $mpCompanion.attitude to "neutral">><<if window.dolmp && window.dolmp.companion>><<set window.dolmp.companion.attitude to "neutral">><</if>><</link>>
-<br>
-<<tficon>><<link [[性别设为：女性|MP Companion Hub]]>><<set $mpCompanion.pronoun to "f">><<set $mpCompanion.gender to "f">><<if window.dolmp && window.dolmp.companion>><<set window.dolmp.companion.pronoun to "f">><<set window.dolmp.companion.gender to "f">><</if>><</link>>
-<br>
-<<tficon>><<link [[性别设为：男性|MP Companion Hub]]>><<set $mpCompanion.pronoun to "m">><<set $mpCompanion.gender to "m">><<if window.dolmp && window.dolmp.companion>><<set window.dolmp.companion.pronoun to "m">><<set window.dolmp.companion.gender to "m">><</if>><</link>>
-<br><br>
-<<getouticon>><<link [[返回|MP Companion Hub]]>><</link>>
-
-
-:: MP Companion Talk [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你与<<print $mpInteractTargetName>>并肩坐在窗边，聊起了孤儿院里的点点滴滴。从孩子们偷偷藏起来的糖果、走廊地板哪一块踩上去会响，一直聊到各自对未来的打算。
-<br><br>
-<<if _comp.attitude is "meek">>
-	"只要能和你待在一起，哪怕这间孤儿院再破旧，我也觉得像真正的家一样，"<<he>>垂下眼帘，手指轻轻勾住你的小指，声音轻柔而真挚。
-<<elseif _comp.attitude is "bratty">>
-	"哼，贝利要是敢对你动粗，我第一个跟那家伙拼命，"<<he>>抱起手臂偏过头，眼神却始终没有离开你的脸，"你只管照顾好自己就行了，听见没有？"
-<<else>>
-	"镇上最近不太平，要是出门去远的地方，记得提前告诉我一声，"<<he>>神色认真地替你整理了一下衣领，"无论什么时候，我都会在家里给你留着灯。"
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_talk", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 1 })>>
-<br><br>
-<<if "MP Companion Talk" is "MP Companion Room Bed" or "MP Companion Talk" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Study [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你们把课本与笔记摊开在桌面上，头挨着头一起梳理最近落下功课的难点。微风吹动书页，发出沙沙的轻响，你们的肩膀不时轻轻碰触在一起。
-<br><br>
-<<if _comp.attitude is "meek">>
-	每当你遇到卡壳的题目时，<<he>>总会耐心地用铅笔在草稿纸上一步步写下推导过程，温热的呼吸拂过你的耳垂，让你连枯燥的课业都觉得甜丝丝的。
-<<elseif _comp.attitude is "bratty">>
-	"笨死了，这道题我上次不是给你划过重点吗？"<<he>>嘴上数落着，手底下却把自己工工整整写好的笔记推到你面前，指尖还在你手背上轻轻点了两下。
-<<else>>
-	<<He>>条理清晰地帮你归纳好各科的重点，又贴心地替你削好了铅笔。在<<his>>的陪伴下，原本繁杂的课业很快便迎刃而解。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_study", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 1 })>>
-<br><br>
-<<if "MP Companion Study" is "MP Companion Room Bed" or "MP Companion Study" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Cuddle [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你主动张开双臂靠进<<print $mpInteractTargetName>>怀里。<<He>>愣了一瞬，随即顺势收拢双臂将你紧紧圈住，下巴轻轻搁在你的发顶上。
-<br><br>
-<<if _comp.attitude is "meek">>
-	<<He>>温热的胸膛随着呼吸轻轻起伏，手掌顺着你的后背一下下轻抚着，仿佛要把你所有的疲惫与不安都揉进怀抱里融化掉。
-<<elseif _comp.attitude is "bratty">>
-	"突然撒什么娇啊……"<<he>>的身体先是僵了一下，随后耳根通红地把你抱得更紧了些，连声音都放轻了不少，"算了，想靠多久都随你。"
-<<else>>
-	你们安静地依偎在一起，听着窗外隐约传来的风声与彼此平稳的心跳，内心深处的焦躁在无声的温存中缓缓平息。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_cuddle", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 1, jealousy: -1 })>>
-<br><br>
-<<if "MP Companion Cuddle" is "MP Companion Room Bed" or "MP Companion Cuddle" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Walk School [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-清晨的阳光洒在宅邸街的石板路上，你与<<print $mpInteractTargetName>>并肩走出孤儿院大门，顺着街道一路朝牛津街的学校走去。
-<br><br>
-<<if _comp.attitude is "meek">>
-	路上遇到湿滑的水洼或来往的车辆时，<<he>>总会第一时间握住你的手把你拉到安全的内侧，一直把你送到学校前院才恋恋不舍地松开手。
-<<elseif _comp.attitude is "bratty">>
-	<<He>>单肩背着书包走在靠马路的一侧，顺手替你拎过了沉重的书袋："走快点，要是迟到了被礼顿留堂，我可不陪你罚站。"
-<<else>>
-	你们一路聊着天穿过街区，清爽的晨风拂面而来。抵达学校前院时，<<he>>朝你挥了挥手，约好放学后一起回孤儿院。<<set $mpReturnPassage to "School Front Courtyard">>
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_walk", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 1 })>>
-<br><br>
-<<if "MP Companion Walk School" is "MP Companion Room Bed" or "MP Companion Walk School" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Weekend Stall [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-周末的街角人来人往，你陪着<<print $mpInteractTargetName>>一起支起小木桌，将平时收集整理好的旧书、手编绳结与小巧的玻璃瓶摆在绒布上售卖。
-<br><br>
-<<if _comp.attitude is "meek">>
-	每当有客人驻足挑选时，<<he>>都羞涩而认真地介绍着，你在一旁帮忙收钱找零。忙活了小半天，钱袋里便攒下了不少叮当作响的硬币。
-<<elseif _comp.attitude is "bratty">>
-	遇到想恶意压价的油滑客人，<<he>>立刻冷下脸挡在你身前把对方怼了回去，转头看向你时却又得意地扬了扬眉："有我在，谁也别想占我们便宜。"
-<<else>>
-	你们默契十足地配合着招呼客人，不仅顺利卖出了大半货品，还在收摊清点时发现一名老主顾多留下了一枚成色极佳的旧银币。<<set $antiquemoney to ($antiquemoney or 0) + 15>>
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_talk", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 1 })>>
-<br><br>
-<<if "MP Companion Weekend Stall" is "MP Companion Room Bed" or "MP Companion Weekend Stall" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Kiss [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你仰起脸凑近<<print $mpInteractTargetName>>，在<<he>>微怔的注视下，轻轻印上了<<his>>温软的唇瓣。
-<br><br>
-<<if _comp.attitude is "meek">>
-	<<He>>发出一声低不可闻的轻哼，睫毛剧烈地颤动着，双手小心翼翼地捧住你的脸颊，笨拙却无比深情地含住你的唇舌回应起来。
-<<elseif _comp.attitude is "bratty">>
-	<<He>>呼吸一滞，随即反客为主地按住你的后颈加深了这个吻，舌尖带着不容拒绝的力道扫过你的唇齿，直到你双腿发软才意犹未尽地松开。
-<<else>>
-	唇齿相贴的温度迅速蔓延至全身，你们在静谧的角落里交换了一个绵长而缠绵的吻，分开时彼此的眼底都泛着迷离的水光。<<run window.dolmp && window.dolmp.takeVirginityByPlayer && window.dolmp.takeVirginityByPlayer($mpInteractTargetName, 'kiss')>>
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_kiss", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, lust: 1, jealousy: -1 })>>
-<br><br>
-<<if "MP Companion Kiss" is "MP Companion Room Bed" or "MP Companion Kiss" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Lewd Touch [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-借着昏暗光线的掩护，你贴近<<print $mpInteractTargetName>>怀里，牵起<<his>>的手顺着自己的衣摆探入贴身衣物之下，同时另一只手也大胆地隔着衣料覆上了<<his>>最敏感的部位。
-<br><br>
-<<if _comp.attitude is "meek">>
-	"唔……在这里的话……"<<he>>满脸通红地咬住下唇，手指却在接触到你滚烫肌肤的瞬间不受控制地轻轻揉捻起来，呼吸变得滚烫而紊乱。
-<<elseif _comp.attitude is "bratty">>
-	"你这家伙，胆子真是越来越大了……"<<he>>喉头滚动了一下，干脆一把将你抵在角落里，滚烫的手掌直接钻进你的内衣里肆意揉弄摩挲。
-<<else>>
-	衣物摩擦的细碎声响与压抑的喘息交织在一起，滚烫的体液很快浸湿了贴身的布料，每一次指尖的刮擦都让你们双双陷入蚀骨的战栗之中。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_lewd", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, lust: 1, corruption: 1 })>>
-<br><br>
-<<if "MP Companion Lewd Touch" is "MP Companion Room Bed" or "MP Companion Lewd Touch" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Play Game [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你们并肩坐在床沿的地毯上，一人握着一只手柄玩起了双人闯关游戏。屏幕的光影映在你们专注的侧脸上，房间里回荡着按键的清脆声响。
-<br><br>
-<<if _comp.attitude is "meek">>
-	当你差点被屏幕里的怪物击中时，<<he>>慌忙凑过来替你挡下攻击，肩膀紧紧贴着你的手臂，赢下关卡后开心地抱住你欢呼起来。
-<<elseif _comp.attitude is "bratty">>
-	"看好了，这关得这样打！"<<he>>得意地操作着角色一路开路，趁你全神贯注盯着屏幕时，却偷偷偏过头在你的侧脸上亲了一口。
-<<else>>
-	你们配合默契地一路打通了关底，紧绷的神经在欢声笑语中彻底放松了下来。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_talk", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 1 })>>
-<br><br>
-<<if "MP Companion Play Game" is "MP Companion Room Bed" or "MP Companion Play Game" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Room]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Room Cocoa [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你捧着热气腾腾的马克杯，小口啜饮着香醇浓郁的热可可，<<print $mpInteractTargetName>>拿出一小碟刚烤好的黄油曲奇与你分着吃。
-<br><br>
-<<if _comp.attitude is "meek">>
-	看到你嘴角沾了一点可可奶沫，<<he>>脸颊微红地凑近过来，伸出舌尖轻轻舔去了那抹甜香，随后害羞地把脸埋进杯子后面。
-<<elseif _comp.attitude is "bratty">>
-	<<He>>把烤得最酥脆的几块曲奇全挑出来塞进你手里，自己喝了一口热可可，看着你吃得满足的模样，嘴角不自觉地弯了起来。
-<<else>>
-	甜暖的香气驱散了窗外的寒意，你们一边吃着点心一边聊着天，度过了一段宁静惬意的时光。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_talk", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 1 })>>
-<br><br>
-<<if "MP Companion Room Cocoa" is "MP Companion Room Bed" or "MP Companion Room Cocoa" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Room]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Trauma Care [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你将头伏在<<print $mpInteractTargetName>>的膝上，把这段时间在外面遭受的委屈、恐惧与压力一点点倾诉了出来。
-<br><br>
-<<if _comp.attitude is "meek">>
-	<<He>>心疼得眼圈泛红，俯下身将你紧紧搂进怀里，温热的泪水滴落在你的发间："对不起，都是我没能时刻守在你身边……以后不管发生什么，我都会拼命保护你的。"
-<<elseif _comp.attitude is "bratty">>
-	<<He>>拳头攥得咯咯作响，随即又放轻力道温柔地抚摸着你的后脑勺："把那些混账统统忘掉！有我在，天塌下来也有我替你顶着，谁也别想再欺负你。"
-<<else>>
-	<<He>>一言不发地用温暖的手掌包裹住你冰凉的指尖，一下下轻柔地梳理着你的发丝，直到你颤抖的肩膀彻底平静下来。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_cuddle", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 2, jealousy: -1 })>>
-<br><br>
-<<if "MP Companion Trauma Care" is "MP Companion Room Bed" or "MP Companion Trauma Care" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Room]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
-
-
-:: MP Companion Room Bed [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你将<<print $mpInteractTargetName>>轻轻推倒在柔软的床铺上，顺势跨坐在<<his>>的腰间，俯下身封住了<<his>>的双唇。
-<br><br>
-<<if _comp.attitude is "meek">>
-	床单在你们身下揉出凌乱的褶皱，<<he>>羞赧而顺从地环住你的脖颈，任由你的手掌解开衣扣，在滚烫的肌肤与敏感处肆意流连，喉咙里溢出一声声甜腻的轻吟。
-<<elseif _comp.attitude is "bratty">>
-	<<He>>一个翻身反将你压在身下，灼热的吻密密麻麻地落在你的锁骨与胸口，手掌熟稔地探入你的下装之中，带起一阵阵令人头皮发麻的快感。
-<<else>>
-	房间内温度节节攀升，你们在床铺上紧密交缠、尽情索取着彼此的体温，直到两人都气喘吁吁地瘫软在床垫上相视而笑。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_lewd", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, lust: 2, corruption: 1 })>>
-<br><br>
-<<if "MP Companion Room Bed" is "MP Companion Room Bed" or "MP Companion Room Bed" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Room]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
 
 
 :: MP Companion Room Sleep [nobr]
 <<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f" })>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-你们褪去外衣钻进同一床温暖的被窝里，在静谧的夜色中面对面相拥而眠。<<print $mpInteractTargetName>>的手臂稳稳地揽在你的腰间，呼吸绵长而温热。
-<br><br>
-<<if _comp.attitude is "meek">>
-	半梦半醒间，你感觉到<<he>>替你掖了掖被角，在你额头上落下一个轻柔的晚安吻，整夜都没有再被噩梦惊醒。
-<<elseif _comp.attitude is "bratty">>
-	<<He>>像只护食的幼兽般用双腿夹住你的腿，把你的头按在自己胸口上，嘟囔着说了一句梦话，手臂却把你箍得更紧了。
+你脱下外鞋躺进<<print _comp.name>>带着熟悉气息的床铺里。<<He>>体贴地替你拉高棉被盖好肩膀，自己也侧身躺在了你身旁。
+<<if _comp.stage is "soulmate" or _comp.stage is "lover">>
+	在温暖的被窝底下，<<he>>自然而然地伸手环住你的腰，将你的腿夹进双腿之间替你暖着，下巴轻轻抵在你的发顶。听着窗外隐约的风声与身边人沉稳的心跳，你紧绷的神经彻底松弛下来。
 <<else>>
-	伴着彼此令人安心的心跳与体温，你睡了这段时间以来最安稳香甜的一觉，醒来时精神焕发。
+	虽然两人之间还隔着一拳的距离，但被褥间传来的融融暖意依然驱散了你身上的寒气与疲乏。
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_cuddle", 15, -6, -3, 0, 300, "与你在孤儿院共度了一段亲密时光", { love: 1, trust: 1, jealousy: -1 })>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_cuddle", 30, -8, -3, -10, 200, "在房间床铺上与你相拥小憩", { love: 1, trust: 1 })>>
 <br><br>
-<<if "MP Companion Room Sleep" is "MP Companion Room Bed" or "MP Companion Room Sleep" is "MP Companion Lewd Touch">>
-	<<brothelicon>><<link [[彻底褪去衣物与<<him>>深入交合|MP Companion Start Combat]]>><</link>><<promiscuous3>>
-	<br>
-<</if>>
-<<socialiseicon>><<link [[继续|MP Companion Room]]>><</link>>
-<br>
-<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
+<<socialiseicon>><<link [[起身|MP Companion Room]]>><</link>>
 
 
-:: MP Companion Start Combat [nobr]
+:: MP Companion Combat Consensual [nobr]
 <<effects>>
 <<run window.dolmp && window.dolmp.startOfflineCompanionCombat && window.dolmp.startOfflineCompanionCombat(true)>>
+你向同伴伸出了手……
+<br><br>
+<<getouticon>><<link [[返回|MP Companion Hub]]>><</link>>
 
 
-:: MP Companion Storyline Hub [nobr]
+
+:: MP Companion Talk [nobr]
 <<effects>>
-<<set _stage to ($mpCompanionQuest or 0)>>
-<<if _stage is 0>>
-	<<include "MP Companion Quest Stage 0">>
-<<elseif _stage is 1>>
-	<<include "MP Companion Quest Stage 1">>
-<<elseif _stage is 2>>
-	<<include "MP Companion Quest Stage 2">>
-<<elseif _stage is 3>>
-	<<include "MP Companion Quest Stage 3">>
-<<elseif _stage is 4>>
-	<<include "MP Companion Quest Stage 4">>
-<<elseif _stage is 5>>
-	<<include "MP Companion Quest Stage 5">>
-<<elseif _stage is 6>>
-	<<include "MP Companion Quest Stage 6">>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", stage: "stranger" })>>
+<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
+<<person1>>
+你与<<print _comp.name>>并肩坐下，低声聊起了这几天的经历。
+<br><br>
+<<if _comp.stage is "soulmate">>
+	<<He>>将你半拢在怀里，下巴抵着你的肩头低语。你们早已熟悉彼此的每一个眼神与呼吸，哪怕只是聊些最寻常的琐事，胸口也满溢着踏实的暖意。
+<<elseif _comp.stage is "lover">>
+	<<He>>握着你的手放在掌心轻轻摩挲，无论你说什么都温柔地注视着你，把你随口提过的小事全都牢牢记在了心上。
+<<elseif _comp.stage is "crush">>
+	聊着聊着，<<his>>的目光便不由自主地停留在你的嘴唇与眉眼上。当你转头看过去时，<<he>>红着耳根慌乱地低下头，手指却悄悄勾住了你的衣袖。
+<<elseif _comp.stage is "friend">>
+	<<He>>熟稔地向你说起今天在学校与街头的见闻，还把打听到的省钱窍门仔细告诉了你，叮嘱你出门在外千万留神。
 <<else>>
-	<<include "MP Companion Quest Epilogue">>
+	你们聊起孤儿院里捉襟见肘的开支与贝利冷酷的眼神。<<He>>虽然与你相识不久，但听完你的讲述后还是认真地提醒了你几处镇上夜晚最好绕开的小巷。
 <</if>>
+<br><br>
+<<print "墙角潮湿的青苔散发着微苦的泥土腥气，排水渠下方偶尔传来水滴坠落的清脆回响。在这座表面平静、实则暗流涌动的小镇里，每一扇紧闭的百叶窗后似乎都藏着不为人知的窥探视线。你放轻脚步踩过松动的石板，呼吸在冷空气中化作一团浅白的水雾。">>
+<<if "companion_talk" is "companion_Study">><<schoolskill 3>><</if>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_talk", 7, -6, -2, 0, 300, "与你在镇上共度了一段亲密时光", { love: 1, trust: 1, jealousy: -1 })>>
+<br><br>
+<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
 
 
-:: MP Companion Quest Stage 0 [nobr]
+
+:: MP Companion Study [nobr]
 <<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<set $mpInteractTargetName to _comp.name>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", stage: "stranger" })>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-在孤儿院房间的书桌最下层，<<print $mpInteractTargetName>>取出一只上了锁的胡桃木小盒。打开盒盖，里面躺着半块停摆的银质怀表与一张字迹模糊的当票，上面盖着旧街区钟表行的火漆印记。
+你翻开笔记与课本，和<<print _comp.name>>凑在一处共同温习功课。
 <br><br>
-"这是我刚来孤儿院时身上唯一留下的东西，"<<he>>轻声说道，"听说另一半表壳和当年的线索落在高街与商业区小巷的暗处，我想找回它，又怕贝利发现后拿去抵债。"
-<br><br>
-<<investigateicon>><<link [[答应陪<<him>>一起暗中寻回线索 (0:20)|MP Companion Quest Stage 0 Res A]]>><<pass 20>><<set $mpCompanionQuest to 1>><<set $antiquemoney to ($antiquemoney or 0) + 25>><<set $blackmoney to ($blackmoney or 0) + 0>><</link>><<glove>><<gtrust>>
-<br>
-<<loveicon "hug">><<link [[在房间里替<<him>>仔细擦拭保养怀表 (0:20)|MP Companion Quest Stage 0 Res B]]>><<pass 20>><<set $mpCompanionQuest to 1>><<set $antiquemoney to ($antiquemoney or 0) + 25>><<stress -8>><<arousal 800>><</link>><<lstress>><<glove>><<garousal>>
-<br>
-<<sneakicon>><<link [[提醒<<him>>当心贝利的耳目 (0:20)|MP Companion Quest Stage 0 Res C]]>><<pass 20>><<set $mpCompanionQuest to 1>><<set $blackmoney to ($blackmoney or 0) + 0>><<skulduggery 4>><</link>><<gskulduggery>><<gtrust>>
-
-:: MP Companion Quest Stage 0 Res A [nobr]
-<<effects>>
-你握紧<<print $mpInteractTargetName>>的手，与<<he>>一起有条不紊地推进了计划。在默契的配合下，你们不仅顺利拿到了关键的信物，彼此之间的信任也在不知不觉间更加深厚了。
-<<if 25 gt 0>>
-	<br><br>你在整理器物时发现了一件保存完好的旧时代古董，或许博物馆会对它感兴趣。
+<<if _comp.stage is "soulmate">>
+	你在<<his>>温暖的怀抱里翻看着书页，<<he>>耐心细致地替你讲解着每一处细节，连指尖翻动书页的节奏都与你的目光完美契合。
+<<elseif _comp.stage is "lover">>
+	<<He>>一手揽着你的腰，一手握着你的手在纸页上写画，时不时趁你思索时偷亲一下你的脸颊，把枯燥的温习变成了甜蜜的厮磨。
+<<elseif _comp.stage is "crush">>
+	当两人的肩膀在翻页时不小心贴在一起，<<his>>的笔尖明显顿了一下，呼吸变得有些急促，过了好几秒才红着脸继续往下讲。
+<<elseif _comp.stage is "friend">>
+	你们头挨着头核对历史与数学笔记，<<he>>不时把整理好的重点推到你手边，配合得十分默契。
+<<else>>
+	<<He>>安静地坐在桌子的另一端，遇到你不理解的难点时，会用笔尖在草稿纸上条理分明地写出推导步骤。
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_0_a", 20, -6, -4, 0, 200, "与你并肩推进了旧怀表的秘密调查", { love: 1, trust: 2 })>>
 <br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 0 Res B [nobr]
-<<effects>>
-在紧张的探索间隙，你将<<print $mpInteractTargetName>>拉进安静的角落，用温暖的怀抱与亲吻抚平了<<he>>眉宇间的不安。<<He>>顺从地靠在你胸前喘息，看向你的眼神愈发痴迷而眷恋。
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_0_b", 20, -8, -4, 0, 800, "在调查途中与你亲密拥吻", { love: 2, lust: 1, trust: 1 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 0 Res C [nobr]
-<<effects>>
-你凭借老练的警觉心带着<<print $mpInteractTargetName>>避开了所有耳目，在无人察觉的情况下顺走了暗藏的财物并全身而退。<<He>>对你的机敏赞叹不已，紧紧挽着你的手臂不愿松开。
-<<if 0 gt 0>>
-	<br><br>你顺手收起了几件来路隐秘的赃物，或许能在熟识销赃门路的地方换取报酬。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_0_c", 20, -4, -2, 0, 300, "与你默契配合避开了耳目", { love: 1, trust: 1, corruption: 1 })>>
+<<print "温热的吐息在狭小的空间里交织，连带着周遭原本冰冷的空气都染上了一丝暧昧的燥热。衣料摩擦时发出的窸窣声响在安静的角落里被无限放大，每一次不经意的肢体触碰都像是一点火星落在干涸的草地上，引得脊背窜起一阵难以言喻的酥麻。">>
+<<if "companion_study" is "companion_Study">><<schoolskill 3>><</if>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_study", 22, -6, -2, 0, 300, "与你在镇上共度了一段亲密时光", { love: 1, trust: 1 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
 
 
-:: MP Companion Quest Stage 1 [nobr]
+
+:: MP Companion Cuddle [nobr]
 <<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<set $mpInteractTargetName to _comp.name>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", stage: "stranger" })>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-趁着傍晚街上人少，你陪着<<print $mpInteractTargetName>>穿过宅邸街来到商业区后巷的老钟表铺。柜台后的老匠人戴着单片眼镜端详了那半块银怀表许久，从暗格里翻出一本泛黄的典当底册。
+你卸下防备靠在<<print _comp.name>>身边，闭上眼睛静静依偎了一会儿。
 <br><br>
-底册上记载着，这枚银表原本属于十几年前镇上一位博物学者，而下半截带有暗锁的表盖早已被转手卖往了黑市与旧下水道的走私贩手中。老匠人还顺手收购了你们在路上拾到的一枚旧铜扣。
-<br><br>
-<<investigateicon>><<link [[记下走私贩出没的暗渠记号 (0:20)|MP Companion Quest Stage 1 Res A]]>><<pass 20>><<set $mpCompanionQuest to 2>><<set $antiquemoney to ($antiquemoney or 0) + 35>><<set $blackmoney to ($blackmoney or 0) + 20>><</link>><<glove>><<gtrust>>
-<br>
-<<loveicon "hug">><<link [[向老匠人打听打开表芯暗格的手法 (0:20)|MP Companion Quest Stage 1 Res B]]>><<pass 20>><<set $mpCompanionQuest to 2>><<set $antiquemoney to ($antiquemoney or 0) + 35>><<stress -8>><<arousal 800>><</link>><<lstress>><<glove>><<garousal>>
-<br>
-<<sneakicon>><<link [[牵紧<<his>>的手安抚<<his>>激动的情绪 (0:20)|MP Companion Quest Stage 1 Res C]]>><<pass 20>><<set $mpCompanionQuest to 2>><<set $blackmoney to ($blackmoney or 0) + 20>><<skulduggery 4>><</link>><<gskulduggery>><<gtrust>>
-
-:: MP Companion Quest Stage 1 Res A [nobr]
-<<effects>>
-你握紧<<print $mpInteractTargetName>>的手，与<<he>>一起有条不紊地推进了计划。在默契的配合下，你们不仅顺利拿到了关键的信物，彼此之间的信任也在不知不觉间更加深厚了。
-<<if 35 gt 0>>
-	<br><br>你在整理器物时发现了一件保存完好的旧时代古董，或许博物馆会对它感兴趣。
+<<if _comp.stage is "soulmate">>
+	你们像两株紧密缠绕的藤蔓般贴合在一起，<<he>>温热的唇贴着你的额角，用沉稳的心跳与体温一点点抚平你所有的创伤与疲倦。
+<<elseif _comp.stage is "lover">>
+	<<He>>心疼地将你整个人圈进怀里，手指插进你的发间轻柔地按揉着你的太阳穴，低声哄着你放松下来。
+<<elseif _comp.stage is "crush">>
+	感受到你温热的呼吸拂过颈侧，<<his>>的心跳声陡然加快，犹豫了片刻后，小心翼翼地伸出手臂虚揽住了你的肩膀。
+<<elseif _comp.stage is "friend">>
+	<<He>>自然地调整了一下坐姿，用半边身体替你挡住吹来的穿堂风，轻轻拍了拍你的后背。
+<<else>>
+	<<He>>起初身体微微僵硬了一下，但看到你疲惫的神色，还是安静地挺直了肩膀让你靠着休息。
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_1_a", 20, -6, -4, 0, 200, "与你并肩推进了旧怀表的秘密调查", { love: 1, trust: 2 })>>
 <br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 1 Res B [nobr]
-<<effects>>
-在紧张的探索间隙，你将<<print $mpInteractTargetName>>拉进安静的角落，用温暖的怀抱与亲吻抚平了<<he>>眉宇间的不安。<<He>>顺从地靠在你胸前喘息，看向你的眼神愈发痴迷而眷恋。
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_1_b", 20, -8, -4, 0, 800, "在调查途中与你亲密拥吻", { love: 2, lust: 1, trust: 1 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 1 Res C [nobr]
-<<effects>>
-你凭借老练的警觉心带着<<print $mpInteractTargetName>>避开了所有耳目，在无人察觉的情况下顺走了暗藏的财物并全身而退。<<He>>对你的机敏赞叹不已，紧紧挽着你的手臂不愿松开。
-<<if 20 gt 0>>
-	<br><br>你顺手收起了几件来路隐秘的赃物，或许能在熟识销赃门路的地方换取报酬。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_1_c", 20, -4, -2, 0, 300, "与你默契配合避开了耳目", { love: 1, trust: 1, corruption: 1 })>>
+<<print "温热的吐息在狭小的空间里交织，连带着周遭原本冰冷的空气都染上了一丝暧昧的燥热。衣料摩擦时发出的窸窣声响在安静的角落里被无限放大，每一次不经意的肢体触碰都像是一点火星落在干涸的草地上，引得脊背窜起一阵难以言喻的酥麻。">>
+<<if "companion_cuddle" is "companion_Study">><<schoolskill 3>><</if>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_cuddle", 16, -6, -2, 0, 300, "与你在镇上共度了一段亲密时光", { love: 1, trust: 1, jealousy: -1 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
 
 
-:: MP Companion Quest Stage 2 [nobr]
+
+:: MP Companion Walk [nobr]
 <<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<set $mpInteractTargetName to _comp.name>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", stage: "stranger" })>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-刚回到孤儿院走廊，沉重的皮鞋声便从楼梯口传来。贝利冷着脸拦在走廊中央，锐利的目光在你们两人紧握的手与鼓起的衣袋之间扫视着。
+你与<<print _comp.name>>一同走出门外，沿着僻静的石板路并肩漫步。
 <br><br>
-"这么晚才回来，你们两个在外面搞什么小动作？"贝利伸出手冷冷说道，"这周的规矩不用我再提醒你们吧。"
-<br><br>
-<<investigateicon>><<link [[不动声色地挡在<<him>>身前应付贝利 (0:20)|MP Companion Quest Stage 2 Res A]]>><<pass 20>><<set $mpCompanionQuest to 3>><<set $antiquemoney to ($antiquemoney or 0) + 0>><<set $blackmoney to ($blackmoney or 0) + 30>><</link>><<glove>><<gtrust>>
-<br>
-<<loveicon "hug">><<link [[趁贝利不备将木盒悄悄塞进暗格 (0:20)|MP Companion Quest Stage 2 Res B]]>><<pass 20>><<set $mpCompanionQuest to 3>><<set $antiquemoney to ($antiquemoney or 0) + 0>><<stress -8>><<arousal 800>><</link>><<lstress>><<glove>><<garousal>>
-<br>
-<<sneakicon>><<link [[塞给贝利一点零钱打发对方离开 (0:20)|MP Companion Quest Stage 2 Res C]]>><<pass 20>><<set $mpCompanionQuest to 3>><<set $blackmoney to ($blackmoney or 0) + 30>><<skulduggery 4>><</link>><<gskulduggery>><<gtrust>>
-
-:: MP Companion Quest Stage 2 Res A [nobr]
-<<effects>>
-你握紧<<print $mpInteractTargetName>>的手，与<<he>>一起有条不紊地推进了计划。在默契的配合下，你们不仅顺利拿到了关键的信物，彼此之间的信任也在不知不觉间更加深厚了。
-<<if 0 gt 0>>
-	<br><br>你在整理器物时发现了一件保存完好的旧时代古董，或许博物馆会对它感兴趣。
+<<if _comp.stage is "soulmate">>
+	夕阳与街灯将你们相依的影子拉得很长。无论经过怎样喧嚣或荒凉的街角，<<he>>紧扣着你的十指都未曾松开分毫。
+<<elseif _comp.stage is "lover">>
+	<<He>>全程紧紧牵着你的手揣进自己温暖的外套口袋里，走在靠车马的外侧将你妥帖地护在里侧。
+<<elseif _comp.stage is "crush">>
+	走在狭窄的人行道上时，你们的手背一次次在摆动间轻轻擦碰。终于，<<he>>鼓起勇气用小指勾住了你的指尖，耳根一直红到了脖颈。
+<<elseif _comp.stage is "friend">>
+	微风拂过街角的树梢，你们一边散步一边聊着镇上的趣闻，步调不知不觉间变得一致起来。
+<<else>>
+	你们保持着礼貌的距离并肩走着，遇到泥泞或坑洼的路面时，<<he>>会提前出声提醒你当心脚下。
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_2_a", 20, -6, -4, 0, 200, "与你并肩推进了旧怀表的秘密调查", { love: 1, trust: 2 })>>
 <br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 2 Res B [nobr]
-<<effects>>
-在紧张的探索间隙，你将<<print $mpInteractTargetName>>拉进安静的角落，用温暖的怀抱与亲吻抚平了<<he>>眉宇间的不安。<<He>>顺从地靠在你胸前喘息，看向你的眼神愈发痴迷而眷恋。
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_2_b", 20, -8, -4, 0, 800, "在调查途中与你亲密拥吻", { love: 2, lust: 1, trust: 1 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 2 Res C [nobr]
-<<effects>>
-你凭借老练的警觉心带着<<print $mpInteractTargetName>>避开了所有耳目，在无人察觉的情况下顺走了暗藏的财物并全身而退。<<He>>对你的机敏赞叹不已，紧紧挽着你的手臂不愿松开。
-<<if 30 gt 0>>
-	<br><br>你顺手收起了几件来路隐秘的赃物，或许能在熟识销赃门路的地方换取报酬。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_2_c", 20, -4, -2, 0, 300, "与你默契配合避开了耳目", { love: 1, trust: 1, corruption: 1 })>>
+<<print "墙角潮湿的青苔散发着微苦的泥土腥气，排水渠下方偶尔传来水滴坠落的清脆回响。在这座表面平静、实则暗流涌动的小镇里，每一扇紧闭的百叶窗后似乎都藏着不为人知的窥探视线。你放轻脚步踩过松动的石板，呼吸在冷空气中化作一团浅白的水雾。">>
+<<if "companion_walk" is "companion_Study">><<schoolskill 3>><</if>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_walk", 25, -6, -2, 0, 300, "与你在镇上共度了一段亲密时光", { love: 1, trust: 1 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
 
 
-:: MP Companion Quest Stage 3 [nobr]
+
+:: MP Companion Kiss [nobr]
 <<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<set $mpInteractTargetName to _comp.name>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", stage: "stranger" })>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-根据典当底册上的记号，你与<<print $mpInteractTargetName>>在退潮后的傍晚潜入了商业区通往旧下水道的石砌拱门。潮湿的石壁上滴落着水珠，角落的石龛里果然藏着一只生锈的铁皮匣。
+你抬起头捧住<<print _comp.name>>的脸颊，踮起脚尖吻上了<<his>>的双唇。
 <br><br>
-撬开铁锁后，里面不仅放着怀表的另一半雕花银盖，还压着几枚成色极佳的古银币与一封未寄出的书信。当两半表壳严丝合缝地扣合在一起时，表盘背面弹开了一个微型暗槽，露出一枚小巧的黄铜钥匙。
-<br><br>
-<<investigateicon>><<link [[收好古银币与黄铜钥匙 (0:20)|MP Companion Quest Stage 3 Res A]]>><<pass 20>><<set $mpCompanionQuest to 4>><<set $antiquemoney to ($antiquemoney or 0) + 60>><<set $blackmoney to ($blackmoney or 0) + 40>><</link>><<glove>><<gtrust>>
-<br>
-<<loveicon "hug">><<link [[在幽暗的拱门下抱住受惊的<<him>>温存片刻 (0:20)|MP Companion Quest Stage 3 Res B]]>><<pass 20>><<set $mpCompanionQuest to 4>><<set $antiquemoney to ($antiquemoney or 0) + 60>><<stress -8>><<arousal 800>><</link>><<lstress>><<glove>><<garousal>>
-<br>
-<<sneakicon>><<link [[趁夜色原路潜回地面 (0:20)|MP Companion Quest Stage 3 Res C]]>><<pass 20>><<set $mpCompanionQuest to 4>><<set $blackmoney to ($blackmoney or 0) + 40>><<skulduggery 4>><</link>><<gskulduggery>><<gtrust>>
-
-:: MP Companion Quest Stage 3 Res A [nobr]
-<<effects>>
-你握紧<<print $mpInteractTargetName>>的手，与<<he>>一起有条不紊地推进了计划。在默契的配合下，你们不仅顺利拿到了关键的信物，彼此之间的信任也在不知不觉间更加深厚了。
-<<if 60 gt 0>>
-	<br><br>你在整理器物时发现了一件保存完好的旧时代古董，或许博物馆会对它感兴趣。
+<<if _comp.stage is "soulmate">>
+	这个吻绵长而深邃，仿佛要将彼此的灵魂都揉进骨血之中。分开时<<he>>抵着你的额头急促喘息，眼底满是化不开的浓情与欲火。
+<<elseif _comp.stage is "lover">>
+	<<He>>熟练地托住你的后颈加深了这个吻，舌尖勾着你的软舌缠绵吮吸，直到两人唇角都溢出了晶莹的水泽才恋恋不舍地分开。
+<<elseif _comp.stage is "crush">>
+	压抑已久的悸动在这一刻彻底决堤。<<He>>浑身微颤着反客为主，滚烫的唇舌急切地撬开你的唇齿，连呼吸都变得灼热无比。
+<<elseif _comp.stage is "friend">>
+	<<He>>呼吸一滞，旋即顺从地闭上双眼，双手扶住你的肩膀，与你交换了一个温柔而试探的吻。
+<<else>>
+	<<He>>猛地睁大了眼睛，显然没料到你会如此大胆。短暂的错愕过后，<<he>>笨拙而青涩地回应着你的唇瓣。
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_3_a", 20, -6, -4, 0, 200, "与你并肩推进了旧怀表的秘密调查", { love: 1, trust: 2 })>>
 <br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 3 Res B [nobr]
-<<effects>>
-在紧张的探索间隙，你将<<print $mpInteractTargetName>>拉进安静的角落，用温暖的怀抱与亲吻抚平了<<he>>眉宇间的不安。<<He>>顺从地靠在你胸前喘息，看向你的眼神愈发痴迷而眷恋。
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_3_b", 20, -8, -4, 0, 800, "在调查途中与你亲密拥吻", { love: 2, lust: 1, trust: 1 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 3 Res C [nobr]
-<<effects>>
-你凭借老练的警觉心带着<<print $mpInteractTargetName>>避开了所有耳目，在无人察觉的情况下顺走了暗藏的财物并全身而退。<<He>>对你的机敏赞叹不已，紧紧挽着你的手臂不愿松开。
-<<if 40 gt 0>>
-	<br><br>你顺手收起了几件来路隐秘的赃物，或许能在熟识销赃门路的地方换取报酬。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_3_c", 20, -4, -2, 0, 300, "与你默契配合避开了耳目", { love: 1, trust: 1, corruption: 1 })>>
+<<print "温热的吐息在狭小的空间里交织，连带着周遭原本冰冷的空气都染上了一丝暧昧的燥热。衣料摩擦时发出的窸窣声响在安静的角落里被无限放大，每一次不经意的肢体触碰都像是一点火星落在干涸的草地上，引得脊背窜起一阵难以言喻的酥麻。">>
+<<if "companion_kiss" is "companion_Study">><<schoolskill 3>><</if>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_kiss", 4, -6, -2, 0, 300, "与你在镇上共度了一段亲密时光", { love: 1, lust: 1, jealousy: -1 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
 
 
-:: MP Companion Quest Stage 4 [nobr]
+
+:: MP Companion Lewd [nobr]
 <<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<set $mpInteractTargetName to _comp.name>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", stage: "stranger" })>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-黄铜钥匙的齿纹与学校图书馆最里侧那排旧档案柜完全吻合。放学后，你与<<print $mpInteractTargetName>>借着整理图书的工夫溜进档案室里间，打开了尘封多年的27号木格。
+你将<<print _comp.name>>拉进背光的隐秘角落，滚烫的身体紧密贴合在一起。
 <br><br>
-里面整齐地码放着一叠当年的地契副本、一只镶嵌着蓝宝石的银质发簪，以及一份关于孤儿院地下旧酒窖藏品的清单。<<print $mpInteractTargetName>>靠在你肩头，呼吸因为紧张与贴近而变得格外急促。
-<br><br>
-<<investigateicon>><<link [[收起银质发簪与地契清单 (0:20)|MP Companion Quest Stage 4 Res A]]>><<pass 20>><<set $mpCompanionQuest to 5>><<set $antiquemoney to ($antiquemoney or 0) + 80>><<set $blackmoney to ($blackmoney or 0) + 50>><</link>><<glove>><<gtrust>>
-<br>
-<<loveicon "hug">><<link [[在寂静的档案架之间与<<him>>深吻缠绵 (0:20)|MP Companion Quest Stage 4 Res B]]>><<pass 20>><<set $mpCompanionQuest to 5>><<set $antiquemoney to ($antiquemoney or 0) + 80>><<stress -8>><<arousal 800>><</link>><<lstress>><<glove>><<garousal>>
-<br>
-<<sneakicon>><<link [[迅速抹去开锁的痕迹离开学校 (0:20)|MP Companion Quest Stage 4 Res C]]>><<pass 20>><<set $mpCompanionQuest to 5>><<set $blackmoney to ($blackmoney or 0) + 50>><<skulduggery 4>><</link>><<gskulduggery>><<gtrust>>
-
-:: MP Companion Quest Stage 4 Res A [nobr]
-<<effects>>
-你握紧<<print $mpInteractTargetName>>的手，与<<he>>一起有条不紊地推进了计划。在默契的配合下，你们不仅顺利拿到了关键的信物，彼此之间的信任也在不知不觉间更加深厚了。
-<<if 80 gt 0>>
-	<br><br>你在整理器物时发现了一件保存完好的旧时代古董，或许博物馆会对它感兴趣。
+<<if _comp.stage is "soulmate">>
+	你们早已对彼此身体最敏感的每一寸了如指掌。湿热的唇舌与深入衣内的手指同时发力，很快便在激烈的痉挛与泥泞的水声中一同攀上了巅峰。
+<<elseif _comp.stage is "lover">>
+	<<He>>眼底翻涌着灼热的欲念，一手捂住你的嘴防止声音外泄，另一只手熟练地解开你的搭扣，在紧贴的喘息与摩擦中与你共享极致的快感。
+<<elseif _comp.stage is "crush">>
+	<<He>>满脸通红地抓紧你的衣襟，随着你的指尖探入贴身内衣里拨弄湿滑的软肉，双腿发软地几乎挂在你身上。
+<<elseif _comp.stage is "friend">>
+	借着阴影的掩护，你们隔着衣物互相揉弄着彼此滚烫的敏感部位，压抑的喘息声在狭小的角落里回荡。
+<<else>>
+	<<He>>被你大胆的举动弄得呼吸急促，面对你探入衣摆的手指既羞耻又无力抗拒，只能咬紧下唇任由你抚弄。
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_4_a", 20, -6, -4, 0, 200, "与你并肩推进了旧怀表的秘密调查", { love: 1, trust: 2 })>>
 <br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 4 Res B [nobr]
-<<effects>>
-在紧张的探索间隙，你将<<print $mpInteractTargetName>>拉进安静的角落，用温暖的怀抱与亲吻抚平了<<he>>眉宇间的不安。<<He>>顺从地靠在你胸前喘息，看向你的眼神愈发痴迷而眷恋。
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_4_b", 20, -8, -4, 0, 800, "在调查途中与你亲密拥吻", { love: 2, lust: 1, trust: 1 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 4 Res C [nobr]
-<<effects>>
-你凭借老练的警觉心带着<<print $mpInteractTargetName>>避开了所有耳目，在无人察觉的情况下顺走了暗藏的财物并全身而退。<<He>>对你的机敏赞叹不已，紧紧挽着你的手臂不愿松开。
-<<if 50 gt 0>>
-	<br><br>你顺手收起了几件来路隐秘的赃物，或许能在熟识销赃门路的地方换取报酬。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_4_c", 20, -4, -2, 0, 300, "与你默契配合避开了耳目", { love: 1, trust: 1, corruption: 1 })>>
+<<print "潮湿的海风顺着狭窄的砖石街巷灌入，吹得头顶生锈的铁皮招牌发出吱呀作响的摩擦声。远处钟塔传来的报时声在雾气中显得有些沉闷，路灯昏黄的光晕在积水的青石板路面上投下摇晃的碎影。你下意识地拢了拢衣领，寒冷的空气顺着衣缝钻进皮肤，激起一层细小的鸡皮疙瘩。">>
+<<if "companion_lewd" is "companion_Study">><<schoolskill 3>><</if>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_lewd", 12, -6, -2, 0, 300, "与你在镇上共度了一段亲密时光", { love: 1, lust: 2, corruption: 1 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
 
 
-:: MP Companion Quest Stage 5 [nobr]
+
+:: MP Companion Quest Step [nobr]
 <<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<set $mpInteractTargetName to _comp.name>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", stage: "stranger" })>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-消息似乎还是走漏了风声。当你们在雨夜穿过住宅区小巷返回孤儿院时，两名受雇于地下钱庄的打手堵在了巷道两头，要求你们交出从旧档案室带出来的东西。
-<br><br>
-雨水顺着<<print $mpInteractTargetName>>的脸颊滑落，<<he>>毫不犹豫地将你护在身后，手指紧紧扣住你的手心："别怕，今天就算拼上性命，我也会带你安全走出去。"
-<br><br>
-<<investigateicon>><<link [[与<<him>>并肩突围击退打手 (0:20)|MP Companion Quest Stage 5 Res A]]>><<pass 20>><<set $mpCompanionQuest to 6>><<set $antiquemoney to ($antiquemoney or 0) + 50>><<set $blackmoney to ($blackmoney or 0) + 80>><</link>><<glove>><<gtrust>>
-<br>
-<<loveicon "hug">><<link [[利用熟悉的暗巷地形设伏反制对方 (0:20)|MP Companion Quest Stage 5 Res B]]>><<pass 20>><<set $mpCompanionQuest to 6>><<set $antiquemoney to ($antiquemoney or 0) + 50>><<stress -8>><<arousal 800>><</link>><<lstress>><<glove>><<garousal>>
-<br>
-<<sneakicon>><<link [[以假清单诱骗对方后从水道脱身 (0:20)|MP Companion Quest Stage 5 Res C]]>><<pass 20>><<set $mpCompanionQuest to 6>><<set $blackmoney to ($blackmoney or 0) + 80>><<skulduggery 4>><</link>><<gskulduggery>><<gtrust>>
-
-:: MP Companion Quest Stage 5 Res A [nobr]
-<<effects>>
-你握紧<<print $mpInteractTargetName>>的手，与<<he>>一起有条不紊地推进了计划。在默契的配合下，你们不仅顺利拿到了关键的信物，彼此之间的信任也在不知不觉间更加深厚了。
-<<if 50 gt 0>>
-	<br><br>你在整理器物时发现了一件保存完好的旧时代古董，或许博物馆会对它感兴趣。
+<<set _q to ($mpCompanionQuest or 0)>>
+<<if _q is 0>>
+	在整理<<print _comp.name>>房间床底的旧木匣时，你发现了一只缺少发条音筒的银边八音盒，盒底刻着半行模糊的孤儿院早期档案编号。<<print _comp.name>>看着那只八音盒，轻声说这是自己刚进孤儿院时唯一带在身上的旧物，只可惜里面的芯子早就遗失了。你们决定先去孤儿院旧储物室查一查当年的登记底册。
+	<br><br>
+	潮湿的海风顺着狭窄的砖石街巷灌入，吹得头顶生锈的铁皮招牌发出吱呀作响的摩擦声。远处钟塔传来的报时声在雾气中显得有些沉闷，路灯昏黄的光晕在积水的青石板路面上投下摇晃的碎影。你下意识地拢了拢衣领，寒冷的空气顺着衣缝钻进皮肤，激起一层细小的鸡皮疙瘩。
+	<<set $mpCompanionQuest to 1>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("companion_quest_stage_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+	<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_quest", 18, -10, -5, 0, 400, "与你共同推进了八音盒身世之谜的调查", { love: 2, trust: 2 })>>
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_5_a", 20, -6, -4, 0, 200, "与你并肩推进了旧怀表的秘密调查", { love: 1, trust: 2 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 5 Res B [nobr]
-<<effects>>
-在紧张的探索间隙，你将<<print $mpInteractTargetName>>拉进安静的角落，用温暖的怀抱与亲吻抚平了<<he>>眉宇间的不安。<<He>>顺从地靠在你胸前喘息，看向你的眼神愈发痴迷而眷恋。
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_5_b", 20, -8, -4, 0, 800, "在调查途中与你亲密拥吻", { love: 2, lust: 1, trust: 1 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 5 Res C [nobr]
-<<effects>>
-你凭借老练的警觉心带着<<print $mpInteractTargetName>>避开了所有耳目，在无人察觉的情况下顺走了暗藏的财物并全身而退。<<He>>对你的机敏赞叹不已，紧紧挽着你的手臂不愿松开。
-<<if 80 gt 0>>
-	<br><br>你顺手收起了几件来路隐秘的赃物，或许能在熟识销赃门路的地方换取报酬。
+<<if _q is 1>>
+	你们趁着傍晚无人注意潜入孤儿院旧储物室，在蒙尘的铁皮柜底层翻出了十年前的收养与寄养存根。泛黄的纸页上记载着那只银边八音盒曾被前任管理员典当给了高街的钟表旧货铺。<<print _comp.name>>握紧了你的手，眼底燃起了一丝希冀。
+	<br><br>
+	墙角潮湿的青苔散发着微苦的泥土腥气，排水渠下方偶尔传来水滴坠落的清脆回响。在这座表面平静、实则暗流涌动的小镇里，每一扇紧闭的百叶窗后似乎都藏着不为人知的窥探视线。你放轻脚步踩过松动的石板，呼吸在冷空气中化作一团浅白的水雾。
+	<<set $mpCompanionQuest to 2>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("companion_quest_stage_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+	<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_quest", 18, -10, -5, 0, 400, "与你共同推进了八音盒身世之谜的调查", { love: 2, trust: 2 })>>
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_5_c", 20, -4, -2, 0, 300, "与你默契配合避开了耳目", { love: 1, trust: 1, corruption: 1 })>>
+<<if _q is 2>>
+	你们一同来到高街的钟表旧货铺。修表师塞拉对着放大镜端详了八音盒内壁的刻痕，认出这枚定制音筒早年曾流落到牛津街学园的旧档案室。离开钟表铺时，外头飘起了细雨，<<print _comp.name>>与你共撑一把伞，肩膀紧紧依偎在一起。
+	<br><br>
+	空气中弥漫着旧木头、煤油灯与雨水混合的独特气味。微弱的光线从高处的透气窗斜斜切入，照亮了半空中缓缓浮动的尘埃。你能够清晰地听见自己胸腔里平稳或急促的心跳声，指尖触碰到微凉的石壁时，那种真实而细腻的触感让你纷乱的思绪逐渐沉淀下来。
+	<<set $mpCompanionQuest to 3>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("companion_quest_stage_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+	<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_quest", 18, -10, -5, 0, 400, "与你共同推进了八音盒身世之谜的调查", { love: 2, trust: 2 })>>
+<</if>>
+<<if _q is 3>>
+	趁着放学后的静谧，你们潜入学校图书馆最里侧的旧档案架。在翻找一摞未编号的音乐社团旧物时，外面突然传来了巡查的脚步声。<<print _comp.name>>一把将你拉进狭窄的书架死角里，两人胸膛贴着胸膛屏住呼吸，直到脚步声远去，才在散落的木盒里找到了半张刻有曲谱的铜片。
+	<br><br>
+	不远处的街道上传来零星的脚步声与模糊的交谈，但很快又被呼啸而过的夜风吞没。阴影在墙面上拉得很长，仿佛随时会有什么东西从拐角处伸出手来。你警惕地打量着四周的动静，同时留意着身旁可堪借力的地形与退路。
+	<<set $mpCompanionQuest to 4>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("companion_quest_stage_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+	<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_quest", 18, -10, -5, 0, 400, "与你共同推进了八音盒身世之谜的调查", { love: 2, trust: 2 })>>
+<</if>>
+<<if _q is 4>>
+	铜片背面标注着公园旧玻璃花房的暗格位置。你们在黄昏时分来到公园花房，拨开枯萎的藤蔓，在石砌花坛下方摸到了一个密封的铅盒。然而铅盒上的十字锁孔已经锈死，你们需要去多瑙河街或黑铁货站寻找匹配的精密黄铜钥匙。
+	<br><br>
+	温热的吐息在狭小的空间里交织，连带着周遭原本冰冷的空气都染上了一丝暧昧的燥热。衣料摩擦时发出的窸窣声响在安静的角落里被无限放大，每一次不经意的肢体触碰都像是一点火星落在干涸的草地上，引得脊背窜起一阵难以言喻的酥麻。
+	<<set $mpCompanionQuest to 5>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("companion_quest_stage_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+	<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_quest", 18, -10, -5, 0, 400, "与你共同推进了八音盒身世之谜的调查", { love: 2, trust: 2 })>>
+<</if>>
+<<if _q is 5>>
+	经过一番周折，你们终于寻获了那把带有天鹅纹章的黄铜小匙。在孤儿院温暖的台灯下，<<print _comp.name>>屏息凝神地转动钥匙，铅盒应声弹开——里面静静躺着那枚失落多年的纯银音筒，以及一封证明<<he>>身世清白的旧信函。
+	<br><br>
+	当紧绷的神经稍稍放松下来时，积攒在四肢百骸里的疲倦与酸楚便悄然浮现。然而看着眼前熟悉而专注的面孔，那些在贝利催逼与街巷周旋中生出的阴郁与不安，似乎都在这一刻找到了可以停靠的港湾。
+	<<set $mpCompanionQuest to 6>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("companion_quest_stage_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+	<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_quest", 18, -10, -5, 0, 400, "与你共同推进了八音盒身世之谜的调查", { love: 2, trust: 2 })>>
+<</if>>
+<<if _q is 6>>
+	你们将纯银音筒重新装回八音盒中，轻轻拧紧发条。清脆而温柔的摇篮曲在寂静的房间里缓缓流淌开来。<<print _comp.name>>怔怔地听着那段跨越了漫长岁月的旋律，眼眶泛起晶莹的泪光，转过身一把将你紧紧拥入怀中，声音哽咽地倾诉着对你的感激与爱意。
+	<br><br>
+	潮湿的海风顺着狭窄的砖石街巷灌入，吹得头顶生锈的铁皮招牌发出吱呀作响的摩擦声。远处钟塔传来的报时声在雾气中显得有些沉闷，路灯昏黄的光晕在积水的青石板路面上投下摇晃的碎影。你下意识地拢了拢衣领，寒冷的空气顺着衣缝钻进皮肤，激起一层细小的鸡皮疙瘩。
+	<<set $mpCompanionQuest to 7>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("companion_quest_stage_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+	<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_quest", 18, -10, -5, 0, 400, "与你共同推进了八音盒身世之谜的调查", { love: 2, trust: 2 })>>
+<</if>>
+<<if _q is 7>>
+	随着旧八音盒与身世信函的秘密彻底解开，<<print _comp.name>>从盒底取出一枚与八音盒成套的纯银同心指环，郑重地戴在了你的手指上。从此无论这座小镇有多少风雨，你们的心意与命运都已彻底相连。
+	<br><br>
+	墙角潮湿的青苔散发着微苦的泥土腥气，排水渠下方偶尔传来水滴坠落的清脆回响。在这座表面平静、实则暗流涌动的小镇里，每一扇紧闭的百叶窗后似乎都藏着不为人知的窥探视线。你放轻脚步踩过松动的石板，呼吸在冷空气中化作一团浅白的水雾。
+	<<set $mpCompanionQuest to 8>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("companion_quest_stage_8")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+	<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_quest", 18, -10, -5, 0, 400, "与你共同推进了八音盒身世之谜的调查", { love: 2, trust: 2 })>>
+<</if>>
 <br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
+<<socialiseicon>><<link [[返回同伴身边 (0:03)|MP Companion Hub]]>><<pass 3>><</link>>
 
 
-:: MP Companion Quest Stage 6 [nobr]
+
+:: MP Companion Room Game [nobr]
 <<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<set $mpInteractTargetName to _comp.name>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", stage: "stranger" })>>
 <<generateNPC 1 "a" _comp.pronoun _comp.gender>>
 <<person1>>
-回到孤儿院后，你们趁着深夜无人，用那枚黄铜钥匙打开了孤儿院最底层旧储物室地板下的暗门。顺着石阶走下去，一间干爽隐秘的地下石室出现在眼前。
+你与<<print _comp.name>>并肩窝在床沿的地毯上，打开床头那台老旧的小彩电与双人手柄，玩起了像素闯关游戏。屏幕微弱的荧光映照着你们凑得很近的侧脸。
 <br><br>
-石桌上摆放着当年博物学者留下的古董匣、几袋封存完好的金币，以及一处足以作为你们两人秘密避风港的休憩床榻。面对这份足以改变你们处境的秘藏，<<print $mpInteractTargetName>>转过身凝视着你的眼睛，等待着你做出最后的决定。
-<br><br>
-<<investigateicon>><<link [[将古董妥善保存，把石室作为两人温暖的秘密家园 (0:20)|MP Companion Quest Stage 6 Res A]]>><<pass 20>><<set $mpCompanionQuest to 7>><<set $antiquemoney to ($antiquemoney or 0) + 120>><<set $blackmoney to ($blackmoney or 0) + 120>><</link>><<glove>><<gtrust>>
-<br>
-<<loveicon "hug">><<link [[借这笔资金与暗巷渠道建立属于你们的地下人脉 (0:20)|MP Companion Quest Stage 6 Res B]]>><<pass 20>><<set $mpCompanionQuest to 7>><<set $antiquemoney to ($antiquemoney or 0) + 120>><<stress -8>><<arousal 800>><</link>><<lstress>><<glove>><<garousal>>
-<br>
-<<sneakicon>><<link [[在石室的软榻上褪去衣物，与<<him>>彻夜沉沦欢好 (0:20)|MP Companion Quest Stage 6 Res C]]>><<pass 20>><<set $mpCompanionQuest to 7>><<set $blackmoney to ($blackmoney or 0) + 120>><<skulduggery 4>><</link>><<gskulduggery>><<gtrust>>
-
-:: MP Companion Quest Stage 6 Res A [nobr]
-<<effects>>
-你握紧<<print $mpInteractTargetName>>的手，与<<he>>一起有条不紊地推进了计划。在默契的配合下，你们不仅顺利拿到了关键的信物，彼此之间的信任也在不知不觉间更加深厚了。
-<<if 120 gt 0>>
-	<br><br>你在整理器物时发现了一件保存完好的旧时代古董，或许博物馆会对它感兴趣。
+<<if _comp.stage is "soulmate" or _comp.stage is "lover">>
+	玩到惊险的Boss关时，<<print _comp.name>>干脆从背后环住你的肩膀，把下巴抵在你颈窝里和你一起按手柄按键。通关的瞬间，<<he>>开心地偏过头在你脸颊上亲了一口："我们两个配合起来果然天下无敌。"
+<<elseif _comp.stage is "crush">>
+	你们的手指在争抢道具时不小心碰到了一起，<<print _comp.name>>的耳根瞬间红透，手忙脚乱地按错了好几个键，惹得你们相视一笑，连日来的紧绷与阴霾都消散了许多。
+<<else>>
+	你们默契地分工掩护，一路打通了好几个高难关卡，房间里回荡着难得轻松的笑声。
 <</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_6_a", 20, -6, -4, 0, 200, "与你并肩推进了旧怀表的秘密调查", { love: 1, trust: 2 })>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("companion_talk", 25, -10, -4, 0, 150, "与你在房间床边一起玩了双人游戏", { love: 1, trust: 1 })>>
 <br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 6 Res B [nobr]
-<<effects>>
-在紧张的探索间隙，你将<<print $mpInteractTargetName>>拉进安静的角落，用温暖的怀抱与亲吻抚平了<<he>>眉宇间的不安。<<He>>顺从地靠在你胸前喘息，看向你的眼神愈发痴迷而眷恋。
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_6_b", 20, -8, -4, 0, 800, "在调查途中与你亲密拥吻", { love: 2, lust: 1, trust: 1 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-:: MP Companion Quest Stage 6 Res C [nobr]
-<<effects>>
-你凭借老练的警觉心带着<<print $mpInteractTargetName>>避开了所有耳目，在无人察觉的情况下顺走了暗藏的财物并全身而退。<<He>>对你的机敏赞叹不已，紧紧挽着你的手臂不愿松开。
-<<if 120 gt 0>>
-	<br><br>你顺手收起了几件来路隐秘的赃物，或许能在熟识销赃门路的地方换取报酬。
-<</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("comp_quest_6_c", 20, -4, -2, 0, 300, "与你默契配合避开了耳目", { love: 1, trust: 1, corruption: 1 })>>
-<br><br>
-<<socialiseicon>><<link [[继续|MP Companion Hub]]>><</link>>
-
-
-:: MP Companion Quest Epilogue [nobr]
-<<effects>>
-<<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
-<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek" })>>
-<<generateNPC 1 "a" _comp.pronoun _comp.gender>>
-<<person1>>
-你们顺着旧储物室的暗门走进那间只属于你们两人的地下秘密石室。暖黄的煤油灯映照着整洁的软榻与书架，<<print _comp.name>>正坐在软榻边替你温着热茶。
-<br><br>
-"不管外面的世界有多乱，这里永远是只属于我们两个人的地方，"<<he>>向你伸出手，眼底满是温柔的光彩。
-<<if !$daily or !$daily.mpCompSanctuaryReward>>
-	<<set $daily.mpCompSanctuaryReward to 1>>
-	<<stress -12>><<trauma -8>><<tiredness -8>>
-	<<set $antiquemoney to ($antiquemoney or 0) + 20>>
-	<br><br><<He>>将今天在旧账册夹层里新整理出的一枚古董银章交到了你手里。
-<</if>>
-<br><br>
-<<bedicon "double">><<link [[在秘密石室的软榻上与<<him>>缠绵温存 (0:30)|MP Companion Start Combat]]>><<pass 30>><</link>><<promiscuous2>>
-<br>
-<<socialiseicon>><<link [[返回伴侣互动|MP Companion Hub]]>><</link>>
+<<socialiseicon>><<link [[放下手柄继续交谈 (0:02)|MP Companion Room]]>><<pass 2>><</link>>

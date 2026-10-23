@@ -1,4 +1,4 @@
-/* DoL-MP client mod v0.6.0 — 原版沉浸文风 + 独立/同步时间线与选择同步 + 遭遇战原版NPC完整保留 + PvP真名/破处/逃跑判定 + 离线伴侣NPC与大世界暗线系统
+/* DoL-MP client mod v0.9.0 — 原版沉浸文风 + 独立/同步时间线与选择同步 + 遭遇战原版NPC完整保留 + PvP真名/破处/逃跑判定 + 离线伴侣NPC与大世界暗线系统
  * 核心特性：
  * 1. 彻底移除所有剧透提示、【...】标签与（...）括号备注，100% 遵循 DoL 原版沉浸式文风与图标系统
  * 2. 时间线机制：分头行动时各自时间独立流动；组队时各自行动扣减自己的时间线，并提供「同步时间线」按钮，可选择同步任意队友的时间线
@@ -23,7 +23,20 @@
   var LS_HOST = "dolmp.host";
   var LS_REL = "dolmp.relations.v6";
   var LS_COMPANION = "dolmp.companion.v6";
+  var LS_UID = "dolmp.player_uid.v9";
   var DEFAULT_SERVER = "ws://127.0.0.1:8787";
+
+  function getOrCreatePlayerUid() {
+    try {
+      var u = localStorage.getItem(LS_UID);
+      if (u && u.length >= 8) return u;
+      u = "u_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem(LS_UID, u);
+      return u;
+    } catch (e) {
+      return "u_local_default";
+    }
+  }
 
   var SAFE_PASSAGES = [
     "Orphanage", "Bedroom", "Bathroom", "Garden", "Domus Street", "Barb Street",
@@ -38,6 +51,14 @@
     "Brothel", "Pub", "Hospital Courtyard", "Police Station", "Ocean Breeze", "Adult Shop",
     "Arcade", "Docks", "Farmland", "Cottage", "Sewers", "Sewers Lake",
     "Residential Alleyways", "Commercial Alleyways", "Industrial Alleyways", "Park Toilets",
+    "MP Region Foghorn Island", "MP Region Foghorn Pier", "MP Region Foghorn Keeper", "MP Region Foghorn Wreck", "MP Region Foghorn Echo",
+    "MP Region Clockwork Undercity", "MP Region Clockwork Corridor", "MP Region Clockwork Steam", "MP Region Clockwork Astro", "MP Region Clockwork Vault",
+    "MP Region Sunken Abbey", "MP Region Abbey Steps", "MP Region Abbey Confess", "MP Region Abbey Scriptorium", "MP Region Abbey Ferry",
+    "MP Region Glasshouse Manor", "MP Region Glasshouse Orchid", "MP Region Glasshouse Specimen", "MP Region Glasshouse Dome", "MP Region Glasshouse Cellar",
+    "MP Region Blackiron Yard", "MP Region Blackiron Siding", "MP Region Blackiron Armored", "MP Region Blackiron Signal", "MP Region Blackiron Platform",
+    "MP Region Druid Circle", "MP Region Druid Pillars", "MP Region Druid Moonwell", "MP Region Druid Rootcave", "MP Region Druid Watchtower",
+    "MP Region Velvet Mirage", "MP Region Velvet Masque", "MP Region Velvet Salon", "MP Region Velvet Terrace", "MP Region Velvet Auction",
+    "MP Region Observatory Wing", "MP Region Observatory Dome", "MP Region Observatory Star", "MP Region Observatory Cabinet", "MP Region Observatory Bridge",
     "联机会客厅", "多人卧室"
   ];
 
@@ -166,6 +187,46 @@
     "Farmland": "农场",
     "Kylar Manor": "凯拉尔庄园",
     "Sewers": "下水道",
+    "MP Region Foghorn Island": "雾角灯塔岛",
+    "MP Region Foghorn Pier": "雾角栈桥",
+    "MP Region Foghorn Keeper": "守塔人旧居",
+    "MP Region Foghorn Wreck": "断桅沉船滩",
+    "MP Region Foghorn Echo": "海蚀回音廊",
+    "MP Region Clockwork Undercity": "旧钟塔地下机括城",
+    "MP Region Clockwork Corridor": "青铜齿轮回廊",
+    "MP Region Clockwork Steam": "蒸汽压力室",
+    "MP Region Clockwork Astro": "停摆天文台",
+    "MP Region Clockwork Vault": "档案馆密库",
+    "MP Region Sunken Abbey": "圣堂地下古修道院",
+    "MP Region Abbey Steps": "静默石阶",
+    "MP Region Abbey Confess": "告解回音壁",
+    "MP Region Abbey Scriptorium": "灰烬藏经阁",
+    "MP Region Abbey Ferry": "地下暗河渡口",
+    "MP Region Glasshouse Manor": "多瑙河秘密温室庄园",
+    "MP Region Glasshouse Orchid": "雾化兰花厅",
+    "MP Region Glasshouse Specimen": "夜光标本廊",
+    "MP Region Glasshouse Dome": "玻璃穹顶露台",
+    "MP Region Glasshouse Cellar": "地下酿造室",
+    "MP Region Blackiron Yard": "麋鹿街黑铁货运站",
+    "MP Region Blackiron Siding": "废弃调车场",
+    "MP Region Blackiron Armored": "三号装甲货车",
+    "MP Region Blackiron Signal": "信号塔值班室",
+    "MP Region Blackiron Platform": "地下走私月台",
+    "MP Region Druid Circle": "深林古德鲁伊石环",
+    "MP Region Druid Pillars": "迷雾石柱群",
+    "MP Region Druid Moonwell": "月泉祭坛",
+    "MP Region Druid Rootcave": "古根地穴",
+    "MP Region Druid Watchtower": "守林人瞭望台",
+    "MP Region Velvet Mirage": "峭壁天鹅绒暗层",
+    "MP Region Velvet Masque": "丝绒假面回廊",
+    "MP Region Velvet Salon": "镜面试衣沙龙",
+    "MP Region Velvet Terrace": "露台观海雅座",
+    "MP Region Velvet Auction": "私人拍卖暗厅",
+    "MP Region Observatory Wing": "牛津街旧学园天文翼楼",
+    "MP Region Observatory Dome": "折光穹顶室",
+    "MP Region Observatory Star": "星图档案室",
+    "MP Region Observatory Cabinet": "标本陈列暗阁",
+    "MP Region Observatory Bridge": "钟楼连廊",
     "Tutorial": "街巷遭遇",
     "MP Native Combat": "遭遇战中"
   };
@@ -249,7 +310,23 @@
     ["Forest", "Deep Forest", 10],
     ["Forest", "Cottage", 10],
     ["Deep Forest", "Cottage", 5],
-    ["Deep Forest", "Wolf Cave", 6]
+    ["Deep Forest", "Wolf Cave", 6],
+    ["Sea Rocks", "MP Region Foghorn Island", 8],
+    ["Docks", "MP Region Foghorn Island", 10],
+    ["High Street", "MP Region Clockwork Undercity", 6],
+    ["Sewers", "MP Region Clockwork Undercity", 8],
+    ["Temple", "MP Region Sunken Abbey", 6],
+    ["Forest", "MP Region Sunken Abbey", 9],
+    ["Danube Street", "MP Region Glasshouse Manor", 5],
+    ["Park", "MP Region Glasshouse Manor", 6],
+    ["Elk Street", "MP Region Blackiron Yard", 5],
+    ["Industrial Alleyways", "MP Region Blackiron Yard", 4],
+    ["Deep Forest", "MP Region Druid Circle", 7],
+    ["Farmland", "MP Region Druid Circle", 9],
+    ["Connudatus Street", "MP Region Velvet Mirage", 4],
+    ["Cliff Street", "MP Region Velvet Mirage", 5],
+    ["School Library", "MP Region Observatory Wing", 4],
+    ["Hallways", "MP Region Observatory Wing", 5]
   ];
 
   var BUS_STOPS = [
@@ -475,6 +552,7 @@
     acts: new Map(),
     chat: [],
     retryTimer: null,
+    playerUid: getOrCreatePlayerUid(),
     name: localStorage.getItem(LS_NAME) || ("玩家" + Math.floor(Math.random() * 900 + 100)),
     server: localStorage.getItem(LS_SERVER) || DEFAULT_SERVER,
     room: null,
@@ -652,6 +730,40 @@
     return true;
   }
 
+  function canClaimUniqueReward(rewardKey) {
+    if (!rewardKey) return false;
+    var v = V();
+    if (!v) return false;
+    if (!v.mpUniqueRewards || typeof v.mpUniqueRewards !== "object") {
+      v.mpUniqueRewards = {};
+    }
+    if (rewardKey === "tutorial_first_spray") {
+      var lsClaimed = false;
+      try { lsClaimed = localStorage.getItem("dolmp.tutorial_spray_done") === "1"; } catch (e) {}
+      if (lsClaimed || v.tutorial === 1 || v.mpTutorialSprayClaimed === 1 || (Number(v.spraymax) || 0) >= 1 || (Number(v.spray) || 0) >= 1) {
+        v.mpUniqueRewards[rewardKey] = 1;
+        v.mpTutorialSprayClaimed = 1;
+        return false;
+      }
+      return false;
+    }
+    return v.mpUniqueRewards[rewardKey] !== 1;
+  }
+
+  function claimUniqueReward(rewardKey) {
+    if (!canClaimUniqueReward(rewardKey)) return false;
+    var v = V();
+    if (!v.mpUniqueRewards || typeof v.mpUniqueRewards !== "object") {
+      v.mpUniqueRewards = {};
+    }
+    v.mpUniqueRewards[rewardKey] = 1;
+    if (rewardKey === "tutorial_first_spray") {
+      v.mpTutorialSprayClaimed = 1;
+      try { localStorage.setItem("dolmp.tutorial_spray_done", "1"); } catch (e) {}
+    }
+    return true;
+  }
+
   function canDoDailyInteract(kind) {
     if (!kind) return true;
     var v = V();
@@ -701,19 +813,7 @@
   }
 
   function renderRelationshipBannerHtml() {
-    var v = V();
-    var targetName = (S.interactTarget && S.interactTarget.name) || (v && v.mpInteractTargetName) || (S.companion && S.companion.name) || "同伴";
-    var r = getRel(targetName);
-    return [
-      '<div class="mp-rel-title">' + escapeHtml(targetName) + ' · ' + stageLabelCn(r.stage) + '</div>',
-      '<div class="mp-rel-stats">',
-      '<span class="mp-rel-pill" style="color:#65f08e;">爱意 ' + r.love + '/100</span>',
-      '<span class="mp-rel-pill" style="color:#64d8cb;">信任 ' + r.trust + '/100</span>',
-      '<span class="mp-rel-pill" style="color:#ff85c0;">性欲 ' + r.lust + '/100</span>',
-      '<span class="mp-rel-pill" style="color:#c78cff;">占有 ' + r.jealousy + '/100</span>',
-      '<span class="mp-rel-pill" style="color:#ff9f5a;">共鸣 ' + r.corruption + '/100</span>',
-      '</div>'
-    ].join("");
+    return "";
   }
 
   /* ---------------- 离线伴侣 NPC 持久化与日程/性格差分系统 ---------------- */
@@ -724,6 +824,7 @@
       if (raw) return JSON.parse(raw);
     } catch (e) {}
     return {
+      playerUid: "",
       name: "艾琳",
       pronoun: "f",
       gender: "f",
@@ -742,8 +843,38 @@
     } catch (e) {}
   }
 
+  function isSamePlayerAsCompanion(p, comp) {
+    if (!p || !comp) return false;
+    if (p.playerUid && comp.playerUid && String(p.playerUid) === String(comp.playerUid)) {
+      return true;
+    }
+    var pName = String(p.name || "").trim().toLowerCase();
+    var cName = String(comp.name || "").trim().toLowerCase();
+    if (pName && cName && pName === cName) {
+      return true;
+    }
+    return false;
+  }
+
+  function findOnlineCompanionPeer() {
+    var comp = S.companion || (V() && V().mpCompanion) || null;
+    if (!comp || S.players.size === 0) return null;
+    var matched = null;
+    S.players.forEach(function (p) {
+      if (!matched && isSamePlayerAsCompanion(p, comp)) {
+        matched = p;
+      }
+    });
+    if (!matched && S.players.size === 1) {
+      matched = S.players.values().next().value;
+    }
+    return matched;
+  }
+
   function updateCompanionFromOnlinePlayer(p) {
     if (!p || !p.name) return;
+    var prevComp = S.companion || {};
+    var oldName = prevComp.name || "";
     var snap = p.combatSnapshot || {};
     var pl = snap.player || {};
     var app = p.appearance || {};
@@ -756,17 +887,29 @@
       else if ((st.willpower || 0) <= 450) att = "meek";
       else att = "neutral";
     }
-    S.companion = Object.assign({}, S.companion || {}, {
+    // 若同一个玩家（相同 playerUid）修改了昵称，自动迁移关系数据与日志羁绊
+    if (oldName && oldName !== p.name && (!prevComp.playerUid || prevComp.playerUid === p.playerUid)) {
+      if (S.relations && S.relations[oldName] && !S.relations[p.name]) {
+        S.relations[p.name] = clone(S.relations[oldName]);
+      }
+      var v = V();
+      if (v && v.mpRelations && v.mpRelations[oldName] && !v.mpRelations[p.name]) {
+        v.mpRelations[p.name] = clone(v.mpRelations[oldName]);
+      }
+    }
+    S.companion = Object.assign({}, prevComp, {
       id: p.id,
+      playerUid: p.playerUid || prevComp.playerUid || "",
       name: p.name,
       pronoun: pronoun,
       gender: gender,
       attitude: att,
-      hairColour: app.hairColour || snap.haircolour || "silver",
-      eyeColour: app.eyeColour || snap.leftEyeColour || "purple",
-      skinColour: app.skinColour || snap.skinColour || "light",
-      combatSnapshot: snap,
-      stats: p.stats || {},
+      hairColour: app.hairColour || snap.haircolour || prevComp.hairColour || "silver",
+      eyeColour: app.eyeColour || snap.leftEyeColour || prevComp.eyeColour || "purple",
+      skinColour: app.skinColour || snap.skinColour || prevComp.skinColour || "light",
+      lastPassage: p.passage || prevComp.lastPassage || "Orphanage",
+      combatSnapshot: snap.player ? snap : (prevComp.combatSnapshot || {}),
+      stats: p.stats || prevComp.stats || {},
       hasMet: 1,
       updatedAt: Date.now()
     });
@@ -811,8 +954,11 @@
     if (rel.jealousy >= 20) personaVariant = "possessive";
     else if (rel.corruption >= 20 || (Number(v.promiscuity) || 0) >= 55) personaVariant = "corrupt";
 
+    var onlinePeer = findOnlineCompanionPeer();
     v.mpCompanion = Object.assign({}, v.mpCompanion || {}, {
-      name: comp.name || "艾琳",
+      playerUid: comp.playerUid || "",
+      onlinePeerId: onlinePeer ? onlinePeer.id : "",
+      name: (onlinePeer && onlinePeer.name) ? onlinePeer.name : (comp.name || "艾琳"),
       pronoun: comp.pronoun === "m" ? "m" : "f",
       gender: ["m", "f", "h"].indexOf(comp.gender) >= 0 ? comp.gender : (comp.pronoun === "m" ? "m" : "f"),
       attitude: comp.attitude || "meek",
@@ -825,8 +971,9 @@
       jealousy: rel.jealousy || 0,
       corruption: rel.corruption || 0,
       stage: rel.stage || "stranger",
+      lastPassage: (onlinePeer && onlinePeer.passage) ? onlinePeer.passage : (comp.lastPassage || "Orphanage"),
       activeLocations: getCompanionScheduledLocations(),
-      isPartnerOnline: S.players.size > 0
+      isPartnerOnline: !!onlinePeer
     });
   }
 
@@ -853,14 +1000,157 @@
     return n;
   }
 
+  var CUSTOM_GIFS = {"tv": "data:image/gif;base64,R0lGODlhEAAQAIMAABgUJQAAAFppiECk9DpEZnPv6P9aeP/Uef///wAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJJAAAACwAAAAAEAAQAAAIbgADCAwAoKDBggMTAhDAsCFDAAkJOpwoAKLAhRUPGnx4seKAjyA/LrQ48iOCAihFVuwIIGTIkSw/HvhoQCVJjy5tdsyoEePNhgQMHCDg0CLBnhojAiDAtClToxedSiUAdSkCA04PFKCqFClCgQEBACH5BAkkAAAALAAAAAAQABAAgxgUJQAAAFppiHPv6DpEZkCk9P9aeP/Uef///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAhsAAMIDACgoMGCAxMCEMCwIUMACQk6nCgAosCFFQ8afHix4oCPID8utDjyI4ICKEVW7AggZMiRLD8a+HhAJUmPLm12zKgR482GBA4YIODQIsGeGiMCIMC0KVOjF51KJQB1qVCnCAZQVYoUocCAADs=", "fist": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAAPS0jBgUJcR4WOZFRf///wAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJHgAAACwAAAAAEAAQAAAIVwABCAQgoKDBggMTCggQYGFDhgISEoRI8WHEgQ4ZatR4UaCAASBDiuyYMUCBjRw9olzZEKPIlwM6qmQp0yNMkDU9EtjJM6dOnjt9EjxoUKLRo0iTKj0aEAAh+QQJHgAAACwBAAAADgANAIIAAAD0tIwYFCXEeFjmRUX/3G7///8AAAAIUQALAAAgoKDBggMFFhAQIABDhw0FCCQYsSJEAQMfGmjIMWLGASBDisT4sOHGjhFLouxIUqTLARgzrvQ4kOBLkDFrCiDAs2dOnT191tR50GDNgAA7", "shelter": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAABgUJdhqqPXQbpQ8cFqv/////wAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJIgAAACwAAAAAEAAQAAAIVgABACggUGCAAAUHJkwYQIAAhAsZNnT4EOLCiQYoOrRoUKPHhwUnCiBAsiRFiAdTqlwZ0eAAiwQLxnTJsSVNmxdfCpx58aBOnAACDBhas2VKoEiTRgwIACH5BAkiAAAALAEAAAAOAA4AggAAABgUJdhqqPXQbpQ8cFqv/////wAAAAhPAAEIHBggwMCDBQgKEGBQYEKCARYuLHgQQEQBBiROVKixo8GLAgiIHCmxoMmTKBseDDBAZUWCLQc+fCiQpcuXFmPitFhQJ02YA3TuNPkyIAA7", "bloodmoon": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAABgUJdwoQf+CoL7r/4ISJv///wAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJKAAAACwAAAAAEAAQAAAIcQABCAQQoKDBggMHFhTAsCFDhAIDMBxAsSLFhxEFUDxY8GIAghoHBCBAsmQAjxJFkjTA0gDJkwIWqjQgMaZLmDJHEmjpkgDOlCpLvvQIciNHoiAFFFjKdCnGiAGaNoWYkKPBhFgFJNSKtSvDrmDDCgwIACH5BAkoAAAALAAAAAAQAA8AggAAABgUJdwoQb7r/4ISJv////+CoAAAAAhvAAEIBBCgoMGCAwcWJMCwIUOEAgMQEECxokUCASJSPHhwI8GNA0KKDBlgY8kAAwoUMMDSgMoBJ0+mNBBAZQCXMAUU1JlyZcuXMUGOFFlS50edHHcaJTjRolOMCiU6bAgxYdKqCQUMpLg1YdavCQMCADs=", "bailey": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAABgUJf/QRsiMHqCswP///wAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJJgAAACwAAAAAEAAQAAAIXwADBABAsKBBggIDEBgIIGFChAsbLgwgoKJFgRERUhRQwGJFgQY3CggwYIBHhgg/lix5MeRFli0LihQA86PLiitN2pQ58yRKhQJzlsQ4EKhGhxAfHlwKcqnTp1CjOg0IACH5BAkmAAAALAAAAAAQAA0AggAAABgUJdw3N19qfv/QRv///wAAAAAAAAhZAAMEAECwoEGCAgMMGAggYUKECxsuDCCgokWBERFSFFDAYkWBBjcKCECAgEeGCD+WLHkx5EWWLQuKFADzo8uKK03alDnzJEqFGAcIFYpxIFCNDiE+PMhUYEAAOw==", "badend": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAABgUJddVw/XIWv///30jcwAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJJgAAACwAAAAAEAAQAAAIXgABCBQYoKDBgQgJDljIMEBChQMMBljoMOHEigoxEpTIseDAAAJCihwZsiJIAQRIjjS50uBKgiIDEJhJ4KQAliVryrSJM2fNlwACFBha4CZIogUwduz4sKnTp1ChBgQAIfkECSYAAAAsAQAAAA4ADQCCAAAAGBQlfSNz11XD9chaAAAAAAAAAAAACFYAAQgEEKCgwYEIAxBYyDAAQoILDSok4HCgwooCL1qUyLEgQQEgQ4oEWRDkgJMoT5IMYHKARJUCSgpwyZDigJUmL168GZPlTJo2ecrMGYAnSYIdOQIICAA7", "trial": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAABgUJcjc9f/SWv///26b3AAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJIAAAACwAAAAAEAAQAAAIXwABBAgAoKDBgwMFEhBA8KDBAAIIDBQQsSHChQwFUpR4kaJFiBULBsBoUeTGgSQdmoyYUuVKjy5FDhgwcGbJhzZl0nQYoECBkj1/PvR5UyBRgTldBsiZMKbAok6jxgwIACH5BAkgAAAALAAAAAAQAA4AggAAABgUJf///8jc9f/SWm6b3AAAAAAAAAheAAEECACgoMGDAwUKEEDwoMEACwcuZOhQYUSBAwZQfCggY0OMGhtC9OgwQEaGIwd8RDhx4sqSLV8iJEBgIE2ZAm8WDKATYYECKwP8/CgUaMWiBHnWrLhTZ0KmOwkGBAA7", "p2p": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAABgUJVDrkf/cZFrI+v///wAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJIwAAACwAAAAAEAAQAAAITgABCBwYoGCAgQgRBiDAkMDBhBAVJjT4UCJBARgFVBzAccDFAhgfehw4MkBGjREVGpy4MqVAkxk3IvRoEiRKkh1fnqyYkqLLn0CDCgUaEAAh+QQJIwAAACwAAAAADwAMAIIAAAAYFCVayPpQ65H/3GT///8AAAAAAAAISgABCBwYoGCAgQgJElhI4GDChwQRGnQokaCAiwIoDtg4QGAAAQUuOuw4sONHjBQhTky4EqJHjBkFkpQJ4GPImDI5vkTp0qNBAAEBADs=", "heart": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAAP9zrxgUJeY3c////wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJJAAAACwAAAAAEAAQAAAIVQABABBAUCBBAQITGgzAkCDDAAgVCmBI4KHFgwstXhzAEeFEjQ05ivQIEuIAAiMzbhQ5IOJAjQJYulRpsqPChB9rzrz5MebOmwMxAh1KtKjRo0hvBgQAIfkECSQAAAAsAAABABAACwCCAAAA/3OvGBQl5jdz////AAAAAAAAAAAACEsAAQAQQFAgQQECExoMwJAgwwAHEQ5kSODhQwEDMiIUYNEixowaOXZsOIAAyI0jIYLUuLDjR5YJRV48qbAlyQESa04kmVPnwIg1AwIAOw==", "lantern": "data:image/gif;base64,R0lGODlhEAAQAIIAAAAAABgUJbSCPP/hbv///+uRMgAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJIgAAACwAAAAAEAAQAAAIUQABCBwYoGCAgQgRBhDAUMDBhAQNSoQIYKGAARgHMHyo8CKBjwQ0ciTosUCBkA4hLhwAEuVIgRYzakypUqJBihYbNnwJ02ZBikCDCh1KtKjRgAAh+QQJIgAAACwDAAAACgALAIIAAAAYFCW0gjz/4W7rkTL///8AAAAAAAAIPQABCAxAMIDAgwEEKBRgcGDBhwASChhAcYBCghMJaCRgEeMAAgUKcGSY8OPGjhIrWmQY8WHBiAtjsnT5MiAAOw=="};
+
+  function resolveCustomGif(keyOrPath) {
+    var s = String(keyOrPath || "");
+    if (CUSTOM_GIFS[s]) return CUSTOM_GIFS[s];
+    if (s.indexOf("custom:") === 0) {
+      var k = s.slice(7);
+      if (CUSTOM_GIFS[k]) return CUSTOM_GIFS[k];
+    }
+    if (s.indexOf("tv") >= 0) return CUSTOM_GIFS.tv;
+    if (s.indexOf("fist") >= 0) return CUSTOM_GIFS.fist;
+    if (s.indexOf("shelter") >= 0) return CUSTOM_GIFS.shelter;
+    if (s.indexOf("bloodmoon") >= 0) return CUSTOM_GIFS.bloodmoon;
+    if (s.indexOf("bailey") >= 0) return CUSTOM_GIFS.bailey;
+    if (s.indexOf("badend") >= 0) return CUSTOM_GIFS.badend;
+    if (s.indexOf("trial") >= 0) return CUSTOM_GIFS.trial;
+    if (s.indexOf("p2p") >= 0) return CUSTOM_GIFS.p2p;
+    if (s.indexOf("heart") >= 0) return CUSTOM_GIFS.heart;
+    if (s.indexOf("lantern") >= 0) return CUSTOM_GIFS.lantern;
+    return "";
+  }
+
   function dolIconImg(relPath) {
+    var customUri = resolveCustomGif(relPath);
     var img = el("img", {
       class: "icon",
-      src: relPath,
-      style: "width:16px;height:16px;vertical-align:middle;margin-right:3px;"
+      src: customUri || relPath,
+      style: "width:16px;height:16px;vertical-align:middle;margin-right:4px;image-rendering:pixelated;"
     });
-    img.addEventListener("error", function () { img.style.display = "none"; });
+    img.addEventListener("error", function () {
+      img.src = CUSTOM_GIFS.lantern;
+    });
     return img;
+  }
+
+  function installCustomIconMacros() {
+    var M = window.Macro || (window.SugarCube && window.SugarCube.Macro);
+    if (!M || typeof M.add !== "function" || typeof M.get !== "function") return;
+
+    var iconMap = {
+      tvicon: "tv",
+      gameicon: "tv",
+      fisticon: "fist",
+      sheltericon: "shelter",
+      bloodmoonicon: "bloodmoon",
+      wraithicon: "bloodmoon",
+      baileyicon: "bailey",
+      badendicon: "badend",
+      trialicon: "trial",
+      p2picon: "p2p",
+      mphearticon: "heart",
+      lanternicon: "lantern",
+      mpicon: "lantern"
+    };
+
+    Object.keys(iconMap).forEach(function (macroName) {
+      try {
+        if (M.get(macroName)) return;
+        M.add(macroName, {
+          handler: function () {
+            var argKey = (this.args && this.args[0]) ? String(this.args[0]) : iconMap[macroName];
+            var uri = CUSTOM_GIFS[argKey] || CUSTOM_GIFS[iconMap[macroName]] || CUSTOM_GIFS.lantern;
+            var img = document.createElement("img");
+            img.className = "icon";
+            img.src = uri;
+            img.style.cssText = "width:16px;height:16px;vertical-align:middle;margin-right:4px;image-rendering:pixelated;";
+            this.output.appendChild(img);
+          }
+        });
+      } catch (e) {}
+    });
+  }
+
+  /* ---------------- 组队天气、温度、血月与淋雨湿透（Wetness）同步系统 ---------------- */
+
+  function hasPlayerUmbrella(v) {
+    if (!v || !v.worn || !v.worn.handheld) return false;
+    var hh = String(v.worn.handheld.name || "").toLowerCase();
+    var hhType = v.worn.handheld.type || [];
+    return hh.indexOf("umbrella") >= 0 || hh.indexOf("parasol") >= 0 || (Array.isArray(hhType) && hhType.indexOf("rainproof") >= 0);
+  }
+
+  function extractWeatherPack() {
+    var v = V();
+    var wName = "clear";
+    var temp = 15;
+    var isBlood = false;
+    try {
+      if (window.Weather) {
+        wName = Weather.name || "clear";
+        temp = Number.isFinite(Weather.temperature) ? Weather.temperature : 15;
+        isBlood = !!Weather.bloodMoon;
+      } else if (v && v.weather) {
+        wName = v.weather;
+      }
+    } catch (e) {}
+    return {
+      name: wName,
+      weatherVar: (v && v.weather) || wName,
+      temperature: temp,
+      snow: (v && v.weatherObj && v.weatherObj.snow) || 0,
+      bloodMoon: isBlood,
+      hasUmbrella: hasPlayerUmbrella(v),
+      upperwet: (v && Number(v.upperwet)) || 0,
+      lowerwet: (v && Number(v.lowerwet)) || 0,
+      underupperwet: (v && Number(v.underupperwet)) || 0,
+      underlowerwet: (v && Number(v.underlowerwet)) || 0,
+      hairwet: (v && Number(v.hairwet)) || 0
+    };
+  }
+
+  function applyWeatherPack(wPack, syncWetnessWithPeer) {
+    if (!wPack || typeof wPack !== "object") return;
+    var v = V();
+    if (!v) return;
+    try {
+      if (wPack.name && window.Weather && typeof Weather.set === "function") {
+        if (Weather.name !== wPack.name) {
+          Weather.set(wPack.name, true);
+        }
+      }
+      if (Number.isFinite(wPack.temperature) && window.Weather && typeof Weather.setTemperature === "function") {
+        Weather.setTemperature(wPack.temperature);
+      }
+      if (v.weatherObj && Number.isFinite(wPack.snow)) {
+        v.weatherObj.snow = wPack.snow;
+      }
+      if (wPack.weatherVar) {
+        v.weather = wPack.weatherVar;
+      }
+      // 当两人组队同行且在同一场景时，同步淋雨湿透度与共撑雨伞保护，彻底消除因一人淋湿一人未淋湿导致的选项不一致！
+      if (syncWetnessWithPeer) {
+        var iHaveUmbrella = hasPlayerUmbrella(v);
+        var peerHasUmbrella = !!wPack.hasUmbrella;
+        if (iHaveUmbrella || peerHasUmbrella) {
+          // 只要两人中有一人打伞，同行时共撑一把伞，双方衣物均不会被雨水淋透
+          v.upperwet = Math.min(v.upperwet || 0, wPack.upperwet || 0);
+          v.lowerwet = Math.min(v.lowerwet || 0, wPack.lowerwet || 0);
+          v.underupperwet = Math.min(v.underupperwet || 0, wPack.underupperwet || 0);
+          v.underlowerwet = Math.min(v.underlowerwet || 0, wPack.underlowerwet || 0);
+          v.hairwet = Math.min(v.hairwet || 0, wPack.hairwet || 0);
+        } else {
+          // 两人均未打伞时，对齐双方的淋雨湿透度，确保页面上的湿衣/避雨选项 100% 同步显示
+          if (Number.isFinite(wPack.upperwet)) v.upperwet = wPack.upperwet;
+          if (Number.isFinite(wPack.lowerwet)) v.lowerwet = wPack.lowerwet;
+          if (Number.isFinite(wPack.underupperwet)) v.underupperwet = wPack.underupperwet;
+          if (Number.isFinite(wPack.underlowerwet)) v.underlowerwet = wPack.underlowerwet;
+          if (Number.isFinite(wPack.hairwet)) v.hairwet = wPack.hairwet;
+        }
+      }
+    } catch (e) {}
   }
 
   function toast(text, kind) {
@@ -878,7 +1168,576 @@
     renderChat();
   }
 
-  function send(obj) { if (S.ws && S.ws.readyState === 1) S.ws.send(JSON.stringify(obj)); }
+  /* ---------------- 端到端 P2P 免云服务器直连引擎（WebRTC DataChannel + 免服房间码信令 + 同机通道） ---------------- */
+
+  var P2P = {
+    mode: localStorage.getItem("dolmp.net_mode") || "p2p", // "p2p" | "ws"
+    active: false,
+    isHost: false,
+    roomCode: "",
+    bc: null,
+    mqttWs: null,
+    peers: new Map(), // peerId -> { pc, dc, name, playerUid }
+    hostRoom: null,   // embedded host room state when isHost === true
+    lastOfferCode: ""
+  };
+
+  var PUBLIC_SIGNAL_BROKERS = [
+    "wss://broker.emqx.io:8084/mqtt",
+    "wss://test.mosquitto.org:8081"
+  ];
+
+  var ICE_SERVERS = [
+    { urls: "stun:stun.l.google.com:19302" },
+    { urls: "stun:stun1.l.google.com:19302" },
+    { urls: "stun:stun.qq.com:3478" },
+    { urls: "stun:stun.miwifi.com:3478" }
+  ];
+
+  function startP2PRoom(asHost, codeInput) {
+    disconnect();
+    P2P.active = true;
+    P2P.isHost = !!asHost;
+    var cleanCode = String(codeInput || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!cleanCode) {
+      var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      cleanCode = "";
+      for (var i = 0; i < 4; i++) cleanCode += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    P2P.roomCode = cleanCode;
+    S.id = S.playerUid || getOrCreatePlayerUid();
+    S.connected = true;
+    S.room = cleanCode;
+    S.roomCode = cleanCode;
+    S.isHost = !!asHost;
+    S.wasHost = !!asHost;
+    localStorage.setItem(LS_ROOM, cleanCode);
+    localStorage.setItem(LS_HOST, asHost ? "1" : "0");
+
+    // 1. 建立同设备/局域浏览器 BroadcastChannel 零延迟直连通道
+    try {
+      if (P2P.bc) P2P.bc.close();
+      if (window.BroadcastChannel) {
+        P2P.bc = new BroadcastChannel("dolmp_p2p_room_" + cleanCode);
+        P2P.bc.onmessage = function (ev) {
+          onP2PTransportFrame(ev.data);
+        };
+      }
+    } catch (e) {}
+
+    // 2. 启动跨网 WebRTC 免服信令发现（利用公共 WebSocket 回声/信令通道或手动直连码交换 SDP）
+    connectPublicRoomSignal(cleanCode);
+
+    setStatus("P2P免服直连 · " + cleanCode, "mp-ok");
+    toast((asHost ? "已创建端到端 P2P 免服房间 " : "已加入端到端 P2P 免服房间 ") + cleanCode, "mp-ok");
+    logLine("已启用端到端 P2P 免云服务器直连 · 房间码 " + cleanCode, "mp-sys");
+
+    if (!asHost) {
+      broadcastP2PFrame({
+        _p2p: "join_hello",
+        fromId: S.id,
+        playerUid: S.playerUid,
+        name: S.name
+      });
+    }
+    sendState(true);
+    renderRoom();
+    renderPlayers();
+    renderChannelBar();
+    injectInlinePassageSections();
+  }
+
+  function connectPublicRoomSignal(roomCode) {
+    // 尝试连接免配置公共 WebRTC 信令中继（若处于纯离线环境则自动静默降级为离线直连码 + BroadcastChannel）
+    try {
+      if (P2P.mqttWs) { try { P2P.mqttWs.close(); } catch (e) {} P2P.mqttWs = null; }
+      var relayUrl = "wss://free.blr2.piesocket.com/v3/dolmp_" + roomCode.toLowerCase() + "?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self=0";
+      var rws = new WebSocket(relayUrl);
+      P2P.mqttWs = rws;
+      rws.onopen = function () {
+        if (!P2P.isHost) {
+          broadcastP2PFrame({
+            _p2p: "join_hello",
+            fromId: S.id,
+            playerUid: S.playerUid,
+            name: S.name
+          });
+        }
+        sendState(true);
+      };
+      rws.onmessage = function (ev) {
+        try {
+          var data = JSON.parse(ev.data);
+          onP2PTransportFrame(data);
+        } catch (e) {}
+      };
+      rws.onerror = function () {};
+    } catch (e) {}
+  }
+
+  function broadcastP2PFrame(frameObj) {
+    if (!P2P.active) return;
+    frameObj._room = P2P.roomCode;
+    frameObj._sender = S.id;
+    var raw = JSON.stringify(frameObj);
+    try {
+      if (P2P.bc) P2P.bc.postMessage(frameObj);
+    } catch (e) {}
+    try {
+      if (P2P.mqttWs && P2P.mqttWs.readyState === 1) {
+        P2P.mqttWs.send(raw);
+      }
+    } catch (e) {}
+    P2P.peers.forEach(function (peerEntry) {
+      try {
+        if (peerEntry.dc && peerEntry.dc.readyState === "open") {
+          peerEntry.dc.send(raw);
+        }
+      } catch (e) {}
+    });
+  }
+
+  // 生成纯端到端 WebRTC 离线邀请码（无需任何公网中继，复制粘贴即可建立 RTCDataChannel）
+  function createManualWebRTCOffer(cb) {
+    if (!window.RTCPeerConnection) {
+      toast("当前浏览器环境不支持 WebRTC", "mp-bad");
+      return;
+    }
+    var pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+    var dc = pc.createDataChannel("dolmp_p2p");
+    var peerTempId = "webrtc_" + Date.now();
+    P2P.peers.set(peerTempId, { pc: pc, dc: dc });
+
+    dc.onopen = function () {
+      toast("端到端 WebRTC 数据通道已直连成功！", "mp-ok");
+      sendState(true);
+    };
+    dc.onmessage = function (ev) {
+      try { onP2PTransportFrame(JSON.parse(ev.data)); } catch (e) {}
+    };
+
+    pc.onicecandidate = function (ev) {
+      if (!ev.candidate && pc.localDescription) {
+        var pack = {
+          r: P2P.roomCode || "P2P1",
+          t: "offer",
+          sdp: pc.localDescription
+        };
+        var code = "DOLP2P1:" + btoa(unescape(encodeURIComponent(JSON.stringify(pack))));
+        P2P.lastOfferCode = code;
+        if (cb) cb(code);
+      }
+    };
+    pc.createOffer().then(function (offer) {
+      return pc.setLocalDescription(offer);
+    }).catch(function () {});
+  }
+
+  function acceptManualWebRTCCode(rawCode, cb) {
+    var clean = String(rawCode || "").trim();
+    if (clean.indexOf("DOLP2P1:") !== 0) {
+      toast("端到端直连码格式不正确", "mp-bad");
+      return;
+    }
+    try {
+      var jsonStr = decodeURIComponent(escape(atob(clean.slice(8))));
+      var pack = JSON.parse(jsonStr);
+      if (pack.t === "offer") {
+        if (!P2P.active) startP2PRoom(false, pack.r || "P2P1");
+        var pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+        pc.ondatachannel = function (ev) {
+          var dc = ev.channel;
+          P2P.peers.set("host_peer", { pc: pc, dc: dc });
+          dc.onopen = function () {
+            toast("端到端 WebRTC 直连已建立！", "mp-ok");
+            broadcastP2PFrame({ _p2p: "join_hello", fromId: S.id, playerUid: S.playerUid, name: S.name });
+            sendState(true);
+          };
+          dc.onmessage = function (mEv) {
+            try { onP2PTransportFrame(JSON.parse(mEv.data)); } catch (e) {}
+          };
+        };
+        pc.onicecandidate = function (ev) {
+          if (!ev.candidate && pc.localDescription) {
+            var ansPack = { r: P2P.roomCode, t: "answer", sdp: pc.localDescription };
+            var ansCode = "DOLP2P1:" + btoa(unescape(encodeURIComponent(JSON.stringify(ansPack))));
+            if (cb) cb(ansCode);
+          }
+        };
+        pc.setRemoteDescription(new RTCSessionDescription(pack.sdp)).then(function () {
+          return pc.createAnswer();
+        }).then(function (ans) {
+          return pc.setLocalDescription(ans);
+        });
+      } else if (pack.t === "answer") {
+        P2P.peers.forEach(function (pe) {
+          if (pe.pc && pe.pc.signalingState === "have-local-offer") {
+            pe.pc.setRemoteDescription(new RTCSessionDescription(pack.sdp));
+          }
+        });
+        toast("已接收对方应答码，端到端 P2P 正在握手连接！", "mp-ok");
+      }
+    } catch (e) {
+      toast("解析直连码失败", "mp-bad");
+    }
+  }
+
+  function onP2PTransportFrame(frame) {
+    if (!frame || typeof frame !== "object") return;
+    if (frame._room && P2P.roomCode && frame._room !== P2P.roomCode) return;
+    if (frame._sender === S.id) return;
+    if (frame._target && frame._target !== S.id) return;
+
+    if (frame._p2p === "join_hello") {
+      S.players.set(frame.fromId, {
+        id: frame.fromId,
+        playerUid: frame.playerUid || frame.fromId,
+        name: frame.name || "同伴",
+        passage: "Orphanage",
+        timeStamp: S.clock.timeStamp
+      });
+      sendState(true);
+      renderPlayers();
+      injectInlinePassageSections();
+      return;
+    }
+
+    if (frame._p2p === "direct_msg" && frame.msg) {
+      handleMessage(frame.msg);
+      return;
+    }
+
+    if (frame._p2p === "client_send" && frame.payload) {
+      handleP2PPeerPayload(frame._sender, frame.payload);
+    }
+  }
+
+  function handleP2PPeerPayload(fromId, msg) {
+    if (!msg || !msg.t) return;
+    if (msg.t === "state") {
+      var pObj = {
+        id: fromId,
+        playerUid: msg.playerUid || fromId,
+        name: msg.name || (S.players.get(fromId) && S.players.get(fromId).name) || "同伴",
+        passage: msg.passage || "Orphanage",
+        phase: msg.phase,
+        recentPassages: msg.recentPassages || [],
+        location: msg.location || "",
+        mapLocation: msg.mapLocation || "",
+        inCombat: !!msg.inCombat,
+        combatInfo: msg.combatInfo || null,
+        syncMode: !!msg.syncMode,
+        timeStamp: msg.timeStamp || 25260,
+        weatherPack: msg.weatherPack || null,
+        speechAttitude: msg.speechAttitude || "neutral",
+        appearance: msg.appearance || {},
+        combatSnapshot: msg.combatSnapshot || {},
+        stats: msg.stats || {}
+      };
+      var prevP = S.players.get(fromId);
+      S.players.set(fromId, pObj);
+      updateCompanionFromOnlinePlayer(pObj);
+
+      if (S.syncMode && pObj.weatherPack) {
+        var isSamePas = (pObj.passage === ((window.State && State.passage) || ""));
+        applyWeatherPack(pObj.weatherPack, isSamePas);
+      }
+
+      if (S.syncMode && (!prevP || prevP.passage !== pObj.passage) && SAFE_PASSAGES.indexOf(pObj.passage) >= 0 && !pObj.inCombat) {
+        handleMessage({
+          t: "sync_jump",
+          fromId: fromId,
+          fromName: pObj.name,
+          passage: pObj.passage,
+          phase: pObj.phase,
+          weatherPack: pObj.weatherPack,
+          eventContext: msg.eventContext || null,
+          inCombat: false,
+          reason: "host_move"
+        });
+      }
+      renderPlayers();
+      injectInlinePassageSections();
+      renderMapMarkers();
+    } else if (msg.t === "chat") {
+      handleMessage({
+        t: "chat",
+        from: fromId,
+        name: msg.name || "同伴",
+        text: msg.text,
+        passage: msg.passage
+      });
+    } else if (msg.t === "sync_timeline") {
+      broadcastP2PFrame({
+        _p2p: "direct_msg",
+        _target: fromId,
+        msg: {
+          t: "sync_timeline_apply",
+          targetId: S.id,
+          targetName: S.name,
+          timeStamp: (V() && V().timeStamp) || S.clock.timeStamp
+        }
+      });
+    } else if (msg.t === "sync_request") {
+      handleMessage({ t: "sync_invite", reqId: "p2p_sync_" + Date.now(), fromId: fromId, fromName: msg.name || "同伴" });
+    } else if (msg.t === "sync_accept") {
+      S.syncMode = true;
+      handleMessage({ t: "sync_accepted", byId: fromId, byName: msg.name || "同伴" });
+    } else if (msg.t === "sync_mode") {
+      handleMessage({ t: "sync_state", syncMode: !!msg.syncMode, byName: msg.name || "同伴" });
+    } else if (msg.t === "meet_here") {
+      handleMessage({ t: "meet_invite", fromId: fromId, fromName: msg.name || "同伴", passage: msg.passage });
+    } else if (msg.t === "meet_accept") {
+      S.syncMode = true;
+      var peerM = S.players.get(fromId);
+      var rInfo = calcShortestAssistTravelClient(peerM || { passage: msg.passage });
+      broadcastP2PFrame({
+        _p2p: "direct_msg",
+        _target: fromId,
+        msg: {
+          t: "meet_jump",
+          fromId: S.id,
+          fromName: S.name,
+          passage: (window.State && State.passage) || "Orphanage",
+          timeCostSeconds: rInfo.seconds,
+          timeCostMinutes: rInfo.minutes,
+          routeSummary: rInfo.routeSummary
+        }
+      });
+      handleMessage({ t: "meet_accepted_notify", byId: fromId, byName: (peerM && peerM.name) || "同伴", passage: (window.State && State.passage) || "Orphanage" });
+    } else if (msg.t === "interact_effect") {
+      handleMessage(Object.assign({}, msg, { t: "interact_effect", fromId: fromId, fromName: msg.name || "同伴" }));
+    } else if (msg.t === "event_pick") {
+      handleMessage(Object.assign({}, msg, { t: "sync_event", fromId: fromId, fromName: msg.name || "同伴" }));
+    } else if (msg.t === "inline_dom_event") {
+      handleMessage(Object.assign({}, msg, { t: "sync_inline_dom", fromId: fromId, fromName: msg.name || "同伴" }));
+    } else if (msg.t === "link_vote") {
+      handleMessage({
+        t: "link_commit",
+        passage: msg.passage,
+        linkIndex: msg.linkIndex,
+        linkKey: msg.linkKey,
+        linkText: msg.linkText,
+        targetPassage: msg.targetPassage,
+        reason: "unanimous",
+        pickedBy: msg.name || "同伴",
+        pickedById: fromId,
+        eventContext: msg.eventContext
+      });
+    } else if (msg.t === "attack_request") {
+      if (msg.consensual) {
+        handleMessage({ t: "consensual_request", reqId: "p2p_con_" + fromId, fromId: fromId, fromName: msg.name || "同伴" });
+      } else {
+        var oppP = S.players.get(fromId) || { id: fromId, name: msg.name || "同伴" };
+        var cid = "p2p_c_" + Date.now();
+        var startMsg = {
+          t: "pvp_combat_start",
+          combatId: cid,
+          mode: "pvp",
+          consensual: false,
+          opponent: oppP,
+          returnPassage: (window.State && State.passage) || "Orphanage"
+        };
+        handleMessage(startMsg);
+        broadcastP2PFrame({
+          _p2p: "direct_msg",
+          _target: fromId,
+          msg: Object.assign({}, startMsg, {
+            opponent: { id: S.id, name: S.name, combatSnapshot: extractCombatSnapshot(), stats: collectMyStats(V()) }
+          })
+        });
+      }
+    } else if (msg.t === "consensual_accept") {
+      var oppC = S.players.get(fromId) || { id: fromId, name: msg.name || "同伴" };
+      var cidC = "p2p_c_" + Date.now();
+      var startC = {
+        t: "pvp_combat_start",
+        combatId: cidC,
+        mode: "pvp",
+        consensual: true,
+        opponent: oppC,
+        returnPassage: (window.State && State.passage) || "Orphanage"
+      };
+      handleMessage(startC);
+      broadcastP2PFrame({
+        _p2p: "direct_msg",
+        _target: fromId,
+        msg: Object.assign({}, startC, {
+          opponent: { id: S.id, name: S.name, combatSnapshot: extractCombatSnapshot(), stats: collectMyStats(V()) }
+        })
+      });
+    } else if (msg.t === "assist_combat") {
+      var peerHelper = S.players.get(fromId) || { id: fromId, name: msg.name || "同伴" };
+      var cInfoP2p = buildCombatInfo(V()) || { enemyName: "袭击者", enemyPronoun: "m", enemyGender: "m", enemyHealth: 275, enemyHealthMax: 275, enemyArousal: 100, enemyArousalMax: 500 };
+      var cidCoop = S.combatId || ("p2p_coop_" + Date.now());
+      var sharedEn = S.combatSharedEnemy || {
+        name: cInfoP2p.enemyName || "袭击者",
+        pronoun: cInfoP2p.enemyPronoun || "m",
+        gender: cInfoP2p.enemyGender || "m",
+        hp: Math.round((cInfoP2p.enemyHealth || 275) * 1.65),
+        hpMax: Math.round((cInfoP2p.enemyHealthMax || 275) * 1.65),
+        arousal: cInfoP2p.enemyArousal || 80,
+        arousalMax: Math.round((cInfoP2p.enemyArousalMax || 500) * 1.55),
+        anger: 65,
+        angerMax: 200,
+        trust: 0,
+        npcSnapshot: cInfoP2p.npcSnapshot || null
+      };
+      var rAssist = calcShortestAssistTravelClient(peerHelper);
+      var coopPayload = {
+        t: "coop_combat_joined",
+        combatId: cidCoop,
+        mode: "coop_pve",
+        helperId: fromId,
+        helperName: peerHelper.name || "同伴",
+        hostPlayerId: S.id,
+        hostPlayerName: S.name,
+        timeCostSeconds: rAssist.seconds,
+        timeCostMinutes: rAssist.minutes,
+        routeSummary: rAssist.routeSummary,
+        lockedTargetId: S.id,
+        lockedTargetName: S.name,
+        sharedEnemy: sharedEn,
+        fighters: {},
+        opponent: peerHelper,
+        returnPassage: findSafeReturnPassage(true)
+      };
+      handleMessage(coopPayload);
+      broadcastP2PFrame({
+        _p2p: "direct_msg",
+        _target: fromId,
+        msg: Object.assign({}, coopPayload, {
+          opponent: { id: S.id, name: S.name, combatSnapshot: extractCombatSnapshot(), stats: collectMyStats(V()) }
+        })
+      });
+    } else if (msg.t === "steal_request") {
+      var vVictim = V();
+      var thiefPeer = S.players.get(fromId) || { id: fromId, name: msg.name || "同伴", stats: {} };
+      var thiefSkul = (thiefPeer.stats && Number(thiefPeer.stats.skulduggery)) || 0;
+      if (thiefSkul < 600) {
+        broadcastP2PFrame({
+          _p2p: "direct_msg",
+          _target: fromId,
+          msg: { t: "steal_result", role: "thief", success: false, reason: "low_skill", grade: "C", targetId: S.id, targetName: S.name, amount: 0 }
+        });
+      } else {
+        var myMoney = (vVictim && Number(vVictim.money)) || 0;
+        if (myMoney <= 0) {
+          broadcastP2PFrame({
+            _p2p: "direct_msg",
+            _target: fromId,
+            msg: { t: "steal_result", role: "thief", success: false, reason: "no_money", targetId: S.id, targetName: S.name, amount: 0 }
+          });
+        } else {
+          var stolenAmt = Math.max(100, Math.min(myMoney, Math.min(5000, Math.round(myMoney * 0.2))));
+          handleMessage({ t: "steal_result", role: "victim", success: true, reason: "ok", thiefId: fromId, thiefName: thiefPeer.name, amount: stolenAmt });
+          broadcastP2PFrame({
+            _p2p: "direct_msg",
+            _target: fromId,
+            msg: { t: "steal_result", role: "thief", success: true, reason: "ok", targetId: S.id, targetName: S.name, amount: stolenAmt }
+          });
+        }
+      }
+    } else if (msg.t === "combat_turn") {
+      P2P.peerTurn = {
+        fromId: fromId,
+        fromName: msg.name || "同伴",
+        actions: msg.actions || {},
+        organStates: msg.organStates || null,
+        summary: msg.summary || ((msg.name || "同伴") + " 执行了行动"),
+        enemyhealth: msg.enemyhealth,
+        enemyarousal: msg.enemyarousal,
+        combatSnapshot: msg.combatSnapshot
+      };
+      if (S.combatReadyIds.indexOf(fromId) < 0) S.combatReadyIds.push(fromId);
+      renderCombatSyncHint();
+      if (S.combatTurnReady && P2P.myTurn) {
+        resolveP2PCombatTurn();
+      }
+    }
+  }
+
+  function resolveP2PCombatTurn() {
+    var peerT = P2P.peerTurn;
+    var myT = P2P.myTurn;
+    if (!peerT || !myT) return;
+    P2P.peerTurn = null;
+    P2P.myTurn = null;
+    S.combatReadyIds = [];
+
+    var v = V();
+    var pActs = peerT.actions || {};
+    var pSexKind = "";
+    if (pActs.penisaction === "penistovagina" || pActs.penisaction === "penisvaginafuck" || pActs.penisaction === "cooperate") pSexKind = "penis_to_vagina";
+    else if (pActs.penisaction === "penistoanus" || pActs.penisaction === "penisanusfuck") pSexKind = "penis_to_anus";
+    else if (pActs.vaginaaction === "vaginatopenis" || pActs.vaginaaction === "vaginapenisfuck" || pActs.vaginaaction === "cooperate") pSexKind = "vagina_to_penis";
+    else if (pActs.anusaction === "anustopenis") pSexKind = "anus_to_penis";
+    else if (pActs.vaginaaction === "vaginatovagina" || pActs.vaginaaction === "trib") pSexKind = "trib";
+    else if (pActs.mouthaction === "oral" || pActs.mouthaction === "suck") pSexKind = "oral_to_peer";
+    else if (pActs.mouthaction === "kisslips" || pActs.mouthaction === "kiss") pSexKind = "kiss";
+
+    handleMessage({
+      t: "combat_peer_turn",
+      fromId: peerT.fromId,
+      fromName: peerT.fromName,
+      actions: pActs,
+      organStates: peerT.organStates,
+      activeSexKind: pSexKind,
+      summary: peerT.summary,
+      combatSnapshot: peerT.combatSnapshot
+    });
+
+    var finished = false;
+    var outcome = "";
+    if (S.combatMode === "coop_pve" && S.combatSharedEnemy) {
+      S.combatSharedEnemy.hp = Math.max(0, (S.combatSharedEnemy.hp || 275) - 55);
+      S.combatSharedEnemy.arousal = Math.min(S.combatSharedEnemy.arousalMax || 500, (S.combatSharedEnemy.arousal || 100) + 65);
+      if (S.combatSharedEnemy.hp <= 0) { finished = true; outcome = "peer_down"; }
+      else if (S.combatSharedEnemy.arousal >= (S.combatSharedEnemy.arousalMax || 500)) { finished = true; outcome = "peer_arousal"; }
+    } else if (v) {
+      if ((v.enemyhealth != null && v.enemyhealth <= 35) || (peerT.enemyhealth != null && peerT.enemyhealth <= 0)) {
+        finished = true; outcome = "peer_down";
+      } else if ((v.enemyarousal != null && v.enemyarousal >= (v.enemyarousalmax || 500) - 45)) {
+        finished = true; outcome = "peer_arousal";
+      }
+    }
+
+    handleMessage({
+      t: "combat_turn_commit",
+      combatId: S.combatId,
+      mode: S.combatMode,
+      sharedEnemy: S.combatSharedEnemy,
+      peerActiveSexKind: pSexKind,
+      combinedSummary: (myT.summary || "") + " ｜ " + (peerT.summary || ""),
+      peerSnapshot: peerT.combatSnapshot,
+      finished: finished,
+      outcome: outcome
+    });
+  }
+
+  function send(obj) {
+    if (P2P.active) {
+      obj.name = S.name;
+      obj.playerUid = S.playerUid;
+      if (obj.t === "combat_turn") {
+        P2P.myTurn = obj;
+        broadcastP2PFrame({ _p2p: "client_send", payload: obj });
+        if (P2P.peerTurn || S.players.size === 0) {
+          if (!P2P.peerTurn && S.players.size === 0) {
+            P2P.peerTurn = { fromId: "offline", fromName: (S.combatOpponent && S.combatOpponent.name) || "对方", actions: {}, summary: ((S.combatOpponent && S.combatOpponent.name) || "对方") + " 采取了行动" };
+          }
+          resolveP2PCombatTurn();
+        }
+        return;
+      }
+      broadcastP2PFrame({ _p2p: "client_send", payload: obj });
+      if (obj.t === "chat") {
+        logLine("[我] " + obj.text, "mp-me");
+      }
+      return;
+    }
+    if (S.ws && S.ws.readyState === 1) S.ws.send(JSON.stringify(obj));
+  }
   function setStatus(text, cls) {
     var s = document.getElementById("mp-status");
     if (s) { s.textContent = text; s.className = "mp-status " + (cls || ""); }
@@ -1099,9 +1958,59 @@
     return false;
   }
 
+  var MP_PREFIX_CN = [
+    ["MP NPC Sera", "高街钟表铺"],
+    ["MP NPC Vesper", "旧港防波堤"],
+    ["MP NPC Noel", "学园标本室"],
+    ["MP NPC Lin", "宅邸街巡夜点"],
+    ["MP NPC Monet", "康努达图斯街画室"],
+    ["MP NPC Ash", "森林守灯人石径"],
+    ["MP Companion Room", "孤儿院同伴房间"],
+    ["MP Companion", "孤儿院"],
+    ["MP Player Interact", "同行互动中"],
+    ["MP Bailey Biweekly", "孤儿院走廊"],
+    ["MP Quest Bailey", "孤儿院走廊"],
+    ["MP BadEnd Velvet", "天鹅绒暗层"],
+    ["MP BadEnd Abbey", "地下古修道院"],
+    ["MP BadEnd Smuggler", "夜航走私船底舱"],
+    ["MP BadEnd Glasshouse", "多瑙河温室庄园"],
+    ["MP BadEnd Bailey", "孤儿院地下训诫室"],
+    ["MP Elite Encounter Ivory Wraith", "血月迷雾圣殿"],
+    ["MP Elite Encounter Abyssal Tentacles", "深渊潮汐洞穴"],
+    ["MP Elite Encounter Blackiron Bosun", "旧港防波堤禁区"],
+    ["MP Elite Encounter Velvet Enforcers", "峭壁天鹅绒暗层"],
+    ["MP Elite Encounter Bailey Enforcers", "孤儿院走廊"],
+    ["MP Region Foghorn", "雾角灯塔岛"],
+    ["MP Region Clockwork", "地下机括城"],
+    ["MP Region Sunken Abbey", "地下古修道院"],
+    ["MP Region Abbey", "地下古修道院"],
+    ["MP Region Glasshouse", "秘密温室庄园"],
+    ["MP Region Blackiron", "黑铁货运站"],
+    ["MP Region Druid", "古德鲁伊石环"],
+    ["MP Region Velvet", "峭壁天鹅绒暗层"],
+    ["MP Region Observatory", "旧学园天文翼楼"],
+    ["MP Main Story", "小镇暗线调查中"],
+    ["MP Collection", "信物残片搜集中"],
+    ["MP Grand Quest", "城镇秘闻调查中"],
+    ["MP Quest", "城镇暗线调查中"],
+    ["MP World Event", "街巷奇遇中"],
+    ["MP Event", "同行奇遇中"]
+  ];
+
   function shortLoc(p) {
-    if (!p) return "未知位置";
-    return PASSAGE_CN[p] || p;
+    if (!p) return "孤儿院";
+    var s = String(p).trim();
+    if (PASSAGE_CN[s]) return PASSAGE_CN[s];
+    for (var i = 0; i < MP_PREFIX_CN.length; i++) {
+      if (s.indexOf(MP_PREFIX_CN[i][0]) === 0) return MP_PREFIX_CN[i][1];
+    }
+    if (s.indexOf("MP ") === 0) {
+      var v = V();
+      var ret = v && v.mpReturnPassage;
+      if (ret && PASSAGE_CN[ret]) return PASSAGE_CN[ret];
+      return "镇上";
+    }
+    return PASSAGE_CN[s] || s;
   }
 
   function findSafeReturnPassage(strict) {
@@ -1142,7 +2051,23 @@
     { name: "mp_world_forest_shrine", weight: 0.35, locs: ["Forest", "Deep Forest"], content: "<<include \"MP World Event Forest Shrine\">>" },
     { name: "mp_world_park_sketchbook", weight: 0.35, locs: ["Park", "Nightingale Street", "Oxford Street"], content: "<<include \"MP World Event Park Sketchbook\">>" },
     { name: "mp_world_temple_censer", weight: 0.35, locs: ["Wolf Street", "Temple"], content: "<<include \"MP World Event Temple Censer\">>" },
-    { name: "mp_world_sewer_cache", weight: 0.4, locs: ["Sewers", "Commercial Alleyways", "Industrial Alleyways"], minSkul: 200, content: "<<include \"MP World Event Sewer Cache\">>" }
+    { name: "mp_world_sewer_cache", weight: 0.4, locs: ["Sewers", "Commercial Alleyways", "Industrial Alleyways"], minSkul: 200, content: "<<include \"MP World Event Sewer Cache\">>" },
+    { name: "mp_world_barb_patrol", weight: 0.35, locs: ["Barb Street", "Police Station", "Cliff Street"], content: "<<include \"MP World Event Barb Patrol\">>" },
+    { name: "mp_world_danube_carriage", weight: 0.35, locs: ["Danube Street", "Kylar Manor", "Wolf Street"], content: "<<include \"MP World Event Danube Carriage\">>" },
+    { name: "mp_world_school_corridor", weight: 0.35, locs: ["Hallways", "School Library", "School Front Courtyard", "Canteen"], content: "<<include \"MP World Event School Corridor\">>" },
+    { name: "mp_world_pool_steam", weight: 0.35, locs: ["Swimming Pool", "Bathroom"], content: "<<include \"MP World Event Pool Steam\">>" },
+    { name: "mp_world_arcade_neon", weight: 0.35, locs: ["Arcade", "Starfish Street", "Ocean Breeze"], content: "<<include \"MP World Event Arcade Neon\">>" },
+    { name: "mp_world_shopping_mirror", weight: 0.35, locs: ["Shopping Centre", "Shopping Centre Top", "High Street"], content: "<<include \"MP World Event Shopping Mirror\">>" },
+    { name: "mp_world_hospital_night", weight: 0.35, locs: ["Hospital Courtyard", "Nightingale Street"], content: "<<include \"MP World Event Hospital Night\">>" },
+    { name: "mp_world_brothel_backdoor", weight: 0.35, locs: ["Brothel", "Harvest Street", "Pub", "Adult Shop"], content: "<<include \"MP World Event Brothel Backdoor\">>" },
+    { name: "mp_world_farmland_hedgerow", weight: 0.35, locs: ["Farmland", "Cottage", "Deep Forest"], content: "<<include \"MP World Event Farmland Hedgerow\">>" },
+    { name: "mp_world_npc_sera_encounter", weight: 0.32, locs: ["High Street", "Shopping Centre", "Wolf Street"], content: "<<include \"MP NPC Sera Street Encounter\">>" },
+    { name: "mp_world_npc_vesper_encounter", weight: 0.32, locs: ["Docks", "Mer Street", "Elk Street"], content: "<<include \"MP NPC Vesper Street Encounter\">>" },
+    { name: "mp_world_npc_noel_encounter", weight: 0.32, locs: ["Oxford Street", "Park", "School Library", "Hallways"], content: "<<include \"MP NPC Noel Street Encounter\">>" },
+    { name: "mp_world_npc_lin_encounter", weight: 0.32, locs: ["Domus Street", "Barb Street", "Residential Alleyways", "Orphanage"], content: "<<include \"MP NPC Lin Street Encounter\">>" },
+    { name: "mp_world_npc_monet_encounter", weight: 0.32, locs: ["Connudatus Street", "Cliff Street", "Ocean Breeze"], content: "<<include \"MP NPC Monet Street Encounter\">>" },
+    { name: "mp_world_npc_ash_encounter", weight: 0.32, locs: ["Forest", "Deep Forest", "Temple", "Sewers"], content: "<<include \"MP NPC Ash Street Encounter\">>" },
+    { name: "mp_world_deep_router", weight: 0.45, locs: SAFE_PASSAGES, content: "<<include \"MP World Deep Router\">>" }
   ];
 
   function makeDeterministicPrngPack() {
@@ -1691,6 +2616,45 @@
 
   /* ---------------- 原生遭遇战初始化与每回合动作/插入/破处同步 ---------------- */
 
+  function sanitizeCombatNpcAndState(v) {
+    if (!v || !Array.isArray(v.NPCList)) return;
+    var npc = v.NPCList[0];
+    if (!npc || typeof npc !== "object") return;
+    // 确保只激活第 1 个 NPC 槽位，彻底消除 Undefined NPC in personselect 1
+    v.enemyno = 1;
+    v.enemynomax = 1;
+    v.index = 0;
+    v.enemytype = "man";
+    v.npcrow = [0];
+    v.npcnum = [0];
+    if (!npc.pronoun || npc.pronoun === "none") npc.pronoun = "m";
+    if (!npc.gender || npc.gender === "none") npc.gender = npc.pronoun;
+    v.pronoun = npc.pronoun;
+
+    // 严禁 lefthand/righthand 为 undefined 或 "idle"（DoL 0.5.12.13 仅接受 0、"none" 或合法部位动作名）
+    if (npc.lefthand === undefined || npc.lefthand === null || npc.lefthand === "idle") npc.lefthand = 0;
+    if (npc.righthand === undefined || npc.righthand === null || npc.righthand === "idle") npc.righthand = 0;
+    if (npc.mouth === undefined || npc.mouth === null || npc.mouth === "idle") npc.mouth = 0;
+    if (npc.penis === undefined || npc.penis === null) npc.penis = (npc.gender === "f" ? "none" : 0);
+    if (npc.vagina === undefined || npc.vagina === null) npc.vagina = (npc.gender === "m" ? "none" : 0);
+    if (!Number.isFinite(Number(npc.breastsize))) npc.breastsize = (npc.pronoun === "f" ? 3 : 0);
+    if (npc.chest === undefined || npc.chest === null) npc.chest = 0;
+    if (!npc.chastity || typeof npc.chastity !== "object") {
+      npc.chastity = { penis: "", vagina: "", anus: "" };
+    }
+    if (!npc.location || typeof npc.location !== "object") {
+      npc.location = { head: 0, genitals: 0 };
+    }
+    if (!npc.type) npc.type = "human";
+    if (!v.targetlist || typeof v.targetlist !== "object") {
+      v.targetlist = { "none": "none", "self": "self", "0": (npc.fullDescription || npc.description || "对方") };
+    }
+    if (!v.lefttarget) v.lefttarget = 0;
+    if (!v.righttarget) v.righttarget = 0;
+    if (!v.feettarget) v.feettarget = 0;
+    if (!v.mouthtarget) v.mouthtarget = 0;
+  }
+
   function hasCoopNpcSnapshot() {
     var v = V();
     if (S.combatMode === "coop_pve") {
@@ -1706,21 +2670,25 @@
 
   function restoreCoopNpcSnapshot() {
     var v = V();
-    if (!v) return false;
-    if (S.combatMode === "coop_pve" && S.combatSharedEnemy && S.combatSharedEnemy.npcSnapshot) {
-      applyEventContext(S.combatSharedEnemy.npcSnapshot);
-      if (v.NPCList && v.NPCList[0] && v.NPCList[0].pronoun) {
-        try {
-          if (window.Wikifier && typeof Wikifier.wikifyEval === "function") {
-            Wikifier.wikifyEval("<<person1>>");
-          }
-        } catch (e) {}
-        return true;
-      }
+    if (!v || !v.NPCList || !v.NPCList[0]) return false;
+    var snapNpc = null;
+    if (S.combatMode === "coop_pve" && S.combatSharedEnemy && S.combatSharedEnemy.npcSnapshot && Array.isArray(S.combatSharedEnemy.npcSnapshot.activeNpcs)) {
+      snapNpc = S.combatSharedEnemy.npcSnapshot.activeNpcs[0];
+    } else if (S.SavedHostCombatNpc) {
+      snapNpc = S.SavedHostCombatNpc;
     }
-    if (S.combatMode === "coop_pve" && v.NPCList && v.NPCList[0] && v.NPCList[0].pronoun && v.NPCList[0].pronoun !== "none") {
+    if (snapNpc && typeof snapNpc === "object") {
+      var npc = v.NPCList[0];
+      var safeKeys = ["pronoun", "gender", "description", "description_CN", "fullDescription", "fullDescription_CN", "name", "name_known", "role", "role_CN", "skincolour", "haircolour", "breastsize", "penissize", "penisdesc", "insecurity"];
+      safeKeys.forEach(function (k) {
+        if (snapNpc[k] !== undefined && snapNpc[k] !== null) {
+          npc[k] = clone(snapNpc[k]);
+        }
+      });
+      sanitizeCombatNpcAndState(v);
       return true;
     }
+    sanitizeCombatNpcAndState(v);
     return false;
   }
 
@@ -1732,6 +2700,10 @@
         Wikifier.wikifyEval("<<variablesStart2>>");
       }
     } catch (e) {}
+
+    if (v.NPCList && v.NPCList[0] && v.NPCList[0].pronoun && v.NPCList[0].pronoun !== "none") {
+      S.SavedHostCombatNpc = clone(v.NPCList[0]);
+    }
 
     var pronoun = "m";
     var gender = "m";
@@ -1760,7 +2732,8 @@
     var st = getIndependentCombatStats(v);
 
     if (S.combatMode === "coop_pve" && S.combatSharedEnemy) {
-      // 支援战斗：完整保留对方遭遇战的原版 NPC，不篡改其名称、描述或外貌
+      // 支援战斗：在 <<maninit>> 基础上恢复原版 NPC 的名字、外貌与代词，绝不破坏战斗属性
+      restoreCoopNpcSnapshot();
       delete npc.mpPlayerName;
       v.enemyhealthmax = S.combatSharedEnemy.hpMax || npc.healthmax || 275;
       v.enemyhealth = S.combatSharedEnemy.hp != null ? S.combatSharedEnemy.hp : (npc.health || 275);
@@ -1770,13 +2743,10 @@
       v.enemyarousal = S.combatSharedEnemy.arousal != null ? S.combatSharedEnemy.arousal : 100;
       v.npcSub = 0;
     } else {
-      // 玩家双方主动挑起的遭遇战（PvP / 温存）：
-      // 1. 名字与描述 100% 设为对方联机玩家的真实昵称 ID，绝不显示“xx的男人/女人”
       var oppName = (S.combatOpponent && S.combatOpponent.name) || v.mpOpponentName || "玩家";
       v.mpOpponentName = oppName;
       applyPvpPlayerNameToNpc(npc, oppName);
 
-      // 2. 同步对方玩家的真实身体部位（有无阴茎/小穴/尺寸），且默认动作绝不自动把私处贴过去
       var oppSnap = (S.combatOpponent && S.combatOpponent.combatSnapshot) || {};
       var oppPl = oppSnap.player || {};
       if (oppPl.penisExist) {
@@ -1792,12 +2762,12 @@
         npc.vagina = "none";
       }
       npc.breastsize = oppPl.breastsize != null ? oppPl.breastsize : 3;
-      npc.lefthand = "idle";
-      npc.righthand = "idle";
+      npc.chest = 0;
+      npc.lefthand = 0;
+      npc.righthand = 0;
       npc.mouth = 0;
       if (npc.location) npc.location.genitals = 0;
 
-      // 3. 设置 $npcSub = 1，彻底禁止原版 AI 在默认回合自动脱衣或自动把生殖器往玩家私处顶靠
       v.npcSub = 1;
       v.vaginause = 0;
       v.vaginastate = 0;
@@ -1818,6 +2788,7 @@
     v.enemytrust = 0;
     v.consensual = (v.mpCombatConsensual === 1) ? 1 : 0;
     v.position = S.combatSwapPose ? "doggy" : "missionary";
+    sanitizeCombatNpcAndState(v);
   }
 
   function hasMyGenitalAction(v) {
@@ -1907,6 +2878,7 @@
   function beforeNativeCombatEffects() {
     var v = V();
     if (!v) return;
+    sanitizeCombatNpcAndState(v);
 
     if (S.combatMode === "pvp" && v.NPCList && v.NPCList[0]) {
       var oppName = (S.combatOpponent && S.combatOpponent.name) || v.mpOpponentName || "玩家";
@@ -2691,61 +3663,135 @@
 
   /* ---------------- 大世界暗线与离线伴侣 NPC 无剧透自然挂载 ---------------- */
 
+  function getHourNow() {
+    try {
+      if (window.Time && Number.isFinite(Time.hour)) return Time.hour;
+    } catch (e) {}
+    return 12;
+  }
+
+  function isNightNow() {
+    var h = getHourNow();
+    return h >= 20 || h < 6;
+  }
+
+  function isDuskOrNightNow() {
+    var h = getHourNow();
+    return h >= 17 || h < 6;
+  }
+
   var WORLD_STORYLINE_HOOKS = [
     {
+      locs: ["Orphanage", "Bedroom", "Domus Street"],
+      check: function (v) {
+        var curDay = (window.Time && Number.isFinite(Time.days)) ? Time.days : 0;
+        if (v.mpBaileyBiweeklyNextDay === undefined) v.mpBaileyBiweeklyNextDay = curDay + 14;
+        return (Number(v.mpQuestBaileyRebellion) || 0) < 8 && curDay >= v.mpBaileyBiweeklyNextDay;
+      },
+      hint: "贝利正捏着黑色封皮的双周连坐账册站在走廊台阶上，身后跟着两名戴黑皮手套的精锐清道夫。",
+      icon: "custom:bailey",
+      linkText: "应对贝利的双周连坐清算 (0:15)",
+      passage: "MP Bailey Biweekly Tribunal"
+    },
+    {
+      locs: ["Orphanage", "Domus Street", "Barb Street"],
+      check: function (v) {
+        return (Number(v.mpQuestBaileyRebellion) || 0) < 8 && (!v.daily || !v.daily.mpQuestBaileyRebellion);
+      },
+      hint: "贝利办公室外侧的通风铁栅下隐约露出一角被碎纸机漏掉的黑账交接单。",
+      icon: "custom:bailey",
+      linkText: "追查《孤儿院黑账与断链之盟》 (0:16)",
+      passage: "MP Quest Bailey Rebellion"
+    },
+    {
+      locs: ["Temple", "Deep Forest", "Sea Rocks", "MP Region Sunken Abbey", "MP Region Foghorn Island"],
+      check: function (v) {
+        var isBlood = !!(window.Weather && Weather.bloodMoon);
+        return (isBlood || isNightNow()) && (!v.daily || !v.daily.mpEliteWraith);
+      },
+      hint: "暗红色的月华穿透夜雾，一道佩戴象牙项链的苍白半透明身影在半空中若隐若现，周遭弥漫着令人窒息的执念。",
+      icon: "custom:bloodmoon",
+      linkText: "直面血月奇遇·苍白象牙怨灵 (0:18)",
+      passage: "MP Elite Encounter Ivory Wraith"
+    },
+    {
+      locs: ["Beach Cave", "MP Region Sunken Abbey", "MP Region Foghorn Wreck"],
+      check: function (v) { return isDuskOrNightNow() && (!v.daily || !v.daily.mpEliteTentacles); },
+      hint: "幽暗的潮汐深潭底部翻涌着诡异的幽蓝磷光，数条粗壮的触手阴影在水面下蠢蠢欲动。",
+      icon: "custom:trial",
+      linkText: "踏入深渊潮汐·巨型触手试炼 (0:18)",
+      passage: "MP Elite Encounter Abyssal Tentacles"
+    },
+    {
+      locs: ["Docks", "MP Region Blackiron Yard", "Mer Street"],
+      check: function (v) { return isDuskOrNightNow() && (!v.daily || !v.daily.mpEliteBosun); },
+      hint: "防波堤禁区深处亮起探照灯，黑铁水手长正守在沉甸甸的走私主金库铁箱旁。",
+      icon: "custom:trial",
+      linkText: "挑战黑铁水手长争夺主金库 (0:18)",
+      passage: "MP Elite Encounter Blackiron Bosun"
+    },
+    {
+      locs: ["MP Region Velvet Mirage", "Connudatus Street"],
+      check: function (v) { return isDuskOrNightNow() && (!v.daily || !v.daily.mpEliteVelvet); },
+      hint: "天鹅绒暗层深处的紫檀金匣散发着诱人的光泽，戴着银狐假面的首席执事正持鞭巡视。",
+      icon: "custom:badend",
+      linkText: "潜入天鹅绒暗层挑战首席执事 (0:18)",
+      passage: "MP Elite Encounter Velvet Enforcers"
+    },
+    {
       locs: ["Orphanage"],
-      check: function (v) { return (Number(v.mpQuestCellar) || 0) < 7 && (!v.daily || !v.daily.mpQuestCellar); },
+      check: function (v) { return (Number(v.mpQuestCellar) || 0) < 7 && (!v.daily || !v.daily.mpQuestCellar) && (getHourNow() >= 19 || getHourNow() < 7 || (Number(v.mpQuestCellar) || 0) > 0); },
       hint: "走廊尽头通往旧储物室的木门虚掩着，门缝底下透出一丝阴凉的穿堂风。",
       icon: "img/misc/icon/investigate.png",
-      linkText: "推开旧储物室的木门 (0:10)",
+      linkText: "推开旧储物室的木门 (0:06)",
       passage: "MP Quest Orphanage Cellar"
     },
     {
       locs: ["Bedroom"],
-      check: function (v) { return (Number(v.mpQuestAttic) || 0) < 6 && (!v.daily || !v.daily.mpQuestAttic); },
+      check: function (v) { return (Number(v.mpQuestAttic) || 0) < 6 && (!v.daily || !v.daily.mpQuestAttic) && (getHourNow() >= 20 || getHourNow() < 8 || (Number(v.mpQuestAttic) || 0) > 0); },
       hint: "天花板角落的活板门边垂下一截磨损的麻绳。",
       icon: "img/misc/icon/investigate.png",
-      linkText: "拉动阁楼的麻绳 (0:10)",
+      linkText: "拉动阁楼的麻绳 (0:05)",
       passage: "MP Quest Bedroom Attic"
     },
     {
       locs: ["High Street", "Shopping Centre"],
-      check: function (v) { return ((Number(v.mpAntiquesUnappraised) || 0) > 0 || (Number(v.mpQuestClocktower) || 0) < 7) && (!v.daily || !v.daily.mpQuestClocktower); },
+      check: function (v) { return ((Number(v.mpAntiquesUnappraised) || 0) > 0 || (Number(v.mpQuestClocktower) || 0) > 0 || (getHourNow() >= 9 && getHourNow() <= 21)) && (Number(v.mpQuestClocktower) || 0) < 7 && (!v.daily || !v.daily.mpQuestClocktower); },
       hint: "钟表旧货铺的玻璃橱窗后亮着一盏昏黄的煤油灯，柜台后摆放着放大镜与天平。",
       icon: "img/misc/icon/shop.png",
-      linkText: "推门走进钟表旧货铺 (0:15)",
+      linkText: "推门走进钟表旧货铺 (0:08)",
       passage: "MP Quest HighStreet Clockshop"
     },
     {
       locs: ["Elk Street", "Docks", "Industrial Alleyways"],
-      check: function (v) { return ((Number(v.skulduggery) || 0) >= 100 || (Number(v.blackmoney) || 0) > 0 || (Number(v.mpContrabandSealed) || 0) > 0) && (!v.daily || !v.daily.mpQuestSmuggler); },
+      check: function (v) { return ((Number(v.skulduggery) || 0) >= 120 || (Number(v.blackmoney) || 0) > 0 || (Number(v.mpContrabandSealed) || 0) > 0 || isDuskOrNightNow()) && (!v.daily || !v.daily.mpQuestSmuggler); },
       hint: "生锈的货运集装箱后方传出低沉的金属叩击声，似乎有人在暗处清点货箱。",
       icon: "img/misc/icon/sneak.png",
-      linkText: "绕到集装箱后方查看 (0:15)",
+      linkText: "绕到集装箱后方查看 (0:07)",
       passage: "MP Quest Docks Smuggler"
     },
     {
-      locs: ["School Library", "Hallways"],
+      locs: ["School Library"],
       check: function (v) { return (Number(v.mpQuestLibrary) || 0) < 7 && (!v.daily || !v.daily.mpQuestLibrary); },
       hint: "最里侧的旧档案架下有几册没有编号的皮革卷宗。",
       icon: "img/misc/icon/school.png",
-      linkText: "抽出最底层的皮革卷宗 (0:15)",
+      linkText: "抽出最底层的皮革卷宗 (0:10)",
       passage: "MP Quest School Archives"
     },
     {
-      locs: ["Temple", "Wolf Street"],
+      locs: ["Temple"],
       check: function (v) { return (Number(v.mpQuestCatacomb) || 0) < 7 && (!v.daily || !v.daily.mpQuestCatacomb); },
       hint: "石廊侧壁的烛台底座留有近期被人转动过的刮痕。",
       icon: "img/misc/icon/temple.png",
-      linkText: "走近侧廊的旧烛台 (0:15)",
+      linkText: "走近侧廊的旧烛台 (0:06)",
       passage: "MP Quest Temple Catacomb"
     },
     {
-      locs: ["Beach", "Sea Rocks", "Beach Cave"],
+      locs: ["Sea Rocks", "Beach Cave"],
       check: function (v) { return (Number(v.mpQuestShipwreck) || 0) < 7 && (!v.daily || !v.daily.mpQuestShipwreck); },
       hint: "退潮后的暗礁缝隙间露出一截覆满藤壶的旧船肋木。",
       icon: "img/misc/icon/beach.png",
-      linkText: "沿着暗礁走向沉船残骸 (0:20)",
+      linkText: "沿着暗礁走向沉船残骸 (0:12)",
       passage: "MP Quest Beach Shipwreck"
     },
     {
@@ -2753,42 +3799,337 @@
       check: function (v) { return (Number(v.mpQuestManorRuins) || 0) < 7 && (!v.daily || !v.daily.mpQuestManorRuins); },
       hint: "密林深处的荆棘丛后隐约可见半截坍塌的石砌拱门。",
       icon: "img/misc/icon/forest.png",
-      linkText: "拨开荆棘走向石拱门 (0:20)",
+      linkText: "拨开荆棘走向石拱门 (0:14)",
       passage: "MP Quest Forest Ruins"
     },
     {
-      locs: ["Park", "Nightingale Street"],
+      locs: ["Park"],
       check: function (v) { return (Number(v.mpQuestGreenhouse) || 0) < 7 && (!v.daily || !v.daily.mpQuestGreenhouse); },
-      hint: "公园偏僻处的旧玻璃花房里飘出一缕奇异的甜香。",
+      hint: "公园偏僻处的旧玻璃花房里飘出一缕清冷的草木甜香。",
       icon: "img/misc/icon/park.png",
-      linkText: "走近玻璃花房侧门 (0:15)",
+      linkText: "走近玻璃花房侧门 (0:07)",
       passage: "MP Quest Park Greenhouse"
     },
     {
-      locs: ["Connudatus Street", "Brothel", "Pub"],
-      check: function (v) { return (Number(v.mpQuestVelvet) || 0) < 7 && (!v.daily || !v.daily.mpQuestVelvet); },
+      locs: ["Connudatus Street", "Brothel"],
+      check: function (v) { return (Number(v.mpQuestVelvet) || 0) < 7 && (!v.daily || !v.daily.mpQuestVelvet) && (isDuskOrNightNow() || (Number(v.mpQuestVelvet) || 0) > 0); },
       hint: "后巷天鹅绒侧门旁的铜铃下挂着一枚暗红色的木牌。",
       icon: "img/misc/icon/brothel.gif",
-      linkText: "走近天鹅绒侧门 (0:15)",
+      linkText: "走近天鹅绒侧门 (0:06)",
       passage: "MP Quest Connudatus Velvet"
     },
     {
-      locs: ["Farmland", "Harvest Street"],
+      locs: ["Farmland"],
       check: function (v) { return (Number(v.mpQuestMill) || 0) < 7 && (!v.daily || !v.daily.mpQuestMill); },
       hint: "荒废的旧风车磨坊下方传来齿轮缓慢转动的声响。",
       icon: "img/misc/icon/walk.png",
-      linkText: "走向旧风车磨坊 (0:20)",
+      linkText: "走向旧风车磨坊 (0:12)",
       passage: "MP Quest Farmland Mill"
     },
     {
-      locs: ["Sewers", "Commercial Alleyways"],
+      locs: ["Sewers"],
       check: function (v) { return (Number(v.mpQuestUnderground) || 0) < 7 && (!v.daily || !v.daily.mpQuestUnderground); },
       hint: "排水渠拱顶下的石壁上用粉笔画着一个不起眼的三岔记号。",
       icon: "img/misc/icon/sneak.png",
-      linkText: "顺着粉笔记号探索暗渠 (0:20)",
+      linkText: "顺着粉笔记号探索暗渠 (0:10)",
       passage: "MP Quest Sewers Market"
+    },
+    {
+      locs: ["Danube Street"],
+      check: function (v) { return (Number(v.mpQuestDanubeSalon) || 0) < 7 && (!v.daily || !v.daily.mpQuestDanubeSalon) && (getHourNow() >= 14 || (Number(v.mpQuestDanubeSalon) || 0) > 0); },
+      hint: "多瑙河街一栋灰白色庄园的侧门内传来低沉的大提琴弦音。",
+      icon: "img/misc/icon/socialise.png",
+      linkText: "驻足倾听庄园侧门的弦音 (0:04)",
+      passage: "MP Grand Quest Danube Salon"
+    },
+    {
+      locs: ["Barb Street", "Police Station"],
+      check: function (v) { return (Number(v.mpQuestBarbEvidence) || 0) < 7 && (!v.daily || !v.daily.mpQuestBarbEvidence) && ((Number(v.skulduggery) || 0) >= 100 || isDuskOrNightNow() || (Number(v.mpQuestBarbEvidence) || 0) > 0); },
+      hint: "警局后巷的铁栅窗内堆放着几只贴有旧封条的证物木箱。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "凑近铁栅窗打量证物箱 (0:05)",
+      passage: "MP Grand Quest Barb Evidence"
+    },
+    {
+      locs: ["Cliff Street", "Ocean Breeze"],
+      check: function (v) { return (Number(v.mpQuestCliffLighthouse) || 0) < 7 && (!v.daily || !v.daily.mpQuestCliffLighthouse); },
+      hint: "峭壁尽头的废弃雾角塔楼下留着一串未干的湿脚印。",
+      icon: "img/misc/icon/walk.png",
+      linkText: "沿着石阶走向旧雾角塔 (0:08)",
+      passage: "MP Grand Quest Cliff Lighthouse"
+    },
+    {
+      locs: ["Starfish Street", "Arcade"],
+      check: function (v) { return (Number(v.mpQuestArcadeBasement) || 0) < 7 && (!v.daily || !v.daily.mpQuestArcadeBasement); },
+      hint: "游戏厅最里侧一台黑屏的旧街机后方透出微弱的紫光。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "查看黑屏街机后方的暗门 (0:05)",
+      passage: "MP Grand Quest Arcade Basement"
+    },
+    {
+      locs: ["Nightingale Street", "Hospital Courtyard"],
+      check: function (v) { return (Number(v.mpQuestHospitalWing) || 0) < 7 && (!v.daily || !v.daily.mpQuestHospitalWing); },
+      hint: "医院旧翼走廊尽头的磨砂玻璃门后传来轻微的仪器滴答声。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "推开旧翼走廊的磨砂门 (0:06)",
+      passage: "MP Grand Quest Hospital Wing"
+    },
+    {
+      locs: ["Oxford Street", "School Front Courtyard"],
+      check: function (v) { return (Number(v.mpQuestSchoolBell) || 0) < 7 && (!v.daily || !v.daily.mpQuestSchoolBell); },
+      hint: "教学楼旧钟塔的螺旋铁梯入口处挂着一把松动的铜锁。",
+      icon: "img/misc/icon/school.png",
+      linkText: "推开旧钟塔铁梯的木门 (0:07)",
+      passage: "MP Grand Quest School Bell"
+    },
+    {
+      locs: ["Swimming Pool"],
+      check: function (v) { return (Number(v.mpQuestPoolDrain) || 0) < 7 && (!v.daily || !v.daily.mpQuestPoolDrain); },
+      hint: "泳池器材室后方的温水循环阀室里冒出阵阵白雾。",
+      icon: "img/misc/icon/swim.png",
+      linkText: "走进温水阀室查看 (0:06)",
+      passage: "MP Grand Quest Pool Drain"
+    },
+    {
+      locs: ["Mer Street", "Docks"],
+      check: function (v) { return (Number(v.mpQuestMerDrydock) || 0) < 7 && (!v.daily || !v.daily.mpQuestMerDrydock) && (isDuskOrNightNow() || (Number(v.mpQuestMerDrydock) || 0) > 0); },
+      hint: "三号干船坞的防雨帆布下停泊着一艘没有悬挂船旗的双桅帆船。",
+      icon: "img/misc/icon/sneak.png",
+      linkText: "掀开干船坞的帆布一角 (0:08)",
+      passage: "MP Grand Quest Mer Drydock"
+    },
+    {
+      locs: ["Elk Street", "Adult Shop"],
+      check: function (v) { return (Number(v.mpQuestElkWorkshop) || 0) < 7 && (!v.daily || !v.daily.mpQuestElkWorkshop); },
+      hint: "成人店后巷的地下工坊排气扇里飘出皮革与金属抛光膏的气息。",
+      icon: "img/misc/icon/shop.png",
+      linkText: "敲响地下工坊的铁门 (0:05)",
+      passage: "MP Grand Quest Elk Workshop"
+    },
+    {
+      locs: ["Harvest Street", "Pub"],
+      check: function (v) { return (Number(v.mpQuestHarvestCellar) || 0) < 7 && (!v.daily || !v.daily.mpQuestHarvestCellar); },
+      hint: "酒馆后院橡木酒桶下方的地窖铁环被人拉开了半寸。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "拉起橡木桶旁的地窖铁环 (0:06)",
+      passage: "MP Grand Quest Harvest Cellar"
+    },
+    {
+      locs: ["Residential Alleyways"],
+      check: function (v) { return (Number(v.mpQuestAlleyShelter) || 0) < 7 && (!v.daily || !v.daily.mpQuestAlleyShelter); },
+      hint: "住宅区小巷的砖墙夹缝里搭着一处用旧帆布遮蔽的避风棚。",
+      icon: "img/misc/icon/walk.png",
+      linkText: "拨开旧帆布查看避风棚 (0:05)",
+      passage: "MP Grand Quest Alley Shelter"
+    },
+    {
+      locs: ["Industrial Alleyways"],
+      check: function (v) { return (Number(v.mpQuestFoundry) || 0) < 7 && (!v.daily || !v.daily.mpQuestFoundry); },
+      hint: "停工的旧铸造厂烟囱下仍残留着未熄灭的暗红炭火。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "潜入旧铸造厂侧门 (0:09)",
+      passage: "MP Grand Quest Foundry"
+    },
+    {
+      locs: ["Garden"],
+      check: function (v) { return (Number(v.mpQuestGardenWell) || 0) < 7 && (!v.daily || !v.daily.mpQuestGardenWell); },
+      hint: "孤儿院花园角落被常春藤覆盖的枯井壁上嵌着几枚生锈的铁脚蹬。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "拨开常春藤探看枯井 (0:06)",
+      passage: "MP Grand Quest Garden Well"
+    },
+    {
+      locs: ["Bathroom"],
+      check: function (v) { return (Number(v.mpQuestBathPipe) || 0) < 7 && (!v.daily || !v.daily.mpQuestBathPipe); },
+      hint: "浴室黄铜热水管后方的瓷砖有一块松动脱落。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "挪开松动的浴室瓷砖 (0:04)",
+      passage: "MP Grand Quest Bath Pipe"
+    },
+    {
+      locs: ["Beach Cave"],
+      check: function (v) { return (Number(v.mpQuestGrottoPearl) || 0) < 7 && (!v.daily || !v.daily.mpQuestGrottoPearl); },
+      hint: "海蚀洞深处的潮汐水潭底闪烁着幽蓝色的磷光。",
+      icon: "img/misc/icon/swim.png",
+      linkText: "沿着潮汐水潭向内涉水 (0:12)",
+      passage: "MP Grand Quest Grotto Pearl"
+    },
+    {
+      locs: ["Deep Forest", "Wolf Cave"],
+      check: function (v) { return (Number(v.mpQuestMoonAltar) || 0) < 7 && (!v.daily || !v.daily.mpQuestMoonAltar); },
+      hint: "深林古树环绕的空地中央立着一座布满苔藓的月牙石台。",
+      icon: "img/misc/icon/forest.png",
+      linkText: "走上布满苔藓的月牙石台 (0:10)",
+      passage: "MP Grand Quest Moon Altar"
+    },
+    {
+      locs: ["Orphanage", "High Street", "Temple", "Docks"],
+      check: function (v) {
+        var stg = Number(v.mpMainStoryEclipse) || 0;
+        var hasClue = stg > 0 || (Number(v.mpQuestCellar) || 0) >= 1 || (Number(v.mpQuestClocktower) || 0) >= 1 || (Number(v.mpQuestCatacomb) || 0) >= 1;
+        return hasClue && stg < 12 && (!v.daily || !v.daily.mpMainStoryEclipse);
+      },
+      hint: "石墙与铜柱的交界处留着一枚新近刻下的新月水波纹记号。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "顺着新月水波纹记号查探 (0:12)",
+      passage: "MP Main Story Eclipse Hub"
+    },
+    {
+      locs: ["High Street", "School Library", "Forest", "Beach", "Sewers", "Elk Street"],
+      check: function (v) {
+        var hasFrag = (Number(v.mpFragCrownGear) || 0) > 0 || (Number(v.mpFragAbyssPage) || 0) > 0 || (Number(v.mpFragSmugglerRing) || 0) > 0 || (Number(v.mpFragBrideFlower) || 0) > 0 || (Number(v.mpFragVelvetCrest) || 0) > 0 || (Number(v.mpFragLedgerKey) || 0) > 0;
+        return hasFrag && (Number(v.mpCollectHubUnlocked) || 0) < 6;
+      },
+      hint: "随身携带的旧残片在靠近街角暗格时发出了轻微的共鸣。",
+      icon: "img/misc/icon/sneak.png",
+      linkText: "拼合随身携带的残片线索 (0:06)",
+      passage: "MP Collection Quests Hub"
     }
   ];
+
+  var NEW_WORLD_REGIONS = [
+    {
+      locs: ["Sea Rocks", "Docks"],
+      check: function (v) { return (Number(v.mpQuestShipwreck) || 0) >= 1 || (Number(v.mpQuestCliffLighthouse) || 0) >= 1 || (Number(v.mpMainStoryEclipse) || 0) >= 1 || isDuskOrNightNow(); },
+      hint: "暗礁外侧的铁环上系着一叶旧木舟，海雾尽头隐约浮现出雾角灯塔岛的轮廓。",
+      icon: "img/misc/icon/beach.png",
+      linkText: "解缆划向雾角灯塔岛 (0:18)",
+      passage: "MP Region Foghorn Island"
+    },
+    {
+      locs: ["High Street", "Sewers"],
+      check: function (v) { return (Number(v.mpQuestClocktower) || 0) >= 1 || (Number(v.skulduggery) || 0) >= 150 || isNightNow(); },
+      hint: "旧钟塔基座后方的排水铁栅松动着，下方露出带有黄铜齿轮刻痕的石阶。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "顺着齿轮石阶下潜 (0:10)",
+      passage: "MP Region Clockwork Undercity"
+    },
+    {
+      locs: ["Temple", "Forest"],
+      check: function (v) { return (Number(v.mpQuestCatacomb) || 0) >= 1 || (Number(v.mpQuestManorRuins) || 0) >= 1 || isDuskOrNightNow(); },
+      hint: "坍塌的石廊拱门后方延伸出一段覆满青苔的古老旋梯。",
+      icon: "img/misc/icon/temple.png",
+      linkText: "拾级走下地下古修道院 (0:12)",
+      passage: "MP Region Sunken Abbey"
+    },
+    {
+      locs: ["Danube Street", "Park"],
+      check: function (v) { return (Number(v.mpQuestGreenhouse) || 0) >= 1 || (Number(v.mpQuestDanubeSalon) || 0) >= 1 || (getHourNow() >= 18 || getHourNow() <= 7); },
+      hint: "高耸的冬青树篱后方藏着一扇半掩的铸铁雕花小门，门内水雾氤氲。",
+      icon: "img/misc/icon/park.png",
+      linkText: "闪身步入秘密温室庄园 (0:08)",
+      passage: "MP Region Glasshouse Manor"
+    },
+    {
+      locs: ["Elk Street", "Industrial Alleyways"],
+      check: function (v) { return (Number(v.skulduggery) || 0) >= 100 || (Number(v.mpContrabandSealed) || 0) > 0 || isDuskOrNightNow(); },
+      hint: "生锈的货运铁轨穿过坍塌的砖墙，通向废弃的黑铁调车场。",
+      icon: "img/misc/icon/sneak.png",
+      linkText: "沿着铁轨潜入黑铁货运站 (0:09)",
+      passage: "MP Region Blackiron Yard"
+    },
+    {
+      locs: ["Deep Forest", "Farmland"],
+      check: function (v) { return (Number(v.mpQuestMoonAltar) || 0) >= 1 || (Number(v.mpQuestMill) || 0) >= 1 || isDuskOrNightNow(); },
+      hint: "古木交错的迷雾深处立着一圈高大的风化石柱，林间回荡着低沉的风鸣。",
+      icon: "img/misc/icon/forest.png",
+      linkText: "穿林走向古德鲁伊石环 (0:14)",
+      passage: "MP Region Druid Circle"
+    },
+    {
+      locs: ["Connudatus Street", "Cliff Street"],
+      check: function (v) { return (Number(v.mpQuestVelvet) || 0) >= 1 || (Number(v.promiscuity) || 0) >= 35 || isDuskOrNightNow(); },
+      hint: "悬崖廊柱下的天鹅绒侧门半掩着，门内飘出低柔的大提琴与暖香。",
+      icon: "img/misc/icon/brothel.gif",
+      linkText: "步入峭壁天鹅绒暗层 (0:07)",
+      passage: "MP Region Velvet Mirage"
+    },
+    {
+      locs: ["School Library", "Hallways"],
+      check: function (v) { return (Number(v.mpQuestLibrary) || 0) >= 1 || (Number(v.mpQuestSchoolBell) || 0) >= 1 || getHourNow() >= 16; },
+      hint: "古籍架侧面的木制暗门虚掩着，后方连廊直通旧学园天文翼楼。",
+      icon: "img/misc/icon/school.png",
+      linkText: "穿过连廊登上旧天文翼楼 (0:08)",
+      passage: "MP Region Observatory Wing"
+    }
+  ];
+
+  var NEW_WORLD_NPCS = [
+    {
+      key: "sera",
+      name: "塞拉",
+      title: "高街钟表与古物修缮师",
+      locs: ["High Street", "Shopping Centre"],
+      hours: [8, 21],
+      hint: "钟表旧货铺的玻璃柜台后，塞拉正戴着单眼放大镜擦拭一枚精密的黄铜发条。",
+      icon: "img/misc/icon/shop.png",
+      linkText: "与塞拉交谈 (0:04)",
+      passage: "MP NPC Sera Hub"
+    },
+    {
+      key: "vesper",
+      name: "维斯",
+      title: "旧港区夜航船长",
+      locs: ["Docks", "Elk Street", "Mer Street"],
+      hours: [17, 6],
+      hint: "防波堤栈桥边的阴影里，维斯正靠在锚链旁擦拭手里的铜质怀表。",
+      icon: "img/misc/icon/sneak.png",
+      linkText: "走近维斯 (0:04)",
+      passage: "MP NPC Vesper Hub"
+    },
+    {
+      key: "noel",
+      name: "诺艾尔",
+      title: "学园植物标本学徒",
+      locs: ["School Library", "Hallways", "Park"],
+      hours: [7, 20],
+      hint: "诺艾尔正站在安静的角落里翻阅一册夹满干花标本的笔记。",
+      icon: "img/misc/icon/school.png",
+      linkText: "与诺艾尔搭话 (0:03)",
+      passage: "MP NPC Noel Hub"
+    },
+    {
+      key: "lin",
+      name: "林恩",
+      title: "宅邸街守夜人",
+      locs: ["Domus Street", "Orphanage", "Barb Street", "Pub"],
+      hours: [16, 7],
+      hint: "缠着旧绷带的林恩正靠在街角路灯下活动着手腕关节。",
+      icon: "img/misc/icon/socialise.png",
+      linkText: "走近林恩 (0:04)",
+      passage: "MP NPC Lin Hub"
+    },
+    {
+      key: "monet",
+      name: "莫奈",
+      title: "天鹅绒画师与裁缝",
+      locs: ["Connudatus Street", "Cliff Street", "Ocean Breeze"],
+      hours: [10, 23],
+      hint: "手持素描本的莫奈正站在廊檐下，目光穿过人群落向你这边。",
+      icon: "img/misc/icon/socialise.png",
+      linkText: "走向莫奈 (0:04)",
+      passage: "MP NPC Monet Hub"
+    },
+    {
+      key: "ash",
+      name: "阿什",
+      title: "林间与古墓守灯人",
+      locs: ["Forest", "Deep Forest", "Temple", "Sewers"],
+      hours: [6, 23],
+      hint: "提着防风油灯的阿什正站在石径旁，替脚边的猎犬解开荆棘。",
+      icon: "img/misc/icon/forest.png",
+      linkText: "走近阿什 (0:05)",
+      passage: "MP NPC Ash Hub"
+    }
+  ];
+
+  function isNpcInScheduleHour(npcEntry) {
+    if (!npcEntry || !Array.isArray(npcEntry.hours)) return true;
+    var h = getHourNow();
+    var start = npcEntry.hours[0], end = npcEntry.hours[1];
+    if (start <= end) return h >= start && h <= end;
+    return h >= start || h <= end;
+  }
 
   function injectWorldAndCompanionNodes(host, pas, v) {
     if (!host || !pas || !v || v.combat === 1) return;
@@ -2797,13 +4138,15 @@
     var oldWorldBox = document.getElementById("mp-world-organic-box");
     if (oldWorldBox && oldWorldBox.parentNode) oldWorldBox.parentNode.removeChild(oldWorldBox);
 
-    var container = el("div", { id: "mp-world-organic-box", style: "margin:8px 0;" });
+    var container = el("div", { id: "mp-world-organic-box", style: "margin:6px 0;" });
     var hasAny = false;
 
-    // 1. 若同伴不在线，且当前地点在伴侣 NPC 的日常作息地点中，自然融入孤儿院/学校/小镇场景
+    // 1. 房间同伴识别与在线/离线无缝替换：
+    // 若该玩家当前在线（通过 playerUid 或同名识别），直接由在线玩家替代离线 NPC，绝不重复出现两个分身！
     syncCompanionToVariables();
     var comp = v.mpCompanion;
-    if (comp && S.players.size === 0 && Array.isArray(comp.activeLocations) && comp.activeLocations.indexOf(pas) >= 0) {
+    var onlinePeer = findOnlineCompanionPeer();
+    if (comp && !onlinePeer && Array.isArray(comp.activeLocations) && comp.activeLocations.indexOf(pas) >= 0) {
       hasAny = true;
       var cName = comp.name || "艾琳";
       var desc = "";
@@ -2818,7 +4161,7 @@
       } else {
         desc = "你在街角看到了" + cName + "熟悉的身影。";
       }
-      var compP = el("div", { style: "margin:6px 0;" });
+      var compP = el("div", { style: "margin:4px 0;" });
       compP.appendChild(el("span", { text: desc + " " }));
       var compLink = el("a", {
         class: "link-internal",
@@ -2829,17 +4172,80 @@
         }
       });
       compLink.appendChild(dolIconImg("img/misc/icon/socialise.png"));
-      compLink.appendChild(document.createTextNode("走近" + cName + " (0:05)"));
+      compLink.appendChild(document.createTextNode("走近" + cName + " (0:03)"));
       compP.appendChild(compLink);
       container.appendChild(compP);
     }
 
-    // 2. 检查当前场景是否有满足隐藏条件的大世界支线暗线（最多只给 1 句环境描写暗示 + 1 个原版交互链接）
+    // 2. 常驻镇民 NPC（按各自作息时间段自然出没，每场景最多出现 1 位）
+    if (!v.mpNpcs) {
+      v.mpNpcs = {
+        sera: { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 },
+        vesper: { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 },
+        noel: { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 },
+        lin: { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 },
+        monet: { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 },
+        ash: { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 }
+      };
+    }
+    for (var ni = 0; ni < NEW_WORLD_NPCS.length; ni++) {
+      var nItem = NEW_WORLD_NPCS[ni];
+      if (nItem.locs.indexOf(pas) >= 0 && isNpcInScheduleHour(nItem)) {
+        hasAny = true;
+        var nRow = el("div", { style: "margin:4px 0;" });
+        nRow.appendChild(el("span", { text: nItem.hint + " " }));
+        (function (npcEntry) {
+          var nLink = el("a", {
+            class: "link-internal",
+            onclick: function (ev) {
+              ev.preventDefault();
+              v.mpReturnPassage = pas;
+              if (v.mpNpcs && v.mpNpcs[npcEntry.key]) {
+                v.mpNpcs[npcEntry.key].hasMet = 1;
+              }
+              enginePlay(npcEntry.passage);
+            }
+          });
+          nLink.appendChild(dolIconImg(npcEntry.icon));
+          nLink.appendChild(document.createTextNode(npcEntry.linkText));
+          nRow.appendChild(nLink);
+        })(nItem);
+        container.appendChild(nRow);
+        break;
+      }
+    }
+
+    // 3. 连通的新探索区域入口（仅在满足前置线索或时段条件时自然浮现，每场景最多 1 处）
+    for (var ri = 0; ri < NEW_WORLD_REGIONS.length; ri++) {
+      var rItem = NEW_WORLD_REGIONS[ri];
+      if (rItem.locs.indexOf(pas) >= 0 && (!rItem.check || rItem.check(v))) {
+        hasAny = true;
+        var rRow = el("div", { style: "margin:4px 0;" });
+        rRow.appendChild(el("span", { text: rItem.hint + " " }));
+        (function (regEntry) {
+          var rLink = el("a", {
+            class: "link-internal",
+            onclick: function (ev) {
+              ev.preventDefault();
+              v.mpReturnPassage = pas;
+              enginePlay(regEntry.passage);
+            }
+          });
+          rLink.appendChild(dolIconImg(regEntry.icon));
+          rLink.appendChild(document.createTextNode(regEntry.linkText));
+          rRow.appendChild(rLink);
+        })(rItem);
+        container.appendChild(rRow);
+        break;
+      }
+    }
+
+    // 4. 满足隐藏条件或已开启线索的暗线（每场景最多浮现 1 条，绝不堆砌刷屏）
     for (var i = 0; i < WORLD_STORYLINE_HOOKS.length; i++) {
       var hk = WORLD_STORYLINE_HOOKS[i];
       if (hk.locs.indexOf(pas) >= 0 && hk.check(v)) {
         hasAny = true;
-        var qRow = el("div", { style: "margin:6px 0;" });
+        var qRow = el("div", { style: "margin:4px 0;" });
         qRow.appendChild(el("span", { text: hk.hint + " " }));
         (function (hookItem) {
           var qLink = el("a", {
@@ -3364,6 +4770,501 @@
     });
   }
 
+  /* ---------------- 原版『社交 (Social)』与『日志 (Journal)』无缝注入系统 ---------------- */
+
+  function buildNativeStatBlock(titleText, pct, activeIconSrc, inactiveIconSrc, orientation, isImportant, barColor) {
+    var safePct = Math.max(0, Math.min(100, Math.round(Number(pct) || 0)));
+    var v = V();
+    var showImages = !(v && v.options && v.options.images === 0);
+    var cleanTitle = String(titleText || "").replace(/[:：]/g, "").trim();
+
+    var block = el("div", {
+      class: "relation-stat-block",
+      style: "--progress: " + safePct + "%;"
+    });
+
+    if (isImportant) {
+      block.appendChild(el("label", { text: cleanTitle }));
+    }
+
+    if (showImages) {
+      var statDiv = el("div", { class: "relation-stat" });
+      if (!isImportant) {
+        var nameSpan = el("span", { class: "relation-stat-name" });
+        nameSpan.appendChild(el("small", { text: cleanTitle }));
+        statDiv.appendChild(nameSpan);
+      }
+      var iconSpan = el("span", {
+        class: "relation-stat-icon " + (orientation || "horizontal")
+      });
+      var activeImg = el("img", {
+        class: "active-icon-img",
+        src: activeIconSrc
+      });
+      var inactiveImg = el("img", {
+        class: inactiveIconSrc ? "inactive-icon-img" : "inactive-icon-img outlined",
+        src: inactiveIconSrc || activeIconSrc
+      });
+      iconSpan.appendChild(activeImg);
+      iconSpan.appendChild(inactiveImg);
+      statDiv.appendChild(iconSpan);
+
+      var pctSpan = el("span", { class: "relation-stat-percent black" });
+      pctSpan.appendChild(document.createTextNode(String(safePct)));
+      pctSpan.appendChild(el("small", { text: "%" }));
+      statDiv.appendChild(pctSpan);
+      block.appendChild(statDiv);
+    } else {
+      var pctText = el("span", { class: "relation-stat-percent black" });
+      pctText.appendChild(document.createTextNode((isImportant ? " " : cleanTitle + " ") + String(safePct)));
+      pctText.appendChild(el("small", { text: "%" }));
+      block.appendChild(pctText);
+      block.appendChild(el("div", {
+        class: "progress-bar " + (barColor || "red") + "bar"
+      }));
+    }
+    return block;
+  }
+
+  function buildCompanionStatusDescription(comp, rel, onlinePeer, partnerName) {
+    var stage = rel.stage || "stranger";
+    var persona = comp.persona || comp.attitude || "neutral";
+    var locText = onlinePeer ? ("正在" + shortLoc(onlinePeer.passage) + "与你同行。") : "与你同住在孤儿院。";
+    if (stage === "soulmate") {
+      if (persona === "possessive") return partnerName + " " + locText + "胸前贴身戴着与你成对的银挂坠，视线几乎不愿离开你半步。";
+      if (persona === "corrupt") return partnerName + " " + locText + "与你在暗夜中共享着最隐秘的默契。";
+      return partnerName + " " + locText + "与你许下了生死相随的誓约，无论风雨都会站在你身侧。";
+    }
+    if (stage === "lover") {
+      if (persona === "bratty") return partnerName + " " + locText + "嘴上总爱逞强逗你，却会在危险时刻第一时间护住你。";
+      if (persona === "meek") return partnerName + " " + locText + "一见到你就会露出安心的微笑，总是温柔地牵着你的衣角。";
+      return partnerName + " " + locText + "与你心意相通的恋人，眼神交汇间满是眷恋。";
+    }
+    if (stage === "crush") {
+      return partnerName + " " + locText + "望向你的眼神总是带着掩饰不住的悸动。";
+    }
+    if (stage === "friend") {
+      return partnerName + " " + locText + "在孤儿院与镇上与你彼此照应、值得信赖的密友。";
+    }
+    return partnerName + " " + locText + "对你的举止颇为留意，仍在慢慢熟悉你的步调。";
+  }
+
+  function hideEmptyPrimaryRelNotice(relDisplay, primaryBox) {
+    if (!relDisplay || !primaryBox) return;
+    // 隐藏原版在没有恋爱对象时生成的 "//你现在没有羁绊角色//" 占位斜体文字
+    var sib = primaryBox.nextSibling;
+    while (sib) {
+      if (sib.nodeType === 1) {
+        var tag = sib.tagName.toLowerCase();
+        var txt = (sib.textContent || "").trim();
+        if ((tag === "i" || tag === "em" || tag === "span") && (txt.indexOf("没有羁绊角色") >= 0 || txt.indexOf("No primary relationships") >= 0)) {
+          sib.style.display = "none";
+          if (sib.nextElementSibling && sib.nextElementSibling.tagName.toLowerCase() === "br") {
+            sib.nextElementSibling.style.display = "none";
+          }
+          break;
+        }
+        if (sib.id === "secondary-npcs" || sib.classList.contains("gold")) break;
+      }
+      sib = sib.nextSibling;
+    }
+  }
+
+  function renderSocialRelations() {
+    var relDisplay = document.getElementById("relation-display");
+    if (!relDisplay) return;
+    var primaryBox = document.getElementById("npc-relations");
+    var secondaryBox = document.getElementById("secondary-npcs");
+    if (!primaryBox) return;
+
+    var oldCards = relDisplay.querySelectorAll(".mp-native-relation-box");
+    for (var i = 0; i < oldCards.length; i++) {
+      if (oldCards[i].parentNode) oldCards[i].parentNode.removeChild(oldCards[i]);
+    }
+
+    var v = V();
+    var noImagesCls = (v && v.options && v.options.images === 0) ? " no-images" : "";
+    syncCompanionToVariables();
+    var comp = (v && v.mpCompanion) || S.companion || loadCompanionFromStorage();
+    var onlinePeer = findOnlineCompanionPeer();
+    var partnerName = (onlinePeer && onlinePeer.name) ? onlinePeer.name : (comp.name || "艾琳");
+    var partnerRel = getRel(partnerName);
+
+    // 1. 将联机同伴 / 离线伴侣注入『主要关系 (#npc-relations)』，采用与原版完全一致的 DOM 结构与百分比显示
+    var compCard = el("div", {
+      class: "relation-box mp-native-relation-box",
+      style: "order: 15"
+    });
+    var topLine = el("div", { class: "relation-top-line" });
+    var nameHeader = el("span", { class: "relation-name" });
+    nameHeader.appendChild(document.createTextNode(partnerName + " "));
+    var titleSmall = el("small", { class: "relation-title black" });
+    titleSmall.appendChild(el("i", {
+      text: onlinePeer ? ("同伴 · " + shortLoc(onlinePeer.passage)) : ("同伴 · " + stageLabelCn(partnerRel.stage))
+    }));
+    nameHeader.appendChild(titleSmall);
+    topLine.appendChild(nameHeader);
+    if (partnerRel.stage === "lover" || partnerRel.stage === "soulmate") {
+      topLine.appendChild(el("img", {
+        class: "love-interest-icon",
+        src: "img/ui/love-interest.png",
+        title: partnerRel.stage === "soulmate" ? "誓约伴侣" : "恋人"
+      }));
+    }
+    compCard.appendChild(topLine);
+
+    compCard.appendChild(el("div", {
+      class: "relation-description",
+      text: buildCompanionStatusDescription(comp, partnerRel, onlinePeer, partnerName)
+    }));
+
+    var statList = el("div", { class: "relation-stat-list" + noImagesCls });
+    statList.appendChild(buildNativeStatBlock("爱意", partnerRel.love || 0, "img/ui/sym-love.png", "img/ui/sym-love-empty.png", "horizontal", true, "red"));
+    statList.appendChild(buildNativeStatBlock("信任", partnerRel.trust || 0, "img/ui/sym-confidence.png", "", "horizontal", true, "teal"));
+    statList.appendChild(buildNativeStatBlock("性欲", partnerRel.lust || 0, "img/ui/sym-lust.png", "img/ui/sym-lust-empty.png", "vertical", true, "pink"));
+    statList.appendChild(buildNativeStatBlock("占有", partnerRel.jealousy || 0, "img/ui/sym-dominance.png", "", "horizontal", true, "purple"));
+    statList.appendChild(buildNativeStatBlock("共鸣", partnerRel.corruption || 0, "img/ui/tf-demon.png", "", "horizontal-inverted", true, "purple"));
+    statList.appendChild(buildNativeStatBlock("默契", Math.min(100, Math.round(((partnerRel.love || 0) + (partnerRel.trust || 0)) / 2)), "img/ui/sym-harmony.png", "", "vertical", true, "gold"));
+    compCard.appendChild(statList);
+
+    primaryBox.appendChild(compCard);
+    hideEmptyPrimaryRelNotice(relDisplay, primaryBox);
+
+    // 若房间内还有第 3、第 4 名在线玩家
+    S.players.forEach(function (p) {
+      if (onlinePeer && p.id === onlinePeer.id) return;
+      var pRel = getRel(p.name || p.id);
+      var pCard = el("div", {
+        class: "relation-box mp-native-relation-box",
+        style: "order: 16"
+      });
+      var pTop = el("div", { class: "relation-top-line" });
+      var pNameSpan = el("span", { class: "relation-name" });
+      pNameSpan.appendChild(document.createTextNode((p.name || "同行者") + " "));
+      var pSmall = el("small", { class: "relation-title black" });
+      pSmall.appendChild(el("i", { text: "同行者 · " + shortLoc(p.passage) }));
+      pNameSpan.appendChild(pSmall);
+      pTop.appendChild(pNameSpan);
+      pCard.appendChild(pTop);
+      pCard.appendChild(el("div", {
+        class: "relation-description",
+        text: (p.name || "同行者") + " 正与你在小镇中结伴行动，目前位于" + shortLoc(p.passage) + "。"
+      }));
+      var pStats = el("div", { class: "relation-stat-list" + noImagesCls });
+      pStats.appendChild(buildNativeStatBlock("爱意", pRel.love || 0, "img/ui/sym-love.png", "img/ui/sym-love-empty.png", "horizontal", true, "red"));
+      pStats.appendChild(buildNativeStatBlock("信任", pRel.trust || 0, "img/ui/sym-confidence.png", "", "horizontal", true, "teal"));
+      pStats.appendChild(buildNativeStatBlock("性欲", pRel.lust || 0, "img/ui/sym-lust.png", "img/ui/sym-lust-empty.png", "vertical", true, "pink"));
+      pCard.appendChild(pStats);
+      primaryBox.appendChild(pCard);
+    });
+
+    // 2. 将结识过的 6 位新镇民 NPC 注入『普通角色 (#secondary-npcs)』，完整显示百分比数值与图标
+    var targetNpcContainer = secondaryBox || primaryBox;
+    var npcMeta = [
+      {
+        key: "sera",
+        name: "塞拉",
+        title: "钟表修缮师",
+        descZero: "塞拉 对你还保持着客气的审视。",
+        descMid: "塞拉 信任你的眼光，乐意替你鉴定古物。",
+        descHigh: "塞拉 对你极为偏爱，钟表铺的阁楼随时向你敞开。"
+      },
+      {
+        key: "vesper",
+        name: "维斯",
+        title: "夜航船长",
+        descZero: "维斯 觉得你还算守口如瓶。",
+        descMid: "维斯 把你视作可靠的暗潮搭档。",
+        descHigh: "维斯 将船长室的副匙交给了你，愿为你留着归航的灯。"
+      },
+      {
+        key: "noel",
+        name: "诺艾尔",
+        title: "标本室学徒",
+        descZero: "诺艾尔 与你相处时还有些拘谨。",
+        descMid: "诺艾尔 总是提前为你温好舒缓心神的花茶。",
+        descHigh: "诺艾尔 对你怀着毫无保留的依恋与倾慕。"
+      },
+      {
+        key: "lin",
+        name: "林恩",
+        title: "街区守夜人",
+        descZero: "林恩 在巡夜时会顺便留意你的安全。",
+        descMid: "林恩 认可你的韧劲，常在旧车库指导你格斗步法。",
+        descHigh: "林恩 发誓用双拳替你挡下暗巷里的一切风雨。"
+      },
+      {
+        key: "monet",
+        name: "莫奈",
+        title: "画师与裁缝",
+        descZero: "莫奈 对你的身形轮廓颇感兴趣。",
+        descMid: "莫奈 喜欢在试衣镜前细致地替你修补衣衫。",
+        descHigh: "莫奈 视你为唯一的缪斯，画室只为你一人敞开。"
+      },
+      {
+        key: "ash",
+        name: "阿什",
+        title: "林间守灯人",
+        descZero: "阿什 对你印象尚可，愿意在林间替你引路。",
+        descMid: "阿什 会在迷雾中放慢脚步等你，递给你温热的姜汤。",
+        descHigh: "阿什 愿在深林篝火旁将你拥入怀中，护你走过每一寸夜路。"
+      }
+    ];
+
+    var mpNpcs = (v && v.mpNpcs) || {};
+    npcMeta.forEach(function (nm, idx) {
+      var st = mpNpcs[nm.key] || { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 };
+      var hasInteracted = st.hasMet || (st.love || 0) > 0 || (st.trust || 0) > 0 || (st.lust || 0) > 0 || (st.stage || 0) > 0;
+      if (!hasInteracted) return;
+
+      var nCard = el("div", {
+        class: "relation-box mp-native-relation-box",
+        style: "order: " + (60 + idx)
+      });
+      var nTop = el("div", { class: "relation-top-line" });
+      var nName = el("span", { class: "relation-name" });
+      nName.appendChild(document.createTextNode(nm.name + " "));
+      var nSmall = el("small", { class: "relation-title black" });
+      nSmall.appendChild(el("i", { text: nm.title }));
+      nName.appendChild(nSmall);
+      nTop.appendChild(nName);
+      if ((st.love || 0) >= 20 || (st.stage || 0) >= 8) {
+        nTop.appendChild(el("img", { class: "love-interest-icon", src: "img/ui/love-interest.png", title: "深厚羁绊" }));
+      }
+      nCard.appendChild(nTop);
+
+      var descTxt = (st.love || 0) >= 18 ? nm.descHigh : ((st.love || 0) >= 6 || (st.trust || 0) >= 6) ? nm.descMid : nm.descZero;
+      nCard.appendChild(el("div", { class: "relation-description", text: descTxt }));
+
+      var nStats = el("div", { class: "quick-stats relation-stat-list" + noImagesCls });
+      nStats.appendChild(buildNativeStatBlock("好感", st.love || 0, "img/ui/sym-love.png", "img/ui/sym-love-empty.png", "horizontal", false, "red"));
+      nStats.appendChild(buildNativeStatBlock("信任", st.trust || 0, "img/ui/sym-confidence.png", "", "horizontal", false, "teal"));
+      nStats.appendChild(buildNativeStatBlock("欲念", st.lust || 0, "img/ui/sym-lust.png", "img/ui/sym-lust-empty.png", "vertical", false, "pink"));
+      nCard.appendChild(nStats);
+
+      targetNpcContainer.appendChild(nCard);
+    });
+  }
+
+  function renderJournalEntries() {
+    var divMap = document.getElementById("divmap");
+    var overlayContent = document.getElementById("customOverlayContent");
+    if (!divMap || !overlayContent) return;
+
+    var oldBox = document.getElementById("mp-native-journal-section");
+    if (oldBox && oldBox.parentNode) oldBox.parentNode.removeChild(oldBox);
+
+    var v = V();
+    if (!v) return;
+    syncCompanionToVariables();
+
+    var wrap = el("div", { id: "mp-native-journal-section" });
+
+    // 1. 同伴与日常动向
+    var comp = v.mpCompanion || S.companion || loadCompanionFromStorage();
+    var onlinePeer = findOnlineCompanionPeer();
+    var partnerName = (onlinePeer && onlinePeer.name) ? onlinePeer.name : (comp.name || "艾琳");
+    var partnerRel = getRel(partnerName);
+
+    wrap.appendChild(el("hr"));
+    wrap.appendChild(el("h1", { class: "header gold bold", text: "同伴与镇民动向" }));
+    var ulComp = el("ul", { class: "journal" });
+
+    if (onlinePeer) {
+      ulComp.appendChild(el("li", {
+        text: partnerName + " · " + stageLabelCn(partnerRel.stage) + "目前正在镇上行动，最近一次出现在" + shortLoc(onlinePeer.passage) + "。"
+      }));
+    } else {
+      var h = getHourNow();
+      var schedHint = "清晨至上午常在孤儿院走廊与餐厅帮忙；平日白天会前往牛津街学校上课，周末则喜欢去公园或高街散步；傍晚后会回到孤儿院卧室休息。";
+      if (h >= 9 && h < 16) {
+        schedHint = "眼下这个时辰，" + partnerName + "通常在学校图书馆、走廊或公园长椅附近活动。";
+      } else if (h >= 16 && h < 22) {
+        schedHint = "傍晚时分，" + partnerName + "通常留在孤儿院走廊、花园或自己的房间里。";
+      } else if (h >= 22 || h < 6) {
+        schedHint = "夜深人静，" + partnerName + "已经回到孤儿院斜对面的卧室休息。";
+      }
+      ulComp.appendChild(el("li", {
+        text: partnerName + " · " + stageLabelCn(partnerRel.stage) + "：" + schedHint
+      }));
+    }
+
+    var compQuestStg = Number(comp.questStage || v.mpCompanionQuest) || 0;
+    if (compQuestStg > 0 && compQuestStg < 8) {
+      ulComp.appendChild(el("li", {
+        text: "你与" + partnerName + "正在共同追查旧八音盒与早年档案的下落 · 当前进度 " + compQuestStg + "/8。"
+      }));
+    } else if (compQuestStg >= 8) {
+      ulComp.appendChild(el("li", {
+        text: "你与" + partnerName + "已经解开了旧八音盒背后的往事，彼此的羁绊愈发牢固。"
+      }));
+    }
+
+    // 已结识的新 NPC 动向与委托记录
+    var mpNpcs = v.mpNpcs || {};
+    var npcJournalDefs = [
+      { key: "sera", name: "塞拉", schedule: "每日白昼至晚间 · 08:00 - 21:00在高街钟表旧货铺坐镇，可替你鉴定古物并折算古董收益。", questTitle: "雾月钟楼与失落发条圣物" },
+      { key: "vesper", name: "维斯", schedule: "每日黄昏至次日清晨 · 17:00 - 06:00在码头或麋鹿街暗巷出没，可安全接手封存的暗市货包。", questTitle: "暗潮走私船与沉没金库" },
+      { key: "noel", name: "诺艾尔", schedule: "白昼与傍晚 · 07:00 - 20:00在学校图书馆或公园玻璃花房整理标本，可为你调配舒缓草药茶。", questTitle: "标本室秘药与温室夜谈" },
+      { key: "lin", name: "林恩", schedule: "傍晚至次日清晨 · 16:00 - 07:00在宅邸街、倒钩街与孤儿院外围巡夜，可指导你防身格斗步法。", questTitle: "地下铁笼与孤儿院守夜人" },
+      { key: "monet", name: "莫奈", schedule: "上午至深夜 · 10:00 - 23:00在康努达图斯街、峭壁街或海风咖啡馆写生，可替你修补破损衣物。", questTitle: "天鹅绒画室与午夜缪斯" },
+      { key: "ash", name: "阿什", schedule: "清晨至深夜在森林、深林或神殿石径巡视，可带你避开林间泥沼并拓印古碑。", questTitle: "古墓迷雾与森林古祭坛" }
+    ];
+    npcJournalDefs.forEach(function (nd) {
+      var st = mpNpcs[nd.key];
+      if (!st) return;
+      var hasMet = st.hasMet || (st.love || 0) > 0 || (st.trust || 0) > 0 || (st.stage || 0) > 0;
+      if (!hasMet) return;
+      var lineTxt = nd.name + "：" + nd.schedule;
+      if ((st.stage || 0) > 0 && (st.stage || 0) < 10) {
+        lineTxt += " · 当前正在共同推进『" + nd.questTitle + "』第 " + st.stage + "/10 阶段";
+      } else if ((st.stage || 0) >= 10) {
+        lineTxt += " · 已与你共同完成了『" + nd.questTitle + "』的全部委托";
+      }
+      ulComp.appendChild(el("li", { text: lineTxt }));
+    });
+    wrap.appendChild(ulComp);
+
+    // 1.5 孤儿院贝利双周连坐核查与断链反抗进度
+    var curDayJ = (window.Time && Number.isFinite(Time.days)) ? Time.days : 0;
+    if (v.mpBaileyBiweeklyNextDay === undefined) v.mpBaileyBiweeklyNextDay = curDayJ + 14;
+    var daysLeft = Math.max(0, v.mpBaileyBiweeklyNextDay - curDayJ);
+    var rebStg = Number(v.mpQuestBaileyRebellion) || 0;
+    var curTribute = Math.max(0, 1500 - rebStg * 180);
+    wrap.appendChild(el("hr"));
+    wrap.appendChild(el("h1", { class: "header gold bold", text: "孤儿院双周连坐与断链之盟" }));
+    var ulBailey = el("ul", { class: "journal" });
+    if (rebStg >= 8) {
+      ulBailey.appendChild(el("li", {
+        text: "你们已集齐并公开备份了贝利的全部黑账原件，彻底废除了两周一次的同行连坐规费。"
+      }));
+    } else {
+      ulBailey.appendChild(el("li", {
+        text: daysLeft === 0
+          ? ("贝利的双周连坐清算日已到，本期需交纳 £" + curTribute + "，或与同伴并肩反抗、推进断链支线。")
+          : ("距离贝利下一次双周连坐核查还有 " + daysLeft + " 天 · 当前每两周连坐规费为 £" + curTribute + "。")
+      }));
+      if (rebStg > 0) {
+        ulBailey.appendChild(el("li", {
+          text: "正在推进反抗支线『孤儿院黑账与断链之盟』 · 当前进度 " + rebStg + "/8，已永久削减双周连坐金 £" + (rebStg * 180) + "。"
+        }));
+      }
+    }
+    wrap.appendChild(ulBailey);
+
+    // 2. 随身待处理古物与暗市货包记录
+    var unappraised = Number(v.mpAntiquesUnappraised) || 0;
+    var contraband = Number(v.mpContrabandSealed) || 0;
+    if (unappraised > 0 || contraband > 0) {
+      wrap.appendChild(el("hr"));
+      wrap.appendChild(el("h1", { class: "header gold bold", text: "待鉴定的古物与暗市货包" }));
+      var ulItems = el("ul", { class: "journal" });
+      if (unappraised > 0) {
+        ulItems.appendChild(el("li", {
+          text: "你随身携带着 " + unappraised + " 件尚未鉴定的古物，可前往高街钟表旧货铺请塞拉鉴定并折算为博物馆古董款项。"
+        }));
+      }
+      if (contraband > 0) {
+        ulItems.appendChild(el("li", {
+          text: "你手里藏有 " + contraband + " 份封存的暗市货包，可在傍晚或夜间前往码头、麋鹿街后巷交予维斯或暗桩安全脱手。"
+        }));
+      }
+      wrap.appendChild(ulItems);
+    }
+
+    // 3. 正在追查的城镇线索与秘闻（仅展示已触发/进行中的调查，绝不剧透未发现的暗线）
+    var activeQuestNotes = [];
+    var mainStg = Number(v.mpMainStoryEclipse) || 0;
+    if (mainStg > 0 && mainStg < 12) {
+      var mainHints = [
+        "",
+        "你在孤儿院旧储物室发现了缺页的早年收养账册，线索指向高街钟表旧货铺的密文音筒。",
+        "塞拉协助你破译了黄铜音筒上的星象刻度，下一步需前往牛津街学园旧天文翼楼核对星轨图。",
+        "天文翼楼的星轨指向了圣堂地下古修道院，那里似乎封存着雾月教团的石碑。",
+        "地下修道院的石碑拓片提及了多瑙河街秘密温室庄园的午夜集会。",
+        "温室庄园截获的货单指向麋鹿街黑铁货运站的三号装甲货车。",
+        "黑铁货运站的铅封账册记载着深林古德鲁伊石环的月泉祭礼。",
+        "深林石环的线索指向峭壁天鹅绒暗层即将举行的假面私密拍卖会。",
+        "你在天鹅绒暗层取得了关键拍品，需深入旧钟塔地下机括城重启核心齿轮。",
+        "地下机括城的压力阀已经就位，还需在旧港区与下水道截断暗潮走私网。",
+        "全镇的线索已串联成形，风暴前夕的异动正汇聚向海礁外的雾角灯塔岛。",
+        "雾角灯塔岛顶层的铜门已经松动，只需登顶即可揭开『潮汐与雾月之蚀』的最终真相。"
+      ];
+      activeQuestNotes.push("『潮汐与雾月之蚀』" + (mainHints[mainStg] || ("正在追查第 " + mainStg + "/12 章的线索。")));
+    } else if (mainStg >= 12) {
+      activeQuestNotes.push("『潮汐与雾月之蚀』你已彻底查明雾角灯塔岛与孤儿院早年账册背后的真相，平息了席卷全镇的暗流。");
+    }
+
+    var subQuestDefs = [
+      { varName: "mpQuestCellar", max: 7, title: "孤儿院旧储物室暗门", loc: "孤儿院走廊" },
+      { varName: "mpQuestAttic", max: 6, title: "卧室阁楼尘封旧箱", loc: "孤儿院卧室" },
+      { varName: "mpQuestClocktower", max: 7, title: "高街钟表铺的停摆怀表", loc: "高街" },
+      { varName: "mpQuestSmuggler", max: 7, title: "港区集装箱后的暗哨", loc: "码头与麋鹿街" },
+      { varName: "mpQuestLibrary", max: 7, title: "图书馆无编号皮革卷宗", loc: "学校图书馆" },
+      { varName: "mpQuestCatacomb", max: 7, title: "神殿侧廊转动过的烛台", loc: "狼街神殿" },
+      { varName: "mpQuestShipwreck", max: 7, title: "退潮暗礁间的沉船肋木", loc: "海礁" },
+      { varName: "mpQuestManorRuins", max: 7, title: "深林荆棘后的坍塌石拱门", loc: "森林与深林" },
+      { varName: "mpQuestGreenhouse", max: 7, title: "公园旧玻璃花房的奇异甜香", loc: "公园" },
+      { varName: "mpQuestVelvet", max: 7, title: "康努达图斯街的天鹅绒侧门", loc: "康努达图斯街" },
+      { varName: "mpQuestMill", max: 7, title: "荒废旧风车磨坊的齿轮声", loc: "农场" },
+      { varName: "mpQuestUnderground", max: 7, title: "下水道拱顶的三岔粉笔记号", loc: "下水道" },
+      { varName: "mpQuestDanubeSalon", max: 7, title: "多瑙河街白公馆的弦音", loc: "多瑙河街" },
+      { varName: "mpQuestBarbEvidence", max: 7, title: "倒钩街证物室的旧封条", loc: "倒钩街" },
+      { varName: "mpQuestCliffLighthouse", max: 7, title: "峭壁旧雾角塔的湿脚印", loc: "峭壁街" },
+      { varName: "mpQuestArcadeBasement", max: 7, title: "星鱼街黑屏街机后的暗门", loc: "星鱼街游戏厅" },
+      { varName: "mpQuestHospitalWing", max: 7, title: "夜莺街旧病房走廊的滴答声", loc: "医院" },
+      { varName: "mpQuestSchoolBell", max: 7, title: "牛津街学园旧钟塔的铜锁", loc: "学校前院" },
+      { varName: "mpQuestPoolDrain", max: 7, title: "泳池温水阀室的回响", loc: "学校泳池" },
+      { varName: "mpQuestMerDrydock", max: 7, title: "梅尔街三号干船坞的无旗帆船", loc: "码头与梅尔街" },
+      { varName: "mpQuestElkWorkshop", max: 7, title: "麋鹿街地下工坊的铁门", loc: "麋鹿街" },
+      { varName: "mpQuestHarvestCellar", max: 7, title: "丰收街酒馆橡木桶下的铁环", loc: "丰收街酒吧" },
+      { varName: "mpQuestAlleyShelter", max: 7, title: "住宅区砖墙夹缝的避风棚", loc: "住宅区小巷" },
+      { varName: "mpQuestFoundry", max: 7, title: "工业区旧铸造厂的余烬", loc: "工业区小巷" },
+      { varName: "mpQuestGardenWell", max: 7, title: "孤儿院花园常春藤枯井", loc: "孤儿院花园" },
+      { varName: "mpQuestBathPipe", max: 7, title: "浴室黄铜蒸汽管后的夹墙", loc: "孤儿院浴室" },
+      { varName: "mpQuestGrottoPearl", max: 7, title: "海蚀洞深潭的幽蓝磷光", loc: "海滩洞穴" },
+      { varName: "mpQuestMoonAltar", max: 7, title: "深林古树间的月牙石台", loc: "深林" }
+    ];
+
+    subQuestDefs.forEach(function (sq) {
+      var val = Number(v[sq.varName]) || 0;
+      if (val > 0 && val < sq.max) {
+        activeQuestNotes.push("正在调查『" + sq.title + "』 · 位于" + sq.loc + "，当前阶段 " + val + "/" + (sq.max - 1) + "。");
+      } else if (val >= sq.max) {
+        activeQuestNotes.push("已查明『" + sq.title + "』的始末。");
+      }
+    });
+
+    var fragDefs = [
+      { varName: "mpFragCrownGear", name: "失落王冠的黄铜齿轮" },
+      { varName: "mpFragAbyssPage", name: "深渊古教团的羊皮残页" },
+      { varName: "mpFragSmugglerRing", name: "旧港走私王的火漆印戒" },
+      { varName: "mpFragBrideFlower", name: "雾月花嫁的银丝花标本" },
+      { varName: "mpFragVelvetCrest", name: "天鹅绒假面舞会的暗金徽章" },
+      { varName: "mpFragLedgerKey", name: "孤儿院早期账册的黄铜密匙" }
+    ];
+    fragDefs.forEach(function (fd) {
+      var cnt = Number(v[fd.varName]) || 0;
+      if (cnt > 0 && cnt < 3) {
+        activeQuestNotes.push("已搜集『" + fd.name + "』线索残片 · " + cnt + "/3。");
+      } else if (cnt >= 3) {
+        activeQuestNotes.push("已集齐『" + fd.name + "』的全部残片。");
+      }
+    });
+
+    if (activeQuestNotes.length > 0) {
+      wrap.appendChild(el("hr"));
+      wrap.appendChild(el("h1", { class: "header gold bold", text: "小镇暗流与调查笔记" }));
+      var ulQuests = el("ul", { class: "journal" });
+      activeQuestNotes.forEach(function (note) {
+        ulQuests.appendChild(el("li", { text: note }));
+      });
+      wrap.appendChild(ulQuests);
+    }
+
+    overlayContent.appendChild(wrap);
+  }
+
   /* ---------------- 物品与交易系统 ---------------- */
 
   var CATALOG = null;
@@ -3435,7 +5336,7 @@
     ws.onopen = function () {
       S.connected = true;
       setStatus("已连接", "mp-ok");
-      send({ t: "hello", name: S.name });
+      send({ t: "hello", name: S.name, playerUid: S.playerUid });
       sendState(true);
       logLine("已连接到 " + S.server, "mp-sys");
       renderRoom(); renderPlayers(); renderJoinRequests();
@@ -3489,6 +5390,10 @@
           if (p.id !== S.id) {
             S.players.set(p.id, p);
             updateCompanionFromOnlinePlayer(p);
+            if (S.syncMode && p.weatherPack && (p.isHost || p.passage === ((window.State && State.passage) || ""))) {
+              var sameSceneNow = (p.passage === ((window.State && State.passage) || ""));
+              applyWeatherPack(p.weatherPack, sameSceneNow);
+            }
           }
         });
         if (msg.prng) applySharedPrng(msg.prng);
@@ -3618,6 +5523,9 @@
         var curPas = (window.State && State.passage) || "";
         if (curPas === MP_COMBAT_PASSAGE || curPas === "MP Native Combat Finish" || (vj && vj.combat === 1 && !msg.inCombat)) {
           cleanupNativeCombatState();
+        }
+        if (msg.weatherPack) {
+          applyWeatherPack(msg.weatherPack, true);
         }
         if (msg.eventContext) {
           applyEventContext(msg.eventContext);
@@ -3836,6 +5744,7 @@
         v.mpCombatStart = 1;
         v.mpCombatConsensual = msg.consensual ? 1 : 0;
         v.mpCombatMode = "pvp";
+        delete v.mpWasTutorial;
         if (msg.instantFinish) {
           v.mpCombatOutcome = msg.outcome || "me_pain_full";
           v.mpForceCombatEnd = 1;
@@ -3908,8 +5817,10 @@
         var vc = V();
         vc.mpCombatMode = "coop_pve";
         vc.mpCombatIsHost = (msg.hostPlayerId === S.id) ? 1 : 0;
-        if (msg.sharedEnemy && msg.sharedEnemy.wasTutorial) {
+        if (msg.hostPlayerId === S.id && msg.sharedEnemy && msg.sharedEnemy.wasTutorial && !vc.mpTutorialSprayClaimed && (Number(vc.spraymax) || 0) <= 0 && canClaimUniqueReward("tutorial_first_spray")) {
           vc.mpWasTutorial = 1;
+        } else {
+          delete vc.mpWasTutorial;
         }
         delete vc.mpCombatOutcome;
         delete vc.mpForceCombatEnd;
@@ -4127,7 +6038,7 @@
       enemyArousalMax: v.enemyarousalmax || 500,
       npcSnapshot: extractEventContext(),
       origPassage: curPas,
-      wasTutorial: !!(v.mpWasTutorial === 1 || curPas === "Tutorial" || (v.spraymax || 0) <= 0 || v.tutorialExit !== undefined)
+      wasTutorial: !!(curPas === "Tutorial" && !v.mpTutorialSprayClaimed && (Number(v.spraymax) || 0) <= 0 && canClaimUniqueReward("tutorial_first_spray"))
     };
   }
 
@@ -4166,6 +6077,7 @@
     var v = V(), p = (v && v.player) || {};
     var payload = {
       t: "state",
+      playerUid: S.playerUid,
       passage: (window.State && State.passage) || "",
       phase: v ? v.phase : undefined,
       recentPassages: (S._passageHistory || []).slice(-8),
@@ -4176,6 +6088,7 @@
       combatInfo: buildCombatInfo(v),
       syncMode: S.syncMode,
       timeStamp: (v && v.timeStamp) || S.clock.timeStamp,
+      weatherPack: extractWeatherPack(),
       speechAttitude: (v && v.speech_attitude) || "neutral",
       appearance: {
         sex: p.sex == null ? "" : String(p.sex),
@@ -4777,11 +6690,22 @@
 
     var panel = el("div", { id: "mp-panel", class: "mp-panel mp-hide" });
     panel.innerHTML = [
-      '<div class="mp-head"><b>联机设置 · v0.6.0</b><span id="mp-status" class="mp-status">未连接</span>',
+      '<div class="mp-head"><b>联机设置 · v1.0.0</b><span id="mp-status" class="mp-status">未连接</span>',
       '<button id="mp-close" class="mp-x">×</button></div>',
       '<div class="mp-row"><label>昵称<input id="mp-name" class="mp-input" maxlength="24"></label></div>',
-      '<div class="mp-row"><label>服务器<input id="mp-server" class="mp-input" placeholder="ws://127.0.0.1:8787"></label></div>',
-      '<div class="mp-row"><button id="mp-connect" class="mp-mini mp-ok">连接</button>',
+      '<div class="mp-row" style="background:rgba(30,65,50,0.45);padding:6px;border-radius:4px;border:1px solid #4fd07a;">',
+      '<div style="width:100%;font-size:0.88em;color:#8ff0a4;margin-bottom:4px;">⚡ 端到端 P2P 免云服务器直连 · 手机APK与电脑通用</div>',
+      '<input id="mp-p2p-code" class="mp-input" style="width:82px;" maxlength="8" placeholder="4位房码">',
+      '<button id="mp-p2p-host" class="mp-mini mp-ok">免服建房</button>',
+      '<button id="mp-p2p-join" class="mp-mini mp-ok">免服进房</button>',
+      '<button id="mp-p2p-sdp" class="mp-mini" title="生成或粘贴纯离线端到端WebRTC直连码">离线直连码</button>',
+      '</div>',
+      '<div id="mp-sdp-box" class="mp-row mp-hide" style="flex-direction:column;align-items:stretch;gap:4px;">',
+      '<textarea id="mp-sdp-text" class="mp-input" style="height:48px;font-size:11px;" placeholder="可生成本机直连码发给好友，或粘贴好友发来的直连码"></textarea>',
+      '<div class="mp-row"><button id="mp-sdp-gen" class="mp-mini mp-ok">生成直连邀请码</button><button id="mp-sdp-apply" class="mp-mini">粘贴并连接</button></div>',
+      '</div>',
+      '<div class="mp-row"><label>局域网/云服<input id="mp-server" class="mp-input" placeholder="ws://127.0.0.1:8787"></label></div>',
+      '<div class="mp-row"><button id="mp-connect" class="mp-mini">连接服务器</button>',
       '<button id="mp-disconnect" class="mp-mini">断开</button></div>',
       '<div id="mp-room-box" class="mp-room-box"></div>',
       '<div id="mp-join-box" class="mp-list"></div>',
@@ -4816,7 +6740,45 @@
     document.getElementById("mp-name").value = S.name;
     document.getElementById("mp-server").value = S.server;
     document.getElementById("mp-close").onclick = function () { panel.classList.add("mp-hide"); };
+    document.getElementById("mp-p2p-host").onclick = function () {
+      S.name = document.getElementById("mp-name").value.trim().slice(0, 24) || S.name;
+      saveSettings();
+      var cVal = document.getElementById("mp-p2p-code").value.trim();
+      startP2PRoom(true, cVal);
+      document.getElementById("mp-p2p-code").value = P2P.roomCode;
+    };
+    document.getElementById("mp-p2p-join").onclick = function () {
+      S.name = document.getElementById("mp-name").value.trim().slice(0, 24) || S.name;
+      saveSettings();
+      var cVal = document.getElementById("mp-p2p-code").value.trim();
+      if (!cVal) { toast("请输入好友的 4 位房间码", "mp-bad"); return; }
+      startP2PRoom(false, cVal);
+    };
+    document.getElementById("mp-p2p-sdp").onclick = function () {
+      var sbox = document.getElementById("mp-sdp-box");
+      if (sbox) sbox.classList.toggle("mp-hide");
+    };
+    document.getElementById("mp-sdp-gen").onclick = function () {
+      if (!P2P.active) startP2PRoom(true, document.getElementById("mp-p2p-code").value.trim());
+      toast("正在生成端到端 WebRTC 直连码…", "mp-wait");
+      createManualWebRTCOffer(function (code) {
+        var ta = document.getElementById("mp-sdp-text");
+        if (ta) ta.value = code;
+        try { navigator.clipboard.writeText(code); toast("端到端直连码已生成并复制！发给好友粘贴即可", "mp-ok"); }
+        catch (e) { toast("直连码已生成，请全选复制发给好友", "mp-ok"); }
+      });
+    };
+    document.getElementById("mp-sdp-apply").onclick = function () {
+      var ta = document.getElementById("mp-sdp-text");
+      if (!ta || !ta.value.trim()) { toast("请先粘贴好友发来的直连码", "mp-bad"); return; }
+      acceptManualWebRTCCode(ta.value.trim(), function (ansCode) {
+        ta.value = ansCode;
+        try { navigator.clipboard.writeText(ansCode); toast("已生成应答码并复制！发回给房主即可完成直连", "mp-ok"); }
+        catch (e) { toast("应答码已生成，请复制发回给房主", "mp-ok"); }
+      });
+    };
     document.getElementById("mp-connect").onclick = function () {
+      P2P.active = false;
       S.name = document.getElementById("mp-name").value.trim().slice(0, 24) || S.name;
       S.server = document.getElementById("mp-server").value.trim() || DEFAULT_SERVER;
       saveSettings();
@@ -4836,6 +6798,13 @@
       var obs = new MutationObserver(function () {
         if (document.getElementById("divmap") && !document.getElementById("mp-journal-players")) {
           renderMapMarkers();
+        }
+        if (document.getElementById("divmap") && !document.getElementById("mp-native-journal-section")) {
+          renderJournalEntries();
+        }
+        var relDisp = document.getElementById("relation-display");
+        if (relDisp && !relDisp.querySelector(".mp-native-relation-box")) {
+          renderSocialRelations();
         }
       });
       obs.observe(document.body, { childList: true, subtree: true });
@@ -4860,6 +6829,7 @@
     hookMultiCanvasModel();
     installEventPoolHook();
     installPersonNameHook();
+    installCustomIconMacros();
     syncCompanionToVariables();
     S.myVotedIndex = -1;
     S.currentVotes = [];
@@ -4867,10 +6837,32 @@
     var curPasNow = (window.State && State.passage) || "";
     var vNow = V();
 
-    // 记录新手教程遭遇战状态，保证打完必进陌生人赠送防狼喷雾环节
-    if (vNow && (curPasNow === "Tutorial" || vNow.tutorial === 1 || vNow.tutorialExit !== undefined)) {
-      vNow.mpWasTutorial = 1;
-      if (!vNow.tutorialExit) vNow.tutorialExit = "Domus Street";
+    // 若玩家正在离线伴侣页面，而同一个玩家恰巧上线进入房间，无缝切换为实时在线玩家互动界面
+    if ((curPasNow === "MP Companion Hub" || curPasNow === "MP Companion Room") && findOnlineCompanionPeer()) {
+      var livePeer = findOnlineCompanionPeer();
+      S.interactTarget = livePeer;
+      if (vNow) {
+        vNow.mpInteractTargetId = livePeer.id;
+        vNow.mpInteractTargetName = livePeer.name || "同伴";
+      }
+      setTimeout(function () {
+        openNativeInteract(livePeer);
+      }, 20);
+    }
+
+    // 严格记录新手教程首次出门遭遇战状态：仅在真正进入 Tutorial 通道且从未拿过防狼喷雾时标记一次
+    if (vNow) {
+      if ((Number(vNow.spraymax) || 0) >= 1 || curPasNow === "Tutorial Flirt" || curPasNow === "Tutorial Thank") {
+        vNow.mpTutorialSprayClaimed = 1;
+        if (!vNow.mpUniqueRewards) vNow.mpUniqueRewards = {};
+        vNow.mpUniqueRewards["tutorial_first_spray"] = 1;
+        delete vNow.mpWasTutorial;
+      } else if (curPasNow === "Tutorial" && !vNow.mpTutorialSprayClaimed && canClaimUniqueReward("tutorial_first_spray")) {
+        vNow.mpWasTutorial = 1;
+        if (!vNow.tutorialExit) vNow.tutorialExit = "Domus Street";
+      } else if (curPasNow !== MP_COMBAT_PASSAGE && curPasNow !== "MP Native Combat Finish") {
+        delete vNow.mpWasTutorial;
+      }
     }
 
     try {
@@ -4946,7 +6938,9 @@
     }
     if (S._syncJumpPassage === curPasNow) S._syncJumpPassage = "";
 
-    if (nowInCombat && !replayedAfterMp && !S._lastInCombat && S.connected && S.room && !S.combatId && curPasNow !== MP_COMBAT_PASSAGE) {
+    var isHumanEncounter = !vNow.enemytype || vNow.enemytype === "man";
+    var isSingleEnemy = !vNow.enemynomax || vNow.enemynomax <= 1;
+    if (nowInCombat && isHumanEncounter && isSingleEnemy && curPasNow !== "Tutorial" && !replayedAfterMp && !S._lastInCombat && S.connected && S.room && !S.combatId && curPasNow !== MP_COMBAT_PASSAGE) {
       S._combatPendingAt = Date.now();
       send({
         t: "combat_enter",
@@ -4978,6 +6972,7 @@
     hookMultiCanvasModel();
     installEventPoolHook();
     installPersonNameHook();
+    installCustomIconMacros();
     syncCompanionToVariables();
     connect();
     onPassageDisplay();
@@ -5025,10 +7020,16 @@
   S.sendMeetFromInteract = sendMeetFromInteract;
   S.requestTimelineSync = requestTimelineSync;
   S.canDoDailyInteract = canDoDailyInteract;
+  S.canClaimUniqueReward = canClaimUniqueReward;
+  S.claimUniqueReward = claimUniqueReward;
   S.takeVirginityByPlayer = takeVirginityByPlayer;
   S.syncCompanionToVariables = syncCompanionToVariables;
+  S.findOnlineCompanionPeer = findOnlineCompanionPeer;
+  S.renderSocialRelations = renderSocialRelations;
+  S.renderJournalEntries = renderJournalEntries;
   S.onEventPicked = onEventPicked;
   S.installEventPoolHook = installEventPoolHook;
   window.dolmp = S;
-  setTimeout(function () { try { installEventPoolHook(); installPersonNameHook(); } catch (e) {} }, 0);
+  setTimeout(function () { try { installEventPoolHook(); installPersonNameHook();
+    installCustomIconMacros(); } catch (e) {} }, 0);
 })();

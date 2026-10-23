@@ -1,0 +1,465 @@
+/* 贝利双周连坐清算 / 8阶段断链支线 / 5大独有机制高难试炼 */
+
+:: MP Bailey Biweekly Tribunal [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Orphanage">>
+<</if>>
+<<set _rebStg to ($mpQuestBaileyRebellion or 0)>>
+<<set _demand to Math.max(0, 150000 - (_rebStg * 18000))>>
+<<set _demandPound to Math.round(_demand / 100)>>
+<<set _compName to (($mpCompanion and $mpCompanion.name) or "同伴")>>
+<<endevent>>
+<<generate1>><<person1>>
+孤儿院走廊顶部的白炽灯管发出轻微的电流嗡鸣。贝利站在楼梯转角处，手指按着一本黑皮双周连坐账册，身后两名戴着黑皮手套的打手一左一右堵住了大门。
+<<if _rebStg gte 4>>贝利的脸色比往常阴沉了几分，显然白公馆与货运站黑账外泄的风声已经传到了耳中。
+<<elseif $pain gte 30 or $stress gte 5000>>你略显苍白的脸色让身旁的<<print _compName>>下意识地往你身前挡了半步。
+<<else>>"两周一次的同行连坐清算日到了，"贝利冷漠地扫过你与<<print _compName>>，"本期连坐规费是 <span class="gold">£<<print _demandPound>></span>，现在拿出来。"<</if>>
+<br><br>
+<<if _rebStg gte 8>>
+	你们早已将贝利勾结地下钱庄的原件备份交予全镇各方势力。贝利盯着你手里的铜钥匙扣看了两秒，冷哼一声合上账册，挥手带着打手径直上了楼。
+	<br><br>
+	<<getouticon>><<link [[目送贝利离去 (0:03)|_exitPas]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 3>><<stress -10>><<endevent>><</link>><<lstress>>
+<<else>>
+	<<if $money gte _demand>>
+		<<baileyicon>><<link [[当场付清双周连坐金 £<<print _demandPound>> (0:04)|MP Bailey Biweekly Pay]]>><<set $money -= _demand>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 4>><<stress -4>><</link>><<lstress>>
+		<br>
+	<</if>>
+	<<fisticon>><<link [[跨前一步独自替同伴扛下皮鞭惩戒 (0:18)|MP Bailey Biweekly Shield]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 18>><<pain 32>><<stress 10>><<willpower 4>><</link>><<ggpain>><<gstress>><<gwillpower>><<glove>>
+	<br>
+	<<trialicon>><<link [[推倒走廊衣柜与同伴联手反击打手 (0:15)|MP Elite Encounter Bailey Enforcers]]>><<pass 15>><<def 3>><</link>>
+	<br>
+	<<if $skulduggery gte 550>>
+		<<sneakicon>><<link [[用钟表铺防伪印泥改写的银票蒙混过关 (0:06)|MP Bailey Biweekly Bluff]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 6>><<skulduggery 4>><</link>>
+		<br>
+	<</if>>
+	<<badendicon>><<link [[交不出钱，被押往地下训诫室 (0:12)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 12>><</link>>
+<</if>>
+
+:: MP Bailey Biweekly Pay [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+你将点好的钞票拍在贝利摊开的掌心里。贝利捻过纸币边缘确认无误，用钢笔划掉本期的连坐款项，带着两名打手转身走上二楼。
+<<if $money lte 10000>>口袋一下子空了大半，<<print (($mpCompanion and $mpCompanion.name) or "同伴")>>握住你的手低声道："我这几天去多接几份零工，同时加快搜集黑账，绝不再让贝利盘剥几次。"
+<<else>><<print (($mpCompanion and $mpCompanion.name) or "同伴")>>松了口气，替你拍平衣袖上的褶皱，与你低声商议起下一处黑账线索。<</if>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("bailey_pay", 4, -4, -2, 0, 0, "与你一同应付了贝利的双周清算", { love: 1, trust: 1 })>>
+<br><br>
+<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<baileyicon>><<link [[顺势去通风管旁查看断链线索 (0:12)|MP Quest Bailey Rebellion]]>><<pass 12>><</link>>
+
+:: MP Bailey Biweekly Shield [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+<<set _compName to (($mpCompanion and $mpCompanion.name) or "同伴")>>
+你伸手将<<print _compName>>拨到身后，迎着贝利冰冷的视线往前跨了一步。沉重的黑皮鞭落在你的肩背上，火辣辣的痛楚令你指节发白，但你死死咬住嘴唇没有退后半寸，直到贝利收起账册离去。
+<<if $pain gte 50>><<print _compName>>眼圈通红地冲上来扶住摇晃的你，颤抖着从口袋里掏出芦荟伤药替你涂抹淤青："下次绝不许你再一个人硬扛了。"
+<<else>><<print _compName>>连忙用温热的毛巾替你擦去额角冷汗，小心翼翼地扶着你靠坐在长椅上缓气。<</if>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("bailey_shield", 18, -6, -4, 0, 0, "心疼地替独自扛下惩戒的你上药", { love: 2, trust: 2 })>>
+<br><br>
+<<getouticon>><<link [[在搀扶下返回休息 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<bedicon "zzz">><<link [[回卧室躺下敷药 (0:15)|Bedroom]]>><<pass 15>><<pain -10>><<stress -6>><<set $eventskip to 1>><<endevent>><</link>><<lpain>><<lstress>>
+
+:: MP Bailey Biweekly Bluff [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+<<if $skulduggery gte random(520, 860)>>
+	你从容地取出一张盖有海事商会火漆的改装汇兑本票递过去。贝利对着走廊灯光检查了水印，没有发现异样，点点头将本票夹进了账册里。<<stress -8>><<willpower 3>>
+	<br><br>
+	<<getouticon>><<link [[与同伴不动声色地离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+	<br>
+	<<walkicon>><<link [[转去宅邸街透口气 (0:04)|Domus Street]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+	贝利的指腹在汇票边缘一搓，当场识破了未干透的印泥，冷笑着将纸片撕碎。两名黑衣打手立刻反剪住你的双臂，将你押向地下室楼梯。<<stress 10>><<pain 12>>
+	<br><br>
+	<<badendicon>><<link [[被押入地下训诫室 (0:10)|MP BadEnd Bailey Basement]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
+	<br>
+	<<fisticon>><<link [[半路踢翻烛台强行反抗 (0:12)|MP Elite Encounter Bailey Enforcers]]>><<pass 12>><</link>>
+<</if>>
+
+:: MP Quest Bailey Rebellion [nobr]
+<<effects>>
+<<set _stg to ($mpQuestBaileyRebellion or 0)>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Orphanage">>
+<</if>>
+<<if _stg is 0>>
+	贝利办公室外侧的通风铁栅松动着，里面卡着半张被碎纸机漏掉的双周连坐交接单。纸条上用红笔标注着倒钩街巡逻车与黑铁货运站的暗账编号。
+<<elseif _stg is 1>>
+	倒钩街警局后巷的铁栅下，守夜人林恩正向你比出手势，值班巡逻车的副驾驶暗格里锁着贝利买通队长的受贿底单。
+<<elseif _stg is 2>>
+	麋鹿街黑铁货运站的三号装甲车厢内传出轻微的敲击声，一名替贝利记账的院童正被锁在车厢夹层里，手边还有一枚私人金库火漆印模。
+<<elseif _stg is 3>>
+	高街钟表旧货铺的煤油灯下，塞拉用光学放大镜对准火漆印模边缘的微缩齿痕，辨认出多瑙河街白公馆地下保险箱的密码。
+<<elseif _stg is 4>>
+	多瑙河街白公馆的地窖透气窗在夜雨中半掩着，莫奈留下的丝绒披肩记号正挂在通往联名保险箱的侧门铜把手上。
+<<elseif _stg is 5>>
+	工业区旧铸造厂的巷道里弥漫着蒸汽白雾，贝利派出的黑衣追兵正试图封锁巷口，而领头打手腰间挂着孤儿院地下金库的副钥。
+<<elseif _stg is 6>>
+	趁着周日贝利外出收账，孤儿院办公室地板下的暗格金库露出了锁孔，你手里的副钥与塞拉破译的密码正好能将其打开。
+<<elseif _stg is 7>>
+	全套双周连坐原始黑账与孤儿院地契拓本已经装入防水皮袋，只差分别交予维斯的船队、塞拉的行会与林恩的守夜人同盟备份。
+<<else>>
+	《孤儿院黑账与断链之盟》的全部铁证已在全镇三方势力处完成备份，贝利的双周连坐规费已被彻底废除。
+<</if>>
+<<if Time.dayState is "night">>夜色掩护了你的行动，走廊与街角的视线都稀疏了许多。
+<<else>>白昼人来人往，你借着衣摆遮住手里的工具，放轻了脚步。<</if>>
+<br><br>
+<<if _stg lt 8>>
+	<<baileyicon>><<link [[推进第 <<print (_stg + 1)>> 阶段断链行动 (0:18)|MP Quest Bailey Rebellion Resolve]]>><<set $mpQuestBaileyRebellion to _stg + 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBaileyRebellion to 1>><<pass 18>><<stress -6>><<willpower 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_" + (_stg + 1))>><<set $money += 60000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>><<gwillpower>>
+	<br>
+<</if>>
+<<getouticon>><<link [[返回原处 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Quest Bailey Rebellion Resolve [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Orphanage">>
+<</if>>
+你将新截获的贝利黑账凭证封入防水夹层，与同伴核对了下一阶段的联络暗号。随着把柄一件件落实，贝利每两周的连坐勒索已被永久削减了 <span class="gold">£<<print (($mpQuestBaileyRebellion or 1) * 180)>></span>。
+<<if ($mpQuestBaileyRebellion or 0) gte 8>>从今往后，贝利再也不敢向你们索要分毫双周连坐金。<<stress -15>><<trauma -8>>
+<<else>>你把夹层藏回贴身内袋，听着外侧平稳的风声，心底多了一分底气。<</if>>
+<br><br>
+<<getouticon>><<link [[返回安全处 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[顺路去宅邸街巡看 (0:05)|Domus Street]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+
+
+/* 精英战 1：苍白象牙怨灵（独有机制：三重水镜幻象与意志共鸣） */
+:: MP Elite Encounter Ivory Wraith [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Temple")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Temple">><</if>>
+暗红的血月光华穿透雾气，水面与石柱间浮现出三道半透明的苍白倒影。佩戴象牙项链的怨灵悬浮在石坛中央，冰冷的幽影触手封锁了台阶："同行的羔羊，在镜面迷宫里一同沉沦吧。"
+<<if $willpower gte 700>>你咬破舌尖保持清醒，一眼看穿左侧两道倒影只是没有实体的水雾折射。
+<<elseif $stress gte 5000>>刺骨的寒意顺着脚踝往上爬，耳边回荡着令人昏沉的低语。
+<<else>>你握紧身旁同伴的手掌，借着彼此掌心的温度抵御怨灵的精神侵蚀。<</if>>
+<br><br>
+<<bloodmoonicon>><<link [[举起防风铜灯砸碎祭坛左侧的幻象水镜 (0:12)|MP Elite Encounter Ivory Wraith Mirror]]>><<pass 12>><<willpower 3>><</link>>
+<br>
+<<trialicon>><<link [[与同伴十指紧扣激发意志共鸣正面破障 (0:15)|MP Elite Encounter Ivory Wraith Resonance]]>><<pass 15>><</link>>
+<br>
+<<runicon>><<link [[掀翻檀香铜炉借浓烟掩护撤退 (0:06)|MP Elite Encounter Ivory Wraith Escape]]>><<pass 6>><</link>>
+
+:: MP Elite Encounter Ivory Wraith Mirror [nobr]
+<<effects>>
+你抓起台阶边的黄铜防风灯，迎着呼啸而来的幽影触手猛地砸向左侧积水石盘。伴随着清脆的铜镜碎裂声，两道虚假的苍白分身瞬间化作白雾消散，怨灵本体的象牙项链露出了明显的裂隙。
+<<if $skulduggery gte 500 or $willpower gte 650>>你趁怨灵真身僵直的刹那欺身而上，一举扯下了那枚凝聚月华的晶簇核心。<<include "MP Elite Encounter Ivory Wraith Win">>
+<<else>>残余的幽影触手抽打在你的肩头，刺骨的寒气令你呼吸一窒，不得不与同伴背靠背稳住阵脚。<<pain 10>><<stress 8>>
+	<br><br>
+	<<trialicon>><<link [[趁怨灵真身暴露全力合击 (0:10)|MP Elite Encounter Ivory Wraith Resonance]]>><<pass 10>><</link>>
+	<br>
+	<<runicon>><<link [[借幻象破灭的空隙突围撤离 (0:05)|MP Elite Encounter Ivory Wraith Escape]]>><<pass 5>><</link>>
+<</if>>
+
+:: MP Elite Encounter Ivory Wraith Resonance [nobr]
+<<effects>>
+<<set _power to (($willpower or 500) / 10) + (($physique or 10000) / 300) + ((window.dolmp && window.dolmp.players && window.dolmp.players.size gt 0) ? 35 : 20)>>
+<<if _power + random(1, 45) gte 105>>
+	你与同伴同时踏前一步，毫不退缩地直视怨灵空洞的双眸，用滚烫的血气与决绝的意志冲散了漫天红雾。<<include "MP Elite Encounter Ivory Wraith Win">>
+<<else>>
+	怨灵刺耳的尖啸震得你眼前发黑，冰冷的幽影触手缠住你的脚踝，将意识模糊的你拽向了地下修道院的石牢深处。<<stress 14>><<trauma 8>>
+	<br><br>
+	<<badendicon>><<link [[坠入地下修道院静思石牢 (0:10)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
+	<br>
+	<<bloodmoonicon>><<link [[咬牙燃尽最后一丝心力强行挣脱 (0:08)|MP Elite Encounter Ivory Wraith Escape]]>><<pass 8>><<pain 15>><<stress 10>><</link>><<gpain>><<gstress>>
+<</if>>
+
+:: MP Elite Encounter Ivory Wraith Win [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Temple")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Temple">><</if>>
+苍白怨灵发出一声悠长的叹息，半透明的身躯在晨风中寸寸消融，只留下一枚温润剔透的『无瑕象牙月华晶簇』落在青石板上。笼罩四周的血月寒雾随之散去，你的心神与控制感都得到了极大的淬炼。
+<<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpEliteWraith to 1>>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_ivory_wraith_win")>>
+	<<set $money += 350000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -18>><<trauma -12>><<control 25>>
+<<else>>
+	<<set $money += 45000>><<willpower 3>><<stress -10>><<control 10>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[收起月华晶簇返回 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[前往神殿花园平复呼吸 (0:06)|Temple Garden]]>><<pass 6>><<stress -4>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+
+:: MP Elite Encounter Ivory Wraith Escape [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Temple")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Temple">><</if>>
+你一脚踢翻台阶旁的青铜香炉，浓密的檀香灰雾瞬间遮蔽了水镜折射的红光。你拉住同伴的手腕顺着石廊侧门疾奔而出，将怨灵的低语彻底甩在了身后。<<stress -4>>
+<br><br>
+<<getouticon>><<link [[退回安全地段 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转往狼街透气 (0:05)|Wolf Street]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+
+
+/* 精英战 2：深渊巨型触手集群（独有机制：涨潮水位倒计时与鲸油引燃） */
+:: MP Elite Encounter Abyssal Tentacles [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Sea Rocks")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Sea Rocks">><</if>>
+海蚀洞底的暗潮突然咆哮着漫过脚踝，六条碗口粗、泛着幽蓝磷光的巨型触手破水而出，滑腻的吸盘喷吐着甜腥的催情水雾。洞顶悬着半桶守塔人留下的防锈鲸油，而海水正以肉眼可见的速度向胸口上涨。
+<<if $danceskill gte 450 or $athletics gte 450>>你踩在湿滑的钟乳石凸起上轻巧借力，避开了第一波横扫而来的触手。
+<<else>>冰冷的海水漫过小腿，几缕细小的触须已经缠上了你的靴筒。<</if>>
+<br><br>
+<<lanternicon>><<link [[打碎洞壁鲸油桶并用提灯引燃海面 (0:12)|MP Elite Encounter Abyssal Tentacles Oil]]>><<pass 12>><<skulduggery 3>><</link>>
+<br>
+<<trialicon>><<link [[借礁石高低差与同伴交替斩断主触手 (0:16)|MP Elite Encounter Abyssal Tentacles Agile]]>><<pass 16>><</link>>
+<br>
+<<runicon>><<link [[趁潮水未封顶潜入外侧水道脱身 (0:06)|MP Elite Encounter Abyssal Tentacles Escape]]>><<pass 6>><</link>>
+
+:: MP Elite Encounter Abyssal Tentacles Oil [nobr]
+<<effects>>
+你用撬棍砸裂石壁铁钩上的木桶，粘稠的鲸油顿时铺满了翻涌的潭面。随着你将防风提灯掷入水中，炽烈的蓝黄色火舌顺着水面轰然腾起，烧得巨型触手发出嘶嘶惨叫并剧烈痉挛着缩回深渊。
+<<if $skulduggery gte 400 or $physique gte 11500>>趁着主触手被烈火逼退，你一把捞起了潭底露出的古沉船金币箱。<<include "MP Elite Encounter Abyssal Tentacles Win">>
+<<else>>受惊的触手掀起一股巨浪扑灭了半边火苗，溅起的甜腥水雾令你浑身发热。<<arousal 600>>
+	<br><br>
+	<<trialicon>><<link [[趁触手吃痛畏缩发动致命一击 (0:10)|MP Elite Encounter Abyssal Tentacles Agile]]>><<pass 10>><</link>>
+	<br>
+	<<runicon>><<link [[顺着退潮水浪游出洞口 (0:05)|MP Elite Encounter Abyssal Tentacles Escape]]>><<pass 5>><</link>>
+<</if>>
+
+:: MP Elite Encounter Abyssal Tentacles Agile [nobr]
+<<effects>>
+<<set _agileScore to (($danceskill or 200) / 10) + (($athletics or 200) / 10) + (($physique or 10000) / 300) + ((window.dolmp && window.dolmp.players && window.dolmp.players.size gt 0) ? 35 : 15)>>
+<<if _agileScore + random(1, 50) gte 100>>
+	你在湿滑的岩壁间腾挪借力，与同伴一左一右吸引触手注意，用锋利的鱼叉狠狠钉穿了触手集群的中枢神经节。<<include "MP Elite Encounter Abyssal Tentacles Win">>
+<<else>>
+	上涨的潮水淹没了落脚的礁石，数条滑腻的触手趁你脚下一滑缠住了你的腰肢，将你拖向了岸边停泊的暗潮走私船底舱。<<arousal 900>><<stress 10>>
+	<br><br>
+	<<badendicon>><<link [[被暗流卷入走私船底舱 (0:10)|MP BadEnd Smuggler Cargo]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
+	<br>
+	<<swimicon>><<link [[屏息蹬开岩壁强行浮出水面 (0:08)|MP Elite Encounter Abyssal Tentacles Escape]]>><<pass 8>><<pain 12>><<tiredness 5>><</link>><<gpain>><<gtiredness>>
+<</if>>
+
+:: MP Elite Encounter Abyssal Tentacles Win [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Sea Rocks")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Sea Rocks">><</if>>
+受创的深渊触手集群彻底缩回海沟裂缝，翻腾的潮水随之平息。你在退潮的石台上拾起了散发幽香的『深海龙涎香』与一只覆满藤壶的古金币箱。
+<<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpEliteTentacles to 1>>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_abyssal_tentacles_win")>>
+	<<set $money += 300000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 7>><<stress -16>><<control 20>>
+<<else>>
+	<<set $money += 40000>><<willpower 3>><<stress -8>><<control 10>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[带着战利品返回海礁 (0:05)|_exitPas]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[到海滩晒干衣衫 (0:06)|Beach]]>><<pass 6>><<stress -4>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+
+:: MP Elite Encounter Abyssal Tentacles Escape [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Sea Rocks")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Sea Rocks">><</if>>
+你深吸一口气潜入外侧的潮汐水道，借着退潮的吸力与同伴一同滑出岩洞，湿漉漉地爬上了阳光下的海礁高处。<<stress -3>>
+<br><br>
+<<getouticon>><<link [[返回安全礁石 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[沿着沙滩返回镇上 (0:06)|Starfish Street]]>><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+
+
+/* 精英战 3：黑铁重装水手长（独有机制：高压蒸汽管道引爆与起重吊钩） */
+:: MP Elite Encounter Blackiron Bosun [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Docks")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Docks">><</if>>
+防波堤禁区的探照灯将地面照得雪亮。身高近两米的黑铁水手长披着铆钉铁甲，手里拎着沉重的包铁船锚链，正守在走私主金库铁箱前。他身侧的蒸汽起重机锅炉指针已逼近红色警戒区。
+<<if $skulduggery gte 550>>你一眼注意到水手长脚边的高压蒸汽泄压阀只用了一根生锈的铅丝栓住。
+<<elseif Weather.precipitation is "rain">>雨水打在滚烫的蒸汽管道上腾起陣阵白雾，恰好遮住了你们侧翼移动的脚步。
+<<else>>沉重的铁锚链砸在石板上火星四溅，正面的硬拼显然讨不到便宜。<</if>>
+<br><br>
+<<sneakicon>><<link [[用飞石击断高压蒸汽泄压阀喷瞎水手长 (0:12)|MP Elite Encounter Blackiron Bosun Steam]]>><<pass 12>><<skulduggery 4>><</link>>
+<br>
+<<fisticon>><<link [[松开货运起重机刹车用铁吊钩撞击铁甲 (0:15)|MP Elite Encounter Blackiron Bosun Crane]]>><<pass 15>><<physique 4>><</link>>
+<br>
+<<runicon>><<link [[钻进交错的集装箱迷宫甩开追击 (0:06)|MP Elite Encounter Blackiron Bosun Escape]]>><<pass 6>><</link>>
+
+:: MP Elite Encounter Blackiron Bosun Steam [nobr]
+<<effects>>
+你绕到蒸汽管道盲区，用钢钎猛地敲掉泄压阀的铅封栓。灼热的白色高压蒸汽带着刺耳的尖啸喷涌而出，正中黑铁水手长的面门，烫得他丢下锚链连连后退。
+<<if $skulduggery gte 550>>你趁着漫天蒸汽白雾摸上前去，一脚踢翻失去重心的水手长，顺手摘下了他腰间的走私金库主匙。<<include "MP Elite Encounter Blackiron Bosun Win">>
+<<else>>水手长挥舞铁臂胡乱砸碎了蒸汽管，防御架势已彻底散乱。
+	<br><br>
+	<<fisticon>><<link [[趁其视线受阻发动致命合击 (0:10)|MP Elite Encounter Blackiron Bosun Crane]]>><<pass 10>><</link>>
+	<br>
+	<<runicon>><<link [[借着蒸汽浓雾撤出防波堤 (0:05)|MP Elite Encounter Blackiron Bosun Escape]]>><<pass 5>><</link>>
+<</if>>
+
+:: MP Elite Encounter Blackiron Bosun Crane [nobr]
+<<effects>>
+<<set _bosunScore to (($physique or 10000) / 260) + (($skulduggery or 200) / 10) + ((window.dolmp && window.dolmp.players && window.dolmp.players.size gt 0) ? 35 : 15)>>
+<<if _bosunScore + random(1, 45) gte 105>>
+	你与同伴合力扳下起重机齿轮制动杆，半吨重的钢铁吊钩呼啸着荡过半空，结结实实地撞在水手长的胸甲上，将他连人带甲撞翻在货堆里。<<include "MP Elite Encounter Blackiron Bosun Win">>
+<<else>>
+	水手长甩出铁锚链缠住你的脚踝猛地一拽，剧痛令你重重摔在集装箱铁板上，随后被水手们押进了即将起航的走私船底舱。<<pain 18>><<stress 12>>
+	<br><br>
+	<<badendicon>><<link [[被押入夜航走私船底舱 (0:10)|MP BadEnd Smuggler Cargo]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
+	<br>
+	<<runicon>><<link [[滚入集装箱底缝死里逃生 (0:08)|MP Elite Encounter Blackiron Bosun Escape]]>><<pass 8>><<pain 12>><</link>><<gpain>>
+<</if>>
+
+:: MP Elite Encounter Blackiron Bosun Win [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Docks")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Docks">><</if>>
+黑铁水手长轰然倒在蒸汽白雾中人事不省。你用夺来的黄铜主匙打开防波堤主金库，将里面的走私金条、黑市现钞与封存货包一扫而空。
+<<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpEliteBosun to 1>>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_blackiron_bosun_win")>>
+	<<set $money += 320000>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 3>><<willpower 8>><<stress -18>><<control 22>>
+<<else>>
+	<<set $money += 45000>><<willpower 3>><<stress -10>><<control 10>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[带着金库秘宝返回码头 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[转入麋鹿街暗巷分赃 (0:06)|Elk Street]]>><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Elite Encounter Blackiron Bosun Escape [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Docks")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Docks">><</if>>
+你拉着同伴钻进两排万吨集装箱之间的狭窄夹缝，沉重的铁甲让水手长根本挤不进来，只能眼睁睁看着你们翻出港区铁丝网。<<stress -4>>
+<br><br>
+<<getouticon>><<link [[返回安全区域 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[顺着梅尔街离开 (0:05)|Mer Street]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+
+
+/* 精英战 4：天鹅绒暗层猎艳执事团（独有机制：假面毒酒调包与水晶吊灯） */
+:: MP Elite Encounter Velvet Enforcers [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Connudatus Street")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Connudatus Street">><</if>>
+天鹅绒暗层内厅的紫檀圆桌上摆着盛满筹码的金匣，戴着银狐假面的首席执事正摇晃着两杯琥珀色香槟，身后两名执事手持丝绒软鞭封住了走廊。大厅正上方悬着一盏巨大的水晶枝形吊灯，配重绒绳就系在你们手边的雕花立柱上。
+<<if $seductionskill gte 500>>首席执事的目光被你的身段牢牢吸引，端着酒杯的右手不自觉地放低了防备。
+<<else>>香槟杯里飘出一股甜腻的催眠药味，显然是一场鸿门宴。<</if>>
+<br><br>
+<<brothelicon>><<link [[假意敬酒趁机调换执事手中的催眠香槟 (0:12)|MP Elite Encounter Velvet Enforcers Wine]]>><<pass 12>><<arousal 300>><</link>><<promiscuous1>><<garousal>>
+<br>
+<<trialicon>><<link [[割断立柱配重绒绳用巨型水晶吊灯砸翻执事团 (0:14)|MP Elite Encounter Velvet Enforcers Chandelier]]>><<pass 14>><</link>>
+<br>
+<<runicon>><<link [[戴上备用狐狸假面混入舞池人群撤离 (0:06)|MP Elite Encounter Velvet Enforcers Escape]]>><<pass 6>><</link>>
+
+:: MP Elite Encounter Velvet Enforcers Wine [nobr]
+<<effects>>
+你端起桌上的水晶酒杯款款上前，用衣袖掩住杯口，在交杯换盏的刹那与首席执事的手中酒杯完成了调包。银狐执事仰头一饮而尽，不到十秒便扶着额头摇晃起来。
+<<if $seductionskill gte 450 or $skulduggery gte 450>>首席执事扑通一声栽倒在波斯地毯上，两名副手顿时阵脚大乱，被你与同伴轻松击倒。<<include "MP Elite Encounter Velvet Enforcers Win">>
+<<else>>执事察觉到酒味有异吐出了半口，但药力已令他脚步虚浮。
+	<br><br>
+	<<trialicon>><<link [[趁其药力发作割断吊灯配重绳 (0:10)|MP Elite Encounter Velvet Enforcers Chandelier]]>><<pass 10>><</link>>
+	<br>
+	<<runicon>><<link [[掀翻酒桌转身退入舞池 (0:05)|MP Elite Encounter Velvet Enforcers Escape]]>><<pass 5>><</link>>
+<</if>>
+
+:: MP Elite Encounter Velvet Enforcers Chandelier [nobr]
+<<effects>>
+<<set _velvetScore to (($seductionskill or 200) / 10) + (($skulduggery or 200) / 10) + (($physique or 10000) / 300) + ((window.dolmp && window.dolmp.players && window.dolmp.players.size gt 0) ? 35 : 15)>>
+<<if _velvetScore + random(1, 45) gte 100>>
+	你拔出餐刀一刀割断立柱上的丝绒配重绳，头顶的巨型水晶吊灯轰然坠落，将执事团尽数扣在璀璨的玻璃碎片与灯架之下。<<include "MP Elite Encounter Velvet Enforcers Win">>
+<<else>>
+	软鞭缠住了你的手腕，浓烈的催情熏香令你眼前发软，执事们将失去力气的你抬进了暗层深处的水晶展柜。<<arousal 1000>><<stress 10>>
+	<br><br>
+	<<badendicon>><<link [[陷落为天鹅绒展柜缪斯 (0:10)|MP BadEnd Velvet Doll]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
+	<br>
+	<<runicon>><<link [[扯下丝绒帷幔裹身撞窗逃出 (0:08)|MP Elite Encounter Velvet Enforcers Escape]]>><<pass 8>><<pain 10>><</link>><<gpain>>
+<</if>>
+
+:: MP Elite Encounter Velvet Enforcers Win [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Connudatus Street")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Connudatus Street">><</if>>
+你跨过满地的水晶灯碎片，拎起圆桌中央那只沉甸甸的紫檀金匣与不记名金券，与同伴从天鹅绒露台潇洒离去。
+<<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpEliteVelvet to 1>>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_velvet_enforcers_win")>>
+	<<set $money += 300000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 7>><<stress -16>><<control 22>>
+<<else>>
+	<<set $money += 42000>><<willpower 3>><<stress -8>><<control 10>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回康努达图斯街 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[去海风咖啡馆歇脚 (0:06)|Ocean Breeze]]>><<pass 6>><<stress -4>><<set $eventskip to 1>><<endevent>><</link>><<lstress>>
+
+:: MP Elite Encounter Velvet Enforcers Escape [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Connudatus Street")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Connudatus Street">><</if>>
+你抓起托盘上的两副银色假面扣在自己与同伴脸上，转身混入旋转的华尔兹人群，从侧廊安全门溜回了街面。<<stress -4>>
+<br><br>
+<<getouticon>><<link [[返回街面 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[顺着峭壁街吹风 (0:05)|Cliff Street]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+
+
+/* 精英战 5：贝利黑衣清道夫（独有机制：走廊橡木柜路障与林恩伏击哨） */
+:: MP Elite Encounter Bailey Enforcers [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+贝利的两名黑衣清道夫甩出包铅橡胶棍，一前一后封堵了孤儿院走廊。走廊中段立着一座塞满旧床单的笨重橡木高柜，而楼梯半层平台上方隐约可见守夜人林恩潜伏的手势。
+<<if $physique gte 13000>>你抵住橡木高柜侧沿，感觉凭借自己与同伴的力气完全能将其推倒截断走廊。
+<<else>>走廊狭窄，一旦被两名打手同时合围将极难招架。<</if>>
+<br><br>
+<<fisticon>><<link [[与同伴合力推倒橡木高柜砸翻前排打手 (0:12)|MP Elite Encounter Bailey Enforcers Barricade]]>><<pass 12>><<physique 4>><</link>>
+<br>
+<<trialicon>><<link [[吹响守夜人短哨引林恩从楼梯平台跃下夹击 (0:14)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 14>><</link>>
+<br>
+<<runicon>><<link [[拉下走廊电闸趁黑退回卧室阁楼 (0:05)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 5>><</link>>
+
+:: MP Elite Encounter Bailey Enforcers Barricade [nobr]
+<<effects>>
+你与同伴同时发力猛推走廊中段的橡木高柜，沉重的柜体轰然砸落，将冲在最前面的黑衣清道夫死死压在底板下，也将另一名打手隔绝在了走廊外侧。
+<<if $physique gte 12500 or $willpower gte 600>>你们趁势夺过被压打手手中的橡胶棍，两棍敲落了后方打手的武器，连同贝利的黑金收款箱一并截获。<<include "MP Elite Encounter Bailey Enforcers Win">>
+<<else>>后方的打手踩着柜顶跃过障碍，但已成了孤军奋战之势。
+	<br><br>
+	<<trialicon>><<link [[引林恩从楼梯跃下合围剩余打手 (0:10)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 10>><</link>>
+	<br>
+	<<runicon>><<link [[借着木柜阻隔退入卧室 (0:04)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 4>><</link>>
+<</if>>
+
+:: MP Elite Encounter Bailey Enforcers Ambush [nobr]
+<<effects>>
+<<set _baileyScore to (($physique or 10000) / 260) + (($willpower or 500) / 10) + ((window.dolmp && window.dolmp.players && window.dolmp.players.size gt 0) ? 35 : 20)>>
+<<if _baileyScore + random(1, 45) gte 100>>
+	随着你一声短哨，林恩从半层楼梯纵身跃下，精准锁住后排打手的咽喉，你与同伴则合力将前排打手击倒在地。<<include "MP Elite Encounter Bailey Enforcers Win">>
+<<else>>
+	橡胶棍重重砸在你的肩头，剧痛令你眼前一黑失去平衡，被两名打手直接拖进了孤儿院地底的训诫室。<<pain 20>><<stress 12>>
+	<br><br>
+	<<badendicon>><<link [[被拖入贝利地下训诫室 (0:10)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
+	<br>
+	<<runicon>><<link [[挣脱衣袖顺着阁楼绳梯逃脱 (0:06)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 6>><<pain 10>><</link>><<gpain>>
+<</if>>
+
+:: MP Elite Encounter Bailey Enforcers Win [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+两名黑衣清道夫狼狈地倒在走廊上动弹不得。贝利冷冷地看了你们一眼，没敢再上前纠缠便退回了办公室。你不仅免除了本期的双周连坐规费，还当场截获了打手随身携带的 £2,500 黑金箱！
+<<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>>
+<<if ($mpQuestBaileyRebellion or 0) lt 8>><<set $mpQuestBaileyRebellion to ($mpQuestBaileyRebellion or 0) + 1>><</if>>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_bailey_enforcers_win")>>
+	<<set $money += 250000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<willpower 8>><<stress -18>><<control 25>>
+<<else>>
+	<<set $money += 40000>><<willpower 3>><<stress -10>><<control 10>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[收好战利品返回走廊 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[回卧室清点黑金箱 (0:05)|Bedroom]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Elite Encounter Bailey Enforcers Escape [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+你果断拉下走廊墙角的电闸，整条通道瞬间陷入漆黑。你拉着同伴借着熟悉的地形溜进侧门，将打手沉重的脚步声甩在了楼道另一头。<<stress -4>>
+<br><br>
+<<getouticon>><<link [[返回安全处 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[从后门溜去花园 (0:04)|Garden]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
