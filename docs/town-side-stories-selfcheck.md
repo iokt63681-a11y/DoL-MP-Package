@@ -20,7 +20,7 @@
 | `$location` 在允许列表内 | 36/36 |
 | 图标宏 | 9 种，全部在允许列表；未注册 0 |
 | 每段汉字数 600–1200 | 36/36 |
-| 汉字数范围 | 600–638，平均 604.8，总计 21,772 |
+| 汉字数范围 | 600–638，平均 604.4，总计 21,759 |
 | 每段至少 1 个检查 | 36/36 |
 | 检查类型 | `<<skulduggerycheck>>` 14 段；`$skill gte` 22 段 |
 | 每个检查有失败代价 | 36/36（pain / stress / tiredness / trauma 或失去线索） |
@@ -65,21 +65,21 @@
 | MP Side Bookstall | high | 638 | skulduggerycheck |
 | MP Side Bookstall Step2 | high | 601 | skulduggerycheck |
 | MP Side Bookstall Resolve | high | 611 | skill gte |
-| MP Side Cafe Alley | cafe | 606 | skill gte |
-| MP Side Cafe Alley Step2 | cafe | 603 | skulduggerycheck |
+| MP Side Cafe Alley | cafe | 605 | skill gte |
+| MP Side Cafe Alley Step2 | cafe | 601 | skulduggerycheck |
 | MP Side Cafe Alley Resolve | cafe | 608 | skill gte |
 | MP Side Orphan Laundry | orphanage | 600 | skulduggerycheck |
 | MP Side Orphan Laundry Step2 | orphanage | 601 | skulduggerycheck |
 | MP Side Orphan Laundry Resolve | orphanage | 602 | skill gte |
 | MP Side School Goggles | school | 605 | skill gte |
 | MP Side School Goggles Step2 | school | 602 | skulduggerycheck |
-| MP Side School Goggles Resolve | school | 616 | skill gte |
+| MP Side School Goggles Resolve | school | 615 | skill gte |
 | MP Side Temple Coin | temple | 601 | skill gte |
 | MP Side Temple Coin Step2 | temple | 604 | skulduggerycheck |
-| MP Side Temple Coin Resolve | temple | 601 | skill gte |
+| MP Side Temple Coin Resolve | temple | 603 | skill gte |
 | MP Side Docks Knot | docks | 601 | skill gte |
 | MP Side Docks Knot Step2 | docks | 601 | skill gte |
-| MP Side Docks Knot Resolve | docks | 601 | skill gte |
+| MP Side Docks Knot Resolve | docks | 600 | skill gte |
 | MP Side Park Pigeon | park | 603 | skill gte |
 | MP Side Park Pigeon Step2 | park | 604 | skulduggerycheck |
 | MP Side Park Pigeon Resolve | park | 600 | skill gte |
@@ -91,7 +91,7 @@
 | MP Side Hospital Slip Resolve | hospital | 611 | skill gte |
 | MP Side Street Lamp | home | 601 | skulduggerycheck |
 | MP Side Street Lamp Step2 | home | 600 | skill gte |
-| MP Side Street Lamp Resolve | home | 626 | skill gte |
+| MP Side Street Lamp Resolve | home | 616 | skill gte |
 | MP Side Window Mannequin | high | 602 | skill gte |
 | MP Side Window Mannequin Step2 | high | 603 | skulduggerycheck |
 | MP Side Window Mannequin Resolve | high | 602 | skill gte |
