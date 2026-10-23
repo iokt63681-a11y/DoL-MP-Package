@@ -65,7 +65,7 @@
   function isSafePassage(p) {
     if (!p) return false;
     if (SAFE_PASSAGES.indexOf(p) >= 0) return true;
-    return /^MP (Livelihood|Job|Side|Wild|Town Side|Content)/.test(String(p));
+    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Content)/.test(String(p));
   }
 
   var ACTS = {
@@ -2003,6 +2003,7 @@
     ["MP Grand Quest", "城镇秘闻调查中"],
     ["MP Quest", "城镇暗线调查中"],
     ["MP Livelihood", "街角零工告示板"],
+    ["MP Jobline", "零工伙伴"],
     ["MP Job", "长期零工路线"],
     ["MP Town Side", "城镇小事"],
     ["MP Side", "街头小事"],
@@ -4269,6 +4270,49 @@
     }
   ];
 
+  var JOB_NPC_HOOKS = [
+    {
+      locs: ["Docks", "Sea Rocks"],
+      check: function (v) { return (Number(v.mpJobFishLevel) || 0) >= 2 && (Number(v.mpJoblineGwylan) || 0) < 4; },
+      hint: "格威岚在鱼档后面补一张被割破的网，手边压着一卷新网线。",
+      icon: "img/misc/icon/beach.png",
+      linkText: "去鱼档看看格威岚 (0:04)",
+      passage: "MP Jobline Gwylan 1"
+    },
+    {
+      locs: ["High Street"],
+      check: function (v) { return (Number(v.mpJobClockLevel) || 0) >= 2 && (Number(v.mpJoblineSera) || 0) < 4; },
+      hint: "塞拉把一只没有主人的银壳怀表推到柜台边，表盖内侧刻着字。",
+      icon: "img/misc/icon/shop.png",
+      linkText: "问塞拉那只怀表 (0:04)",
+      passage: "MP Jobline Sera 1"
+    },
+    {
+      locs: ["Farmland"],
+      check: function (v) { return (Number(v.mpJobFarmLevel) || 0) >= 2 && (Number(v.mpJoblineAlex) || 0) < 4; },
+      hint: "Alex 在谷仓梁上翻一叠发黄的佃租收据，铁锹靠在门边。",
+      icon: "img/misc/icon/forest.png",
+      linkText: "去谷仓找 Alex (0:04)",
+      passage: "MP Jobline Alex 1"
+    },
+    {
+      locs: ["Spa"],
+      check: function (v) { return (Number(v.mpJobSpaLevel) || 0) >= 2 && (Number(v.mpJoblineJordan) || 0) < 4; },
+      hint: "约旦在池边捡起一张被蒸汽浸软的祷词卡，眉头没有松开。",
+      icon: "img/misc/icon/temple.png",
+      linkText: "去池边找约旦 (0:04)",
+      passage: "MP Jobline Jordan 1"
+    },
+    {
+      locs: ["Orphanage"],
+      check: function (v) { return (Number(v.mpJobLaundryLevel) || 0) >= 2 && (Number(v.mpJoblineRobin) || 0) < 4; },
+      hint: "罗宾从洗衣篮底下抽出一件绣着陌生字母的白衬衫，朝走廊看了一眼。",
+      icon: "img/misc/icon/socialise.png",
+      linkText: "去洗衣房找罗宾 (0:04)",
+      passage: "MP Jobline Robin 1"
+    }
+  ];
+
   function isNpcInScheduleHour(npcEntry) {
     if (!npcEntry || !Array.isArray(npcEntry.hours)) return true;
     var h = getHourNow();
@@ -4456,6 +4500,30 @@
           lhRow.appendChild(lhLink);
         })(lhk);
         container.appendChild(lhRow);
+        break;
+      }
+    }
+
+    for (var ji = 0; ji < JOB_NPC_HOOKS.length; ji++) {
+      var jhk = JOB_NPC_HOOKS[ji];
+      if (jhk.locs.indexOf(pas) >= 0 && (!jhk.check || jhk.check(v))) {
+        hasAny = true;
+        var jhRow = el("div", { style: "margin:4px 0;" });
+        jhRow.appendChild(el("span", { text: jhk.hint + " " }));
+        (function (lineItem) {
+          var jhLink = el("a", {
+            class: "link-internal",
+            onclick: function (ev) {
+              ev.preventDefault();
+              v.mpReturnPassage = pas;
+              enginePlay(lineItem.passage);
+            }
+          });
+          jhLink.appendChild(dolIconImg(lineItem.icon));
+          jhLink.appendChild(document.createTextNode(lineItem.linkText));
+          jhRow.appendChild(jhLink);
+        })(jhk);
+        container.appendChild(jhRow);
         break;
       }
     }
