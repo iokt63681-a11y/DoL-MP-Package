@@ -75,14 +75,15 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 :: MP Job Cafe Shift [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set $mpJobCafeExp to ($mpJobCafeExp or 0)>><<set $mpJobCafeLevel to ($mpJobCafeExp gte 21 ? 5 : $mpJobCafeExp gte 15 ? 4 : $mpJobCafeExp gte 10 ? 3 : $mpJobCafeExp gte 6 ? 2 : $mpJobCafeExp gte 3 ? 1 : 0)>>
-<<if $mpJobCafeLevel gte 2>><<set $mpJobCafeRegular to 1>><</if>><<if $mpJobCafeLevel gte 3>><<set $mpJobCafePerk to 1>><</if>><<if $mpJobCafeLevel gte 4>><<set $mpJobCafeKey to 1>><</if>>
+<<if $mpJobCafeLevel gte 2>><<set $mpJobCafeRegular to 1>><</if>><<if $mpJobCafeLevel gte 3 and ($mpJobCafePenalty or 0) is 0>><<set $mpJobCafePerk to 1>><</if>><<if $mpJobCafeLevel gte 4 and ($mpJobCafePenalty or 0) is 0>><<set $mpJobCafeKey to 1>><</if>>
 <<if $daily and $daily.mpJobCafe>>
 	<<if $mpJobResultText>>
 		<<print $mpJobResultText>>
 		<<if ($mpJobResultPay or 0) gt 0>>
 			约 £<<print Math.floor($mpJobResultPay / 100)>> 已经进了你的口袋。
 		<</if>>
-		<<include "MP Job Random Cafe">>
+		<<if ($mpJobResultPay or 0) gt 0>><<include "MP Job Random Cafe">><</if>>
+		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobCafeStrike or 0) gt 0>><<set $mpJobCafeStrike to Math.max(0, $mpJobCafeStrike - 1)>><</if>>
 		<<if ($mpJobCafeLevel or 0) gt ($mpJobCafeLastLevel or 0)>>
 			<<if $mpJobCafeLevel is 1>>Gwylan 开始让你独自看窗边四桌，客人点单时会先看向你。<<elseif $mpJobCafeLevel is 2>>熟客名册上多了一个圈，Gwylan 让你试着调一杯简单的。<<elseif $mpJobCafeLevel is 3>>午市最忙的时候，吧台交给你看。<<elseif $mpJobCafeLevel is 4>>后门钥匙挂到了你的围裙内侧。<<else>>Gwylan 把账本推给你，说这间店有你一份。<</if>>
 			<<set $mpJobCafeLastLevel to $mpJobCafeLevel>>
@@ -92,7 +93,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
-			<<set $mpJobCafeStrike to Math.min(3, ($mpJobCafeStrike or 0) + 1)>>
+			<<set $mpJobCafeStrike to Math.min(3, ($mpJobCafeStrike or 0) + 1)>><<if $mpJobCafeStrike gte 3>><<set $mpJobCafeSuspended to 1>><</if>>
 			<<link "去后厨说明情况 (0:03)">><<set _pun to "MP Job Punishment Cafe " + ($mpJobCafeStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
@@ -133,9 +134,9 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 	Gwylan 把账本推给你，说这间店有你一份。窗边四桌的常客已经会直接叫你的名字。
 <</if>>
 <br><br>
-<<if ($mpJobCafeLevel or 0) gte 2>>熟客名册上已经有三个人在你的名字旁画了圈。<<else>>名册上还没有你的名字。<</if>>
-<<if ($mpJobCafeLevel or 0) gte 3>>灶台边那只缺口的杯子归你用，咖啡不要钱。<</if>>
-<<if ($mpJobCafeLevel or 0) gte 4>>后门钥匙挂在围裙内侧，铜齿被磨得发亮。<</if>>
+<<if ($mpJobCafeLevel or 0) gte 2 and ($mpJobCafePenalty or 0) is 0>>熟客名册上已经有三个人在你的名字旁画了圈。<<else>>名册上还没有你的名字。<</if>>
+<<if ($mpJobCafeLevel or 0) gte 3 and ($mpJobCafePenalty or 0) is 0>>灶台边那只缺口的杯子归你用，咖啡不要钱。<</if>>
+<<if ($mpJobCafeLevel or 0) gte 4 and ($mpJobCafePenalty or 0) is 0>>后门钥匙挂在围裙内侧，铜齿被磨得发亮。<</if>>
 <br><br>
 <<walkicon>><<link [[回吧台帮忙 (0:01)|MP Job Cafe]]>><<pass 1>><</link>>
 <br>
@@ -183,7 +184,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 :: MP Job Fish Shift [nobr]
 <<set $outside to 1>><<set $location to "searocks">><<effects>>
 <<set $mpJobFishExp to ($mpJobFishExp or 0)>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>>
-<<if $mpJobFishLevel gte 3>><<set $mpJobFishRod to 1>><</if>>
+<<if $mpJobFishLevel gte 3 and ($mpJobFishPenalty or 0) is 0>><<set $mpJobFishRod to 1>><</if>>
 <<set _lv to ($mpJobFishLevel or 0)>><<set _night to (_lv gte 3 and Time.dayState is "night")>>
 <<if $daily and $daily.mpJobFish>>
 	<<if $mpJobResultText>>
@@ -191,7 +192,8 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 		<<if ($mpJobResultPay or 0) gt 0>>
 			鱼贩把约 £<<print Math.floor($mpJobResultPay / 100)>> 的鱼钱拍在你掌心。
 		<</if>>
-		<<include "MP Job Random Fish">>
+		<<if ($mpJobResultPay or 0) gt 0>><<include "MP Job Random Fish">><</if>>
+		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobFishStrike or 0) gt 0>><<set $mpJobFishStrike to Math.max(0, $mpJobFishStrike - 1)>><</if>>
 		<<if ($mpJobFishLevel or 0) gt ($mpJobFishLastLevel or 0)>>
 			<<if $mpJobFishLevel is 1>>鱼贩让你自己下近岸的网，不再跟在你身后看。<<elseif $mpJobFishLevel is 2>>你开始认得外礁的水色，旧竿换了加固竿。<<elseif $mpJobFishLevel is 3>>鱼贩把最好的摊位留给你。<<elseif $mpJobFishLevel is 4>>你能借到小船，去外海下钩。<<else>>鱼贩把船钥匙扔给你，说随你用。<</if>>
 			<<set $mpJobFishLastLevel to $mpJobFishLevel>>
@@ -201,7 +203,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
-			<<set $mpJobFishStrike to Math.min(3, ($mpJobFishStrike or 0) + 1)>>
+			<<set $mpJobFishStrike to Math.min(3, ($mpJobFishStrike or 0) + 1)>><<if $mpJobFishStrike gte 3>><<set $mpJobFishSuspended to 1>><</if>>
 			<<link "去鱼档说明情况 (0:03)">><<set _pun to "MP Job Punishment Fish " + ($mpJobFishStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
@@ -246,7 +248,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 	潮位表上的记号你全认得了。鱼贩把船钥匙扔给你，说随你用。
 <</if>>
 <br><br>
-<<if ($mpJobFishRod or 0) is 1>>加固竿靠在棚子最里面，握把上缠着新麻绳。<</if>>
+<<if ($mpJobFishRod or 0) is 1 and ($mpJobFishPenalty or 0) is 0>>加固竿靠在棚子最里面，握把上缠着新麻绳。<</if>>
 <<if ($mpJobFishCatch or 0) gt 0>>今天最后一趟的鱼获约 £<<print Math.floor(($mpJobFishCatch or 0) / 100)>>。<</if>>
 <br><br>
 <<swimicon>><<link [[回礁石边 (0:01)|MP Job Fish]]>><<pass 1>><</link>>
@@ -292,14 +294,15 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 :: MP Job Spa Shift [nobr]
 <<set $outside to 0>><<set $location to "spa">><<effects>>
 <<set $mpJobSpaExp to ($mpJobSpaExp or 0)>><<set $mpJobSpaLevel to ($mpJobSpaExp gte 21 ? 5 : $mpJobSpaExp gte 15 ? 4 : $mpJobSpaExp gte 10 ? 3 : $mpJobSpaExp gte 6 ? 2 : $mpJobSpaExp gte 3 ? 1 : 0)>>
-<<if $mpJobSpaLevel gte 3>><<set $mpJobSpaPrivate to 1>><</if>><<if $mpJobSpaLevel gte 4>><<set $mpJobSpaRegular to 1>><</if>>
+<<if $mpJobSpaLevel gte 3 and ($mpJobSpaPenalty or 0) is 0>><<set $mpJobSpaPrivate to 1>><</if>><<if $mpJobSpaLevel gte 4 and ($mpJobSpaPenalty or 0) is 0>><<set $mpJobSpaRegular to 1>><</if>>
 <<if $daily and $daily.mpJobSpa>>
 	<<if $mpJobResultText>>
 		<<print $mpJobResultText>>
 		<<if ($mpJobResultPay or 0) gt 0>>
 			前台把约 £<<print Math.floor($mpJobResultPay / 100)>> 塞进你的工钱袋。
 		<</if>>
-		<<include "MP Job Random Spa">>
+		<<if ($mpJobResultPay or 0) gt 0>><<include "MP Job Random Spa">><</if>>
+		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobSpaStrike or 0) gt 0>><<set $mpJobSpaStrike to Math.max(0, $mpJobSpaStrike - 1)>><</if>>
 		<<if ($mpJobSpaLevel or 0) gt ($mpJobSpaLastLevel or 0)>>
 			<<if $mpJobSpaLevel is 1>>你递巾的动作稳了，有客人开始在你经过时抬头。<<elseif $mpJobSpaLevel is 2>>有人点你的手法，私汤的木牌挂到了门边。<<elseif $mpJobSpaLevel is 3>>固定客人会问你哪天当班。<<elseif $mpJobSpaLevel is 4>>你能自己开关池子。<<else>>Jordan 说这间浴场交给你很放心。<</if>>
 			<<set $mpJobSpaLastLevel to $mpJobSpaLevel>>
@@ -309,7 +312,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
-			<<set $mpJobSpaStrike to Math.min(3, ($mpJobSpaStrike or 0) + 1)>>
+			<<set $mpJobSpaStrike to Math.min(3, ($mpJobSpaStrike or 0) + 1)>><<if $mpJobSpaStrike gte 3>><<set $mpJobSpaSuspended to 1>><</if>>
 			<<link "去前台说明情况 (0:03)">><<set _pun to "MP Job Punishment Spa " + ($mpJobSpaStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
@@ -350,8 +353,8 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 	排班表上的名字你能背下来。Jordan 说这间交给你很放心。
 <</if>>
 <br><br>
-<<if ($mpJobSpaPrivate or 0) is 1>>私汤的木牌挂在门边，背面刻着你的名字缩写。<</if>>
-<<if ($mpJobSpaRegular or 0) is 1>>有几位客人只在你在班时才来，点名要你看水温。<</if>>
+<<if ($mpJobSpaPrivate or 0) is 1 and ($mpJobSpaPenalty or 0) is 0>>私汤的木牌挂在门边，背面刻着你的名字缩写。<</if>>
+<<if ($mpJobSpaRegular or 0) is 1 and ($mpJobSpaPenalty or 0) is 0>>有几位客人只在你在班时才来，点名要你看水温。<</if>>
 <br><br>
 <<tendingicon>><<link [[回池边 (0:01)|MP Job Spa]]>><<pass 1>><</link>>
 <br>
@@ -402,7 +405,7 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 :: MP Job Farm Shift [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>>
 <<set $mpJobFarmExp to ($mpJobFarmExp or 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>>
-<<if $mpJobFarmLevel gte 3>><<set $mpJobFarmGreenhouse to 1>><</if>>
+<<if $mpJobFarmLevel gte 3 and ($mpJobFarmPenalty or 0) is 0>><<set $mpJobFarmGreenhouse to 1>><</if>>
 <<set _today to Math.max(1, ((window.Time && Time.days) or 0))>><<set _planted to ($mpJobFarmPlantedDay or 0)>><<set _ready to (_planted gt 0 and _today gt _planted)>><<set _rain to (window.Weather && Weather.precipitation isnot "none")>>
 <<if $daily and $daily.mpJobFarm>>
 	<<if $mpJobResultText>>
@@ -410,7 +413,8 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 		<<if ($mpJobResultPay or 0) gt 0>>
 			Alex 把约 £<<print Math.floor($mpJobResultPay / 100)>> 的工钱数给你。
 		<</if>>
-		<<include "MP Job Random Farm">>
+		<<if ($mpJobResultPay or 0) gt 0>><<include "MP Job Random Farm">><</if>>
+		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobFarmStrike or 0) gt 0>><<set $mpJobFarmStrike to Math.max(0, $mpJobFarmStrike - 1)>><</if>>
 		<<if ($mpJobFarmLevel or 0) gt ($mpJobFarmLastLevel or 0)>>
 			<<if $mpJobFarmLevel is 1>>你能同时照料两畦，Alex 不再跟在后面返工。<<elseif $mpJobFarmLevel is 2>>你拿到温室钥匙，雨天也能育苗。<<elseif $mpJobFarmLevel is 3>>排水沟修好以后，涝天也不减产。<<elseif $mpJobFarmLevel is 4>>三畦轮作已经跑顺。<<else>>Alex 把下一季的种子单交给你。<</if>>
 			<<set $mpJobFarmLastLevel to $mpJobFarmLevel>>
@@ -420,7 +424,7 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
-			<<set $mpJobFarmStrike to Math.min(3, ($mpJobFarmStrike or 0) + 1)>>
+			<<set $mpJobFarmStrike to Math.min(3, ($mpJobFarmStrike or 0) + 1)>><<if $mpJobFarmStrike gte 3>><<set $mpJobFarmSuspended to 1>><</if>>
 			<<link "去田埂说明情况 (0:03)">><<set _pun to "MP Job Punishment Farm " + ($mpJobFarmStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
@@ -516,14 +520,15 @@ Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从
 :: MP Job Clock Shift [nobr]
 <<set $outside to 0>><<set $location to "high">><<effects>>
 <<set $mpJobClockExp to ($mpJobClockExp or 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>>
-<<if $mpJobClockLevel gte 3>><<set $mpJobClockCommission to 1>><</if>> <<if $mpJobClockLevel gte 4>><<set $mpJobClockHighEnd to 1>><</if>> <<if $mpJobClockLevel gte 5>><<set $mpJobClockPartner to 1>><</if>>
+<<if $mpJobClockLevel gte 3 and ($mpJobClockPenalty or 0) is 0>><<set $mpJobClockCommission to 1>><</if>> <<if $mpJobClockLevel gte 4 and ($mpJobClockPenalty or 0) is 0>><<set $mpJobClockHighEnd to 1>><</if>> <<if $mpJobClockLevel gte 5 and ($mpJobClockPenalty or 0) is 0>><<set $mpJobClockPartner to 1>><</if>>
 <<if $daily and $daily.mpJobClock>>
 	<<if $mpJobResultText>>
 		<<print $mpJobResultText>>
 		<<if ($mpJobResultPay or 0) gt 0>>
 			Sera 把约 £<<print Math.floor($mpJobResultPay / 100)>> 推到你手边。
 		<</if>>
-		<<include "MP Job Random Clock">>
+		<<if ($mpJobResultPay or 0) gt 0>><<include "MP Job Random Clock">><</if>>
+		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobClockStrike or 0) gt 0>><<set $mpJobClockStrike to Math.max(0, $mpJobClockStrike - 1)>><</if>>
 		<<if ($mpJobClockLevel or 0) gt ($mpJobClockLastLevel or 0)>>
 			<<if $mpJobClockLevel is 1>>你能独立换摆轮，Sera 把简单委托推到你手边。<<elseif $mpJobClockLevel is 2>>你开始接高价维修，柜台里那只银壳三问表只让你碰。<<elseif $mpJobClockLevel is 3>>委托栏上挂了一块刻你名字的小铜牌。<<elseif $mpJobClockLevel is 4>>Sera 让你在招牌上署名。<<else>>委托簿上一半的活已经写着你的名字。<</if>>
 			<<set $mpJobClockLastLevel to $mpJobClockLevel>>
@@ -533,7 +538,7 @@ Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
-			<<set $mpJobClockStrike to Math.min(3, ($mpJobClockStrike or 0) + 1)>>
+			<<set $mpJobClockStrike to Math.min(3, ($mpJobClockStrike or 0) + 1)>><<if $mpJobClockStrike gte 3>><<set $mpJobClockSuspended to 1>><</if>>
 			<<link "去柜台说明情况 (0:03)">><<set _pun to "MP Job Punishment Clock " + ($mpJobClockStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
@@ -574,9 +579,9 @@ Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从
 	委托簿上一半的活已经写着你的名字。Sera 说招牌该重新漆了。
 <</if>>
 <br><br>
-<<if ($mpJobClockCommission or 0) is 1>>委托栏上挂着一块刻你名字的小铜牌。<</if>>
-<<if ($mpJobClockHighEnd or 0) is 1>>柜台里那只银壳三问表，Sera 只让你碰。<</if>>
-<<if ($mpJobClockPartner or 0) is 1>>招牌右下角多了一行小字，是你的名字。<</if>>
+<<if ($mpJobClockCommission or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>委托栏上挂着一块刻你名字的小铜牌。<</if>>
+<<if ($mpJobClockHighEnd or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>柜台里那只银壳三问表，Sera 只让你碰。<</if>>
+<<if ($mpJobClockPartner or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>招牌右下角多了一行小字，是你的名字。<</if>>
 <br><br>
 <<investigateicon>><<link [[回工作台 (0:01)|MP Job Clock]]>><<pass 1>><</link>>
 <br>
@@ -617,14 +622,15 @@ Robin 把床单放进盆里，皂角沫漫过手背：「先熨这一批，旧�
 :: MP Job Laundry Shift [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>>
 <<set $mpJobLaundryExp to ($mpJobLaundryExp or 0)>><<set $mpJobLaundryLevel to ($mpJobLaundryExp gte 21 ? 5 : $mpJobLaundryExp gte 15 ? 4 : $mpJobLaundryExp gte 10 ? 3 : $mpJobLaundryExp gte 6 ? 2 : $mpJobLaundryExp gte 3 ? 1 : 0)>>
-<<if $mpJobLaundryLevel gte 2>><<set $mpJobLaundryDiscount to 1>><</if>><<if $mpJobLaundryLevel gte 3>><<set $mpJobLaundryBench to 1>><</if>><<if $mpJobLaundryLevel gte 4>><<set $mpJobLaundryBook to 1>><</if>>
+<<if $mpJobLaundryLevel gte 2 and ($mpJobLaundryPenalty or 0) is 0>><<set $mpJobLaundryDiscount to 1>><</if>><<if $mpJobLaundryLevel gte 3 and ($mpJobLaundryPenalty or 0) is 0>><<set $mpJobLaundryBench to 1>><</if>><<if $mpJobLaundryLevel gte 4 and ($mpJobLaundryPenalty or 0) is 0>><<set $mpJobLaundryBook to 1>><</if>>
 <<if $daily and $daily.mpJobLaundry>>
 	<<if $mpJobResultText>>
 		<<print $mpJobResultText>>
 		<<if ($mpJobResultPay or 0) gt 0>>
 			管事把约 £<<print Math.floor($mpJobResultPay / 100)>> 记在你的工钱上。
 		<</if>>
-		<<include "MP Job Random Laundry">>
+		<<if ($mpJobResultPay or 0) gt 0>><<include "MP Job Random Laundry">><</if>>
+		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobLaundryStrike or 0) gt 0>><<set $mpJobLaundryStrike to Math.max(0, $mpJobLaundryStrike - 1)>><</if>>
 		<<if ($mpJobLaundryLevel or 0) gt ($mpJobLaundryLastLevel or 0)>>
 			<<if $mpJobLaundryLevel is 1>>你熨过的床单不再留水痕，浆洗房的价目表上多了你的「内部价」。<<elseif $mpJobLaundryLevel is 2>>你拿到装订台钥匙，脱线的旧书开始由你经手。<<elseif $mpJobLaundryLevel is 3>>你能悄悄藏下一本待修的旧书。<<elseif $mpJobLaundryLevel is 4>>旧书摊的装订委托归你。<<else>>管事把钥匙串放在你手边，说这间浆洗房迟早交给你。<</if>>
 			<<set $mpJobLaundryLastLevel to $mpJobLaundryLevel>>
@@ -634,7 +640,7 @@ Robin 把床单放进盆里，皂角沫漫过手背：「先熨这一批，旧�
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
-			<<set $mpJobLaundryStrike to Math.min(3, ($mpJobLaundryStrike or 0) + 1)>>
+			<<set $mpJobLaundryStrike to Math.min(3, ($mpJobLaundryStrike or 0) + 1)>><<if $mpJobLaundryStrike gte 3>><<set $mpJobLaundrySuspended to 1>><</if>>
 			<<link "去浆洗房说明情况 (0:03)">><<set _pun to "MP Job Punishment Laundry " + ($mpJobLaundryStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
@@ -675,8 +681,8 @@ Robin 把床单放进盆里，皂角沫漫过手背：「先熨这一批，旧�
 	账本上的活计你全接过了。管事把钥匙串放在你手边。
 <</if>>
 <br><br>
-<<if ($mpJobLaundryDiscount or 0) is 1>>浆洗房的价目表上，你的名字旁写着「内部价」。<</if>>
-<<if ($mpJobLaundryBook or 0) is 1>>装订台最下层压着一本你藏起来的旧书，书页还带着浆糊味。<</if>>
+<<if ($mpJobLaundryDiscount or 0) is 1 and ($mpJobLaundryPenalty or 0) is 0>>浆洗房的价目表上，你的名字旁写着「内部价」。<</if>>
+<<if ($mpJobLaundryBook or 0) is 1 and ($mpJobLaundryPenalty or 0) is 0>>装订台最下层压着一本你藏起来的旧书，书页还带着浆糊味。<</if>>
 <br><br>
 <<tendingicon>><<link [[回浆洗房 (0:01)|MP Job Laundry]]>><<pass 1>><</link>>
 <br>

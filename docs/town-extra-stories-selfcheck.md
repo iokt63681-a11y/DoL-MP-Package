@@ -23,7 +23,7 @@
 | `<<` / `>>` 宏括号配对 | 25/25 |
 | 图标宏 | 9 种，全部在允许列表；未注册 0 |
 | 正文汉字数 500–1000 | 24/24 |
-| 汉字数范围 | 506–540，平均 516.8，总计 12,404 |
+| 汉字数范围 | 501–540，平均 516.2，总计 12,390 |
 | 每段至少 1 个检查 | 24/24 |
 | 检查总数 | 24 个（每段 1 个） |
 | 检查类型 | `skulduggerycheck` 8 个；属性阈值 16 个 |
@@ -91,7 +91,7 @@
 | MP Extra Cafe Beans Resolve | cafe | 535 | 1 | skulduggery ≥420 | 3 | 800 / 500 |
 | MP Extra Clock Marks | high | 511 | 1 | maths / history ≥280 | 3 | — |
 | MP Extra Clock Marks Step2 | high | 510 | 1 | `skulduggerycheck` | 3 | — |
-| MP Extra Clock Marks Resolve | high | 515 | 1 | english ≥420 | 3 | 700 / 400 |
+| MP Extra Clock Marks Resolve | high | 501 | 1 | english ≥420 | 3 | 700 / 400 |
 
 ## 题材去重说明
 
