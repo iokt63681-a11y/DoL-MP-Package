@@ -90,6 +90,7 @@ npm install
 - **长期零工 6 条**：19 段，咖啡馆/鱼档/桑拿/农场/钟表学徒/浆洗房；等级 0–5、每日一次、失败扣钱、Lv3 里程碑
 - **零工伙伴 5 条**：17 段，格威岚/塞拉/Alex/约旦/罗宾，Lv2 后按地点出现
 - **信物收集 6 条**：18 段 + hub，扩成 3 段式，奖励压到 £8/£16/£25
+- **区域事件库去模板化**：153 段重写，10 句重复模板清零；314 笔 money 全部防重复领取
 - **新内容可达性**：188/188 个新 passage 可从入口 BFS 到达
 - **联机安全页扩展**：`MP Job` / `MP Jobline` / `MP Side` / `MP Wild` / `MP Livelihood` 纳入 `isSafePassage`
 - **本轮修复**：最终报酬刷钱、`$mpClues` 未初始化、`tendingicon` 未注册、`$swimming`/`$seduction` 变量名、`Weather.precipitation` 字符串比较、`spa` ambient、荒野小事缺 `[nobr]`、boot 清单
@@ -97,7 +98,7 @@ npm install
 
 ### 已知问题
 
-- region bank 仍有 7 句模板结果句；下一批处理。
+- region bank 已完成 153 段去模板化；剩余 12 段原本无模板句。
 - 28 个交互/战斗/romance 页刻意不写死地点，继承玩家当前位置。
 - 联机同步补丁仍需双开实测：同一事件名、同一选项目标、落后者 `event_resync`。
 - 零工收益与时间/疲劳消耗需要实机走一轮再微调。
