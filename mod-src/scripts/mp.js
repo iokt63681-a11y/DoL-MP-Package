@@ -65,7 +65,7 @@
   function isSafePassage(p) {
     if (!p) return false;
     if (SAFE_PASSAGES.indexOf(p) >= 0) return true;
-    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Town Extra|Wild Extra|Extra|Content)/.test(String(p));
+    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Town Extra|Wild Extra|Extra|Daily|Festival|Content)/.test(String(p));
   }
 
   var ACTS = {
@@ -2006,6 +2006,8 @@
     ["MP Job Punishment", "零工失误"],
     ["MP Jobline", "零工伙伴"],
     ["MP Job", "长期零工路线"],
+    ["MP Festival", "城镇节日"],
+    ["MP Daily", "日常关系"],
     ["MP Town Side", "城镇小事"],
     ["MP Side", "街头小事"],
     ["MP Wild Side", "荒野小事"],
@@ -5317,6 +5319,47 @@
     });
   }
 
+  var MOD_FESTIVALS = [
+    { key: "harvest", name: "丰收节", month: 9, day: 15, loc: "农场与高街", hint: "麦捆、集市和临时搭起的秤台会挤满高街。" },
+    { key: "fog", name: "雾月节", month: 10, day: 21, loc: "神殿与多瑙河街", hint: "神殿会点起长明灯，多瑙河街的雾里有人戴面具。" },
+    { key: "winter", name: "冬幕节", month: 12, day: 18, loc: "孤儿院与高街", hint: "孤儿院会煮热汤，高街的店铺挂起旧布做的冬幕。" },
+    { key: "flood", name: "春汛节", month: 3, day: 21, loc: "码头与梅尔街", hint: "春汛把木舟推回码头，鱼市和系船柱边最热闹。" },
+    { key: "sealamp", name: "海灯节", month: 6, day: 21, loc: "海滩与海礁", hint: "退潮后的沙滩上会放纸灯，海礁边有人等潮。" },
+    { key: "bell", name: "钟塔纪念日", month: 11, day: 5, loc: "高街与旧钟塔", hint: "旧钟塔会敲响纪念钟，工匠名册摊在塔下。" }
+  ];
+
+  function nextModFestival(v) {
+    if (!window.Time || !Time.date || typeof DateTime !== "function") return null;
+    var now = Time.date;
+    var today = new DateTime(now.year, now.month, now.day, 0, 0, 0);
+    var best = null;
+    for (var i = 0; i < MOD_FESTIVALS.length; i++) {
+      var f = MOD_FESTIVALS[i];
+      var d = new DateTime(now.year, f.month, f.day, 0, 0, 0);
+      if (d.timeStamp < today.timeStamp) d = new DateTime(now.year + 1, f.month, f.day, 0, 0, 0);
+      var days = Math.round((d.timeStamp - today.timeStamp) / 86400);
+      if (!best || days < best.days) {
+        best = { key: f.key, name: f.name, loc: f.loc, hint: f.hint, days: days, date: d };
+      }
+    }
+    return best;
+  }
+
+  var MOD_JOB_JOURNAL = [
+    { name: "海风咖啡馆", lv: "mpJobCafeLevel", strike: "mpJobCafeStrike", susp: "mpJobCafeSuspended", day: "mpJobCafe",
+      ranks: ["刚系上围裙", "能看住窗边四桌", "记得熟客的口味", "能独自看午市", "有后门钥匙", "Gwylan 放心的老手"] },
+    { name: "码头鱼档", lv: "mpJobFishLevel", strike: "mpJobFishStrike", susp: "mpJobFishSuspended", day: "mpJobFish",
+      ranks: ["还在学看潮", "能下近岸的网", "认得外礁的水色", "有最好的摊位", "能借到小船", "鱼档老手"] },
+    { name: "温泉桑拿", lv: "mpJobSpaLevel", strike: "mpJobSpaStrike", susp: "mpJobSpaSuspended", day: "mpJobSpa",
+      ranks: ["还在记毛巾位置", "能递巾看水", "客人开始点你的手法", "能看私汤", "有值班钥匙", "池边老手"] },
+    { name: "河湾农场", lv: "mpJobFarmLevel", strike: "mpJobFarmStrike", susp: "mpJobFarmSuspended", day: "mpJobFarm",
+      ranks: ["还在学看墒", "能照料一畦", "能同时看两畦", "有温室钥匙", "会轮作", "Alex 放心的老手"] },
+    { name: "钟表铺", lv: "mpJobClockLevel", strike: "mpJobClockStrike", susp: "mpJobClockSuspended", day: "mpJobClock",
+      ranks: ["还在认零件", "能换摆轮", "能接简单委托", "接高价维修", "招牌上有你的名字", "Sera 的合伙人"] },
+    { name: "孤儿院浆洗房", lv: "mpJobLaundryLevel", strike: "mpJobLaundryStrike", susp: "mpJobLaundrySuspended", day: "mpJobLaundry",
+      ranks: ["还在学熨边", "熨烫不留水痕", "有装订台钥匙", "能藏下一本旧书", "接旧书摊委托", "浆洗房老手"] }
+  ];
+
   function renderJournalEntries() {
     var divMap = document.getElementById("divmap");
     var overlayContent = document.getElementById("customOverlayContent");
@@ -5395,6 +5438,59 @@
       ulComp.appendChild(el("li", { text: lineTxt }));
     });
     wrap.appendChild(ulComp);
+
+    // 1.2 节日倒计时：只在最近 7 天内出现
+    var fest = nextModFestival(v);
+    if (fest && fest.days <= 7) {
+      wrap.appendChild(el("hr"));
+      wrap.appendChild(el("h1", { class: "header gold bold", text: "节日与日程" }));
+      var ulFest = el("ul", { class: "journal" });
+      var whenFest = fest.days === 0 ? "今天就是" : fest.days === 1 ? "明天是" : ("还有 " + fest.days + " 天是");
+      ulFest.appendChild(el("li", {
+        text: whenFest + "『" + fest.name + "』，地点在" + fest.loc + "。" + fest.hint
+      }));
+      wrap.appendChild(ulFest);
+    }
+
+    // 1.3 零工进度与日常约定
+    var jobLines = [];
+    MOD_JOB_JOURNAL.forEach(function (j) {
+      var lv = Number(v[j.lv]) || 0;
+      var strike = Number(v[j.strike]) || 0;
+      var susp = Number(v[j.susp]) || 0;
+      if (!lv && !strike && !susp) return;
+      var rank = j.ranks[Math.min(lv, j.ranks.length - 1)];
+      var line = j.name + "：" + rank + "。";
+      if (susp) {
+        line += "东家让你先歇几天，得去把话说清楚。";
+      } else if (v.daily && v.daily[j.day]) {
+        line += "今天已经上过工。";
+      } else {
+        line += "今天还能上工。";
+      }
+      if (!susp && strike >= 2) line += "东家最近对你不太满意。";
+      else if (!susp && strike >= 1) line += "东家提醒过你一次。";
+      jobLines.push(line);
+    });
+    var dailyDefs = [
+      ["mpDailyWhitney", "惠特尼"], ["mpDailyKylar", "凯拉尔"], ["mpDailySydney", "西德尼"],
+      ["mpDailyMason", "梅森"], ["mpDailyLeighton", "莱顿"], ["mpDailyBailey", "贝利"]
+    ];
+    dailyDefs.forEach(function (dd) {
+      var st = Number(v[dd[0]]) || 0;
+      if (st > 0 && st < 3) {
+        jobLines.push("你答应过再去看看" + dd[1] + "，那边还有一件小事没了结。");
+      } else if (st >= 3) {
+        jobLines.push("你和" + dd[1] + "最近走得近了些。");
+      }
+    });
+    if (jobLines.length > 0) {
+      wrap.appendChild(el("hr"));
+      wrap.appendChild(el("h1", { class: "header gold bold", text: "零工与日常" }));
+      var ulJobs = el("ul", { class: "journal" });
+      jobLines.forEach(function (line) { ulJobs.appendChild(el("li", { text: line })); });
+      wrap.appendChild(ulJobs);
+    }
 
     // 1.5 孤儿院贝利双周连坐核查与断链反抗进度
     var curDayJ = (window.Time && Number.isFinite(Time.days)) ? Time.days : 0;
