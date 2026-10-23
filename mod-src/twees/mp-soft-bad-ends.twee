@@ -1,366 +1,711 @@
-/* 软坏结局系统 / 5处囚禁险境 / 独立破局机制与差分 */
+/* 软坏结局系统 / 5处囚禁险境 / 多路线破局与真实代价差分（25段） */
 
 :: MP BadEnd Velvet Doll [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
 <<effects>>
 <<set $mpBadEndProgress to ($mpBadEndProgress or 0)>>
 <<set $mpBadEndDays to ($mpBadEndDays or 1)>>
+<<if ($mpBadEndId or "") isnot "velvet">><<set $mpBadEndId to "velvet">><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><</if>>
 峭壁天鹅绒暗层的水晶展柜内亮着暖紫色的射灯。你的脚踝扣着一截三米长的细银链，单向雾化玻璃外隐约传来沙龙宾客碰杯的脆响。
 <<if $exposed gte 2>>身上的丝绒礼服被剪去了大半衬里，微凉的空气贴着裸露的腰臀滑过，外侧的窥视目光令你耳根发烫。
 <<elseif $arousal gte 4000>>展柜内熏染的甜腻兰花香钻入鼻腔，你的呼吸渐渐急促，连指尖都泛起不受控制的轻颤。
 <<else>>你借着拖长的丝绒裙摆掩住腿侧，冷静地观察着玻璃展柜四角固定桩与换气格栅的缝隙。<</if>>
-<<if $mpBadEndProgress gte 100>>
-	脚踝银链的簧片已被彻底拨松，莫奈留下的画室暗门信号也在镜面后亮起。
+<<if ($mpBadEndProgress or 0) gte 100>>
+	脚踝银链的三道锁簧已被你彻底挑松，送餐小窗的插销虚掩着，铜镜背后也亮起了莫奈约定的暗门微光。
 	<br><br>
-	<<trialicon>><<link [[撞开单向玻璃洗劫筹码匣脱困 (0:12)|MP BadEnd Velvet Doll EscapeWin]]>><<pass 12>><</link>>
+	<<trialicon>><<link [[趁熄灯撞开侧窗离开 (0:12)|MP BadEnd Velvet Doll EscapeWin]]>><<pass 12>><</link>>
 <<else>>
+	<<if ($mpBadEndProgress or 0) gte 60>>脚踝锁扣已经松开了大半，只差最后一下便能彻底脱开。<<elseif ($mpBadEndProgress or 0) gte 30>>你已经摸清了展柜送餐窗与踝链锁孔的构造，但外侧仍有执事巡视。<</if>>
 	<br><br>
-	<<socialiseicon>><<link [[顺应射灯变换舞姿换取侍者递酒 (0:20)|MP BadEnd Velvet Doll Pose]]>><<pass 20>><<arousal 400>><</link>><<garousal>>
+	<<socialiseicon>><<link [[靠近送餐小窗与侍者搭话 (0:18)|MP BadEnd Velvet Doll Pose]]>><<pass 18>><</link>>
 	<br>
-	<<sneakicon>><<link [[拔下发髻银簪试探踝链锁簧 (0:16)|MP BadEnd Velvet Doll Hairpin]]>><<pass 16>><<skulduggery 3>><</link>>
+	<<sneakicon>><<link [[蹲在软垫后试探踝链锁孔 (0:16)|MP BadEnd Velvet Doll Hairpin]]>><<pass 16>><</link>>
 	<br>
-	<<if $physique gte 12000 or $danceskill gte 450>>
-		<<fisticon>><<link [[借旋转蹬踏之力踹裂展柜侧角玻璃 (0:10)|MP BadEnd Velvet Doll Hairpin]]>><<pass 10>><<set $mpBadEndProgress to Math.min(100, $mpBadEndProgress + 25)>><<pain 4>><</link>><<gpain>>
-		<br>
+	<<mphearticon>><<link [[走到落地铜镜前叩击镜框 (0:18)|MP BadEnd Velvet Doll Curtain]]>><<pass 18>><</link>>
+	<br>
+	<<investigateicon>><<link "伏在绒毯边静数换班钟声 (0:20)">><<pass 20>><<replace "#velvet-doll-patience">>
+	<<if ($willpower or 0) gte 440 or ($mpBadEndDays or 1) gte 2>>
+		你耐着性子在暖紫射灯下静坐了整整一轮沙漏，终于听清外廊两名执事交接钥匙时的步点空档，顺手将滑落在送餐槽边的一枚备用铜钩拢进袖口。
+		<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<stress -2>><<lstress>>
+	<<else>>
+		展柜内甜腻的熏香随着暖风越积越浓，你在漫长的等待中眼皮发沉，错过了执事换防的短短几秒，只能咬住舌尖强迫自己清醒。
+		<<set $mpBadEndDays to ($mpBadEndDays or 1) + 1>><<arousal 400>><<tiredness 2>><<garousal>><<gtiredness>>
 	<</if>>
-	<<mphearticon>><<link [[对着试衣铜镜反光向莫奈与同伴打暗记 (0:18)|MP BadEnd Velvet Doll Curtain]]>><<pass 18>><<stress -6>><</link>><<lstress>>
+	<</replace>><</link>>
+	<br>
+	<div id="velvet-doll-patience"></div>
 <</if>>
 
 :: MP BadEnd Velvet Doll Pose [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
 <<effects>>
-你踩着展柜软垫舒展腰肢，水银灯下的剪影引得玻璃外侧响起一阵压低的惊叹。戴着白手套的侍者推开送餐小窗，将一只盛着冰镇果酒的高脚杯递到你手边。
-<<if $danceskill gte 400>>你借着旋转收势的遮掩，顺手将托盘边缘的一枚备用黄铜小钩卷进了掌心。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<stress -4>>
-<<elseif $stress gte 4000>>长时间维持紧绷的姿态令你小腿发酸，但侍者放下托盘时忘了锁死送餐窗的插销。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 20)>><<tiredness 3>>
-<<else>>你趁侍者低头收盘的空档，记下了走廊巡逻执事换班的准确钟声间隔。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 20)>><</if>>
+你走到展柜右侧的送餐小窗边，借着水银射灯的光晕整理裙摆。戴着白手套的侍者推开小窗插销，将一只盛着冰镇果酒的高脚杯递到你手边。
+<<if ($tiredness or 0) gte 800>>连日困在狭窄的展柜里让你小腿发酸，你扶住窗沿才稳住身形。<</if>>
 <br><br>
-<<walkicon>><<link [[敛裙坐回丝绒软垫 (0:03)|MP BadEnd Velvet Doll]]>><<pass 3>><</link>>
+<<walkicon>><<link [[敛裙退回丝绒软垫 (0:03)|MP BadEnd Velvet Doll]]>><<pass 3>><</link>>
 <br>
-<<sneakicon>><<link [[趁机把酒泼向玻璃外侧试探反应 (0:04)|MP BadEnd Velvet Doll]]>><<pass 4>><<stress -3>><<arousal 200>><</link>><<lstress>><<garousal>>
+<div id="velvet-pose-choices">
+<<socialiseicon>><<link "借接酒杯顺走托盘铜钩 (0:08)">><<pass 8>><<replace "#velvet-pose-choices">>
+<<if ($danceskill or 0) gte 350 or ($seductionskill or 0) gte 350>>
+<span class="green">你迎着侍者的视线微微一笑，指尖拂过银托盘边缘的瞬间，借着宽大水袖的遮掩将那枚开启内窗的黄铜小钩卷进了掌心。</span>侍者怔了一瞬，竟忘了锁死送餐小窗的外插销。
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<stress -3>><<lstress>>
+<<else>>
+<span class="red">你的手指刚碰到托盘边沿，侍者便警觉地缩回托盘，咔哒一声将送餐小窗的铜插销落了死锁。</span>外侧传来几声低沉的哄笑，让你耳根发烫。
+<<stress 5>><<arousal 300>><<gstress>><<garousal>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<sneakicon>><<link "把果酒泼在窗槽软化封胶 (0:06)">><<pass 6>><<replace "#velvet-pose-choices">>
+<<if ($skulduggery or 0) gte 300 or ($willpower or 0) gte 450>>
+<span class="green">你假装手腕无力晃洒了半杯果酒，微酸的酒液顺着送餐窗底槽渗入老化的橡胶封条，你用指甲轻轻一抠便掀松了半边窗框。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">冰凉的果酒大半溅在了你自己的裙摆上，非但没能浸软窗槽，湿冷黏腻的布料贴在腿侧反而令你狼狈不堪。</span>
+<<stress 4>><<arousal 200>><<gstress>><<garousal>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Velvet Doll Hairpin [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
 <<effects>>
-你将藏在掌心里的细银簪探入脚踝银链的钥匙孔，屏住呼吸一点点拨动内侧的黄铜弹子。展厅外的大提琴曲掩盖了细微的金属刮擦声。
-<<if $skulduggery gte 450>>只听见极轻的一声脆响，三道锁簧已被你挑开了两道，只差最后一下就能随时脱落。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<skulduggery 4>>
-<<elseif $arousal gte 5000>>体内的燥热令你指尖微微打滑，银簪歪斜着划伤了脚踝皮肤，只勉强挑松了外圈卡扣。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 25)>><<pain 5>><<arousal 500>>
-<<else>>你耐心地磨开了锁芯外层的铅封，顺手从软垫夹缝里摸到一枚前人遗落的珍珠胸针。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+你背对单向雾化玻璃蹲在软垫阴影里，将拔下的细银簪探入脚踝银链的钥匙孔。展厅外悠扬的大提琴曲掩盖了细微的金属刮擦声。
 <br><br>
-<<walkicon>><<link [[将银簪藏回袖口 (0:02)|MP BadEnd Velvet Doll]]>><<pass 2>><</link>>
+<<walkicon>><<link [[将银簪藏回袖口里 (0:02)|MP BadEnd Velvet Doll]]>><<pass 2>><</link>>
 <br>
-<<investigateicon>><<link [[顺势检查展柜底部的通风暗槽 (0:05)|MP BadEnd Velvet Doll]]>><<pass 5>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="velvet-hairpin-choices">
+<<sneakicon>><<link "屏息拨动踝链三道锁簧 (0:10)">><<pass 10>><<replace "#velvet-hairpin-choices">>
+<<set $skulduggerydifficulty to 380>><<skulduggerycheck "silent">>
+<<if $skulduggerysuccess is 1>>
+<span class="green">你顺着大提琴重音的节拍一点点顶起内侧黄铜弹子，只听极轻的两声脆响，踝链主卡扣应声弹开，只虚挂在脚踝上掩人耳目。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 50)>><<skulduggery 4>><<stress -3>><<lstress>>
+<<else>>
+<span class="red">展柜内的兰花甜香让你指尖发滑，银簪尖端在锁芯里猛地打滑，不仅没能挑开第二道弹子，反而划伤了脚踝皮肤。</span>
+<<pain 5>><<stress 5>><<arousal 400>><<gpain>><<gstress>><<garousal>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<fisticon>><<link "用鞋跟撬动底板换气栅 (0:08)">><<pass 8>><<replace "#velvet-hairpin-choices">>
+<<if ($physique or 10000) gte 12000 or ($athletics or 0) gte 320>>
+<span class="green">你借着丝绒裙摆掩护，用鞋跟抵住展柜底角松动的黄铜换气格栅用力一别，两颗锈蚀的螺丝连着铅封被整根撬起。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<physique 2>>
+<<else>>
+<span class="red">黄铜格栅咬合得比预想中紧得多，你连蹬两下都没能撬动，脚腕反而被银链拽出一道红印，外廊的巡逻执事也朝展柜投来审视的一瞥。</span>
+<<pain 4>><<stress 5>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Velvet Doll Curtain [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
 <<effects>>
-你走近镶嵌着落地铜镜的展柜内壁，借着整理肩带的手势，用指尖在起雾的镜面上画出一道裁缝银针记号。几秒钟后，铜镜背后的夹墙里传来了三声熟悉的轻叩。
-<<if $mpCompanion and $mpCompanion.stage is "lover" or ($mpCompanion and $mpCompanion.stage is "soulmate")>>你的同伴与莫奈已经潜入了画室后廊，顺着换气孔塞进一把涂了润滑油的精密钳，并隔着墙板轻轻碰了碰你的指尖。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<stress -12>><<trauma -6>>
-<<else>>莫奈从镜框暗缝里推入一张画着撤离路线的速写纸，约好在午夜拍卖锤响时切断展厅电源。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<stress -8>><</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_velvet", 18, -8, -4, 0, 0, "与莫奈在天鹅绒展柜后廊接应你", { love: 1, trust: 2 })>>
+你走近镶嵌着落地铜镜的展柜内壁，借着整理肩带的手势，用指尖在起雾的镜面上画出一道裁缝银针记号。几秒钟后，铜镜背后的夹墙里传来了三声轻叩。
 <br><br>
-<<walkicon>><<link [[抹去镜面水痕静候时机 (0:03)|MP BadEnd Velvet Doll]]>><<pass 3>><</link>>
+<<walkicon>><<link [[抹去镜面水痕退开 (0:03)|MP BadEnd Velvet Doll]]>><<pass 3>><</link>>
 <br>
-<<socialiseicon>><<link [[隔着夹墙低声确认撤离暗号 (0:04)|MP BadEnd Velvet Doll]]>><<pass 4>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="velvet-curtain-choices">
+<<mphearticon>><<link "顺着换气孔接过钢丝钳 (0:08)">><<pass 8>><<replace "#velvet-curtain-choices">>
+<<if ($mpCompanion and ($mpCompanion.stage is "lover" or $mpCompanion.stage is "soulmate")) or (($mpNpcs and $mpNpcs.monet and ($mpNpcs.monet.love or 0) gte 6)) or ($willpower or 0) gte 420>>
+<span class="green">铜镜下方的暗缝被轻轻推开一寸，莫奈将一把涂满润滑油的扁嘴钢丝钳塞进你手心，并低声与你对好了午夜拉闸断电的准确钟点。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<stress -8>><<trauma -4>><<lstress>><<ltrauma>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_velvet", 18, -8, -4, 0, 0, "与莫奈在天鹅绒展柜后廊接应你", { love: 1, trust: 2 })>>
+<<else>>
+<span class="red">夹墙外忽然响起执事催促送画的脚步声，莫奈来不及把工具塞过窄缝便被迫退开，你只能迅速抹掉镜面上的记号。</span>
+<<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<socialiseicon>><<link "隔着夹墙核对撤离暗道 (0:06)">><<pass 6>><<replace "#velvet-curtain-choices">>
+<<if ($english or 0) gte 250 or ($skulduggery or 0) gte 280>>
+<span class="green">你贴着镜框用指节轻敲出三短一长的回音，摸清了从画室暗廊通往康努达图斯街悬崖石阶的撤离路线。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -4>><<lstress>>
+<<else>>
+<span class="red">展厅外的弦乐声忽然拔高，盖过了夹墙里的低语，你没能听清暗道出口的门栓位置，心里一阵焦急。</span>
+<<stress 4>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Velvet Doll EscapeWin [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
 <<effects>>
 <<unset $mpBadEndProgress>><<unset $mpBadEndDays>>
-随着展厅吊灯突然熄灭，你一脚踢开脱扣的脚踝银链，抓起铜镜暗门递来的短棍砸开单向玻璃。在一片混乱的惊呼声中，你顺手卷走展台暗格里的紫檀筹码匣与古董画卷，跟着莫奈和同伴从悬崖秘道冲回了街面。
+随着展厅吊灯突然熄灭，你一脚踢开脱扣的脚踝银链，推开松动的送餐侧窗翻出展台。在一片混乱的惊呼声中，你顺手卷走展台暗格里的紫檀筹码匣，跟着莫奈从悬崖秘道冲回了街面。
 <<if Weather.precipitation is "rain">>冰凉的夜雨迎面浇下，瞬间驱散了展厅里甜腻的熏香。
 <<else>>清冷的海风灌入胸腔，让你紧绷的神经彻底舒展开来。<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_reward_velvet_doll")>>
-	<<set $money += 15000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -20>><<trauma -12>><<control 25>>
+	<<money 15000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -20>><<trauma -12>><<control 25>>
 <<else>>
-	<<set $money += 5000>><<willpower 3>><<stress -12>><<control 10>>
+	你沿着熟悉的秘道迅速脱身，虽然暗格已经空了，但重获自由让你的心神安定下来。<<willpower 3>><<stress -12>><<control 10>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回康努达图斯街 (0:05)|Connudatus Street]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回康努达图斯街 (0:05)|Connudatus Street]]>><<set $outside to 1>><<set $location to "connudatus">><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[转入峭壁街休整 (0:06)|Cliff Street]]>><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+<<walkicon>><<link [[转入峭壁街休整 (0:06)|Cliff Street]]>><<set $outside to 1>><<set $location to "cliff">><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP BadEnd Abbey Penance [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>>
 <<set $mpBadEndProgress to ($mpBadEndProgress or 0)>>
 <<set $mpBadEndDays to ($mpBadEndDays or 1)>>
+<<if ($mpBadEndId or "") isnot "abbey">><<set $mpBadEndId to "abbey">><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><</if>>
 圣堂地下古修道院的静思石牢阴冷潮湿，石壁上的铜烛台燃着带有苦杏仁味的没药。你的手腕被镌刻古教团铭文的银戒律链扣在石砌祈祷台前，脚下暗渠传来低沉的水声。
 <<if $stress gte 5000>>浓郁的没药烟雾熏得你太阳穴突突跳动，石壁上的浮雕影子在烛火下仿佛活了过来。
 <<elseif Time.dayState is "night">>地底深处的晚祷钟声震落了拱顶的细灰，看守修女的脚步声在长廊外渐渐远去。
 <<else>>你把冰凉的手腕贴在祈祷台边缘的青苔上，仔细辨认着地面排水铁格栅的铆钉走向。<</if>>
-<<if $mpBadEndProgress gte 100>>
+<<if ($mpBadEndProgress or 0) gte 100>>
 	祈祷台底部的银链铆钉已经彻底松脱，地下暗河方向也传来了阿什猎犬的低吠声。
 	<br><br>
-	<<trialicon>><<link [[扯断银链取走祭坛圣油壶脱身 (0:14)|MP BadEnd Abbey Penance EscapeWin]]>><<pass 14>><</link>>
+	<<trialicon>><<link [[挣开银链跃入暗渠脱身 (0:14)|MP BadEnd Abbey Penance EscapeWin]]>><<pass 14>><</link>>
 <<else>>
+	<<if ($mpBadEndProgress or 0) gte 60>>排水铁格栅的铅封已经融开大半，手腕上的银链也只剩最后一扣。<<elseif ($mpBadEndProgress or 0) gte 30>>看守对你的戒心有所放松，铁格栅边缘也撬出了一道细缝。<</if>>
 	<br><br>
-	<<socialiseicon>><<link [[随晚钟低诵古祝词令看守修女放松戒备 (0:25)|MP BadEnd Abbey Penance Chant]]>><<pass 25>><<stress -5>><</link>><<lstress>>
+	<<socialiseicon>><<link [[随晚钟低诵古礼拜词 (0:20)|MP BadEnd Abbey Penance Chant]]>><<pass 20>><</link>>
 	<br>
-	<<sneakicon>><<link [[用长明烛火烘烤排水铁栅的铅封 (0:18)|MP BadEnd Abbey Penance Wax]]>><<pass 18>><<skulduggery 3>><</link>>
+	<<sneakicon>><<link [[取长明烛烘烤铁栅铅封 (0:18)|MP BadEnd Abbey Penance Wax]]>><<pass 18>><</link>>
 	<br>
-	<<mphearticon>><<link [[顺着暗渠水道吹响骨哨联络阿什与同伴 (0:20)|MP BadEnd Abbey Penance Hound]]>><<pass 20>><<trauma -5>><</link>><<ltrauma>>
+	<<mphearticon>><<link [[凑近暗渠铁栅吹响哨音 (0:20)|MP BadEnd Abbey Penance Hound]]>><<pass 20>><</link>>
+	<br>
+	<<investigateicon>><<link "借着钟声默记巡廊步点 (0:20)">><<pass 20>><<replace "#abbey-penance-patience">>
+	<<if ($willpower or 0) gte 450 or ($purity or 0) gte 500>>
+		你垂眸跪坐在祈祷垫上，借着三遍晚钟的回响摸清了看守执事去藏经阁添香油的空档，并用祈祷台边角磨薄了银链副环。
+		<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<stress -3>><<lstress>>
+	<<else>>
+		石牢里的苦杏仁没药味熏得你阵阵犯困，你在冰冷的石板上熬到半夜，手腕反而被银链磨得生疼。
+		<<set $mpBadEndDays to ($mpBadEndDays or 1) + 1>><<pain 3>><<stress 4>><<gpain>><<gstress>>
+	<</if>>
+	<</replace>><</link>>
+	<br>
+	<div id="abbey-penance-patience"></div>
 <</if>>
 
 :: MP BadEnd Abbey Penance Chant [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>>
-你垂下眼帘，用平稳的低音跟随着回廊远处的钟声诵读古礼拜词。负责看守的执事隔着铁栏观察了你片刻，紧绷的肩线缓缓放平，将盛着净水与黑面包的木碗推了进来。
-<<if $willpower gte 650>>你借着伸手接碗的动作，用衣袖掩护着将执事挂在腰侧的一枚铜制拔钉锥顺进了膝下。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<willpower 3>>
-<<elseif $trauma gte 2000>>幽闭石牢的回音令你声音微颤，但执事以为你已彻底悔过，提前半小时熄灭了外廊的巡视灯。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 30)>><<stress -4>>
-<<else>>你一面饮水恢复体力，一面默记下执事靴底钥匙串晃动的齿形。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 30)>><</if>>
+你垂下眼帘，用平稳的低音跟随着回廊远处的钟声诵读古礼拜词。负责看守的执事隔着铁栏观察了你片刻，将盛着净水与黑面包的木碗从栏杆下推了进来。
 <br><br>
-<<walkicon>><<link [[放下木碗继续静坐 (0:03)|MP BadEnd Abbey Penance]]>><<pass 3>><</link>>
+<<walkicon>><<link [[放下木碗退回祈祷台 (0:03)|MP BadEnd Abbey Penance]]>><<pass 3>><</link>>
 <br>
-<<investigateicon>><<link [[用碗底清水浸润银链锈蚀处 (0:05)|MP BadEnd Abbey Penance]]>><<pass 5>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="abbey-chant-choices">
+<<socialiseicon>><<link "接木碗时顺走拔钉铜锥 (0:08)">><<pass 8>><<replace "#abbey-chant-choices">>
+<<if ($willpower or 0) gte 550 or ($skulduggery or 0) gte 340>>
+<span class="green">你双手合十欠身接碗，宽大的苦修袖口拂过栏杆底沿，无声无息地将执事遗落在石阶边的一枚铜制拔钉锥拢入膝下。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<willpower 2>><<stress -3>><<gwillpower>><<lstress>>
+<<else>>
+<span class="red">你伸手时手腕银链撞在铁栏上发出一声脆响，执事立刻后退半步按住腰间戒尺，冷冷盯着你把黑面包吃完才提灯离开。</span>
+<<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<investigateicon>><<link "用碗中净水浸润锈蚀链扣 (0:06)">><<pass 6>><<replace "#abbey-chant-choices">>
+<<if ($history or 0) gte 250 or ($tending or 0) gte 250>>
+<span class="green">你认出祈祷台底座用的是遇水易酥的旧石灰砂浆，便将半碗净水一点点淋在固定桩根部，用力一晃便让银链桩头松开了半寸。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">冰凉的净水顺着石台流进地缝，非但没能泡软铁桩，反而打湿了你膝下的祈祷垫，寒气直往骨头缝里钻。</span>
+<<stress 4>><<pain 2>><<gstress>><<gpain>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Abbey Penance Wax [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>>
 你将手腕银链拉到极限，取下祈祷台旁半截燃烧的没药蜡烛，贴近地面排水铁格栅的铅封铆钉。暗红色的蜡油伴着滚烫的铅水一点点滴落。
-<<if $skulduggery gte 500>>你精准地控制着火苗角度，没发出半点声响便融开了两枚主铆钉，还从石缝里抠出了一页羊皮古卷。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
-<<else>>滚烫的蜡油溅在手背上激起一阵刺痛，但铁格栅的一角已经被你撬开了足以容身的缝隙。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<pain 6>><</if>>
 <br><br>
 <<walkicon>><<link [[将蜡烛放回铜台原位 (0:02)|MP BadEnd Abbey Penance]]>><<pass 2>><</link>>
 <br>
-<<sneakicon>><<link [[用鞋跟踩实松动的铁格栅掩人耳目 (0:04)|MP BadEnd Abbey Penance]]>><<pass 4>><<skulduggery 2>><</link>>
+<div id="abbey-wax-choices">
+<<sneakicon>><<link "控制火苗融开两枚主铆钉 (0:10)">><<pass 10>><<replace "#abbey-wax-choices">>
+<<set $skulduggerydifficulty to 380>><<skulduggerycheck "silent">>
+<<if $skulduggerysuccess is 1>>
+<span class="green">你稳稳托住烛台底座，让火苗外焰精准舔舐铆钉外圈的软铅，没发出半点声响便融开了两枚主铆钉，铁格栅随之撬开一道足以容身的缺口。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 50)>><<skulduggery 3>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">暗渠吹来的一股冷风让烛火猛地倾斜，滚烫的没药蜡油滴在你的手背上，痛得你手一抖熄灭了火苗，铅封只融化了浅浅一层。</span>
+<<pain 6>><<stress 5>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<fisticon>><<link "用鞋跟猛踹松动的铁栅角 (0:06)">><<pass 6>><<replace "#abbey-wax-choices">>
+<<if ($physique or 10000) gte 11800 or ($athletics or 0) gte 280>>
+<span class="green">你趁着地下晚钟轰鸣的瞬间，用鞋跟全力一脚蹬在烤软的铅封处，铁格栅折页应声弯曲，露出了下方潺潺流动的暗渠水面。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<physique 2>>
+<<else>>
+<span class="red">生锈的铁格栅纹丝不动，反震的力道震得你脚跟发麻，长廊尽头还传来了看守修女查看动静的脚步声。</span>
+<<pain 4>><<stress 5>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Abbey Penance Hound [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>>
-你俯身贴近地面排水铁格栅，对着幽暗的地下暗河吹出两长一短的低沉哨音。水声尽头很快亮起一豆摇晃的黄铜防风灯光，阿什的猎犬叼着一只防水油布包从浅滩游了过来。
-<<if $mpCompanion and ($mpCompanion.love gte 15 or $mpCompanion.trust gte 15)>>油布包里除了钢锯条和伤药，还有你的同伴亲手写下的字条，他们已在暗河渡口备好了木舟接应你。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 60)>><<stress -10>><<trauma -6>>
-<<else>>你取出油布包里的钢丝锯条迅速锯薄银链母扣，猎犬乖巧地用脑袋蹭了蹭你的掌心后游回暗处待命。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 50)>><<stress -6>><</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_abbey", 20, -8, -5, 0, 0, "与阿什在修道院暗河渡口接应你", { love: 1, trust: 2 })>>
+你俯身贴近地面排水铁格栅，对着幽暗的地下暗河吹出两长一短的低沉哨音。水声尽头很快亮起一豆摇晃的黄铜防风灯光。
 <br><br>
-<<walkicon>><<link [[收好钢锯条等待晚祷换防 (0:03)|MP BadEnd Abbey Penance]]>><<pass 3>><</link>>
+<<walkicon>><<link [[收声坐回祈祷台前 (0:03)|MP BadEnd Abbey Penance]]>><<pass 3>><</link>>
 <br>
-<<socialiseicon>><<link [[轻拍猎犬的脑袋示意一切就绪 (0:03)|MP BadEnd Abbey Penance]]>><<pass 3>><<stress -3>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>><<lstress>>
+<div id="abbey-hound-choices">
+<<mphearticon>><<link "伸手接过猎犬口中油布包 (0:08)">><<pass 8>><<replace "#abbey-hound-choices">>
+<<if ($mpCompanion and ($mpCompanion.love gte 10 or $mpCompanion.trust gte 10)) or (($mpNpcs and $mpNpcs.ash and ($mpNpcs.ash.love or 0) gte 6)) or ($tending or 0) gte 260>>
+<span class="green">阿什的猎犬踩着浅滩游到铁栅正下方，乖巧地把一只防水油布包顶进你掌心。你取出里面的金刚石细锯条，三两下便锯薄了银链母扣。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<stress -8>><<trauma -5>><<lstress>><<ltrauma>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_abbey", 20, -8, -5, 0, 0, "与阿什在修道院暗河渡口接应你", { love: 1, trust: 2 })>>
+<<else>>
+<span class="red">暗河水位突然上涨，湍急的暗流将猎犬冲偏了数尺，你伸长手指也没能勾到油布包，只能示意它先退回渡口免得暴露。</span>
+<<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<socialiseicon>><<link "顺着水道低声确认木舟位 (0:06)">><<pass 6>><<replace "#abbey-hound-choices">>
+<<if ($willpower or 0) gte 440 or ($swimmingskill or 0) gte 250>>
+<span class="green">你借着拱渠回音与暗河尽头的阿什对准了暗号，确认平底柏木舟就停在下游第一个石弯处等候接应。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -4>><<lstress>>
+<<else>>
+<span class="red">冰冷的水声混杂着风啸在石渠里回荡，你没能听清渡口传来的回音，潮气反而冻得你鼻尖发酸。</span>
+<<stress 4>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Abbey Penance EscapeWin [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>>
 <<unset $mpBadEndProgress>><<unset $mpBadEndDays>>
-趁着晚祷钟声掩盖整座地下修道院的声响，你猛地发力扯开锯断的银链，顺手抄走祭坛暗龛里的纯银圣油壶与古教团秘宝，掀开排水铁栅跃入地下暗河。阿什与你的同伴早已撑着木舟在渡口等候，一把将湿透的你拉上船板，顺着暗流划回了神殿后园。
+趁着晚祷钟声掩盖整座地下修道院的声响，你猛地发力扯开锯断的银链，掀开排水铁栅跃入地下暗河。阿什早已撑着木舟在渡口等候，一把将湿透的你拉上船板，顺着暗流划回了神殿后园。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_reward_abbey_penance")>>
-	<<set $money += 18000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -20>><<trauma -12>><<control 25>>
+	<<money 18000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -20>><<trauma -12>><<control 25>>
 <<else>>
-	<<set $money += 4000>><<willpower 3>><<stress -10>><<control 10>>
+	你在阿什的接应下平安脱困，胸中的阴霾被林间晚风吹散。<<willpower 3>><<stress -10>><<control 10>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[从暗渠返回狼街神殿 (0:06)|Temple]]>><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[从暗渠返回狼街神殿 (0:06)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[随阿什退入森林石径 (0:08)|Forest]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<walkicon>><<link [[随阿什退入森林石径 (0:08)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP BadEnd Smuggler Cargo [nobr]
 <<set $outside to 0>><<set $location to "pirate_ship">>
 <<effects>>
 <<set $mpBadEndProgress to ($mpBadEndProgress or 0)>>
 <<set $mpBadEndDays to ($mpBadEndDays or 1)>>
+<<if ($mpBadEndId or "") isnot "smuggler">><<set $mpBadEndId to "smuggler">><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><</if>>
 双桅走私船在近海浓雾中剧烈颠簸，咸涩的海水顺着橡木舱板的接缝渗入底舱。你被反绑在堆满防水油布货箱的隔间立柱旁，甲板上方不断传来水手长粗暴的呼喝声。
 <<if Weather.precipitation is "rain" or Weather.name is "heavyClouds">>外海的风浪拍得船体发出令人牙酸的呻吟，堆叠的走私木箱在摇晃中撞出一条狭窄通道。
 <<elseif $pain gte 30>>粗糙的麻绳磨得你手腕发红，但渗入底舱的咸水正让麻绳结头一点点变滑。
 <<else>>你曲起膝盖顶住身前的木箱借力，借着舷窗漏进的惨白雾光打量着舱底抽水阀与门锁。<</if>>
-<<if $mpBadEndProgress gte 100>>
-	底舱门锁已被彻底打开，舷窗外也亮起了维斯快艇的三盏绿灯。
+<<if ($mpBadEndProgress or 0) gte 100>>
+	底舱立柱的麻绳已被彻底磨开，舷窗外也亮起了维斯快艇接应的三盏绿灯。
 	<br><br>
-	<<trialicon>><<link [[撬开走私金条箱跃上接应快艇 (0:15)|MP BadEnd Smuggler Cargo EscapeWin]]>><<pass 15>><</link>>
+	<<trialicon>><<link [[推开舷窗跃上接应快艇 (0:15)|MP BadEnd Smuggler Cargo EscapeWin]]>><<pass 15>><</link>>
 <<else>>
+	<<if ($mpBadEndProgress or 0) gte 60>>手腕麻绳已经松脱，只差找准船身倾斜的时机冲出底舱。<<elseif ($mpBadEndProgress or 0) gte 30>>底舱立柱的木楔已经晃动，守舱水手的注意力也开始涣散。<</if>>
 	<br><br>
-	<<sneakicon>><<link [[借船体颠簸用脚尖拧松底舱抽水铜阀 (0:20)|MP BadEnd Smuggler Cargo Bilge]]>><<pass 20>><<skulduggery 3>><</link>>
+	<<sneakicon>><<link [[借颠簸用鞋跟蹬抽水铜阀 (0:20)|MP BadEnd Smuggler Cargo Bilge]]>><<pass 20>><</link>>
 	<br>
-	<<brothelicon>><<link [[用木箱暗格里的朗姆酒引诱守舱水手开门 (0:18)|MP BadEnd Smuggler Cargo Rum]]>><<pass 18>><<arousal 300>><</link>><<promiscuous1>><<garousal>>
+	<<brothelicon>><<link [[敲击舱门拿朗姆酒引水手 (0:18)|MP BadEnd Smuggler Cargo Rum]]>><<pass 18>><</link>>
 	<br>
-	<<mphearticon>><<link [[在圆舷窗边划亮防风火柴引导维斯与同伴靠帮 (0:16)|MP BadEnd Smuggler Cargo Flare]]>><<pass 16>><<stress -6>><</link>><<lstress>>
+	<<mphearticon>><<link [[凑近圆舷窗划亮磷火信号 (0:16)|MP BadEnd Smuggler Cargo Flare]]>><<pass 16>><</link>>
+	<br>
+	<<investigateicon>><<link "借浪涌在货箱铁角磨绳结 (0:20)">><<pass 20>><<replace "#smuggler-cargo-patience">>
+	<<if ($willpower or 0) gte 450 or ($athletics or 0) gte 280>>
+		你顺着每一次海浪抛起船身的节奏，将手腕反绑的麻绳贴在货箱包角铁皮上反复摩擦，终于磨断了最外层的主股麻线。
+		<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<stress -2>><<lstress>>
+	<<else>>
+		剧烈颠簸的底舱晃得你胃里翻江倒海，手腕在粗糙的铁皮边擦破了皮，麻绳却反而越勒越紧。
+		<<set $mpBadEndDays to ($mpBadEndDays or 1) + 1>><<pain 4>><<stress 5>><<gpain>><<gstress>>
+	<</if>>
+	<</replace>><</link>>
+	<br>
+	<div id="smuggler-cargo-patience"></div>
 <</if>>
 
 :: MP BadEnd Smuggler Cargo Bilge [nobr]
 <<set $outside to 0>><<set $location to "pirate_ship">>
 <<effects>>
-你趁着一个大浪将船身抛起的瞬间，用鞋跟死死卡住底舱角落的黄铜抽水阀手柄，顺势往逆时针方向猛蹬。高压舱底水顿时嗤嗤喷涌而出，将固定立柱底座的木楔冲得松动了半寸。
-<<if $physique gte 12500>>你一鼓作气将整根立柱木楔拔出，手腕上的麻绳随之脱落，还在货箱夹层摸到了一包封存暗货。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
-<<else>>冰冷的舱底水打湿了你的裤脚，麻绳在木楔边缘磨断了一半纤维。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<tiredness 3>><</if>>
+你趁着一个大浪将船身抛起的瞬间，用鞋跟卡住底舱角落的黄铜抽水阀手柄。咸腥的舱底水在木板缝隙间晃荡。
 <br><br>
-<<walkicon>><<link [[将脱落的麻绳虚搭在手腕上伪装 (0:03)|MP BadEnd Smuggler Cargo]]>><<pass 3>><</link>>
+<<walkicon>><<link [[将麻绳虚搭腕上退回柱边 (0:03)|MP BadEnd Smuggler Cargo]]>><<pass 3>><</link>>
 <br>
-<<investigateicon>><<link [[撬开手边货箱检查内部物资 (0:05)|MP BadEnd Smuggler Cargo]]>><<pass 5>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="smuggler-bilge-choices">
+<<fisticon>><<link "逆时针猛蹬抽水阀冲松木楔 (0:10)">><<pass 10>><<replace "#smuggler-bilge-choices">>
+<<if ($physique or 10000) gte 12200 or ($athletics or 0) gte 300>>
+<span class="green">你双腿蓄力猛地一蹬，高压舱底水嗤嗤喷涌而出，将固定立柱底座的橡木楔冲松了大半，手腕上的麻绳随之滑落。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<physique 3>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">黄铜阀门锈得死紧，你鞋底一滑重重撞在隔间木板上，冰冷的舱底水溅湿了半条裤腿，阀门却只转了半格。</span>
+<<pain 4>><<tiredness 3>><<stress 4>><<gpain>><<gtiredness>><<gstress>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<sneakicon>><<link "用咸水浸滑手腕麻绳活结 (0:08)">><<pass 8>><<replace "#smuggler-bilge-choices">>
+<<set $skulduggerydifficulty to 350>><<skulduggerycheck "silent">>
+<<if $skulduggerysuccess is 1>>
+<span class="green">你借着渗出的润滑油与咸水浸湿绳圈，拇指微缩便从紧绷的双套结里滑出了右手。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<skulduggery 3>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">麻绳吸饱咸水后反而膨胀收紧，勒得你手腕阵阵发麻，一时半会儿没能抽开。</span>
+<<pain 3>><<stress 4>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Smuggler Cargo Rum [nobr]
 <<set $outside to 0>><<set $location to "pirate_ship">>
 <<effects>>
-你用指尖勾出货箱稻草里的黑瓶陈年朗姆酒，轻轻敲击舱门木板。满身酒气的守舱水手骂骂咧咧地拉开插销，一看见你脚边的酒瓶和微敞的领口，眼睛顿时直了。
-<<if $seductionskill gte 400 or $promiscuity gte 25>>你半垂着眼睫将酒瓶递过去，趁水手仰头猛灌的瞬间，用藏在袖口里的铜阀扳手精准敲晕了他，摸走了整串底舱钥匙。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<skulduggery 3>>
-<<else>>水手贪婪地抢过酒瓶痛饮，忘了重新挂上舱门外侧的铁链便靠在门边打起了呼噜。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><</if>>
+你用指尖勾出货箱稻草里的黑瓶陈年朗姆酒，轻轻敲击舱门木板。满身酒气的守舱水手骂骂咧咧地拉开插销探进头来。
 <br><br>
-<<walkicon>><<link [[跨过昏睡的水手探看甲板梯口 (0:03)|MP BadEnd Smuggler Cargo]]>><<pass 3>><</link>>
+<<walkicon>><<link [[退回隔间木柱旁静候 (0:03)|MP BadEnd Smuggler Cargo]]>><<pass 3>><</link>>
 <br>
-<<sneakicon>><<link [[顺手搜刮水手皮带上的零钱袋 (0:04)|MP BadEnd Smuggler Cargo]]>><<pass 4>><<money 2500>><</link>>
+<div id="smuggler-rum-choices">
+<<brothelicon>><<link "递酒引水手近身夺钥匙 (0:10)">><<pass 10>><<replace "#smuggler-rum-choices">>
+<<set $seductiondifficulty to 4200>><<seductioncheck>>
+<<if $seductionrating gte $seductionrequired or ($seductionskill or 0) gte 380 or ($skulduggery or 0) gte 380>>
+<span class="green">你半垂眼睫将黑瓶朗姆酒递过去，趁水手贪婪仰头猛灌的瞬间，用藏在袖口里的铜阀扳手精准敲在他后颈，顺手摘下了他腰间的底舱钥匙串。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_smuggler_sailor_pouch")>>
+	<<money 1500>>
+<</if>>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<skulduggery 3>><<stress -3>><<lstress>>
+<<else>>
+<span class="red">水手一把抢过酒瓶却没有靠近，反而隔着铁栏抓了把你的衣领调笑两句，随后打着酒嗝把舱门重重关上。</span>
+<<stress 5>><<arousal 300>><<gstress>><<garousal>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<socialiseicon>><<link "用走私暗货情报换松绑 (0:08)">><<pass 8>><<replace "#smuggler-rum-choices">>
+<<if ($english or 0) gte 280 or ($willpower or 0) gte 460>>
+<span class="green">你压低声音点破船长私吞三号箱红利的把柄，水手脸色变了变，半信半疑地替你松开了两圈腕绳，转身去甲板核实。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">水手根本不信你的说辞，往地上啐了一口，警告你少耍花样。</span>
+<<stress 4>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Smuggler Cargo Flare [nobr]
 <<set $outside to 0>><<set $location to "pirate_ship">>
 <<effects>>
-你垫着木箱凑到铸铁圆舷窗前，用防水火柴盒连续划出三道亮红色的磷火。海雾深处很快传来低沉的双冲程引擎轰鸣，维斯驾驶着黑色快艇贴着走私船盲区靠了上来，你的同伴正站在船头向你抛出带钩软梯。
-<<if $mpCompanion and $mpCompanion.isPartnerOnline>>你的同伴顺着软梯翻入底舱舷窗，三两下替你割断残余绳索，与你一起撬开了船长私藏的金条暗箱。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 65)>><<stress -12>>
-<<else>>维斯用包了黑布的铁钩稳稳锁住舷窗外沿，向你比出随时跳船的手势。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<stress -8>><</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_smuggler", 16, -8, -4, 0, 0, "与维斯驾驶快艇靠帮接应你逃离走私船", { love: 1, trust: 2 })>>
+你垫着木箱凑到铸铁圆舷窗前，用摸到的防水火柴盒连续划出三道亮红色的磷火。海雾深处隐约传来双冲程引擎的低鸣。
 <br><br>
-<<walkicon>><<link [[系紧救生索准备跳帮 (0:02)|MP BadEnd Smuggler Cargo]]>><<pass 2>><</link>>
+<<walkicon>><<link [[合上舷窗退回货箱后 (0:02)|MP BadEnd Smuggler Cargo]]>><<pass 2>><</link>>
 <br>
-<<investigateicon>><<link [[临走前再撬开一只密封货箱 (0:04)|MP BadEnd Smuggler Cargo]]>><<pass 4>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="smuggler-flare-choices">
+<<mphearticon>><<link "推开圆舷窗接住带钩软梯 (0:08)">><<pass 8>><<replace "#smuggler-flare-choices">>
+<<if ($mpCompanion and $mpCompanion.isPartnerOnline) or (($mpNpcs and $mpNpcs.vesper and ($mpNpcs.vesper.love or 0) gte 6)) or ($athletics or 0) gte 280>>
+<span class="green">维斯驾驶着黑色快艇贴着走私船盲区靠帮，包了黑布的铁钩稳稳锁住舷窗外沿，并向底舱抛入一把锋利的水手割绳刀。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 60)>><<stress -8>><<lstress>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_smuggler", 16, -8, -4, 0, 0, "与维斯驾驶快艇靠帮接应你逃离走私船", { love: 1, trust: 2 })>>
+<<else>>
+<span class="red">一个横浪突然拍在船舷上，抛来的带钩软梯擦着铸铁窗框滑进海里，甲板上随即响起巡视水手的脚步声，你只好先缩回阴影。</span>
+<<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<investigateicon>><<link "撬开手边防水油布暗箱 (0:06)">><<pass 6>><<replace "#smuggler-flare-choices">>
+<<if ($skulduggery or 0) gte 300 or ($physique or 10000) gte 11800>>
+<span class="green">你借着外海风浪的掩护用铁撬扁别开箱扣，不仅取出了一卷备用救生索固定在窗边，还摸到了一包封存暗货。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_smuggler_flare_crate")>>
+	<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+<</if>>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">木箱外层钉着双排铁皮箍，你徒手去掰时指甲被铁刺刮痛，没能撬开箱盖。</span>
+<<pain 3>><<stress 4>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Smuggler Cargo EscapeWin [nobr]
 <<set $outside to 0>><<set $location to "pirate_ship">>
 <<effects>>
 <<unset $mpBadEndProgress>><<unset $mpBadEndDays>>
-趁着风浪拍击甲板的巨响，你抱起船底暗格里的黑市金条箱与航海密匣，顺着舷窗软梯一跃跳上维斯的快艇。快艇引擎全速轰鸣，在走私船水手反应过来之前便切入礁石水道，平安驶回了旧港栈桥。
+趁着风浪拍击甲板的巨响，你推开底舱圆舷窗，顺着软梯一跃跳上维斯的接应快艇。快艇引擎全速轰鸣，在走私船水手反应过来之前便切入礁石水道，平安驶回了旧港栈桥。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_reward_smuggler_cargo")>>
-	<<set $money += 12000>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 3>><<willpower 9>><<stress -22>><<trauma -12>><<control 25>>
+	<<money 12000>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 3>><<willpower 9>><<stress -22>><<trauma -12>><<control 25>>
 <<else>>
-	<<set $money += 5500>><<willpower 3>><<stress -12>><<control 10>>
+	快艇冲破浓雾靠上旧港栈桥，你踩上坚实的陆地，长长舒了一口气。<<willpower 3>><<stress -12>><<control 10>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回旧港码头 (0:05)|Docks]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回旧港码头 (0:05)|Docks]]>><<set $outside to 1>><<set $location to "docks">><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[从梅尔街小巷离开 (0:06)|Mer Street]]>><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+<<walkicon>><<link [[从梅尔街小巷离开 (0:06)|Mer Street]]>><<set $outside to 1>><<set $location to "mer">><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP BadEnd Glasshouse Nectar [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>>
 <<set $mpBadEndProgress to ($mpBadEndProgress or 0)>>
 <<set $mpBadEndDays to ($mpBadEndDays or 1)>>
+<<if ($mpBadEndId or "") isnot "glasshouse">><<set $mpBadEndId to "glasshouse">><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><</if>>
 多瑙河秘密温室庄园的地下育种厅里水雾氤氲，高大的玻璃穹顶下垂落着无数泛着银光的肉质花藤。你的四肢被柔韧的藤蔓缠在恒温石床上，空气中甜腻的花粉雾气令你浑身发软。
 <<if $arousal gte 6000>>银脉兰分泌的温热花蜜滴落在你的锁骨与腿间，肌肤泛起一层近乎过敏的绯红，每一次喘息都带着甜香。
 <<elseif $worn.upper.integrity lte 40>>湿热的雾气浸透了你破损的衣衫，藤蔓顺着衣缝不断向内探入。
 <<else>>你屏住呼吸用湿衣袖掩住口鼻，目光锁定了石床右侧的玻璃培养皿碎片与冷凝水铜阀。<</if>>
-<<if $mpBadEndProgress gte 100>>
-	缠住四肢的主藤蔓已被割断，顶棚换气扇也吹散了催情花粉雾。
+<<if ($mpBadEndProgress or 0) gte 100>>
+	缠住四肢的主藤蔓已被割断，顶棚换气扇也彻底吹散了催情花粉雾。
 	<br><br>
-	<<trialicon>><<link [[取走浓缩银脉原液冲出温室庄园 (0:12)|MP BadEnd Glasshouse Nectar EscapeWin]]>><<pass 12>><</link>>
+	<<trialicon>><<link [[挣脱枯藤冲出温室后门 (0:12)|MP BadEnd Glasshouse Nectar EscapeWin]]>><<pass 12>><</link>>
 <<else>>
+	<<if ($mpBadEndProgress or 0) gte 60>>主藤蔓已经断了大半，厅内的甜腻香雾也明显变淡。<<elseif ($mpBadEndProgress or 0) gte 30>>你的右手已经能勉强活动，藤蔓的缠绕力道有所减弱。<</if>>
 	<br><br>
-	<<sneakicon>><<link [[捻起石床边的培养皿碎玻璃割断主藤蔓 (0:16)|MP BadEnd Glasshouse Nectar Shard]]>><<pass 16>><<skulduggery 3>><</link>>
+	<<sneakicon>><<link [[夹起碎玻璃切割腕部主藤 (0:16)|MP BadEnd Glasshouse Nectar Shard]]>><<pass 16>><</link>>
 	<br>
-	<<fisticon>><<link [[伸脚踢翻冷凝铜釜用冷水冲散花粉雾 (0:15)|MP BadEnd Glasshouse Nectar Valve]]>><<pass 15>><<physique 3>><<arousal -600>><</link>><<larousal>>
+	<<fisticon>><<link [[伸脚蹬向石床尾端冷凝釜 (0:15)|MP BadEnd Glasshouse Nectar Valve]]>><<pass 15>><</link>>
 	<br>
-	<<mphearticon>><<link [[拽动高处百叶通风绳向诺艾尔与同伴呼救 (0:18)|MP BadEnd Glasshouse Nectar Vent]]>><<pass 18>><<stress -6>><</link>><<lstress>>
+	<<mphearticon>><<link [[仰头拽动顶棚百叶拉绳 (0:18)|MP BadEnd Glasshouse Nectar Vent]]>><<pass 18>><</link>>
+	<br>
+	<<tendingicon>><<link "屏息顺着藤蔓脉动缩腕 (0:18)">><<pass 18>><<replace "#glasshouse-nectar-patience">>
+	<<if ($tending or 0) gte 280 or ($willpower or 0) gte 480>>
+		你看出这种嗜温银脉兰在喷淋间歇期会自然松弛气根，便屏住呼吸不再挣扎，趁藤蔓舒张的刹那将左腕抽出了半圈。
+		<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<arousal -300>><<stress -2>><<larousal>><<lstress>>
+	<<else>>
+		温热甜腻的花粉雾气随着你的呼吸涌入肺腑，不仅没能等来藤蔓松开，反而引得更多细藤缠上了脚踝。
+		<<set $mpBadEndDays to ($mpBadEndDays or 1) + 1>><<arousal 600>><<stress 4>><<garousal>><<gstress>>
+	<</if>>
+	<</replace>><</link>>
+	<br>
+	<div id="glasshouse-nectar-patience"></div>
 <</if>>
 
 :: MP BadEnd Glasshouse Nectar Shard [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>>
-你曲起手指夹住一枚锋利的弧形烧瓶碎玻璃，趁着花藤脉动收缩的间隙，贴着石床边缘反复切割最粗的一根银脉主藤。泛着荧光的汁液溅在石板上发出轻微的滋滋声。
-<<if $skulduggery gte 400 or $willpower gte 600>>你顶着甜香的侵袭一刀割断了主藤核心，右手彻底恢复了活动自如。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<willpower 2>>
-<<else>>滑腻的汁液令玻璃片有些打滑，虽然锯断了大半藤蔓，但花香也让你的呼吸更加灼热。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 30)>><<arousal 500>><</if>>
+你曲起手指夹住石床边一枚锋利的弧形烧瓶碎玻璃，贴着石床边缘对准最粗的一根银脉主藤。
 <br><br>
-<<walkicon>><<link [[握紧玻璃片继续切割左腕藤蔓 (0:03)|MP BadEnd Glasshouse Nectar]]>><<pass 3>><</link>>
+<<walkicon>><<link [[将玻璃片藏在掌心歇气 (0:03)|MP BadEnd Glasshouse Nectar]]>><<pass 3>><</link>>
 <br>
-<<investigateicon>><<link [[收集滴落在玉瓶里的银脉原液 (0:04)|MP BadEnd Glasshouse Nectar]]>><<pass 4>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="glasshouse-shard-choices">
+<<sneakicon>><<link "顶着甜香割断右腕主藤芯 (0:10)">><<pass 10>><<replace "#glasshouse-shard-choices">>
+<<if ($skulduggery or 0) gte 360 or ($willpower or 0) gte 550>>
+<span class="green">你咬紧舌尖保持清醒，弧形玻璃刃精准划开主藤韧皮部，泛着荧光的汁液嗤地溅开，你的右手彻底恢复了活动自如。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<willpower 2>><<stress -3>><<gwillpower>><<lstress>>
+<<else>>
+<span class="red">滑腻的花蜜令玻璃片在指间打滑，不但没能割断主藤芯，锋利的玻璃棱反而划破了你自己的手指，浓郁的花香趁机钻入鼻腔。</span>
+<<pain 4>><<arousal 500>><<stress 4>><<gpain>><<garousal>><<gstress>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<investigateicon>><<link "刮取石槽白垩粉涂抹腕部 (0:06)">><<pass 6>><<replace "#glasshouse-shard-choices">>
+<<if ($science or 0) gte 260 or ($tending or 0) gte 260>>
+<span class="green">你用玻璃片刮下石床排水槽边的干燥碱性白垩粉抹在手腕上，气根一碰到碱粉便迅速畏缩卷曲，松开了大半束缚。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">你刮下的只是普通的潮湿青苔泥，涂在腕上反而让藤蔓吸饱水分缠得更紧了。</span>
+<<stress 4>><<arousal 300>><<gstress>><<garousal>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Glasshouse Nectar Valve [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>>
-你将双腿蓄满力气，看准石床尾端那座正在加热的黄铜冷凝釜，猛地一脚踹在支架螺栓上。整桶冰凉的井水哗啦一声倾泻而下，瞬间浇灭了酒精炉，温室内的粉红香雾随之消散了大半。
-<<if $physique gte 13000>>铜釜倒地时砸断了石床脚部的铁扣，你的双腿当场挣脱了束缚，头脑也彻底恢复了清明。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 50)>><<arousal -1200>>
-<<else>>冰冷的井水溅湿了你的全身，让你从迷乱的燥热中清醒过来，藤蔓遇冷后明显畏缩松弛。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<arousal -600>><</if>>
+你将双腿蓄满力气，看准石床尾端那座正在加热的黄铜冷凝釜支架。釜底的酒精炉正源源不断地蒸发出粉红色的催情花雾。
 <br><br>
-<<walkicon>><<link [[借着冷水清醒心神 (0:02)|MP BadEnd Glasshouse Nectar]]>><<pass 2>><</link>>
+<<walkicon>><<link [[收回双腿平复喘息 (0:02)|MP BadEnd Glasshouse Nectar]]>><<pass 2>><</link>>
 <br>
-<<sneakicon>><<link [[用滚落的铜盖砸击腕部藤结 (0:04)|MP BadEnd Glasshouse Nectar]]>><<pass 4>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="glasshouse-valve-choices">
+<<fisticon>><<link "全力踹翻冷凝釜浇灭炉火 (0:08)">><<pass 8>><<replace "#glasshouse-valve-choices">>
+<<if ($physique or 10000) gte 12200 or ($athletics or 0) gte 300>>
+<span class="green">你猛地一脚踹在支架螺栓上，整桶冰凉的井水哗啦倾泻而下，当场浇灭了酒精炉，遇冷的银脉藤剧烈收缩，双腿束缚随之崩开。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 50)>><<arousal -1000>><<stress -3>><<larousal>><<lstress>>
+<<else>>
+<span class="red">缠在脚踝上的藤蔓扯偏了你的准头，你的脚背重重磕在滚烫的铜釜底座上，只晃洒出几滴热水，炉火反而烧得更旺了。</span>
+<<pain 5>><<arousal 400>><<stress 5>><<gpain>><<garousal>><<gstress>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<sneakicon>><<link "用脚趾勾转冷水泄压阀 (0:08)">><<pass 8>><<replace "#glasshouse-valve-choices">>
+<<if ($danceskill or 0) gte 280 or ($skulduggery or 0) gte 300>>
+<span class="green">你灵巧地探出脚尖勾住侧面的十字铜阀，一点点拧开冷水旁路，冰凉的水流顺着石床漫过全身，瞬间冲散了燥热的迷雾。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<arousal -600>><<larousal>>
+<<else>>
+<span class="red">十字铜阀被水垢卡得很紧，你的小腿抽筋般酸痛也没能拧动分毫。</span>
+<<pain 3>><<tiredness 3>><<gpain>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Glasshouse Nectar Vent [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>>
-你仰头抓住垂在石床上方的黄铜换气百叶拉绳，有节奏地用力拉扯了三次。几分钟后，温室顶部的天窗格栅被人从外侧撬开，诺艾尔与你的同伴顺着铁艺花架翻了进来，向厅内撒入了一把中和花粉的薄荷药粉。
-<<if $mpCompanion and ($mpCompanion.love gte 10 or $mpCompanion.isPartnerOnline)>>你的同伴快步冲到石床前，用园艺剪利落地剪断所有缠绕你的花藤，将一件干净的外套披在你肩上。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 60)>><<stress -10>><<arousal -1000>>
-<<else>>诺艾尔递给你一瓶清凉的解毒花露，帮你把最后一根银脉藤从脚踝上剥离下来。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 50)>><<stress -8>><</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_glasshouse", 18, -8, -4, 0, -500, "与诺艾尔潜入温室庄园替你驱散花粉脱困", { love: 1, trust: 2 })>>
+你仰头抓住垂在石床上方的黄铜换气百叶拉绳，有节奏地用力拉扯了三次。温室顶部的天窗格栅外传来了细碎的响动。
 <br><br>
-<<walkicon>><<link [[饮下清凉花露准备撤离 (0:03)|MP BadEnd Glasshouse Nectar]]>><<pass 3>><</link>>
+<<walkicon>><<link [[松开拉绳躺回石床 (0:03)|MP BadEnd Glasshouse Nectar]]>><<pass 3>><</link>>
 <br>
-<<investigateicon>><<link [[将桌面上的秘药手稿一并收走 (0:04)|MP BadEnd Glasshouse Nectar]]>><<pass 4>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="glasshouse-vent-choices">
+<<mphearticon>><<link "接过天窗抛下的薄荷药囊 (0:08)">><<pass 8>><<replace "#glasshouse-vent-choices">>
+<<if ($mpCompanion and ($mpCompanion.love gte 10 or $mpCompanion.isPartnerOnline)) or (($mpNpcs and $mpNpcs.noel and ($mpNpcs.noel.love or 0) gte 6)) or ($tending or 0) gte 260>>
+<span class="green">天窗格栅被从外侧撬开，诺艾尔顺着铁艺花架抛下一只清凉的薄荷驱藤药囊与园艺剪，厅内的催情花粉被夜风迅速抽散。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<stress -8>><<arousal -800>><<lstress>><<larousal>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_glasshouse", 18, -8, -4, 0, -500, "与诺艾尔潜入温室庄园替你驱散花粉脱困", { love: 1, trust: 2 })>>
+<<else>>
+<span class="red">黄铜拉绳在中途卡进了生锈的滑轮槽，天窗只掀开了一条细缝便重重落下，外面的巡夜园丁被声响惊动，朝育种厅走来。</span>
+<<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<socialiseicon>><<link "借着通风口呼唤花房外援 (0:06)">><<pass 6>><<replace "#glasshouse-vent-choices">>
+<<if ($willpower or 0) gte 440 or ($english or 0) gte 250>>
+<span class="green">你的声音顺着铜制通风管清晰传到了外廊，接应的同伴立刻在后门制造响动引开了守夜人。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -4>><<lstress>>
+<<else>>
+<span class="red">甜腻的花雾让你嗓音沙哑无力，微弱的呼喊被喷淋水声彻底淹没。</span>
+<<stress 4>><<arousal 300>><<gstress>><<garousal>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Glasshouse Nectar EscapeWin [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>>
 <<unset $mpBadEndProgress>><<unset $mpBadEndDays>>
-你摆脱了最后几缕枯萎的银脉花藤，将实验台上密封的千年银脉原液与多瑙河名流往来账册塞入怀中，与诺艾尔及同伴一起撞开温室后侧的铸铁花门，穿过冬青树篱回到了街道上。
+你摆脱了最后几缕枯萎的银脉花藤，与接应的诺艾尔一起推开温室后侧的铸铁花门，穿过冬青树篱回到了清爽的街道上。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_reward_glasshouse_nectar")>>
-	<<set $money += 16000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -20>><<trauma -10>><<control 25>>
+	<<money 16000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -20>><<trauma -10>><<control 25>>
 <<else>>
-	<<set $money += 3500>><<willpower 3>><<stress -10>><<control 10>>
+	晚风吹散了身上残存的花草甜香，你的呼吸彻底恢复了顺畅。<<willpower 3>><<stress -10>><<control 10>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回多瑙河街 (0:05)|Danube Street]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回多瑙河街 (0:05)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[穿入公园小径 (0:06)|Park]]>><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+<<walkicon>><<link [[穿入公园小径 (0:06)|Park]]>><<set $outside to 1>><<set $location to "park">><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP BadEnd Bailey Basement [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>>
 <<set $mpBadEndProgress to ($mpBadEndProgress or 0)>>
 <<set $mpBadEndDays to ($mpBadEndDays or 1)>>
+<<if ($mpBadEndId or "") isnot "bailey">><<set $mpBadEndId to "bailey">><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><</if>>
 孤儿院地底最深处的训诫室里只亮着一盏刺眼的白炽灯。你的手腕被黑铁短链锁在生锈的暖气主管旁，铁桌面上摆着一份逼你签字的长期苦工契约，门外走廊不时传来打手皮靴踱步的声响。
 <<if $pain gte 40>>手腕与后背的淤青隐隐作痛，但暖气管道传来的温热让你的手指依然保持着灵活。
 <<elseif $stress gte 5000>>刺眼的灯光照得你眼眶发酸，你强迫自己把注意力集中在墙角松动的运煤滑道铁板上。
 <<else>>你借着阴影的掩护曲起手指，仔细摸索着暖气主管法兰盘与墙角运煤口的位置。<</if>>
-<<if $mpBadEndProgress gte 100>>
-	运煤滑道的铁盖已被撬开，林恩与你的同伴也在锅炉房一侧接应就位。
+<<if ($mpBadEndProgress or 0) gte 100>>
+	运煤滑道的铁盖已被彻底撬开，林恩也在锅炉房一侧备好了接应撬棍。
 	<br><br>
-	<<trialicon>><<link [[席卷铁柜里的救济金顺运煤道脱困 (0:12)|MP BadEnd Bailey Basement EscapeWin]]>><<pass 12>><</link>>
+	<<trialicon>><<link [[顺锅炉房运煤道滑出脱困 (0:12)|MP BadEnd Bailey Basement EscapeWin]]>><<pass 12>><</link>>
 <<else>>
+	<<if ($mpBadEndProgress or 0) gte 60>>腕铐螺栓与运煤滑道合页都已松脱，随时可以撤离。<<elseif ($mpBadEndProgress or 0) gte 30>>你已经藏好了撬锁工具，并摸清了门外打手巡查的间隙。<</if>>
 	<br><br>
-	<<socialiseicon>><<link [[假装体力不支低头签字引诱看守解开副铐 (0:18)|MP BadEnd Bailey Basement Feign]]>><<pass 18>><<stress -4>><</link>><<lstress>>
+	<<socialiseicon>><<link [[低头装作体力不支肯签字 (0:18)|MP BadEnd Bailey Basement Feign]]>><<pass 18>><</link>>
 	<br>
-	<<sneakicon>><<link [[用砖缝里的旧铁钉撬动锅炉房运煤滑道 (0:20)|MP BadEnd Bailey Basement Chute]]>><<pass 20>><<skulduggery 4>><</link>>
+	<<sneakicon>><<link [[抠出墙缝铁钉撬运煤铁盖 (0:20)|MP BadEnd Bailey Basement Chute]]>><<pass 20>><</link>>
 	<br>
-	<<mphearticon>><<link [[用铁铐规律敲击暖气主管联络林恩与同伴 (0:16)|MP BadEnd Bailey Basement Pipe]]>><<pass 16>><<trauma -5>><</link>><<ltrauma>>
+	<<mphearticon>><<link [[用铁铐规律敲击暖气主管 (0:16)|MP BadEnd Bailey Basement Pipe]]>><<pass 16>><</link>>
+	<br>
+	<<investigateicon>><<link "借着管道热胀拧动法兰螺母 (0:20)">><<pass 20>><<replace "#bailey-basement-patience">>
+	<<if ($willpower or 0) gte 460 or ($physique or 10000) gte 11800>>
+		你耐心地等到夜间锅炉房加压供暖的时刻，趁着铸铁法兰盘热胀微松，垫着衣角将固定锁链的六角螺母拧松了三圈。
+		<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<stress -2>><<lstress>>
+	<<else>>
+		滚烫的暖气主管烫红了你的指腹，六角螺母被铁锈咬死，你白白耗费了力气也没能拧动半分。
+		<<set $mpBadEndDays to ($mpBadEndDays or 1) + 1>><<pain 4>><<stress 4>><<gpain>><<gstress>>
+	<</if>>
+	<</replace>><</link>>
+	<br>
+	<div id="bailey-basement-patience"></div>
 <</if>>
 
 :: MP BadEnd Bailey Basement Feign [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>>
-你故意垂下脑袋，发出虚弱的喘息声，向门外看守示意自己愿意在契约上按手印。黑衣打手冷笑着推门进来，掏出钥匙解开了你右手的副铐，把钢笔塞进你手里。
-<<if $skulduggery gte 450 or $physique gte 13000>>你假装握不稳钢笔将其掉在桌下，趁打手弯腰的瞬间顺走了他挂在皮带副环上的半截铜匙。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<skulduggery 3>>
-<<else>>你故意将墨水弄翻在契约纸上，迫使打手骂骂咧咧地转身去楼上重拿空白契约，为你争取到了宝贵的独处空档。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 30)>><</if>>
+你故意垂下脑袋，发出虚弱的喘息声，向门外看守示意自己愿意在契约上按手印。黑衣打手冷笑着推门进来，掏出钥匙解开了你右手的副铐。
 <br><br>
-<<walkicon>><<link [[握紧藏好的工具退回管边 (0:02)|MP BadEnd Bailey Basement]]>><<pass 2>><</link>>
+<<walkicon>><<link [[退回暖气主管旁坐下 (0:02)|MP BadEnd Bailey Basement]]>><<pass 2>><</link>>
 <br>
-<<investigateicon>><<link [[趁机窥看铁桌抽屉里的账册编号 (0:04)|MP BadEnd Bailey Basement]]>><<pass 4>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="bailey-feign-choices">
+<<sneakicon>><<link "假装掉笔顺走皮带副匙 (0:08)">><<pass 8>><<replace "#bailey-feign-choices">>
+<<set $skulduggerydifficulty to 380>><<skulduggerycheck "silent">>
+<<if $skulduggerysuccess is 1>>
+<span class="green">你假装手抖握不住钢笔将其掉在铁桌下，趁打手低头怒骂的瞬间，两指飞快地摘下了他皮带副环上的半截备用铜匙。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 45)>><<skulduggery 3>><<stress -3>><<lstress>>
+<<else>>
+<span class="red">打手一眼识破了你的小动作，一脚踢开钢笔并重新锁紧了你的副铐，威胁你再耍花招就饿上两天。</span>
+<<pain 5>><<stress 6>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<socialiseicon>><<link "碰翻墨水瓶逼打手去重取 (0:06)">><<pass 6>><<replace "#bailey-feign-choices">>
+<<if ($english or 0) gte 250 or ($willpower or 0) gte 450>>
+<span class="green">你装作眼花手滑将整瓶蓝黑墨水泼在了契约金额栏上，连声赔罪，逼得打手骂骂咧咧地锁门上楼重拿空白契约，为你争取到一刻钟空档。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 35)>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">打手眼疾手快地按住了墨水瓶，反手将你的手腕按在冰冷的铁桌面上，逼你在角落先按了个指印。</span>
+<<pain 4>><<stress 5>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Bailey Basement Chute [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>>
-你把从墙角抠出的扁平长铁钉插进运煤滑道铁盖的合页缝里，借着全身重量一点点向下压动。老旧的铸铁合页发出一声低不可闻的闷响，露出了后方通往旧锅炉房的倾斜滑道。
-<<if $skulduggery gte 500>>你顺着滑道边缘摸到了一个被前任院童藏在煤灰下的铁皮盒，里面装着几枚古银币与一把小巧的十字螺丝刀。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 50)>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
-<<else>>铁盖已被你撬开了大半，只剩最后一颗螺丝固定着。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><</if>>
+你把从墙角抠出的扁平长铁钉插进运煤滑道铁盖的合页缝里，后方通往旧锅炉房的倾斜滑道隐约透出一丝煤灰气。
 <br><br>
-<<walkicon>><<link [[用煤灰掩住合页撬痕 (0:03)|MP BadEnd Bailey Basement]]>><<pass 3>><</link>>
+<<walkicon>><<link [[用煤灰掩住撬痕退回 (0:03)|MP BadEnd Bailey Basement]]>><<pass 3>><</link>>
 <br>
-<<sneakicon>><<link [[用螺丝刀卸松腕铐螺栓 (0:04)|MP BadEnd Bailey Basement]]>><<pass 4>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="bailey-chute-choices">
+<<sneakicon>><<link "借全身重量撬开铸铁合页 (0:10)">><<pass 10>><<replace "#bailey-chute-choices">>
+<<if ($skulduggery or 0) gte 380 or ($physique or 10000) gte 12200>>
+<span class="green">你用湿布包住铁钉尾端用力下压，老旧的铸铁合页发出一声极轻的闷响，两颗锈钉应声崩断，滑道铁盖被你彻底掀开。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 50)>><<skulduggery 3>><<stress -2>><<lstress>>
+<<else>>
+<span class="red">扁铁钉在坚硬的合页缝里弯折成两截，你的指节重重磕在水泥墙角上，合页只撬开了一条窄缝。</span>
+<<pain 5>><<stress 5>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<investigateicon>><<link "摸索滑道内壁前人藏物盒 (0:06)">><<pass 6>><<replace "#bailey-chute-choices">>
+<<if ($skulduggery or 0) gte 300 or ($history or 0) gte 250>>
+<span class="green">你顺着滑道内壁的松动砖块摸进去，取出一只被前任院童藏在煤灰下的铁皮盒，里面有一把小巧的十字螺丝刀。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -3>><<lstress>>
+<<else>>
+<span class="red">滑道里积满了呛人的黑煤灰，你摸了半天只抓出一手煤渣，还差点呛得咳嗽出声。</span>
+<<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Bailey Basement Pipe [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>>
-你举起手腕上的黑铁短链，按照孤儿院夜间查房的暗号，在通往楼上卧室的暖气主管上连续敲击了五下。不到半分钟，管壁传来了清晰而有力的回击声，紧接着运煤滑道下方亮起了手电筒的光束。
-<<if $mpCompanion and ($mpCompanion.love gte 10 or $mpCompanion.isPartnerOnline)>>你的同伴与林恩顺着锅炉房滑道爬到挡板后，用液压钢筋钳一下剪断了你的铁链，紧紧握住你冰凉的手。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 65)>><<stress -12>><<pain -8>>
-<<else>>林恩从运煤口递进一根撬棍和一卷绷带，低声叮嘱你拿上铁柜里的账袋立刻撤离。<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<stress -8>><</if>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_bailey", 16, -10, -5, 0, 0, "与林恩顺着锅炉房运煤道救你脱离地下训诫室", { love: 2, trust: 2 })>>
+你举起手腕上的黑铁短链，按照孤儿院夜间查房的暗号，在通往楼上与锅炉房的暖气主管上连续敲击了五下。
 <br><br>
-<<walkicon>><<link [[缠好手腕绷带准备撤离 (0:02)|MP BadEnd Bailey Basement]]>><<pass 2>><</link>>
+<<walkicon>><<link [[放轻铁链静待回音 (0:02)|MP BadEnd Bailey Basement]]>><<pass 2>><</link>>
 <br>
-<<investigateicon>><<link [[撬开训诫室墙角的备用铁柜 (0:04)|MP BadEnd Bailey Basement]]>><<pass 4>><<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 10)>><</link>>
+<div id="bailey-pipe-choices">
+<<mphearticon>><<link "从运煤口接过林恩的撬棍 (0:08)">><<pass 8>><<replace "#bailey-pipe-choices">>
+<<if ($mpCompanion and ($mpCompanion.love gte 10 or $mpCompanion.isPartnerOnline)) or (($mpNpcs and $mpNpcs.lin and ($mpNpcs.lin.love or 0) gte 6)) or ($willpower or 0) gte 440>>
+<span class="green">管壁很快传来三记沉稳有力的回击，林恩顺着锅炉房运煤滑道爬到挡板后，将一根钢制撬棍与一卷护腕绷带塞进你手里。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 60)>><<stress -10>><<pain -4>><<lstress>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_bailey", 16, -10, -5, 0, 0, "与林恩顺着锅炉房运煤道救你脱离地下训诫室", { love: 2, trust: 2 })>>
+<<else>>
+<span class="red">锅炉房正好在排汽放水，巨大的蒸汽嘶鸣声掩盖了管壁的敲击暗号，门外打手反而敲了敲铁门喝令你安静。</span>
+<<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<sneakicon>><<link "用撬棍别开墙角旧账铁柜 (0:06)">><<pass 6>><<replace "#bailey-pipe-choices">>
+<<if ($skulduggery or 0) gte 320 or ($physique or 10000) gte 12000>>
+<span class="green">你借着暖气管道的掩护用撬棍别开墙角备用铁柜的挂锁，将里面的半叠黑账收据收进怀中，同时解开了主链挂钩。</span>
+<<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -3>><<lstress>>
+<<else>>
+<span class="red">铁柜挂锁纹丝不动，金属摩擦声惊动了走廊尽头的看守，你只得迅速缩回管边假装闭目养神。</span>
+<<stress 5>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
 
 :: MP BadEnd Bailey Basement EscapeWin [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>>
 <<unset $mpBadEndProgress>><<unset $mpBadEndDays>>
-你用撬棍一把别开训诫室铁柜，将贝利克扣的孤儿院救济金与半叠黑账收据尽数塞进怀里，随后滑入运煤通道。林恩在后方用铁栓反锁了滑道重门，护送你与同伴从花园枯井侧门安然返回了孤儿院。
+你挣开暖气主管上的黑铁短链，顺着撬开的运煤滑道滑入旧锅炉房。林恩在后方用铁栓反锁了滑道重门，护送你从花园枯井侧门安然返回了孤儿院。
 <<if ($mpQuestBaileyRebellion or 0) lt 8>><<set $mpQuestBaileyRebellion to ($mpQuestBaileyRebellion or 0) + 1>><</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_reward_bailey_basement")>>
-	<<set $money += 14000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<willpower 8>><<stress -20>><<trauma -12>><<control 25>>
+	<<money 14000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<willpower 8>><<stress -20>><<trauma -12>><<control 25>>
 <<else>>
-	<<set $money += 15000>><<willpower 3>><<stress -10>><<control 10>>
+	你顺着熟悉的锅炉房秘道脱身，回到安全的走廊后长舒了一口气。<<willpower 3>><<stress -10>><<control 10>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回孤儿院大厅 (0:04)|Orphanage]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回孤儿院大厅 (0:04)|Orphanage]]>><<set $outside to 0>><<set $location to "orphanage">><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[先回卧室换洗休整 (0:05)|Bedroom]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+<<walkicon>><<link [[先回卧室换洗休整 (0:05)|Bedroom]]>><<set $outside to 0>><<set $location to "bedroom">><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>

@@ -1,0 +1,45 @@
+# Argon 工作包 v6 · 从这里开始
+
+## 包内是什么
+
+- `mod-src/`：DoL-MP 1.2.0-dev5 完整源码（38 个 twee，1294 个 passage）
+  - 城镇/荒野暗线、城镇小事、荒野小事
+  - 12 条长期零工 + 零工伙伴 + 随机/季节/失败/三级惩罚
+  - 12 条零工的季节/失败/随机插入段（dev5 新增）
+  - NPC 日常 + 6 位常驻 NPC 的 10 阶段任务
+  - 12 个主节日 + 3 个小节令
+  - 8 个新区域（入口 / Scout / Ask / 32 子区域 / Rest）
+  - 5 处软坏结局
+- `ARGON_PROMPT_V5.md`：主写作规则
+- `ARGON_HANDOFF_V4.md`：架构与硬规则
+- `ARGON_NEXT_TASK.md`：**这一批要做的返修 + 新内容**
+- `docs/`：审核、原版对照、节日日历、自检
+- `docs/argon-dev5-audit.md`：上一批的接入记录和遗留问题
+- `sample_briar_split.twee`：7 段样张
+- `reference/`：本体检查、地点、发现、打工收入、模板句
+- `quota.md` / `used_scenes.md` / `used_openings.md`
+
+## 阅读顺序
+
+1. `ARGON_NEXT_TASK.md`（先看你这一批要做什么）
+2. `docs/argon-dev5-audit.md`（上一批哪里被改了、为什么）
+3. `ARGON_PROMPT_V5.md`
+4. `docs/vanilla-job-punishment-comparison.md`
+5. `sample_briar_split.twee`
+6. 需要时查 `reference/`
+
+## 本批最重要的三条
+
+1. **先返修再扩写**：NPC 任务阶段要加检定，区域瞬时事件不要传送，Search 低分支不要无限刷钱。
+2. **不显示 Lv/等级/经验**；进度用叙事、钥匙、铜牌、熟客行为表达。
+3. 每个 passage 开头 `$outside` / `$location`，加 `[nobr]`，检查失败有代价但不扣钱。
+
+## 验收
+
+- passage 名唯一、断链 0、宏闭合 0 错误
+- 每段 `$outside` / `$location` / `[nobr]`
+- 未注册图标 0
+- 失败不扣存款
+- 没有 Lv/等级/经验数字
+- 新内容可从入口 BFS 到达
+- 不修改 `boot.json` / `mp.js`；Hub 留好，由集成方接线

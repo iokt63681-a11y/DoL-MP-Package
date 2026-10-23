@@ -61,6 +61,10 @@
 <<set $mpJobBakeryCount to ($mpJobBakeryCount or 0)>>
 <<set _stage to ($mpJobBakeryCount gte 15 ? 4 : $mpJobBakeryCount gte 10 ? 3 : $mpJobBakeryCount gte 6 ? 2 : $mpJobBakeryCount gte 3 ? 1 : 0)>>
 早市的钟声刚响过第一遍，三层铁烤架上的黑麦面团已经鼓起饱满的弧度，前厅橱窗外排起了买热面包的街坊。炉温正高，热浪扑在脸上让人鼻尖冒汗，师傅在案板另一头喊你搭手。
+<<if Weather.isSnow>><<include "MP Job Seasonal Bakery Winter">>
+<<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Bakery Rain">>
+<<elseif Time.season is "autumn">><<include "MP Job Seasonal Bakery Festival">>
+<</if>>
 <br><br>
 <<tendingicon>><<link [[掌铲看管主炉火候 (0:18)|MP Job Bakery Settle]]>>
 	<<set _sk to ($tending or 0)>>
@@ -184,16 +188,12 @@
 	师傅从木抽屉里点出工钱塞进你手心，温热的硬币还带着烤炉边的暖意。
 	<<if ($mpJobBakeryStrike or 0) gt 0>><<set $mpJobBakeryStrike to Math.max(0, $mpJobBakeryStrike - 1)>><</if>>
 	<br><br>
-	<<set _ev to random(1, 4)>>
-	<<if _ev is 1>>
-		隔壁咖啡馆的帮工跑来借了一小罐肉桂粉，顺手帮你把门口的空面粉袋摞到了墙角。<<stress -1>>
-	<<elseif _ev is 2>>
-		一只麻雀停在透气窗台上啄食散落的麦屑，你吹了声口哨，它歪着脑袋看了你半晌。<<stress -2>>
-	<<elseif _ev is 3>>
-		刚出炉的糖霜卷粘在了油纸上，你耐心地用小竹签一点点挑开，指尖沾了一层甜香。<<tiredness 1>>
-	<<else>>
-		一位赶早班车的邮差买走最后两只牛角包，把多出的几枚零钱留在了柜台木碟里。<<stress -1>>
-	<</if>>
+	<<set _ev to random(1, 3)>>
+	<<switch _ev>>
+	<<case 1>><<include "MP Job Random Bakery 1">>
+	<<case 2>><<include "MP Job Random Bakery 2">>
+	<<case 3>><<include "MP Job Random Bakery 3">>
+	<</switch>>
 	<<if _stage gte 3>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_bakery_milestone")>>
 			<br><br>
@@ -205,13 +205,9 @@
 	<<set $mpJobBakeryStrike to Math.min(3, ($mpJobBakeryStrike or 0) + 1)>>
 	<<if $mpJobBakeryStrike is 2>><<set $mpJobBakeryPenalty to 1>><<elseif $mpJobBakeryStrike gte 3>><<set $mpJobBakerySuspended to 1>><</if>>
 	<br><br>
-	<<if $mpJobBakeryStrike is 1>>
-		师傅把焦黑的残渣扫进铁桶，沉着脸警告你下不为例，今天这班白干了。
-	<<elseif $mpJobBakeryStrike is 2>>
-		师傅叹了口气，把原本留给你的热奶酥和发酵室钥匙收了回去，让你先去反省。
-	<<else>>
-		师傅直接摘下了你的亚麻手垫挂回墙钉：「你这几天心不在焉，先停几天早班，什么时候把杂事理清再过来。」
-	<</if>>
+	<<if $mpJobBakeryStrike is 1>><<include "MP Job Failure Bakery 1">>
+	<<elseif $mpJobBakeryStrike is 2>><<include "MP Job Failure Bakery 2">>
+	<<else>><<include "MP Job Failure Bakery 3">><</if>>
 <</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
 <br><br>
@@ -253,6 +249,10 @@
 <<set $mpJobTailorCount to ($mpJobTailorCount or 0)>>
 <<set _stage to ($mpJobTailorCount gte 15 ? 4 : $mpJobTailorCount gte 10 ? 3 : $mpJobTailorCount gte 6 ? 2 : $mpJobTailorCount gte 3 ? 1 : 0)>>
 午后的试衣间门帘不时掀动，衣架上挂满了等待收腰、换衬里和钉暗扣的礼服与制服。老裁缝踩着踏板发出规律的哒哒声，把几件标着取衣钟点的衣裳推到你的工作台边。
+<<if Weather.isSnow>><<include "MP Job Seasonal Tailor Winter">>
+<<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Tailor Rain">>
+<<elseif Time.season is "autumn">><<include "MP Job Seasonal Tailor Festival">>
+<</if>>
 <br><br>
 <<sneakicon>><<link [[改礼服暗衬与隐扣 (0:18)|MP Job Tailor Settle]]>>
 	<<set _sk to ($skulduggery or 0)>>
@@ -376,16 +376,12 @@
 	老裁缝推了推鼻梁上的老花镜，把算好的手工钱放在你的软尺旁边。
 	<<if ($mpJobTailorStrike or 0) gt 0>><<set $mpJobTailorStrike to Math.max(0, $mpJobTailorStrike - 1)>><</if>>
 	<br><br>
-	<<set _ev to random(1, 4)>>
-	<<if _ev is 1>>
-		你在拆一件旧马甲的口袋时摸到一枚失去光泽的铜顶针，老裁缝看了一眼说归你留着用。<<stress -1>>
-	<<elseif _ev is 2>>
-		莫奈来店里挑丝绒衬布，顺手教你打了一个不易散开的法式暗结。<<stress -2>>
-	<<elseif _ev is 3>>
-		窗外的雨点敲打着橱窗玻璃，屋里蒸汽熨斗的白雾让你眼皮有些发沉。<<tiredness 1>>
-	<<else>>
-		一位女学生红着脸来改撑裂的百褶裙腰扣，你帮她悄悄遮掩过去，她感激地朝你弯了弯眼睛。<<stress -1>>
-	<</if>>
+	<<set _ev to random(1, 3)>>
+	<<switch _ev>>
+	<<case 1>><<include "MP Job Random Tailor 1">>
+	<<case 2>><<include "MP Job Random Tailor 2">>
+	<<case 3>><<include "MP Job Random Tailor 3">>
+	<</switch>>
 	<<if _stage gte 3>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_tailor_milestone")>>
 			<br><br>
@@ -397,13 +393,9 @@
 	<<set $mpJobTailorStrike to Math.min(3, ($mpJobTailorStrike or 0) + 1)>>
 	<<if $mpJobTailorStrike is 2>><<set $mpJobTailorPenalty to 1>><<elseif $mpJobTailorStrike gte 3>><<set $mpJobTailorSuspended to 1>><</if>>
 	<br><br>
-	<<if $mpJobTailorStrike is 1>>
-		老裁缝把受损的布料收进柜台下，冷淡地提醒你今天没有工钱，下回拿稳剪刀。
-	<<elseif $mpJobTailorStrike is 2>>
-		老裁缝收回了副台上的镀银剪刀与加急单优待，让你这几天只准做粗活。
-	<<else>>
-		老裁缝直接合上了你的针线匣：「手不稳就先歇几天，等把赔礼和杂活办妥了再上台。」
-	<</if>>
+	<<if $mpJobTailorStrike is 1>><<include "MP Job Failure Tailor 1">>
+	<<elseif $mpJobTailorStrike is 2>><<include "MP Job Failure Tailor 2">>
+	<<else>><<include "MP Job Failure Tailor 3">><</if>>
 <</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
 <br><br>
@@ -445,6 +437,10 @@
 <<set $mpJobCourierCount to ($mpJobCourierCount or 0)>>
 <<set _stage to ($mpJobCourierCount gte 15 ? 4 : $mpJobCourierCount gte 10 ? 3 : $mpJobCourierCount gte 6 ? 2 : $mpJobCourierCount gte 3 ? 1 : 0)>>
 街口的报时钟敲过整点，帆布挎包里塞满了封着红蜡的商行急件与住户包裹。石板路被晨雾润得微滑，几条近道小巷里不时有野狗与推车穿行。
+<<if Weather.isSnow>><<include "MP Job Seasonal Courier Winter">>
+<<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Courier Rain">>
+<<elseif Time.season is "autumn">><<include "MP Job Seasonal Courier Festival">>
+<</if>>
 <br><br>
 <<runicon>><<link [[走捷径派送跨区急件 (0:18)|MP Job Courier Settle]]>>
 	<<set _sk to ($athletics or 0)>>
@@ -568,16 +564,12 @@
 	老邮差核对完回执数目，从铁皮钱匣里数出跑腿工钱递到你手里。
 	<<if ($mpJobCourierStrike or 0) gt 0>><<set $mpJobCourierStrike to Math.max(0, $mpJobCourierStrike - 1)>><</if>>
 	<br><br>
-	<<set _ev to random(1, 4)>>
-	<<if _ev is 1>>
-		路过宅邸街时，一位老太太塞给你一颗薄荷硬糖，夸你敲门的声音比别人温和。<<stress -2>>
-	<<elseif _ev is 2>>
-		巷子里的虎斑猫跟着你的铜铃声跑了半条街，在台阶上蹭了蹭你的裤脚。<<stress -1>>
-	<<elseif _ev is 3>>
-		迎面吹来的街风有些急，你按住帽檐紧赶了几步，小腿肚隐隐发酸。<<tiredness 1>>
-	<<else>>
-		你在信筒底部捡到一枚没贴稳的纪念邮票，老邮差让你夹进自己的小本子里收着。<<stress -1>>
-	<</if>>
+	<<set _ev to random(1, 3)>>
+	<<switch _ev>>
+	<<case 1>><<include "MP Job Random Courier 1">>
+	<<case 2>><<include "MP Job Random Courier 2">>
+	<<case 3>><<include "MP Job Random Courier 3">>
+	<</switch>>
 	<<if _stage gte 3>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_courier_milestone")>>
 			<br><br>
@@ -589,13 +581,9 @@
 	<<set $mpJobCourierStrike to Math.min(3, ($mpJobCourierStrike or 0) + 1)>>
 	<<if $mpJobCourierStrike is 2>><<set $mpJobCourierPenalty to 1>><<elseif $mpJobCourierStrike gte 3>><<set $mpJobCourierSuspended to 1>><</if>>
 	<br><br>
-	<<if $mpJobCourierStrike is 1>>
-		老邮差把退回的信件拍在木台上，警告你今天这趟白跑，明天必须看准门牌。
-	<<elseif $mpJobCourierStrike is 2>>
-		老邮差收走了你的远线专送铜牌，把你的派件抽成降到了最低档。
-	<<else>>
-		老邮差直接把帆布挎包收进窗内锁好：「接连误事可不行，你先停几天班，把积压的杂差补上再说。」
-	<</if>>
+	<<if $mpJobCourierStrike is 1>><<include "MP Job Failure Courier 1">>
+	<<elseif $mpJobCourierStrike is 2>><<include "MP Job Failure Courier 2">>
+	<<else>><<include "MP Job Failure Courier 3">><</if>>
 <</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
 <br><br>
@@ -637,6 +625,10 @@
 <<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0)>>
 <<set _stage to ($mpJobPubKitchenCount gte 15 ? 4 : $mpJobPubKitchenCount gte 10 ? 3 : $mpJobPubKitchenCount gte 6 ? 2 : $mpJobPubKitchenCount gte 3 ? 1 : 0)>>
 前厅酒客的喧哗声隔着摆门传进来，传菜铃接连不断地响起。铁板上的香肠滋滋冒油，地窖楼梯口还堆着刚送来的四桶黑麦啤酒。
+<<if Weather.isSnow>><<include "MP Job Seasonal PubKitchen Winter">>
+<<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal PubKitchen Rain">>
+<<elseif Time.season is "autumn">><<include "MP Job Seasonal PubKitchen Festival">>
+<</if>>
 <br><br>
 <<tendingicon>><<link [[掌管烤肉切配出餐 (0:18)|MP Job PubKitchen Settle]]>>
 	<<set _sk to ($housekeeping or 0)>>
@@ -760,16 +752,12 @@
 	厨娘在油腻的围裙上擦了擦手，从铁盒里数出工钱塞进你兜里。
 	<<if ($mpJobPubKitchenStrike or 0) gt 0>><<set $mpJobPubKitchenStrike to Math.max(0, $mpJobPubKitchenStrike - 1)>><</if>>
 	<br><br>
-	<<set _ev to random(1, 4)>>
-	<<if _ev is 1>>
-		厨娘把切下来的一小块脆皮烤肉塞进你嘴里，让你尝尝今晚的盐味正不正。<<stress -2>>
-	<<elseif _ev is 2>>
-		前厅传来行吟诗人弹奏鲁特琴的欢快调子，连洗碗的节奏都跟着轻快起来。<<stress -1>>
-	<<elseif _ev is 3>>
-		后厨的排烟扇卡了一下，呛人的油烟熏得你揉了揉眼睛。<<tiredness 1>>
-	<<else>>
-		雷恩从后门经过讨了一杯冷水，顺手帮你将一只卡住的木桶扶正。<<stress -1>>
-	<</if>>
+	<<set _ev to random(1, 3)>>
+	<<switch _ev>>
+	<<case 1>><<include "MP Job Random PubKitchen 1">>
+	<<case 2>><<include "MP Job Random PubKitchen 2">>
+	<<case 3>><<include "MP Job Random PubKitchen 3">>
+	<</switch>>
 	<<if _stage gte 3>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_pubkitchen_milestone")>>
 			<br><br>
@@ -781,13 +769,9 @@
 	<<set $mpJobPubKitchenStrike to Math.min(3, ($mpJobPubKitchenStrike or 0) + 1)>>
 	<<if $mpJobPubKitchenStrike is 2>><<set $mpJobPubKitchenPenalty to 1>><<elseif $mpJobPubKitchenStrike gte 3>><<set $mpJobPubKitchenSuspended to 1>><</if>>
 	<br><br>
-	<<if $mpJobPubKitchenStrike is 1>>
-		厨娘把木勺重重搁在锅沿上，宣布你今天这班没有工钱，先把地面擦干净再走。
-	<<elseif $mpJobPubKitchenStrike is 2>>
-		厨娘收走了你的地窖副匙与热汤福利，让你这几天老老实实干粗活。
-	<<else>>
-		厨娘直接把你的围裙摘下来扔进竹篓：「再这么砸下去生意都别做了，你先停几天班，什么时候把后院酒桶清完再来。」
-	<</if>>
+	<<if $mpJobPubKitchenStrike is 1>><<include "MP Job Failure PubKitchen 1">>
+	<<elseif $mpJobPubKitchenStrike is 2>><<include "MP Job Failure PubKitchen 2">>
+	<<else>><<include "MP Job Failure PubKitchen 3">><</if>>
 <</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
 <br><br>
@@ -829,6 +813,10 @@
 <<set $mpJobStableCount to ($mpJobStableCount or 0)>>
 <<set _stage to ($mpJobStableCount gte 15 ? 4 : $mpJobStableCount gte 10 ? 3 : $mpJobStableCount gte 6 ? 2 : $mpJobStableCount gte 3 ? 1 : 0)>>
 田间土路被露水浸得松软，两匹年轻挽马因为远处的雷鸣声有些焦躁地刨着前蹄。板车上摞着十袋新磨的麦粉与几篓易碎的鸡蛋，正等着发车。
+<<if Weather.isSnow>><<include "MP Job Seasonal Stable Winter">>
+<<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Stable Rain">>
+<<elseif Time.season is "autumn">><<include "MP Job Seasonal Stable Festival">>
+<</if>>
 <br><br>
 <<tendingicon>><<link [[安抚挽马控缰赶车 (0:19)|MP Job Stable Settle]]>>
 	<<set _sk to ($tending or 0)>>
@@ -952,16 +940,12 @@
 	车夫老伯从皮腰包里点出铜币与纸钞，笑着塞进你手里。
 	<<if ($mpJobStableStrike or 0) gt 0>><<set $mpJobStableStrike to Math.max(0, $mpJobStableStrike - 1)>><</if>>
 	<br><br>
-	<<set _ev to random(1, 4)>>
-	<<if _ev is 1>>
-		栗色挽马低下头，用温热的鼻尖轻轻拱了拱你的掌心，讨走了一小块胡萝卜。<<stress -2>>
-	<<elseif _ev is 2>>
-		亚历克斯路过马厩，顺手递给你一只刚摘的红苹果解渴。<<stress -1>>
-	<<elseif _ev is 3>>
-		田埂上的风夹着草屑吹进衣领，你抖了抖外套，肩膀有些发紧。<<tiredness 1>>
-	<<else>>
-		你在干草垛边发现了一窝刚孵出的小山雀，小心地把草叉挪到了另一边。<<stress -1>>
-	<</if>>
+	<<set _ev to random(1, 3)>>
+	<<switch _ev>>
+	<<case 1>><<include "MP Job Random Stable 1">>
+	<<case 2>><<include "MP Job Random Stable 2">>
+	<<case 3>><<include "MP Job Random Stable 3">>
+	<</switch>>
 	<<if _stage gte 3>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_milestone")>>
 			<br><br>
@@ -973,13 +957,9 @@
 	<<set $mpJobStableStrike to Math.min(3, ($mpJobStableStrike or 0) + 1)>>
 	<<if $mpJobStableStrike is 2>><<set $mpJobStablePenalty to 1>><<elseif $mpJobStableStrike gte 3>><<set $mpJobStableSuspended to 1>><</if>>
 	<br><br>
-	<<if $mpJobStableStrike is 1>>
-		老伯看着撒落的货篓摇了摇头，说今天这趟白跑，让你先把车板刷干净。
-	<<elseif $mpJobStableStrike is 2>>
-		老伯收走了你的远线马铃与跟车补贴，让你这几天只准留在院里看草料。
-	<<else>>
-		老伯直接落下了马厩木栓：「马匹受惊可不是闹着玩的，你先停班歇几天，把赔礼的杂活干完再上车。」
-	<</if>>
+	<<if $mpJobStableStrike is 1>><<include "MP Job Failure Stable 1">>
+	<<elseif $mpJobStableStrike is 2>><<include "MP Job Failure Stable 2">>
+	<<else>><<include "MP Job Failure Stable 3">><</if>>
 <</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
 <br><br>
@@ -1021,6 +1001,10 @@
 <<set $mpJobTrawlerCount to ($mpJobTrawlerCount or 0)>>
 <<set _stage to ($mpJobTrawlerCount gte 15 ? 4 : $mpJobTrawlerCount gte 10 ? 3 : $mpJobTrawlerCount gte 6 ? 2 : $mpJobTrawlerCount gte 3 ? 1 : 0)>>
 渔船驶出防波堤外，咸冷的海浪拍打着船头，成群的海鸥追着尾流盘旋。船尾的拖网绞盘发出沉闷的吱呀声，网兜在灰绿色的海面下沉甸甸地绷紧了。
+<<if Weather.isSnow>><<include "MP Job Seasonal Trawler Winter">>
+<<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Trawler Rain">>
+<<elseif Time.season is "autumn">><<include "MP Job Seasonal Trawler Festival">>
+<</if>>
 <br><br>
 <<swimicon>><<link [[探身解开挂网起鱼 (0:20)|MP Job Trawler Settle]]>>
 	<<set _sk to ($swimmingskill or 0)>>
@@ -1144,16 +1128,12 @@
 	船老大在秤台边跟鱼商结清货款，当场分出你的那份船钱拍在你手心。
 	<<if ($mpJobTrawlerStrike or 0) gt 0>><<set $mpJobTrawlerStrike to Math.max(0, $mpJobTrawlerStrike - 1)>><</if>>
 	<br><br>
-	<<set _ev to random(1, 4)>>
-	<<if _ev is 1>>
-		网底夹上来一枚被海浪磨得浑圆的绿玻璃浮球，老水手笑着擦干净塞进了你怀里。<<stress -2>>
-	<<elseif _ev is 2>>
-		返航时夕阳把海雾染成了金红色，几只海豚沿着船舷跃出水面，引来水手们一阵欢呼。<<stress -2>>
-	<<elseif _ev is 3>>
-		咸涩的海水溅在袖口结了一层白盐霜，你活动了一下发僵的肩膀。<<tiredness 1>>
-	<<else>>
-		船舱小炉上温着一壶姜糖热茶，船老大给你倒了满满一搪瓷缸驱寒。<<stress -1>>
-	<</if>>
+	<<set _ev to random(1, 3)>>
+	<<switch _ev>>
+	<<case 1>><<include "MP Job Random Trawler 1">>
+	<<case 2>><<include "MP Job Random Trawler 2">>
+	<<case 3>><<include "MP Job Random Trawler 3">>
+	<</switch>>
 	<<if _stage gte 3>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_milestone")>>
 			<br><br>
@@ -1165,13 +1145,9 @@
 	<<set $mpJobTrawlerStrike to Math.min(3, ($mpJobTrawlerStrike or 0) + 1)>>
 	<<if $mpJobTrawlerStrike is 2>><<set $mpJobTrawlerPenalty to 1>><<elseif $mpJobTrawlerStrike gte 3>><<set $mpJobTrawlerSuspended to 1>><</if>>
 	<br><br>
-	<<if $mpJobTrawlerStrike is 1>>
-		船老大磕了磕烟斗灰，沉声说这趟网破鱼跑没法分钱，让你先把破网扛下船。
-	<<elseif $mpJobTrawlerStrike is 2>>
-		船老大扣下了你的鲜鱼福利与熟手分红，让你接下来几趟先从杂活干起。
-	<<else>>
-		船老大直接撤起了登船跳板：「海上容不得半点马虎，你先在岸上停班反省，把网补好、船底清干净再上船。」
-	<</if>>
+	<<if $mpJobTrawlerStrike is 1>><<include "MP Job Failure Trawler 1">>
+	<<elseif $mpJobTrawlerStrike is 2>><<include "MP Job Failure Trawler 2">>
+	<<else>><<include "MP Job Failure Trawler 3">><</if>>
 <</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
 <br><br>
