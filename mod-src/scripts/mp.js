@@ -65,7 +65,7 @@
   function isSafePassage(p) {
     if (!p) return false;
     if (SAFE_PASSAGES.indexOf(p) >= 0) return true;
-    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Town Extra|Wild Extra|Extra|Daily|Festival|Content)/.test(String(p));
+    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Town Extra|Wild Extra|Extra|Daily|Festival|Town Festivals|Region|Content)/.test(String(p));
   }
 
   var ACTS = {
@@ -2028,6 +2028,10 @@
     ["MP Job Punishment", "零工失误"],
     ["MP Jobline", "零工伙伴"],
     ["MP Job", "长期零工路线"],
+    ["MP Extra Jobs", "额外零工"],
+    ["MP Daily Extra", "额外日常"],
+    ["MP Town Festivals 2", "后半年的节日"],
+    ["MP Region Extra", "区域额外事件"],
     ["MP Festival", "城镇节日"],
     ["MP Daily", "日常关系"],
     ["MP Town Side", "城镇小事"],
@@ -5315,7 +5319,13 @@
     { key: "winter", name: "冬幕节", month: 12, day: 18, loc: "孤儿院与高街", hint: "孤儿院会煮热汤，高街的店铺挂起旧布做的冬幕。" },
     { key: "flood", name: "春汛节", month: 3, day: 21, loc: "码头与梅尔街", hint: "春汛把木舟推回码头，鱼市和系船柱边最热闹。" },
     { key: "sealamp", name: "海灯节", month: 6, day: 21, loc: "海滩与海礁", hint: "退潮后的沙滩上会放纸灯，海礁边有人等潮。" },
-    { key: "bell", name: "钟塔纪念日", month: 11, day: 5, loc: "高街与旧钟塔", hint: "旧钟塔会敲响纪念钟，工匠名册摊在塔下。" }
+    { key: "bell", name: "钟塔纪念日", month: 11, day: 5, loc: "高街与旧钟塔", hint: "旧钟塔会敲响纪念钟，工匠名册摊在塔下。" },
+    { key: "plough", name: "初春开犁节", month: 4, day: 1, loc: "农场与高街", hint: "河湾农场牵出披红布的挽马，犁开第一道沟。" },
+    { key: "solstice", name: "夏季长日节", month: 7, day: 1, loc: "公园与海滩", hint: "白昼最长的一天，公园和海滩都有人彻夜不归。" },
+    { key: "tide", name: "旧港潮汐节", month: 8, day: 15, loc: "码头与梅尔街", hint: "退潮后的旧港会露出老钟，鱼市和栈桥最热闹。" },
+    { key: "term", name: "学园开学祭", month: 9, day: 1, loc: "学校与高街", hint: "学园走廊换上新的画框，高街的文具铺挤满人。" },
+    { key: "lantern", name: "秋末点灯节", month: 10, day: 31, loc: "神殿与孤儿院", hint: "神殿和孤儿院会点起一排防风灯，灯芯要提前换。" },
+    { key: "chime", name: "年末钟声夜", month: 12, day: 31, loc: "高街与神殿", hint: "钟塔会敲响年末最后一轮钟，工匠们聚在塔下。" }
   ];
 
   function nextModFestival(v) {
@@ -5347,7 +5357,19 @@
     { name: "钟表铺", lv: "mpJobClockLevel", strike: "mpJobClockStrike", susp: "mpJobClockSuspended", day: "mpJobClock",
       ranks: ["还在认零件", "能换摆轮", "能接简单委托", "接高价维修", "招牌上有你的名字", "Sera 的合伙人"] },
     { name: "孤儿院浆洗房", lv: "mpJobLaundryLevel", strike: "mpJobLaundryStrike", susp: "mpJobLaundrySuspended", day: "mpJobLaundry",
-      ranks: ["还在学熨边", "熨烫不留水痕", "有装订台钥匙", "能藏下一本旧书", "接旧书摊委托", "浆洗房老手"] }
+      ranks: ["还在学熨边", "熨烫不留水痕", "有装订台钥匙", "能藏下一本旧书", "接旧书摊委托", "浆洗房老手"] },
+    { name: "面包房早班", countVar: "mpJobBakeryCount", thresholds: [3, 6, 10, 15], strike: "mpJobBakeryStrike", susp: "mpJobBakerySuspended", day: "mpJobBakery",
+      ranks: ["还在抹烤盘", "能看第一炉", "会调糖霜", "能独看早炉", "师傅放心的老手"] },
+    { name: "裁缝铺改衣", countVar: "mpJobTailorCount", thresholds: [3, 6, 10, 15], strike: "mpJobTailorStrike", susp: "mpJobTailorSuspended", day: "mpJobTailor",
+      ranks: ["还在穿针", "能改裤脚", "开始接改衣", "能独立量体", "老裁缝的帮手"] },
+    { name: "街巷跑腿邮差", countVar: "mpJobCourierCount", thresholds: [3, 6, 10, 15], strike: "mpJobCourierStrike", susp: "mpJobCourierSuspended", day: "mpJobCourier",
+      ranks: ["还在认路", "能跑近街", "认得后巷捷径", "能送远线", "街巷老手"] },
+    { name: "丰收酒馆后厨", countVar: "mpJobPubKitchenCount", thresholds: [3, 6, 10, 15], strike: "mpJobPubKitchenStrike", susp: "mpJobPubKitchenSuspended", day: "mpJobPubKitchen",
+      ranks: ["还在洗菜", "能看汤锅", "会配香料", "能独看后厨", "酒馆老手"] },
+    { name: "河湾马厩驮运", countVar: "mpJobStableCount", thresholds: [3, 6, 10, 15], strike: "mpJobStableStrike", susp: "mpJobStableSuspended", day: "mpJobStable",
+      ranks: ["还在刷马", "能备鞍", "会驾板车", "能跑夜路", "马厩老手"] },
+    { name: "旧港近海渔船", countVar: "mpJobTrawlerCount", thresholds: [3, 6, 10, 15], strike: "mpJobTrawlerStrike", susp: "mpJobTrawlerSuspended", day: "mpJobTrawler",
+      ranks: ["还在理网", "能看近海", "会下拖网", "能认潮路", "渔队老手"] }
   ];
 
   function renderJournalEntries() {
@@ -5446,6 +5468,10 @@
     var jobLines = [];
     MOD_JOB_JOURNAL.forEach(function (j) {
       var lv = Number(v[j.lv]) || 0;
+      if (j.countVar && Array.isArray(j.thresholds)) {
+        var cnt = Number(v[j.countVar]) || 0;
+        lv = cnt >= j.thresholds[3] ? 4 : cnt >= j.thresholds[2] ? 3 : cnt >= j.thresholds[1] ? 2 : cnt >= j.thresholds[0] ? 1 : 0;
+      }
       var strike = Number(v[j.strike]) || 0;
       var susp = Number(v[j.susp]) || 0;
       if (!lv && !strike && !susp) return;
