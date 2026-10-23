@@ -2,7 +2,7 @@
 
 ## 包内是什么
 
-- `mod-src/`：DoL-MP 1.2.0-dev4 完整源码（32 个 twee，1104 个 passage）
+- `mod-src/`：DoL-MP 1.2.0-dev4 完整源码（36 个 twee，1224 个 passage）
   - 城镇/荒野 12 条暗线
   - 城镇小事 12 + 额外 8
   - 荒野小事 10 + 额外 8
