@@ -48,7 +48,7 @@
     "School Library", "School Toilets", "Canteen", "Classroom", "Science Classroom",
     "Maths Classroom", "English Classroom", "History Classroom", "Swimming Pool",
     "Shopping Centre", "Shopping Centre Top", "Temple", "Temple Garden", "Temple Quarters",
-    "Brothel", "Pub", "Hospital Courtyard", "Police Station", "Ocean Breeze", "Adult Shop",
+    "Brothel", "Pub", "Spa", "Hospital Courtyard", "Police Station", "Ocean Breeze", "Adult Shop",
     "Arcade", "Docks", "Farmland", "Cottage", "Sewers", "Sewers Lake",
     "Residential Alleyways", "Commercial Alleyways", "Industrial Alleyways", "Park Toilets",
     "MP Region Foghorn Island", "MP Region Foghorn Pier", "MP Region Foghorn Keeper", "MP Region Foghorn Wreck", "MP Region Foghorn Echo",
@@ -61,6 +61,12 @@
     "MP Region Observatory Wing", "MP Region Observatory Dome", "MP Region Observatory Star", "MP Region Observatory Cabinet", "MP Region Observatory Bridge",
     "联机会客厅", "多人卧室"
   ];
+
+  function isSafePassage(p) {
+    if (!p) return false;
+    if (SAFE_PASSAGES.indexOf(p) >= 0) return true;
+    return /^MP (Livelihood|Job|Side|Wild|Town Side|Content)/.test(String(p));
+  }
 
   var ACTS = {
     handhold: { label: "牵手", arousal: 30, stress: -1, seconds: 120, lines: ["你和 {name} 十指紧扣地牵着手待了一会儿，掌心的温度令人安心。"] },
@@ -178,6 +184,7 @@
     "Temple": "神殿",
     "Brothel": "妓院",
     "Pub": "酒吧",
+    "Spa": "多瑙河温泉浴场",
     "Hospital Courtyard": "医院",
     "Police Station": "警察局",
     "Ocean Breeze": "海风咖啡馆",
@@ -1051,6 +1058,7 @@
       trialicon: "trial",
       p2picon: "p2p",
       mphearticon: "heart",
+      tendingicon: "heart",
       lanternicon: "lantern",
       mpicon: "lantern"
     };
@@ -1443,7 +1451,7 @@
         applyWeatherPack(pObj.weatherPack, isSamePas);
       }
 
-      if (S.syncMode && (!prevP || prevP.passage !== pObj.passage) && SAFE_PASSAGES.indexOf(pObj.passage) >= 0 && !pObj.inCombat) {
+      if (S.syncMode && (!prevP || prevP.passage !== pObj.passage) && isSafePassage(pObj.passage) && !pObj.inCombat) {
         handleMessage({
           t: "sync_jump",
           fromId: fromId,
@@ -1994,6 +2002,12 @@
     ["MP Collection", "信物残片搜集中"],
     ["MP Grand Quest", "城镇秘闻调查中"],
     ["MP Quest", "城镇暗线调查中"],
+    ["MP Livelihood", "街角零工告示板"],
+    ["MP Job", "长期零工路线"],
+    ["MP Town Side", "城镇小事"],
+    ["MP Side", "街头小事"],
+    ["MP Wild Side", "荒野小事"],
+    ["MP Wild", "荒野小事"],
     ["MP World Event", "街巷奇遇中"],
     ["MP Event", "同行奇遇中"]
   ];
@@ -2017,7 +2031,7 @@
   function findSafeReturnPassage(strict) {
     var hist = S._passageHistory || [];
     for (var i = hist.length - 1; i >= 0; i--) {
-      if (SAFE_PASSAGES.indexOf(hist[i]) >= 0) return hist[i];
+      if (isSafePassage(hist[i])) return hist[i];
     }
     if (strict) return "Orphanage";
     for (var j = hist.length - 1; j >= 0; j--) {
@@ -2140,7 +2154,7 @@
             }
           }
           if (!S.syncMode && (!vv || (vv.eventPoolOverride === undefined && !vv.eventPoolOverrideContent))) {
-            if (SAFE_PASSAGES.indexOf(curPasNow) >= 0 && vv) vv.mpReturnPassage = curPasNow;
+            if (isSafePassage(curPasNow) && vv) vv.mpReturnPassage = curPasNow;
             return orig.call(this);
           }
           var pick = null;
@@ -2172,7 +2186,7 @@
             return orig.call(this);
           }
           try {
-            if (SAFE_PASSAGES.indexOf(curPasNow) >= 0) vv.mpReturnPassage = curPasNow;
+            if (isSafePassage(curPasNow)) vv.mpReturnPassage = curPasNow;
             jQuery(this.output).wiki(pick.content);
           } catch (e) {
             return orig.call(this);
@@ -4225,6 +4239,36 @@
     }
   ];
 
+  var SIDE_HUB_HOOKS = [
+    {
+      locs: ["High Street"],
+      check: function (v) { return true; },
+      hint: "布告栏最下面一排新钉了几张手写纸条，纸角被雨泡得发皱。",
+      icon: "img/misc/icon/investigate.png",
+      linkText: "看看布告栏上的零碎消息 (0:03)",
+      passage: "MP Town Side Stories Hub"
+    },
+    {
+      locs: ["Park"],
+      check: function (v) { return true; },
+      hint: "公园北角的猎人行会木牌上钉着几张手绘地图，边角用不同绳结系着。",
+      icon: "img/misc/icon/forest.png",
+      linkText: "看看猎人行会的木牌 (0:03)",
+      passage: "MP Wild Side Stories Hub"
+    }
+  ];
+
+  var LIVELIHOOD_HOOKS = [
+    {
+      locs: ["Ocean Breeze", "Spa", "Docks", "Farmland", "Orphanage", "High Street"],
+      check: function (v) { return true; },
+      hint: "街角的木告示板上钉着几张招工纸条，边角写着工钱和时辰。",
+      icon: "img/misc/icon/shop.png",
+      linkText: "看看今天的零工 (0:03)",
+      passage: "MP Livelihood Hub"
+    }
+  ];
+
   function isNpcInScheduleHour(npcEntry) {
     if (!npcEntry || !Array.isArray(npcEntry.hours)) return true;
     var h = getHourNow();
@@ -4363,6 +4407,55 @@
           qRow.appendChild(qLink);
         })(hk);
         container.appendChild(qRow);
+        break;
+      }
+    }
+
+    // 5. 街角告示板 / 零工入口（与暗线分开，避免被暗线钩子挤掉）
+    for (var si = 0; si < SIDE_HUB_HOOKS.length; si++) {
+      var shk = SIDE_HUB_HOOKS[si];
+      if (shk.locs.indexOf(pas) >= 0 && (!shk.check || shk.check(v))) {
+        hasAny = true;
+        var shRow = el("div", { style: "margin:4px 0;" });
+        shRow.appendChild(el("span", { text: shk.hint + " " }));
+        (function (hubItem) {
+          var shLink = el("a", {
+            class: "link-internal",
+            onclick: function (ev) {
+              ev.preventDefault();
+              v.mpReturnPassage = pas;
+              enginePlay(hubItem.passage);
+            }
+          });
+          shLink.appendChild(dolIconImg(hubItem.icon));
+          shLink.appendChild(document.createTextNode(hubItem.linkText));
+          shRow.appendChild(shLink);
+        })(shk);
+        container.appendChild(shRow);
+        break;
+      }
+    }
+
+    for (var li = 0; li < LIVELIHOOD_HOOKS.length; li++) {
+      var lhk = LIVELIHOOD_HOOKS[li];
+      if (lhk.locs.indexOf(pas) >= 0 && (!lhk.check || lhk.check(v))) {
+        hasAny = true;
+        var lhRow = el("div", { style: "margin:4px 0;" });
+        lhRow.appendChild(el("span", { text: lhk.hint + " " }));
+        (function (jobItem) {
+          var lhLink = el("a", {
+            class: "link-internal",
+            onclick: function (ev) {
+              ev.preventDefault();
+              v.mpReturnPassage = pas;
+              enginePlay(jobItem.passage);
+            }
+          });
+          lhLink.appendChild(dolIconImg(jobItem.icon));
+          lhLink.appendChild(document.createTextNode(jobItem.linkText));
+          lhRow.appendChild(lhLink);
+        })(lhk);
+        container.appendChild(lhRow);
         break;
       }
     }
@@ -5638,7 +5731,7 @@
           vj.eventPoolOverrideContent = msg.content || "";
           vj.eventPoolOverridePrng = msg.prng || S.prng;
         }
-        if (msg.reason === "host_move" && SAFE_PASSAGES.indexOf(targetPas) >= 0 && vj) {
+        if (msg.reason === "host_move" && isSafePassage(targetPas) && vj) {
           vj.eventskip = 1;
         }
         S.myVotedIndex = -1;
@@ -7045,7 +7138,7 @@
       }
     }
 
-    var isSafePas = SAFE_PASSAGES.indexOf(curPasNow) >= 0;
+    var isSafePas = isSafePassage(curPasNow);
     var isEventPas = !!curPasNow && !isSafePas &&
       curPasNow !== MP_COMBAT_PASSAGE && curPasNow !== "MP Native Combat Finish" &&
       curPasNow !== "Start" && curPasNow !== "Start2" && curPasNow !== "Orphanage Intro" &&

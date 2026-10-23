@@ -1,8 +1,8 @@
 # DoL-MP 整合包
 
-**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.1.0-dev3**
+**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.2.0-dev4**
 
-> **开发预览版**：这一版是内容整改中的预览包，town/wilds/region bank 还在继续重写；稳定版仍是 v1.0.0。
+> **开发预览版**：城镇/荒野 12 条暗线、22 条小事、6 条长期零工已经并入；region bank 仍待下一批清理。稳定版仍是 v1.0.0。
 
 > **18+ 成人内容警告**：本仓库包含成人向文字游戏及其模组，仅面向成年人。请勿向未成年人传播。
 >
@@ -16,7 +16,7 @@
 
 - 游戏本体（含 ModLoader）
 - 汉化包、官方图片包
-- DoL-MP v1.1.0-dev3 联机模组（含完整源码）
+- DoL-MP v1.2.0-dev4 联机模组（含完整源码）
 - 联机服务器（Node.js，依赖已内置）
 - 中文说明书 `说明书.md`
 
@@ -29,7 +29,7 @@
 | `game/Degrees of Lewdity.html` | 游戏本体（ModLoader 版，64MB） |
 | `mods/ModI18N-0.5.12.13-chs-1.0.1a.mod.zip` | 中文汉化包 |
 | `mods/GameOriginalImagePack-0.5.12.13.mod.zip` | 官方图片包 |
-| `mods/DoL-MP-v1.1.0-dev3.mod.zip` | DoL-MP 联机模组（可直接添加） |
+| `mods/DoL-MP-v1.2.0-dev4.mod.zip` | DoL-MP 联机模组（可直接添加） |
 | `mod-src/` | DoL-MP 模组源码（`boot.json` / JS / CSS / Twee / 图标） |
 | `server/` | 联机服务器（`server.js` + 已内置 `ws` 依赖） |
 | `start-game.bat` | 启动游戏 |
@@ -80,26 +80,25 @@ npm install
 
 ---
 
-## v1.1.0-dev3 更新要点
+## v1.2.0-dev4 更新要点
 
-- 19 个 twee，约 768 个 passage
-- **new-regions 发现层**：8 区域 ×（hub + Scout + Ask），32 个 `$mpKnown`，0 个无条件"前往"
-- **world-events 长任务**：34 个事件扩成 100 段，54 个检查，接入 `$mpClues`/`$mpKnown`
-- **grand 长任务**：16 条长线 × 7 阶段拆成 112 段，47 个检查，32 个 `$mpClues`
-- **main 线索门控**：12 章 hub 改成 NPC 引路 + `$mpClues["main_eclipse_N"]`，不再旁白剧透
-- **联机同步修复**：同步事件身份（passage + phase + 事件名），选项按 `eventKey` 分组；去掉 `linkIndex` 兜底；`event_pick` 优先；新增 `event_resync`
-- **联机选项改为提议制**：第一次点击只发提议，队友看到「同意 / 不同意」；不同意则取消，不强制移动；房主移动不再强拉队友，先汇合再同步
-- **4 个 P0 修复**：未注册的 `workicon`、3 个不存在的返回目标、9 个错位的 `$mpKnown` key、`mpAmbient` 缺 case
-- **室内外补全**：740/768 个 passage 已设置 `$outside` / `$location`
-- 8 个新区域、6 个新 NPC、5 个软坏结局、5 个精英遭遇战
-- 伴侣系统、同行互动、12 条跨周大支线、主线和信物收集
-- 联机服务器支持房间、同步、PvP 与离线队友转伴侣
+- 23 个 twee，约 915 个 passage
+- **城镇 6 条暗线重写**：42 段，10 处 `skulduggerycheck`，22/42 段含技能门槛，最终报酬防重复结算
+- **荒野 6 条暗线重写**：42 段，24/42 段含检定，6 条软坏结局分支，每条 4 种脱身方式
+- **城镇小事 12 条**：36 段，高街布告栏入口
+- **荒野小事 10 条**：30 段，公园猎人行会木牌入口
+- **长期零工 6 条**：19 段，咖啡馆/鱼档/桑拿/农场/钟表学徒/浆洗房；等级 0–5、每日一次、失败扣钱、Lv3 里程碑
+- **新内容可达性**：171/171 个新 passage 可从入口 BFS 到达
+- **联机安全页扩展**：`MP Job` / `MP Side` / `MP Wild` / `MP Livelihood` 纳入 `isSafePassage`
+- **本轮修复**：最终报酬刷钱、`$mpClues` 未初始化、`tendingicon` 未注册、`$swimming`/`$seduction` 变量名、`Weather.precipitation` 字符串比较、`spa` ambient、荒野小事缺 `[nobr]`、boot 清单
+- 继续保留：main 12 章线索门控、grand 112 段、world-events 100 段、new-regions 发现层、联机事件身份与提议制
 
 ### 已知问题
 
-- town/wilds/main/region bank 仍是旧结构，下一版继续重写。
 - region bank 仍有 7 句模板结果句；下一批处理。
 - 28 个交互/战斗/romance 页刻意不写死地点，继承玩家当前位置。
+- 联机同步补丁仍需双开实测：同一事件名、同一选项目标、落后者 `event_resync`。
+- 零工收益与时间/疲劳消耗需要实机走一轮再微调。
 
 ---
 
