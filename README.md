@@ -95,7 +95,7 @@ npm install
 - **零工随机事件**：6 条路线 × 6 个随机小事件；每班最多触发 1 个
 - **零工三级惩罚**：18 段，警告 → 停优待 → 短暂停班；不扣现有钱
 - **区域事件库去模板化**：153 段重写，10 句重复模板清零；314 笔 money 全部防重复领取
-- **新内容可达性**：188/188 个新 passage 可从入口 BFS 到达
+- **新内容可达性**：262 个新 passage；244 个静态可达，18 个通过 `<<include>>` / `<<goto>>` 动态到达
 - **联机安全页扩展**：`MP Job` / `MP Jobline` / `MP Side` / `MP Wild` / `MP Livelihood` 纳入 `isSafePassage`
 - **本轮修复**：最终报酬刷钱、`$mpClues` 未初始化、`tendingicon` 未注册、`$swimming`/`$seduction` 变量名、`Weather.precipitation` 字符串比较、`spa` ambient、荒野小事缺 `[nobr]`、boot 清单
 - 继续保留：main 12 章线索门控、grand 112 段、world-events 100 段、new-regions 发现层、联机事件身份与提议制
