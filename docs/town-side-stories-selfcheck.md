@@ -76,13 +76,13 @@
 | MP Side School Goggles Resolve | school | 616 | skill gte |
 | MP Side Temple Coin | temple | 601 | skill gte |
 | MP Side Temple Coin Step2 | temple | 604 | skulduggerycheck |
-| MP Side Temple Coin Resolve | temple | 602 | skill gte |
+| MP Side Temple Coin Resolve | temple | 601 | skill gte |
 | MP Side Docks Knot | docks | 601 | skill gte |
 | MP Side Docks Knot Step2 | docks | 601 | skill gte |
-| MP Side Docks Knot Resolve | docks | 600 | skill gte |
+| MP Side Docks Knot Resolve | docks | 601 | skill gte |
 | MP Side Park Pigeon | park | 603 | skill gte |
 | MP Side Park Pigeon Step2 | park | 604 | skulduggerycheck |
-| MP Side Park Pigeon Resolve | park | 602 | skill gte |
+| MP Side Park Pigeon Resolve | park | 600 | skill gte |
 | MP Side Elk Watch | elk | 601 | skulduggerycheck |
 | MP Side Elk Watch Step2 | elk | 604 | skulduggerycheck |
 | MP Side Elk Watch Resolve | elk | 601 | skill gte |
