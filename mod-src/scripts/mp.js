@@ -3841,41 +3841,6 @@
       passage: "MP Quest Bailey Rebellion"
     },
     {
-      locs: ["Temple", "Deep Forest", "Sea Rocks", "MP Region Sunken Abbey", "MP Region Foghorn Island"],
-      check: function (v) {
-        var isBlood = !!(window.Weather && Weather.bloodMoon);
-        return (isBlood || isNightNow()) && (!v.daily || !v.daily.mpEliteWraith);
-      },
-      hint: "暗红色的月华穿透夜雾，一道佩戴象牙项链的苍白半透明身影在半空中若隐若现，周遭弥漫着令人窒息的执念。",
-      icon: "custom:bloodmoon",
-      linkText: "直面血月奇遇·苍白象牙怨灵 (0:18)",
-      passage: "MP Elite Encounter Ivory Wraith"
-    },
-    {
-      locs: ["Beach Cave", "MP Region Sunken Abbey", "MP Region Foghorn Wreck"],
-      check: function (v) { return isDuskOrNightNow() && (!v.daily || !v.daily.mpEliteTentacles); },
-      hint: "幽暗的潮汐深潭底部翻涌着诡异的幽蓝磷光，数条粗壮的触手阴影在水面下蠢蠢欲动。",
-      icon: "custom:trial",
-      linkText: "踏入深渊潮汐·巨型触手试炼 (0:18)",
-      passage: "MP Elite Encounter Abyssal Tentacles"
-    },
-    {
-      locs: ["Docks", "MP Region Blackiron Yard", "Mer Street"],
-      check: function (v) { return isDuskOrNightNow() && (!v.daily || !v.daily.mpEliteBosun); },
-      hint: "防波堤禁区深处亮起探照灯，黑铁水手长正守在沉甸甸的走私主金库铁箱旁。",
-      icon: "custom:trial",
-      linkText: "挑战黑铁水手长争夺主金库 (0:18)",
-      passage: "MP Elite Encounter Blackiron Bosun"
-    },
-    {
-      locs: ["MP Region Velvet Mirage", "Connudatus Street"],
-      check: function (v) { return isDuskOrNightNow() && (!v.daily || !v.daily.mpEliteVelvet); },
-      hint: "天鹅绒暗层深处的紫檀金匣散发着诱人的光泽，戴着银狐假面的首席执事正持鞭巡视。",
-      icon: "custom:badend",
-      linkText: "潜入天鹅绒暗层挑战首席执事 (0:18)",
-      passage: "MP Elite Encounter Velvet Enforcers"
-    },
-    {
       locs: ["Orphanage"],
       check: function (v) { return (Number(v.mpQuestCellar) || 0) < 7 && (!v.daily || !v.daily.mpQuestCellar) && (getHourNow() >= 19 || getHourNow() < 7 || (Number(v.mpQuestCellar) || 0) > 0); },
       hint: "走廊尽头通往旧储物室的木门虚掩着，门缝底下透出一丝阴凉的穿堂风。",
@@ -4135,7 +4100,7 @@
   var NEW_WORLD_REGIONS = [
     {
       locs: ["Sea Rocks", "Docks"],
-      check: function (v) { return (Number(v.mpQuestShipwreck) || 0) >= 1 || (Number(v.mpQuestCliffLighthouse) || 0) >= 1 || (Number(v.mpMainStoryEclipse) || 0) >= 1 || isDuskOrNightNow(); },
+      check: function (v) { return (Number(v.mpQuestShipwreck) || 0) >= 1 || (Number(v.mpQuestCliffLighthouse) || 0) >= 1 || (Number(v.mpMainStoryEclipse) || 0) >= 1; },
       hint: "暗礁外侧的铁环上系着一叶旧木舟，海雾尽头隐约浮现出雾角灯塔岛的轮廓。",
       icon: "img/misc/icon/beach.png",
       linkText: "解缆划向雾角灯塔岛 (0:18)",
@@ -4143,7 +4108,7 @@
     },
     {
       locs: ["High Street", "Sewers"],
-      check: function (v) { return (Number(v.mpQuestClocktower) || 0) >= 1 || (Number(v.skulduggery) || 0) >= 150 || isNightNow(); },
+      check: function (v) { return (Number(v.mpQuestClocktower) || 0) >= 1 || (Number(v.skulduggery) || 0) >= 150; },
       hint: "旧钟塔基座后方的排水铁栅松动着，下方露出带有黄铜齿轮刻痕的石阶。",
       icon: "img/misc/icon/investigate.png",
       linkText: "顺着齿轮石阶下潜 (0:10)",
@@ -4151,7 +4116,7 @@
     },
     {
       locs: ["Temple", "Forest"],
-      check: function (v) { return (Number(v.mpQuestCatacomb) || 0) >= 1 || (Number(v.mpQuestManorRuins) || 0) >= 1 || isDuskOrNightNow(); },
+      check: function (v) { return (Number(v.mpQuestCatacomb) || 0) >= 1 || (Number(v.mpQuestManorRuins) || 0) >= 1; },
       hint: "坍塌的石廊拱门后方延伸出一段覆满青苔的古老旋梯。",
       icon: "img/misc/icon/temple.png",
       linkText: "拾级走下地下古修道院 (0:12)",
@@ -4159,7 +4124,7 @@
     },
     {
       locs: ["Danube Street", "Park"],
-      check: function (v) { return (Number(v.mpQuestGreenhouse) || 0) >= 1 || (Number(v.mpQuestDanubeSalon) || 0) >= 1 || (getHourNow() >= 18 || getHourNow() <= 7); },
+      check: function (v) { return (Number(v.mpQuestGreenhouse) || 0) >= 1 || (Number(v.mpQuestDanubeSalon) || 0) >= 1; },
       hint: "高耸的冬青树篱后方藏着一扇半掩的铸铁雕花小门，门内水雾氤氲。",
       icon: "img/misc/icon/park.png",
       linkText: "闪身步入秘密温室庄园 (0:08)",
@@ -4167,7 +4132,7 @@
     },
     {
       locs: ["Elk Street", "Industrial Alleyways"],
-      check: function (v) { return (Number(v.skulduggery) || 0) >= 100 || (Number(v.mpContrabandSealed) || 0) > 0 || isDuskOrNightNow(); },
+      check: function (v) { return (Number(v.skulduggery) || 0) >= 100 || (Number(v.mpContrabandSealed) || 0) > 0; },
       hint: "生锈的货运铁轨穿过坍塌的砖墙，通向废弃的黑铁调车场。",
       icon: "img/misc/icon/sneak.png",
       linkText: "沿着铁轨潜入黑铁货运站 (0:09)",
@@ -4175,7 +4140,7 @@
     },
     {
       locs: ["Deep Forest", "Farmland"],
-      check: function (v) { return (Number(v.mpQuestMoonAltar) || 0) >= 1 || (Number(v.mpQuestMill) || 0) >= 1 || isDuskOrNightNow(); },
+      check: function (v) { return (Number(v.mpQuestMoonAltar) || 0) >= 1 || (Number(v.mpQuestMill) || 0) >= 1; },
       hint: "古木交错的迷雾深处立着一圈高大的风化石柱，林间回荡着低沉的风鸣。",
       icon: "img/misc/icon/forest.png",
       linkText: "穿林走向古德鲁伊石环 (0:14)",
@@ -4183,7 +4148,7 @@
     },
     {
       locs: ["Connudatus Street", "Cliff Street"],
-      check: function (v) { return (Number(v.mpQuestVelvet) || 0) >= 1 || (Number(v.promiscuity) || 0) >= 35 || isDuskOrNightNow(); },
+      check: function (v) { return (Number(v.mpQuestVelvet) || 0) >= 1 || (Number(v.promiscuity) || 0) >= 35; },
       hint: "悬崖廊柱下的天鹅绒侧门半掩着，门内飘出低柔的大提琴与暖香。",
       icon: "img/misc/icon/brothel.gif",
       linkText: "步入峭壁天鹅绒暗层 (0:07)",
@@ -4191,7 +4156,7 @@
     },
     {
       locs: ["School Library", "Hallways"],
-      check: function (v) { return (Number(v.mpQuestLibrary) || 0) >= 1 || (Number(v.mpQuestSchoolBell) || 0) >= 1 || getHourNow() >= 16; },
+      check: function (v) { return (Number(v.mpQuestLibrary) || 0) >= 1 || (Number(v.mpQuestSchoolBell) || 0) >= 1; },
       hint: "古籍架侧面的木制暗门虚掩着，后方连廊直通旧学园天文翼楼。",
       icon: "img/misc/icon/school.png",
       linkText: "穿过连廊登上旧天文翼楼 (0:08)",

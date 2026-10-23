@@ -48,6 +48,9 @@
 - 零工失败**不再扣现有钱**，只当班没有工钱 + 压力/疲劳；原版对照见 `docs/vanilla-job-punishment-comparison.md`。
 - 第二级惩罚会实际停掉对应优待；第三级停班会设置 `$mpJobXSuspended`，不能靠不点惩罚页绕过。
 - 修复：最终报酬刷钱、`$mpClues` 未初始化、`tendingicon` 未注册、`$swimming`/`$seduction` 变量名、`Weather.precipitation` 字符串比较、`spa` ambient、荒野小事缺 `[nobr]`、boot 清单。
+- 普通地点不再主动弹出 5 个精英遭遇按钮；这些内容改为后续世界事件/剧情触发。
+- 新区域入口改为线索门控，不再仅靠“夜晚/黄昏”就在神殿、高街等地点弹出。
+- NPC hub 的动作链接去掉图标前缀，改成“说只是路过 / 帮他清点货箱”这类自然动作；地点出口放在动作上面。
 - 联机：`isSafePassage()` 覆盖 `MP Job` / `MP Jobline` / `MP Side` / `MP Wild` / `MP Extra` / `MP Daily` / `MP Festival` / `MP Livelihood`。
 - 日志：`mp.js` 的 `renderJournalEntries()` 增加「节日与日程」「零工与日常」；最近 7 天节日倒计时，零工进度用叙事，不显示 Lv。节日日期见 `docs/节日日历.md`。
 
