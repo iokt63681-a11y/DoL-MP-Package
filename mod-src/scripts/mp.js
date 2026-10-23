@@ -65,7 +65,7 @@
   function isSafePassage(p) {
     if (!p) return false;
     if (SAFE_PASSAGES.indexOf(p) >= 0) return true;
-    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Content)/.test(String(p));
+    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Town Extra|Wild Extra|Extra|Content)/.test(String(p));
   }
 
   var ACTS = {
@@ -2003,11 +2003,14 @@
     ["MP Grand Quest", "城镇秘闻调查中"],
     ["MP Quest", "城镇暗线调查中"],
     ["MP Livelihood", "街角零工告示板"],
+    ["MP Job Punishment", "零工失误"],
     ["MP Jobline", "零工伙伴"],
     ["MP Job", "长期零工路线"],
     ["MP Town Side", "城镇小事"],
     ["MP Side", "街头小事"],
     ["MP Wild Side", "荒野小事"],
+    ["MP Wild Extra", "荒野额外遭遇"],
+    ["MP Extra", "城镇额外小事"],
     ["MP Wild", "荒野小事"],
     ["MP World Event", "街巷奇遇中"],
     ["MP Event", "同行奇遇中"]
