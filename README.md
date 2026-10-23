@@ -1,6 +1,6 @@
 # DoL-MP 整合包
 
-**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.2.0-dev6**
+**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.2.0-dev7**
 
 > **开发预览版**：城镇/荒野 12 条暗线、22 条小事、6 条长期零工已经并入；region bank 仍待下一批清理。稳定版仍是 v1.0.0。
 
@@ -16,7 +16,7 @@
 
 - 游戏本体（含 ModLoader）
 - 汉化包、官方图片包
-- DoL-MP v1.2.0-dev6 联机模组（含完整源码）
+- DoL-MP v1.2.0-dev7 联机模组（含完整源码）
 - 联机服务器（Node.js，依赖已内置）
 - 中文说明书 `说明书.md`
 
@@ -29,7 +29,7 @@
 | `game/Degrees of Lewdity.html` | 游戏本体（ModLoader 版，64MB） |
 | `mods/ModI18N-0.5.12.13-chs-1.0.1a.mod.zip` | 中文汉化包 |
 | `mods/GameOriginalImagePack-0.5.12.13.mod.zip` | 官方图片包 |
-| `mods/DoL-MP-v1.2.0-dev6.mod.zip` | DoL-MP 联机模组（可直接添加） |
+| `mods/DoL-MP-v1.2.0-dev7.mod.zip` | DoL-MP 联机模组（可直接添加） |
 | `mod-src/` | DoL-MP 模组源码（`boot.json` / JS / CSS / Twee / 图标） |
 | `server/` | 联机服务器（`server.js` + 已内置 `ws` 依赖） |
 | `start-game.bat` | 启动游戏 |
@@ -80,7 +80,17 @@ npm install
 
 ---
 
-## v1.2.0-dev6 更新要点
+## v1.2.0-dev7 更新要点
+
+- 50 个 twee，1618 个 passage
+- **NPC 任务第 3/6/9 阶段真双选**：两个动作各用不同技能，各自成功/失败叙述
+- **区域 Scout/Ask 差异化**：两个动作不同技能、不同解锁顺序
+- **零工季节段降频**：春夏 1/3 概率，里程碑/季节/随机互斥
+- **旧长段落压缩**：17 个文件、290 段压到 ≤250 字
+- **新增**：2 条区域暗线、24 段熟稔日、24 段城乡瞬间、12 段零工后续、6 段信物鉴看、4 个半日节令、40 段区域瞬间
+- **本轮修复**：6 个新文件未进 boot、4 个新节令终段重复发钱、零工后续链接排在离开之后
+
+### v1.2.0-dev6 要点
 
 - 44 个 twee，1468 个 passage
 - **NPC 任务阶段检定**：6 位常驻 NPC 的第 3/6/9 阶段加入检定与失败分支

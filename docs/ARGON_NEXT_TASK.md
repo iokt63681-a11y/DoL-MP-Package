@@ -1,71 +1,80 @@
-# 给 Argon 的下一批任务（dev6 接入后）
+# 给 Argon 的下一批任务（dev7 接入后）
 
-当前源码：**44 个 twee，1468 个 passage**。dev6 的 6 个新文件与 6 个返修文件已经全部接入，3 个新 Hub 已接线。
+当前源码：**50 个 twee，1618 个 passage**。dev7 的 6 个新文件与 17 个返修文件已经接入。
 
-> 写之前先读 `docs/vanilla-ui-style.md` 和 `ARGON_PROMPT_V6.md`。这一批重点是“把选择做成真的”，不是继续堆 Hub。
+> 写之前先读 `docs/vanilla-ui-style.md` 和 `ARGON_PROMPT_V6.md`。这一批重点：把“失败也能推进”和“两个动作同一段结果”改掉。
 
-## A. 质量返修（约 60 段）
+## A. 质量返修（约 90 段）
 
-### A1. NPC 任务检定改成“点动作时再判定”（6 位 × 3 阶段）
+### A1. 旧支线的“进页面自动投骰”（31 处）
 
-现在 `MP NPC <Name> Quest` 在第 3/6/9 阶段是进页面前就掷好检定，两个动作都指向同一个 Pass/Fail。请改成：
+`mp-town-side-stories`、`mp-wilds-side-stories`、`mp-town-extra-stories`、`mp-wild-extra-events`、`mp-mansion-avery-1` 里仍有 31 个入口在正文后直接 `<<skulduggerycheck>>` 或属性比较，玩家没点动作就掉血/加压力。改成：
 
-- 两个动作各自在点击时检定，用不同技能/属性（例如一个诡术、一个体能/意志）。
-- 成功进对应 `Pass`，失败进 `Fail`；失败不推进阶段、不扣存款。
-- 两个动作的成功文本要不同，不能只是同一段换一句话。
+- 入口只写环境和物件；
+- 检定放进“伸手/查看/跟踪/翻找”这类 `<<link>>`；
+- 失败给具体代价，可再试或退出。
 
-### A2. 零工季节段降频
+### A2. 新内容的“双动作同一结果”（约 134 对）
 
-`mp-livelihoods.twee` 和 `mp-job-extra-routes.twee` 里，春夏季节段现在每次成功班次都会插入。改成：
+`mp-npc-relationship-days`、`mp-region-moments-2`、`mp-town-wilds-moments`、`mp-town-festivals-4`、`mp-job-and-keepsake-followups` 里，两个动作的技能不同，但成功/失败文本和去向完全一样。改成：
 
-- 季节段 1/3 概率出现，或只在节气附近几天出现；
-- 随机小事件仍每次最多 1 个；
-- 不要让一次收工同时出现“季节段 + 随机段 + 里程碑”三连。
+- 每个动作有自己的成功文本与失败代价；
+- 至少一个动作在失败时给不同线索/不同后续，而不是简单回退。
 
-### A3. 区域瞬时事件完成后清标记
+### A3. 节日失败不再白拿终段奖励
 
-`MP Region Micro *` 完成后把对应的 `$mpMicroNotice["..."]` 清掉，区域入口不再一直挂着同一条事件链接。
+四组半日节令（festival-3/4）目前 5 段全失败也能走到终段领 £6.50。加一个简单的成功计数（`$mpFestScore` 或每段 flag）：
 
-### A4. 旧长段落压缩（优先 10 段）
+- 全部成功：£6.50；
+- 部分成功：£3.50；
+- 全失败：只给一句收尾，不发钱。
 
-按正文 ≤250 字压缩这些旧段落，保留信息、删掉重复形容：
+### A4. 关系日/信物鉴看/零工后续加每日限制
 
-- `MP Companion Quest Step`（1178 字）
-- `MP Main Story Eclipse Hub`（942 字）
-- `MP Companion Hub`（797 字）
-- `MP Side Bookstall` / `MP Side School Goggles Resolve` / `MP Side Street Lamp Resolve`
-- `MP Side Hospital Slip Resolve` / `MP Wild Extra Red Thread Herbs Resolve`
-- `MP Wild Extra Boundary Stone Resolve` / `MP Side Cafe Alley Resolve`
-- `MP Mansion Avery CarInvite` / `GownCheck` / `ChampagneToast` / `Quinn WineCellar`（各 380–440 字）
+`MP RelDay`、`MP Keepsake Show`、`MP Job Followup` 目前可以反复进出刷 love/trust、回压力。入口加 `$daily` 旗标（每天一次），重复进入只写一段短收尾。
 
-## B. 新内容（约 140 段）
+### A5. 区域暗线失败可重试
 
-1. **2 条新区域暗线 × 7 段 = 14 段**：选两个现有新区域（例如 Velvet Mirage、Observatory Wing），写有阶段、失败、软坏结局的 7 段小链。
-2. **12 段 NPC 关系事件**：6 位常驻 NPC × 2 段，写关系推进后的具体一天，不要再写初见。
-3. **12 段城镇/荒野日常**：市场、码头、学校、公园、森林、农场各 2 段，1 段 1 个瞬间，必含检定。
-4. **6 段零工后续**：12 条零工里挑 6 条，各写 1 段“熟客/东家记得你”的后续。
-5. **5 段收集信物后续**：现有 `$mpKeepsake` 信物各写 1 段“拿给某个 NPC 看”的反应。
-6. **4 个新半日节令 × 5 段 = 20 段**：日期自己定，写进 manifest；Hub 要按日期窗口显示。
-7. **剩余补足到 140 段**：优先补区域事件和 NPC 日常，不要新增纯菜单 Hub。
+`MP Quest Velvet Mirage 1-5`、`MP Quest Observatory Wing 1-5` 失败后两个动作一起消失，只能从第 1 段重走。失败结果保留“再试一次”链接，或只替换结果区。
+
+### A6. 剩余超长段落
+
+- `mp-job-seasonal-events`：Cafe Winter 271、Clock Rain 266、Laundry Festival 251。
+- `mp-soft-bad-ends`：5 个 Hub 280–316。
+- `mp-town-festivals`：丰收/雾月/冬幕/春汛/海灯/钟塔的 1–5 段 430–456。
+
+压到 ≤250，保留线索和分支。
+
+## B. 新内容（约 100 段）
+
+1. **12 段 NPC 关系日后续**：6 位常驻 NPC × 2 段，写关系稳定后的日常，不要再写初见。
+2. **12 段区域瞬间**：8 个区域里挑 6 个，各 2 段；1 段 1 个瞬间，必含检定。
+3. **10 段零工季节/失败补充**：12 条零工里挑 10 条，各 1 段。
+4. **8 段信物后续**：现有 8 枚 `$mpKeepsake` 各 1 段“拿去用”的具体场景。
+5. **8 段城镇/荒野夜事件**：深夜巷口、码头、森林、公园各 2 段。
+6. **剩余补足到 100 段**：优先补区域事件和 NPC 日常，不新增纯菜单 Hub。
 
 ## 硬规则（不变）
 
 1. 一个 passage 只写一个瞬间；正文 60–200 字，最多 250。
 2. 一段 2–4 个选项，最多 5 个；移动/离开选项在最上面。
 3. 选项写动作，不写结果；≤12 个汉字；不加句号。
-4. 一段图标最多 3–4 个；闲聊、追问、等待不加图标。
-5. 有检定就有成功/失败和具体后果；失败不扣现有钱、不加进度。
-6. 不写 Lv/等级/经验/任务/阶段/进度/奖励/你成功了。
-7. 每个 passage 开头 `$outside` / `$location`，加 `[nobr]`。
-8. 一次性奖励用 `claimUniqueReward`；`<<money 1200>>` = £12。
-9. 中文引号必须成对；对话用「」。
-10. 不要改 `boot.json` / `mp.js`；新文件与 Hub 留好接口，由集成方接线。
+4. **同一段的选项长短不要一样**：不要三个都是 4 字或三个都是 10 字，长短交错；变化来自动作的具体程度。
+5. 一段图标最多 3–4 个；闲聊、追问、等待不加图标。
+6. 有检定就有成功/失败和具体后果；失败不扣现有钱、不加进度。
+7. **选择要真的改变结果**：不能进页面前掷好，也不能两个选项同一段结果。
+8. 不写 Lv/等级/经验/任务/阶段/进度/奖励/你成功了。
+9. 每个 passage 开头 `$outside` / `$location`，加 `[nobr]`。
+10. 一次性奖励用 `claimUniqueReward`；`<<money 1200>>` = £12。
+11. 中文引号必须成对；对话用「」。
+12. 不要改 `boot.json` / `mp.js`；新文件与 Hub 留好接口，由集成方接线。
 
 ## 输出
 
 1. 返修直接改对应文件，`manifest.md` 列出改了哪些段。
 2. 新内容按主题分文件。
 3. `selfcheck.md`：断链、outside/location、宏闭合、未注册图标、Lv、失败扣钱、重复句、BFS 可达、引号配对。
+4. `manifest.md` 里列出每个新文件对照过的本体 passage 名（3–5 个），以及对照后采用了哪种框架（地点固定链接 / eventpool / NPC 引路 / 传闻解锁）。
 
 ## 验收
 
@@ -75,3 +84,4 @@
 - 没有失败扣存款
 - 新内容可从入口 BFS 到达
 - 抽查 10 段：正文 ≤250 字、选项 ≤5 个、图标 ≤4 个、标签是动作、失败有具体代价
+- 抽查 10 对双动作：成功/失败文本与去向不能完全相同

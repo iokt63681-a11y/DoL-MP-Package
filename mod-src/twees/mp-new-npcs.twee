@@ -1,5 +1,3 @@
-/* 六位常驻镇民NPC剧本库（V6精修版：含36段关键阶段检定分支、UI规范化、$location对齐） */
-
 :: MP NPC Sera Hub [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
@@ -42,7 +40,7 @@
 <<if (_npc.love or 0) gte 8 or (_npc.trust or 0) gte 8>>
 	<<walkicon>><<link [[约她打烊后去旧街走走 (0:08)|MP Extra Daily Sera 1]]>><<pass 8>><</link>>
 <</if>>
-
+<<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[雨夜打烊后留下来陪她 (0:08)|MP RelDay Sera 1]]>><<pass 8>><</link>><</if>>
 :: MP NPC Sera Service [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
@@ -58,7 +56,7 @@
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你屏息扶稳灯座，看她两指轻拨簧片。<span class="green">卡扣应声归位，你学到了一手巧劲。</span><<stress -2>><<else>>你呼吸急了些，灯影晃动。<span class="red">铜镊擦过表壳，只得下次再试。</span><<stress 2>><</if>>
 <</replace>><</link>>
 </div>
-
+<<if $mpKeepsake and $mpKeepsake["keepsake_clockwork_core"]>><br><<link [[取出机括游丝芯请她过目 (0:06)|MP Keepsake Show Core]]>><<pass 6>><</link>><</if>>
 :: MP NPC Sera Help [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
@@ -101,47 +99,23 @@
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
 <<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
-<<if _stg is 2>>
-	竖井铁栅上的铜挂锁已被水汽锈死。塞拉半蹲在青石阶上把煤油棉签递给你，让你趁巡夜换班空档挑锁，或按她手势挡住穿堂风。
+<<if _stg gte 5>>
+	<<include "MP NPC Sera Quest Late">>
+<<elseif _stg is 2>>
+	竖井铁栅上的铜挂锁已被水汽锈死。塞拉半蹲在石阶上递来煤油棉签，让你趁巡夜换班空档挑锁，或去扳开侧壁的通风活页。
 	<br><br>
 	<<getouticon>><<link [[先退回塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
 	<br>
 	<<if ($skulduggery or 0) gte 250 or ($science or 0) gte 240 or (_npc.trust or 0) gte 8>>
-		<<investigateicon>><<link [[顺着节拍挑开锈锁舌 (0:08)|MP NPC Sera Quest 3 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[按塞拉手势扶稳防风灯 (0:08)|MP NPC Sera Quest 3 Pass]]>><<pass 8>><</link>>
+		<<investigateicon>><<link [[顺着节拍挑开锈锁舌 (0:08)|MP NPC Sera Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<investigateicon>><<link [[顺着节拍挑开锈锁舌 (0:08)|MP NPC Sera Quest 3 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[按塞拉手势扶稳防风灯 (0:08)|MP NPC Sera Quest 3 Fail]]>><<pass 8>><</link>>
+		<<investigateicon>><<link [[顺着节拍挑开锈锁舌 (0:08)|MP NPC Sera Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
-<<elseif _stg is 5>>
-	羊皮星盘底图在胡桃木桌上摊开，上面标着天文翼楼与机括城的三条联动轴线。塞拉递给你分规，让你测算空缺月相轮的朔望齿距。
-	<br><br>
-	<<link [[先退回塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($maths or 0) gte 260 or ($history or 0) gte 250 or (_npc.love or 0) gte 10>>
-		<<link [[用分规测算朔望齿距 (0:08)|MP NPC Sera Quest 6 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[比对旧钟塔副轴拓片 (0:08)|MP NPC Sera Quest 6 Pass]]>><<pass 8>><</link>>
+	<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250 or (_npc.trust or 0) gte 10>>
+		<<fisticon>><<link [[发力扳开侧壁活页栓 (0:08)|MP NPC Sera Quest 3 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<<else>>
-		<<link [[用分规测算朔望齿距 (0:08)|MP NPC Sera Quest 6 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[比对旧钟塔副轴拓片 (0:08)|MP NPC Sera Quest 6 Fail]]>><<pass 8>><</link>>
-	<</if>>
-<<elseif _stg is 8>>
-	高街钟塔顶层的配重副轴正在高速空转，必须在午夜正点前将鎏金发条核心嵌入主擒纵轮。塞拉握紧制动杆，喊你看准缺口推入核心。
-	<br><br>
-	<<link [[先退回塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
-	<br>
-	<<if ($athletics or 0) gte 260 or ($science or 0) gte 260 or (_npc.trust or 0) gte 12>>
-		<<link [[看准轮齿缺口推入核心 (0:10)|MP NPC Sera Quest 9 Pass]]>><<pass 10>><</link>>
-		<br>
-		<<link [[合身拽住副轴配重铁索 (0:10)|MP NPC Sera Quest 9 Pass]]>><<pass 10>><</link>>
-	<<else>>
-		<<link [[看准轮齿缺口推入核心 (0:10)|MP NPC Sera Quest 9 Fail]]>><<pass 10>><</link>>
-		<br>
-		<<link [[合身拽住副轴配重铁索 (0:10)|MP NPC Sera Quest 9 Fail]]>><<pass 10>><</link>>
+		<<fisticon>><<link [[发力扳开侧壁活页栓 (0:08)|MP NPC Sera Quest 3 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<</if>>
 <<else>>
 	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
@@ -149,25 +123,77 @@
 	<<elseif _stg is 1>>塞拉拼起三份市政修缮底图，量出钟塔基座下被封死的通风竖井：「明晚换班时，我们去听听擒纵叉动静。」
 	<<elseif _stg is 3>>回到二楼工作台，塞拉熔化焊锡，让你用夹具稳住受损冠轮。火苗映着她的瞳孔，齿轮终于修整如初。
 	<<elseif _stg is 4>>塞拉将复原的冠轮卡进副轴槽位，报时音筒转过半圈，吐出一卷藏在空心轴里的羊皮星盘底图。
-	<<elseif _stg is 6>>塞拉换上深灰长裙，与你在后巷拦下旧货经纪，三言两语点破假座钟破绽，取回了装有蓝钢游丝轮的木匣。
-	<<elseif _stg is 7>>午夜前，塞拉将蓝钢游丝轮嵌入古星盘底座，十二道机括簧片依次弹开，升起一枚鎏金发条核心。
-	<<elseif _stg is 9>>黎明前，塞拉与你登上钟塔顶层锁死副轴封盖。晨钟敲响第一记浑厚钟声，她在钟鸣里轻轻握住你的手腕。
-	<<else>>塞拉将整套旧物妥善收好，给你倒了一杯热饮。<</if>>
+	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">塞拉将一份 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">塞拉分给你 £8 补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">塞拉将 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">塞拉分给你 £8 补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
-	<<link [[收好东西回到塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+	<<getouticon>><<link [[收好东西回到塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
 	<br>
-	<<link [[与塞拉核对下一步去向 (0:04)|MP NPC Sera Hub]]>><<pass 4>><<stress -2>><</link>>
+	<<if _npc.stage gte 5>><<link [[继续翻看后续卷宗 (0:03)|MP NPC Sera Quest Late]]>><<pass 3>><</link>><<else>><<link [[与塞拉核对下一步去向 (0:04)|MP NPC Sera Hub]]>><<pass 4>><<stress -2>><</link>><</if>>
+<</if>>
+
+:: MP NPC Sera Quest Late [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set _npc to $mpNpcs.sera>><<set _stg to (_npc.stage or 5)>>
+<<if _stg is 5>>
+	羊皮星盘底图在胡桃木桌上摊开，标着天文翼楼与机括城的三条轴线。塞拉递来分规，让你测算空缺月相轮齿距，或去翻查早年修表底簿。
+	<br><br>
+	<<getouticon>><<link [[先退回塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($maths or 0) gte 260 or ($science or 0) gte 250>>
+		<<investigateicon>><<link [[用分规测算朔望齿距 (0:08)|MP NPC Sera Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+	<<else>>
+		<<investigateicon>><<link [[用分规测算朔望齿距 (0:08)|MP NPC Sera Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+	<</if>>
+	<br>
+	<<if ($history or 0) gte 250 or ($english or 0) gte 250 or (_npc.love or 0) gte 10>>
+		<<link [[翻查早年修表底簿核对 (0:08)|MP NPC Sera Quest 6 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
+	<<else>>
+		<<link [[翻查早年修表底簿核对 (0:08)|MP NPC Sera Quest 6 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
+	<</if>>
+<<elseif _stg is 8>>
+	高街钟塔顶层的配重副轴正在高速空转，必须在午夜前将鎏金核心嵌入主擒纵轮。塞拉握紧制动杆，喊你看准缺口推入核心，或拽住副轴配重铁索减速。
+	<br><br>
+	<<getouticon>><<link [[先退回塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($skulduggery or 0) gte 270 or ($science or 0) gte 260>>
+		<<investigateicon>><<link [[看准轮齿缺口推入核心 (0:10)|MP NPC Sera Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<<else>>
+		<<investigateicon>><<link [[看准轮齿缺口推入核心 (0:10)|MP NPC Sera Quest 9 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<</if>>
+	<br>
+	<<if ($athletics or 0) gte 260 or ($physique or 10000) gte 11800 or (_npc.trust or 0) gte 12>>
+		<<fisticon>><<link [[合身拽住副轴配重铁索 (0:10)|MP NPC Sera Quest 9 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<<else>>
+		<<fisticon>><<link [[合身拽住副轴配重铁索 (0:10)|MP NPC Sera Quest 9 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<</if>>
+<<else>>
+	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	<<if _stg is 6>>塞拉与你在后巷拦下旧货商，取回装有蓝钢游丝轮的木匣。
+	<<elseif _stg is 7>>塞拉将游丝轮嵌入星盘底座，机括弹开升起鎏金核心。
+	<<elseif _stg is 9>>黎明前你们登上钟塔锁死封盖，晨钟在雾中浑厚敲响。
+	<<else>>塞拉收好旧物，替你倒了一杯热茶。<</if>>
+	<br><br>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_" + _npc.stage)>>
+		<<money 1500>><<stress -4>><span class="gold">塞拉把 £15 分红塞进你掌心。</span>
+	<<else>><<stress -2>><</if>>
+	<br><br>
+	<<getouticon>><<link [[收好旧物回到塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+	<br>
+	<<link [[与塞拉清点所得线索 (0:04)|MP NPC Sera Hub]]>><<pass 4>><<stress -2>><</link>>
 <</if>>
 
 :: MP NPC Sera Quest 3 Pass [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set _npc to $mpNpcs.sera>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你借着煤油润透的阻力轻轻一拨，三枚铜弹子依次落位。旋梯下露出被撬开的零件箱，塞拉拈起断齿冠轮：「有人故意卡停副钟，想掩盖地底蒸汽抽水声。」<span class="green">你们顺利摸清了竖井下的动静。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你借煤油润透锁芯，用探针依次挑落三枚铜弹子。铁栅无声敞开，塞拉从竖井底拈起一枚断齿冠轮：「有人故意卡停副钟掩盖抽水声。」<span class="green">你用巧劲挑开了竖井铜锁。</span>
+<<else>>
+	你双手扣住通风活页的生铁栓，憋足力气硬生生将锈死的合页扳开一道容人钻入的缝隙。塞拉探身取出井底的断齿冠轮，赞许地拍了拍你的手背。<span class="green">你借侧壁活页打开了通路。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_3")>>
 	<<money 1500>><span class="gold">塞拉把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -180,7 +206,11 @@
 :: MP NPC Sera Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set _npc to $mpNpcs.sera>>
-探针在潮湿锁芯里打滑，防风灯罩烫红了你的指背。巷口突然传来巡夜靴声，塞拉连忙吹熄灯火拉你退回暗处，锁舌仍死死卡着。<span class="red">你被灯罩烫伤手指，今晚只得无功而返。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	探针在潮湿锁芯里打滑，崩断的钢丝划红了指尖。巷口传来巡夜靴声，塞拉连忙拉你退回暗处。<span class="red">锁舌仍死死卡着，今晚只得无功而返。</span>
+<<else>>
+	生铁活页栓纹丝不动，反震得你虎口发麻。铁锈簌簌落下惊动了巷口巡哨，塞拉连忙吹熄提灯拉你撤退。<span class="red">你震痛了手腕，只得先行退回。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随塞拉退回安全处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>>
@@ -191,7 +221,11 @@
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set _npc to $mpNpcs.sera>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你稳住分规量准圆弧夹角，算出缺失零件正是三十六齿蓝钢游丝轮。塞拉欣喜地合上账本：「那东西流进了多瑙河街私下拍场，明晚我们去拦人。」<span class="green">你算准了月相轮的制式参数。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你稳住分规量准圆弧夹角，算出缺失零件正是三十六齿蓝钢游丝轮。塞拉合上草图：「明晚我们去多瑙河街后巷把东西拦下来。」<span class="green">你算准了月相轮的制式齿距。</span>
+<<else>>
+	你从旧货铺底层的修表台账里翻出二十年前的进货单，精准查到了那枚三十六齿蓝钢游丝轮的编号与买主。塞拉惊喜地向你点头。<span class="green">你从旧台账查明了零件去向。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_6")>>
 	<<money 1500>><span class="gold">塞拉把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -204,7 +238,11 @@
 :: MP NPC Sera Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set _npc to $mpNpcs.sera>>
-煤油灯芯爆出一颗火星，你手腕一抖划花了一页草图。两套岁差刻度始终对不上，塞拉揉了揉眉心把图纸收起，让你先去歇息，改日再算。<span class="red">草图被墨迹污损，测算半途中断。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	煤油灯芯爆出火星，分规尖端一抖划破了草图纸面，两套岁差刻度始终对不上。<span class="red">草图被墨迹污损，测算半途中断。</span>
+<<else>>
+	十几册陈年台账字迹潦草模糊，你翻得头昏脑涨也没能对上编号，反被纸张边缘割破指腹。<span class="red">你没能从旧账里理出头绪。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随塞拉退回安全处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>>
@@ -215,7 +253,11 @@
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set _npc to $mpNpcs.sera>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你顶住呼啸的冷风，在擒纵叉回摆的刹那将鎏金核心严丝合缝地按入卡槽。整座钟塔的齿轮发出低沉悦耳的共鸣，塞拉长舒一口气握紧你的手。<span class="green">鎏金发条核心稳稳咬合归位。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你算准擒纵叉回摆的毫厘间隙，手腕一沉将鎏金核心稳稳按入主轮卡槽。钟塔齿轮发出浑厚共鸣，塞拉长舒一口气握紧你的手。<span class="green">你精准将发条核心嵌入主轴。</span>
+<<else>>
+	你双手缠住麻布猛拽配重铁索，硬生生将狂转的副轴拖慢半拍，塞拉趁机将鎏金核心推入卡槽。她转过身替你擦去额角热汗。<span class="green">你凭臂力稳住配重索助她合龙。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_9")>>
 	<<money 1500>><span class="gold">塞拉把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -228,7 +270,11 @@
 :: MP NPC Sera Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set _npc to $mpNpcs.sera>>
-狂风从百叶窗灌入，配重铁索猛地回弹擦破你的手掌。你慢了半秒，副轴安全栓自动锁死，塞拉连忙拉你退下检修梯，只能等明日午夜再试。<span class="red">铁索擦伤手掌，错过了午夜校准窗口。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	狂风从百叶窗灌入，你推入核心时慢了半秒，副轴安全栓自动锁死，指节也被铜齿刮破。<span class="red">你错过了午夜校准窗口。</span>
+<<else>>
+	高速滑行的配重铁索带着巨大冲力，猛地回弹擦破你的手掌，塞拉连忙拉你退下检修梯。<span class="red">铁索烫伤手掌，今晚只得作罢。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随塞拉退回安全处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>>
@@ -288,7 +334,7 @@
 <<if (_npc.love or 0) gte 8 or (_npc.trust or 0) gte 8>>
 	<<walkicon>><<link [[陪他沿着防波堤夜巡 (0:08)|MP Extra Daily Vesper 1]]>><<pass 8>><</link>>
 <</if>>
-
+<<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[清晨大雾时去栈桥找他 (0:08)|MP RelDay Vesper 1]]>><<pass 8>><</link>><</if>>
 :: MP NPC Vesper Service [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
@@ -304,7 +350,7 @@
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你手指翻飞绕紧麻绳。<span class="green">双套盲结一拉即紧，维斯赞许地点头。</span><<stress -2>><<else>>湿滑麻绳在掌心散开。<span class="red">指节被粗麻磨红，你还没摸清绕法。</span><<stress 2>><</if>>
 <</replace>><</link>>
 </div>
-
+<<if $mpKeepsake and $mpKeepsake["keepsake_foghorn_whistle"]>><br><<link [[取出守塔人铜哨请他辨认 (0:06)|MP Keepsake Show Whistle]]>><<pass 6>><</link>><</if>>
 :: MP NPC Vesper Help [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
@@ -347,73 +393,101 @@
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
 <<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
-<<if _stg is 2>>
-	退潮后的断桅暗礁间水流速极快，沉船前舱的铁格栅被一条断裂的铁锚链死死缠住。维斯把撬棍递给你，让你趁浪涌退去的间隙撬开锚链扣。
+<<if _stg gte 5>>
+	<<include "MP NPC Vesper Quest Late">>
+<<elseif _stg is 2>>
+	退潮后的暗礁区浪急水冷，沉船前舱的铁锚链死死压着防水铜账管。维斯递来铁撬棍，让你潜入浅浪撬开锚链，或在礁盘上拉紧滑轮副缆。
 	<br><br>
 	<<getouticon>><<link [[先退回维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($swimmingskill or 0) gte 250 or ($athletics or 0) gte 260 or (_npc.trust or 0) gte 8>>
-		<<investigateicon>><<link [[屏息潜入浅浪撬开锚扣 (0:08)|MP NPC Vesper Quest 3 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[在礁石上拽紧副缆借力 (0:08)|MP NPC Vesper Quest 3 Pass]]>><<pass 8>><</link>>
+	<<if ($swimmingskill or 0) gte 250 or ($athletics or 0) gte 250>>
+		<<swimicon>><<link [[潜入浅浪撬开铁锚链 (0:09)|MP NPC Vesper Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<investigateicon>><<link [[屏息潜入浅浪撬开锚扣 (0:08)|MP NPC Vesper Quest 3 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[在礁石上拽紧副缆借力 (0:08)|MP NPC Vesper Quest 3 Fail]]>><<pass 8>><</link>>
+		<<swimicon>><<link [[潜入浅浪撬开铁锚链 (0:09)|MP NPC Vesper Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
-<<elseif _stg is 5>>
-	沉船中舱的樟木海图柜外加装了走私船惯用的倒钩铅封锁，强行砸开会引爆里面的硫酸毁账管。维斯打亮水下防风灯，让你用细铜丝挑开铅封。
-	<br><br>
-	<<link [[先退回维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($skulduggery or 0) gte 260 or ($science or 0) gte 250 or (_npc.love or 0) gte 10>>
-		<<link [[顺着锁孔挑开倒钩铅封 (0:08)|MP NPC Vesper Quest 6 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[用小刀拆下樟木柜背板 (0:08)|MP NPC Vesper Quest 6 Pass]]>><<pass 8>><</link>>
+	<<if ($physique or 10000) gte 11600 or ($skulduggery or 0) gte 250 or (_npc.trust or 0) gte 10>>
+		<<fisticon>><<link [[在礁石上绞紧滑轮副缆 (0:09)|MP NPC Vesper Quest 3 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
 	<<else>>
-		<<link [[顺着锁孔挑开倒钩铅封 (0:08)|MP NPC Vesper Quest 6 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[用小刀拆下樟木柜背板 (0:08)|MP NPC Vesper Quest 6 Fail]]>><<pass 8>><</link>>
-	<</if>>
-<<elseif _stg is 8>>
-	下潜主金库前，海关夜巡汽艇的探照灯突然锁死了海湾出口。维斯把备用诱饵浮灯交给你，让你游向东侧礁石引开探照灯。
-	<br><br>
-	<<link [[先退回维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>>
-	<br>
-	<<if ($swimmingskill or 0) gte 270 or ($skulduggery or 0) gte 270 or (_npc.trust or 0) gte 12>>
-		<<link [[潜游到东礁点亮诱饵灯 (0:10)|MP NPC Vesper Quest 9 Pass]]>><<pass 10>><</link>>
-		<br>
-		<<link [[借雾角回声扰乱巡艇方位 (0:10)|MP NPC Vesper Quest 9 Pass]]>><<pass 10>><</link>>
-	<<else>>
-		<<link [[潜游到东礁点亮诱饵灯 (0:10)|MP NPC Vesper Quest 9 Fail]]>><<pass 10>><</link>>
-		<br>
-		<<link [[借雾角回声扰乱巡艇方位 (0:10)|MP NPC Vesper Quest 9 Fail]]>><<pass 10>><</link>>
+		<<fisticon>><<link [[在礁石上绞紧滑轮副缆 (0:09)|MP NPC Vesper Quest 3 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
 	<</if>>
 <<else>>
 	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
-	<<if _stg is 0>>维斯摊开一张被海水泡黄的旧港海图，指着外海暗礁：「十年前沉没的『黑天鹅号』底舱，还锁着半船海关罚没金银。」
-	<<elseif _stg is 1>>维斯带你借着夜雾划小舢板靠近一号灯浮标，捞起一只挂在锚链下方的密封铜管，里面装着半截生锈的舵轮轴芯。
-	<<elseif _stg is 3>>回到栈桥暗室，维斯用热醋洗去铜牌绿锈，上面显出一组与雾角岛退潮时刻对应的水下深度刻痕。
-	<<elseif _stg is 4>>维斯借来一套旧式潜水铅鞋与导气皮管，与你在浅湾演练水下换气手势，确保两人能在暗流里进退自如。
-	<<elseif _stg is 6>>你们把从沉船副舱取出的防水账册烘乾，查出当年私吞另一半金库钥匙的正是旧港前任副港务长。
-	<<elseif _stg is 7>>维斯与你在码头酒馆后巷截住副港务长的马车，用那本旧账逼对方交出了开启主金库的十字青铜重匙。
-	<<elseif _stg is 9>>月黑风高之夜，你与维斯再次潜入『黑天鹅号』主舱，用双匙打开沉没金库，将最后一批银砖装入浮力帆布袋。
-	<<else>>维斯将整套旧物妥善收好，给你倒了一杯热饮。<</if>>
+	<<if _stg is 0>>维斯撬开冲上岸的铅封浮筒，里面是一本浸水航海日志：「旧港外沉着一艘运银砖的护卫舰，跟我干，分你一半。」
+	<<elseif _stg is 1>>三号干船坞的帆布下，维斯带你给快艇加装消音铜管，手把手教你辨认暗礁航标与缉私艇探照灯死角。
+	<<elseif _stg is 3>>快艇返航途中遇上缉私艇巡查，维斯将船滑入桥墩死角，把你拉进防风大衣下屏息躲过了探照灯。
+	<<elseif _stg is 4>>船长室铁炉烧得通红，维斯递给你干毛巾与姜茶，将火漆账管在炭火旁烘开，露出一张绘着暗流海沟的羊皮图。
+	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">维斯将一份 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">维斯分给你 £8 补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">维斯将 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">维斯分给你 £8 补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
-	<<link [[收好东西回到维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>>
+	<<getouticon>><<link [[收好东西回到维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>>
 	<br>
-	<<link [[与维斯核对下一步去向 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><<stress -2>><</link>>
+	<<if _npc.stage gte 5>><<link [[继续翻看后续卷宗 (0:03)|MP NPC Vesper Quest Late]]>><<pass 3>><</link>><<else>><<link [[与维斯核对下一步去向 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><<stress -2>><</link>><</if>>
+<</if>>
+
+:: MP NPC Vesper Quest Late [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+<<set _npc to $mpNpcs.vesper>><<set _stg to (_npc.stage or 5)>>
+<<if _stg is 5>>
+	防水铜账管内壁焊着一圈机关硫酸泡，稍有晃动就会腐蚀底单。维斯屏住呼吸按住管身，让你用细铜丝挑开铅封，或用白蜡先行封堵酸液导槽。
+	<br><br>
+	<<getouticon>><<link [[先退回维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($skulduggery or 0) gte 270 or ($science or 0) gte 250>>
+		<<sneakicon>><<link [[用细铜丝挑开内壁铅封 (0:08)|MP NPC Vesper Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+	<<else>>
+		<<sneakicon>><<link [[用细铜丝挑开内壁铅封 (0:08)|MP NPC Vesper Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+	<</if>>
+	<br>
+	<<if ($willpower or 0) gte 440 or ($tending or 0) gte 250 or (_npc.love or 0) gte 10>>
+		<<investigateicon>><<link [[融化白蜡封堵酸液导槽 (0:08)|MP NPC Vesper Quest 6 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
+	<<else>>
+		<<investigateicon>><<link [[融化白蜡封堵酸液导槽 (0:08)|MP NPC Vesper Quest 6 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
+	<</if>>
+<<elseif _stg is 8>>
+	风暴夜的断桅沉船滩外，海关巡逻艇封死了主航道。维斯掌稳双桅船舵轮，让你潜游去东侧暗礁点亮诱饵浮灯，或升起副帆贴着盲区强行冲关。
+	<br><br>
+	<<getouticon>><<link [[先退回维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($swimmingskill or 0) gte 280 or ($skulduggery or 0) gte 280>>
+		<<swimicon>><<link [[潜游去东礁挂诱饵浮灯 (0:10)|MP NPC Vesper Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<<else>>
+		<<swimicon>><<link [[潜游去东礁挂诱饵浮灯 (0:10)|MP NPC Vesper Quest 9 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<</if>>
+	<br>
+	<<if ($athletics or 0) gte 270 or ($physique or 10000) gte 11800 or (_npc.trust or 0) gte 12>>
+		<<runicon>><<link [[收紧副帆贴着礁影抢航 (0:10)|MP NPC Vesper Quest 9 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<<else>>
+		<<runicon>><<link [[收紧副帆贴着礁影抢航 (0:10)|MP NPC Vesper Quest 9 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<</if>>
+<<else>>
+	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	<<if _stg is 6>>你们趁退潮划入海蚀暗洞，在石龛下起出半箱航海金器。
+	<<elseif _stg is 7>>旧港栈桥边两名眼线拦路，维斯与你并肩迫退对方守住货箱。
+	<<elseif _stg is 9>>晨光刺破海雾，双桅船满载靠岸，维斯将船长室副匙交给你。
+	<<else>>维斯收妥账册，递给你一杯温热朗姆酒。<</if>>
+	<br><br>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_" + _npc.stage)>>
+		<<money 1500>><<stress -4>><span class="gold">维斯把 £15 分红塞进你掌心。</span>
+	<<else>><<stress -2>><</if>>
+	<br><br>
+	<<getouticon>><<link [[收好旧物回到维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>>
+	<br>
+	<<link [[与维斯清点所得线索 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><<stress -2>><</link>>
 <</if>>
 
 :: MP NPC Vesper Quest 3 Pass [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set _npc to $mpNpcs.vesper>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你借着回流寸劲一撬，锈蚀的锚链环应声崩断。维斯探身从格栅后取出一块刻满水深坐标的航海铜牌。<span class="green">你们顺利取出了前舱的航海铜牌。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你深吸一口气潜入冰凉海水，将撬棍插进锚链环眼发力一别，顺利抽出底下的防水铜账管。维斯一把将你拉上艇舷裹进大衣。<span class="green">你潜入浪底起出了防水账管。</span>
+<<else>>
+	你将麻缆缠在礁石铁桩上死死绞紧，借着涌浪浮力将沉重锚链吊起半尺，维斯探身抽出铜账管后冲你竖起拇指。<span class="green">你借滑轮巧劲吊起了铁锚链。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_3")>>
 	<<money 1500>><span class="gold">维斯把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -426,7 +500,11 @@
 :: MP NPC Vesper Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set _npc to $mpNpcs.vesper>>
-一股冰冷的暗流猛地卷过礁盘，你脚下一滑磕在藤壶上，手里撬棍脱手沉入石缝。涨潮已经漫上脚踝，维斯一把将你拽回舢板。<span class="red">藤壶划破小腿，涨潮迫使你们先行撤回。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	暗流突然卷过礁盘，撬棍在藤壶上打滑，冰冷海水呛入喉咙，小腿也被牡蛎壳划破。<span class="red">你被暗流冲回艇边，未能取出账管。</span>
+<<else>>
+	湿透的麻缆在绞盘上猛然打滑，粗糙麻绳勒红了你的掌心，锚链轰然落回水底。<span class="red">缆绳脱手擦伤手掌，只得趁涨潮前撤离。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随维斯退回安全处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>>
@@ -437,7 +515,11 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set _npc to $mpNpcs.vesper>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你屏住呼吸拨开硫酸玻管旁的铜簧，完好无损地抽出了封在蜡纸里的私运底账。维斯冲你比了个漂亮的手势。<span class="green">防水底账完好无损地到了手里。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你屏息将细铜丝探入管口，稳稳勾住机关簧片卸下玻璃硫酸泡，完整抽出了早年商会骗保的海难底单。<span class="green">你无损拆除了账管内的自毁机关。</span>
+<<else>>
+	你滴入温热白蜡将导流槽严密包裹，哪怕玻璃泡微裂也无法渗入内层，维斯顺利旋开底盖取出了海难底单。<span class="green">你用白蜡封死导槽保住了底单。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_6")>>
 	<<money 1500>><span class="gold">维斯把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -450,7 +532,11 @@
 :: MP NPC Vesper Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set _npc to $mpNpcs.vesper>>
-暗流晃动灯影，你的铜丝勾到了副簧，柜缝里渗出一缕刺鼻酸雾。维斯果断拉开你退向舱口，只能等酸液被海水冲淡后再来。<span class="red">酸雾熏痛眼眶，你们被迫退出中舱。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	船身被夜浪晃了一下，铜丝磕破玻璃外管，刺鼻白烟瞬间冒出，维斯疾手将铜管浸入水桶才没烧穿底单。<span class="red">白烟呛得你直咳嗽，开锁被迫中断。</span>
+<<else>>
+	热蜡滴偏了位置，滚烫蜡油溅在你手背上，机关簧片卡死在半途，只能等回岸备齐工具再试。<span class="red">热蜡烫红手背，未能取出底单。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随维斯退回安全处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>>
@@ -461,7 +547,11 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set _npc to $mpNpcs.vesper>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你贴着浪谷悄无声息地游过警戒线，将诱饵浮灯系在东侧废标上。巡逻艇立刻调头追去，主暗礁航道彻底清空。<span class="green">你干净利落地引开了巡逻汽艇。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你顶着黑浪游上东侧礁盘，将防风诱饵灯系在浮木上推向远海。巡逻艇立刻调头追去，维斯趁机驾船打捞起主金库铁箱。<span class="green">你用诱饵浮灯巧妙调开了巡逻艇。</span>
+<<else>>
+	你与维斯合力拉满斜帆，双桅船借着狂风贴着黑色崖影疾掠而过，在探照灯扫来的前一秒冲入沉船湾捞起主金库。<span class="green">你们凭娴熟控帆穿过封锁线。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_9")>>
 	<<money 1500>><span class="gold">维斯把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -474,7 +564,11 @@
 :: MP NPC Vesper Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<set _npc to $mpNpcs.vesper>>
-探照灯光柱擦过你的后背，刺骨海水冻得你小腿抽筋。维斯及时划舢板将你捞进暗影，但今晚已无法下潜金库。<span class="red">海水冻僵四肢，今晚错失了下潜良机。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	巨浪迎面拍下，诱饵灯被浪花打灭，探照灯立刻扫向礁盘，维斯只得冒险驾艇将湿透的你拉回船舱撤离。<span class="red">海浪拍熄浮灯，你们只得先行退避。</span>
+<<else>>
+	横风猛烈灌入副帆，帆索抽得你手臂生疼，船身擦过暗礁发出闷响，维斯果断下令转舵退回暗港。<span class="red">风浪过急，抢航半途受阻。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随维斯退回安全处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>>
@@ -534,7 +628,7 @@
 <<if (_npc.love or 0) gte 8 or (_npc.trust or 0) gte 8>>
 	<<walkicon>><<link [[陪她去后园修剪药草垄 (0:08)|MP Extra Daily Noel 1]]>><<pass 8>><</link>>
 <</if>>
-
+<<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[霜降清晨去药草垄帮她 (0:08)|MP RelDay Noel 1]]>><<pass 8>><</link>><</if>>
 :: MP NPC Noel Service [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
@@ -548,7 +642,7 @@
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>清凉薄荷与雪松香气直透眉心。<span class="green">你顿觉神清气爽。</span><<stress -2>><<else>>你不小心凑得太近，浓烈樟脑味呛得打了个喷嚏。<span class="red">眼角泛起一抹酸涩。</span><<stress 2>><</if>>
 <</replace>><</link>>
 </div>
-
+<<if $mpKeepsake and $mpKeepsake["keepsake_glasshouse_amber"]>><br><<link [[取出夜光琥珀花匣给她看 (0:06)|MP Keepsake Show Amber]]>><<pass 6>><</link>><</if>>
 :: MP NPC Noel Help [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
@@ -591,73 +685,101 @@
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
 <<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
-<<if _stg is 2>>
-	多瑙河街秘密温室的废弃育苗箱里还残留着三枚银丝兰休眠球茎，但箱底长满了带刺的毒刺荨麻。诺艾尔递给你鹿皮手套与竹镊。
+<<if _stg gte 5>>
+	<<include "MP NPC Noel Quest Late">>
+<<elseif _stg is 2>>
+	银脉兰块茎必须用温水剥去外层带刺的毒荨麻膜才能入土。诺艾尔递来竹镊，让你夹除细小毒刺，或调配薄荷碱水先行中和。
 	<br><br>
 	<<getouticon>><<link [[先退回诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($tending or 0) gte 250 or ($science or 0) gte 240 or (_npc.trust or 0) gte 8>>
-		<<investigateicon>><<link [[戴好手套用竹镊夹取球茎 (0:08)|MP NPC Noel Quest 3 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[撒入草木灰压制毒荨麻 (0:08)|MP NPC Noel Quest 3 Pass]]>><<pass 8>><</link>>
+	<<if ($tending or 0) gte 250 or ($skulduggery or 0) gte 240>>
+		<<tendingicon>><<link [[用竹镊逐根夹除毒刺 (0:08)|MP NPC Noel Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<investigateicon>><<link [[戴好手套用竹镊夹取球茎 (0:08)|MP NPC Noel Quest 3 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[撒入草木灰压制毒荨麻 (0:08)|MP NPC Noel Quest 3 Fail]]>><<pass 8>><</link>>
+		<<tendingicon>><<link [[用竹镊逐根夹除毒刺 (0:08)|MP NPC Noel Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
-<<elseif _stg is 5>>
-	沉没修道院的石壁高处长着一片夜生白苔，但下方石阶覆着滑腻水苔，且必须用骨刀贴壁整片刮下才能保住菌丝活性。
-	<br><br>
-	<<link [[先退回诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($tending or 0) gte 260 or ($athletics or 0) gte 250 or (_npc.love or 0) gte 10>>
-		<<link [[踩稳石缝用骨刀整片刮取 (0:08)|MP NPC Noel Quest 6 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[让诺艾尔托住竹篮配合接应 (0:08)|MP NPC Noel Quest 6 Pass]]>><<pass 8>><</link>>
+	<<if ($science or 0) gte 250 or ($housekeeping or 0) gte 250 or (_npc.trust or 0) gte 10>>
+		<<investigateicon>><<link [[调配薄荷碱水浸泡脱膜 (0:08)|MP NPC Noel Quest 3 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<<else>>
-		<<link [[踩稳石缝用骨刀整片刮取 (0:08)|MP NPC Noel Quest 6 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[让诺艾尔托住竹篮配合接应 (0:08)|MP NPC Noel Quest 6 Fail]]>><<pass 8>><</link>>
-	<</if>>
-<<elseif _stg is 8>>
-	盛放前夜，一场突如其来的寒流让花房恒温铜炉气压骤降。诺艾尔守在兰盆边护住防风罩，喊你去调节副炉的蒸汽分流阀。
-	<br><br>
-	<<link [[先退回诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
-	<br>
-	<<if ($science or 0) gte 260 or ($housekeeping or 0) gte 260 or (_npc.trust or 0) gte 12>>
-		<<link [[对照气压表旋开副炉分流阀 (0:10)|MP NPC Noel Quest 9 Pass]]>><<pass 10>><</link>>
-		<br>
-		<<link [[用厚麻袋封堵漏风天窗缝 (0:10)|MP NPC Noel Quest 9 Pass]]>><<pass 10>><</link>>
-	<<else>>
-		<<link [[对照气压表旋开副炉分流阀 (0:10)|MP NPC Noel Quest 9 Fail]]>><<pass 10>><</link>>
-		<br>
-		<<link [[用厚麻袋封堵漏风天窗缝 (0:10)|MP NPC Noel Quest 9 Fail]]>><<pass 10>><</link>>
+		<<investigateicon>><<link [[调配薄荷碱水浸泡脱膜 (0:08)|MP NPC Noel Quest 3 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<</if>>
 <<else>>
 	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
-	<<if _stg is 0>>诺艾尔翻开一本百年前的院长手札，指着一页夹着银白枯瓣的记录：「旧温室曾培育过能安抚梦魇的『月光银丝兰』。」
-	<<elseif _stg is 1>>你们在学校图书馆顶层暗格里找出当年的育种配土表，发现银丝兰需要混合月泉白砂与松脂腐殖土才能萌发。
-	<<elseif _stg is 3>>回到花房暗格，诺艾尔将休眠的兰草球茎浸入调好的营养液，球茎表皮渐渐浮现出银丝般的微光脉络。
-	<<elseif _stg is 4>>连续数日的恒温养护后，银丝兰抽出了第一枝嫩芽，但要让它开花，还差一味采自古修道院石壁的夜生白苔。
-	<<elseif _stg is 6>>诺艾尔将白苔铺在兰盆四周，花苞在傍晚胀满，散发出清冽宁神的幽香，连窗外的夜枭都安静下来。
-	<<elseif _stg is 7>>一名替多瑙河街药商跑腿的学徒企图夜间偷换兰盆，被你和诺艾尔用假标本巧妙骗走，保住了真株。
-	<<elseif _stg is 9>>满月之夜，月光银丝兰在玻璃穹顶下完全盛放。诺艾尔剪下最饱满的一朵制成永生花标本，郑重放进你的掌心。
-	<<else>>诺艾尔将整套旧物妥善收好，给你倒了一杯热饮。<</if>>
+	<<if _stg is 0>>诺艾尔在理科旧准备室翻出一册植物图谱，里面夹着半片泛银光的干枯花瓣：「这是失传的雾月银脉兰。」
+	<<elseif _stg is 1>>宵禁后，诺艾尔带你从学园后门溜去公园旧玻璃花房，在荒废花坛下挖出三枚尚有生机的银脉兰块茎。
+	<<elseif _stg is 3>>恒温蒸馏器接口松脱，喷出一团清甜白雾。诺艾尔脸颊绯红地把你拉到通风窗边，两人在微喘中贴在一起平复心跳。
+	<<elseif _stg is 4>>为查最后味辅料，你们在图书馆古籍架死角翻书，礼顿突然巡查经过，诺艾尔慌忙捂住你的嘴躲进阴影。
+	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">诺艾尔将一份 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">诺艾尔分给你 £8 补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">诺艾尔将 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">诺艾尔分给你 £8 补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
-	<<link [[收好东西回到诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
+	<<getouticon>><<link [[收好东西回到诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 	<br>
-	<<link [[与诺艾尔核对下一步去向 (0:04)|MP NPC Noel Hub]]>><<pass 4>><<stress -2>><</link>>
+	<<if _npc.stage gte 5>><<link [[继续翻看后续卷宗 (0:03)|MP NPC Noel Quest Late]]>><<pass 3>><</link>><<else>><<link [[与诺艾尔核对下一步去向 (0:04)|MP NPC Noel Hub]]>><<pass 4>><<stress -2>><</link>><</if>>
+<</if>>
+
+:: MP NPC Noel Quest Late [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>>
+<<set _npc to $mpNpcs.noel>><<set _stg to (_npc.stage or 5)>>
+<<if _stg is 5>>
+	辅料所需的月光白苔只长在沉没修道院暗河边的滑石上，稍见强光便会枯萎。诺艾尔遮住提灯，让你用骨刀整片刮取，或连着底石整块凿下。
+	<br><br>
+	<<getouticon>><<link [[先退回诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($tending or 0) gte 270 or ($science or 0) gte 260>>
+		<<tendingicon>><<link [[用骨刀贴着石缝刮取白苔 (0:09)|MP NPC Noel Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+	<<else>>
+		<<tendingicon>><<link [[用骨刀贴着石缝刮取白苔 (0:09)|MP NPC Noel Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+	<</if>>
+	<br>
+	<<if ($athletics or 0) gte 260 or ($willpower or 0) gte 440 or (_npc.love or 0) gte 10>>
+		<<sneakicon>><<link [[扶稳湿滑岩壁凿下薄石片 (0:09)|MP NPC Noel Quest 6 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
+	<<else>>
+		<<sneakicon>><<link [[扶稳湿滑岩壁凿下薄石片 (0:09)|MP NPC Noel Quest 6 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
+	<</if>>
+<<elseif _stg is 8>>
+	寒潮夜里温室主蒸汽管压力骤降，正在开花的双生银脉兰随时会冻伤。诺艾尔守着温床，让你去扳开副炉分流铜阀，或用双层棉毡搭起保温内棚。
+	<br><br>
+	<<getouticon>><<link [[先退回诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($physique or 10000) gte 11600 or ($science or 0) gte 270>>
+		<<fisticon>><<link [[缠上麻布扳开副炉分流阀 (0:10)|MP NPC Noel Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<<else>>
+		<<fisticon>><<link [[缠上麻布扳开副炉分流阀 (0:10)|MP NPC Noel Quest 9 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<</if>>
+	<br>
+	<<if ($tending or 0) gte 280 or ($housekeeping or 0) gte 270 or (_npc.trust or 0) gte 12>>
+		<<tendingicon>><<link [[用炭钵与棉毡搭起保温棚 (0:10)|MP NPC Noel Quest 9 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<<else>>
+		<<tendingicon>><<link [[用炭钵与棉毡搭起保温棚 (0:10)|MP NPC Noel Quest 9 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<</if>>
+<<else>>
+	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	<<if _stg is 6>>诺艾尔将银脉兰与白苔合入铜釜，萃出淡紫色的安神原液。
+	<<elseif _stg is 7>>诺艾尔将花露交予多瑙河街药剂行，换回经费与温室通行牌。
+	<<elseif _stg is 9>>晨光洒满准备室，诺艾尔将双生银丝花琥珀胸针别在你领口。
+	<<else>>诺艾尔收好标本册，为你斟了一杯花茶。<</if>>
+	<br><br>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_" + _npc.stage)>>
+		<<money 1500>><<stress -4>><span class="gold">诺艾尔把 £15 分红塞进你掌心。</span>
+	<<else>><<stress -2>><</if>>
+	<br><br>
+	<<getouticon>><<link [[收好旧物回到诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
+	<br>
+	<<link [[与诺艾尔清点所得线索 (0:04)|MP NPC Noel Hub]]>><<pass 4>><<stress -2>><</link>>
 <</if>>
 
 :: MP NPC Noel Quest 3 Pass [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set _npc to $mpNpcs.noel>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你顺着荨麻叶背的走向轻轻拨开毒刺，将三枚饱满的银丝兰球茎完好取出。诺艾尔欣喜地用湿苔将球茎包好。<span class="green">三枚休眠球茎毫发无损地收入囊中。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你屏住呼吸用竹镊将球茎表面的透明毒刺一根不落地拔除，完好露出了里面晶莹的银白芽尖，诺艾尔欣喜地将其植入营养钵。<span class="green">你干净利落地剥除了块茎毒刺。</span>
+<<else>>
+	你按比例兑好温热薄荷碱水，块茎入水片刻后外层毒膜便自行脱落。诺艾尔捧起发亮的芽球向你露出明媚笑意。<span class="green">你用碱水温和卸去了外层毒膜。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_3")>>
 	<<money 1500>><span class="gold">诺艾尔把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -670,7 +792,11 @@
 :: MP NPC Noel Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set _npc to $mpNpcs.noel>>
-枯枝突然断裂，你的手腕擦过荨麻毒刺，顿时起了几颗火辣辣的红疹。诺艾尔心疼地拉你退开，先替你敷上薄荷汁。<span class="red">荨麻毒刺蛰伤手腕，只得改日再来取苗。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	竹镊尖端一滑，毒荨麻细刺扎破了手套刺入指尖，火辣辣的麻痒让你手腕一抖碰伤了外层芽皮。<span class="red">毒刺扎伤手指，只能等明日重新处理。</span>
+<<else>>
+	碱水温度稍高了一线，块茎表皮泛起焦黄，诺艾尔连忙将其捞出浸入冷水抢救，今晚无法继续移栽。<span class="red">水温失准，移栽被迫顺延。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随诺艾尔退回安全处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
@@ -681,7 +807,11 @@
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set _npc to $mpNpcs.noel>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你屏息凝神，刀刃贴着潮湿石面一气呵成地剥下整片银白苔藓，菌丝完好如初。诺艾尔连忙用玻璃皿封存。<span class="green">活性十足的夜生白苔已妥善收好。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你在微光中稳稳运刀，连着湿润假根将整片泛着银光的白苔完整剥下，迅速封入诺艾尔举着的黑玻广口瓶。<span class="green">你完好采下了鲜活的月光白苔。</span>
+<<else>>
+	你踩稳暗河边的青苔石阶，用小锤沿页岩层理轻轻一敲，连着薄石片将整簇白苔原封不动地收入暗盒。<span class="green">你连石带苔完整取下了标本。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_6")>>
 	<<money 1500>><span class="gold">诺艾尔把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -694,7 +824,11 @@
 :: MP NPC Noel Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set _npc to $mpNpcs.noel>>
-脚底青苔一滑，你为了稳住身形按偏了刀刃，刮下的白苔碎成几截失去了微光。诺艾尔忙扶住你，决定等新苔长出再来。<span class="red">石阶打滑刮碎了菌丝，白苔失去了活性。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	暗河冷风吹晃了灯影，你在青苔石阶上滑了半步，骨刀刮碎了大半簇白苔，膝盖也磕在石棱上。<span class="red">白苔受损失去药性，只得改日重采。</span>
+<<else>>
+	页岩比预想中更脆，小锤落点稍偏便震裂了石面，水花溅湿了你的衣摆，白苔散落进湍急暗河。<span class="red">石片碎裂，采集未能如愿。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随诺艾尔退回安全处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
@@ -705,7 +839,11 @@
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set _npc to $mpNpcs.noel>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你果断关小回水支路、推高主炉蒸汽压，暖雾重新均匀地笼罩住花房。银丝兰的花瓣在暖意中舒展开第一道银边。<span class="green">花房恒温恢复，花苞安然渡过寒潮。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你顶着喷涌的滚烫白雾拧开副炉分流阀，暖流重新注满盘管，双生银脉兰在温润水雾中缓缓舒展花瓣。<span class="green">你及时恢复了温室的恒温供暖。</span>
+<<else>>
+	你麻利地支起竹架罩上双层棉毡，在四角放好温水铜钵，将花床温度稳稳锁在二十度，银脉兰安然盛放。<span class="green">你搭起保温内棚护住了双生花。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_9")>>
 	<<money 1500>><span class="gold">诺艾尔把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -718,7 +856,11 @@
 :: MP NPC Noel Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<set _npc to $mpNpcs.noel>>
-副阀铁柄烫得吓人，你拧反了半圈导致冷风倒灌，花苞尖端微微蜷缩。诺艾尔连忙搬来炭盆抢救，花期被迫推迟了一日。<span class="red">冷风倒灌冻伤花尖，今晚无法如期盛放。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	滚烫铜阀卡在半途，溢出的热汽烫红了你的小臂，温度计水银柱一路下滑，银脉兰花苞紧闭收回。<span class="red">你被热汽烫伤，花期被迫推迟。</span>
+<<else>>
+	穿堂冷风吹翻了一角棉毡，冰凉水珠溅在花托上，双生兰受寒合拢，诺艾尔只得先将花钵抱回内室抢救。<span class="red">寒风灌入花棚，今晚未能开花。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随诺艾尔退回安全处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
@@ -778,7 +920,7 @@
 <<if (_npc.love or 0) gte 8 or (_npc.trust or 0) gte 8>>
 	<<walkicon>><<link [[陪他在晨雾里练早功 (0:08)|MP Extra Daily Lin 1]]>><<pass 8>><</link>>
 <</if>>
-
+<<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[雪夜巡街后随他回修车库 (0:08)|MP RelDay Lin 1]]>><<pass 8>><</link>><</if>>
 :: MP NPC Lin Service [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
@@ -792,7 +934,7 @@
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>拳峰砸出沉闷声响。<span class="green">林恩颔首赞许你的发力时机。</span><<stress -2>><<else>>出拳偏了半寸，手腕微酸。<span class="red">林恩按住你手腕让你先放松。</span><<stress 2>><</if>>
 <</replace>><</link>>
 </div>
-
+<<if $mpKeepsake and $mpKeepsake["keepsake_blackiron_medal"]>><br><<link [[取出司炉长铜章给他过目 (0:06)|MP Keepsake Show Medal]]>><<pass 6>><</link>><</if>>
 :: MP NPC Lin Help [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
@@ -835,73 +977,101 @@
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
 <<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
-<<if _stg is 2>>
-	黑铁货运站保卫科的铁皮档案柜外挂着双簧铁锁，走廊外两名夜班护卫正打着哈欠巡来。林恩守在拐角，让你速开铁柜或合力制伏落单护卫。
+<<if _stg gte 5>>
+	<<include "MP NPC Lin Quest Late">>
+<<elseif _stg is 2>>
+	黑铁货运站保卫科的铁皮窗紧锁，里面存着地下拳场的假拳分红底单。林恩在巷口放哨，让你用钢片顶开窗扣，或从屋顶气窗顺绳滑入。
 	<br><br>
 	<<getouticon>><<link [[先退回林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($skulduggery or 0) gte 250 or ($physique or 10000) gte 11600 or (_npc.trust or 0) gte 8>>
-		<<investigateicon>><<link [[用钢片顶开档案柜双簧锁 (0:08)|MP NPC Lin Quest 3 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[配合林恩从暗影掩口夺匙 (0:08)|MP NPC Lin Quest 3 Pass]]>><<pass 8>><</link>>
+	<<if ($skulduggery or 0) gte 260 or ($science or 0) gte 240>>
+		<<sneakicon>><<link [[用薄钢片顶开双簧窗扣 (0:08)|MP NPC Lin Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<investigateicon>><<link [[用钢片顶开档案柜双簧锁 (0:08)|MP NPC Lin Quest 3 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[配合林恩从暗影掩口夺匙 (0:08)|MP NPC Lin Quest 3 Fail]]>><<pass 8>><</link>>
+		<<sneakicon>><<link [[用薄钢片顶开双簧窗扣 (0:08)|MP NPC Lin Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
-<<elseif _stg is 5>>
-	废弃拳场地窖的铁笼机关门突然落下，将你们困在积水甬道内。必须在巡夜打手赶到前掰开生锈的齿轮棘爪。
-	<br><br>
-	<<link [[先退回林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($physique or 10000) gte 11800 or ($athletics or 0) gte 260 or (_npc.love or 0) gte 10>>
-		<<link [[与林恩合力扳开齿轮棘爪 (0:08)|MP NPC Lin Quest 6 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[顺着通风铁管卸下限位销 (0:08)|MP NPC Lin Quest 6 Pass]]>><<pass 8>><</link>>
+	<<if ($athletics or 0) gte 260 or ($physique or 10000) gte 11600 or (_npc.trust or 0) gte 10>>
+		<<runicon>><<link [[攀上砖墙从天窗翻入室内 (0:08)|MP NPC Lin Quest 3 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<<else>>
-		<<link [[与林恩合力扳开齿轮棘爪 (0:08)|MP NPC Lin Quest 6 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[顺着通风铁管卸下限位销 (0:08)|MP NPC Lin Quest 6 Fail]]>><<pass 8>><</link>>
-	<</if>>
-<<elseif _stg is 8>>
-	幕后庄家企图在今夜乘火车销毁最后一本总账。林恩在月台天桥布防，让你在庄家随从经过时截下那只黑皮公文包。
-	<br><br>
-	<<link [[先退回林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
-	<br>
-	<<if ($athletics or 0) gte 270 or ($skulduggery or 0) gte 270 or (_npc.trust or 0) gte 12>>
-		<<link [[借蒸汽浓雾错身夺下皮包 (0:10)|MP NPC Lin Quest 9 Pass]]>><<pass 10>><</link>>
-		<br>
-		<<link [[扳动行李车拦住随从去路 (0:10)|MP NPC Lin Quest 9 Pass]]>><<pass 10>><</link>>
-	<<else>>
-		<<link [[借蒸汽浓雾错身夺下皮包 (0:10)|MP NPC Lin Quest 9 Fail]]>><<pass 10>><</link>>
-		<br>
-		<<link [[扳动行李车拦住随从去路 (0:10)|MP NPC Lin Quest 9 Fail]]>><<pass 10>><</link>>
+		<<runicon>><<link [[攀上砖墙从天窗翻入室内 (0:08)|MP NPC Lin Quest 3 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<</if>>
 <<else>>
 	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
-	<<if _stg is 0>>林恩摩挲着一枚刻有『七号铁笼』的旧铜牌：「几年前倒钩街地下拳场曾逼孤儿打黑赛，我想把当年的账册挖出来。」
-	<<elseif _stg is 1>>你们在废弃厂房外围找到当年看门老拳手的住处，从他口中问出旧拳场的账本藏在黑铁货运站的保卫科铁柜里。
-	<<elseif _stg is 3>>回到值班室，林恩翻看取出的押注名册，发现幕后庄家每隔半月都会在多瑙河街茶会洗白黑钱。
-	<<elseif _stg is 4>>林恩带你潜入拳场旧址地窖，找到了当年被扣押的孤儿院学徒卖身契原件，准备一并交还给当事人。
-	<<elseif _stg is 6>>庄家派来两名拳手在孤儿院后巷堵截，你与林恩背靠背迎敌，三两下将对方缴械赶跑。
-	<<elseif _stg is 7>>你们将庄家伪造债务的铁证匿名塞进市政厅与警局督察信箱，彻底斩断了拳场伸向孤儿院的黑手。
-	<<elseif _stg is 9>>清晨阳光洒满宅邸街，林恩当着你的面将那枚『七号铁笼』旧铜牌扔进熔炉，转身紧紧抱住了你。
-	<<else>>林恩将整套旧物妥善收好，给你倒了一杯热饮。<</if>>
+	<<if _stg is 0>>林恩把一张黑拳赛催命单拍在木箱上：「赌庄老板要逼孤儿院大孩子打黑赛抵债，帮我摸清他们账房底细。」
+	<<elseif _stg is 1>>你们换上粗布工装混进丰收街酒馆后院，借搬运空酒桶摸清了地下拳场暗门守卫的换班钟点。
+	<<elseif _stg is 3>>撤出工业巷时三名打手堵住去路，林恩与你互成掎角之势，三拳两脚将对方放倒在泥水里。
+	<<elseif _stg is 4>>回到修车库二楼阁楼，你用温热药酒替林恩擦拭肩背淤青，他在昏黄灯下低声说绝不让人动你分毫。
+	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">林恩将一份 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">林恩分给你 £8 补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">林恩将 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">林恩分给你 £8 补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
-	<<link [[收好东西回到林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
+	<<getouticon>><<link [[收好东西回到林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 	<br>
-	<<link [[与林恩核对下一步去向 (0:04)|MP NPC Lin Hub]]>><<pass 4>><<stress -2>><</link>>
+	<<if _npc.stage gte 5>><<link [[继续翻看后续卷宗 (0:03)|MP NPC Lin Quest Late]]>><<pass 3>><</link>><<else>><<link [[与林恩核对下一步去向 (0:04)|MP NPC Lin Hub]]>><<pass 4>><<stress -2>><</link>><</if>>
+<</if>>
+
+:: MP NPC Lin Quest Late [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>>
+<<set _npc to $mpNpcs.lin>><<set _stg to (_npc.stage or 5)>>
+<<if _stg is 5>>
+	酒馆地窖铁笼里关着被逼签字的大孩子，笼门挂着沉重的棘轮锁。林恩用铁棍卡住门轴，让你撬开棘轮簧片，或合力将生锈的门轴插销直接拔出。
+	<br><br>
+	<<getouticon>><<link [[先退回林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($skulduggery or 0) gte 270 or ($willpower or 0) gte 450>>
+		<<sneakicon>><<link [[用钢钎拨开棘轮止回爪 (0:09)|MP NPC Lin Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+	<<else>>
+		<<sneakicon>><<link [[用钢钎拨开棘轮止回爪 (0:09)|MP NPC Lin Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+	<</if>>
+	<br>
+	<<if ($physique or 10000) gte 11800 or ($athletics or 0) gte 270 or (_npc.love or 0) gte 10>>
+		<<fisticon>><<link [[与林恩合力拔出门轴铁销 (0:09)|MP NPC Lin Quest 6 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
+	<<else>>
+		<<fisticon>><<link [[与林恩合力拔出门轴铁销 (0:09)|MP NPC Lin Quest 6 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
+	<</if>>
+<<elseif _stg is 8>>
+	地下赌庄今晚要把总账转移去码头，林恩拉下工业巷总蒸汽阀制造白雾。他让你趁浓雾贴身截走账房怀里的皮包，或推倒货架封死护卫退路。
+	<br><br>
+	<<getouticon>><<link [[先退回林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($skulduggery or 0) gte 280 or ($danceskill or 0) gte 260>>
+		<<sneakicon>><<link [[借浓雾错身顺走总账皮包 (0:10)|MP NPC Lin Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<<else>>
+		<<sneakicon>><<link [[借浓雾错身顺走总账皮包 (0:10)|MP NPC Lin Quest 9 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<</if>>
+	<br>
+	<<if ($physique or 10000) gte 12000 or ($athletics or 0) gte 280 or (_npc.trust or 0) gte 12>>
+		<<fisticon>><<link [[推倒铁货架拦住护卫去路 (0:10)|MP NPC Lin Quest 9 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<<else>>
+		<<fisticon>><<link [[推倒铁货架拦住护卫去路 (0:10)|MP NPC Lin Quest 9 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<</if>>
+<<else>>
+	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	<<if _stg is 6>>你们在商业巷截住赌庄记账师，换出了锁在暗柜里的欠条原件。
+	<<elseif _stg is 7>>林恩当着你的面将胁迫欠条投入铁桶烧成灰烬。
+	<<elseif _stg is 9>>夜巡归来，林恩将磨亮的黄铜指虎与车库副匙塞进你手心。
+	<<else>>林恩擦净护腕，递给你一瓶温热的跌打药酒。<</if>>
+	<br><br>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_" + _npc.stage)>>
+		<<money 1500>><<stress -4>><span class="gold">林恩把 £15 分红塞进你掌心。</span>
+	<<else>><<stress -2>><</if>>
+	<br><br>
+	<<getouticon>><<link [[收好旧物回到林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
+	<br>
+	<<link [[与林恩清点所得线索 (0:04)|MP NPC Lin Hub]]>><<pass 4>><<stress -2>><</link>>
 <</if>>
 
 :: MP NPC Lin Quest 3 Pass [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _npc to $mpNpcs.lin>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你看准护卫转身的空档，利落地挑开铁柜锁舌，抽出了封存的地下拳场押注名册。林恩压低声音道：「撤，一分不多留。」<span class="green">你们神不知鬼不觉地拿到了押注名册。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你将薄钢片顺着窗缝滑入，精准顶起双簧卡舌，无声推开铁窗翻出抽屉里的假拳分红底单。<span class="green">你用薄钢片悄无声息挑开了窗锁。</span>
+<<else>>
+	你借着雨水管攀上平顶，推开通气天窗轻巧落地，从桌上拓下假拳分红底单后原路翻出。<span class="green">你从屋顶气窗顺利取得了底单。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_3")>>
 	<<money 1500>><span class="gold">林恩把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -914,7 +1084,11 @@
 :: MP NPC Lin Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _npc to $mpNpcs.lin>>
-铁柜抽屉滑轨生锈发出一声刺耳摩擦，门外护卫立刻吹响警哨。林恩一把揽住你的腰撞开侧窗翻出墙外，手臂被窗框刮伤。<span class="red">警哨惊动护卫，你们只得翻窗撤离。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	双簧窗扣卡得极紧，钢片崩断弹在玻璃上发出脆响，屋里看守瞬间惊醒，林恩一把拉住你翻墙撤离。<span class="red">声响惊动看守，今晚只得空手撤回。</span>
+<<else>>
+	墙头青苔湿滑，你攀爬时脚下一空擦破手肘，瓦片滑落惊动了巡夜恶犬，只得随林恩先行退走。<span class="red">瓦片滑落惊动护院犬，只得退走。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随林恩退回安全处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
@@ -925,7 +1099,11 @@
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _npc to $mpNpcs.lin>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你用铁管卡死主轮，与林恩同时发力，生锈棘爪咔哒崩断。你们赶在打手下楼前带着卖身契从暗渠全身而退。<span class="green">你们破开铁笼机关，带出了全部契书。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你顶着昏暗光线将钢钎探入棘轮槽，咔哒一声挑开止回爪，铁笼门应声弹开，你们护着人从后巷全身而退。<span class="green">你撬开棘轮锁救出了受困同伴。</span>
+<<else>>
+	你与林恩一上一下握紧铁棍同时发力，生锈的门轴铁销被硬生生连根拔起，整扇铁笼门被直接卸下。<span class="green">你们凭爆发力卸下笼门救出人质。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_6")>>
 	<<money 1500>><span class="gold">林恩把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -938,7 +1116,11 @@
 :: MP NPC Lin Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _npc to $mpNpcs.lin>>
-铁链湿滑脱手，配重门反震让你虎口发麻。为了不暴露卖身契，林恩将契书藏回石缝，带你从排水口涉水撤出。<span class="red">铁链反震伤及虎口，契书暂留石缝。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	棘轮咬合极死，钢钎滑脱撞在铁栏上铛的一声巨响，楼上脚步声大作，林恩只得先带你从排气道撤出。<span class="red">铁栏巨响引来打手，营救暂缓。</span>
+<<else>>
+	门轴铁销锈死在石墩里，你发力过猛拉伤了肩背肌肉，走廊尽头亮起火光，你们只得先行退避。<span class="red">肩背拉伤且打手逼近，未能救出人。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随林恩退回安全处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
@@ -949,7 +1131,11 @@
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _npc to $mpNpcs.lin>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你趁机车排放白汽的瞬间撞偏随从肩头，顺势摘走黑皮公文包抛向天桥上的林恩。总账到手，庄家彻底失势。<span class="green">最后一本黑赛总账被你们稳稳截获。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你在漫天白雾中如游鱼般贴近账房身侧，刀片轻划搭扣便将整只牛皮总账包顺入怀中，随林恩跃出围墙。<span class="green">你在白雾中神不知鬼不觉截获总账。</span>
+<<else>>
+	你合身撞倒巷侧满载木箱的铁货架，将四名护卫严严实实堵在死胡同里，林恩趁机一把夺下总账皮包。<span class="green">你推倒货架断后助林恩夺下总账。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_9")>>
 	<<money 1500>><span class="gold">林恩把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -962,7 +1148,11 @@
 :: MP NPC Lin Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _npc to $mpNpcs.lin>>
-随从警惕地将公文包锁在手腕铁链上，你扑上前时被车门气浪推开，膝盖磕在月台石沿上。林恩跃下天桥护住你撤退。<span class="red">手腕铁链未能挣断，你在月台擦伤了膝盖。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	蒸汽白雾被横风吹散，你的刀片刚碰到皮包背带就被护卫挥棍格开，小臂挨了一记闷棍，只得随林恩撤退。<span class="red">白雾散去暴露身形，小臂擦伤。</span>
+<<else>>
+	铁货架底座焊在地面石板上，你全力猛推只震落几只空木箱，反而惊动了前排打手，只得先行突围离开。<span class="red">货架未能推倒，截击无功而返。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随林恩退回安全处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
@@ -1022,7 +1212,7 @@
 <<if (_npc.love or 0) gte 8 or (_npc.trust or 0) gte 8>>
 	<<walkicon>><<link [[陪她去峭壁露台速写 (0:08)|MP Extra Daily Monet 1]]>><<pass 8>><</link>>
 <</if>>
-
+<<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[午后去画室帮她绷画布 (0:08)|MP RelDay Monet 1]]>><<pass 8>><</link>><</if>>
 :: MP NPC Monet Service [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
@@ -1036,7 +1226,7 @@
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你顺着她的指点旋身收步。<span class="green">举手投足间多了几分从容韵味。</span><<stress -2>><<else>>裙摆缠住鞋跟晃了一下。<span class="red">莫奈伸手扶住你，让你先歇口气。</span><<stress 2>><</if>>
 <</replace>><</link>>
 </div>
-
+<<if $mpKeepsake and $mpKeepsake["keepsake_druid_antler"]>><br><<link [[取出白鹿角符牌请她鉴赏 (0:06)|MP Keepsake Show Antler]]>><<pass 6>><</link>><</if>>
 :: MP NPC Monet Help [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
@@ -1079,73 +1269,101 @@
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
 <<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
-<<if _stg is 2>>
-	试衣沙龙后台的红木账柜里锁着『V-14』号藏品的交割清单。莫奈借口挑选披肩替你挡住管事视线，让你趁机拓下清单印鉴。
+<<if _stg gte 5>>
+	<<include "MP NPC Monet Quest Late">>
+<<elseif _stg is 2>>
+	海风咖啡馆二楼包厢里，假画商把交割印鉴锁在红木匣中。莫奈在前厅拖住随从，让你用软蜡拓下印模，或隔着屏风临摹印文笔法。
 	<br><br>
 	<<getouticon>><<link [[先退回莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($skulduggery or 0) gte 250 or ($danceskill or 0) gte 250 or (_npc.trust or 0) gte 8>>
-		<<investigateicon>><<link [[用软蜡迅速拓下清单印鉴 (0:08)|MP NPC Monet Quest 3 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[默记买受人缩写与暗库柜号 (0:08)|MP NPC Monet Quest 3 Pass]]>><<pass 8>><</link>>
+	<<if ($skulduggery or 0) gte 260 or ($tending or 0) gte 250>>
+		<<sneakicon>><<link [[挑开匣扣用软蜡拓下印模 (0:08)|MP NPC Monet Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<investigateicon>><<link [[用软蜡迅速拓下清单印鉴 (0:08)|MP NPC Monet Quest 3 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[默记买受人缩写与暗库柜号 (0:08)|MP NPC Monet Quest 3 Fail]]>><<pass 8>><</link>>
+		<<sneakicon>><<link [[挑开匣扣用软蜡拓下印模 (0:08)|MP NPC Monet Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
-<<elseif _stg is 5>>
-	为了模仿古画边缘的岁月氧化层，必须在胡桃木烘箱旁精准控制松烟熏染的火候。莫奈递给你羽毛扇与测温铜片。
-	<br><br>
-	<<link [[先退回莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($housekeeping or 0) gte 250 or ($history or 0) gte 250 or (_npc.love or 0) gte 10>>
-		<<link [[轻摇羽扇控制松烟熏染度 (0:08)|MP NPC Monet Quest 6 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[调配茶水旧化画布背面 (0:08)|MP NPC Monet Quest 6 Pass]]>><<pass 8>><</link>>
+	<<if ($english or 0) gte 260 or ($history or 0) gte 250 or (_npc.trust or 0) gte 10>>
+		<<investigateicon>><<link [[对着火漆信封临摹印鉴花押 (0:08)|MP NPC Monet Quest 3 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<<else>>
-		<<link [[轻摇羽扇控制松烟熏染度 (0:08)|MP NPC Monet Quest 6 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[调配茶水旧化画布背面 (0:08)|MP NPC Monet Quest 6 Fail]]>><<pass 8>><</link>>
-	<</if>>
-<<elseif _stg is 8>>
-	拍卖暗厅后台的十四号紫檀画框背面悬着三枚防盗铜铃。必须在执事巡廊的十秒空档内塞入棉花止音并换入临摹卷。
-	<br><br>
-	<<link [[先退回莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>>
-	<br>
-	<<if ($skulduggery or 0) gte 270 or ($danceskill or 0) gte 270 or (_npc.trust or 0) gte 12>>
-		<<link [[塞入丝绵止住铜铃换下真迹 (0:10)|MP NPC Monet Quest 9 Pass]]>><<pass 10>><</link>>
-		<br>
-		<<link [[顺着画框滑槽无声抽换画芯 (0:10)|MP NPC Monet Quest 9 Pass]]>><<pass 10>><</link>>
-	<<else>>
-		<<link [[塞入丝绵止住铜铃换下真迹 (0:10)|MP NPC Monet Quest 9 Fail]]>><<pass 10>><</link>>
-		<br>
-		<<link [[顺着画框滑槽无声抽换画芯 (0:10)|MP NPC Monet Quest 9 Fail]]>><<pass 10>><</link>>
+		<<investigateicon>><<link [[对着火漆信封临摹印鉴花押 (0:08)|MP NPC Monet Quest 3 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<</if>>
 <<else>>
 	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
-	<<if _stg is 0>>莫奈掀开画室角落的白布，露出一幅被刮去署名的旧肖像：「这是我老师失踪前的绝笔，真迹底稿被沙龙拍卖行霸占了。」
-	<<elseif _stg is 1>>你们用松节油轻轻洗去画角后补的假漆，露出一行用群青颜料写的拍卖行暗库编号『V-14』。
-	<<elseif _stg is 3>>回到画室，莫奈根据清单复原了当年被拆卖的三联画右翼草图，查出主画正准备在下周暗拍会上易手。
-	<<elseif _stg is 4>>莫奈教你调配出与百年前完全一致的亚麻籽裂纹清漆，准备了一幅足以乱真的临摹替换卷。
-	<<elseif _stg is 6>>你们从装裱匠口中得知，拍卖暗厅的画框背面都嵌着防盗铜铃，唯有先取下配重铅坠才能无声换画。
-	<<elseif _stg is 7>>莫奈在沙龙晚宴上弹奏钢琴吸引全场宾客目光，掩护你溜进后台 corridors 接近十四号展柜。
-	<<elseif _stg is 9>>真迹终于重回阁楼画室。莫奈在晨光中补全了老师的署名，转身将你拥入满是松节油香气的怀抱。
-	<<else>>莫奈将整套旧物妥善收好，给你倒了一杯热饮。<</if>>
+	<<if _stg is 0>>莫奈展开一幅被裁去落款的素描：「拍卖行有人冒用我的名义卖赝品，帮我把背后的画商揪出来。」
+	<<elseif _stg is 1>>在镜面试衣沙龙，莫奈替你换上贴身丝绒礼服，借量体裁衣的机会将一枚微缩铜印藏进你的袖扣。
+	<<elseif _stg is 3>>假面酒会上，你借与贵宾碰杯的掩护，将莫奈特制的荧光显影粉抹在了赝品画框的右下角。
+	<<elseif _stg is 4>>回到天鹅绒画室，莫奈让你披上轻纱斜倚在软榻上，在烛光下一笔笔勾勒出用做掉包诱饵的《午夜缪斯》。
+	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">莫奈将一份 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">莫奈分给你 £8 补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">莫奈将 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">莫奈分给你 £8 补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
-	<<link [[收好东西回到莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>>
+	<<getouticon>><<link [[收好东西回到莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>>
 	<br>
-	<<link [[与莫奈核对下一步去向 (0:04)|MP NPC Monet Hub]]>><<pass 4>><<stress -2>><</link>>
+	<<if _npc.stage gte 5>><<link [[继续翻看后续卷宗 (0:03)|MP NPC Monet Quest Late]]>><<pass 3>><</link>><<else>><<link [[与莫奈核对下一步去向 (0:04)|MP NPC Monet Hub]]>><<pass 4>><<stress -2>><</link>><</if>>
+<</if>>
+
+:: MP NPC Monet Quest Late [nobr]
+<<set $outside to 0>><<set $location to "cafe">><<effects>>
+<<set _npc to $mpNpcs.monet>><<set _stg to (_npc.stage or 5)>>
+<<if _stg is 5>>
+	用于调包的诱饵画卷必须在天亮前做旧烘干，否则金粉会在展厅射灯下露馅。莫奈调好松烟水，让你用羽扇控温烘烤，或用茶水均匀刷染画背。
+	<br><br>
+	<<getouticon>><<link [[先退回莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($tending or 0) gte 260 or ($danceskill or 0) gte 250>>
+		<<tendingicon>><<link [[执羽扇在炭盆旁控温烘绢 (0:09)|MP NPC Monet Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+	<<else>>
+		<<tendingicon>><<link [[执羽扇在炭盆旁控温烘绢 (0:09)|MP NPC Monet Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+	<</if>>
+	<br>
+	<<if ($housekeeping or 0) gte 260 or ($willpower or 0) gte 440 or (_npc.love or 0) gte 10>>
+		<<investigateicon>><<link [[用陈年红茶均匀刷染画背 (0:09)|MP NPC Monet Quest 6 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
+	<<else>>
+		<<investigateicon>><<link [[用陈年红茶均匀刷染画背 (0:09)|MP NPC Monet Quest 6 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
+	<</if>>
+<<elseif _stg is 8>>
+	天鹅绒拍卖厅后台，真迹画框四角挂着敏感的警报铜铃。莫奈在展厅举牌吸引视线，让你用丝绵塞住铜铃摘下画芯，或旋松画架背板从后方抽画。
+	<br><br>
+	<<getouticon>><<link [[先退回莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($skulduggery or 0) gte 280 or ($danceskill or 0) gte 270>>
+		<<sneakicon>><<link [[用丝绵塞住铜铃取下真迹 (0:10)|MP NPC Monet Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<<else>>
+		<<sneakicon>><<link [[用丝绵塞住铜铃取下真迹 (0:10)|MP NPC Monet Quest 9 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<</if>>
+	<br>
+	<<if ($science or 0) gte 260 or ($willpower or 0) gte 460 or (_npc.trust or 0) gte 12>>
+		<<investigateicon>><<link [[用银币旋开背板螺丝抽画 (0:10)|MP NPC Monet Quest 9 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<<else>>
+		<<investigateicon>><<link [[用银币旋开背板螺丝抽画 (0:10)|MP NPC Monet Quest 9 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<</if>>
+<<else>>
+	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	<<if _stg is 6>>拍场揭幕时，莫奈用紫光灯照出赝品暗记，假画商当场败露。
+	<<elseif _stg is 7>>散场后你们从后台暗格取回银线织锦真迹，莫奈眼眶微红。
+	<<elseif _stg is 9>>画展之夜，莫奈将画室纯银副匙系在你颈间，在帷幔后吻住你。
+	<<else>>莫奈收起画笔，替你理好微乱的衣领。<</if>>
+	<br><br>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_" + _npc.stage)>>
+		<<money 1500>><<stress -4>><span class="gold">莫奈把 £15 分红塞进你掌心。</span>
+	<<else>><<stress -2>><</if>>
+	<br><br>
+	<<getouticon>><<link [[收好旧物回到莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>>
+	<br>
+	<<link [[与莫奈清点所得线索 (0:04)|MP NPC Monet Hub]]>><<pass 4>><<stress -2>><</link>>
 <</if>>
 
 :: MP NPC Monet Quest 3 Pass [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set _npc to $mpNpcs.monet>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你指尖轻巧地翻开夹层，用蜂蜡片印下火漆纹样并抄出柜号，在管事回头前从容合上柜门。<span class="green">交割清单的柜号与印鉴已完整到手。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你用银簪拨开红木匣暗扣，将温软蜂蜡按在玛瑙印章上，完整拓下了带缺口的双天鹅印模。<span class="green">你用蜂蜡清晰拓下了交割印模。</span>
+<<else>>
+	你借着落地窗透进的斜阳，用极细炭笔将桌角火漆信封上的双天鹅暗纹分毫不差地摹在描图纸上。<span class="green">你精准临摹出了印鉴防伪花押。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_3")>>
 	<<money 1500>><span class="gold">莫奈把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -1158,7 +1376,11 @@
 :: MP NPC Monet Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set _npc to $mpNpcs.monet>>
-丝绸屏风被穿堂风吹晃，管事突然转身查看账柜。你连忙缩手退回莫奈身旁，软蜡片被手心汗水捏变了形。<span class="red">管事提前回头，软蜡印模未能成型。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	红木匣内侧连着一根防盗铜铃丝，你刚撬开半寸便响起清脆铃声，只得连忙合上匣盖退回楼梯口。<span class="red">暗铃作响，你只得空手退回前厅。</span>
+<<else>>
+	包厢光线昏暗，你临摹时炭笔芯折断，楼梯口已传来画商上楼的谈话声，只得收起纸笔匆匆撤离。<span class="red">笔芯折断且脚步逼近，未能摹完。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随莫奈退回安全处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
@@ -1169,7 +1391,11 @@
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set _npc to $mpNpcs.monet>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你把松烟温度控得分毫不差，亚麻画布表面渐渐浮起一层温润自然的百年琥珀色包浆，连莫奈都惊叹不已。<span class="green">替换画卷的包浆纹路足以乱真。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你手腕轻摇羽扇，让银炭热流均匀拂过绢面，松烟与金粉自然沁入肌理，呈现出毫无破绽的百年古意。<span class="green">你控温烘出了天衣无缝的旧绢光泽。</span>
+<<else>>
+	你执起宽排羊毛刷沾取浓茶，力道均匀地刷过整幅画背，干透后的包浆与真迹一般无二，莫奈欣喜地抱住你。<span class="green">你用茶染技法完美复刻了古画包浆。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_6")>>
 	<<money 1500>><span class="gold">莫奈把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -1182,7 +1408,11 @@
 :: MP NPC Monet Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set _npc to $mpNpcs.monet>>
-松香炭块突然爆出一团浓烟，画布边角熏黑了一块，刺鼻烟气呛得你连连咳嗽。莫奈连忙拉开窗户散烟，只能重裁一块画布。<span class="red">松烟过浓熏黑画角，只得重裁画布。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	炭盆火星突然爆跳，热浪熏得画绢边缘微微卷曲泛黄，莫奈连忙移开画架喷水补救。<span class="red">火候过急熏焦画角，做旧被迫重来。</span>
+<<else>>
+	羊毛刷蘸茶稍多，画绢背面洇出了一块深浅不均的水痕，只能等彻底晾干后再行修补。<span class="red">茶水洇湿画心，今晚无法完成调包。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随莫奈退回安全处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
@@ -1193,7 +1423,11 @@
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set _npc to $mpNpcs.monet>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你屏息用三团丝绵塞住铃舌，双手稳稳抽出真迹卷入画筒，再将临摹卷推入卡槽，全程未发出一丝声响。<span class="green">真迹画芯在无声无息间物归原主。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你屏息将四团软丝绵塞入铃舌，动作行云流水地换上诱饵画芯，将银线织锦真迹卷入画筒全身而退。<span class="green">你止住铜铃无声换出了真迹画卷。</span>
+<<else>>
+	你完全不碰外框铜铃，用薄银币旋松背板四颗暗螺丝，从后方将真迹平整抽出并塞入假画，不留一丝痕迹。<span class="green">你从背板夹层巧妙取回了真迹。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_9")>>
 	<<money 1500>><span class="gold">莫奈把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -1206,7 +1440,11 @@
 :: MP NPC Monet Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set _npc to $mpNpcs.monet>>
-你的袖口擦过画框底边的暗弦，铜铃发出一声轻颤。走廊外执事立刻喝问，你慌忙合上展布从侧门退回前厅。<span class="red">暗弦惊动走廊执事，换画行动被迫中止。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	最后一团丝绵还未塞稳，穿堂风吹晃画框发出一声脆响，后台执事提灯喝问，你只得退入暗门。<span class="red">铜铃微响惊动执事，调包被迫中止。</span>
+<<else>>
+	背板右下角的螺丝锈死打滑，薄银币拧弯也没能旋开，展厅已传来散场掌声，你只得先行撤离。<span class="red">背板螺丝卡死，错过了动手时机。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随莫奈退回安全处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
@@ -1266,7 +1504,7 @@
 <<if (_npc.love or 0) gte 8 or (_npc.trust or 0) gte 8>>
 	<<walkicon>><<link [[陪他去溪流下游收鱼篓 (0:08)|MP Extra Daily Ash 1]]>><<pass 8>><</link>>
 <</if>>
-
+<<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[清晨去石屋前帮他劈松柴 (0:08)|MP RelDay Ash 1]]>><<pass 8>><</link>><</if>>
 :: MP NPC Ash Service [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
@@ -1280,7 +1518,7 @@
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>羽箭稳稳钉入枯木靶心。<span class="green">阿什眼中闪过一抹赞赏。</span><<stress -2>><<else>>弓弦擦过小臂，箭矢偏入灌木。<span class="red">阿什替你绑好护臂皮套。</span><<stress 2>><</if>>
 <</replace>><</link>>
 </div>
-
+<<if $mpKeepsake and $mpKeepsake["keepsake_abbey_ring"]>><br><<link [[取出修道院银鸽戒给他看 (0:06)|MP Keepsake Show Ring]]>><<pass 6>><</link>><</if>>
 :: MP NPC Ash Help [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
@@ -1323,73 +1561,101 @@
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.ash>><<set $mpNpcs.ash to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
 <<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
-<<if _stg is 2>>
-	暗河谷底的旋涡潭里沉着最关键的一块碑角，潭边石壁长满滑腻水藻，水下暗流湍急。阿什将麻绳系在腰间，让你拉稳绳索或潜入浅滩摸石。
+<<if _stg gte 5>>
+	<<include "MP NPC Ash Quest Late">>
+<<elseif _stg is 2>>
+	第二枚青铜圣徽沉在深林暗河的旋涡潭底，水草缠着断裂的古碑角。阿什在岸边攥紧麻绳，让你潜入潭底摸取圣徽，或用带钩长竹竿从石缝勾出。
 	<br><br>
 	<<getouticon>><<link [[先退回阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($swimmingskill or 0) gte 250 or ($physique or 10000) gte 11600 or (_npc.trust or 0) gte 8>>
-		<<investigateicon>><<link [[屏息潜入浅潭摸索碑角 (0:08)|MP NPC Ash Quest 3 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[绕古树桩拉紧安全麻绳 (0:08)|MP NPC Ash Quest 3 Pass]]>><<pass 8>><</link>>
+	<<if ($swimmingskill or 0) gte 260 or ($athletics or 0) gte 250>>
+		<<swimicon>><<link [[系紧麻绳潜入潭底摸取 (0:09)|MP NPC Ash Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<investigateicon>><<link [[屏息潜入浅潭摸索碑角 (0:08)|MP NPC Ash Quest 3 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[绕古树桩拉紧安全麻绳 (0:08)|MP NPC Ash Quest 3 Fail]]>><<pass 8>><</link>>
+		<<swimicon>><<link [[系紧麻绳潜入潭底摸取 (0:09)|MP NPC Ash Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
-<<elseif _stg is 5>>
-	古根地穴入口弥漫着令人头晕的腐叶瘴气，必须先用艾草与松脂调成辟瘴熏香点亮四个通风石孔，才能安全深入。
-	<br><br>
-	<<link [[先退回阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>>
 	<br>
-	<<if ($tending or 0) gte 260 or ($willpower or 0) gte 450 or (_npc.love or 0) gte 10>>
-		<<link [[辨清风向点亮四处辟瘴孔 (0:08)|MP NPC Ash Quest 6 Pass]]>><<pass 8>><</link>>
-		<br>
-		<<link [[调配浓薄荷水浸湿面巾 (0:08)|MP NPC Ash Quest 6 Pass]]>><<pass 8>><</link>>
+	<<if ($tending or 0) gte 250 or ($willpower or 0) gte 440 or (_npc.trust or 0) gte 10>>
+		<<tendingicon>><<link [[用铁钩长竿拨开水草勾取 (0:09)|MP NPC Ash Quest 3 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
 	<<else>>
-		<<link [[辨清风向点亮四处辟瘴孔 (0:08)|MP NPC Ash Quest 6 Fail]]>><<pass 8>><</link>>
-		<br>
-		<<link [[调配浓薄荷水浸湿面巾 (0:08)|MP NPC Ash Quest 6 Fail]]>><<pass 8>><</link>>
-	<</if>>
-<<elseif _stg is 8>>
-	在最后一道泉眼引水槽合拢前，受惊的林间野猪群冲向石环营地。阿什举弓拦在正面，喊你敲响青铜号角并燃起火把驱散兽群。
-	<br><br>
-	<<link [[先退回阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>>
-	<br>
-	<<if ($athletics or 0) gte 270 or ($willpower or 0) gte 480 or (_npc.trust or 0) gte 12>>
-		<<link [[挥动松明火把吹响铜号角 (0:10)|MP NPC Ash Quest 9 Pass]]>><<pass 10>><</link>>
-		<br>
-		<<link [[拉起荆棘拒马封住东侧豁口 (0:10)|MP NPC Ash Quest 9 Pass]]>><<pass 10>><</link>>
-	<<else>>
-		<<link [[挥动松明火把吹响铜号角 (0:10)|MP NPC Ash Quest 9 Fail]]>><<pass 10>><</link>>
-		<br>
-		<<link [[拉起荆棘拒马封住东侧豁口 (0:10)|MP NPC Ash Quest 9 Fail]]>><<pass 10>><</link>>
+		<<tendingicon>><<link [[用铁钩长竿拨开水草勾取 (0:09)|MP NPC Ash Quest 3 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
 	<</if>>
 <<else>>
 	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
-	<<if _stg is 0>>阿什拨开石环北侧的藤蔓，露出一截断裂的古德鲁伊石碑：「碑文下半截在五十年前山洪里冲进了暗河谷，我想把它找回来。」
-	<<elseif _stg is 1>>你们顺着干涸的古河床向下游搜寻，在乱石滩的泥沙里挖出半块刻着星辰轨迹的青石残片。
-	<<elseif _stg is 3>>回到营地，阿什用木炭纸将两块残碑拓印拼合，读出碑文记载着古根地穴深处一处镇压林雾的泉眼。
-	<<elseif _stg is 4>>阿什用蜂蜡与白树胶调成古法修石膏，与你一起将断裂的石碑重新粘合固定在祭坛基座上。
-	<<elseif _stg is 6>>石碑复位后，月泉底部的暗渠仍被百年前坍塌的巨石堵住一半，需要用热胀冷缩之法裂开巨石。
-	<<elseif _stg is 7>>你们在巨石四周架起干燥松木烧透石面，再引月泉冷水激淋，随着一声闷响，堵死泉眼的巨石应声裂开。
-	<<elseif _stg is 9>>清冽的活水重新注满古石环的水道，林间瘴雾尽数散去。阿什在澄澈月光下将一枚古青铜护身符系在你颈间。
-	<<else>>阿什将整套旧物妥善收好，给你倒了一杯热饮。<</if>>
+	<<if _stg is 0>>阿什在守林人石屋摊开半张兽皮拓片：「深林古祭坛的封印松了，盗墓贼在找地底藏骨堂，帮我守住石环。」
+	<<elseif _stg is 1>>夜雨初歇，阿什提着防风灯带你走过神殿后园古道，在倒塌石碑下拓下了第一枚德鲁伊方位符文。
+	<<elseif _stg is 3>>山涧暴涨冲垮了独木桥，阿什果断涉水揽住你的腰，把你带进干燥岩洞生起松木火堆烘烤湿衣。
+	<<elseif _stg is 4>>深林雾气弥漫，三名持镐盗墓贼正在撬动月泉石砖，阿什指挥猎犬与你从两侧包抄，将盗墓贼驱出林地。
+	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">阿什将一份 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">阿什分给你 £8 补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold">阿什将 £15 补贴塞进你掌心。</span><<else>><<money 800>><<stress -2>><span class="gold">阿什分给你 £8 补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
-	<<link [[收好东西回到阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>>
+	<<getouticon>><<link [[收好东西回到阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>>
 	<br>
-	<<link [[与阿什核对下一步去向 (0:04)|MP NPC Ash Hub]]>><<pass 4>><<stress -2>><</link>>
+	<<if _npc.stage gte 5>><<link [[继续翻看后续卷宗 (0:03)|MP NPC Ash Quest Late]]>><<pass 3>><</link>><<else>><<link [[与阿什核对下一步去向 (0:04)|MP NPC Ash Hub]]>><<pass 4>><<stress -2>><</link>><</if>>
+<</if>>
+
+:: MP NPC Ash Quest Late [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set _npc to $mpNpcs.ash>><<set _stg to (_npc.stage or 5)>>
+<<if _stg is 5>>
+	古根地穴深处积聚着陈年腐叶瘴气，必须按四象方位依次拨通石壁上的排风孔。阿什举着风向草，让你顺着微风掏空石孔，或爬上树根穹顶推开天窗。
+	<br><br>
+	<<getouticon>><<link [[先退回阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($science or 0) gte 250 or ($history or 0) gte 250>>
+		<<investigateicon>><<link [[辨认风向掏通四处排风孔 (0:09)|MP NPC Ash Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+	<<else>>
+		<<investigateicon>><<link [[辨认风向掏通四处排风孔 (0:09)|MP NPC Ash Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+	<</if>>
+	<br>
+	<<if ($athletics or 0) gte 260 or ($physique or 10000) gte 11600 or (_npc.love or 0) gte 10>>
+		<<runicon>><<link [[攀上古树根须顶开换气石板 (0:09)|MP NPC Ash Quest 6 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
+	<<else>>
+		<<runicon>><<link [[攀上古树根须顶开换气石板 (0:09)|MP NPC Ash Quest 6 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 9>><</link>>
+	<</if>>
+<<elseif _stg is 8>>
+	血月升起前，一群受惊的林间野猪冲向古祭坛石环。阿什拉满猎弓守住正面，让你挥动松明火把封住西侧缺口，或吹响守林人骨哨引开头猪。
+	<br><br>
+	<<getouticon>><<link [[先退回阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>>
+	<br>
+	<<if ($physique or 10000) gte 11800 or ($willpower or 0) gte 460>>
+		<<fisticon>><<link [[挥舞松明火把封堵西侧缺口 (0:10)|MP NPC Ash Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<<else>>
+		<<fisticon>><<link [[挥舞松明火把封堵西侧缺口 (0:10)|MP NPC Ash Quest 9 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
+	<</if>>
+	<br>
+	<<if ($tending or 0) gte 270 or ($athletics or 0) gte 270 or (_npc.trust or 0) gte 12>>
+		<<tendingicon>><<link [[跃上石柱吹响低频驱兽骨哨 (0:10)|MP NPC Ash Quest 9 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<<else>>
+		<<tendingicon>><<link [[跃上石柱吹响低频驱兽骨哨 (0:10)|MP NPC Ash Quest 9 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 10>><</link>>
+	<</if>>
+<<else>>
+	<<set _npc.stage to Math.min(10, _stg + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	<<if _stg is 6>>集齐三枚圣徽后，阿什带你开启古根藏骨堂，封存好先人遗物。
+	<<elseif _stg is 7>>阿什把盗墓贼遗落的金银器折算分给你，猎犬亲昵地蹭着你。
+	<<elseif _stg is 9>>篝火噼啪作响，阿什将打磨好的狼牙平安符系在你手腕上。
+	<<else>>阿什添上松柴，递给你一碗驱寒热汤。<</if>>
+	<br><br>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_" + _npc.stage)>>
+		<<money 1500>><<stress -4>><span class="gold">阿什把 £15 分红塞进你掌心。</span>
+	<<else>><<stress -2>><</if>>
+	<br><br>
+	<<getouticon>><<link [[收好旧物回到阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>>
+	<br>
+	<<link [[与阿什清点所得线索 (0:04)|MP NPC Ash Hub]]>><<pass 4>><<stress -2>><</link>>
 <</if>>
 
 :: MP NPC Ash Quest 3 Pass [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<set _npc to $mpNpcs.ash>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你顶着冰凉的潭水摸到刻满螺旋符文的青石角，用绳套牢牢捆紧，与阿什合力将它拖上了岸。<span class="green">缺失的古碑残角终于重见天日。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你深吸一口气潜入冰澈潭底，拨开缠绕的水草从碑座凹槽抠出青铜圣徽，拉动麻绳由阿什一把拉上河岸。<span class="green">你潜入寒潭顺利取出了青铜圣徽。</span>
+<<else>>
+	你趴在岸边岩石上，借着防风灯光用长竿铁钩精准勾住圣徽挂环，稳稳将其挑出水面收入掌心。<span class="green">你用长竿巧劲勾出了潭底圣徽。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_3")>>
 	<<money 1500>><span class="gold">阿什把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -1402,7 +1668,11 @@
 :: MP NPC Ash Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<set _npc to $mpNpcs.ash>>
-潭底旋涡猛地一扯麻绳，你的手掌被粗麻绳勒出一道红印，碑角重新滑回深潭泥沙中。阿什连忙将你拉回岸边烤火。<span class="red">旋涡扯脱绳套，手掌被麻绳擦伤。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	潭底旋涡吸力惊人，冰冷水草缠住你的脚踝，你呛了一口冷水，幸亏阿什及时收绳将你拽回岸上。<span class="red">寒潭旋涡过急，你呛水受寒未能取到。</span>
+<<else>>
+	长竿在湍急水流中剧烈晃动，铁钩碰歪了圣徽使其滑入更深的石缝，手掌也被竹刺刮破。<span class="red">水流冲偏长竿，只能等退水再试。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随阿什退回安全处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>>
@@ -1413,7 +1683,11 @@
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<set _npc to $mpNpcs.ash>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你借着烛火看准地穴微弱的气流走向，依次点亮四座松脂石龛，上升的热流很快将沉积的腐叶瘴气排空。<span class="green">地穴内的浑浊瘴气被彻底排净。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你顺着风向草的摆幅，用短刀依次清开东南西北四处石孔的泥封，林间新风瞬间涌入驱散了浑浊瘴气。<span class="green">你按古法疏通了地穴排风孔道。</span>
+<<else>>
+	你踩着盘结的粗壮树根爬上穹顶，用肩膀顶开覆满落叶的换气石板，清冷山风倾泻而下扫清了地穴。<span class="green">你顶开穹顶石板引来了林间清风。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_6")>>
 	<<money 1500>><span class="gold">阿什把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -1426,7 +1700,11 @@
 :: MP NPC Ash Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<set _npc to $mpNpcs.ash>>
-地穴深处突然倒灌一股阴风，熏香浓烟扑了你满脸，呛得你头晕目眩。阿什一把将你背出洞口透气，只能等风向转稳再进。<span class="red">倒灌阴风呛得你头晕，被迫退出洞口。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	地穴内雾气迷眼，你挖错了第三处盲孔，一股酸腐冷气迎面扑来呛得你头晕目眩，阿什连忙背你退回洞口。<span class="red">瘴气扑面令人眩晕，只得退出换气。</span>
+<<else>>
+	穹顶树根凝满滑腻水珠，你攀爬到半途脚下一滑摔在厚苔藓上，手肘磕出一片青紫。<span class="red">湿滑树根令你失足，未能顶开石板。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随阿什退回安全处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>>
@@ -1437,7 +1715,11 @@
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<set _npc to $mpNpcs.ash>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
-你跃上石柱底座，吹响浑厚的青铜号角并掷出火把。领头野猪受惊调头，兽群顺着山坡退入密林，引水槽毫发无伤。<span class="green">兽群被号角与火光稳稳驱离石环。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	你双手挥动燃烧的松脂火把在石柱间划出火墙，暴躁的领头野猪畏惧烈焰调头逃入密林，祭坛完好无损。<span class="green">你用松明火墙震退了冲撞的兽群。</span>
+<<else>>
+	你翻身跃上风化石柱，吹出悠长尖锐的头狼威慑哨音，受惊的野猪群顿时阵脚大乱，纷纷折向山谷奔逃。<span class="green">你用驱兽骨哨完美引开了野猪群。</span>
+<</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_9")>>
 	<<money 1500>><span class="gold">阿什把 £15 分红塞进你口袋。</span>
 <</if>>
@@ -1450,7 +1732,11 @@
 :: MP NPC Ash Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<set _npc to $mpNpcs.ash>>
-一头受惊野猪撞翻了石台边的柴堆，飞溅的火星烫伤了你的小腿，刚砌好的引水石槽也被踏塌了一角，只能明日重新垒砌。<span class="red">柴堆被撞翻烫伤小腿，石槽需重新修补。</span>
+<<if ($mpNpcQuestAct or 1) is 1>>
+	夜雨打湿了松脂，火苗忽明忽暗，一头野猪擦着石柱冲过，飞溅的碎石刮破你的小腿，阿什急忙放箭将你护上高台。<span class="red">火把受潮暗淡，你被碎石擦伤小腿。</span>
+<<else>>
+	你在冷风中气息不稳，骨哨吹出了破音，野猪群撞翻了外围石灯笼，你们只得先退上瞭望台暂避。<span class="red">哨音走调未能驱兽，石坛外围受损。</span>
+<</if>>
 <<pain 2>><<stress 5>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
 <br><br>
 <<getouticon>><<link [[随阿什退回安全处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>>

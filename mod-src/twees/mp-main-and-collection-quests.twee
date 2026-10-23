@@ -5,133 +5,122 @@
 <<set $mpClues to ($mpClues or {})>>
 <<set _stg to ($mpMainStoryEclipse or 0)>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Orphanage">>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+<<if _stg gte 8>>
+	<<include "MP Main Story Eclipse Late">>
+<<elseif _stg gte 4>>
+	<<include "MP Main Story Eclipse Mid">>
+<<else>>
+	<<getouticon>><<link [[收好线索返回 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+	<br>
+	<<if _stg is 0>>
+		高街与孤儿院交界的石墙下，罗宾朝新刻的新月记号努了努嘴：「昨晚有人在这儿翻出半页旧账册。」基石缝里塞着泡软的纸角。
+		<br><br>
+		<<investigateicon>><<link [[撬开松动基石 (0:05)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_1"] to 1>><<set $mpMainStoryEclipse to 1>><<pass 5>><</link>>
+		<br>
+		<<link [[先问罗宾细节 (0:03)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_1"] to 1>><<set $mpMainStoryEclipse to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<pass 3>><</link>>
+	<<elseif _stg is 1>>
+		<<set $outside to 0>><<set $location to "cabin">>
+		高街钟表铺里，塞拉用放大镜端详账册残页：「这组音筒编号是给旧学园天文翼楼赤道仪校准用的。」
+		<br><br>
+		<<investigateicon>><<link [[带音筒去校准赤道仪 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_2"] to 1>><<set $mpMainStoryEclipse to 2>><<pass 8>><</link>>
+	<<elseif _stg is 2>>
+		<<set $outside to 0>><<set $location to "school">>
+		天文翼楼穹顶室里，诺艾尔看见音筒后压低声音：「赤道仪刻度与神殿地下修道院的旧碑文是同一套记号。」
+		<br><br>
+		<<investigateicon>><<link [[前往灰烬藏经阁 (0:10)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_3"] to 1>><<set $mpMainStoryEclipse to 3>><<pass 10>><</link>>
+	<<else>>
+		<<set $outside to 0>><<set $location to "temple">>
+		地下修道院藏经阁门前，约旦把小灯留给你：「账册与这里的碑文能对上，进去拓下来吧。」
+		<br><br>
+		<<investigateicon>><<link [[拓下藏经阁碑文 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_4"] to 1>><<set $mpMainStoryEclipse to 4>><<pass 12>><</link>>
+		<br>
+		<<walkicon>><<link [[转入中段调查线索 (0:03)|MP Main Story Eclipse Mid]]>><<pass 3>><</link>>
+	<</if>>
 <</if>>
 
-<<if _stg is 0>>
-	<<set $outside to 1>><<set $location to "town">>
-	高街与孤儿院交界的石墙下，罗宾抱着洗衣篮停在拐角，朝墙根那枚新刻的新月记号努了努嘴。
-	「昨晚有人在这儿翻东西，」罗宾压低声音，「我好像看见半页孤儿院的旧账册。」
-	石墙下方的基石确实松了一块，缝里塞着被雨水泡软的纸角。
-	<br><br>
-	<<investigateicon>><<link [[撬开基石 (0:05)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_1"] to 1>><<set $mpMainStoryEclipse to 1>><<pass 5>><</link>>
-	<br>
-	<<socialiseicon>><<link [[先问罗宾 (0:03)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_1"] to 1>><<set $mpMainStoryEclipse to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<pass 3>><</link>>
-<</if>>
-<<if _stg is 1 and ($mpClues["main_eclipse_1"] or $mpMainStoryEclipse gte 1)>>
-	<<set $outside to 0>><<set $location to "cabin">>
-	高街钟表铺的铜铃在门后轻响。塞拉把放大镜推到额头上，接过你手里的账册残页。
-	「这组音筒编号不是给人看的，」她指尖点了点纸角，「是给旧学园天文翼楼的赤道仪校准用的。」
-	她把一枚黄铜音筒推回你手边，示意你天亮前别从正门进去。
-	<br><br>
-	<<investigateicon>><<link [[校准赤道仪 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_2"] to 1>><<set $mpMainStoryEclipse to 2>><<pass 8>><</link>>
-<</if>>
-<<if _stg is 2 and ($mpClues["main_eclipse_2"] or $mpMainStoryEclipse gte 2)>>
-	<<set $outside to 0>><<set $location to "school">>
-	天文翼楼的折光穹顶室里，诺艾尔正把一叠星图塞回柜子。
-	「赤道仪的刻度被人动过，」她看见你手里的音筒，压低声音，「和神殿地下那批旧碑文是同一套记号。」
-	她把一张写着「灰烬藏经阁」的便签夹进你的袖口。
-	<br><br>
-	<<investigateicon>><<link [[去藏经阁 (0:10)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_3"] to 1>><<set $mpMainStoryEclipse to 3>><<pass 10>><</link>>
-<</if>>
-<<if _stg is 3 and ($mpClues["main_eclipse_3"] or $mpMainStoryEclipse gte 3)>>
-	<<set $outside to 0>><<set $location to "temple">>
-	神殿后方的旋梯通向地下修道院。约旦提着一盏小灯站在灰烬藏经阁门口。
-	「你带来的账册和这里的碑文能对上，」他说，「但接下来的名字不该由我说出口。」
-	他把灯留给你，转身退回楼梯。
-	<br><br>
-	<<investigateicon>><<link [[拓下碑文 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_4"] to 1>><<set $mpMainStoryEclipse to 4>><<pass 12>><</link>>
-<</if>>
-<<if _stg is 4 and ($mpClues["main_eclipse_4"] or $mpMainStoryEclipse gte 4)>>
-	<<set $outside to 0>><<set $location to "avery_mansion">>
-	多瑙河秘密温室的玻璃穹顶下，一名侍者正把一叠请柬塞进银盘。
-	「今晚的客人里有人提到黑铁货运站，」他低声说，「三号装甲车，午夜换班。」
-	你借着兰花架挡住身形，记下了车厢编号。
+:: MP Main Story Eclipse Mid [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
+<<set $mpClues to ($mpClues or {})>>
+<<set _stg to ($mpMainStoryEclipse or 4)>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+<<getouticon>><<link [[收好线索返回 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<if _stg is 4>>
+	多瑙河秘密温室穹顶下，侍者低声透露：「今晚有人提到黑铁货运站三号装甲车，午夜换班。」
 	<br><br>
 	<<if ($skulduggery or 0) gte 300>>
-		<<sneakicon>><<link [[潜入货运站 (0:15)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_5"] to 1>><<set $mpMainStoryEclipse to 5>><<pass 15>><</link>>
+		<<sneakicon>><<link [[潜入黑铁货运站 (0:15)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_5"] to 1>><<set $mpMainStoryEclipse to 5>><<pass 15>><</link>>
 	<<else>>
-		<<walkicon>><<link [[绕到后门 (0:20)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_5"] to 1>><<set $mpMainStoryEclipse to 5>><<pass 20>><<stress 3>><</link>>
+		<<walkicon>><<link [[从货运站后门绕入 (0:20)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_5"] to 1>><<set $mpMainStoryEclipse to 5>><<pass 20>><<stress 3>><</link>>
 	<</if>>
-<</if>>
-<<if _stg is 5 and ($mpClues["main_eclipse_5"] or $mpMainStoryEclipse gte 5)>>
+<<elseif _stg is 5>>
 	<<set $outside to 1>><<set $location to "docks">>
-	黑铁货运站的信号塔下，一名老码头工正往手心哈气。
-	「三号车昨晚拉走了一箱不该拉的东西，」他朝铁轨尽头抬了抬下巴，「司机说下一站在森林边的石环。」
-	你记下他说的月泉方位。
+	黑铁货运站信号塔下，老码头工朝铁轨尽头抬下巴：「三号车昨晚拉走的箱子，下一站在深林石环月泉。」
 	<br><br>
-	<<investigateicon>><<link [[去石环 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_6"] to 1>><<set $mpMainStoryEclipse to 6>><<pass 12>><</link>>
-<</if>>
-<<if _stg is 6 and ($mpClues["main_eclipse_6"] or $mpMainStoryEclipse gte 6)>>
+	<<investigateicon>><<link [[前往深林石环 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_6"] to 1>><<set $mpMainStoryEclipse to 6>><<pass 12>><</link>>
+<<elseif _stg is 6>>
 	<<set $outside to 1>><<set $location to "forest">>
-	深林月泉的水面映着碎月。伊甸蹲在石环边磨刀，听见脚步声也没抬头。
-	「你找的那半枚徽章在泉底，」她用刀尖指了指水面，「另外半枚今晚会在峭壁的假面拍卖会上出现。」
-	她把一根细绳递给你。
+	深林月泉边，伊甸用刀尖指了指水面：「半枚徽章在泉底，另外半枚今晚在峭壁天鹅绒拍卖会。」
 	<br><br>
 	<<if ($swimmingskill or 0) gte 250>>
-		<<link [[潜到泉底 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_7"] to 1>><<set $mpMainStoryEclipse to 7>><<pass 8>><</link>>
+		<<swimicon>><<link [[潜入月泉底摸取 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_7"] to 1>><<set $mpMainStoryEclipse to 7>><<pass 8>><</link>>
 	<<else>>
-		<<link [[用细绳慢慢捞 (0:14)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_7"] to 1>><<set $mpMainStoryEclipse to 7>><<pass 14>><<stress 2>><</link>>
+		<<link [[用细绳慢慢打捞 (0:14)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_7"] to 1>><<set $mpMainStoryEclipse to 7>><<pass 14>><<stress 2>><</link>>
 	<</if>>
-<</if>>
-<<if _stg is 7 and ($mpClues["main_eclipse_7"] or $mpMainStoryEclipse gte 7)>>
+<<else>>
 	<<set $outside to 0>><<set $location to "brothel">>
-	峭壁天鹅绒暗层的拍卖厅里，布莱尔隔着人群朝你举了举杯。
-	「压轴拍品在我后廊的保险柜里，」布莱尔用只有你能听见的声音说，「你要是能混进后台，我可以当没看见。」
-	后台的门边站着两名执事。
+	天鹅绒暗层拍卖厅里，布莱尔朝你举杯低语：「压轴拍品在我后廊保险柜，能混进后台我就当没看见。」
 	<br><br>
 	<<if ($seductionskill or 0) gte 350 or ($skulduggery or 0) gte 350>>
-		<<brothelicon>><<link [[混进后台 (0:10)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_8"] to 1>><<set $mpMainStoryEclipse to 8>><<pass 10>><</link>>
+		<<sneakicon>><<link [[趁乱混进拍卖后台 (0:10)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_8"] to 1>><<set $mpMainStoryEclipse to 8>><<pass 10>><</link>>
 	<<else>>
-		<<walkicon>><<link [[等执事换班 (0:16)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_8"] to 1>><<set $mpMainStoryEclipse to 8>><<pass 16>><<stress 2>><</link>>
+		<<walkicon>><<link [[耐心等执事换班 (0:16)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_8"] to 1>><<set $mpMainStoryEclipse to 8>><<pass 16>><<stress 2>><</link>>
 	<</if>>
+	<br>
+	<<walkicon>><<link [[翻看终局航线线索 (0:03)|MP Main Story Eclipse Late]]>><<pass 3>><</link>>
 <</if>>
-<<if _stg is 8 and ($mpClues["main_eclipse_8"] or $mpMainStoryEclipse gte 8)>>
-	<<set $outside to 0>><<set $location to "underground">>
-	旧钟塔地下机括城的蒸汽压力室里，铜管嗡嗡作响。你手里的两半徽章在控制盘前轻轻发烫。
-	墙上的刻度显示，主阀门的位置和账册最后一页的暗号一致。
+
+:: MP Main Story Eclipse Late [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpClues to ($mpClues or {})>>
+<<set _stg to ($mpMainStoryEclipse or 8)>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+<<getouticon>><<link [[收好线索返回 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<if _stg is 8>>
+	地下机括城蒸汽室里，两半徽章在控制盘前微烫，主阀刻度与账册末页暗号完全一致。
 	<br><br>
 	<<if ($maths or 0) gte 300>>
-		<<link [[校准主阀 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_9"] to 1>><<set $mpMainStoryEclipse to 9>><<pass 12>><</link>>
+		<<investigateicon>><<link [[按暗号校准主阀 (0:12)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_9"] to 1>><<set $mpMainStoryEclipse to 9>><<pass 12>><</link>>
 	<<else>>
-		<<link [[按刻度慢慢试 (0:18)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_9"] to 1>><<set $mpMainStoryEclipse to 9>><<pass 18>><<stress 2>><</link>>
+		<<link [[对照刻度慢慢试拧 (0:18)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_9"] to 1>><<set $mpMainStoryEclipse to 9>><<pass 18>><<stress 2>><</link>>
 	<</if>>
-<</if>>
-<<if _stg is 9 and ($mpClues["main_eclipse_9"] or $mpMainStoryEclipse gte 9)>>
+<<elseif _stg is 9>>
 	<<set $outside to 0>><<set $location to "sewers">>
-	旧港与下水道交汇的暗河渡口，一艘没有灯的小船靠在石阶下。
-	船头的守夜人认出了你手里的徽章，把一只防水油布包推过来。
-	「灯塔顶层的手轮和这张海图，」他说，「拿了就走吧，别回头。」
+	暗河渡口的小船旁，守夜人认出徽章，把装有灯塔顶层手轮与海图的防水包推给你。
 	<br><br>
-	<<investigateicon>><<link [[收下油布包 (0:06)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_10"] to 1>><<set $mpMainStoryEclipse to 10>><<pass 6>><</link>>
-<</if>>
-<<if _stg is 10 and ($mpClues["main_eclipse_10"] or $mpMainStoryEclipse gte 10)>>
+	<<investigateicon>><<link [[收下防水油布包 (0:06)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_10"] to 1>><<set $mpMainStoryEclipse to 10>><<pass 6>><</link>>
+<<elseif _stg is 10>>
 	<<set $outside to 1>><<set $location to "searocks">>
-	风暴欲来的黄昏，你把木舟系在雾角灯塔岛南侧的系船石阶上。
-	断桅沉船滩的残骸在脚下咔咔作响，海蚀回音廊方向传来低沉的风鸣。
-	灯塔顶层的铜门在雾里只剩一个模糊的轮廓。
+	黄昏风暴欲来，你把木舟系在雾角灯塔岛南侧石阶，顶层铜门在浓雾里若隐若现。
 	<br><br>
 	<<if ($athletics or 0) gte 300 or ($physique or 0) gte 12000>>
-		<<walkicon>><<link [[顶着海风登塔 (0:18)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_11"] to 1>><<set $mpMainStoryEclipse to 11>><<pass 18>><</link>>
+		<<runicon>><<link [[顶着海风登塔 (0:18)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_11"] to 1>><<set $mpMainStoryEclipse to 11>><<pass 18>><</link>>
 	<<else>>
-		<<walkicon>><<link [[沿背风面慢慢爬 (0:24)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_11"] to 1>><<set $mpMainStoryEclipse to 11>><<pass 24>><<stress 2>><</link>>
+		<<walkicon>><<link [[沿背风面攀爬 (0:24)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_11"] to 1>><<set $mpMainStoryEclipse to 11>><<pass 24>><<stress 2>><</link>>
 	<</if>>
-<</if>>
-<<if _stg is 11 and ($mpClues["main_eclipse_11"] or $mpMainStoryEclipse gte 11)>>
+<<elseif _stg is 11>>
 	<<set $outside to 1>><<set $location to "sea">>
-	灯塔顶层的旋转透镜下，铁柜里的契约、账册和基金凭证码得整整齐齐。
-	你转动手轮，青铜门在身后合拢，光束扫过夜海。
+	灯塔顶层旋转透镜下，铁柜里的早期契约、账册与基金凭证码得整整齐齐，光束扫过夜海。
 	<br><br>
-	<<investigateicon>><<link [[打开铁柜 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_12"] to 1>><<set $mpMainStoryEclipse to 12>><<pass 8>><</link>>
-<</if>>
-<<if _stg gte 12>>
+	<<investigateicon>><<link [[打开铁柜核对原件 (0:08)|MP Main Story Eclipse Resolve]]>><<set $mpClues["main_eclipse_12"] to 1>><<set $mpMainStoryEclipse to 12>><<pass 8>><</link>>
+<<else>>
 	<<set $outside to 1>><<set $location to "sea">>
-	灯塔的光束在夜海上平稳旋转。账册、契约与基金凭证都已收好，剩下的只是如何处置它们。
-	<br><br>
-	<<investigateicon>><<link [[整理线索 (0:03)|MP Main Story Eclipse Resolve]]>><<pass 3>><</link>>
+	灯塔顶层的铁柜已经打开过，契约与账册都收进了防水暗袋。海风从透镜间穿过，剩下的只是如何处置这些证据。
 <</if>>
-<<getouticon>><<link [[收好线索返回 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Main Story Eclipse Resolve [nobr]
 <<set $outside to 1>><<set $location to "town">>
@@ -156,76 +145,34 @@
 /* 6条信物收集支线 V2 / 每条3段 / 先讲残片为何值得拼，再拼合，最后处置 / 分档奖励 */
 
 :: MP Collection Quests Hub [nobr]
-<<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<set $outside to 1>><<set $location to "town">><<effects>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "High Street">>
-<</if>>
-你在背光的石龛旁停下脚步，将这段时间在小镇各个隐秘角落搜集到的信物残片一一取出核对。石台边缘已被你的指尖磨出一小块浅痕。已复原 <<print ($mpCollectHubUnlocked or 0)>> / 6 条。
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+你在背光的石龛旁停步，将各地寻获的信物残片取出比对。
 <br><br>
-<<if $mpDoneCrownGear is 1>>
-	失落王冠的黄铜齿轮：三枚齿轮已咬合复原，机括密匣归位。
-	<br>
-<<elseif ($mpFragCrownGear or 0) gte 3>>
-	<<investigateicon>><<link [[拼合三枚『失落王冠的黄铜齿轮』开启机括密匣 (0:16)|MP Collection Resolve CrownGear]]>><<pass 16>><</link>>
-	<br>
-<<else>>
-	失落王冠的黄铜齿轮：已搜集 <<print ($mpFragCrownGear or 0)>> / 3 枚，散落于旧钟塔地下机括城与学园天文翼楼。
-	<br>
-<</if>>
-<<if $mpDoneAbyssPage is 1>>
-	深渊古教团的羊皮残页：三页已按回环字序排好，暗龛已开。
-	<br>
-<<elseif ($mpFragAbyssPage or 0) gte 3>>
-	<<templeicon>><<link [[拼合三张『深渊古教团的羊皮残页』解读古祝祷 (0:18)|MP Collection Resolve AbyssPage]]>><<pass 18>><</link>>
-	<br>
-<<else>>
-	深渊古教团的羊皮残页：已搜集 <<print ($mpFragAbyssPage or 0)>> / 3 张，散落于圣堂地下古修道院与神殿暗廊。
-	<br>
-<</if>>
-<<if $mpDoneSmugglerRing is 1>>
-	旧港走私王的火漆印戒：三块印面已合成完整花押，防水箱已开。
-	<br>
-<<elseif ($mpFragSmugglerRing or 0) gte 3>>
-	<<sneakicon>><<link [[集齐『旧港走私王的火漆印戒』开启沉船防水箱 (0:15)|MP Collection Resolve SmugglerRing]]>><<pass 15>><</link>>
-	<br>
-<<else>>
-	旧港走私王的火漆印戒：已搜集 <<print ($mpFragSmugglerRing or 0)>> / 3 枚，散落于雾角灯塔岛沉船滩与码头干船坞。
-	<br>
-<</if>>
-<<if $mpDoneBrideFlower is 1>>
-	雾月花嫁的银丝花标本：三株花丝已叠成完整月路，花房已清点。
-	<br>
-<<elseif ($mpFragBrideFlower or 0) gte 3>>
-	<<parkicon>><<link [[合炼三株『雾月花嫁的银丝花标本』提纯秘露 (0:14)|MP Collection Resolve BrideFlower]]>><<pass 14>><</link>>
-	<br>
-<<else>>
-	雾月花嫁的银丝花标本：已搜集 <<print ($mpFragBrideFlower or 0)>> / 3 株，散落于多瑙河秘密温室与深林古德鲁伊石环。
-	<br>
-<</if>>
-<<if $mpDoneVelvetCrest is 1>>
-	天鹅绒假面舞会的暗金徽章：三枚边齿已咬合，画库门已开。
-	<br>
-<<elseif ($mpFragVelvetCrest or 0) gte 3>>
-	<<brothelicon>><<link [[嵌入三枚『天鹅绒假面舞会的暗金徽章』开启私密画库 (0:12)|MP Collection Resolve VelvetCrest]]>><<pass 12>><</link>>
-	<br>
-<<else>>
-	天鹅绒假面舞会的暗金徽章：已搜集 <<print ($mpFragVelvetCrest or 0)>> / 3 枚，散落于峭壁天鹅绒暗层与康努达图斯街。
-	<br>
-<</if>>
-<<if $mpDoneLedgerKey is 1>>
-	孤儿院早期账册的黄铜密匙：三重锁已开，建院总账已核。
-	<br>
-<<elseif ($mpFragLedgerKey or 0) gte 3>>
-	<<shopicon>><<link [[用三把『孤儿院早期账册的黄铜密匙』打开铅封金匣 (0:15)|MP Collection Resolve LedgerKey]]>><<pass 15>><</link>>
-	<br>
-<<else>>
-	孤儿院早期账册的黄铜密匙：已搜集 <<print ($mpFragLedgerKey or 0)>> / 3 把，散落于麋鹿街黑铁货运站与孤儿院旧储物室。
-	<br>
-<</if>>
-<br>
 <<getouticon>><<link [[收好残片离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<if ($mpFragCrownGear or 0) gte 3 and $mpDoneCrownGear isnot 1>>
+	<<investigateicon>><<link [[拼合黄铜齿轮开密匣 (0:16)|MP Collection Resolve CrownGear]]>><<pass 16>><</link>><br>
+<</if>>
+<<if ($mpFragAbyssPage or 0) gte 3 and $mpDoneAbyssPage isnot 1>>
+	<<templeicon>><<link [[拼合羊皮残页读祝祷 (0:18)|MP Collection Resolve AbyssPage]]>><<pass 18>><</link>><br>
+<</if>>
+<<if ($mpFragSmugglerRing or 0) gte 3 and $mpDoneSmugglerRing isnot 1>>
+	<<sneakicon>><<link [[合拢印戒开沉船铁箱 (0:15)|MP Collection Resolve SmugglerRing]]>><<pass 15>><</link>><br>
+<</if>>
+<<if ($mpFragBrideFlower or 0) gte 3 and $mpDoneBrideFlower isnot 1>>
+	<<parkicon>><<link [[合炼银丝花提纯秘露 (0:14)|MP Collection Resolve BrideFlower]]>><<pass 14>><</link>><br>
+<</if>>
+<<if ($mpFragVelvetCrest or 0) gte 3 and $mpDoneVelvetCrest isnot 1>>
+	<<brothelicon>><<link [[嵌入暗金徽章开画库 (0:12)|MP Collection Resolve VelvetCrest]]>><<pass 12>><</link>><br>
+<</if>>
+<<if ($mpFragLedgerKey or 0) gte 3 and $mpDoneLedgerKey isnot 1>>
+	<<shopicon>><<link [[用三把铜匙开铅封匣 (0:15)|MP Collection Resolve LedgerKey]]>><<pass 15>><</link>><br>
+<</if>>
+<<if (($mpFragCrownGear or 0) lt 3 or $mpDoneCrownGear is 1) and (($mpFragAbyssPage or 0) lt 3 or $mpDoneAbyssPage is 1) and (($mpFragSmugglerRing or 0) lt 3 or $mpDoneSmugglerRing is 1) and (($mpFragBrideFlower or 0) lt 3 or $mpDoneBrideFlower is 1) and (($mpFragVelvetCrest or 0) lt 3 or $mpDoneVelvetCrest is 1) and (($mpFragLedgerKey or 0) lt 3 or $mpDoneLedgerKey is 1)>>
+	<span class="teal">尚有未集齐的残片散落在机括城、古修道院、雾角岛与温室各处。</span>
+<</if>>
 
 :: MP Collection Resolve CrownGear [nobr]
 <<set $outside to 0>><<set $location to "underground">>
@@ -247,7 +194,7 @@
 <br><br>
 <<sneakicon>><<link [[带着齿轮去高街钟表铺 (0:06)|MP Collection Resolve CrownGear Step2]]>><<pass 6>><</link>>
 <br>
-<<investigateicon>><<link [[先把三枚齿轮的齿序记在纸上 (0:07)|MP Collection Resolve CrownGear Step2]]>><<set $mpClues["collect_crown_gear_order"] to 1>><<stress -1>><<pass 7>><</link>>
+<<investigateicon>><<link [[先把三枚齿轮齿序记在纸上 (0:07)|MP Collection Resolve CrownGear Step2]]>><<set $mpClues["collect_crown_gear_order"] to 1>><<stress -1>><<pass 7>><</link>>
 <br>
 <<getouticon>><<link [[先退回地面 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
@@ -337,7 +284,7 @@
 	<<stress 4>><<pain 1>>
 <</if>>
 <br><br>
-<<socialiseicon>><<link [[请乔丹指认页脚的旧修院编号 (0:05)|MP Collection Resolve AbyssPage Step2]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<pass 5>><</link>>
+<<socialiseicon>><<link [[请乔丹指认页的旧修院编号 (0:05)|MP Collection Resolve AbyssPage Step2]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<pass 5>><</link>>
 <br>
 <<investigateicon>><<link [[把三页拓在薄纸上带走 (0:07)|MP Collection Resolve AbyssPage Step2]]>><<stress -1>><<pass 7>><</link>>
 <br>
@@ -611,7 +558,7 @@
 	<<stress 4>>
 <</if>>
 <br><br>
-<<walkicon>><<link [[带徽章去康努达图斯街找刻印师 (0:07)|MP Collection Resolve VelvetCrest Step2]]>><<pass 7>><</link>>
+<<walkicon>><<link [[带徽章去康努斯街找刻印师 (0:07)|MP Collection Resolve VelvetCrest Step2]]>><<pass 7>><</link>>
 <br>
 <<brothelicon>><<link [[留在暗层听完布莱尔的提醒 (0:05)|MP Collection Resolve VelvetCrest Step2]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><</if>><<stress -3>><<pass 5>><</link>>
 <br>
@@ -703,7 +650,7 @@
 	<<pain 2>><<stress 5>>
 <</if>>
 <br><br>
-<<walkicon>><<link [[带着货运单回孤儿院旧储物室 (0:09)|MP Collection Resolve LedgerKey Step2]]>><<pass 9>><</link>>
+<<walkicon>><<link [[带着货运单回儿院旧储物室 (0:09)|MP Collection Resolve LedgerKey Step2]]>><<pass 9>><</link>>
 <br>
 <<investigateicon>><<link [[先把压印槽里的纸拓下来 (0:06)|MP Collection Resolve LedgerKey Step2]]>><<set $mpClues["collect_ledger_key_copy"] to 1>><<stress -1>><<pass 6>><</link>>
 <br>
