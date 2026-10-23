@@ -1,1265 +1,1966 @@
-/* 全镇16条跨周长线剧本库 / 庄园·警局·雾角塔·街机厅·旧病房·钟塔·干船坞等 / 多阶段差分 */
+/* 全镇16条跨周长线剧本库 / V5 分情况设计：16条长线 × 7阶段 = 112 scenes / 零模板句 */
 
 :: MP Grand Quest Danube Salon [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-<<set _stg to ($mpQuestDanubeSalon or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Danube Street">>
+<<set $outside to 1>><<set $location to "danube">><<effects>>
+<<set $mpQuestDanubeSalon to Math.max(($mpQuestDanubeSalon or 0), 1)>>
+你驻足在灰白色庄园的侧门外，低沉优雅的大提琴曲正顺着半开的雕花气窗流淌而出。铸铁门楣上的常春藤在晚风里轻轻晃动，廊柱后方的偏厅透出柔和的烛光。守门的仆役刚提着灯笼绕去前院，侧门虚掩着一道窄缝。
+<br><br>
+<<sneakicon>><<link [[闪身潜入侧门偏厅 (0:06)|MP Grand Quest Danube Salon Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[绕去花园回廊搭话 (0:08)|MP Grand Quest Danube Salon Step3]]>><<pass 8>><</link>>
+<br>
+<<if ($mpQuestDanubeSalon or 0) gte 3>>
+	<<investigateicon>><<link [[直奔二楼书房暗门 (0:05)|MP Grand Quest Danube Salon Step4]]>><<pass 5>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回多瑙河街 (0:03)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你驻足在灰白色庄园的侧门外，低沉优雅的大提琴曲正顺着半开的雕花气窗流淌而出，曲调里却透着一股说不出的孤寂。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Danube Salon Resolve]]>><<set $mpQuestDanubeSalon to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestDanubeSalon to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Danube Salon Step2 [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
+<<set $mpQuestDanubeSalon to Math.max(($mpQuestDanubeSalon or 0), 2)>>
+你轻轻推开虚掩的侧门步入偏厅，波斯地毯吞没了靴底的声响。花园回廊下，一位蒙着黑蕾丝面纱的乐手正独自拉着琴弦，脚边的天鹅绒琴盒里露出一角撕碎的晚宴名单。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1100>><<elseif _sk gte 550>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	你借着烛台阴影掠过屏风，将那半张洒金名单与琴盒夹层里约 £<<print Math.floor(_reward / 100)>> 的打赏金票拢入袖中。
+	<<money _reward>><<stress -2>>
+<<else>>
+	你的衣角带倒了屏风边的银质谱架，清脆的撞击声惊动了门外侍从，你在匆忙后退时撞青了手肘。
+	<<pain 2>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	你轻轻推开虚掩的侧门步入偏厅。花园回廊下，一位蒙着黑色蕾丝面纱的乐手正独自拉着琴弦，琴盒里放着半张被撕碎的晚宴名单。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Danube Salon Resolve]]>><<set $mpQuestDanubeSalon to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestDanubeSalon to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[上前替乐手拾琴弓 (0:06)|MP Grand Quest Danube Salon Step3]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[从侧门退出公馆 (0:03)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Danube Salon Step3 [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
+<<set $mpQuestDanubeSalon to Math.max(($mpQuestDanubeSalon or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["glasshouse_orchid"] to 1>><<set $mpClues["grand_danube_score"] to 1>>
+等一曲终了，你走上前替乐手拾起滑落在地的松香琴弓。对方隔着黑色面纱向你微微颔首：「白公馆的主人今晚借着沙龙掩护，正在地下酒窖把一批未登记的古物装箱运往温室兰花厅。」乐手将一张标有书房暗锁刻度的乐谱夹进你掌心，示意你趁管家换班前去书房取纹章。
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery trust 1>><</if>><<stress -3>>
+<br><br>
+<<investigateicon>><<link [[潜入公馆书房找纹章 (0:08)|MP Grand Quest Danube Salon Step4]]>><<pass 8>><</link>>
+<br>
+<<walkicon>><<link [[先绕去酒窖入口探路 (0:06)|MP Grand Quest Danube Salon Step5]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[离开白公馆 (0:03)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Danube Salon Step4 [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
+<<set $mpQuestDanubeSalon to Math.max(($mpQuestDanubeSalon or 0), 4)>><<set $mpClues to ($mpClues or {})>>
+你顺着乐手指点的回廊暗门溜进二楼书房，胡桃木书桌旁立着一座镶铜古地球仪。底座赤道环上刻着七个古典音名，需要对照乐谱重音依次按压。
+<<if ($history or 0) gte 340 or ($skulduggery or 0) gte 340>>
+	<<set _sk to Math.max(($history or 0), ($skulduggery or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 680>><</if>>
+	<<set $mpClues["grand_danube_ledger"] to 1>>
+	你按降E小调的音程旋动赤道环，底座暗格弹出一枚酒窖黄铜纹章与约 £<<print Math.floor(_reward / 100)>> 的备用金券。
+	<<money _reward>><<stress -2>>
+<<else>>
+	你记错了两个升降音阶，地球仪内部的齿轮卡死不动，走廊外逼近的脚步声吓得你满背冷汗。
+	<<tiredness 3>><<stress 5>>
 <</if>>
-<<if _stg is 2>>
-	等一曲终了，你上前替乐手拾起滑落在地的琴弓。对方轻声向你道谢，并暗示白公馆的主人正在地下酒窖里密谋转移一批来历不明的古董。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Danube Salon Resolve]]>><<set $mpQuestDanubeSalon to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestDanubeSalon to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[持纹章潜入地下酒窖 (0:08)|MP Grand Quest Danube Salon Step5]]>><<pass 8>><</link>>
+<br>
+<<getouticon>><<link [[从书房侧梯离开 (0:03)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Danube Salon Step5 [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
+<<set $mpQuestDanubeSalon to Math.max(($mpQuestDanubeSalon or 0), 5)>>
+你用黄铜纹章旋开地下酒窖的恒温酒架，后方密室里整齐码放着三只填满木丝的红木箱。两名搬运工正背对你清点封条，桌角放着一本私运账册。
+<<set $skulduggerydifficulty to 360>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 780>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你趁搬运工转身钉箱盖的刹那抽走私运账册与一只银爵，顺手摸走桌上约 £<<print Math.floor(_reward / 100)>> 的押运费。
+	<<money _reward>><<stress -3>>
+<<else>>
+	酒架滑轨发出沉闷的摩擦声，搬运工猛地回头呵斥，你在闪避木箱时小腿磕在铁箍桶沿上。
+	<<pain 4>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	顺着乐手指点的回廊暗门，你避开巡视的管家潜入白公馆书房，在地球仪底座下找到了开启地下酒窖的黄铜纹章。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Danube Salon Resolve]]>><<set $mpQuestDanubeSalon to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestDanubeSalon to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你潜入地下酒窖，在恒温酒架后方的密室里发现了那批正待装箱的古代银器与账册。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Danube Salon Resolve]]>><<set $mpQuestDanubeSalon to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestDanubeSalon to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你取走了最关键的罪证账册与一件精巧的古物，让公馆主人的暗中勾当彻底败露。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Danube Salon Resolve]]>><<set $mpQuestDanubeSalon to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestDanubeSalon to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	当你再次经过花园回廊时，蒙面乐手已悄然离去，只在石凳上为你留下了一枚纯银音符胸针。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Danube Salon Resolve]]>><<set $mpQuestDanubeSalon to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestDanubeSalon to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『多瑙河街白公馆的弦音』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[返回花园回廊见乐手 (0:05)|MP Grand Quest Danube Salon Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[从酒窖透气窗撤离 (0:03)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Danube Salon Step6 [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>>
+<<set $mpQuestDanubeSalon to Math.max(($mpQuestDanubeSalon or 0), 6)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["velvet_salon"] to 1>>
+当你带着账册重新回到花园回廊时，蒙面乐手已经收拾好大提琴悄然离去。石凳的丝绒坐垫上端端正正放着一枚纯银音符胸针，底下压着一张散发出白麝香气的字条：「多谢你截下那本假账，日后若去峭壁天鹅绒的镜面试衣沙龙，凭这枚胸针便有人照应。」你收起胸针，心中一片笃定。
+<<stress -3>>
+<br><br>
+<<walkicon>><<link [[从雕花侧门结案离开 (0:05)|MP Grand Quest Danube Salon Resolve]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回多瑙河街 (0:02)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Danube Salon Resolve [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Danube Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Danube Street">>
+<<set $outside to 1>><<set $location to "danube">><<effects>>
+<<set $mpQuestDanubeSalon to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestDanubeSalon to 1>>
+你从多瑙河街白公馆的雕花侧门闪身而出，将截获的沙龙密会乐谱与名流书信折好收起。二楼的水晶吊灯依然通明，一名夜巡执事在铁门外狐疑地打量了你一眼。
+<<set $seductiondifficulty to 4200>><<seductioncheck>>
+<<if $seductionrating gte $seductionrequired or ($willpower or 0) gte 420>>
+	<<set _sk to Math.max(($seductionskill or 0), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 900>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestDanubeSalon_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你神色泰然地亮出胸前的纯银音符胸针，执事立刻躬身行礼并递上约 £<<print Math.floor(_reward / 100)>> 的车马津贴。
+	<<money _reward>><<stress -4>>
+<<else>>
+	你在执事审视的目光下步伐微乱，只得压低帽檐快步混入梧桐树影之中。
+	<<stress 4>>
 <</if>>
-你从多瑙河街白公馆的雕花侧门闪身而出，将截获的沙龙密会乐谱与名流书信折好收起。
-<<if Time.dayState is "night">>白公馆二楼的水晶吊灯依然通明，大提琴的尾音在夜风中渐渐散去。<<else>>修剪整齐的法国梧桐树影遮住了侧门小径，四周静谧无人。<</if>>
-隐藏在高雅室内乐背后的利益交换已被你牢牢掌握。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Danube Salon]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望白公馆侧门 (0:03)|MP Grand Quest Danube Salon]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回多瑙河街 (0:02)|Danube Street]]>><<set $outside to 1>><<set $location to "danube">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Barb Evidence [nobr]
-<<set $outside to 0>><<set $location to "barb">>
-<<effects>>
-<<set _stg to ($mpQuestBarbEvidence or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Barb Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Barb Street">>
+<<set $outside to 1>><<set $location to "barb">><<effects>>
+<<set $mpQuestBarbEvidence to Math.max(($mpQuestBarbEvidence or 0), 1)>>
+你凑近警局后巷的铁栅窗往里打量，昏暗的旧证物室角落堆放着几只落满灰尘、贴着十年前封条的木箱。铁栅窗下方的通风百叶栓已经锈蚀松动，巷口路灯把拉长的铁栏阴影投在潮湿的砖墙上。你可以试着撬开百叶栓，或者先向巡夜的林恩打听换岗规律。
+<br><br>
+<<sneakicon>><<link [[用薄刃挑开百叶栓 (0:06)|MP Grand Quest Barb Evidence Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[向巷口林恩打听换岗 (0:06)|MP Grand Quest Barb Evidence Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestBarbEvidence or 0) gte 3>>
+	<<investigateicon>><<link [[翻查雾月零七号卷宗 (0:06)|MP Grand Quest Barb Evidence Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[离开警局后巷 (0:02)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你凑近警局后巷的铁栅窗往里打量，昏暗的旧证物室角落堆放着几只落满灰尘、贴着十年前封条的木箱。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Barb Evidence Resolve]]>><<set $mpQuestBarbEvidence to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBarbEvidence to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Barb Evidence Step2 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestBarbEvidence to Math.max(($mpQuestBarbEvidence or 0), 2)>>
+你蹲在后巷排水槽边，将薄铁片探入通风百叶窗的锈蚀插销。窗内便是半地下的旧证物室，铁架上摆满了未归档的罚没钱袋。
+<<set $skulduggerydifficulty to 330>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1150>><<elseif _sk gte 550>><<set _reward to 880>><<else>><<set _reward to 620>><</if>>
+	你巧劲一拨便挑开插销，无声滑入证物室铁架后方，顺手从散落的罚没袋里摸出约 £<<print Math.floor(_reward / 100)>> 的旧钞。
+	<<money _reward>><<stress -2>>
+<<else>>
+	生锈的百叶窗页刮破了你的手背，刺耳的金属摩擦声引来值班室里的咳嗽声，你只得屏息缩在墙角。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	你留意到铁栅窗下方的通风百叶栓已经锈蚀松动，只需一把薄刃工具便能从外侧悄无声息地挑开。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Barb Evidence Resolve]]>><<set $mpQuestBarbEvidence to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBarbEvidence to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[退回巷口向林恩请教 (0:05)|MP Grand Quest Barb Evidence Step3]]>><<set $outside to 1>><<set $location to "barb">><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[开启雾月零七号木箱 (0:08)|MP Grand Quest Barb Evidence Step4]]>><<pass 8>><</link>>
+<br>
+<<getouticon>><<link [[返回倒钩街 (0:02)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Barb Evidence Step3 [nobr]
+<<set $outside to 1>><<set $location to "barb">><<effects>>
+<<set $mpQuestBarbEvidence to Math.max(($mpQuestBarbEvidence or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["blackiron_armored"] to 1>><<set $mpClues["grand_barb_case07"] to 1>>
+缠着护腕绷带的林恩正靠在后巷砖墙边抽烟，见你从铁栅窗边退回来，便递给你一枚扁平的铜垫片。「证物室的值班警长每晚整点都会去前面喝咖啡。」林恩压低声音指了指窗内角落，「编号『雾月-07』的那只箱子连着黑铁货运站三号装甲货车的旧案，撬的时候垫上这片铜皮就不会留印子。」
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[回证物室查阅零七卷宗 (0:08)|MP Grand Quest Barb Evidence Step4]]>><<set $outside to 0>><<set $location to "underground">><<pass 8>><</link>>
+<br>
+<<sneakicon>><<link [[直接摸索底层证物袋 (0:08)|MP Grand Quest Barb Evidence Step5]]>><<set $outside to 0>><<set $location to "underground">><<pass 8>><</link>>
+<br>
+<<getouticon>><<link [[返回倒钩街 (0:02)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Barb Evidence Step4 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestBarbEvidence to Math.max(($mpQuestBarbEvidence or 0), 4)>><<set $mpKnown to ($mpKnown or {})>>
+你借着铁栅窗漏进的微光掀开『雾月-07』木箱，陈年樟脑丸的气味扑面而来。箱内整整齐齐码着一叠被强行撤案的失踪笔录与港口汇票存根。
+<<if ($english or 0) gte 320 or ($willpower or 0) gte 420>>
+	<<set _sk to Math.max(($english or 0), ($willpower or 0))>>
+	<<if _sk gte 750>><<set _reward to 1100>><<elseif _sk gte 500>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	<<set $mpKnown["foghorn_pier"] to 1>>
+	你迅速理清笔录里的暗语，查明当年扣押的货船都停靠在雾角栈桥，并从存根信封里找出约 £<<print Math.floor(_reward / 100)>> 的不记名本票。
+	<<money _reward>><<stress -2>>
+<<else>>
+	发霉的纸页字迹模糊难辨，昏暗的光线看得你眼眶酸胀，只得先把卷宗塞回原处。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	趁着夜色与换岗的空档，你挑开百叶栓钻入旧证物室，在编号『雾月-07』的木箱里翻出了一叠从未公开的卷宗。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Barb Evidence Resolve]]>><<set $mpQuestBarbEvidence to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBarbEvidence to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[撬开箱底密封证物袋 (0:07)|MP Grand Quest Barb Evidence Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[翻出铁栅窗回街上 (0:03)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Barb Evidence Step5 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestBarbEvidence to Math.max(($mpQuestBarbEvidence or 0), 5)>><<set $mpClues to ($mpClues or {})>>
+木箱最底层压着一只打着红漆铅封的帆布证物袋，袋口缠着防拆钢丝。走廊外忽然传来值班警员拿着钥匙串巡查的脚步声。
+<<set $skulduggerydifficulty to 360>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<set $mpClues["grand_barb_key"] to 1>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_5")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你用铜垫片无声挑开铅封，摸出孤儿院账册编号铜匙与约 £<<print Math.floor(_reward / 100)>> 的封存赃款。
+	<<money _reward>><<stress -3>>
+<<else>>
+	防拆钢丝扎破了你的拇指，警员的手电光扫过门缝，你狼狈地滚进铁架底下才没被抓个正着。
+	<<pain 4>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	卷宗记载着早年几起失踪案的线索全都指向了海礁外的雾角灯塔岛与黑铁货运站，却被人中途强行压了下来。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Barb Evidence Resolve]]>><<set $mpQuestBarbEvidence to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBarbEvidence to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你在木箱底层的证物袋里找到了一枚带有特殊编号的黄铜密匙与一袋封存的赃款证物。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Barb Evidence Resolve]]>><<set $mpQuestBarbEvidence to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBarbEvidence to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你将关键证物收好，把木箱封条按原样抚平，顺着通风窗敏捷地翻回后巷。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Barb Evidence Resolve]]>><<set $mpQuestBarbEvidence to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBarbEvidence to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你落地后重新扣好百叶栓，倒钩街证物室里尘封的线索已尽数落入你手中。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Barb Evidence Resolve]]>><<set $mpQuestBarbEvidence to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBarbEvidence to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『倒钩街证物室的旧封条』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[抚平封条还原现场 (0:05)|MP Grand Quest Barb Evidence Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[紧急翻窗撤离 (0:03)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Barb Evidence Step6 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestBarbEvidence to Math.max(($mpQuestBarbEvidence or 0), 6)>>
+你屏住呼吸蹲在木箱前，用打火机微弱的火苗烤软封条背面的陈年火漆，将十年前的纸封严丝合缝地重新按回箱沿。你又抓起铁架角落的一撮浮灰均匀吹在箱盖表面，彻底掩去了指印。听着门外巡警走远的脚步声，你紧绷的心弦终于松了开来。
+<<stress -3>>
+<br><br>
+<<runicon>><<link [[攀上通风窗翻回后巷 (0:05)|MP Grand Quest Barb Evidence Resolve]]>><<set $outside to 1>><<set $location to "barb">><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回倒钩街 (0:02)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Barb Evidence Resolve [nobr]
-<<set $outside to 0>><<set $location to "barb">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Barb Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Barb Street">>
+<<set $outside to 1>><<set $location to "barb">><<effects>>
+<<set $mpQuestBarbEvidence to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBarbEvidence to 1>>
+你将倒钩街证物室铁栅窗的插销原样扣回，把抽出的旧案封条与受贿底单贴身藏好。巷口正好有一辆巡逻警车闪着顶灯拐进来，你需要立刻翻上后巷高墙脱身。
+<<if ($athletics or 0) gte 340>>
+	<<set _sk to ($athletics or 0)>>
+	<<if _sk gte 800>><<set _reward to 1400>><<elseif _sk gte 550>><<set _reward to 1100>><<else>><<set _reward to 800>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBarbEvidence_stg_7")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你蹬住排水管干净利落地翻过砖墙，将底单副本卖给暗桩换得约 £<<print Math.floor(_reward / 100)>> 的线报赏金。
+	<<money _reward>><<stress -4>>
+<<else>>
+	你翻墙时靴跟滑脱摔在垃圾桶旁，膝盖磕出一片淤青，好不容易才钻进窄巷甩开警车。
+	<<pain 3>><<stress 5>>
 <</if>>
-你将倒钩街证物室铁栅窗的插销原样扣回，把抽出的旧案封条与受贿底单贴身藏好。
-<<if Weather.precipitation is "rain">>警局后巷的积水映着红蓝警灯的微光，雨水冲刷掉了窗台上的指印。<<else>>巡逻车刚刚驶离后院，巷道里只剩下风吹过铁丝网的轻响。<</if>>
-这份本该被彻底销毁的证物卷宗，如今成了你手中最有力的筹码。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Barb Evidence]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回看警局后巷铁窗 (0:03)|MP Grand Quest Barb Evidence]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回倒钩街 (0:02)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Cliff Lighthouse [nobr]
-<<set $outside to 1>><<set $location to "cliff">>
-<<effects>>
-<<set _stg to ($mpQuestCliffLighthouse or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Cliff Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Cliff Street">>
+<<set $outside to 1>><<set $location to "cliff">><<effects>>
+<<set $mpQuestCliffLighthouse to Math.max(($mpQuestCliffLighthouse or 0), 1)>>
+你沿着峭壁边缘潮湿的石阶向上攀登，那一串带着海藻碎屑的湿脚印一直延伸到废弃雾角塔的铁门前。铁门上的铜挂锁已经被撬开虚掩着，门缝里传出螺旋石梯特有的空洞风鸣。海雾在百尺峭壁下方翻涌，你可以推门上塔，或者先去值班室看看火炉余温。
+<br><br>
+<<walkicon>><<link [[推门攀上螺旋石梯 (0:06)|MP Grand Quest Cliff Lighthouse Step2]]>><<pass 6>><</link>>
+<br>
+<<investigateicon>><<link [[进入守塔值班室 (0:06)|MP Grand Quest Cliff Lighthouse Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestCliffLighthouse or 0) gte 3>>
+	<<sneakicon>><<link [[直登塔顶透镜室 (0:06)|MP Grand Quest Cliff Lighthouse Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[走下峭壁石阶 (0:03)|Cliff Street]]>><<set $outside to 1>><<set $location to "cliff">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你沿着峭壁边缘潮湿的石阶向上攀登，那一串带着海藻碎屑的湿脚印一直延伸到废弃雾角塔的铁门前。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Cliff Lighthouse Resolve]]>><<set $mpQuestCliffLighthouse to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCliffLighthouse to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_1")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Cliff Lighthouse Step2 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestCliffLighthouse to Math.max(($mpQuestCliffLighthouse or 0), 2)>>
+你推开沉重的生铁门走入塔内，盘旋而上的石梯好几级已经崩裂，海风顺着窄长的瞭望风孔灌进来发出呜咽声。风孔内侧的石龛里卡着一只油布钱袋。
+<<if ($athletics or 0) gte 320 or ($physique or 0) gte 9000>>
+	<<set _sk to ($athletics or 0)>>
+	<<if _sk gte 750>><<set _reward to 1100>><<elseif _sk gte 500>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	你扣住石壁上的铁抓环跨过断阶，稳稳探手取出那只油布袋，里面装着约 £<<print Math.floor(_reward / 100)>> 的旧海港银币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	狂风猛地吹迷了你的眼睛，你一脚踩在松动的碎石上滑倒，手掌在粗糙的岩壁上擦破了皮。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	铁门上的挂锁已经被撬开虚掩着。你推门走入塔内，螺旋上升的石梯上回荡着海风灌入风孔的呜咽声。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Cliff Lighthouse Resolve]]>><<set $mpQuestCliffLighthouse to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCliffLighthouse to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_2")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<walkicon>><<link [[走进中层值班室 (0:05)|MP Grand Quest Cliff Lighthouse Step3]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[退下石梯回峭壁街 (0:03)|Cliff Street]]>><<set $outside to 1>><<set $location to "cliff">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Cliff Lighthouse Step3 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestCliffLighthouse to Math.max(($mpQuestCliffLighthouse or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["foghorn_keeper"] to 1>><<set $mpClues["grand_cliff_signal"] to 1>>
+在塔楼中层的守塔人值班室里，铸铁火炉里的木炭灰烬尚存一丝余温，隔绝了外海的湿冷寒气。木桌上摊开着一张标注着近海暗流与灯语信号的航海草图，详细画出了从外海雾角灯塔岛守塔人旧居与这座废塔对发闪光暗号的角度。你将草图上的三组闪光频率默记于心，身体也暖和了不少。
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[爬上塔顶查验透镜 (0:07)|MP Grand Quest Cliff Lighthouse Step4]]>><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[摸索灯座底层暗格 (0:07)|MP Grand Quest Cliff Lighthouse Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回峭壁街 (0:03)|Cliff Street]]>><<set $outside to 1>><<set $location to "cliff">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Cliff Lighthouse Step4 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestCliffLighthouse to Math.max(($mpQuestCliffLighthouse or 0), 4)>><<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+你顺着螺旋梯爬上塔顶灯室，高处的海风吹得黄铜窗框嗡嗡作响。巨大的环形菲涅尔透镜后方藏着一只铜制信号匣，里面插着红蓝绿三色滤光片与折算表。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($science or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($science or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpKnown["foghorn_echo"] to 1>><<set $mpClues["grand_cliff_lens"] to 1>>
+	你按折射率拼合三色滤光片，破译出走私船在海蚀回音廊接头的时刻，并从匣底摸出约 £<<print Math.floor(_reward / 100)>> 的联络津贴。
+	<<money _reward>><<stress -2>>
+<<else>>
+	复杂的棱镜折射角让你算错了潮汐时间，冰冷的穿堂风吹得你太阳穴突突直跳。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	在塔楼中层的守塔人值班室里，你发现火炉里的灰烬尚有余温，桌上摊开着一张标注着近海暗流与灯语信号的草图。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Cliff Lighthouse Resolve]]>><<set $mpQuestCliffLighthouse to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCliffLighthouse to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_3")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[撬开灯室底座暗格 (0:07)|MP Grand Quest Cliff Lighthouse Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[下塔返回峭壁街 (0:03)|Cliff Street]]>><<set $outside to 1>><<set $location to "cliff">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Cliff Lighthouse Step5 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestCliffLighthouse to Math.max(($mpQuestCliffLighthouse or 0), 5)>>
+塔顶灯室的铸铁旋转底座下方有一格用铅条封死的检修仓，仓门缝隙里渗出淡淡的机油味。里面塞着走私瞭望手来不及带走的防水货包与单筒望远镜。
+<<set $skulduggerydifficulty to 350>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_5")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你避开配重齿轮撬开铅封仓门，将封存暗货与望远镜筒里约 £<<print Math.floor(_reward / 100)>> 的金镑尽数收入囊中。
+	<<money _reward>><<stress -3>>
+<<else>>
+	沉重的配重铅块忽然下滑，擦伤了你的手腕，震耳的哐当声在塔筒内久久回荡。
+	<<pain 4>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	你顺着螺旋梯爬上塔顶灯室。巨大的菲涅尔透镜后方藏着一只铜制信号匣，里面装满了用来向海面船只发送密语的彩色滤光片。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Cliff Lighthouse Resolve]]>><<set $mpQuestCliffLighthouse to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCliffLighthouse to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_4")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	通过比对草图上的灯语编码，你破译出了走私船在海蚀洞与雾角灯塔岛之间接头的准确时刻。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Cliff Lighthouse Resolve]]>><<set $mpQuestCliffLighthouse to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCliffLighthouse to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_5")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你在灯室底座的暗格里搜出了一包来不及带走的封存暗货与望远镜。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Cliff Lighthouse Resolve]]>><<set $mpQuestCliffLighthouse to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCliffLighthouse to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_6")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你将战利品收好，趁着夜雾顺着峭壁石阶安全返回了街道。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Cliff Lighthouse Resolve]]>><<set $mpQuestCliffLighthouse to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCliffLighthouse to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_7")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『峭壁旧雾角塔的湿脚印』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<socialiseicon>><<link [[向塔下莫奈打手势 (0:05)|MP Grand Quest Cliff Lighthouse Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[顺石阶撤回峭壁街 (0:03)|Cliff Street]]>><<set $outside to 1>><<set $location to "cliff">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Cliff Lighthouse Step6 [nobr]
+<<set $outside to 1>><<set $location to "cliff">><<effects>>
+<<set $mpQuestCliffLighthouse to Math.max(($mpQuestCliffLighthouse or 0), 6)>>
+你刚走下雾角塔外侧的石阶，便看见莫奈正支着木画架在峭壁栏杆边描摹海雾。见你怀里揣着鼓鼓囊囊的棱镜袋，莫奈不动声色地展开一条宽大的羊绒披肩搭在你肩上。「刚才有两名港务巡警往这边看，站到我画架后面当会儿模特吧，」莫奈冲你眨了眨眼，几笔便把你的剪影画进了雾海画卷里。
+<<stress -3>>
+<br><br>
+<<walkicon>><<link [[借夜雾掩护结案撤离 (0:05)|MP Grand Quest Cliff Lighthouse Resolve]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回峭壁街 (0:02)|Cliff Street]]>><<set $outside to 1>><<set $location to "cliff">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Cliff Lighthouse Resolve [nobr]
-<<set $outside to 1>><<set $location to "cliff">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Cliff Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Cliff Street">>
+<<set $outside to 1>><<set $location to "cliff">><<effects>>
+<<set $mpQuestCliffLighthouse to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCliffLighthouse to 1>>
+你走下峭壁旧雾角塔的螺旋石阶，将守塔人留下的折射棱镜与海雾信号图收进贴身行囊。海风裹挟着咸湿的雾气扑面而来，远海走私船的灯语规律已尽在你的掌握之中。
+<<if ($willpower or 0) gte 420 or ($athletics or 0) gte 320>>
+	<<set _sk to Math.max(($willpower or 0), ($athletics or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestCliffLighthouse_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你稳步穿过湿滑的崖边栈道，将多余的滤光铜件交予收藏商兑得约 £<<print Math.floor(_reward / 100)>> 的酬金。
+	<<money _reward>><<stress -4>>
+<<else>>
+	陡峭的崖壁让你走得双腿发软，好不容易回到街面时已是气喘吁吁。
+	<<stress 4>>
 <</if>>
-你走下峭壁旧雾角塔的螺旋石阶，将守塔人留下的折射棱镜与海雾信号图收进贴身行囊。
-<<if Weather.name is "heavyClouds">>汹涌的海浪拍击着百尺峭壁根部，咸湿的雾气漫过石阶。<<else>>清冽的海风吹散了塔楼里的陈年尘埃，远处的海面一览无余。<</if>>
-旧雾角塔与外海灯塔岛之间的秘密信号链已被你彻底打通。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Cliff Lighthouse]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望旧雾角塔楼 (0:03)|MP Grand Quest Cliff Lighthouse]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回峭壁街 (0:02)|Cliff Street]]>><<set $outside to 1>><<set $location to "cliff">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Arcade Basement [nobr]
-<<set $outside to 0>><<set $location to "arcade">>
-<<effects>>
-<<set _stg to ($mpQuestArcadeBasement or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Arcade")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Arcade">>
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestArcadeBasement to Math.max(($mpQuestArcadeBasement or 0), 1)>>
+你走到游戏厅最里侧那台黑屏的旧街机旁，四周嘈杂的电子音效掩盖了机身背后传来的轻微电流嗡鸣。木质机箱底部与地板瓷砖之间留着一道新鲜的弧形刮痕，投币口内侧似乎装有感应弹簧。你可以假装投币按压暗槽，或者先观察一下周围玩家与店员的动向。
+<br><br>
+<<sneakicon>><<link [[按压投币口机关 (0:06)|MP Grand Quest Arcade Basement Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[向角落常客打听 (0:05)|MP Grand Quest Arcade Basement Step3]]>><<pass 5>><</link>>
+<br>
+<<if ($mpQuestArcadeBasement or 0) gte 3>>
+	<<investigateicon>><<link [[直接下夹层查软盘 (0:06)|MP Grand Quest Arcade Basement Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[离开黑屏街机旁 (0:02)|Arcade]]>><<set $outside to 0>><<set $location to "underground">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你走到游戏厅最里侧那台黑屏的旧街机旁。四周嘈杂的电子音效掩盖了机身背后传来的轻微电流嗡鸣。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Arcade Basement Resolve]]>><<set $mpQuestArcadeBasement to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestArcadeBasement to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Arcade Basement Step2 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestArcadeBasement to Math.max(($mpQuestArcadeBasement or 0), 2)>>
+你假装弯腰捡游戏币俯下身，手指探进黑屏街机侧面的退币暗槽。里面并排藏着三枚微动开关，需要避开漏电铜线依次拨开。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1100>><<elseif _sk gte 550>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	机箱底座应声滑开半尺，露出通往地下夹层的铁梯，你顺手从储币盒里捞出约 £<<print Math.floor(_reward / 100)>> 的钞票。
+	<<money _reward>><<stress -2>>
+<<else>>
+	裸露的电容打出一串电火花，麻得你指尖一颤，额头重重磕在机箱塑料挡板上。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	你假装投币俯下身，发现街机侧面的投币口暗槽可以按照特定顺序按压，机身底座随即向旁滑开了半尺。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Arcade Basement Resolve]]>><<set $mpQuestArcadeBasement to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestArcadeBasement to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<walkicon>><<link [[顺铁梯下到改装夹层 (0:06)|MP Grand Quest Arcade Basement Step3]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回游戏厅大厅 (0:02)|Arcade]]>><<set $outside to 0>><<set $location to "underground">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Arcade Basement Step3 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestArcadeBasement to Math.max(($mpQuestArcadeBasement or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["clockwork_corridor"] to 1>><<set $mpClues["grand_arcade_floppy"] to 1>>
+走下狭窄的铁梯，地下夹层是一间弥漫着松香焊锡味的改装工坊。一名戴着护目镜的年轻技师正低头焊接着一块主板，头也不抬地把你当成了来取货的中间人。他顺手将一张贴着标签的五寸软盘推到桌边：「地下钱庄的对账口令都在盘里，另外后面那扇铸铁风门直通机括城的青铜齿轮回廊，走的时候别忘了关电闸。」
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[点亮显示器读取软盘 (0:08)|MP Grand Quest Arcade Basement Step4]]>><<pass 8>><</link>>
+<br>
+<<sneakicon>><<link [[搜寻工坊上锁抽屉 (0:07)|MP Grand Quest Arcade Basement Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[爬回游戏厅地面 (0:03)|Arcade]]>><<set $outside to 0>><<set $location to "underground">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Arcade Basement Step4 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestArcadeBasement to Math.max(($mpQuestArcadeBasement or 0), 4)>><<set $mpClues to ($mpClues or {})>>
+你点亮工作台上的绿屏显示器，把那张五寸软盘推入驱动器。屏幕上跳出一排十六进制校验码，需要换算成对应的十进制校验位才能打开账本目录。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($maths or 0) gte 320 or ($science or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($maths or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpClues["grand_arcade_cipher"] to 1>>
+	你飞快敲入校验数字，成功调出星鱼街钱庄的交接暗语，并转出账户里约 £<<print Math.floor(_reward / 100)>> 的测试彩金。
+	<<money _reward>><<stress -2>>
+<<else>>
+	闪烁的绿色字符看得你头晕目眩，连续三次输错校验码后驱动器自动锁死退出。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	挪开机身，后方露出一道通往地下夹层的狭窄铁梯，空气里飘来焊锡与旧电路板的气味。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Arcade Basement Resolve]]>><<set $mpQuestArcadeBasement to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestArcadeBasement to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[撬开工作台铁抽屉 (0:07)|MP Grand Quest Arcade Basement Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回游戏厅大厅 (0:03)|Arcade]]>><<set $outside to 0>><<set $location to "underground">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Arcade Basement Step5 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestArcadeBasement to Math.max(($mpQuestArcadeBasement or 0), 5)>>
+工作台最底层的钢制抽屉挂着一把精巧的磁性暗锁，锁孔周围没有任何撬痕。里面存放着一盒早期发行的纯银街机纪念币与全套锁芯改装探针。
+<<set $skulduggerydifficulty to 350>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你用桌上的消磁线圈贴住锁孔拉开抽屉，收好纯银纪念币盒与约 £<<print Math.floor(_reward / 100)>> 的备用现钞。
+	<<money _reward>><<stress -3>>
+<<else>>
+	抽屉边缘的防盗簧片猛地弹起夹伤了你的手指，刺耳的电流啸叫声让你慌忙拔掉电源。
+	<<pain 3>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	走下铁梯，地下夹层竟是一处废弃的黑客与改装工坊，工作台上散落着几枚改装过的街机代币与账本软盘。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Arcade Basement Resolve]]>><<set $mpQuestArcadeBasement to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestArcadeBasement to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你点亮工作台上的旧显示器，从加密目录中调出了星鱼街与商业区几个地下钱庄的暗语口令。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Arcade Basement Resolve]]>><<set $mpQuestArcadeBasement to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestArcadeBasement to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你在工坊抽屉里找到了一盒未拆封的高价值纯银纪念币与改装工具。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Arcade Basement Resolve]]>><<set $mpQuestArcadeBasement to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestArcadeBasement to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你将纪念币与口令收好，回到地面将黑屏街机推回原位。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Arcade Basement Resolve]]>><<set $mpQuestArcadeBasement to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestArcadeBasement to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『星鱼街黑屏街机后的暗门』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[切断电源清理痕迹 (0:05)|MP Grand Quest Arcade Basement Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[返回游戏厅 (0:03)|Arcade]]>><<set $outside to 0>><<set $location to "underground">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Arcade Basement Step6 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestArcadeBasement to Math.max(($mpQuestArcadeBasement or 0), 6)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["clockwork_astro"] to 1>>
+在爬上铁梯前，你顺手关掉了改装工坊的备用稳压器，发现排风管内壁贴着一张手绘的地下管网剖面图。图上用荧光笔标出了一条从机括城通往地下停摆天文台的干爽通道。你将图纸折好塞进内袋，顺着铁梯悄无声息地爬回游戏厅地面。
+<<stress -3>>
+<br><br>
+<<walkicon>><<link [[将黑屏街机推回原位 (0:05)|MP Grand Quest Arcade Basement Resolve]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接混入街机厅人群 (0:02)|Arcade]]>><<set $outside to 0>><<set $location to "underground">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Arcade Basement Resolve [nobr]
-<<set $outside to 0>><<set $location to "arcade">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Arcade")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Arcade">>
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestArcadeBasement to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestArcadeBasement to 1>>
+你把星鱼街游戏厅最里侧那台黑屏街机推回墙角，用导线将暗门电磁锁恢复为待机状态。外面的霓虹灯依旧闪烁不停，没有一名玩家察觉到你刚从地底密室归来。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($physique or 0) gte 9000>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestArcadeBasement_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你顺手用口令在柜台兑出约 £<<print Math.floor(_reward / 100)>> 的不记名代币礼金，圆满结束了这次潜入。
+	<<money _reward>><<stress -4>>
+<<else>>
+	沉重的机箱在瓷砖上留下一道白痕，你赶在店员过来查看前快步闪进了人群。
+	<<stress 4>>
 <</if>>
-你把星鱼街游戏厅最里侧那台黑屏街机推回墙角，用导线将暗门电磁锁恢复为待机状态。
-<<if Time.dayState is "night">>外厅嘈杂的电子音效与霓虹紫光，恰好掩护了你从机房后侧闪出的身影。<<else>>白昼游戏厅里客人不多，你借着机身阴影从容地整理好衣角。<</if>>
-藏在街机主板与地下电缆井里的暗号记录已被你尽数掌握。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Arcade Basement]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回看角落旧街机 (0:03)|MP Grand Quest Arcade Basement]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回游戏厅大厅 (0:02)|Arcade]]>><<set $outside to 0>><<set $location to "underground">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Hospital Wing [nobr]
-<<set $outside to 0>><<set $location to "hospital">>
-<<effects>>
-<<set _stg to ($mpQuestHospitalWing or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Hospital Courtyard")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Hospital Courtyard">>
+<<set $outside to 0>><<set $location to "hospital">><<effects>>
+<<set $mpQuestHospitalWing to Math.max(($mpQuestHospitalWing or 0), 1)>>
+你轻轻推开医院旧翼走廊尽头的磨砂玻璃门，废弃的病区走廊空无一人，只有最里侧的药剂室传来规律的冷凝水滴声。头顶的应急灯管泛着冷白微光，空气里混杂着陈年来苏水与干枯草药的气味。你可以放轻脚步走进旧药剂室，或者先和走廊外的诺艾尔打听情况。
+<br><br>
+<<walkicon>><<link [[走进旧翼药剂室 (0:06)|MP Grand Quest Hospital Wing Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[向采药归来的诺艾尔请教 (0:06)|MP Grand Quest Hospital Wing Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestHospitalWing or 0) gte 3>>
+	<<investigateicon>><<link [[直接开启底层保险屉 (0:06)|MP Grand Quest Hospital Wing Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回医院大门前 (0:03)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你轻轻推开医院旧翼走廊尽头的磨砂玻璃门。废弃的病区走廊空无一人，只有最里侧的药剂室传来规律的水滴声。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Hospital Wing Resolve]]>><<set $mpQuestHospitalWing to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHospitalWing to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Hospital Wing Step2 [nobr]
+<<set $outside to 0>><<set $location to "hospital">><<effects>>
+<<set $mpQuestHospitalWing to Math.max(($mpQuestHospitalWing or 0), 2)>>
+你放轻脚步走进旧药剂室，实验台上的微型酒精灯还跳动着幽蓝火苗。玻璃冷凝管正将淡紫色的提纯液一滴滴汇入锥形瓶，旁边摊开着一本实验手记。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($science or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($science or 0))>>
+	<<if _sk gte 800>><<set _reward to 1100>><<elseif _sk gte 550>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	你熟练地用塞子封好提纯液，并从实验服口袋里摸出约 £<<print Math.floor(_reward / 100)>> 的药材采购经费。
+	<<money _reward>><<stress -2>>
+<<else>>
+	你不小心碰歪了酒精灯座，挥发的药雾熏得你头重脚轻，只能慌忙退到窗边透气。
+	<<tiredness 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	你放轻脚步走进旧药剂室，看到蒸馏器皿里正缓慢滴落着淡紫色的提纯液，旁边放着一本没有署名的研究笔记。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Hospital Wing Resolve]]>><<set $mpQuestHospitalWing to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHospitalWing to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[找诺艾尔辨认草药配比 (0:05)|MP Grand Quest Hospital Wing Step3]]>><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[搜寻药剂柜备用铜匙 (0:07)|MP Grand Quest Hospital Wing Step4]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回医院正门 (0:03)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Hospital Wing Step3 [nobr]
+<<set $outside to 0>><<set $location to "hospital">><<effects>>
+<<set $mpQuestHospitalWing to Math.max(($mpQuestHospitalWing or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["glasshouse_specimen"] to 1>><<set $mpClues["grand_hospital_formula"] to 1>>
+你在旧翼侧廊遇到了前来取蒸馏器皿的诺艾尔，把抄下的配比单递给对方过目。诺艾尔仔细嗅了嗅纸页上的清香，轻声告诉你：「这种高纯度宁神剂需要用到多瑙河温室庄园夜光标本廊培育的银丝花蕊，药剂柜玻璃格后面就挂着开启底层保险抽屉的备用铜匙。」诺艾尔还贴心地递给你一枚薄荷糖提神。
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[取备用铜匙开保险屉 (0:07)|MP Grand Quest Hospital Wing Step4]]>><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[深入内侧冷藏室核查 (0:07)|MP Grand Quest Hospital Wing Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回医院正门 (0:03)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Hospital Wing Step4 [nobr]
+<<set $outside to 0>><<set $location to "hospital">><<effects>>
+<<set $mpQuestHospitalWing to Math.max(($mpQuestHospitalWing or 0), 4)>><<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+你探手从药剂柜玻璃格后方摸出那串冰凉的备用铜匙，蹲下身将其插入最底层的铸铁保险抽屉锁孔。锁芯深处带着一道紧密的防盗卡簧，需要放轻手劲慢慢旋转。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($willpower or 0) gte 420>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpKnown["glasshouse_cellar"] to 1>><<set $mpClues["grand_hospital_order"] to 1>>
+	你稳稳拉开抽屉，取出与温室地下酿造室往来的采购协议，以及信封里约 £<<print Math.floor(_reward / 100)>> 的秘密定金。
+	<<money _reward>><<stress -3>>
+<<else>>
+	锁簧弹回震痛了你的指关节，玻璃柜门发出的晃动声让你心惊肉跳。
+	<<pain 2>><<stress 5>>
 <</if>>
-<<if _stg is 2>>
-	笔记中详细记录了如何利用深林草药与温水泉提炼缓解创伤与精神紧绷的特效宁神剂。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Hospital Wing Resolve]]>><<set $mpQuestHospitalWing to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHospitalWing to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[进入内侧药库取成品 (0:07)|MP Grand Quest Hospital Wing Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回医院正门 (0:03)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Hospital Wing Step5 [nobr]
+<<set $outside to 0>><<set $location to "hospital">><<effects>>
+<<set $mpQuestHospitalWing to Math.max(($mpQuestHospitalWing or 0), 5)>>
+旧药剂室内侧的恒温冷库里散发着丝丝凉气，铁架上存放着整匣贴有封条的高纯度宁神饮。走廊磨砂窗外忽然亮起夜间巡查员晃动的手电光柱。
+<<set $skulduggerydifficulty to 360>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_5")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你在手电光照进窗户前闪入冷库盲区，拎走封存药匣与夹层里约 £<<print Math.floor(_reward / 100)>> 的黑市押金。
+	<<money _reward>><<stress -3>>
+<<else>>
+	冷库铁门合页发出刺耳异响，你在翻越药架躲避时被不锈钢托盘划伤了小臂。
+	<<pain 3>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	你在药剂柜上锁的玻璃格后方发现了一串备用铜匙，顺手打开了最底层的保险抽屉。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Hospital Wing Resolve]]>><<set $mpQuestHospitalWing to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHospitalWing to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	保险抽屉里存放着几支封装完好的高纯度古方宁神饮，以及一份早年院方与多瑙河温室庄园的采购协议。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Hospital Wing Resolve]]>><<set $mpQuestHospitalWing to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHospitalWing to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你饮下一小支宁神饮，只觉一股温和暖流顺着四肢百骸散开，积攒的创伤与压力顿时消退大半。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Hospital Wing Resolve]]>><<set $mpQuestHospitalWing to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHospitalWing to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你将剩余的线索与古方药剂收好，悄然退出了医院旧翼走廊。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Hospital Wing Resolve]]>><<set $mpQuestHospitalWing to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHospitalWing to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『夜莺街旧病房走廊的滴答声』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<bedicon "zzz">><<link [[饮下宁神饮平复心绪 (0:05)|MP Grand Quest Hospital Wing Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[退回医院正门 (0:03)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Hospital Wing Step6 [nobr]
+<<set $outside to 0>><<set $location to "hospital">><<effects>>
+<<set $mpQuestHospitalWing to Math.max(($mpQuestHospitalWing or 0), 6)>>
+你退进旧翼内侧一间拉着遮光帘的值班休息室，拔开木塞饮下一小支淡紫色的古方宁神饮。一股带着蓝冠草清香的温和暖流顺着喉咙散入四肢百骸，连日来在街巷奔波积攒的疲乏与紧绷感随之消退了大半。你将空玻璃管收进袋中，把药柜钥匙挂回原处。
+<<stress -4>><<trauma -1>>
+<br><br>
+<<walkicon>><<link [[带拢磨砂玻璃门离开 (0:05)|MP Grand Quest Hospital Wing Resolve]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回医院正门 (0:02)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Hospital Wing Resolve [nobr]
-<<set $outside to 0>><<set $location to "hospital">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Hospital Courtyard")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Hospital Courtyard">>
+<<set $outside to 0>><<set $location to "hospital">><<effects>>
+<<set $mpQuestHospitalWing to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHospitalWing to 1>>
+你轻轻带拢医院旧翼走廊尽头的磨砂玻璃门，将泛黄的早期病历卡与药剂配方收入怀中。主楼大厅的值班护士正低头核对夜间交接表，你需要穿过明亮的分诊走廊走出正门。
+<<if ($willpower or 0) gte 420 or ($athletics or 0) gte 320>>
+	<<set _sk to Math.max(($willpower or 0), ($athletics or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHospitalWing_stg_7")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你步伐从容地穿过分诊台，将多余的提纯样本转手换得约 £<<print Math.floor(_reward / 100)>> 的酬劳。
+	<<money _reward>><<stress -4>>
+<<else>>
+	你身上残留的草药味引来值班护士的侧目，吓得你加快步子匆匆推门而出。
+	<<stress 4>>
 <</if>>
-你轻轻带拢医院旧翼走廊尽头的磨砂玻璃门，将泛黄的早期病历卡与药剂配方收入怀中。
-<<if Weather.isFreezing>>旧翼走廊的暖气片发出轻微的嘶嘶声，空气里飘着淡淡的来苏水味。<<else>>寂静的走廊尽头没有值班护士经过，只有仪器规律的滴答声。<</if>>
-这批尘封在旧病房档案柜里的特殊病例，拼上了小镇往事的关键一环。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Hospital Wing]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望旧翼磨砂玻璃门 (0:03)|MP Grand Quest Hospital Wing]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回医院正门 (0:02)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest School Bell [nobr]
-<<set $outside to 0>><<set $location to "school">>
-<<effects>>
-<<set _stg to ($mpQuestSchoolBell or 0)>>
-<<set _exitPas to ($mpReturnPassage or "School Front Courtyard")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "School Front Courtyard">>
+<<set $outside to 0>><<set $location to "school">><<effects>>
+<<set $mpQuestSchoolBell to Math.max(($mpQuestSchoolBell or 0), 1)>>
+你推开教学楼侧面通往旧钟塔的木门，顺着盘旋而上的铁梯攀登，脚下的木踏板在寂静中发出轻微的吱呀声。高处窄窗透进斜照的日光，尘埃在光柱里缓缓浮动。半层平台处有一扇挂着字码铜锁的铁栅门，你可以上前试着转开铜锁，或者先找悉尼询问建校年代。
+<br><br>
+<<investigateicon>><<link [[核对门框刻痕开锁 (0:06)|MP Grand Quest School Bell Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[向走廊边的悉尼请教 (0:05)|MP Grand Quest School Bell Step3]]>><<pass 5>><</link>>
+<br>
+<<if ($mpQuestSchoolBell or 0) gte 3>>
+	<<walkicon>><<link [[直入报时大钟机芯室 (0:06)|MP Grand Quest School Bell Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回教学楼走廊 (0:02)|Hallways]]>><<set $outside to 0>><<set $location to "school">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你推开教学楼侧面通往旧钟塔的木门，顺着盘旋而上的铁梯攀登。脚下的木踏板在寂静中发出轻微的吱呀声。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest School Bell Resolve]]>><<set $mpQuestSchoolBell to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSchoolBell to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest School Bell Step2 [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>>
+<<set $mpQuestSchoolBell to Math.max(($mpQuestSchoolBell or 0), 2)>>
+在钟塔半层的平台处，通往报时大钟机芯室的铁栅门被一把四轮字码铜锁拦住。门框青砖上刻着一行罗马数字与校徽纪年。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($history or 0) gte 320 or ($maths or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($history or 0))>>
+	<<if _sk gte 800>><<set _reward to 1100>><<elseif _sk gte 550>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	你迅速换算出建校年份转开铜锁，并在门后工具盒里找到约 £<<print Math.floor(_reward / 100)>> 的钟楼修缮备用金。
+	<<money _reward>><<stress -2>>
+<<else>>
+	锈涩的字码轮卡在半途，无论你怎么拨动都无法对齐锁舌，急得额角渗出细汗。
+	<<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	在钟塔半层的平台处，一扇通往报时大钟机芯室的铁栅门被一把古老的字码铜锁拦住了去路。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest School Bell Resolve]]>><<set $mpQuestSchoolBell to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSchoolBell to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[下楼向悉尼请教校史 (0:05)|MP Grand Quest School Bell Step3]]>><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[步入机芯室查探钟壁 (0:07)|MP Grand Quest School Bell Step4]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回教学楼走廊 (0:02)|Hallways]]>><<set $outside to 0>><<set $location to "school">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest School Bell Step3 [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>>
+<<set $mpQuestSchoolBell to Math.max(($mpQuestSchoolBell or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["observatory_bridge"] to 1>><<set $mpClues["grand_bell_triangle"] to 1>>
+你在楼梯口遇到了正抱着旧校刊去图书馆归档的悉尼。听你问起旧钟塔上的罗马数字，悉尼眼睛一亮，翻开校刊扉页指给你看：「大钟内壁刻着建校时的星象三角图，而且从机芯室侧面的飞扶壁拱门出去，就能走上直通旧天文翼楼的钟楼连廊。」悉尼温和地叮嘱你在高处留神脚下。
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<stress -3>>
+<br><br>
+<<investigateicon>><<link [[进机芯室拓印星象图 (0:07)|MP Grand Quest School Bell Step4]]>><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[攀上悬梁探查燕子窝 (0:07)|MP Grand Quest School Bell Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回教学楼走廊 (0:02)|Hallways]]>><<set $outside to 0>><<set $location to "school">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest School Bell Step4 [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>>
+<<set $mpQuestSchoolBell to Math.max(($mpQuestSchoolBell or 0), 4)>><<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+机芯室内光线幽暗，两米高的黄铜报时大钟静静悬在粗壮的橡木横梁下。大钟内壁镌刻着一幅微缩的城镇星象俯瞰图，将学园、神殿与雾角灯塔连成正三角形。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($science or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($science or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpKnown["observatory_dome"] to 1>><<set $mpClues["grand_bell_vernier"] to 1>>
+	你准确拓下正三角星轨坐标与折光穹顶室的校准刻度，并在钟锤底座下摸出约 £<<print Math.floor(_reward / 100)>> 的古银币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	钟体内部的弧面让拓纸频频移位，报时齿轮忽然转动发出的闷响震得你耳膜嗡嗡作响。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	你仔细观察铁栅门框上的刻痕，结合学园建校年份转出了正确的四位数字，铜锁应声弹开。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest School Bell Resolve]]>><<set $mpQuestSchoolBell to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSchoolBell to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[攀上横梁摸索锡盒 (0:07)|MP Grand Quest School Bell Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回教学楼走廊 (0:02)|Hallways]]>><<set $outside to 0>><<set $location to "school">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest School Bell Step5 [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>>
+<<set $mpQuestSchoolBell to Math.max(($mpQuestSchoolBell or 0), 5)>>
+大钟悬梁上方的凹槽里筑着一只废弃的燕子窝，旁边卡着一只积满灰尘的扁平锡盒。你需要踩着狭窄的齿轮支架爬上三米高的横梁。
+<<if ($athletics or 0) gte 350 or ($physique or 0) gte 9500>>
+	<<set _sk to ($athletics or 0)>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你稳稳攀上橡木横梁取下锡盒，里面装着一枚建校纯金纪念章与约 £<<print Math.floor(_reward / 100)>> 的早期礼金券。
+	<<money _reward>><<stress -3>>
+<<else>>
+	支架上的润滑油让你脚下一滑，小腿磕在铁护栏上，只能空手滑回平台。
+	<<pain 3>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	机芯室内，巨大的黄铜大钟内壁刻着一整幅微缩的城镇星象俯瞰图，将学园、神殿与雾角灯塔连成了一道正三角。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest School Bell Resolve]]>><<set $mpQuestSchoolBell to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSchoolBell to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你在大钟悬梁上方的燕子窝旁摸到了一个积满灰尘的锡盒，里面装着建校初期的纯金纪念章。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest School Bell Resolve]]>><<set $mpQuestSchoolBell to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSchoolBell to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	纪念章背面刻着开启学园旧天文翼楼折光穹顶的校准刻度。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest School Bell Resolve]]>><<set $mpQuestSchoolBell to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSchoolBell to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你将纯金纪念章贴身收好，顺着螺旋铁梯稳步返回了学校前院。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest School Bell Resolve]]>><<set $mpQuestSchoolBell to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSchoolBell to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『牛津街学园旧钟塔的铜锁』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[凭窗远眺学园星轨方位 (0:05)|MP Grand Quest School Bell Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[返回教学楼走廊 (0:02)|Hallways]]>><<set $outside to 0>><<set $location to "school">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest School Bell Step6 [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>>
+<<set $mpQuestSchoolBell to Math.max(($mpQuestSchoolBell or 0), 6)>>
+你站在钟塔高处的石砌拱窗边，迎着清爽的高空微风翻转手中的纯金纪念章。纪念章背面刻着一组精密的赤纬刻度，正好与不远处旧学园天文翼楼的折光穹顶遥遥相对。听着脚下大钟沉稳规律的滴答声，你把纪念章与拓片贴身收好，纷乱的思绪变得格外清明。
+<<stress -3>>
+<br><br>
+<<walkicon>><<link [[顺螺旋铁梯下楼结案 (0:05)|MP Grand Quest School Bell Resolve]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回教学楼走廊 (0:02)|Hallways]]>><<set $outside to 0>><<set $location to "school">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest School Bell Resolve [nobr]
-<<set $outside to 0>><<set $location to "school">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "School Front Courtyard")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "School Front Courtyard">>
+<<set $outside to 0>><<set $location to "school">><<effects>>
+<<set $mpQuestSchoolBell to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSchoolBell to 1>>
+你顺着教学楼旧钟塔的螺旋铁梯爬下顶层，用铜锁将木门重新虚掩，怀里揣着刚拓下的钟铭与纪念章。走廊转角正好有巡视的教职员经过。
+<<set $skulduggerydifficulty to 330>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($willpower or 0) gte 420>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你神色自然地混入放学的人流，将钟铭拓本副本交给校史研究社换得约 £<<print Math.floor(_reward / 100)>> 的补贴。
+	<<money _reward>><<stress -4>>
+<<else>>
+	教职员狐疑地叫住了你，你找借口应付了好一会儿才得以脱身。
+	<<stress 4>>
 <</if>>
-你顺着教学楼旧钟塔的螺旋铁梯爬下顶层，用铜锁将木门重新虚掩，怀里揣着刚拓下的钟铭。
-<<if Time.dayState is "dusk">>暮色中校园钟声轰鸣，震落了铁梯横档上的些许浮尘。<<else>>高处的穿堂风吹过钟楼百叶窗，能俯瞰整个学园前院的动静。<</if>>
-旧钟塔暗阁里封存的建校秘闻已被你彻底解开。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest School Bell]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回看钟塔侧门 (0:03)|MP Grand Quest School Bell]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回教学楼走廊 (0:02)|Hallways]]>><<set $outside to 0>><<set $location to "school">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Pool Drain [nobr]
-<<set $outside to 0>><<set $location to "pool">>
-<<effects>>
-<<set _stg to ($mpQuestPoolDrain or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Swimming Pool")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Swimming Pool">>
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestPoolDrain to Math.max(($mpQuestPoolDrain or 0), 1)>>
+你绕过泳池器材室的储物架，推开后方冒着白雾的温水循环阀室铁门，湿热的蒸汽瞬间打湿了你的额发。阀室中央的巨大黄铜压力表指针正在微微颤动，下方的主排水管道旁有一扇被水垢封住的检修暗门。你可以上前转动泄压手轮，或者先向池边的梅森请教管道走向。
+<br><br>
+<<investigateicon>><<link [[转动旁侧泄压手轮 (0:06)|MP Grand Quest Pool Drain Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[找梅森借管钳工具 (0:05)|MP Grand Quest Pool Drain Step3]]>><<pass 5>><</link>>
+<br>
+<<if ($mpQuestPoolDrain or 0) gte 3>>
+	<<swimicon>><<link [[进入地下罗马温水池 (0:06)|MP Grand Quest Pool Drain Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回学校泳池 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你绕过泳池器材室的储物架，推开后方冒着白雾的温水循环阀室铁门。湿热的蒸汽瞬间打湿了你的刘海。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Pool Drain Resolve]]>><<set $mpQuestPoolDrain to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestPoolDrain to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Pool Drain Step2 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestPoolDrain to Math.max(($mpQuestPoolDrain or 0), 2)>>
+你双手握住温水循环管侧面的铸铁泄压手轮，滚烫的冷凝水顺着阀芯往下滴落。只要把蒸汽压力降下来，就能拉开主管道后方的检修暗门。
+<<set $skulduggerydifficulty to 300>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($physique or 0) gte 9000>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1100>><<elseif _sk gte 550>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	随着一阵白雾排出，检修暗门轰然松动，你在排水滤网槽里捡到了约 £<<print Math.floor(_reward / 100)>> 的遗落硬币与金戒托。
+	<<money _reward>><<stress -2>>
+<<else>>
+	滚烫的蒸汽喷在你的手背上，烫得你急忙缩手，沉重的手轮只转了小半圈便卡住了。
+	<<pain 3>><<tiredness 3>>
 <</if>>
-<<if _stg is 1>>
-	阀室中央的巨大黄铜压力表指针正在微微颤动，下方的主排水管道旁有一扇检修暗门。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Pool Drain Resolve]]>><<set $mpQuestPoolDrain to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestPoolDrain to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[去找梅森问问旧水道 (0:05)|MP Grand Quest Pool Drain Step3]]>><<pass 5>><</link>>
+<br>
+<<walkicon>><<link [[穿过暗门进古浴池 (0:06)|MP Grand Quest Pool Drain Step4]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回学校泳池 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Pool Drain Step3 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestPoolDrain to Math.max(($mpQuestPoolDrain or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["abbey_ferry"] to 1>><<set $mpClues["grand_pool_valve"] to 1>>
+梅森正在器材室门口擦拭救生圈，见你额头挂着蒸汽水珠，便笑着递给你一副厚帆布防滑手套。「阀室后面那座罗马式旧温水池是建校前就有的天然温泉眼。」梅森压低声音告诉你，「它的溢水暗渠一直通往地下古修道院的暗河渡口，你在里面探查时可别滑进深槽里。」
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Mason")>><<npcincr Mason love 1>><</if>><<stress -3>>
+<br><br>
+<<walkicon>><<link [[步入古典地下温水池 (0:06)|MP Grand Quest Pool Drain Step4]]>><<pass 6>><</link>>
+<br>
+<<swimicon>><<link [[潜入兽首水口探查石龛 (0:07)|MP Grand Quest Pool Drain Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回学校泳池 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Pool Drain Step4 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestPoolDrain to Math.max(($mpQuestPoolDrain or 0), 4)>><<set $mpClues to ($mpClues or {})>>
+检修暗门后方是一座保存完好的古典罗马式地下温水浴池，四周立着斑驳的石柱。清澈的温泉水从青铜兽首水口中源源涌出，池底白沙间闪烁着银币的光泽。
+<<if ($swimmingskill or 0) gte 300 or ($history or 0) gte 300>>
+	<<set _sk to Math.max(($swimmingskill or 0), ($history or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpClues["grand_pool_roman"] to 1>>
+	你潜入温润的泉水中抄下兽首铭文，并从池底白沙间捞起约 £<<print Math.floor(_reward / 100)>> 的古代浴场银币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	温热的泉水让你有些气短，你在滑腻的汉白玉池阶上扑了个空，呛了一小口水。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	你转动旁边的泄压手轮将蒸汽排散，发现检修暗门后方通向一处早年被封存的古典罗马式地下温水浴池。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Pool Drain Resolve]]>><<set $mpQuestPoolDrain to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestPoolDrain to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<investigateicon>><<link [[摸索池壁水下石龛 (0:07)|MP Grand Quest Pool Drain Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回学校泳池 (0:03)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Pool Drain Step5 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestPoolDrain to Math.max(($mpQuestPoolDrain or 0), 5)>>
+在青铜兽首水口正下方的池壁凹槽里，卡着一只用铅蜡封口的防水银饰盒。涌动的温热泉水暗流不断冲击着石龛边缘，水波晃动间隐约可见盒盖上的家族纹章。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($swimmingskill or 0) gte 340>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($swimmingskill or 0))>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你顶着泉涌稳稳抠出那只防水银饰盒，里面存着香精油与约 £<<print Math.floor(_reward / 100)>> 的古金币。
+	<<money _reward>><<stress -3>>
+<<else>>
+	湍急的泉眼暗流把你推向石壁，肩膀撞在青铜兽角上隐隐作痛，你只得先浮出水面换气。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 3>>
-	地下温水浴池的汉白玉池壁完好无损，清澈的地下温泉水正源源不断地从兽首水口中涌出。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Pool Drain Resolve]]>><<set $mpQuestPoolDrain to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestPoolDrain to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你在池边的石龛里找到了一只防水的银饰盒，里面存放着几枚成色极佳的古代浴场银币与香精油。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Pool Drain Resolve]]>><<set $mpQuestPoolDrain to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestPoolDrain to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你在温暖的泉水中浸泡片刻，浑身的酸痛与疲乏被泉水彻底涤荡干净。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Pool Drain Resolve]]>><<set $mpQuestPoolDrain to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestPoolDrain to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你带着银饰盒中的古币走出温水阀室，将这处私密温泉暗记于心。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Pool Drain Resolve]]>><<set $mpQuestPoolDrain to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestPoolDrain to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『泳池温水阀室的回响』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<bedicon "zzz">><<link [[在温泉池畔浸泡休整 (0:06)|MP Grand Quest Pool Drain Step6]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回学校泳池 (0:03)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Pool Drain Step6 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestPoolDrain to Math.max(($mpQuestPoolDrain or 0), 6)>>
+你坐在地下浴池温润的汉白玉石阶上，让清澈温暖的泉水漫过肩头。带着淡淡硫磺与香草气息的蒸汽在穹顶下袅袅盘旋，将你肌肉里的酸痛与精神上的紧绷感一寸寸涤荡干净。你用干毛巾擦干水迹，将防水银饰盒装进随身包里，把这处隐秘的地下温泉暗记于心。
+<<tiredness -4>><<stress -4>>
+<br><br>
+<<walkicon>><<link [[拧紧循环铜阀退回更衣廊 (0:05)|MP Grand Quest Pool Drain Resolve]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回学校泳池 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Pool Drain Resolve [nobr]
-<<set $outside to 0>><<set $location to "pool">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Swimming Pool")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Swimming Pool">>
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestPoolDrain to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestPoolDrain to 1>>
+你拧紧泳池器材室后方的温水循环铜阀，趁着白色水雾尚未散尽，带着防水密封筒退回更衣廊。外面正好有游泳队的学生经过器材室门口。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($willpower or 0) gte 400>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestPoolDrain_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你神态自然地拎着泳衣袋走出器材室，将多余的古浴场银币兑出约 £<<print Math.floor(_reward / 100)>> 的现钱。
+	<<money _reward>><<stress -4>>
+<<else>>
+	你不小心碰倒了门边的浮板架，在众人的注视下匆忙低头快步离开。
+	<<stress 4>>
 <</if>>
-你拧紧泳池器材室后方的温水循环铜阀，趁着白色水雾尚未散尽，带着防水密封筒退回更衣廊。
-<<if Weather.precipitation is "rain">>窗外雨声与泳池循环水管的轰鸣交织在一起，无人察觉阀室内的异动。<<else>>温热的水汽烘暖了你的指尖，地面瓷砖上映出清澈的波光。<</if>>
-藏在泳池温水管道夹层里的私藏器物已尽数归你所有。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Pool Drain]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望温水阀室铁门 (0:03)|MP Grand Quest Pool Drain]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回学校泳池 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Mer Drydock [nobr]
-<<set $outside to 1>><<set $location to "mer">>
-<<effects>>
-<<set _stg to ($mpQuestMerDrydock or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Mer Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Mer Street">>
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+<<set $mpQuestMerDrydock to Math.max(($mpQuestMerDrydock or 0), 1)>>
+你掀开三号干船坞沉重的防雨帆布一角钻了进去，船坞内停泊着一艘通体漆成墨黑色的双桅帆船，桅杆上没有悬挂任何旗帜。船舷边的木跳板刚被人用淡水冲刷过，船长室的圆形舷窗内透出微弱的烛光。你可以顺着木跳板悄悄登上甲板，或者先在船坞廊柱后找维斯打听这艘黑船的底细。
+<br><br>
+<<sneakicon>><<link [[顺木跳板潜上甲板 (0:06)|MP Grand Quest Mer Drydock Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[向暗处的维斯打听 (0:06)|MP Grand Quest Mer Drydock Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestMerDrydock or 0) gte 3>>
+	<<investigateicon>><<link [[直接进入船长室查账 (0:06)|MP Grand Quest Mer Drydock Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回梅尔街 (0:03)|Mer Street]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你掀开三号干船坞沉重的防雨帆布一角钻了进去。船坞内停泊着一艘通体漆成墨黑色的双桅帆船，桅杆上没有悬挂任何旗帜。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Mer Drydock Resolve]]>><<set $mpQuestMerDrydock to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMerDrydock to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_1")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Mer Drydock Step2 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+<<set $mpQuestMerDrydock to Math.max(($mpQuestMerDrydock or 0), 2)>>
+你弓着腰踏上搭在船舷边的松木跳板，跳板下方拉着一根连向报警铜铃的细麻线。船头锚链舱的铁盖半开着，里面放着水手值夜的零钱匣。
+<<set $skulduggerydifficulty to 330>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($athletics or 0) gte 330>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($athletics or 0))>>
+	<<if _sk gte 800>><<set _reward to 1150>><<elseif _sk gte 550>><<set _reward to 880>><<else>><<set _reward to 620>><</if>>
+	你轻巧地跨过报警麻线翻上甲板，从锚链舱零钱匣里摸出约 £<<print Math.floor(_reward / 100)>> 的海港银币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	你的靴尖勾到了麻线，铜铃发出一声轻响，你在急忙缩身躲进帆布堆时磕痛了膝盖。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	你顺着搭在船舷边的木跳板登上甲板，发现甲板刚刚被人用淡水冲刷过，船长室的舷窗内亮着微弱的烛光。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Mer Drydock Resolve]]>><<set $mpQuestMerDrydock to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMerDrydock to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_2")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[下船找维斯核对船号 (0:05)|MP Grand Quest Mer Drydock Step3]]>><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[推门进入船长室 (0:07)|MP Grand Quest Mer Drydock Step4]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回梅尔街 (0:03)|Mer Street]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Mer Drydock Step3 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+<<set $mpQuestMerDrydock to Math.max(($mpQuestMerDrydock or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["blackiron_platform"] to 1>><<set $mpClues["grand_drydock_manifest"] to 1>>
+船坞外侧的起重机阴影下，维斯正靠着铁柱按灭烟头。「这艘无旗双桅船每隔半月就会把外海私货卸进黑铁货运站的地下走私月台。」维斯从大衣口袋里摸出一把开口扳手递给你，「船长室床铺底下的暗舱是用左旋螺栓锁住的，趁船长去酒馆喝酒，动作快一点。」
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[进船长室查分流清单 (0:07)|MP Grand Quest Mer Drydock Step4]]>><<set $outside to 0>><<set $location to "cabin">><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[直接用扳手开底舱 (0:07)|MP Grand Quest Mer Drydock Step5]]>><<set $outside to 0>><<set $location to "cabin">><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回梅尔街 (0:03)|Mer Street]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Mer Drydock Step4 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestMerDrydock to Math.max(($mpQuestMerDrydock or 0), 4)>><<set $mpKnown to ($mpKnown or {})>>
+你推门闪进弥漫着朗姆酒与松木味的船长室，壁灯里的鲸油烛火轻轻摇曳。桌上的黄铜航海罗盘正受桌下磁铁牵引微微偏转，底座下压着一份走私货物分流清单。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($maths or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($maths or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpKnown["foghorn_wreck"] to 1>>
+	你算出清单上的吨位差额藏在断桅沉船滩，并从海图抽屉里摸出约 £<<print Math.floor(_reward / 100)>> 的押船银票。
+	<<money _reward>><<stress -2>>
+<<else>>
+	船身随着船坞底水微微摇晃，杂乱的航海缩写看得你眼花缭乱，半天没能对上账目。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	你贴在舷窗外侧倾听，屋内空无一人，只有桌上的航海罗盘正在受某种磁力牵引般微微打转。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Mer Drydock Resolve]]>><<set $mpQuestMerDrydock to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMerDrydock to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_3")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[拧开床铺下暗舱螺栓 (0:07)|MP Grand Quest Mer Drydock Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[下船返回梅尔街 (0:03)|Mer Street]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Mer Drydock Step5 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestMerDrydock to Math.max(($mpQuestMerDrydock or 0), 5)>><<set $mpClues to ($mpClues or {})>>
+你蹲在船长室狭窄的木床铺前，用扳手卡住床板下方的四颗左旋黄铜螺栓。暗舱里并排放着一只铅封货箱与一枚刻有海怪纹章的纯银六分仪。
+<<set $skulduggerydifficulty to 360>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($physique or 0) gte 9500>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<set $mpClues["grand_drydock_sextant"] to 1>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_5")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你一鼓作气卸下螺栓提出暗舱货箱，收起纯银六分仪与箱内约 £<<print Math.floor(_reward / 100)>> 的走私金镑。
+	<<money _reward>><<stress -3>>
+<<else>>
+	扳手突然打滑撞在铁船肋上，震得你虎口生疼，甲板上方顿时传来守夜水手的脚步声。
+	<<pain 4>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	推门进入船长室，你发现罗盘下方压着一张暗潮走私网的货物分流清单，上面记录着黑铁货运站与雾角灯塔岛的往来账目。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Mer Drydock Resolve]]>><<set $mpQuestMerDrydock to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMerDrydock to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_4")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你拧开船长室床铺下方的固定螺栓，从暗舱里提出了一只沉甸甸的封存暗市货箱。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Mer Drydock Resolve]]>><<set $mpQuestMerDrydock to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMerDrydock to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_5")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	货箱旁还放着一枚刻有海怪纹章的纯银航海六分仪。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Mer Drydock Resolve]]>><<set $mpQuestMerDrydock to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMerDrydock to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_6")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你带着封存货箱与纯银六分仪顺着跳板悄然离开干船坞，没有惊动远处的守夜人。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Mer Drydock Resolve]]>><<set $mpQuestMerDrydock to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMerDrydock to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_7")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『梅尔街三号干船坞的无旗帆船』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[合拢舱盖退回船舷 (0:05)|MP Grand Quest Mer Drydock Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[从舷窗滑下撤离 (0:03)|Mer Street]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Mer Drydock Step6 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestMerDrydock to Math.max(($mpQuestMerDrydock or 0), 6)>>
+你将床板下的暗舱盖严丝合缝地重新扣好，又把桌上的黄铜罗盘拨回原本的磁偏角位置。你透过圆形舷窗往外看去，确认甲板上的守夜水手已经转去船尾抽烟。随后你轻轻掩上船长室木门，顺着潮湿的木跳板悄然滑回干船坞地面，夜色与浓雾将你的身形完美藏匿。
+<<stress -3>>
+<br><br>
+<<walkicon>><<link [[放平干船坞防雨帆布 (0:05)|MP Grand Quest Mer Drydock Resolve]]>><<set $outside to 1>><<set $location to "docks">><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回梅尔街 (0:02)|Mer Street]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Mer Drydock Resolve [nobr]
-<<set $outside to 1>><<set $location to "mer">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Mer Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Mer Street">>
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+<<set $mpQuestMerDrydock to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMerDrydock to 1>>
+你放平三号干船坞外围的防雨帆布，将从无旗双桅船暗舱里起出的航海密匣贴身收好。船坞大门外的巡夜提灯正摇晃着逼近。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($athletics or 0) gte 340>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($athletics or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMerDrydock_stg_7")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你贴着龙门吊阴影闪出船坞，将分流航线卖给港口线人换得约 £<<print Math.floor(_reward / 100)>> 的赏银。
+	<<money _reward>><<stress -4>>
+<<else>>
+	船坞守夜人的猎犬冲着帆布狂吠起来，你只得压低身子快步跑出港区。
+	<<stress 4>>
 <</if>>
-你放平三号干船坞外围的防雨帆布，将从无旗双桅船暗舱里起出的航海密匣贴身收好。
-<<if Time.dayState is "night">>船坞底部的抽水泵发出低沉的轰鸣，夜雾将整座船架笼罩得严严实实。<<else>>海风吹得防雨帆布猎猎作响，远处的码头起重机正在装卸货箱。<</if>>
-这艘神秘夜航船的底细与暗舱财物已被你摸得一清二楚。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Mer Drydock]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望三号干船坞 (0:03)|MP Grand Quest Mer Drydock]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回梅尔街 (0:02)|Mer Street]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Elk Workshop [nobr]
-<<set $outside to 0>><<set $location to "elk">>
-<<effects>>
-<<set _stg to ($mpQuestElkWorkshop or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Elk Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Elk Street">>
+<<set $outside to 1>><<set $location to "elk">><<effects>>
+<<set $mpQuestElkWorkshop to Math.max(($mpQuestElkWorkshop or 0), 1)>>
+你走到成人店后巷尽头，按照特定节奏敲了三下地下工坊的铁门，门后的插销滑开，一股皮革与金属抛光膏的气息扑面而来。工坊内部摆满了精巧的黄铜锁具、丝绒束缚带与发条模型，工作台前却不见工匠的身影。你可以上前查看工作台上的锁具样品，或者先向塞拉请教精密簧片的结构。
+<br><br>
+<<investigateicon>><<link [[查验台面机关锁芯 (0:06)|MP Grand Quest Elk Workshop Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[请教路过的塞拉 (0:06)|MP Grand Quest Elk Workshop Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestElkWorkshop or 0) gte 3>>
+	<<sneakicon>><<link [[直取图纸架逃生图 (0:06)|MP Grand Quest Elk Workshop Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回麋鹿街 (0:03)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你走到成人店后巷尽头，按照特定节奏敲了三下地下工坊的铁门。门后的插销滑开，一股皮革与金属抛光膏的气息扑面而来。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Elk Workshop Resolve]]>><<set $mpQuestElkWorkshop to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestElkWorkshop to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Elk Workshop Step2 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestElkWorkshop to Math.max(($mpQuestElkWorkshop or 0), 2)>>
+你走近地下工坊宽大的胡桃木工作台，台灯将金属零件照得纤毫毕现。深色绒布上摆着三把拆了一半的双簧黄铜挂锁与一叠客户预付的手工定金。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1100>><<elseif _sk gte 550>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	你用尖嘴钳拨正错位的锁簧将其组装复原，顺手收起绒布下约 £<<print Math.floor(_reward / 100)>> 的定金零钞。
+	<<money _reward>><<stress -2>>
+<<else>>
+	紧绷的发条簧片突然弹开，锋利的铜边划破了你的食指，吓得你连忙放下钳子。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	工坊内部摆满了各式精巧的金属锁具、丝绒束缚带与发条机关模型，工作台前却不见工匠的身影。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Elk Workshop Resolve]]>><<set $mpQuestElkWorkshop to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestElkWorkshop to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[向门外塞拉请教图纸 (0:05)|MP Grand Quest Elk Workshop Step3]]>><<set $outside to 1>><<set $location to "elk">><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[研读天鹅绒定制图纸 (0:07)|MP Grand Quest Elk Workshop Step4]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回麋鹿街 (0:02)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Elk Workshop Step3 [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>>
+<<set $mpQuestElkWorkshop to Math.max(($mpQuestElkWorkshop or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["velvet_masque"] to 1>><<set $mpClues["grand_elk_blueprint"] to 1>>
+你在后巷台阶旁遇到了拎着零件箱送货的塞拉。塞拉看了一眼工坊半开的铁门，低声提醒你：「这间工坊专门替峭壁天鹅绒的丝绒假面回廊打造束缚锁具，每一把定制锁侧面都留着针孔大小的逃生暗扣。」塞拉指点你去工作台内侧的图纸架查看全套结构图。
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[回工坊研读逃生暗扣 (0:07)|MP Grand Quest Elk Workshop Step4]]>><<set $outside to 0>><<set $location to "underground">><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[开启台底防盗铁匣 (0:07)|MP Grand Quest Elk Workshop Step5]]>><<set $outside to 0>><<set $location to "underground">><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回麋鹿街 (0:02)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Elk Workshop Step4 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestElkWorkshop to Math.max(($mpQuestElkWorkshop or 0), 4)>><<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+你在工作台内侧的图纸架上展开一卷厚实的蓝晒图纸，纸面还留着圆规扎出的细孔。图上用精密剖面图画出了天鹅绒暗层全套锁具的逆向止退齿与逃生暗扣位置。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($science or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($science or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpKnown["velvet_auction"] to 1>><<set $mpClues["grand_elk_spring"] to 1>>
+	你记熟了用细针顶开逃生暗扣的诀窍，并从私人拍卖暗厅的送货信封里摸出约 £<<print Math.floor(_reward / 100)>> 的尾款。
+	<<money _reward>><<stress -2>>
+<<else>>
+	密集的齿轮啮合尺寸看得你头昏眼花，半天也没找准止退销的受力方向。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	你在工作台的图纸架上看到了一套为天鹅绒暗层贵族定制的精密机关锁具图纸，每把锁都配有唯一的逃生暗扣。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Elk Workshop Resolve]]>><<set $mpQuestElkWorkshop to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestElkWorkshop to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[撬开工作台底铁匣 (0:07)|MP Grand Quest Elk Workshop Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回麋鹿街 (0:03)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Elk Workshop Step5 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestElkWorkshop to Math.max(($mpQuestElkWorkshop or 0), 5)>>
+工作台底部的铸铁暗匣配着双重叶片锁，里面存放着工匠珍藏的纯银纪念锁具与几枚古董机械构件。后方走廊忽然传来沉重的脚步声。
+<<set $skulduggerydifficulty to 360>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你按图纸上的暗扣位置一针挑开铁匣，取走银锁具、古董机芯与约 £<<print Math.floor(_reward / 100)>> 的备用金。
+	<<money _reward>><<stress -3>>
+<<else>>
+	锁孔里的防盗刺针扎痛了你的指尖，走廊灯光逼近，你只得慌忙熄灭台灯躲进阴影。
+	<<pain 3>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	通过研读图纸上的逃生暗扣结构，你彻底掌握了在被束缚时利用巧劲解开机关锁的诀窍。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Elk Workshop Resolve]]>><<set $mpQuestElkWorkshop to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestElkWorkshop to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你在工作台底部的铁匣里找到了一套做工考究的银质纪念锁具与几枚古董机械构件。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Elk Workshop Resolve]]>><<set $mpQuestElkWorkshop to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestElkWorkshop to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	工坊后方走廊传来动静，你迅速熄灭台灯，将图纸记在脑中后从透气窗翻回后巷。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Elk Workshop Resolve]]>><<set $mpQuestElkWorkshop to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestElkWorkshop to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你拍去手上的灰尘回到麋鹿街，诡术与脱困技巧都得到了显著精进。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Elk Workshop Resolve]]>><<set $mpQuestElkWorkshop to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestElkWorkshop to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『麋鹿街地下工坊的铁门』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[熄灭台灯准备翻窗 (0:05)|MP Grand Quest Elk Workshop Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[退回麋鹿街 (0:03)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Elk Workshop Step6 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestElkWorkshop to Math.max(($mpQuestElkWorkshop or 0), 6)>>
+你在工匠推开内门前拧灭了工作台上的绿罩铜灯，将蓝晒图纸按原本的卷法放回木架，又顺手带上了防盗铁匣的盒盖。你借着后墙铁货架的踏脚处撑起身体，轻轻推开高处的半扇透气铁窗。晚风从窗外灌入，你顺着外墙排水管滑回微凉的后巷地面，没有留下一丝异响。
+<<stress -3>>
+<br><br>
+<<walkicon>><<link [[拍去灰尘结案返回 (0:05)|MP Grand Quest Elk Workshop Resolve]]>><<set $outside to 1>><<set $location to "elk">><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回麋鹿街 (0:02)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Elk Workshop Resolve [nobr]
-<<set $outside to 0>><<set $location to "elk">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Elk Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Elk Street">>
+<<set $outside to 1>><<set $location to "elk">><<effects>>
+<<set $mpQuestElkWorkshop to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestElkWorkshop to 1>>
+你走出麋鹿街后巷的地下工坊铁门，把刚拿到的精密弹簧锁芯与定制暗扣塞进衣袋。巷口霓虹灯影下，一名黑市锁匠正等着收购流出的精密簧片。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($athletics or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($athletics or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestElkWorkshop_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你将多余的副锁芯卖给锁匠，净赚约 £<<print Math.floor(_reward / 100)>>，并彻底掌握了机关锁的脱困技巧。
+	<<money _reward>><<stress -4>>
+<<else>>
+	锁匠挑剔地压低了收购价，你怕节外生枝只好匆匆收起零件离开后巷。
+	<<stress 4>>
 <</if>>
-你走出麋鹿街后巷的地下工坊铁门，把刚拿到的精密弹簧锁芯与定制暗扣塞进衣袋。
-<<if Weather.isFreezing>>地下工坊排风扇吹出的热风带着皮革与抛光膏的香气，驱散了巷口的寒意。<<else>>工业巷里机器轰鸣，没有人留意到这扇不起眼的地下铁门。<</if>>
-工坊匠人留下的奇巧机关图纸让你的开锁与防身手段更上一层楼。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Elk Workshop]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望工坊后巷铁门 (0:03)|MP Grand Quest Elk Workshop]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回麋鹿街 (0:02)|Elk Street]]>><<set $outside to 1>><<set $location to "elk">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Harvest Cellar [nobr]
-<<set $outside to 0>><<set $location to "harvest">>
-<<effects>>
-<<set _stg to ($mpQuestHarvestCellar or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Harvest Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Harvest Street">>
+<<set $outside to 1>><<set $location to "harvest">><<effects>>
+<<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 1)>>
+你趁着酒馆后院无人注意，用力拉起巨型橡木酒桶下方的生锈铁环，地面活板门向上掀起，露出一段带有浓郁麦芽酒香的石阶。前厅吧台传来酒客划拳的喧哗声，石阶下方点着昏暗的壁灯。你可以顺着石阶走下深层酒窖，或者先找后院歇脚的酒保打听空心酒桶的记号。
+<br><br>
+<<walkicon>><<link [[走下石阶敲击酒桶 (0:06)|MP Grand Quest Harvest Cellar Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[向后院酒保递支烟 (0:05)|MP Grand Quest Harvest Cellar Step3]]>><<pass 5>><</link>>
+<br>
+<<if ($mpQuestHarvestCellar or 0) gte 3>>
+	<<sneakicon>><<link [[直入酒桶后议事室 (0:06)|MP Grand Quest Harvest Cellar Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "harvest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你趁着酒馆后院无人注意，用力拉起巨型橡木酒桶下方的生锈铁环。地面活板门向上掀起，露出一段带有浓郁麦芽酒香的石阶。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Harvest Cellar Resolve]]>><<set $mpQuestHarvestCellar to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_1")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Harvest Cellar Step2 [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>>
+<<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 2)>>
+顺着石阶走下深层酒窖，两侧排列着数十只一人高的陈年橡木桶。你用指节逐一叩击桶壁，最里侧的一只大桶传出空心的回音，侧面的木塞可以左右扳动。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($physique or 0) gte 9000>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1100>><<elseif _sk gte 550>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	你顺时针拧动木塞旋开桶门，并在桶座暗槽里摸出酒客藏匿的约 £<<print Math.floor(_reward / 100)>> 酒资。
+	<<money _reward>><<stress -2>>
+<<else>>
+	木塞机关卡得极紧，你用力过猛扭伤了手腕，酒桶铁箍还刮破了你的袖口。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	顺着石阶走下深层酒窖，两侧排列着数十只一人高的陈年橡木桶，最里侧的一只酒桶却敲击出了空心的回音。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Harvest Cellar Resolve]]>><<set $mpQuestHarvestCellar to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_2")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[回后院找酒保套话 (0:05)|MP Grand Quest Harvest Cellar Step3]]>><<set $outside to 1>><<set $location to "harvest">><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[进入酒桶后议事室 (0:07)|MP Grand Quest Harvest Cellar Step4]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "harvest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Harvest Cellar Step3 [nobr]
+<<set $outside to 1>><<set $location to "harvest">><<effects>>
+<<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["glasshouse_cellar"] to 1>><<set $mpClues["grand_harvest_pact"] to 1>>
+后院台阶上坐着一名擦酒杯的老酒保，你走过去帮他把空木箱叠好。老酒保吐出一口烟雾，朝活板门方向努了努嘴：「酒桶后面那间议事室是丰收街帮派和私酒商分账的地方，他们最高级的秘酿都是从多瑙河温室庄园的地下酿造室直接运来的。」老酒保提醒你圆桌抽屉底下有个双层夹板。
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[进议事室查分成契约 (0:07)|MP Grand Quest Harvest Cellar Step4]]>><<set $outside to 0>><<set $location to "brothel">><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[搜寻圆桌双层暗屉 (0:07)|MP Grand Quest Harvest Cellar Step5]]>><<set $outside to 0>><<set $location to "brothel">><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "harvest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Harvest Cellar Step4 [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>>
+<<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 4)>><<set $mpKnown to ($mpKnown or {})>>
+空心酒桶后方是一间点着煤气灯的地下议事室，空气里飘着浓烈的雪茄烟味。橡木圆桌上散落着帮派与港区私酒商的分成契约，旁边放着一只未上锁的鹿皮钱袋。
+<<set $skulduggerydifficulty to 330>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($maths or 0) gte 300>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($maths or 0))>>
+	<<if _sk gte 800>><<set _reward to 1250>><<elseif _sk gte 550>><<set _reward to 950>><<else>><<set _reward to 680>><</if>>
+	<<set $mpKnown["velvet_terrace"] to 1>>
+	你按账目比例抽走不会引人起疑的约 £<<print Math.floor(_reward / 100)>> 散钞，并记下送往天鹅绒露台观海雅座的酒单。
+	<<money _reward>><<stress -2>>
+<<else>>
+	复杂的黑帮分成暗码看得你头疼，头顶地板传来的沉重脚步声让你不敢久留。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	你扳动那只空心酒桶侧面的木塞机关，酒桶正面像门扇一样旋开，露出后方一间隐秘的地下议事室。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Harvest Cellar Resolve]]>><<set $mpQuestHarvestCellar to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_3")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[撬开圆桌抽屉暗层 (0:07)|MP Grand Quest Harvest Cellar Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[退回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "harvest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Harvest Cellar Step5 [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>>
+<<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 5)>><<set $mpClues to ($mpClues or {})>>
+圆桌主位下方的暗抽屉设有精巧的倒钩暗簧，锁眼隐蔽在雕花木纹之间。夹层里藏着一瓶封存五十年的绝版琥珀威士忌、一枚帮派铜戒与黑市定金。
+<<set $skulduggerydifficulty to 360>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<set $mpClues["grand_harvest_cask"] to 1>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_5")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你按住倒钩滑出暗屉，将绝版名酒、铜戒与约 £<<print Math.floor(_reward / 100)>> 的定金一并收入怀中。
+	<<money _reward>><<stress -3>>
+<<else>>
+	倒钩暗簧弹起划伤了你的手腕，石阶上方传来帮派打手下楼的说话声，吓得你急忙缩回桶后。
+	<<pain 3>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	议事室圆桌上散落着几份丰收街帮派与港区私酒商的分成契约，旁边还放着一只未上锁的钱袋。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Harvest Cellar Resolve]]>><<set $mpQuestHarvestCellar to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_4")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你在圆桌抽屉暗层里翻出了一瓶封存了五十年的绝版琥珀威士忌与一枚帮派信物铜戒。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Harvest Cellar Resolve]]>><<set $mpQuestHarvestCellar to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_5")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你将未上锁的黑市赃款与绝版名酒收入囊中，把空心酒桶重新合拢。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Harvest Cellar Resolve]]>><<set $mpQuestHarvestCellar to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_6")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你拉下活板门回到丰收街后院，神不知鬼不觉地发了一笔横财。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Harvest Cellar Resolve]]>><<set $mpQuestHarvestCellar to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_7")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『丰收街酒馆橡木桶下的铁环』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[合拢空心酒桶机关 (0:05)|MP Grand Quest Harvest Cellar Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[爬出酒窖回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "harvest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Harvest Cellar Step6 [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>>
+<<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 6)>>
+你将圆桌上的契约纸张按原来的折痕摆好，退回深层酒窖通道，轻轻拉上那扇伪装成陈年橡木桶的暗门。随着木塞机关咔哒一声归位，整排橡木桶看起来毫无二致。你用衣袖擦去木塞上的指印，顺着带有麦芽香气石阶悄然向上爬去，呼吸平稳而轻松。
+<<stress -3>>
+<br><br>
+<<walkicon>><<link [[拉下活板门撒草掩迹 (0:05)|MP Grand Quest Harvest Cellar Resolve]]>><<set $outside to 1>><<set $location to "harvest">><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "harvest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Harvest Cellar Resolve [nobr]
-<<set $outside to 0>><<set $location to "harvest">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Harvest Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Harvest Street">>
+<<set $outside to 1>><<set $location to "harvest">><<effects>>
+<<set $mpQuestHarvestCellar to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>>
+你将丰收街酒馆后院橡木桶下的地窖铁环放回凹槽，顺手撒上一层干草掩去新翻动的痕迹。后门风灯下正好有两名私酒贩子低声交谈着经过巷口。
+<<set $skulduggerydifficulty to 330>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($willpower or 0) gte 400>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestHarvestCellar_stg_7")>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	你亮出帮派铜戒将那瓶绝版威士忌高价脱手，净赚约 £<<print Math.floor(_reward / 100)>> 后潇洒离去。
+	<<money _reward>><<stress -4>>
+<<else>>
+	后院醉客吵嚷着朝这边走来，你只好压低头快步从侧门溜出后院。
+	<<stress 4>>
 <</if>>
-你将丰收街酒馆后院橡木桶下的地窖铁环放回凹槽，顺手撒上一层干草掩去新翻动的痕迹。
-<<if Time.dayState is "night">>前厅酒馆里传出喧闹的碰杯声与手风琴曲，没人注意到后院地窖的动静。<<else>>醇厚的麦芽酒香从橡木桶缝隙里飘出，后院阳光温暖而安静。<</if>>
-酒窖暗道里尘封的私酿与黑市账册已被你稳稳收入囊中。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Harvest Cellar]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回看后院巨型橡木桶 (0:03)|MP Grand Quest Harvest Cellar]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "harvest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Alley Shelter [nobr]
-<<set $outside to 0>><<set $location to "residential_alley">>
-<<effects>>
-<<set _stg to ($mpQuestAlleyShelter or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Residential Alleyways")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Residential Alleyways">>
+<<set $outside to 1>><<set $location to "domus">><<effects>>
+<<set $mpQuestAlleyShelter to Math.max(($mpQuestAlleyShelter or 0), 1)>>
+你拨开住宅区小巷两道砖墙夹缝间的旧帆布，里面是一处用木托盘和厚毛毯搭建起来的干燥避风棚。角落的铁罐里存着半罐防潮火柴与压缩饼干，显然是早年孤儿院流浪儿留下的秘密据点。你可以加固松脱的防风帆布，或者翻看毛毯下方砖缝里的铅笔互助笔记。
+<br><br>
+<<investigateicon>><<link [[加固帆布整理铁罐 (0:06)|MP Grand Quest Alley Shelter Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[与寻来的罗宾看笔记 (0:06)|MP Grand Quest Alley Shelter Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestAlleyShelter or 0) gte 3>>
+	<<sneakicon>><<link [[探查头顶排水管空腔 (0:06)|MP Grand Quest Alley Shelter Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回住宅区小巷 (0:02)|Residential Alleyways]]>><<set $outside to 1>><<set $location to "domus">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你拨开住宅区小巷两道砖墙夹缝间的旧帆布，里面是一处用木托盘和厚毛毯搭建起来的干燥避风棚。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Alley Shelter Resolve]]>><<set $mpQuestAlleyShelter to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestAlleyShelter to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Alley Shelter Step2 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestAlleyShelter to Math.max(($mpQuestAlleyShelter or 0), 2)>>
+你弯腰钻进干燥温暖的避风棚内，外面的穿堂冷风顿时被挡在帆布之外。你将松脱的防风拉绳重新系在墙砖铁钩上，又动手清理木托盘下方的积灰。
+<<if ($housekeeping or 0) gte 280 or ($physique or 0) gte 8500>>
+	<<set _sk to ($housekeeping or 0)>>
+	<<if _sk gte 750>><<set _reward to 1000>><<elseif _sk gte 500>><<set _reward to 780>><<else>><<set _reward to 550>><</if>>
+	你把避风棚收拾得整洁牢固，并从木托盘凹槽里扫出前人留下的约 £<<print Math.floor(_reward / 100)>> 应急硬币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	狭窄的砖墙夹缝让你施展不开，扬起的灰尘呛得你连连咳嗽，腰背也酸痛不已。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 1>>
-	避风棚虽简陋却十分干净，角落的铁罐里还存着半罐火柴与几块压缩饼干，显然是昔日流浪儿留下的秘密据点。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Alley Shelter Resolve]]>><<set $mpQuestAlleyShelter to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestAlleyShelter to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[和罗宾共读互助笔记 (0:06)|MP Grand Quest Alley Shelter Step3]]>><<pass 6>><</link>>
+<br>
+<<investigateicon>><<link [[摸索头顶排水管空腔 (0:06)|MP Grand Quest Alley Shelter Step4]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回住宅区小巷 (0:02)|Residential Alleyways]]>><<set $outside to 1>><<set $location to "domus">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Alley Shelter Step3 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestAlleyShelter to Math.max(($mpQuestAlleyShelter or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["blackiron_siding"] to 1>><<set $mpClues["grand_shelter_map"] to 1>>
+罗宾顺着小巷找了过来，钻进避风棚坐在你身边的厚毛毯上。你们一起翻开砖缝里那本用铅笔写的互助笔记，上面不仅画着住宅区所有翻墙捷径，还标出了一条通往黑铁货运站废弃调车场的隐秘狗洞。「以前大孩子们被贝利罚关禁闭时，就会躲到这里来，」罗宾轻轻靠着你的肩膀，眼里满是安心。
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<stress -3>>
+<br><br>
+<<investigateicon>><<link [[按末页提示探排水管 (0:07)|MP Grand Quest Alley Shelter Step4]]>><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[拆开油纸铁盒封蜡 (0:07)|MP Grand Quest Alley Shelter Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回住宅区小巷 (0:02)|Residential Alleyways]]>><<set $outside to 1>><<set $location to "domus">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Alley Shelter Step4 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestAlleyShelter to Math.max(($mpQuestAlleyShelter or 0), 4)>><<set $mpKnown to ($mpKnown or {})>>
+顺着互助笔记最后一页的铅笔箭头，你小心翼翼地踩上垫高的木托盘。你伸手探入头顶铸铁排水管的干燥空腔，指尖很快触到了一只用油纸层层包裹的小铁盒。
+<<set $skulduggerydifficulty to 300>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($athletics or 0) gte 300>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($athletics or 0))>>
+	<<if _sk gte 800>><<set _reward to 1150>><<elseif _sk gte 550>><<set _reward to 880>><<else>><<set _reward to 620>><</if>>
+	<<set $mpKnown["clockwork_vault"] to 1>>
+	你稳稳夹出小铁盒，发现油纸内侧画着地下机括城档案馆密库的通风口位置，盒底还垫着约 £<<print Math.floor(_reward / 100)>> 的旧钞。
+	<<money _reward>><<stress -2>>
+<<else>>
+	木托盘突然倾斜，你的手肘擦在粗糙的红砖墙面上，火辣辣地生疼。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 2>>
-	你在毛毯下方的砖缝里发现了一本用铅笔写的互助笔记，上面用暗语标出了镇上所有小巷的翻墙捷径与躲避追捕的死角。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Alley Shelter Resolve]]>><<set $mpQuestAlleyShelter to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestAlleyShelter to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[开启铁盒内层暗扣 (0:06)|MP Grand Quest Alley Shelter Step5]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回住宅区小巷 (0:02)|Residential Alleyways]]>><<set $outside to 1>><<set $location to "domus">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Alley Shelter Step5 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestAlleyShelter to Math.max(($mpQuestAlleyShelter or 0), 5)>><<set $mpClues to ($mpClues or {})>>
+那只小铁盒表面涂着防锈黑漆，盒口设有一道简易的铁丝扭簧锁。里面保存着早年院童积攒的应急资金与一枚磨得发亮的孤儿院建院旧铜章。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1350>><<elseif _sk gte 600>><<set _reward to 1020>><<else>><<set _reward to 720>><</if>>
+	<<set $mpClues["grand_shelter_badge"] to 1>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你顺着扭簧方向挑开盒盖，收好旧铜章与里面约 £<<print Math.floor(_reward / 100)>> 的互助储蓄。
+	<<money _reward>><<stress -3>>
+<<else>>
+	生锈的铁丝扭簧崩断划破了你的指腹，巷外忽然传来野狗的吠叫声，让你心头一紧。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 3>>
-	顺着笔记最后一页的提示，你伸手探入头顶排水管的空腔，摸到了一个用油纸包好的小铁盒。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Alley Shelter Resolve]]>><<set $mpQuestAlleyShelter to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestAlleyShelter to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	小铁盒里装着前人攒下的一笔应急零钱与一枚磨得发亮的孤儿院旧铜章。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Alley Shelter Resolve]]>><<set $mpQuestAlleyShelter to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestAlleyShelter to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你在避风棚里歇息片刻，不仅记熟了整片街区的脱身捷径，心底也多了一份踏实感。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Alley Shelter Resolve]]>><<set $mpQuestAlleyShelter to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestAlleyShelter to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你替避风棚重新挂好挡风帆布，带着铁盒里的纪念铜章回到了小巷。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Alley Shelter Resolve]]>><<set $mpQuestAlleyShelter to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestAlleyShelter to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『住宅区砖墙夹缝的避风棚』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<bedicon "zzz">><<link [[在毛毯上小憩记路线 (0:06)|MP Grand Quest Alley Shelter Step6]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回住宅区小巷 (0:02)|Residential Alleyways]]>><<set $outside to 1>><<set $location to "domus">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Alley Shelter Step6 [nobr]
+<<set $outside to 0>><<set $location to "cabin">><<effects>>
+<<set $mpQuestAlleyShelter to Math.max(($mpQuestAlleyShelter or 0), 6)>>
+你窝在避风棚干燥松软的厚毛毯上歇息片刻，借着微光将互助笔记上标注的翻墙捷径与躲避追捕的死角全部背熟。两道高墙挡住了外面的冷风，前人留下的铁罐与字迹让你在这座冷漠的小镇里感受到了一丝难得的暖意。你将笔记重新放回砖缝，给后来的院童留下一包火柴。
+<<tiredness -3>><<stress -4>>
+<br><br>
+<<walkicon>><<link [[系紧防风帆布结案离开 (0:04)|MP Grand Quest Alley Shelter Resolve]]>><<set $outside to 1>><<set $location to "domus">><<pass 4>><</link>>
+<br>
+<<getouticon>><<link [[直接返回住宅区小巷 (0:02)|Residential Alleyways]]>><<set $outside to 1>><<set $location to "domus">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Alley Shelter Resolve [nobr]
-<<set $outside to 0>><<set $location to "residential_alley">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Residential Alleyways")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Residential Alleyways">>
+<<set $outside to 1>><<set $location to "domus">><<effects>>
+<<set $mpQuestAlleyShelter to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestAlleyShelter to 1>>
+你替住宅区砖墙夹缝里的避风棚重新系紧防风帆布，将前人留在铁皮盒里的求生笔记与古币收好。巷口正好有两名不良少年晃悠过来。
+<<if ($willpower or 0) gte 400 or ($athletics or 0) gte 300>>
+	<<set _sk to Math.max(($willpower or 0), ($athletics or 0))>>
+	<<if _sk gte 800>><<set _reward to 1400>><<elseif _sk gte 550>><<set _reward to 1100>><<else>><<set _reward to 820>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestAlleyShelter_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你按刚记熟的翻墙捷径一步跃上矮墙绕到他们身后，顺手捡走他们藏在墙头的约 £<<print Math.floor(_reward / 100)>> 零钞。
+	<<money _reward>><<stress -4>>
+<<else>>
+	你为了不暴露避风棚位置，只得绕远路穿过泥泞的窄巷才甩开他们。
+	<<stress 4>>
 <</if>>
-你替住宅区砖墙夹缝里的避风棚重新系紧防风帆布，将前人留在铁皮盒里的求生笔记与古币收好。
-<<if Weather.precipitation is "rain">>紧密的旧帆布将巷道里的冷雨尽数挡在外面，棚内干爽而温暖。<<else>>狭窄的砖墙夹缝避开了街面视线，是一处极佳的落脚暗哨。<</if>>
-这处隐秘的街巷避风港，如今成了你在住宅区周旋的秘密据点。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Alley Shelter]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回看砖墙夹缝帆布 (0:03)|MP Grand Quest Alley Shelter]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回住宅区小巷 (0:02)|Residential Alleyways]]>><<set $outside to 1>><<set $location to "domus">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Foundry [nobr]
-<<set $outside to 0>><<set $location to "industrial">>
-<<effects>>
-<<set _stg to ($mpQuestFoundry or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Industrial Alleyways")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Industrial Alleyways">>
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestFoundry to Math.max(($mpQuestFoundry or 0), 1)>>
+你从工业区小巷潜入停工的旧铸造厂侧门，高耸的铁皮穹顶下，巨大的炼铁炉虽然早已废弃，炉膛底部却仍亮着一点暗红的炭火。操作台边的砂模槽里残留着刚浇铸成型不久的黄铜齿轮毛坯，地面上散落着新刮下的铜屑。你可以上前检查砂模槽，或者顺着铜屑上二楼模具室看看。
+<br><br>
+<<investigateicon>><<link [[检查砂模槽齿轮毛坯 (0:06)|MP Grand Quest Foundry Step2]]>><<pass 6>><</link>>
+<br>
+<<walkicon>><<link [[顺铜屑上二楼模具室 (0:06)|MP Grand Quest Foundry Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestFoundry or 0) gte 3>>
+	<<sneakicon>><<link [[直撬模具室铁皮柜 (0:06)|MP Grand Quest Foundry Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回工业区小巷 (0:03)|Industrial Alleyways]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你从工业区小巷潜入停工的旧铸造厂侧门。高耸的穹顶下，巨大的炼铁炉虽然早已废弃，炉膛底部却仍亮着一点暗红的炭火。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Foundry Resolve]]>><<set $mpQuestFoundry to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestFoundry to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Foundry Step2 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestFoundry to Math.max(($mpQuestFoundry or 0), 2)>>
+你走近炼铁炉宽大的铸铁操作台，拿起长柄火钳翻开尚带余温的细密型砂槽。黑色砂层下方埋着几枚带王冠刻印的黄铜齿轮毛坯与一袋工匠遗落的试铸银币。
+<<if ($science or 0) gte 320 or ($physique or 0) gte 9000>>
+	<<set _sk to ($science or 0)>>
+	<<if _sk gte 750>><<set _reward to 1150>><<elseif _sk gte 500>><<set _reward to 880>><<else>><<set _reward to 620>><</if>>
+	你将齿轮毛坯浸入冷却水槽定型，并把约 £<<print Math.floor(_reward / 100)>> 的试铸银币收进袋中。
+	<<money _reward>><<stress -2>>
+<<else>>
+	飞溅的滚烫砂粒落在你的手背上，烫出一小片红印，沉重的火钳也震得你双臂发酸。
+	<<pain 3>><<tiredness 3>>
 <</if>>
-<<if _stg is 1>>
-	你走近炼铁炉操作台，发现砂模槽里残留着刚刚浇铸成型不久的黄铜齿轮毛坯，显然有人在夜间秘密使用这座铸造厂。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Foundry Resolve]]>><<set $mpQuestFoundry to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestFoundry to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<walkicon>><<link [[上二楼模具室追查 (0:06)|MP Grand Quest Foundry Step3]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回工业区小巷 (0:03)|Industrial Alleyways]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Foundry Step3 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestFoundry to Math.max(($mpQuestFoundry or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["clockwork_steam"] to 1>><<set $mpClues["grand_foundry_mold"] to 1>>
+你顺着地面散落的金黄铜屑一路追踪到铸造厂二楼的模具室。木架上整齐摆放着全套用于修复旧钟塔地下机括城的齿轮木模，墙上还钉着一张连通机括城蒸汽压力室的排烟管道图。你把图纸上的阀门编号记在心里，目光落向角落那只挂着重锁的铁皮原料柜。
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[用钢钎撬开铁皮柜 (0:07)|MP Grand Quest Foundry Step4]]>><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[探查冷却槽底部暗格 (0:07)|MP Grand Quest Foundry Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回工业区小巷 (0:03)|Industrial Alleyways]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Foundry Step4 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestFoundry to Math.max(($mpQuestFoundry or 0), 4)>><<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+模具室角落的铁皮原料柜上了厚重的挂锁，旁边靠着一根六角钢钎。柜门缝隙里隐约可见银白色的金属锭光泽。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($physique or 0) gte 9500>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1250>><<elseif _sk gte 550>><<set _reward to 950>><<else>><<set _reward to 680>><</if>>
+	<<set $mpKnown["blackiron_signal"] to 1>><<set $mpClues["grand_foundry_rail"] to 1>>
+	你用钢钎别开锁扣，取出约 £<<print Math.floor(_reward / 100)>> 的纯银碎锭，并记下柜门内侧通往黑铁信号塔值班室的货运轨道路线。
+	<<money _reward>><<stress -2>>
+<<else>>
+	钢钎在坚硬的锁梁上打滑，刺耳的金属刮擦声在空旷厂房里回荡，累得你双臂发麻。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	顺着地上散落的铜屑一路追踪到铸造厂二楼的模具室，你找到了全套用于修复旧钟塔地下机括城的齿轮模具。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Foundry Resolve]]>><<set $mpQuestFoundry to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestFoundry to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[下楼摸索熔炉冷却槽 (0:07)|MP Grand Quest Foundry Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回工业区小巷 (0:03)|Industrial Alleyways]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Foundry Step5 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestFoundry to Math.max(($mpQuestFoundry or 0), 5)>>
+一楼炼铁炉侧面的干涸冷却槽底部嵌着一块厚实的耐火砖盖板，四周残留着白垩记号。盖板下面藏着私铸工匠存放核心母模与货款的耐火金匣。
+<<set $skulduggerydifficulty to 360>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你避开滚烫的余烬掀开盖板，拎出耐火金匣，收好里面的青铜母模与约 £<<print Math.floor(_reward / 100)>> 的货款。
+	<<money _reward>><<stress -3>>
+<<else>>
+	耐火砖边缘残留的高温烫伤了你的指尖，厂房大门外忽然传来工匠返回开锁的动静。
+	<<pain 4>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	模具室的铁皮柜上了锁，你利用旁边的钢钎与巧劲撬开柜门，发现了几锭尚未熔炼的纯银锭与古铜器。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Foundry Resolve]]>><<set $mpQuestFoundry to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestFoundry to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	柜门内侧还贴着一张通往黑铁货运站地下月台的货运轨道交接图。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Foundry Resolve]]>><<set $mpQuestFoundry to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestFoundry to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你将纯银锭与古铜器收进包里，把铁皮柜掩好。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Foundry Resolve]]>><<set $mpQuestFoundry to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestFoundry to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你顺着铸造厂侧门悄然撤离，夜风吹散了身上的炭火热气。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Foundry Resolve]]>><<set $mpQuestFoundry to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestFoundry to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『工业区旧铸造厂的余烬』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[掩好铁柜退向侧门 (0:05)|MP Grand Quest Foundry Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[返回工业区小巷 (0:03)|Industrial Alleyways]]>><<set $outside to 1>><<set $location to "docks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Foundry Step6 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+<<set $mpQuestFoundry to Math.max(($mpQuestFoundry or 0), 6)>>
+你把铁皮柜与冷却槽盖板恢复原状，推开铸造厂后侧的排渣小门走到露天栈道上。一名替维斯看守货场的水手正提着风灯站在墙角，见你出来便朝小巷方向做了个安全的手势：「私铸工匠刚从正门进去，顺着这排废铁桶往外走，没人能瞧见你。」夜风吹散了你身上的炭火热气。
+<<stress -3>>
+<br><br>
+<<walkicon>><<link [[避开炭灰结案撤离 (0:05)|MP Grand Quest Foundry Resolve]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回工业区小巷 (0:02)|Industrial Alleyways]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Foundry Resolve [nobr]
-<<set $outside to 0>><<set $location to "industrial">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Industrial Alleyways")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Industrial Alleyways">>
+<<set $outside to 1>><<set $location to "docks">><<effects>>
+<<set $mpQuestFoundry to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestFoundry to 1>>
+你避开旧铸造厂地面残留的暗红炭灰，将从熔炉冷却槽暗格里取出的耐火金匣收入行囊。工业区小巷尽头的货运卡车正准备发车。
+<<if ($athletics or 0) gte 330 or ($willpower or 0) gte 420>>
+	<<set _sk to Math.max(($athletics or 0), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestFoundry_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你趁卡车发动的轰鸣声穿出厂区，将多余的银锭兑成约 £<<print Math.floor(_reward / 100)>> 的现钞。
+	<<money _reward>><<stress -4>>
+<<else>>
+	沉重的金匣坠得你步履蹒跚，好不容易拐出巷口时已经累得直喘粗气。
+	<<stress 4>>
 <</if>>
-你避开旧铸造厂地面残留的暗红炭灰，将从熔炉冷却槽暗格里取出的耐火金匣收入行囊。
-<<if Weather.isFreezing>>铸造厂巨大的砖砌烟囱尚存余温，将室内的寒气驱散了大半。<<else>>高耸的厂房天窗漏下几束斜光，照亮了半空中浮动的微尘。<</if>>
-旧铸造厂私铸纪念币与密匙的往事已被你彻底查明。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Foundry]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望旧铸造厂侧门 (0:03)|MP Grand Quest Foundry]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回工业区小巷 (0:02)|Industrial Alleyways]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Garden Well [nobr]
-<<set $outside to 1>><<set $location to "garden">>
-<<effects>>
-<<set _stg to ($mpQuestGardenWell or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Garden")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Garden">>
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestGardenWell to Math.max(($mpQuestGardenWell or 0), 1)>>
+你走到孤儿院花园最僻静的角落，拨开层层叠叠的常春藤，露出了那口早已被木盖封住的石砌枯井。挪开朽坏的木盖向下望去，枯井早已干涸，井壁上每隔两尺便嵌着一枚结实的生锈铁脚蹬。你可以顺着铁脚蹬爬下井底，或者先在井口听听地底引水涵洞的风声。
+<br><br>
+<<walkicon>><<link [[抓紧铁脚蹬爬下枯井 (0:06)|MP Grand Quest Garden Well Step2]]>><<pass 6>><</link>>
+<br>
+<<investigateicon>><<link [[探查井底半封涵洞 (0:06)|MP Grand Quest Garden Well Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestGardenWell or 0) gte 3>>
+	<<sneakicon>><<link [[直取涵洞避难铁匣 (0:06)|MP Grand Quest Garden Well Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回孤儿院花园 (0:02)|Garden]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你走到孤儿院花园最僻静的角落，拨开层层叠叠的常春藤，露出了那口早已被木盖封住的石砌枯井。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Garden Well Resolve]]>><<set $mpQuestGardenWell to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGardenWell to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Garden Well Step2 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestGardenWell to Math.max(($mpQuestGardenWell or 0), 2)>>
+你双手抓紧嵌入石壁的铁脚蹬，一步步向下爬进幽暗干爽的枯井底部。井底铺着厚厚的细沙，沙层里散落着早年院童投下的许愿硬币。
+<<if ($athletics or 0) gte 300 or ($physique or 0) gte 9000>>
+	<<set _sk to ($athletics or 0)>>
+	<<if _sk gte 750>><<set _reward to 1100>><<elseif _sk gte 500>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	你稳稳落在细沙上，从井壁石缝里拢起一捧保存完好的早期银币，折算约有 £<<print Math.floor(_reward / 100)>>。
+	<<money _reward>><<stress -2>>
+<<else>>
+	倒数第二根铁脚蹬突然松动下沉，你脚下一空跌坐在沙地上，手掌被铁锈磨破了一块皮。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	挪开朽坏的木盖向下望去，枯井早已干涸，井壁上每隔两尺便嵌着一枚结实的生锈铁脚蹬。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Garden Well Resolve]]>><<set $mpQuestGardenWell to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGardenWell to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<investigateicon>><<link [[搬开涵洞口松动砖石 (0:06)|MP Grand Quest Garden Well Step3]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[爬回孤儿院花园 (0:03)|Garden]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Garden Well Step3 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestGardenWell to Math.max(($mpQuestGardenWell or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["abbey_steps"] to 1>><<set $mpClues["grand_well_culvert"] to 1>>
+井底侧面的石壁上有一道被青砖半封住的早期引水涵洞，你动手搬开松动的砖块钻了进去。拱形涵洞内部十分干燥，砖壁上刻着百年前修道院工匠留下的路标，指明顺着涵洞南端就能直通地下古修道院的静默石阶。涵洞中央的石台上端放着一只首任院长留下的避难铁匣。
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[开启首任院长避难匣 (0:07)|MP Grand Quest Garden Well Step4]]>><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[搜寻石台下古董银饰 (0:07)|MP Grand Quest Garden Well Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[爬回孤儿院花园 (0:03)|Garden]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Garden Well Step4 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestGardenWell to Math.max(($mpQuestGardenWell or 0), 4)>><<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+你蹲在干燥的涵洞石台前，用指尖拨开避难铁匣生满绿锈的铜搭扣。铁匣里面整齐叠放着一份羊皮纸书写的早期院产地契抄本与一封火漆应急金信封。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($history or 0) gte 320>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($history or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpKnown["abbey_scriptorium"] to 1>><<set $mpClues["grand_well_deed"] to 1>>
+	你读懂地契上注明正本存于古修道院灰烬藏经阁，并取出信封里约 £<<print Math.floor(_reward / 100)>> 的院童救济金。
+	<<money _reward>><<stress -2>>
+<<else>>
+	褪色的古体字迹在昏暗光线下难以辨认，涵洞里的冷气冻得你鼻尖发酸。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	你抓紧铁脚蹬一步步爬下井底。井底铺着干燥的细沙，侧面石壁上有一道被砖石半封住的早期引水涵洞。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Garden Well Resolve]]>><<set $mpQuestGardenWell to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGardenWell to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[摸索铁匣底层银饰格 (0:07)|MP Grand Quest Garden Well Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[爬回孤儿院花园 (0:03)|Garden]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Garden Well Step5 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestGardenWell to Math.max(($mpQuestGardenWell or 0), 5)>>
+避难铁匣底部设有一块带暗簧的防潮锡板，四角用细铜钉固定。锡板下面封存着首任院长留给院童在危急关头变现自救的古董银饰与金壳怀表。
+<<set $skulduggerydifficulty to 350>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你顺着锡板边缘轻轻一挑便打开暗格，收好古董银饰与约 £<<print Math.floor(_reward / 100)>> 的金镑硬币。
+	<<money _reward>><<stress -3>>
+<<else>>
+	锡板边缘锈得锋利如刀，划破了你的食指，涵洞顶部的碎石簌簌落下吓了你一跳。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 3>>
-	你搬开松动的砖石钻进涵洞，发现这里存放着孤儿院首任院长留下的避难铁匣。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Garden Well Resolve]]>><<set $mpQuestGardenWell to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGardenWell to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	铁匣内保存着一份早期院产的地契抄本，以及几件用来在危急关头接济院童的古董银饰。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Garden Well Resolve]]>><<set $mpQuestGardenWell to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGardenWell to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你在涵洞壁上还发现了直通孤儿院旧储物室的通气孔结构。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Garden Well Resolve]]>><<set $mpQuestGardenWell to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGardenWell to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你带着铁匣中的古董银饰爬回地面，重新用常春藤遮好井口。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Garden Well Resolve]]>><<set $mpQuestGardenWell to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGardenWell to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『孤儿院花园常春藤枯井』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<walkicon>><<link [[查看通往储物室的气孔 (0:05)|MP Grand Quest Garden Well Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[返回孤儿院花园 (0:03)|Garden]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Garden Well Step6 [nobr]
+<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $mpQuestGardenWell to Math.max(($mpQuestGardenWell or 0), 6)>>
+你在涵洞北壁上方发现了一道直通孤儿院一楼旧储物室的方形通气孔，将两边的地下脉络彻底印证。正当你走到井底准备往上爬时，井口探出凯拉尔的身影，默默垂下一根结实的园艺麻绳：「我见常春藤动过就守在这里替你看着，没人往花园这边来。」借着麻绳的拉力，你省力不少。
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Kylar")>><<npcincr Kylar trust 1>><</if>><<stress -3>>
+<br><br>
+<<walkicon>><<link [[攀着脚蹬回到地面 (0:05)|MP Grand Quest Garden Well Resolve]]>><<set $outside to 1>><<set $location to "forest">><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回孤儿院花园 (0:02)|Garden]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Garden Well Resolve [nobr]
-<<set $outside to 1>><<set $location to "garden">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Garden")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Garden">>
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestGardenWell to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGardenWell to 1>>
+你攀着孤儿院花园枯井内壁的铁脚蹬回到地面，拨过浓密的常春藤将井口重新掩好。微风拂过菜畦，首任院长留下的早期地契与古董银饰已尽数归你所有。
+<<if ($athletics or 0) gte 320 or ($willpower or 0) gte 400>>
+	<<set _sk to Math.max(($athletics or 0), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGardenWell_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你仔细拂去裤脚的沙土，将部分银币分装妥当，折算下来足有约 £<<print Math.floor(_reward / 100)>>。
+	<<money _reward>><<stress -4>>
+<<else>>
+	攀爬枯井耗尽了你的力气，回到草坪时小腿还在微微打颤。
+	<<stress 4>>
 <</if>>
-你攀着孤儿院花园枯井内壁的铁脚蹬回到地面，拨过浓密的常春藤将井口重新掩好。
-<<if Time.dayState is "night">>夜色下的花园草木葱茏，虫鸣声掩盖了井壁传来的轻微回响。<<else>>花园里阳光正好，晾衣绳上的床单在微风中轻轻摇晃，挡住了旁人的视线。<</if>>
-枯井半腰暗龛里藏着的早年院童信物已平安回到你手中。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Garden Well]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回看常春藤枯井角 (0:03)|MP Grand Quest Garden Well]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回孤儿院花园 (0:02)|Garden]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Bath Pipe [nobr]
-<<set $outside to 0>><<set $location to "home">>
-<<effects>>
-<<set _stg to ($mpQuestBathPipe or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Bathroom")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Bathroom">>
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestBathPipe to Math.max(($mpQuestBathPipe or 0), 1)>>
+趁着浴室里空无一人，你走到最里侧的黄铜热水管旁，伸手轻轻挪开了那块早已松动的白瓷砖。瓷砖后方是一个干燥的壁内空腔，里面塞着一只用防水蜡布包裹的扁平铜盒，深处还能看见控制整栋楼热水循环的副阀门。你可以先取出扁平铜盒，或者仔细查看副阀门上的刻字。
+<br><br>
+<<investigateicon>><<link [[取出蜡布扁平铜盒 (0:05)|MP Grand Quest Bath Pipe Step2]]>><<pass 5>><</link>>
+<br>
+<<socialiseicon>><<link [[请门外罗宾帮忙望风 (0:05)|MP Grand Quest Bath Pipe Step3]]>><<pass 5>><</link>>
+<br>
+<<if ($mpQuestBathPipe or 0) gte 3>>
+	<<sneakicon>><<link [[微调管道后方副阀门 (0:05)|MP Grand Quest Bath Pipe Step4]]>><<pass 5>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回孤儿院浴室 (0:02)|Bathroom]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	趁着浴室里空无一人，你走到最里侧的黄铜热水管旁，伸手轻轻挪开了那块早已松动的白瓷砖。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Bath Pipe Resolve]]>><<set $mpQuestBathPipe to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBathPipe to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Bath Pipe Step2 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestBathPipe to Math.max(($mpQuestBathPipe or 0), 2)>>
+由于黄铜热水管常年散发着高热，壁内空腔边缘十分烫手。你将毛巾缠在手腕上，探指去勾那只被防水蜡布包裹的扁平铜盒。
+<<set $skulduggerydifficulty to 300>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 800>><<set _reward to 1050>><<elseif _sk gte 550>><<set _reward to 800>><<else>><<set _reward to 550>><</if>>
+	你灵巧地避开滚烫管壁抽出铜盒，拨开盒扣摸出前人藏匿的约 £<<print Math.floor(_reward / 100)>> 私房硬币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	你的手背不小心贴在了滚烫的铜管接头上，烫得你倒吸一口凉气，差点把瓷砖摔在地上。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	瓷砖后方是一个干燥的壁内空腔，里面塞着一只用防水蜡布包裹的扁平铜盒。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Bath Pipe Resolve]]>><<set $mpQuestBathPipe to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBathPipe to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[和门口望风的罗宾说话 (0:05)|MP Grand Quest Bath Pipe Step3]]>><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[按盒底刻字调副阀门 (0:06)|MP Grand Quest Bath Pipe Step4]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回孤儿院浴室 (0:02)|Bathroom]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Bath Pipe Step3 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestBathPipe to Math.max(($mpQuestBathPipe or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["glasshouse_dome"] to 1>><<set $mpClues["grand_bath_note"] to 1>>
+罗宾正抱着换洗衣物守在浴室半掩的木门边替你留意走廊动静。看见你打开铜盒露出一小瓶淡金色香精油，罗宾凑近闻了闻：「这种带着迷迭香与柑橘味的精油，只有多瑙河温室庄园的玻璃穹顶露台才会调配。」罗宾指了指铜盒底部刻着的一行小字，上面记着调节热水副阀门的圈数。
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin trust 1>><</if>><<stress -3>>
+<br><br>
+<<investigateicon>><<link [[按圈数微调热水副阀 (0:06)|MP Grand Quest Bath Pipe Step4]]>><<pass 6>><</link>>
+<br>
+<<sneakicon>><<link [[探查夹墙深处暗槽 (0:06)|MP Grand Quest Bath Pipe Step5]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回孤儿院浴室 (0:02)|Bathroom]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Bath Pipe Step4 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestBathPipe to Math.max(($mpQuestBathPipe or 0), 4)>><<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+你按照铜盒底部刻着的小字提示，伸手握住热水管后方的黄铜副阀门。你屏住呼吸先向左旋半圈再向右回四分之一圈，细致地调节着管道内的蒸汽回流压力。
+<<set $skulduggerydifficulty to 300>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($science or 0) gte 300 or ($housekeeping or 0) gte 300>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($science or 0))>>
+	<<if _sk gte 800>><<set _reward to 1150>><<elseif _sk gte 550>><<set _reward to 880>><<else>><<set _reward to 620>><</if>>
+	<<set $mpKnown["clockwork_steam"] to 1>><<set $mpClues["grand_bath_valve"] to 1>>
+	管道内传出轻柔的排气声，不仅让水温变得均匀柔和，还从与机括城蒸汽压力室相连的回水匣里冲出约 £<<print Math.floor(_reward / 100)>> 的旧币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	你旋错了方向，管道里发出一阵剧烈的咕噜声，吓得你一身冷汗连忙拧回原位。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	由于热水管常年散发着余温，铜盒触手温热。你拨开盒扣，发现里面整齐地放着几枚前人藏匿的私房硬币与一瓶未开封的高级精油。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Bath Pipe Resolve]]>><<set $mpQuestBathPipe to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBathPipe to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[取出回水匣内侧银盒 (0:06)|MP Grand Quest Bath Pipe Step5]]>><<pass 6>><</link>>
+<br>
+<<getouticon>><<link [[返回孤儿院浴室 (0:02)|Bathroom]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Bath Pipe Step5 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestBathPipe to Math.max(($mpQuestBathPipe or 0), 5)>>
+随着回水匣里的积水彻底排空，夹墙最深处的方形铅皮暗槽完全露了出来。暗槽干燥的隔板上放着一只雕花古董银皂盒与一卷防潮纸钞。
+<<set $skulduggerydifficulty to 340>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1350>><<elseif _sk gte 600>><<set _reward to 1020>><<else>><<set _reward to 720>><</if>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你用毛巾垫着指尖夹出那只古董银皂盒，收好里面约 £<<print Math.floor(_reward / 100)>> 的私房钞票。
+	<<money _reward>><<stress -3>>
+<<else>>
+	铅皮暗槽边缘的毛刺刮伤了你的手背，走廊外突然传来院童跑向浴室的脚步声。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 3>>
-	铜盒底部还刻着一行小字，记录了如何调节浴室总阀门让水温更加舒适省煤的窍门。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Bath Pipe Resolve]]>><<set $mpQuestBathPipe to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBathPipe to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你按照小字提示微调了管道后方的副阀门，浴室里的暖意顿时变得更加柔和均匀。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Bath Pipe Resolve]]>><<set $mpQuestBathPipe to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBathPipe to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	你将精油与硬币收好，把白瓷砖严丝合缝地按回墙面。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Bath Pipe Resolve]]>><<set $mpQuestBathPipe to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBathPipe to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	蒸汽氤氲中，这处只有你知晓的浴室夹墙秘密被彻底收归囊中。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Bath Pipe Resolve]]>><<set $mpQuestBathPipe to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBathPipe to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『浴室黄铜蒸汽管后的夹墙』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<bedicon "zzz">><<link [[滴入精油借热气舒缓 (0:05)|MP Grand Quest Bath Pipe Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[返回孤儿院浴室 (0:02)|Bathroom]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Bath Pipe Step6 [nobr]
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestBathPipe to Math.max(($mpQuestBathPipe or 0), 6)>>
+你在温热的铜管表面滴了一小滴刚找到的高级香精油，清幽的迷迭香与白花气息顿时随着氤氲的水雾在浴室里弥漫开来。深吸一口温暖湿润的空气，你紧绷的肩颈与酸楚的四肢都舒展开来。你将空铜盒放回夹墙深处，拿过干帕子准备把松动的白瓷砖重新按紧。
+<<stress -4>><<tiredness -3>>
+<br><br>
+<<walkicon>><<link [[按紧白瓷砖擦净石粉 (0:04)|MP Grand Quest Bath Pipe Resolve]]>><<pass 4>><</link>>
+<br>
+<<getouticon>><<link [[直接返回孤儿院浴室 (0:02)|Bathroom]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Bath Pipe Resolve [nobr]
-<<set $outside to 0>><<set $location to "home">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Bathroom")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Bathroom">>
+<<set $outside to 0>><<set $location to "pool">><<effects>>
+<<set $mpQuestBathPipe to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestBathPipe to 1>>
+你将孤儿院浴室黄铜热水管后方的松动瓷砖重新按紧，借着满室水雾擦净手上的石粉。这处只有你知晓的浴室夹墙秘密已彻底收归囊中。
+<<set $skulduggerydifficulty to 300>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($housekeeping or 0) gte 280>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($housekeeping or 0))>>
+	<<if _sk gte 800>><<set _reward to 1400>><<elseif _sk gte 550>><<set _reward to 1100>><<else>><<set _reward to 820>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestBathPipe_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你将瓷砖缝抹得天衣无缝，把多余的香精分装变现换得约 £<<print Math.floor(_reward / 100)>> 的零花钱。
+	<<money _reward>><<stress -4>>
+<<else>>
+	门外有人伸手转动浴室门把，你匆忙间差点把毛巾掉在湿地上。
+	<<stress 4>>
 <</if>>
-你将孤儿院浴室黄铜热水管后方的松动瓷砖重新按紧，借着满室水雾擦净手上的石粉。
-<<if Weather.isFreezing>>浴室里热气腾腾，温暖的水雾将瓷砖接缝遮掩得毫无破绽。<<else>>花洒哗哗的流水声回荡在浴室里，没人发现管道后的夹墙秘密。<</if>>
-藏在蒸汽管夹墙里的防水铁盒与私房积蓄已被你尽数取出。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Bath Pipe]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回看热水管旁白瓷砖 (0:03)|MP Grand Quest Bath Pipe]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回孤儿院浴室 (0:02)|Bathroom]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Grotto Pearl [nobr]
-<<set $outside to 0>><<set $location to "lake_ruin">>
-<<effects>>
-<<set _stg to ($mpQuestGrottoPearl or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Beach Cave")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Beach Cave">>
+<<set $outside to 0>><<set $location to "searocks">><<effects>>
+<<set $mpQuestGrottoPearl to Math.max(($mpQuestGrottoPearl or 0), 1)>>
+你沿着海蚀洞内侧的浅滩向深处涉水前行，随着外头的海浪声渐远，前方一汪幽深的潮汐水潭底泛起了点点奇异的幽蓝磷光。洞顶垂下的钟乳石滴落清凉的水珠，潭底岩缝间隐约可见几枚硕大的夜光珠贝。你可以先在潭边观察暗流走向，或者直接挽起裤脚潜入水下。
+<br><br>
+<<swimicon>><<link [[顺潭壁潜入水下采贝 (0:06)|MP Grand Quest Grotto Pearl Step2]]>><<pass 6>><</link>>
+<br>
+<<investigateicon>><<link [[在潭畔石台观察潮汐 (0:06)|MP Grand Quest Grotto Pearl Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestGrottoPearl or 0) gte 3>>
+	<<sneakicon>><<link [[直探岩缝底部沉沙匣 (0:06)|MP Grand Quest Grotto Pearl Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[走出海蚀洞回海礁 (0:03)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你沿着海蚀洞内侧的浅滩向深处涉水前行。随着外头的海浪声渐远，前方一汪幽深的潮汐水潭底泛起了点点奇异的幽蓝磷光。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Grotto Pearl Resolve]]>><<set $mpQuestGrottoPearl to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGrottoPearl to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Grotto Pearl Step2 [nobr]
+<<set $outside to 0>><<set $location to "searocks">><<effects>>
+<<set $mpQuestGrottoPearl to Math.max(($mpQuestGrottoPearl or 0), 2)>>
+你站在潭边深吸一口气，顺着光滑的潭壁潜入清澈微凉的水下。幽蓝的磷光在四周浮动，你拨开摇曳的墨绿海藻，伸手去撬附着在岩缝间的夜光珠贝。
+<<if ($swimmingskill or 0) gte 320 or ($physique or 0) gte 9000>>
+	<<set _sk to ($swimmingskill or 0)>>
+	<<if _sk gte 800>><<set _reward to 1150>><<elseif _sk gte 550>><<set _reward to 880>><<else>><<set _reward to 620>><</if>>
+	你稳住身形连撬三枚饱满的珠贝，并在岩槽里摸到约 £<<print Math.floor(_reward / 100)>> 的沉船古银币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	冰冷的潭水冻得你小腿抽筋，手指在锋利的礁石边缘划出一道血口，只得浮出水面喘气。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	你蹲在潭边凝视片刻，发现磷光来自潭底岩缝中附着的一种罕见夜光珠贝，水流清澈却颇有些寒意。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Grotto Pearl Resolve]]>><<set $mpQuestGrottoPearl to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGrottoPearl to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<investigateicon>><<link [[爬上干石台查看水道 (0:05)|MP Grand Quest Grotto Pearl Step3]]>><<pass 5>><</link>>
+<br>
+<<swimicon>><<link [[再次下潜摸索青铜盒 (0:07)|MP Grand Quest Grotto Pearl Step4]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回海礁 (0:03)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Grotto Pearl Step3 [nobr]
+<<set $outside to 0>><<set $location to "searocks">><<effects>>
+<<set $mpQuestGrottoPearl to Math.max(($mpQuestGrottoPearl or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["foghorn_echo"] to 1>><<set $mpClues["grand_grotto_tide"] to 1>>
+你坐在潭边高出水面的干燥平石台上，静静倾听潭底岩洞传来的共鸣水声。每当外海退潮，潭水就会顺着北侧一道天然石拱流向雾角灯塔岛下方的海蚀回音廊。借着水位下降一尺的空档，你清楚地看到潭底最深处的沉沙里露出一角青铜首饰盒的绿锈。
+<<stress -3>>
+<br><br>
+<<swimicon>><<link [[潜入潭底打捞青铜盒 (0:07)|MP Grand Quest Grotto Pearl Step4]]>><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[开启盒盖取海蓝宝链 (0:07)|MP Grand Quest Grotto Pearl Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回海礁 (0:03)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Grotto Pearl Step4 [nobr]
+<<set $outside to 0>><<set $location to "searocks">><<effects>>
+<<set $mpQuestGrottoPearl to Math.max(($mpQuestGrottoPearl or 0), 4)>><<set $mpKnown to ($mpKnown or {})>>
+你趁着难得的平潮期再次潜入潭底最深处，水压让耳膜微微发紧。你双手扒开覆盖在岩缝底部的细密白沙，抱住那只沉甸甸的古代青铜首饰盒往上托举。
+<<set $skulduggerydifficulty to 320>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($swimmingskill or 0) gte 340>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($swimmingskill or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpKnown["abbey_ferry"] to 1>>
+	你双腿有力地蹬水浮上石台，在盒底防水夹板里发现通往修道院暗河渡口的水路图与约 £<<print Math.floor(_reward / 100)>> 的古金币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	沉重的青铜盒让你在水下耗尽了气息，不得不松手先游回岸边大口喘气。
+	<<tiredness 4>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	你挽起裤脚顺着潭壁缓步潜入水下，屏住呼吸拨开摇曳的海藻，探手摸向岩缝深处。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Grotto Pearl Resolve]]>><<set $mpQuestGrottoPearl to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGrottoPearl to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[在干石台上挑开铜扣 (0:07)|MP Grand Quest Grotto Pearl Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回海礁 (0:03)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Grotto Pearl Step5 [nobr]
+<<set $outside to 0>><<set $location to "searocks">><<effects>>
+<<set $mpQuestGrottoPearl to Math.max(($mpQuestGrottoPearl or 0), 5)>><<set $mpClues to ($mpClues or {})>>
+你将打捞上来的青铜首饰盒放在干石台上，用衣角擦去表面的泥沙。盒盖四周用陈年蜂蜡与倒刺铜扣封得严严实实，需要顺着锁槽纹路小心撬开。
+<<set $skulduggerydifficulty to 350>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1>>
+	<<set _sk to currentSkillValue("skulduggery")>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<set $mpClues["grand_grotto_pearl"] to 1>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	盒盖应声弹开，幽蓝磷光映亮了一串海蓝宝石古董项链与盒底约 £<<print Math.floor(_reward / 100)>> 的珍珠母币。
+	<<money _reward>><<stress -3>>
+<<else>>
+	铜扣上的绿锈倒刺扎破了你的指腹，冰冷的潮水漫上石台脚边，催得你心神不宁。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 3>>
-	除了几枚饱满的夜光珠贝，你的指尖还在岩缝底部的沉沙里触到了一只沉甸甸的古代青铜首饰盒。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Grotto Pearl Resolve]]>><<set $mpQuestGrottoPearl to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGrottoPearl to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	你抱着青铜首饰盒与珠贝浮出水面，在潭边的干石台上打开盒盖——里面竟是一串保存完好的海蓝宝石古董项链。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Grotto Pearl Resolve]]>><<set $mpQuestGrottoPearl to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGrottoPearl to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	幽蓝的磷光映照着晶莹的宝石，让你在幽暗海洞中生出的紧张感消散无踪。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Grotto Pearl Resolve]]>><<set $mpQuestGrottoPearl to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGrottoPearl to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你将海蓝宝石项链与夜光珠贝妥善收好，顺着潮汐退去的方向走出了海蚀洞。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Grotto Pearl Resolve]]>><<set $mpQuestGrottoPearl to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGrottoPearl to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『海蚀洞深潭的幽蓝磷光』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<bedicon "zzz">><<link [[借幽蓝磷光静坐调息 (0:05)|MP Grand Quest Grotto Pearl Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[返回海礁 (0:03)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Grotto Pearl Step6 [nobr]
+<<set $outside to 0>><<set $location to "searocks">><<effects>>
+<<set $mpQuestGrottoPearl to Math.max(($mpQuestGrottoPearl or 0), 6)>>
+你坐在干燥的平石台上，看着手中晶莹剔透的海蓝宝石项链与夜光珠贝在幽暗中散发柔和的蓝光。潮汐水潭平静如镜，洞顶水珠滴落的清脆声响仿佛能洗去脑海中的一切杂念，让你在幽暗海洞中生出的紧张感消散无踪。你将项链与珠贝妥善装进贴身皮袋，准备顺着退潮浅滩离开。
+<<stress -4>><<trauma -1>>
+<br><br>
+<<walkicon>><<link [[涉水上岸结案离开 (0:05)|MP Grand Quest Grotto Pearl Resolve]]>><<set $outside to 1>><<set $location to "searocks">><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回海礁 (0:02)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Grotto Pearl Resolve [nobr]
-<<set $outside to 0>><<set $location to "lake_ruin">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Beach Cave")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Beach Cave">>
+<<set $outside to 1>><<set $location to "searocks">><<effects>>
+<<set $mpQuestGrottoPearl to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $mpQuestGrottoPearl to 7>><<set $daily.mpQuestGrottoPearl to 1>>
+你从海蚀洞深处的潮汐水潭涉水上岸，将散发着幽蓝磷光的夜光珠贝与古币装入贴身皮袋。外侧礁盘上正涨起傍晚的潮水，海风吹来淡淡的咸雾。
+<<if ($swimmingskill or 0) gte 320 or ($willpower or 0) gte 400>>
+	<<set _sk to Math.max(($swimmingskill or 0), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGrottoPearl_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你迎着海风稳步跃过湿滑的礁石，将品相次一等的珠贝卖给岸边珠商换得约 £<<print Math.floor(_reward / 100)>>。
+	<<money _reward>><<stress -4>>
+<<else>>
+	涨潮的浪花打湿了你的衣摆，你在礁石间走得磕磕绊绊才回到岸上。
+	<<stress 4>>
 <</if>>
-你从海蚀洞深处的潮汐水潭涉水上岸，将散发着幽蓝磷光的夜光珠贝与古币装入贴身皮袋。
-<<if Time.dayState is "night">>洞内水潭的荧光水藻在黑暗中熠熠生辉，宛如一条流动的地下星河。<<else>>洞口折射进来的海面天光，照亮了石笋间干燥的落脚小径。<</if>>
-海蚀洞深潭底部的古老遗珍已被你悉数探明。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Grotto Pearl]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望海蚀洞入口 (0:03)|MP Grand Quest Grotto Pearl]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回海礁 (0:02)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Moon Altar [nobr]
-<<set $outside to 1>><<set $location to "forest">>
-<<effects>>
-<<set _stg to ($mpQuestMoonAltar or 0)>>
-<<set _exitPas to ($mpReturnPassage or "Forest")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Forest">>
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestMoonAltar to Math.max(($mpQuestMoonAltar or 0), 1)>>
+你穿过深林浓重的迷雾，踏上古树环绕的月牙形石台，石台表面覆满柔软的绿苔，中央凿着一道弯月形的浅槽。四周的高大冷杉遮蔽了天光，空气里浮动着松脂与冷泉的清冽气息。你可以俯身拂去弯月浅槽里的落叶，或者先向提灯巡林的阿什请教古德鲁伊仪轨。
+<br><br>
+<<investigateicon>><<link [[拂去弯月浅槽落叶 (0:06)|MP Grand Quest Moon Altar Step2]]>><<pass 6>><</link>>
+<br>
+<<socialiseicon>><<link [[向提灯的阿什请教 (0:06)|MP Grand Quest Moon Altar Step3]]>><<pass 6>><</link>>
+<br>
+<<if ($mpQuestMoonAltar or 0) gte 3>>
+	<<sneakicon>><<link [[引泉水入槽开石匣 (0:06)|MP Grand Quest Moon Altar Step4]]>><<pass 6>><</link>>
+	<br>
 <</if>>
+<<getouticon>><<link [[退回森林石径 (0:03)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
-<<if _stg is 0>>
-	你穿过深林浓重的迷雾，踏上古树环绕的月牙形石台。石台表面覆满柔软的绿苔，中央凿着一道弯月形的浅槽。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:09)|MP Grand Quest Moon Altar Resolve]]>><<set $mpQuestMoonAltar to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMoonAltar to 1>><<pass 9>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_1")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+:: MP Grand Quest Moon Altar Step2 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestMoonAltar to Math.max(($mpQuestMoonAltar or 0), 2)>>
+你俯身跪在柔软的绿苔上，小心拨开弯月形浅槽里的松针与刺藤。槽底花岗岩上刻着古德鲁伊用来观测雾月潮汐的精密星宿图。
+<<set $skulduggerydifficulty to 300>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($tending or 0) gte 300 or ($history or 0) gte 300>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($tending or 0))>>
+	<<if _sk gte 800>><<set _reward to 1100>><<elseif _sk gte 550>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
+	你将二十八宿凹槽清理干净，并从主星凹坑里抠出约 £<<print Math.floor(_reward / 100)>> 的古代奉纳银币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	腐叶底下藏着的荆棘刺伤了你的指尖，林间骤起的寒风吹得你打了个哆嗦。
+	<<pain 3>><<stress 5>>
 <</if>>
-<<if _stg is 1>>
-	你俯身拂去浅槽里的落叶，发现槽底刻着古德鲁伊用来观测雾月潮汐的精密星宿图。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:12)|MP Grand Quest Moon Altar Resolve]]>><<set $mpQuestMoonAltar to 2>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMoonAltar to 1>><<pass 12>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_2")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<socialiseicon>><<link [[向树下阿什请教机关 (0:05)|MP Grand Quest Moon Altar Step3]]>><<pass 5>><</link>>
+<br>
+<<investigateicon>><<link [[引导林间露水入槽 (0:07)|MP Grand Quest Moon Altar Step4]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回森林 (0:03)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Moon Altar Step3 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestMoonAltar to Math.max(($mpQuestMoonAltar or 0), 3)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
+<<set $mpKnown["druid_moonwell"] to 1>><<set $mpClues["grand_moon_star"] to 1>>
+提着黄铜防风灯的阿什正带着猎犬停在石台下方的树根旁，见你清理完星宿槽，便走上台阶递给你一截 hollowed 竹管。「这座月牙台靠水力平衡锤控制，把北侧冷泉的水引到月牙尖端，背面树根里的石匣就会滑开。」阿什抬手指向密林深处，「顺着这道泉眼往里走，还能到达古德鲁伊石环的月泉祭坛。」
+<<stress -3>>
+<br><br>
+<<investigateicon>><<link [[用竹管引泉水入槽 (0:07)|MP Grand Quest Moon Altar Step4]]>><<pass 7>><</link>>
+<br>
+<<sneakicon>><<link [[去背面树根取石匣 (0:07)|MP Grand Quest Moon Altar Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回森林 (0:03)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Moon Altar Step4 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestMoonAltar to Math.max(($mpQuestMoonAltar or 0), 4)>><<set $mpKnown to ($mpKnown or {})>>
+你用竹管将石台北侧的清泉细流引入弯月浅槽，清凉的水花在青苔间溅开。清澈的露水沿着星宿连线缓缓流向月牙尖端，石台下方顿时传来低沉的配重锤滑动声。
+<<if ($science or 0) gte 300 or ($tending or 0) gte 300 or ($willpower or 0) gte 400>>
+	<<set _sk to Math.max(($tending or 0), ($willpower or 0))>>
+	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
+	<<set $mpKnown["druid_rootcave"] to 1>>
+	水流精准注满月尖凹池，石台背面弹出一道通往古根地穴的路标牌与约 £<<print Math.floor(_reward / 100)>> 的祭礼银币。
+	<<money _reward>><<stress -2>>
+<<else>>
+	竹管接口频频漏水，冰凉的泉水浸湿了你的袖口，试了好几次才勉强蓄满浅槽。
+	<<tiredness 3>><<stress 4>>
 <</if>>
-<<if _stg is 2>>
-	当林间清泉的露水顺着石槽汇聚到月牙尖端时，石台下方传来了极其轻微的平衡锤移动声。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:15)|MP Grand Quest Moon Altar Resolve]]>><<set $mpQuestMoonAltar to 3>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMoonAltar to 1>><<pass 15>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_3")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
+<br><br>
+<<sneakicon>><<link [[开启树根缠绕的石匣 (0:07)|MP Grand Quest Moon Altar Step5]]>><<pass 7>><</link>>
+<br>
+<<getouticon>><<link [[返回森林 (0:03)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Moon Altar Step5 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestMoonAltar to Math.max(($mpQuestMoonAltar or 0), 5)>><<set $mpClues to ($mpClues or {})>>
+石台背面的苍白古树根须交错缠绕，一方雕刻着鹿角的青石匣刚从暗槽里滑出一半。你需要赶在平衡锤水漏排空合拢前，将石匣里面的圣物稳妥取出来。
+<<set $skulduggerydifficulty to 350>><<skulduggerycheck>>
+<<if $skulduggerysuccess is 1 or ($athletics or 0) gte 330>>
+	<<set _sk to Math.max(currentSkillValue("skulduggery"), ($athletics or 0))>>
+	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
+	<<set $mpClues["grand_moon_stag"] to 1>>
+	<<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_5")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你眼疾手快地探手取出纯银月鹿雕像、千年琥珀标本与约 £<<print Math.floor(_reward / 100)>> 的古金币。
+	<<money _reward>><<stress -3>>
+<<else>>
+	平衡锤水漏排空，沉重的石匣盖猛地回弹夹痛了你的手背，惊起林冠一群夜鸦。
+	<<pain 4>><<stress 6>>
 <</if>>
-<<if _stg is 3>>
-	你顺着声音在石台背面的树根缠绕处找到了一方滑开的石匣。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:18)|MP Grand Quest Moon Altar Resolve]]>><<set $mpQuestMoonAltar to 4>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMoonAltar to 1>><<pass 18>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_4")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 4>>
-	石匣中静静躺着一尊古朴的纯银月鹿雕像，以及几片压制在水晶板间的千年琥珀标本。
-	<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:24)|MP Grand Quest Moon Altar Resolve]]>><<set $mpQuestMoonAltar to 5>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMoonAltar to 1>><<pass 24>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_5")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 5>>
-	林风吹过古树树冠，仿佛在向你低语着这片古老森林最悠久的祝福，令你的心神与意志都变得无比澄明。
-	<<mpAmbient>><<if ($stress or 0) gte 3500>>你深呼吸稳住心神。<<else>>你全神贯注地观察。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:05)|MP Grand Quest Moon Altar Resolve]]>><<set $mpQuestMoonAltar to 6>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMoonAltar to 1>><<pass 5>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_6")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg is 6>>
-	你将纯银月鹿雕像收好，向着古老的月牙石台微微颔首后转身返回。
-	<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-	<br><br>
-	<<investigateicon>><<link [[把握时机推进调查 (0:07)|MP Grand Quest Moon Altar Resolve]]>><<set $mpQuestMoonAltar to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMoonAltar to 1>><<pass 7>><<stress -5>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_7")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<lstress>>
-	<br>
-<</if>>
-<<if _stg gte 7>>
-	你已经彻底揭开了『深林古树间的月牙石台』背后的全部秘密，旧日的暗流已尽在你的掌控之中。
-	<br><br>
-<</if>>
-<<getouticon>><<link [[悄然离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<<bedicon "zzz">><<link [[在古树下聆听林风调息 (0:05)|MP Grand Quest Moon Altar Step6]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[返回森林 (0:03)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Grand Quest Moon Altar Step6 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestMoonAltar to Math.max(($mpQuestMoonAltar or 0), 6)>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["druid_watchtower"] to 1>>
+林风吹过古树树冠，松涛声仿佛在向你低语着这片古老森林最悠久的祝福，令你的心神与意志都变得无比澄明。随着周围的浓雾散开一线，你抬头看见高处树冠分叉间隐约露出的守林人瞭望台木栏。你将纯银月鹿雕像与琥珀标本贴身收好，向着月牙石台微微颔首。
+<<stress -4>><<willpower 1>>
+<br><br>
+<<walkicon>><<link [[走下月牙石台结案返回 (0:05)|MP Grand Quest Moon Altar Resolve]]>><<pass 5>><</link>>
+<br>
+<<getouticon>><<link [[直接返回森林 (0:02)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Moon Altar Resolve [nobr]
-<<set $outside to 1>><<set $location to "forest">>
-<<effects>>
-<<set _exitPas to ($mpReturnPassage or "Forest")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
-	<<set _exitPas to "Forest">>
+<<set $outside to 1>><<set $location to "forest">><<effects>>
+<<set $mpQuestMoonAltar to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMoonAltar to 1>>
+你走下深林古树环绕的月牙石台，将石槽暗格里取出的古德鲁伊银徽与草药秘卷贴身收好。林间蜿蜒的石径上正好有一支背着竹篓的采药商队经过。
+<<if ($willpower or 0) gte 420 or ($athletics or 0) gte 320>>
+	<<set _sk to Math.max(($willpower or 0), ($athletics or 0))>>
+	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 550>><<set _reward to 1180>><<else>><<set _reward to 880>><</if>>
+	<<if _sk gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMoonAltar_stg_7")>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	你稳步穿出迷雾林带，将多余的琥珀标本交予商队换得约 £<<print Math.floor(_reward / 100)>> 的酬金。
+	<<money _reward>><<stress -4>>
+<<else>>
+	林间湿滑的苔藓让你差点崴了脚踝，费了不少功夫才走回主路。
+	<<stress 4>>
 <</if>>
-你走下深林古树环绕的月牙石台，将石槽暗格里取出的古德鲁伊银徽与草药秘卷贴身收好。
-<<if Time.dayState is "night">>皎洁的月光穿过古树林冠，正好落在月牙石台中央的凹槽上。<<else>>林间清风拂过石台上的绿藓，带来阵阵松针与白桦的清香。<</if>>
-深林月牙石台流传百年的祈福仪轨已在你手中重现光芒。
 <br><br>
-<<investigateicon>><<link [[整理线索继续追查 (0:03)|MP Grand Quest Moon Altar]]>><<pass 3>><<stress -2>><</link>><<lstress>>
+<<investigateicon>><<link [[回望林间月牙石台 (0:03)|MP Grand Quest Moon Altar]]>><<pass 3>><</link>>
 <br>
-<<getouticon>><<link [[收好收获返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回森林 (0:02)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
