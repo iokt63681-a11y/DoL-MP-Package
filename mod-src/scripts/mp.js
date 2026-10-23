@@ -3822,21 +3822,22 @@
       check: function (v) {
         var curDay = (window.Time && Number.isFinite(Time.days)) ? Time.days : 0;
         if (v.mpBaileyBiweeklyNextDay === undefined) v.mpBaileyBiweeklyNextDay = curDay + 14;
-        return (Number(v.mpQuestBaileyRebellion) || 0) < 8 && curDay >= v.mpBaileyBiweeklyNextDay;
+        return Number(v.tutorial) === 1 && curDay >= 1 && (Number(v.mpQuestBaileyRebellion) || 0) < 8 && curDay >= v.mpBaileyBiweeklyNextDay;
       },
-      hint: "贝利正捏着黑色封皮的双周连坐账册站在走廊台阶上，身后跟着两名戴黑皮手套的精锐清道夫。",
+      hint: "贝利站在走廊台阶上，手里捏着一本黑皮账册。",
       icon: "custom:bailey",
-      linkText: "应对贝利的双周连坐清算 (0:15)",
+      linkText: "去听贝利念这个月的账 (0:15)",
       passage: "MP Bailey Biweekly Tribunal"
     },
     {
       locs: ["Orphanage", "Domus Street", "Barb Street"],
       check: function (v) {
-        return (Number(v.mpQuestBaileyRebellion) || 0) < 8 && (!v.daily || !v.daily.mpQuestBaileyRebellion);
+        var curDay = (window.Time && Number.isFinite(Time.days)) ? Time.days : 0;
+        return Number(v.tutorial) === 1 && curDay >= 1 && (Number(v.mpQuestBaileyRebellion) || 0) < 8 && (!v.daily || !v.daily.mpQuestBaileyRebellion);
       },
-      hint: "贝利办公室外侧的通风铁栅下隐约露出一角被碎纸机漏掉的黑账交接单。",
+      hint: "贝利办公室外侧的通风铁栅下卡着半张被碎纸机漏掉的旧账页。",
       icon: "custom:bailey",
-      linkText: "追查《孤儿院黑账与断链之盟》 (0:16)",
+      linkText: "查看铁栅下的旧账页 (0:16)",
       passage: "MP Quest Bailey Rebellion"
     },
     {
@@ -4355,6 +4356,8 @@
 
   function injectWorldAndCompanionNodes(host, pas, v) {
     if (!host || !pas || !v || v.combat === 1) return;
+    // 第一次出门的教程遭遇战优先，任何 mod 入口都不要抢在它前面。
+    if (Number(v.tutorial) === 0 && !v.debug) return;
     if (SAFE_PASSAGES.indexOf(pas) < 0 || pas === HUB || pas === BEDROOM) return;
 
     var oldWorldBox = document.getElementById("mp-world-organic-box");
@@ -5514,32 +5517,34 @@
       wrap.appendChild(ulJobs);
     }
 
-    // 1.5 孤儿院贝利双周连坐核查与断链反抗进度
-    var curDayJ = (window.Time && Number.isFinite(Time.days)) ? Time.days : 0;
-    if (v.mpBaileyBiweeklyNextDay === undefined) v.mpBaileyBiweeklyNextDay = curDayJ + 14;
-    var daysLeft = Math.max(0, v.mpBaileyBiweeklyNextDay - curDayJ);
-    var rebStg = Number(v.mpQuestBaileyRebellion) || 0;
-    var curTribute = Math.max(0, 1500 - rebStg * 180);
-    wrap.appendChild(el("hr"));
-    wrap.appendChild(el("h1", { class: "header gold bold", text: "孤儿院双周连坐与断链之盟" }));
-    var ulBailey = el("ul", { class: "journal" });
-    if (rebStg >= 8) {
-      ulBailey.appendChild(el("li", {
-        text: "你们已集齐并公开备份了贝利的全部黑账原件，彻底废除了两周一次的同行连坐规费。"
-      }));
-    } else {
-      ulBailey.appendChild(el("li", {
-        text: daysLeft === 0
-          ? ("贝利的双周连坐清算日已到，本期需交纳 £" + curTribute + "，或与同伴并肩反抗、推进断链支线。")
-          : ("距离贝利下一次双周连坐核查还有 " + daysLeft + " 天 · 当前每两周连坐规费为 £" + curTribute + "。")
-      }));
-      if (rebStg > 0) {
+    // 1.5 孤儿院旧账与贝利（新手第一次出门不显示）
+    if (Number(v.tutorial) === 1) {
+      var curDayJ = (window.Time && Number.isFinite(Time.days)) ? Time.days : 0;
+      if (v.mpBaileyBiweeklyNextDay === undefined) v.mpBaileyBiweeklyNextDay = curDayJ + 14;
+      var daysLeft = Math.max(0, v.mpBaileyBiweeklyNextDay - curDayJ);
+      var rebStg = Number(v.mpQuestBaileyRebellion) || 0;
+      var curTribute = Math.max(0, 1500 - rebStg * 180);
+      wrap.appendChild(el("hr"));
+      wrap.appendChild(el("h1", { class: "header gold bold", text: "孤儿院旧账与贝利" }));
+      var ulBailey = el("ul", { class: "journal" });
+      if (rebStg >= 8) {
         ulBailey.appendChild(el("li", {
-          text: "正在推进反抗支线『孤儿院黑账与断链之盟』 · 当前进度 " + rebStg + "/8，已永久削减双周连坐金 £" + (rebStg * 180) + "。"
+          text: "你们已经把贝利的旧账备份到几处可靠的人手里，他不再按月来收那笔钱。"
         }));
+      } else {
+        ulBailey.appendChild(el("li", {
+          text: daysLeft === 0
+            ? ("贝利来查账了。这一期要交 £" + curTribute + "，或者先去把办公室外的旧账翻清楚。")
+            : ("距离贝利下一次查账还有 " + daysLeft + " 天 · 这一期的账是 £" + curTribute + "。")
+        }));
+        if (rebStg > 0) {
+          ulBailey.appendChild(el("li", {
+            text: "你正在整理贝利办公室外的旧账 · 当前进度 " + rebStg + "/8，已经让他少收 £" + (rebStg * 180) + "。"
+          }));
+        }
       }
+      wrap.appendChild(ulBailey);
     }
-    wrap.appendChild(ulBailey);
 
     // 2. 随身待处理古物与暗市货包记录
     var unappraised = Number(v.mpAntiquesUnappraised) || 0;
