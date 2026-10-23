@@ -4277,7 +4277,8 @@
       hint: "格威岚在鱼档后面补一张被割破的网，手边压着一卷新网线。",
       icon: "img/misc/icon/beach.png",
       linkText: "去鱼档看看格威岚 (0:04)",
-      passage: "MP Jobline Gwylan 1"
+      passage: "MP Jobline Gwylan 1",
+      passageFor: function (v) { var s = Number(v.mpJoblineGwylan) || 0; return s >= 3 ? "MP Jobline Gwylan 3" : s >= 2 ? "MP Jobline Gwylan 2" : "MP Jobline Gwylan 1"; }
     },
     {
       locs: ["High Street"],
@@ -4285,7 +4286,8 @@
       hint: "塞拉把一只没有主人的银壳怀表推到柜台边，表盖内侧刻着字。",
       icon: "img/misc/icon/shop.png",
       linkText: "问塞拉那只怀表 (0:04)",
-      passage: "MP Jobline Sera 1"
+      passage: "MP Jobline Sera 1",
+      passageFor: function (v) { var s = Number(v.mpJoblineSera) || 0; return s >= 3 ? "MP Jobline Sera 3" : s >= 2 ? "MP Jobline Sera 2" : "MP Jobline Sera 1"; }
     },
     {
       locs: ["Farmland"],
@@ -4293,7 +4295,8 @@
       hint: "Alex 在谷仓梁上翻一叠发黄的佃租收据，铁锹靠在门边。",
       icon: "img/misc/icon/forest.png",
       linkText: "去谷仓找 Alex (0:04)",
-      passage: "MP Jobline Alex 1"
+      passage: "MP Jobline Alex 1",
+      passageFor: function (v) { var s = Number(v.mpJoblineAlex) || 0; return s >= 3 ? "MP Jobline Alex 3" : s >= 2 ? "MP Jobline Alex 2" : "MP Jobline Alex 1"; }
     },
     {
       locs: ["Spa"],
@@ -4301,7 +4304,8 @@
       hint: "约旦在池边捡起一张被蒸汽浸软的祷词卡，眉头没有松开。",
       icon: "img/misc/icon/temple.png",
       linkText: "去池边找约旦 (0:04)",
-      passage: "MP Jobline Jordan 1"
+      passage: "MP Jobline Jordan 1",
+      passageFor: function (v) { var s = Number(v.mpJoblineJordan) || 0; return s >= 3 ? "MP Jobline Jordan 3" : s >= 2 ? "MP Jobline Jordan 2" : "MP Jobline Jordan 1"; }
     },
     {
       locs: ["Orphanage"],
@@ -4309,7 +4313,8 @@
       hint: "罗宾从洗衣篮底下抽出一件绣着陌生字母的白衬衫，朝走廊看了一眼。",
       icon: "img/misc/icon/socialise.png",
       linkText: "去洗衣房找罗宾 (0:04)",
-      passage: "MP Jobline Robin 1"
+      passage: "MP Jobline Robin 1",
+      passageFor: function (v) { var s = Number(v.mpJoblineRobin) || 0; return s >= 3 ? "MP Jobline Robin 3" : s >= 2 ? "MP Jobline Robin 2" : "MP Jobline Robin 1"; }
     }
   ];
 
@@ -4516,7 +4521,7 @@
             onclick: function (ev) {
               ev.preventDefault();
               v.mpReturnPassage = pas;
-              enginePlay(lineItem.passage);
+              enginePlay(lineItem.passageFor ? lineItem.passageFor(v) : lineItem.passage);
             }
           });
           jhLink.appendChild(dolIconImg(lineItem.icon));
