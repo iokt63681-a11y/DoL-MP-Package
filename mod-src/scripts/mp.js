@@ -4584,20 +4584,26 @@
       var regionHead = el("div", { class: "mp-inline-header", text: "新地点" });
       regionBox.insertBefore(regionHead, regionBox.firstChild);
       var pasTop = host.querySelector(".passage") || host;
-      var _anchors = pasTop.querySelectorAll("a.link-internal");
-      var _anchor = _anchors.length ? _anchors[0] : null;
-      if (_anchor) {
-        var _n = _anchor.nextSibling;
-        while (_n) {
-          if (_n.nodeType === 1 && _n.tagName === "BR") { _n = _n.nextSibling; continue; }
-          if (_n.nodeType === 1 && _n.tagName === "A" && _n.className && _n.className.indexOf("link-internal") >= 0) {
-            _anchor = _n; _n = _n.nextSibling; continue;
+      var _targetNode = null;
+      try {
+        var _walk = document.createTreeWalker(pasTop, NodeFilter.SHOW_TEXT, null);
+        var _tn;
+        while ((_tn = _walk.nextNode())) {
+          var _tt = (_tn.nodeValue || "").trim();
+          if (/^(快捷小路|Alternate routes|Shortcuts)$/.test(_tt)) {
+            _targetNode = _tn;
+            break;
           }
-          break;
         }
+      } catch (e) {}
+      if (_targetNode && _targetNode.parentNode) {
+        _targetNode.parentNode.insertBefore(regionBox, _targetNode);
+      } else {
+        var _anchors = pasTop.querySelectorAll("a.link-internal,button.link-internal");
+        var _anchor = _anchors.length ? _anchors[_anchors.length - 1] : null;
+        if (_anchor && _anchor.parentNode) _anchor.parentNode.insertBefore(regionBox, _anchor.nextSibling);
+        else pasTop.insertBefore(regionBox, pasTop.firstChild);
       }
-      if (_anchor && _anchor.parentNode) _anchor.parentNode.insertBefore(regionBox, _anchor.nextSibling);
-      else pasTop.insertBefore(regionBox, pasTop.firstChild);
     }
 
     if (hasAny) {
