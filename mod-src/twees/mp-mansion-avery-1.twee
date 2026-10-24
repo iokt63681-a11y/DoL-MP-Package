@@ -1,8 +1,7 @@
-/* 宅邸与上流社交关系线（V6精修版：$location对齐、段落精简、原版UI规范） */
 :: MP Mansion Pool Router [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>><<mpAmbient>>
-<<set $mpSeenScenes to ($mpSeenScenes or {})>>
+<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
 <<set _mansionScenes to [
 	"MP Mansion Avery CarInvite",
 	"MP Mansion Avery GownCheck",
@@ -99,7 +98,7 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
 二楼弧形露台正对着温室玻璃穹顶，冰桶里的香槟冒着细泡。<<if $NPCNameList and $NPCNameList.includes("Avery")>>艾弗里<<else>>多瑙河富商<</if>>递给你高脚杯：「待会儿奎因过来敬酒，你知道该怎么应对。」
 <br><br>
-<<walkicon>><<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -128,7 +127,7 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
 地下恒温酒窖圆桌上摊着市政修缮预算表。奎因市长合上文件夹冷声道：「把那瓶八二年红酒递给我，别乱看桌上的东西。」
 <br><br>
-<<walkicon>><<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -174,9 +173,9 @@
 衣帽间在偏厅后面的窄廊尽头。两排大衣挂在黄铜架上，门边的保镖正低头擦火柴。
 你手里那叠请柬被掌心焐得发潮。
 <br><br>
-<<walkicon>><<link [[核对名单 (0:08)|MP Mansion Briar VelvetLedger]]>><<pass 8>><</link>>
+<<mpreadicon>><<link [[核对名单 (0:08)|MP Mansion Briar VelvetLedger]]>><<pass 8>><</link>>
 <br>
-<<sneakicon>><<link [[塞进大衣内袋 (0:05)|MP Mansion Briar Distribute]]>><<pass 5>><</link>>
+<<mptailoricon>><<link [[塞进大衣内袋 (0:05)|MP Mansion Briar Distribute]]>><<pass 5>><</link>>
 <br>
 <<investigateicon>><<link [[看清保镖位置 (0:04)|MP Mansion Briar Observe]]>><<pass 4>><</link>>
 
@@ -199,7 +198,7 @@
 	<<stress -3>><<lstress>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
 	<br><br>
-	<<tendingicon>><<link [[退出 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[退出 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
 	<span class="red">指节不慎撞响铜衣架，保镖猛地回头，你只得把请柬缩回袖口。</span><<stress 6>><<pain 2>><<gstress>><<gpain>>
 	<br><br>
@@ -274,7 +273,7 @@
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<brothelicon>><<link [[应声抬价 (0:04)|MP Mansion Briar Deal]]>><<pass 4>><</link>>
+<<mpbargainicon>><<link [[应声抬价 (0:04)|MP Mansion Briar Deal]]>><<pass 4>><</link>>
 
 :: MP Mansion Briar Deal [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
@@ -342,7 +341,7 @@
 <<if $skulduggerysuccess is 1>>
 <span class="green">你趁保安回亭登记，用细铁丝拨开侧门铜锁钻入冬青回廊。</span><<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["glasshouse_orchid"] to 1>><<skulduggery 3>><<stress -2>><<lstress>>
 <br><br>
-<<tendingicon>><<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
 <span class="red">锁簧发涩，岗亭窗户突然推开，强光手电直照向你。</span><<pain 4>><<stress 5>><<gpain>><<gstress>>
 <</if>>
@@ -395,7 +394,7 @@
 <<if _exitPas is "Start" or _exitPas is "Start2">><<set _exitPas to "MP Region Glasshouse Manor">><</if>>
 玻璃连廊顶棚被狂风掀开天窗，冷风直灌向名贵兰花。老花匠急得跺脚：「谁身手利索帮我爬上去把铜插销扣死？」
 <br><br>
-<<walkicon>><<link [[去兰花温室 (0:08)|MP Region Glasshouse Orchid]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<mpherbicon>><<link [[去兰花温室 (0:08)|MP Region Glasshouse Orchid]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<getouticon>><<link [[返回多瑙河街 (0:08)|Danube Street]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -423,7 +422,7 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
 宅邸后巷煤气灯下停着深灰轿车，贝利手下的黑衣清道夫把火漆信函递给副管家：「下周五前必须按账册结清孤儿院借调尾款。」
 <br><br>
-<<walkicon>><<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -481,7 +480,7 @@
 <<if _exitPas is "Start" or _exitPas is "Start2">><<set _exitPas to "MP Region Glasshouse Orchid">><</if>>
 兰花厅大理石排水槽边闪着银光，一枚刻有花体字母『A』的纯银蓝宝袖扣卡在青苔石缝里，正是<<if $NPCNameList and $NPCNameList.includes("Avery")>>艾弗里<<else>>多瑙河富商<</if>>常戴的款式。
 <br><br>
-<<walkicon>><<link [[返回兰花温室 (0:02)|MP Region Glasshouse Orchid]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<mpherbicon>><<link [[返回兰花温室 (0:02)|MP Region Glasshouse Orchid]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<getouticon>><<link [[返回秘密温室 (0:02)|MP Region Glasshouse Manor]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
