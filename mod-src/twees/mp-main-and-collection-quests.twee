@@ -14,24 +14,36 @@
 	<<if _stg is 0>>
 		高街与孤儿院交界的石墙下，<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>朝新刻的新月记号努了努嘴：「昨晚有人在这儿翻出半页旧账册。」基石缝里塞着泡软的纸角。
 		<br><br>
-		<<mplockpickicon>><<if ($history or 0) gte 260 or ($skulduggery or 0) gte 280>><<link [[撬开松动基石 (0:05)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_1"]>><<set $mpClues["main_eclipse_1"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 1>><<pass 5>><</link>><<else>><span class="disabled">撬开松动基石 (0:05)（属性不足）</span><</if>>
+		<<mplockpickicon>><<if ($history or 0) gte 260 or ($skulduggery or 0) gte 280>><<link [[撬开松动基石 (0:05)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_1"]>><<set $mpClues["main_eclipse_1"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 1>><<pass 5>><</link>><<else>><<link [[撬开松动基石 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撬开松动基石">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
 		<br>
 		<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[问罗宾细节 (0:03)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_1"]>><<set $mpClues["main_eclipse_1"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<pass 3>><</link>><<else>><span class="disabled">问罗宾细节 (0:03)（尚未结识）</span><</if>>
 	<<elseif _stg is 1>>
+		<<if Time.hour gte 8 and Time.hour lt 21>>
 		<<set $outside to 0>><<set $location to "cabin">>
 		高街钟表铺里，<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>用放大镜端详账册残页：「这组音筒编号是给旧学园天文翼楼赤道仪校准用的。」
 		<br><br>
-		<<mprepairicon>><<if ($science or 0) gte 260 or ($maths or 0) gte 260>><<link [[去校准赤道仪 (0:08)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_2"]>><<set $mpClues["main_eclipse_2"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 2>><<pass 8>><</link>><<else>><span class="disabled">去校准赤道仪 (0:08)（属性不足）</span><</if>>
+		<<mprepairicon>><<if ($science or 0) gte 260 or ($maths or 0) gte 260>><<link [[去校准赤道仪 (0:08)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_2"]>><<set $mpClues["main_eclipse_2"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 2>><<pass 8>><</link>><<else>><<link [[去校准赤道仪 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "去校准赤道仪">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span> 或 数学等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+		<<else>>
+		钟表铺已经落锁，窗里只亮着一盏值夜灯。白天再来找塞拉。
+		<br><br>
+		<<getouticon>><<link [[离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+		<</if>>
 	<<elseif _stg is 2>>
+		<<if Time.hour gte 7 and Time.hour lt 20>>
 		<<set $outside to 0>><<set $location to "school">>
 		天文翼楼穹顶室里，<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>看见音筒后压低声音：「赤道仪刻度与神殿地下修道院的旧碑文是同一套记号。」
 		<br><br>
 		<<link [[前往灰烬藏经阁 (0:10)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_3"]>><<set $mpClues["main_eclipse_3"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 3>><<pass 10>><</link>>
+		<<else>>
+		天文学园已经闭馆，穹顶室的门从里面锁着。白天再来找诺艾尔。
+		<br><br>
+		<<getouticon>><<link [[离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+		<</if>>
 	<<else>>
 		<<set $outside to 0>><<set $location to "temple">>
 		地下修道院藏经阁门前，<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>把小灯留给你：「账册与这里的碑文能对上，进去拓下来吧。」
 		<br><br>
-		<<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[拓下藏经阁碑文 (0:12)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_4"]>><<set $mpClues["main_eclipse_4"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 4>><<pass 12>><</link>><<else>><span class="disabled">拓下藏经阁碑文 (0:12)（属性不足）</span><</if>>
+		<<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[拓下藏经阁碑文 (0:12)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_4"]>><<set $mpClues["main_eclipse_4"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 4>><<pass 12>><</link>><<else>><<link [[拓下藏经阁碑文 (0:12)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拓下藏经阁碑文">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 英语等级：<span class='purple'>D</span>">><<pass 12>><</link>><</if>>
 		<br>
 		<<link [[调查线索 (0:08)|MP Main Story Eclipse Mid]]>><<pass 8>><</link>>
 	<</if>>
@@ -48,7 +60,7 @@
 <<if _stg is 4>>
 	多瑙河秘密温室穹顶下，侍者低声透露：「今晚有人提到黑铁货运站三号装甲车，午夜换班。」
 	<br><br>
-<<sneakicon>><<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($skulduggery or 0) gte 280>><<link [[潜入货运站 (0:15)|MP Main Story Eclipse Resolve]]>><<pass 15>><<if ($skulduggery or 0) gte 300>><<if !$mpClues or !$mpClues["main_eclipse_5"]>><<set $mpClues["main_eclipse_5"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 5>><<else>><<stress 3>><</if>><</link>><<else>><span class="disabled">潜入货运站 (0:15)（属性不足）</span><</if>><<else>><span class="disabled">潜入货运站 (0:15)（午夜换班时才有机可乘）</span><</if>>
+<<sneakicon>><<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($skulduggery or 0) gte 280>><<link [[潜入货运站 (0:15)|MP Main Story Eclipse Resolve]]>><<pass 15>><<if ($skulduggery or 0) gte 300>><<if !$mpClues or !$mpClues["main_eclipse_5"]>><<set $mpClues["main_eclipse_5"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 5>><<else>><<stress 3>><</if>><</link>><<else>><<link [[潜入货运站 (0:15)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "潜入货运站">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 15>><</link>><</if>><<else>><span class="disabled">潜入货运站 (0:15)（午夜换班时才有机可乘）</span><</if>>
 <<elseif _stg is 5>>
 	<<set $outside to 1>><<set $location to "docks">>
 	黑铁货运站信号塔下，老码头工朝铁轨尽头抬下巴：「三号车昨晚拉走的箱子，下一站在深林石环月泉。」
@@ -58,12 +70,12 @@
 	<<set $outside to 1>><<set $location to "forest">>
 	深林月泉边，<<if $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>林间猎人<</if>>用刀尖指了指水面：「半枚徽章在泉底，另外半枚今晚在峭壁天鹅绒拍卖会。」
 	<br><br>
-<<walkicon>><<if ($swimmingskill or 0) gte 250>><<link [[潜入月泉底 (0:08)|MP Main Story Eclipse Resolve]]>><<pass 8>><<if ($swimmingskill or 0) gte 250>><<if !$mpClues or !$mpClues["main_eclipse_7"]>><<set $mpClues["main_eclipse_7"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 7>><<else>><<stress 3>><</if>><</link>><<else>><span class="disabled">潜入月泉底 (0:08)（水性不足）</span><</if>>
+<<walkicon>><<if ($swimmingskill or 0) gte 250>><<link [[潜入月泉底 (0:08)|MP Main Story Eclipse Resolve]]>><<pass 8>><<if ($swimmingskill or 0) gte 250>><<if !$mpClues or !$mpClues["main_eclipse_7"]>><<set $mpClues["main_eclipse_7"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 7>><<else>><<stress 3>><</if>><</link>><<else>><<link [[潜入月泉底 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "潜入月泉底">><<set $mpInsuffReq to "游泳等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
 <<else>>
 	<<set $outside to 0>><<set $location to "brothel">>
 	天鹅绒暗层拍卖厅里，<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>朝你举杯低语：「压轴拍品在我后廊保险柜，能混进后台我就当没看见。」
 	<br><br>
-<<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($seductionskill or 0) gte 250 or ($skulduggery or 0) gte 250>><<link [[混进拍卖后台 (0:10)|MP Main Story Eclipse Resolve]]>><<pass 10>><<if ($seductionskill or 0) gte 350 or ($skulduggery or 0) gte 350>><<if !$mpClues or !$mpClues["main_eclipse_8"]>><<set $mpClues["main_eclipse_8"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 8>><<else>><<stress 3>><</if>><</link>><<else>><span class="disabled">混进拍卖后台 (0:10)（属性不足）</span><</if>><<else>><span class="disabled">混进拍卖后台 (0:10)（拍卖只在夜里开场）</span><</if>>
+<<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($seductionskill or 0) gte 250 or ($skulduggery or 0) gte 250>><<link [[混进拍卖后台 (0:10)|MP Main Story Eclipse Resolve]]>><<pass 10>><<if ($seductionskill or 0) gte 350 or ($skulduggery or 0) gte 350>><<if !$mpClues or !$mpClues["main_eclipse_8"]>><<set $mpClues["main_eclipse_8"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 8>><<else>><<stress 3>><</if>><</link>><<else>><<link [[混进拍卖后台 (0:10)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "混进拍卖后台">><<set $mpInsuffReq to "魅力等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 10>><</link>><</if>><<else>><span class="disabled">混进拍卖后台 (0:10)（拍卖只在夜里开场）</span><</if>>
 	<br>
 <<link [[翻看终局航线线索 (0:08)|MP Main Story Eclipse Late]]>><<pass 8>><<stress 1>><</link>>
 <</if>>
@@ -79,7 +91,7 @@
 <<if _stg is 8>>
 	地下机括城蒸汽室里，两半徽章在控制盘前微烫，主阀刻度与账册末页暗号完全一致。
 	<br><br>
-<<mprepairicon>><<if ($maths or 0) gte 280>><<link [[校准主阀 (0:12)|MP Main Story Eclipse Resolve]]>><<pass 12>><<if ($maths or 0) gte 300>><<if !$mpClues or !$mpClues["main_eclipse_9"]>><<set $mpClues["main_eclipse_9"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 9>><<else>><<stress 3>><</if>><</link>><<else>><span class="disabled">校准主阀 (0:12)（属性不足）</span><</if>>
+<<mprepairicon>><<if ($maths or 0) gte 280>><<link [[校准主阀 (0:12)|MP Main Story Eclipse Resolve]]>><<pass 12>><<if ($maths or 0) gte 300>><<if !$mpClues or !$mpClues["main_eclipse_9"]>><<set $mpClues["main_eclipse_9"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 9>><<else>><<stress 3>><</if>><</link>><<else>><<link [[校准主阀 (0:12)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "校准主阀">><<set $mpInsuffReq to "数学等级：<span class='purple'>D</span>">><<pass 12>><</link>><</if>>
 <<elseif _stg is 9>>
 	<<set $outside to 0>><<set $location to "sewers">>
 	暗河渡口的小船旁，守夜人认出徽章，把装有灯塔顶层手轮与海图的防水包推给你。
@@ -89,12 +101,12 @@
 	<<set $outside to 1>><<set $location to "searocks">>
 	黄昏风暴欲来，你把木舟系在雾角灯塔岛南侧石阶，顶层铜门在浓雾里若隐若现。
 	<br><br>
-<<runicon>><<if Time.dayState is "dusk" or Time.dayState is "night">><<if ($athletics or 0) gte 280 or ($physique or 0) gte 12000>><<link [[顶着海风登塔 (0:18)|MP Main Story Eclipse Resolve]]>><<pass 18>><<if ($athletics or 0) gte 300 or ($physique or 0) gte 12000>><<if !$mpClues or !$mpClues["main_eclipse_11"]>><<set $mpClues["main_eclipse_11"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 11>><<else>><<stress 3>><</if>><</link>><<else>><span class="disabled">顶着海风登塔 (0:18)（体魄不足）</span><</if>><<else>><span class="disabled">顶着海风登塔 (0:18)（要等黄昏风暴起雾）</span><</if>>
+<<runicon>><<if Time.dayState is "dusk" or Time.dayState is "night">><<if ($athletics or 0) gte 280 or ($physique or 0) gte 12000>><<link [[顶着海风登塔 (0:18)|MP Main Story Eclipse Resolve]]>><<pass 18>><<if ($athletics or 0) gte 300 or ($physique or 0) gte 12000>><<if !$mpClues or !$mpClues["main_eclipse_11"]>><<set $mpClues["main_eclipse_11"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 11>><<else>><<stress 3>><</if>><</link>><<else>><<link [[顶着海风登塔 (0:18)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "顶着海风登塔">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span> 或 体魄：12000">><<pass 18>><</link>><</if>><<else>><span class="disabled">顶着海风登塔 (0:18)（要等黄昏风暴起雾）</span><</if>>
 <<elseif _stg is 11>>
 	<<set $outside to 1>><<set $location to "sea">>
 	灯塔顶层旋转透镜下，铁柜里的早期契约、账册与基金凭证码得整整齐齐，光束扫过夜海。
 	<br><br>
-<<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[核对原件 (0:08)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_12"]>><<set $mpClues["main_eclipse_12"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 12>><<pass 8>><</link>><<else>><span class="disabled">核对原件 (0:08)（属性不足）</span><</if>>
+<<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[核对原件 (0:08)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_12"]>><<set $mpClues["main_eclipse_12"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 12>><<pass 8>><</link>><<else>><<link [[核对原件 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "核对原件">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 英语等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
 <<else>>
 	<<set $outside to 1>><<set $location to "sea">>
 	灯塔顶层的铁柜已经打开过，契约与账册都收进了防水暗袋。海风从透镜间穿过，剩下的只是如何处置这些证据。
@@ -137,22 +149,22 @@
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<if ($mpFragCrownGear or 0) gte 3 and $mpDoneCrownGear isnot 1>>
-	<<keepsakeicon>><<if ($skulduggery or 0) gte 280 or ($maths or 0) gte 260>><<link [[拼合齿轮开匣 (0:16)|MP Collection Resolve CrownGear]]>><<pass 16>><</link>><<else>><span class="disabled">拼合齿轮开匣 (0:16)（属性不足）</span><</if>><br>
+	<<keepsakeicon>><<if ($skulduggery or 0) gte 280 or ($maths or 0) gte 260>><<link [[拼合齿轮开匣 (0:16)|MP Collection Resolve CrownGear]]>><<pass 16>><</link>><<else>><<link [[拼合齿轮开匣 (0:16)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拼合齿轮开匣">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 数学等级：<span class='purple'>D</span>">><<pass 16>><</link>><</if>><br>
 <</if>>
 <<if ($mpFragAbyssPage or 0) gte 3 and $mpDoneAbyssPage isnot 1>>
-	<<mpreadicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link [[拼合残页 (0:18)|MP Collection Resolve AbyssPage]]>><<pass 18>><</link>><<else>><span class="disabled">拼合残页 (0:18)（属性不足）</span><</if>><br>
+	<<mpreadicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link [[拼合残页 (0:18)|MP Collection Resolve AbyssPage]]>><<pass 18>><</link>><<else>><<link [[拼合残页 (0:18)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拼合残页">><<set $mpInsuffReq to "英语等级：<span class='purple'>D</span> 或 历史等级：<span class='purple'>D</span>">><<pass 18>><</link>><</if>><br>
 <</if>>
 <<if ($mpFragSmugglerRing or 0) gte 3 and $mpDoneSmugglerRing isnot 1>>
-	<<investigateicon>><<if ($skulduggery or 0) gte 280>><<link [[合拢印戒开箱 (0:15)|MP Collection Resolve SmugglerRing]]>><<pass 15>><</link>><<else>><span class="disabled">合拢印戒开箱 (0:15)（属性不足）</span><</if>><br>
+	<<investigateicon>><<if ($skulduggery or 0) gte 280>><<link [[合拢印戒开箱 (0:15)|MP Collection Resolve SmugglerRing]]>><<pass 15>><</link>><<else>><<link [[合拢印戒开箱 (0:15)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "合拢印戒开箱">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 15>><</link>><</if>><br>
 <</if>>
 <<if ($mpFragBrideFlower or 0) gte 3 and $mpDoneBrideFlower isnot 1>>
-	<<if ($science or 0) gte 260>><<link [[提纯秘露 (0:14)|MP Collection Resolve BrideFlower]]>><<pass 14>><</link>><<else>><span class="disabled">提纯秘露 (0:14)（属性不足）</span><</if>><br>
+	<<if ($science or 0) gte 260>><<link [[提纯秘露 (0:14)|MP Collection Resolve BrideFlower]]>><<pass 14>><</link>><<else>><<link [[提纯秘露 (0:14)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "提纯秘露">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span>">><<pass 14>><</link>><</if>><br>
 <</if>>
 <<if ($mpFragVelvetCrest or 0) gte 3 and $mpDoneVelvetCrest isnot 1>>
-	<<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[嵌入徽章 (0:12)|MP Collection Resolve VelvetCrest]]>><<pass 12>><</link>><<else>><span class="disabled">嵌入徽章 (0:12)（属性不足）</span><</if>><br>
+	<<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[嵌入徽章 (0:12)|MP Collection Resolve VelvetCrest]]>><<pass 12>><</link>><<else>><<link [[嵌入徽章 (0:12)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "嵌入徽章">><<set $mpInsuffReq to "魅力等级：<span class='purple'>D</span> 或 英语等级：<span class='purple'>D</span>">><<pass 12>><</link>><</if>><br>
 <</if>>
 <<if ($mpFragLedgerKey or 0) gte 3 and $mpDoneLedgerKey isnot 1>>
-	<<if ($skulduggery or 0) gte 280>><<link [[开启铅封匣 (0:15)|MP Collection Resolve LedgerKey]]>><<pass 15>><</link>><<else>><span class="disabled">开启铅封匣 (0:15)（属性不足）</span><</if>><br>
+	<<if ($skulduggery or 0) gte 280>><<link [[开启铅封匣 (0:15)|MP Collection Resolve LedgerKey]]>><<pass 15>><</link>><<else>><<link [[开启铅封匣 (0:15)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "开启铅封匣">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 15>><</link>><</if>><br>
 <</if>>
 <<if (($mpFragCrownGear or 0) lt 3 or $mpDoneCrownGear is 1) and (($mpFragAbyssPage or 0) lt 3 or $mpDoneAbyssPage is 1) and (($mpFragSmugglerRing or 0) lt 3 or $mpDoneSmugglerRing is 1) and (($mpFragBrideFlower or 0) lt 3 or $mpDoneBrideFlower is 1) and (($mpFragVelvetCrest or 0) lt 3 or $mpDoneVelvetCrest is 1) and (($mpFragLedgerKey or 0) lt 3 or $mpDoneLedgerKey is 1)>>
 	<span class="teal">尚有未集齐的残片散落在机括城、古修道院、雾角岛与温室各处。</span>
@@ -186,7 +198,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve CrownGear]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">去高街钟表铺 (0:06)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<keepsakeicon>><<link [[去高街钟表铺 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "去高街钟表铺">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 意志等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
 </div>
 :: MP Collection Resolve CrownGear Step2 [nobr]
 <<set $outside to 0>><<set $location to "town">>
@@ -219,7 +231,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve CrownGear Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">返回机括城 (0:08)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<walkicon>><<link [[返回机括城 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "返回机括城">><<set $mpInsuffReq to "数学等级：<span class='blue'>C</span> 或 历史等级：<span class='blue'>C</span>">><<pass 8>><</link>><</if>>
 </div>
 :: MP Collection Resolve CrownGear Step3 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
@@ -267,7 +279,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve CrownGear Step3]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">拆解暗槽 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<investigateicon>><<link [[拆解暗槽 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拆解暗槽">><<set $mpInsuffReq to "意志等级：<span class='lblue'>B</span> 或 科学等级：<span class='lblue'>B</span>">><<pass 5>><</link>><</if>>
 </div>
 
 :: MP Collection Resolve AbyssPage [nobr]
@@ -298,7 +310,7 @@
 	<br><br>
 	<<investigateicon>><<link [[再试一次 (0:04)|MP Collection Resolve AbyssPage]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">问旧修院编号 (0:05)（尚未结识）</span><</if>><<else>><span class="disabled">问旧修院编号 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">问旧修院编号 (0:05)（尚未结识）</span><</if>><<else>><<socialiseicon>><<link [[问旧修院编号 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "问旧修院编号">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 英语等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
 </div>
 :: MP Collection Resolve AbyssPage Step2 [nobr]
 <<set $outside to 0>><<set $location to "school">>
@@ -329,7 +341,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve AbyssPage Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">返回神殿 (0:08)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<walkicon>><<link [[返回神殿 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "返回神殿">><<set $mpInsuffReq to "英语等级：<span class='blue'>C</span> 或 历史等级：<span class='blue'>C</span>">><<pass 8>><</link>><</if>>
 </div>
 :: MP Collection Resolve AbyssPage Step3 [nobr]
 <<set $outside to 0>><<set $location to "temple">>
@@ -377,7 +389,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve AbyssPage Step3]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">上前应对 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<investigateicon>><<link [[上前应对 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "上前应对">><<set $mpInsuffReq to "意志等级：<span class='lblue'>B</span> 或 英语等级：<span class='lblue'>B</span>">><<pass 5>><</link>><</if>>
 </div>
 
 :: MP Collection Resolve SmugglerRing [nobr]
@@ -408,7 +420,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve SmugglerRing]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">去干船坞 (0:08)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<walkicon>><<link [[去干船坞 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "去干船坞">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 意志等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
 </div>
 :: MP Collection Resolve SmugglerRing Step2 [nobr]
 <<set $outside to 0>><<set $location to "docks">>
@@ -440,7 +452,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve SmugglerRing Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">回沉船滩开箱 (0:09)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<keepsakeicon>><<link [[回沉船滩开箱 (0:09)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "回沉船滩开箱">><<set $mpInsuffReq to "数学等级：<span class='blue'>C</span> 或 英语等级：<span class='blue'>C</span>">><<pass 9>><</link>><</if>>
 </div>
 :: MP Collection Resolve SmugglerRing Step3 [nobr]
 <<set $outside to 1>><<set $location to "searocks">>
@@ -488,7 +500,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve SmugglerRing Step3]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">上前处置 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<investigateicon>><<link [[上前处置 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "上前处置">><<set $mpInsuffReq to "意志等级：<span class='lblue'>B</span> 或 诡术等级：<span class='lblue'>B</span>">><<pass 5>><</link>><</if>>
 </div>
 
 :: MP Collection Resolve BrideFlower [nobr]
@@ -519,7 +531,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve BrideFlower]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">去深林石环 (0:09)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<walkicon>><<link [[去深林石环 (0:09)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "去深林石环">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span> 或 意志等级：<span class='purple'>D</span>">><<pass 9>><</link>><</if>>
 </div>
 :: MP Collection Resolve BrideFlower Step2 [nobr]
 <<set $outside to 1>><<set $location to "forest">>
@@ -550,7 +562,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve BrideFlower Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">返回温室花园 (0:08)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<walkicon>><<link [[返回温室花园 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "返回温室花园">><<set $mpInsuffReq to "历史等级：<span class='blue'>C</span> 或 科学等级：<span class='blue'>C</span>">><<pass 8>><</link>><</if>>
 </div>
 :: MP Collection Resolve BrideFlower Step3 [nobr]
 <<set $outside to 0>><<set $location to "garden">>
@@ -599,7 +611,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve BrideFlower Step3]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">稳住心神 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<investigateicon>><<link [[稳住心神 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "稳住心神">><<set $mpInsuffReq to "科学等级：<span class='lblue'>B</span> 或 意志等级：<span class='lblue'>B</span>">><<pass 5>><</link>><</if>>
 </div>
 
 :: MP Collection Resolve VelvetCrest [nobr]
@@ -630,7 +642,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve VelvetCrest]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">找刻印师 (0:07)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<walkicon>><<link [[找刻印师 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "找刻印师">><<set $mpInsuffReq to "魅力等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
 </div>
 :: MP Collection Resolve VelvetCrest Step2 [nobr]
 <<set $outside to 1>><<set $location to "town">>
@@ -661,7 +673,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve VelvetCrest Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">返回天鹅绒暗层 (0:08)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<keepsakeicon>><<link [[返回天鹅绒暗层 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "返回天鹅绒暗层">><<set $mpInsuffReq to "英语等级：<span class='blue'>C</span> 或 历史等级：<span class='blue'>C</span>">><<pass 8>><</link>><</if>>
 </div>
 :: MP Collection Resolve VelvetCrest Step3 [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
@@ -710,7 +722,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve VelvetCrest Step3]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">拆解暗槽 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<investigateicon>><<link [[拆解暗槽 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拆解暗槽">><<set $mpInsuffReq to "魅力等级：<span class='lblue'>B</span> 或 意志等级：<span class='lblue'>B</span>">><<pass 5>><</link>><</if>>
 </div>
 
 :: MP Collection Resolve LedgerKey [nobr]
@@ -741,7 +753,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve LedgerKey]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">返回旧储物室 (0:09)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<walkicon>><<link [[返回旧储物室 (0:09)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "返回旧储物室">><<set $mpInsuffReq to "数学等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 9>><</link>><</if>>
 </div>
 :: MP Collection Resolve LedgerKey Step2 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
@@ -773,7 +785,7 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve LedgerKey Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">查看铅封铁匣 (0:07)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<keepsakeicon>><<link [[查看铅封铁匣 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "查看铅封铁匣">><<set $mpInsuffReq to "英语等级：<span class='blue'>C</span> 或 历史等级：<span class='blue'>C</span>">><<pass 7>><</link>><</if>>
 </div>
 :: MP Collection Resolve LedgerKey Step3 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
@@ -822,5 +834,5 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Collection Resolve LedgerKey Step3]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">上前应对 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><<investigateicon>><<link [[上前应对 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "上前应对">><<set $mpInsuffReq to "诡术等级：<span class='lblue'>B</span> 或 意志等级：<span class='lblue'>B</span>">><<pass 5>><</link>><</if>>
 </div>

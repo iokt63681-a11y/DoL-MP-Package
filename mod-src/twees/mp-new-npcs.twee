@@ -308,7 +308,7 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 0 }>><</if>>
-<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _open to (Time.hour gte 17 or Time.hour lt 7)>><<if _open>><<set _npc.hasMet to 1>><</if>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _open to (Time.hour gte 17 or Time.hour lt 6)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Docks">><</if>>
 <<if _open>>
@@ -1222,9 +1222,10 @@
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 0 }>><</if>>
-<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _open to (Time.hour gte 10 and Time.hour lt 23)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Connudatus Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Connudatus Street">><</if>>
+<<if _open>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
 <<if $mpNpcs.monet.firstMeet>>廊檐下的人把素描本翻过来给你看：「刚才画的就是这一角的人影。叫我莫奈。」<<set $mpNpcs.monet.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>画室里浮着松节油与白麝香的气息。<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>放下调色刀，笑着揽过你的肩膀，用温热软布替你擦净衣角：「我的缪斯来了，快坐。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>天鹅绒帷幔半掩着露台。<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>朝你举了举手里的骨瓷咖啡杯：「刚调好一幅海雾蓝，正缺你帮我参详。」<<else>>康努达图斯街阁楼画室挂满油画与丝绸披肩。<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>夹着画笔打量你的身形轮廓：「来修补衣物，还是愿意做会儿模特？」<</if>>
 <<if Weather.precipitation is "rain">>雨丝斜织在落地窗外，画布上的色彩愈发深邃。<<else>>夕照透过彩色玻璃，在波斯地毯上洒满暖金斑驳。<</if>>
@@ -1240,6 +1241,11 @@
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_monet)>>
 	<<investigateicon>><<link [[问起蒙尘署名画 (0:20)|MP NPC Monet Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_monet to 1>><<pass 20>><</link>>
 	<br>
+<</if>>
+<<else>>
+画室的木门已经从里面锁上，窗内的画架蒙着防尘布。画室开放时段（10:00–23:00）才会回来。
+<br><br>
+<<getouticon>><<link [[离开画室 (0:04)|_exitPas]]>><<set $outside to 1>><<set $location to "town">>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 
 :: MP NPC Monet Chat [nobr]
@@ -1520,9 +1526,10 @@
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.ash>><<set $mpNpcs.ash to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 0 }>><</if>>
-<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _open to (Time.hour gte 6 and Time.hour lt 23)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Forest")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Forest">><</if>>
+<<if _open>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
 <<if $mpNpcs.ash.firstMeet>>提灯的人解开猎犬腿上的荆棘，抬头看你：「一个人走这条石径？我叫阿什，顺路的话可以跟一段。」<<set $mpNpcs.ash.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>篝火噼啪作响。<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>一听见你踩碎落叶的脚步，便起身将烘暖的鹿皮斗篷裹在你身上，粗糙指腹擦过你的脸颊：「林子雾重，过来坐。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>古石径旁的木桩上放着一罐热姜汤。<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>收起猎弓朝你招手：「刚巡完北坡，给你留了热的。」<<else>>深林雾气在冷杉间流转。披着灰绿斗篷的<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>正蹲在溪边磨骨刀，抬头静静看向你：「迷路了，还是想找向导？」<</if>>
 <<if Weather.precipitation is "rain">>林雨打在冷杉枝叶上，<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>搭起的油布棚下干爽温暖。<<else>>松脂清香混着泥土气息，林冠间漏下斑驳天光。<</if>>
@@ -1538,6 +1545,11 @@
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_ash)>>
 	<<mptranslateicon>><<link [[探寻断碑铭文 (0:20)|MP NPC Ash Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_ash to 1>><<pass 20>><</link>>
 	<br>
+<</if>>
+<<else>>
+石径旁只剩风穿过冷杉的声响。阿什带着猎犬进了更深的林子，清晨到深夜（6:00–23:00）才在。
+<br><br>
+<<getouticon>><<link [[离开林间 (0:04)|_exitPas]]>><<set $outside to 1>><<set $location to "forest">>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 
 :: MP NPC Ash Chat [nobr]

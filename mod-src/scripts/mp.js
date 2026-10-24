@@ -2143,12 +2143,12 @@
     { name: "mp_world_hospital_night", weight: 0.35, locs: ["Hospital Courtyard", "Nightingale Street"], content: "<<include \"MP World Event Hospital Night\">>" },
     { name: "mp_world_brothel_backdoor", weight: 0.35, locs: ["Brothel", "Harvest Street", "Pub", "Adult Shop"], content: "<<include \"MP World Event Brothel Backdoor\">>" },
     { name: "mp_world_farmland_hedgerow", weight: 0.35, locs: ["Farmland", "Cottage", "Deep Forest"], content: "<<include \"MP World Event Farmland Hedgerow\">>" },
-    { name: "mp_world_npc_sera_encounter", weight: 0.32, locs: ["High Street", "Shopping Centre", "Wolf Street"], content: "<<include \"MP NPC Sera Street Encounter\">>" },
-    { name: "mp_world_npc_vesper_encounter", weight: 0.32, locs: ["Docks", "Mer Street", "Elk Street"], content: "<<include \"MP NPC Vesper Street Encounter\">>" },
-    { name: "mp_world_npc_noel_encounter", weight: 0.32, locs: ["Oxford Street", "Park", "School Library", "Hallways"], content: "<<include \"MP NPC Noel Street Encounter\">>" },
-    { name: "mp_world_npc_lin_encounter", weight: 0.32, locs: ["Domus Street", "Barb Street", "Residential Alleyways", "Orphanage"], content: "<<include \"MP NPC Lin Street Encounter\">>" },
-    { name: "mp_world_npc_monet_encounter", weight: 0.32, locs: ["Connudatus Street", "Cliff Street", "Ocean Breeze"], content: "<<include \"MP NPC Monet Street Encounter\">>" },
-    { name: "mp_world_npc_ash_encounter", weight: 0.32, locs: ["Forest", "Temple", "Sewers"], content: "<<include \"MP NPC Ash Street Encounter\">>" },
+    { name: "mp_world_npc_sera_encounter", weight: 0.32, hours: [8, 21], locs: ["High Street", "Shopping Centre", "Wolf Street"], content: "<<include \"MP NPC Sera Street Encounter\">>" },
+    { name: "mp_world_npc_vesper_encounter", weight: 0.32, hours: [17, 6], locs: ["Docks", "Mer Street", "Elk Street"], content: "<<include \"MP NPC Vesper Street Encounter\">>" },
+    { name: "mp_world_npc_noel_encounter", weight: 0.32, hours: [7, 20], locs: ["Oxford Street", "Park", "School Library", "Hallways"], content: "<<include \"MP NPC Noel Street Encounter\">>" },
+    { name: "mp_world_npc_lin_encounter", weight: 0.32, hours: [16, 7], locs: ["Domus Street", "Barb Street", "Residential Alleyways", "Orphanage"], content: "<<include \"MP NPC Lin Street Encounter\">>" },
+    { name: "mp_world_npc_monet_encounter", weight: 0.32, hours: [10, 23], locs: ["Connudatus Street", "Cliff Street", "Ocean Breeze"], content: "<<include \"MP NPC Monet Street Encounter\">>" },
+    { name: "mp_world_npc_ash_encounter", weight: 0.32, hours: [6, 23], locs: ["Forest", "Temple", "Sewers"], content: "<<include \"MP NPC Ash Street Encounter\">>" },
     { name: "mp_world_deep_router", weight: 0.45, locs: SAFE_PASSAGES, content: "<<include \"MP World Deep Router\">>" }
   ];
 
@@ -2205,7 +2205,7 @@
             // 注入符合当前街道与隐藏属性条件的大世界奇遇事件
             var mySkul = Number(vv.skulduggery) || 0;
             WORLD_PASSIVE_EVENTS.forEach(function (wev) {
-              if (wev.locs.indexOf(curPasNow) >= 0 && (!wev.minSkul || mySkul >= wev.minSkul)) {
+              if (wev.locs.indexOf(curPasNow) >= 0 && (!wev.minSkul || mySkul >= wev.minSkul) && (!wev.hours || isNpcInScheduleHour(wev))) {
                 if (!tt.eventpool.some(function (x) { return x.name === wev.name; })) {
                   tt.eventpool.push({ name: wev.name, weight: wev.weight, content: wev.content });
                 }
@@ -3852,7 +3852,7 @@
 
   function isDuskOrNightNow() {
     var h = getHourNow();
-    return h >= 17 || h < 6;
+    return h >= 18 || h < 6;
   }
 
   var WORLD_STORYLINE_HOOKS = [
@@ -3897,7 +3897,7 @@
     },
     {
       locs: ["High Street", "Shopping Centre"],
-      check: function (v) { return ((Number(v.mpAntiquesUnappraised) || 0) > 0 || (Number(v.mpQuestClocktower) || 0) > 0 || (getHourNow() >= 9 && getHourNow() <= 21)) && (Number(v.mpQuestClocktower) || 0) < 7 && (!v.daily || !v.daily.mpQuestClocktower); },
+      check: function (v) { return (getHourNow() >= 9 && getHourNow() < 21) && (Number(v.mpQuestClocktower) || 0) < 7 && (!v.daily || !v.daily.mpQuestClocktower); },
       hint: "钟表旧货铺的玻璃橱窗后亮着一盏昏黄的煤油灯，柜台后摆放着放大镜与天平。",
       icon: "img/misc/icon/shop.png",
       linkText: "推门走进钟表旧货铺 (0:08)",
@@ -4330,6 +4330,7 @@
     },
     {
       locs: ["High Street"],
+      hours: [8, 21],
       check: function (v) { return (Number(v.mpJobClockLevel) || 0) >= 2 && (Number(v.mpJoblineSera) || 0) < 4; },
       hint: "塞拉把一只没有主人的银壳怀表推到柜台边，表盖内侧刻着字。",
       icon: "img/misc/icon/shop.png",
@@ -4380,6 +4381,7 @@
     {
       key: "work",
       dailyKey: "mpStreetWork",
+      hours: [7, 20],
       locs: ["High Street", "Docks", "Elk Street", "Domus Street"],
       hint: "一个背着旧行囊的陌生人正四处打听哪里能找到活计。",
       icon: "img/mp/icon_map.gif",
@@ -4389,6 +4391,7 @@
     {
       key: "busker",
       dailyKey: "mpStreetBusker",
+      hours: [9, 22],
       locs: ["High Street", "Park", "Docks", "Domus Street"],
       hint: "街角的旧琴声断断续续，琴盒里落着几枚零散的铜板。",
       icon: "img/mp/icon_eavesdrop.gif",
@@ -4407,6 +4410,7 @@
     {
       key: "tea",
       dailyKey: "mpStreetTea",
+      hours: [7, 21],
       locs: ["High Street", "Docks", "Park", "Domus Street"],
       hint: "路边的小推车冒着白汽，摊主正往纸杯里舀茶汤。",
       icon: "img/mp/icon_drink.gif",
@@ -4416,6 +4420,7 @@
     {
       key: "child",
       dailyKey: "mpStreetChild",
+      hours: [8, 20],
       locs: ["High Street", "Park", "Domus Street", "Docks"],
       hint: "一个孩子站在人群边上，攥着衣角四处张望。",
       icon: "img/mp/icon_firstaid.gif",
@@ -4425,6 +4430,7 @@
     {
       key: "food",
       dailyKey: "mpStreetFood",
+      hours: [7, 22],
       locs: ["High Street", "Docks", "Elk Street", "Domus Street"],
       hint: "街边摊子飘来油脂和香料的气味，勾得人脚步发慢。",
       icon: "img/mp/icon_cook.gif",
@@ -4469,6 +4475,7 @@
         var ev = RANDOM_STREET_EVENTS[i];
         if (!ev || ev.locs.indexOf(pas) < 0) continue;
         if (v.daily && v.daily[ev.dailyKey]) continue;
+        if (ev.hours && !isNpcInScheduleHour(ev)) continue;
         if (ev.check && !ev.check(v)) continue;
         pool.push(ev);
       }
@@ -4486,8 +4493,9 @@
     if (!npcEntry || !Array.isArray(npcEntry.hours)) return true;
     var h = getHourNow();
     var start = npcEntry.hours[0], end = npcEntry.hours[1];
-    if (start <= end) return h >= start && h <= end;
-    return h >= start || h <= end;
+    // 与 NPC Hub 的 _open 条件保持一致：区间是 [start, end)，收盘小时不计入。
+    if (start <= end) return h >= start && h < end;
+    return h >= start || h < end;
   }
 
   function injectWorldAndCompanionNodes(host, pas, v) {
@@ -4554,7 +4562,7 @@
     }
     for (var ni = 0; ni < NEW_WORLD_NPCS.length; ni++) {
       var nItem = NEW_WORLD_NPCS[ni];
-      if (nItem.locs.indexOf(pas) >= 0 && isNpcInScheduleHour(nItem)) {
+      if (nItem.locs.indexOf(pas) >= 0 && pas !== nItem.passage && isNpcInScheduleHour(nItem)) {
         hasAny = true;
         var nRow = el("div", { style: "margin:4px 0;" });
         var npcEntryVars = (v.mpNpcs && v.mpNpcs[nItem.key]) || null;
@@ -4707,7 +4715,7 @@
 
     for (var ji = 0; ji < JOB_NPC_HOOKS.length; ji++) {
       var jhk = JOB_NPC_HOOKS[ji];
-      if (jhk.locs.indexOf(pas) >= 0 && (!jhk.check || jhk.check(v))) {
+      if (jhk.locs.indexOf(pas) >= 0 && (!jhk.hours || isNpcInScheduleHour(jhk)) && (!jhk.check || jhk.check(v))) {
         hasAny = true;
         var jhRow = el("div", { style: "margin:4px 0;" });
         jhRow.appendChild(el("span", { text: jhk.hint + " " }));
@@ -4797,6 +4805,12 @@
   function injectInlinePassageSections() {
     var host = document.getElementById("passages");
     if (!host) return;
+    // 先清掉上一页残留的挂载块。NPC/任务页不在 SAFE_PASSAGES 里，
+    // injectWorldAndCompanionNodes 会提前 return；不在这里清就会把旧时段的 NPC 行带到新页面。
+    var _staleWorld = document.getElementById("mp-world-organic-box");
+    if (_staleWorld && _staleWorld.parentNode) _staleWorld.parentNode.removeChild(_staleWorld);
+    var _staleRegion = document.getElementById("mp-region-links-box");
+    if (_staleRegion && _staleRegion.parentNode) _staleRegion.parentNode.removeChild(_staleRegion);
     var pas = (window.State && State.passage) || "";
     if (pas === HUB || pas === BEDROOM) return;
 
@@ -5678,12 +5692,12 @@
     // 已结识的新 NPC 动向与委托记录
     var mpNpcs = v.mpNpcs || {};
     var npcJournalDefs = [
-      { key: "sera", name: "塞拉", schedule: "每日白昼至晚间 · 08:00 - 21:00在高街钟表旧货铺坐镇，可替你鉴定古物并折算古董收益。", questTitle: "雾月钟楼与失落发条圣物" },
-      { key: "vesper", name: "维斯", schedule: "每日黄昏至次日清晨 · 17:00 - 06:00在码头或麋鹿街暗巷出没，可安全接手封存的暗市货包。", questTitle: "暗潮走私船与沉没金库" },
-      { key: "noel", name: "诺艾尔", schedule: "白昼与傍晚 · 07:00 - 20:00在学校图书馆或公园玻璃花房整理标本，可为你调配舒缓草药茶。", questTitle: "标本室秘药与温室夜谈" },
-      { key: "lin", name: "林恩", schedule: "傍晚至次日清晨 · 16:00 - 07:00在宅邸街、倒钩街与孤儿院外围巡夜，可指导你防身格斗步法。", questTitle: "地下铁笼与孤儿院守夜人" },
+      { key: "sera", name: "塞拉", schedule: "每日白昼至晚间 · 08:00 - 21:00在高街钟表旧货铺或购物中心坐镇，可替你鉴定古物并折算古董收益。", questTitle: "雾月钟楼与失落发条圣物" },
+      { key: "vesper", name: "维斯", schedule: "每日黄昏至次日清晨 · 17:00 - 06:00在码头、梅尔街或麋鹿街暗巷出没，可安全接手封存的暗市货包。", questTitle: "暗潮走私船与沉没金库" },
+      { key: "noel", name: "诺艾尔", schedule: "白昼与傍晚 · 07:00 - 20:00在学校图书馆、走廊或公园玻璃花房整理标本，可为你调配舒缓草药茶。", questTitle: "标本室秘药与温室夜谈" },
+      { key: "lin", name: "林恩", schedule: "傍晚至次日清晨 · 16:00 - 07:00在宅邸街、倒钩街、孤儿院外围或酒馆巡夜，可指导你防身格斗步法。", questTitle: "地下铁笼与孤儿院守夜人" },
       { key: "monet", name: "莫奈", schedule: "上午至深夜 · 10:00 - 23:00在康努达图斯街、峭壁街或海风咖啡馆写生，可替你修补破损衣物。", questTitle: "天鹅绒画室与午夜缪斯" },
-      { key: "ash", name: "阿什", schedule: "清晨至深夜在森林、深林或神殿石径巡视，可带你避开林间泥沼并拓印古碑。", questTitle: "古墓迷雾与森林古祭坛" }
+      { key: "ash", name: "阿什", schedule: "清晨至深夜 · 06:00 - 23:00在森林、神殿石径或下水道巡视，可带你避开林间泥沼并拓印古碑。", questTitle: "古墓迷雾与森林古祭坛" }
     ];
     npcJournalDefs.forEach(function (nd) {
       var st = mpNpcs[nd.key];
@@ -7644,6 +7658,7 @@
     syncCompanionToVariables();
     connect();
     onPassageDisplay();
+    var _mpLastInjectHour = (window.Time && Number.isFinite(Time.hour)) ? Time.hour : null;
     setInterval(function () {
       if (!S.syncMode && S.clock.running && window.Time && typeof Time.pass === "function") {
         var v = V();
@@ -7652,6 +7667,17 @@
           refreshSidebar();
         }
       }
+      // 时钟跨小时时刷新注入区（NPC 行、任务入口），并在 NPC Hub 上重渲染以切换在场/不在场分支。
+      try {
+        var _hNow = (window.Time && Number.isFinite(Time.hour)) ? Time.hour : null;
+        if (_hNow !== null && _hNow !== _mpLastInjectHour) {
+          _mpLastInjectHour = _hNow;
+          injectInlinePassageSections();
+          var _pasNow = (window.State && State.passage) || "";
+          var _vNow = V();
+          if (/^MP NPC .+ Hub$/.test(_pasNow) && _vNow && _vNow.combat !== 1) enginePlay(_pasNow);
+        }
+      } catch (e) {}
       sendState(false);
       renderClockPill();
     }, 2500);
