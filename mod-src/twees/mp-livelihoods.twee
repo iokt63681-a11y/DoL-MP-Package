@@ -110,7 +110,7 @@
 		<<if ($mpJobResultPay or 0) gt 0 and !$mpJobResultMilestone and (($mpJobCafeLevel or 0) lte ($mpJobCafeLastLevel or 0))>><<if random(1, 3) is 1 and (Time.season is "spring" or Time.season is "summer")>><<if Time.season is "spring">><<include "MP Job Seasonal Cafe Spring">><<else>><<include "MP Job Seasonal Cafe Summer">><</if>><<else>><<set _rj to random(1, 3)>><<if _rj is 1>><<include "MP Job Random Cafe">><<elseif _rj is 2>><<include "MP Job Random Cafe 1">><<else>><<include "MP Job Random Cafe 2">><</if>><</if>><</if>>
 		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobCafeStrike or 0) gt 0>><<set $mpJobCafeStrike to Math.max(0, $mpJobCafeStrike - 1)>><</if>>
 		<<if ($mpJobCafeLevel or 0) gt ($mpJobCafeLastLevel or 0)>>
-			<<if $mpJobCafeLevel is 1>><<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>开始让你独自看窗边四桌，客人点单时会先看向你。<<elseif $mpJobCafeLevel is 2>>熟客名册上多了一个圈，<<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>让你试着调一杯简单的。<<elseif $mpJobCafeLevel is 3>>午市最忙的时候，吧台交给你看。<<elseif $mpJobCafeLevel is 4>>后门钥匙挂到了你的围裙内侧。<<else>><<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>把账本推给你，说这间店有你一份。<</if>>
+			<<if $mpJobCafeLevel is 1>><<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>开始让你独自看窗边四桌，客人点单时会先看向你。<<elseif $mpJobCafeLevel is 2>>熟客名册上多了一个圈，<<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>让你试着调一杯简单的。<<elseif $mpJobCafeLevel is 3>>午市最忙的时候，吧台交给你看。<<elseif $mpJobCafeLevel is 4>>后门钥匙挂到了你的围裙内侧。<<else>><<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>把后厨与账柜的备用钥匙推到你手边，算是认下了你这位合伙人。<</if>>
 			<<set $mpJobCafeLastLevel to $mpJobCafeLevel>>
 		<</if>>
 		<<if $mpJobResultMilestone>>
@@ -216,16 +216,16 @@
 <<else>>
 	海风把鱼线吹出一道弧。礁石背阴处的水洼里，几条小鱼被浪推得打转。鱼贩的秤在身后吱呀作响。
 	<br><br>
-	<<if ($athletics or 0) gte 280 or ($mpJobFishLevel or 0) gte 4>><<runicon>><<link [[近岸撒网 (0:16)|MP Job Fish Settle]]>><<if Time.dayState is "night">><<mpalert 6>><</if>><<set _skill to ($athletics or 0)>><<set _need to (280 + ((window.Weather and Weather.isOvercast) ? 40 : 0))>><<set _ok to (_skill gte _need or _lv gte 4)>><<set $mpJobFishExp to ($mpJobFishExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 4 * (300 + ($mpJobFishLevel or 0) * 60 + Math.floor(_skill / 6) - ((window.Weather && Weather.precipitation isnot "none") ? 50 : 0))>><<set $mpJobFishCatch to _pay>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "网兜出水时沉了一下。银鳞在碎冰上弹了两下，鱼贩过秤后把零钱拍在你掌心。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "网脚被暗礁挂住，你拽了两次只拖上来一团海草。收回来的网破了半尺。鱼贩没让你赔，只让你自己补网。">><<set $mpJobFishCatch to 0>><<stress 5>><<tiredness 3>><</if>><<if ($mpJobFishLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_lv3")>><<money 3600>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFish to 1>><<pass 16>><</link>><<if Time.dayState is "night">><<mpalertgain "撒网时水花四溅"><</if>>
+	<<if ($athletics or 0) gte 280 or ($mpJobFishLevel or 0) gte 4>><<runicon>><<link [[近岸撒网 (0:16)|MP Job Fish Settle]]>><<if Time.dayState is "night">><<mpalert 6>><</if>><<set _skill to ($athletics or 0)>><<set _need to (280 + ((window.Weather and Weather.isOvercast) ? 40 : 0))>><<set _ok to (_skill gte _need or _lv gte 4)>><<set $mpJobFishExp to ($mpJobFishExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 4 * (300 + ($mpJobFishLevel or 0) * 60 + Math.floor(_skill / 6) - ((window.Weather && Weather.precipitation isnot "none") ? 50 : 0))>><<set $mpJobFishCatch to _pay>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "网兜出水时沉了一下。银鳞在碎冰上弹了两下，鱼贩过秤后把零钱拍在你掌心。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "网脚被暗礁挂住，你拽了两次只拖上来一团海草。收回来的网破了半尺。鱼贩没让你赔，只让你自己补网。">><<set $mpJobFishCatch to 0>><<stress 5>><<tiredness 3>><</if>><<if ($mpJobFishLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_lv3")>><<money 3600>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFish to 1>><<pass 16>><</link>><<if Time.dayState is "night">><<mpalertgain "撒网时水花四溅">><</if>>
 	<<else>><span class="disabled">近岸撒网 (0:16)（技艺不足）</span><</if>>
 	<br>
-	<<if ($swimmingskill or 0) gte 260 or ($mpJobFishLevel or 0) gte 4>><<mpclimbicon>><<link [[攀外礁下竿 (0:18)|MP Job Fish Settle]]>><<if Time.dayState is "night">><<mpalert 6>><</if>><<set _skill to ($swimmingskill or 0)>><<set _ok to (_skill gte 260 or _lv gte 4)>><<set $mpJobFishExp to ($mpJobFishExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 4 * (480 + ($mpJobFishLevel or 0) * 70 + Math.floor(_skill / 5))>><<set $mpJobFishCatch to _pay>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把竿梢压进浪里，线绷紧的那一刻手腕发麻。提上来的鱼背泛着淡青，鱼贩多看了两眼。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "浪头比看上去高。你脚下一滑，膝盖磕在礁面上，钩子连着半截线被水卷走。鱼贩摆摆手，让你先回去换线。">><<set $mpJobFishCatch to 0>><<pain 2>><<stress 6>><</if>><<if ($mpJobFishLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_lv3_keepsake")>><<money 3600>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFish to 1>><<pass 18>><</link>><<if Time.dayState is "night">><<mpalertgain "攀礁时碎石滑落"><</if>>
+	<<if ($swimmingskill or 0) gte 260 or ($mpJobFishLevel or 0) gte 4>><<mpclimbicon>><<link [[攀外礁下竿 (0:18)|MP Job Fish Settle]]>><<if Time.dayState is "night">><<mpalert 6>><</if>><<set _skill to ($swimmingskill or 0)>><<set _ok to (_skill gte 260 or _lv gte 4)>><<set $mpJobFishExp to ($mpJobFishExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 4 * (480 + ($mpJobFishLevel or 0) * 70 + Math.floor(_skill / 5))>><<set $mpJobFishCatch to _pay>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把竿梢压进浪里，线绷紧的那一刻手腕发麻。提上来的鱼背泛着淡青，鱼贩多看了两眼。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "浪头比看上去高。你脚下一滑，膝盖磕在礁面上，钩子连着半截线被水卷走。鱼贩摆摆手，让你先回去换线。">><<set $mpJobFishCatch to 0>><<pain 2>><<stress 6>><</if>><<if ($mpJobFishLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_lv3_keepsake")>><<money 3600>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFish to 1>><<pass 18>><</link>><<if Time.dayState is "night">><<mpalertgain "攀礁时碎石滑落">><</if>>
 	<<else>><span class="disabled">攀外礁下竿 (0:18)（水性不足）</span><</if>>
 	<br>
 	<<if _night>>
-		<<mpfishicon>><<link [[夜钓外海 (0:20)|MP Job Fish Settle]]>><<mpalert 4>><<set _pay to 4 * (620 + _lv * 80)>><<set $mpJobFishCatch to _pay>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "灯罩把水面照出一小片黄。你把钩甩进暗处，等了很久，线才猛地一沉。提上来的鱼比白天都大。">><<set $mpJobFishExp to ($mpJobFishExp or 0) + 1>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>><<money _pay>><<tiredness 4>><<set $daily to ($daily or {})>><<set $daily.mpJobFish to 1>><<pass 20>><</link>><<mpalertgain "夜钓灯把水面照得发亮">
+		<<mpfishicon>><<link [[夜钓外海 (0:20)|MP Job Fish Settle]]>><<mpalert 4>><<set _pay to 4 * (620 + _lv * 80)>><<set $mpJobFishCatch to _pay>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "灯罩把水面照出一小片黄。你把钩甩进暗处，等了很久，线才猛地一沉。提上来的鱼比白天都大。">><<set $mpJobFishExp to ($mpJobFishExp or 0) + 1>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>><<money _pay>><<tiredness 4>><<set $daily to ($daily or {})>><<set $daily.mpJobFish to 1>><<pass 20>><</link>><<mpalertgain "夜钓灯把水面照得发亮">>
 	<<else>>
-		<<link [[刮鳞分筐 (0:15)|MP Job Fish Settle]]>><<if Time.dayState is "night">><<mpalert -5>><</if>><<set _pay to 4 * (240 + _lv * 45)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你蹲在冰筐边刮鳞，鱼皮在指下打滑。鱼贩把分好的筐搬上车，顺手多给了几枚铜板。">><<set $mpJobFishExp to ($mpJobFishExp or 0) + 1>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>><<money _pay>><<tiredness 2>><<set $daily to ($daily or {})>><<set $daily.mpJobFish to 1>><<pass 15>><</link>><<if Time.dayState is "night">><<mpalertloss "蹲在角落安静刮鳞"><</if>>
+		<<link [[刮鳞分筐 (0:15)|MP Job Fish Settle]]>><<if Time.dayState is "night">><<mpalert -5>><</if>><<set _pay to 4 * (240 + _lv * 45)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你蹲在冰筐边刮鳞，鱼皮在指下打滑。鱼贩把分好的筐搬上车，顺手多给了几枚铜板。">><<set $mpJobFishExp to ($mpJobFishExp or 0) + 1>><<set $mpJobFishLevel to ($mpJobFishExp gte 21 ? 5 : $mpJobFishExp gte 15 ? 4 : $mpJobFishExp gte 10 ? 3 : $mpJobFishExp gte 6 ? 2 : $mpJobFishExp gte 3 ? 1 : 0)>><<money _pay>><<tiredness 2>><<set $daily to ($daily or {})>><<set $daily.mpJobFish to 1>><<pass 15>><</link>><<if Time.dayState is "night">><<mpalertloss "蹲在角落安静刮鳞">><</if>>
 		<span class="disabled">夜钓外海 (0:20)（要等天黑）</span>
 	<</if>>
 	<br>
@@ -279,11 +279,11 @@
 <<elseif $mpJobFishLevel is 2>>
 	你开始认得外礁的水色。旧竿换了加固竿，夜钓灯也充上了电。
 <<elseif $mpJobFishLevel is 3>>
-	鱼贩把最好的摊位留给你。收网时，他会先问你的意见。
+	靠海风最顺的头等鱼摊如今归你打理。收网时，他会先问你的意见。
 <<elseif $mpJobFishLevel is 4>>
-	你能借到小船，去外海下钩。鱼贩说，风浪大的日子别逞强。
+	栈桥边的轻便舢板随时向你敞开，能撑去外海深水区下钩。鱼贩叮嘱风浪大时别逞强。
 <<else>>
-	潮位表上的记号你全认得了。鱼贩把船钥匙扔给你，说随你用。
+	潮位表上的暗记你已烂熟于心。鱼贩把小艇铜钥匙抛进你怀里，让你随时出海。
 <</if>>
 <br><br>
 <<if ($mpJobFishRod or 0) is 1 and ($mpJobFishPenalty or 0) is 0>>加固竿靠在棚子最里面，握把上缠着新麻绳。<</if>>
@@ -408,7 +408,7 @@
 <<elseif $mpJobSpaLevel is 2>>
 	有人点你的手法。私汤的木牌挂到了门边，背面刻着你的名字缩写。
 <<elseif $mpJobSpaLevel is 3>>
-	固定客人会问你哪天当班。<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>把私汤的钥匙交给你。
+	相熟的常客进门总会先打听你的排班。<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>把私汤的钥匙交给你。
 <<elseif $mpJobSpaLevel is 4>>
 	你能自己开关池子。打烊后，水汽散尽，整间浴场都听你的。
 <<else>>
@@ -553,7 +553,7 @@
 <<elseif $mpJobFarmLevel is 3>>
 	排水沟修好后涝天也不减产，<<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>让你自己排畦。
 <<elseif $mpJobFarmLevel is 4>>
-	三畦轮作已经跑顺。<<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>把下一季的种子单交给你。
+	三畦轮作已经跑顺。<<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>把开春的选种清单交由你拍板。
 <<else>>
 	账上的畦数排满了。<<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>说今年的地随你安排。
 <</if>>
@@ -682,13 +682,13 @@
 <<elseif $mpJobClockLevel is 3>>
 	名表和复杂机芯的活写着你的名字。委托栏上挂了一块小铜牌。
 <<elseif $mpJobClockLevel is 4>>
-	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>让你在招牌上署名。招牌右下角多了一行小字，是你的名字。
+	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>准许你在修表回执与铺面铜牌上刻下自己的印记。
 <<else>>
-	委托簿上一半的活已经写着你的名字。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>说招牌该重新漆了。
+	柜台预约簿上过半的精修单都指名叫你接手。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>说招牌该重新漆了。
 <</if>>
 <br><br>
 <<if ($mpJobClockCommission or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>委托栏上挂着一块刻你名字的小铜牌。<</if>>
-<<if ($mpJobClockHighEnd or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>柜台里那只银壳三问表，<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>只让你碰。<</if>>
+<<if ($mpJobClockHighEnd or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>绒布匣里最贵重的古董三问怀表，如今全都交由你亲手调校。<</if>>
 <<if ($mpJobClockPartner or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>招牌右下角多了一行小字，是你的名字。<</if>>
 <br><br>
 <<walkicon>><<link [[返回工作台 (0:01)|MP Job Clock]]>><<pass 1>><</link>>
@@ -806,14 +806,14 @@
 <<elseif $mpJobLaundryLevel is 2>>
 	你拿到装订台钥匙。脱线的旧书开始由你经手。
 <<elseif $mpJobLaundryLevel is 3>>
-	你能悄悄藏下一本待修的旧书。书页还带着浆糊味。
+	书架底层那些无人认领的善本残卷，管理员默许你带回房里慢慢研读。
 <<elseif $mpJobLaundryLevel is 4>>
-	旧书摊的装订委托归你。管事说这间浆洗房迟早交给你。
+	整条街书铺的古籍锁线活计都认准了你的手艺。管事说这间浆洗房迟早交给你。
 <<else>>
 	账本上的活计你全接过了。管事把钥匙串放在你手边。
 <</if>>
 <br><br>
-<<if ($mpJobLaundryDiscount or 0) is 1 and ($mpJobLaundryPenalty or 0) is 0>>浆洗房的价目表上，你的名字旁写着「内部价」。<</if>>
+<<if ($mpJobLaundryDiscount or 0) is 1 and ($mpJobLaundryPenalty or 0) is 0>>浆洗房的木牌后特意为你留出了免收工本费的内部账格。<</if>>
 <<if ($mpJobLaundryBook or 0) is 1 and ($mpJobLaundryPenalty or 0) is 0>>装订台最下层压着一本你藏起来的旧书，书页还带着浆糊味。<</if>>
 <br><br>
 <<walkicon>><<link [[返回浆洗房 (0:01)|MP Job Laundry]]>><<pass 1>><</link>>
