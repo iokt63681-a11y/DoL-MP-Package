@@ -4,20 +4,20 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
-高街旧书摊侧面的小木架第二层挂着六枚不同质地的信物签：一枚画着笑脸的纸杯垫、一片带松脂香的干冷杉叶、一枚磨平字迹的铜筹码、一条暗红丝绒细带、一张印着烫金花体的便笺，以及一截绑着灰狼毛的皮绳。每样东西都对应着一个熟识的去处，按地点、时辰与往来交情随时可以过去看看。
+高街旧书摊侧面的小木架第二层挂着六枚不同质地的信物签：一枚画着笑脸的纸杯垫、一片带松脂香的干冷杉叶、一枚磨平字迹的铜筹码、一条暗红丝绒细带、一张印着烫金花体的便笺，以及一截绑着灰狼毛的皮绳。每样东西都对应着一个去过或托人捎过话的去处，按地点、时辰与往来交情随时可以过去看看。
 街角的风吹动皮绳与丝绒带，你把六枚信物签理顺，挑定了今天想走一趟的方向。
 <br><br>
-<<link [[去孤儿院找罗宾 (0:04)|MP Daily Robin 1]]>><<pass 4>><</link>>
+<<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[去孤儿院找罗宾 (0:06)|MP Daily Robin 1]]>><<pass 6>><</link>><<else>><span class="disabled">去孤儿院找罗宾 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[去林间木屋找伊甸 (0:05)|MP Daily Eden 1]]>><<pass 5>><</link>>
+<<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[去林间木屋找伊甸 (0:14)|MP Daily Eden 1]]>><<pass 14>><</link>><<else>><span class="disabled">去林间木屋找伊甸 (0:05)（尚未结识）</span><</if>>
 <br>
-<<link [[去旧港栈桥找雷恩 (0:04)|MP Daily Wren 1]]>><<pass 4>><</link>>
+<<if $NPCNameList and $NPCNameList.includes("Wren")>><<link [[去旧港栈桥找雷恩 (0:08)|MP Daily Wren 1]]>><<pass 8>><</link>><<else>><span class="disabled">去旧港栈桥找雷恩 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[去后台找布莱尔 (0:04)|MP Daily Briar 1]]>><<pass 4>><</link>>
+<<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[去后台找布莱尔 (0:06)|MP Daily Briar 1]]>><<pass 6>><</link>><<else>><span class="disabled">去后台找布莱尔 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[去多瑙河街找艾弗里 (0:04)|MP Daily Avery 1]]>><<pass 4>><</link>>
+<<if $NPCNameList and $NPCNameList.includes("Avery")>><<link [[去多瑙河街找艾弗里 (0:08)|MP Daily Avery 1]]>><<pass 8>><</link>><<else>><span class="disabled">去多瑙河街找艾弗里 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[去密林石台找黑狼 (0:05)|MP Daily BlackWolf 1]]>><<pass 5>><</link>>
+<<link [[去密林石台找黑狼 (0:15)|MP Daily BlackWolf 1]]>><<pass 15>><</link>>
 <br><br>
 <<link [[查看木架第一层纸条 (0:02)|MP Daily Life Hub]]>><<pass 2>><</link>>
 <br>
@@ -118,7 +118,7 @@
 森林木屋的屋檐下堆着半人高的冷杉圆木，空气里飘着松脂与熏肉的浓郁气味。伊甸单手拎着沉重的宽刃劈柴斧，正将一段湿木桩架上树墩；旁边的烟熏木架下火苗有些发暗，几挂风干的鹿肉条需要添入新的干果木枝。
 瞥见你走近木屋，伊甸停下斧头，用下巴指了指脚边的竹篓：「既然来了就别闲着，要么把碎木抱进棚里，要么看着熏架别让火灭了。」
 <br><br>
-<<runicon>><<link [[抱干柴跟伊甸进林 (0:07)|MP Daily Eden 2]]>>
+<<runicon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[抱干柴跟伊甸进林 (0:07)|MP Daily Eden 2]]>>
 	<<set $mpDailyEden to Math.max(($mpDailyEden or 0), 1)>><<pass 7>>
 	<<if ($physique or 0) gte 7800>>
 		<<stress -2>>
@@ -127,7 +127,7 @@
 	<<else>>
 		<<pain 2>><<stress 3>><<tiredness 2>>
 	<</if>>
-<</link>>
+<</link>><<else>><span class="disabled">抱干柴跟伊甸进林 (0:07)（尚未结识）</span><</if>>
 <br>
 <<tendingicon>><<link [[往熏架添果木稳火候 (0:06)|MP Daily Eden 2]]>>
 	<<set $mpDailyEden to Math.max(($mpDailyEden or 0), 1)>><<pass 6>>
@@ -149,7 +149,7 @@
 密林小径上覆着厚厚的落叶，伊甸背着猎步枪走在前面，带你巡查溪流北岸的几处防兽绳套。在一处桦木林拐角，原本用来标记安全浅滩的刻痕界石被山洪冲歪进了泥坑，而灌木丛下的钢丝绳套也被野猪拱乱了机关簧片。
 林间雾气渐起，伊甸蹲下身按住草丛，示意你跟紧他的脚步。
 <br><br>
-<<sneakicon>><<link [[屏住呼吸帮伊甸收起捕兽夹 (0:06)|MP Daily Eden 3]]>>
+<<sneakicon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[屏住呼吸帮伊甸收起捕兽夹 (0:06)|MP Daily Eden 3]]>>
 	<<set $mpDailyEden to Math.max(($mpDailyEden or 0), 2)>><<pass 6>>
 	<<if ($skulduggery or 0) gte 260 or ($tending or 0) gte 260>>
 		<<stress -2>>
@@ -158,7 +158,7 @@
 	<<else>>
 		<<pain 1>><<stress 3>>
 	<</if>>
-<</link>>
+<</link>><<else>><span class="disabled">屏住呼吸帮伊甸收起捕兽夹 (0:06)（尚未结识）</span><</if>>
 <br>
 <<runicon>><<link [[合力把界石撬回原位 (0:06)|MP Daily Eden 3]]>>
 	<<set $mpDailyEden to Math.max(($mpDailyEden or 0), 2)>><<pass 6>>
@@ -249,7 +249,7 @@
 	<</if>>
 <</link>>
 <br>
-<<socialiseicon>><<link [[上前替雷恩应付盘问 (0:05)|MP Daily Wren 3]]>>
+<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Wren")>><<link [[上前替雷恩应付盘问 (0:05)|MP Daily Wren 3]]>>
 	<<set $mpDailyWren to Math.max(($mpDailyWren or 0), 2)>><<pass 5>>
 	<<if ($willpower or 0) gte 260>>
 		<<stress -2>>
@@ -257,7 +257,7 @@
 	<<else>>
 		<<stress 4>>
 	<</if>>
-<</link>>
+<</link>><<else>><span class="disabled">上前替雷恩应付盘问 (0:05)（尚未结识）</span><</if>>
 <br>
 <<sneakicon>><<link [[用空鱼篓把木匣吊上 (0:05)|MP Daily Wren 3]]>>
 	<<set $mpDailyWren to Math.max(($mpDailyWren or 0), 2)>><<pass 5>><<stress -2>>

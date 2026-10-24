@@ -4177,9 +4177,9 @@
       title: "高街钟表与古物修缮师",
       locs: ["High Street", "Shopping Centre"],
       hours: [8, 21],
-      hint: "钟表旧货铺的玻璃柜台后，塞拉正戴着单眼放大镜擦拭一枚精密的黄铜发条。",
+      hint: function (v, met) { return met ? "钟表旧货铺的玻璃柜台后，塞拉正戴着单眼放大镜擦拭一枚精密的黄铜发条。" : "钟表旧货铺的玻璃柜台后，一个戴单眼放大镜的人正擦拭一枚精密的黄铜发条。"; },
       icon: "img/misc/icon/shop.png",
-      linkText: "与塞拉交谈 (0:04)",
+      linkText: function (v, met) { return met ? "与塞拉交谈 (0:04)" : "与修表师搭话 (0:04)"; },
       passage: "MP NPC Sera Hub"
     },
     {
@@ -4188,9 +4188,9 @@
       title: "旧港区夜航船长",
       locs: ["Docks", "Elk Street", "Mer Street"],
       hours: [17, 6],
-      hint: "防波堤栈桥边的阴影里，维斯正靠在锚链旁擦拭手里的铜质怀表。",
+      hint: function (v, met) { return met ? "防波堤栈桥边的阴影里，维斯正靠在锚链旁擦拭手里的铜质怀表。" : "防波堤栈桥边的阴影里，一个拎着铜怀表的人正靠在锚链旁。"; },
       icon: "img/misc/icon/sneak.png",
-      linkText: "走近维斯 (0:04)",
+      linkText: function (v, met) { return met ? "走近维斯 (0:04)" : "走近栈桥边的人 (0:04)"; },
       passage: "MP NPC Vesper Hub"
     },
     {
@@ -4199,9 +4199,9 @@
       title: "学园植物标本学徒",
       locs: ["School Library", "Hallways", "Park"],
       hours: [7, 20],
-      hint: "诺艾尔正站在安静的角落里翻阅一册夹满干花标本的笔记。",
+      hint: function (v, met) { return met ? "诺艾尔正站在安静的角落里翻阅一册夹满干花标本的笔记。" : "安静的角落里，一个抱着干花标本册的学生正低头翻页。"; },
       icon: "img/misc/icon/school.png",
-      linkText: "与诺艾尔搭话 (0:03)",
+      linkText: function (v, met) { return met ? "与诺艾尔搭话 (0:03)" : "与翻标本册的学生搭话 (0:03)"; },
       passage: "MP NPC Noel Hub"
     },
     {
@@ -4210,9 +4210,9 @@
       title: "宅邸街守夜人",
       locs: ["Domus Street", "Orphanage", "Barb Street", "Pub"],
       hours: [16, 7],
-      hint: "缠着旧绷带的林恩正靠在街角路灯下活动着手腕关节。",
+      hint: function (v, met) { return met ? "缠着旧绷带的林恩正靠在街角路灯下活动着手腕关节。" : "街角路灯下，一个缠着旧绷带的人正活动着手腕关节。"; },
       icon: "img/misc/icon/socialise.png",
-      linkText: "走近林恩 (0:04)",
+      linkText: function (v, met) { return met ? "走近林恩 (0:04)" : "走近路灯下的人 (0:04)"; },
       passage: "MP NPC Lin Hub"
     },
     {
@@ -4221,9 +4221,9 @@
       title: "天鹅绒画师与裁缝",
       locs: ["Connudatus Street", "Cliff Street", "Ocean Breeze"],
       hours: [10, 23],
-      hint: "手持素描本的莫奈正站在廊檐下，目光穿过人群落向你这边。",
+      hint: function (v, met) { return met ? "手持素描本的莫奈正站在廊檐下，目光穿过人群落向你这边。" : "廊檐下，一个手持素描本的人正望着人群。"; },
       icon: "img/misc/icon/socialise.png",
-      linkText: "走向莫奈 (0:04)",
+      linkText: function (v, met) { return met ? "走向莫奈 (0:04)" : "走向廊檐下的画师 (0:04)"; },
       passage: "MP NPC Monet Hub"
     },
     {
@@ -4232,9 +4232,9 @@
       title: "林间与古墓守灯人",
       locs: ["Forest", "Temple", "Sewers"],
       hours: [6, 23],
-      hint: "提着防风油灯的阿什正站在石径旁，替脚边的猎犬解开荆棘。",
+      hint: function (v, met) { return met ? "提着防风油灯的阿什正站在石径旁，替脚边的猎犬解开荆棘。" : "石径旁，一个提着防风油灯的人正替脚边的猎犬解开荆棘。"; },
       icon: "img/misc/icon/forest.png",
-      linkText: "走近阿什 (0:05)",
+      linkText: function (v, met) { return met ? "走近阿什 (0:05)" : "走近提灯的人 (0:05)"; },
       passage: "MP NPC Ash Hub"
     }
   ];
@@ -4389,7 +4389,11 @@
       if (nItem.locs.indexOf(pas) >= 0 && isNpcInScheduleHour(nItem)) {
         hasAny = true;
         var nRow = el("div", { style: "margin:4px 0;" });
-        nRow.appendChild(el("span", { text: nItem.hint + " " }));
+        var npcEntryVars = (v.mpNpcs && v.mpNpcs[nItem.key]) || null;
+        var npcMet = !!(npcEntryVars && npcEntryVars.hasMet);
+        var npcHintText = typeof nItem.hint === "function" ? nItem.hint(v, npcMet) : nItem.hint;
+        var npcLinkText = typeof nItem.linkText === "function" ? nItem.linkText(v, npcMet) : nItem.linkText;
+        nRow.appendChild(el("span", { text: npcHintText + " " }));
         (function (npcEntry) {
           var nLink = el("a", {
             class: "link-internal",
@@ -4397,13 +4401,14 @@
               ev.preventDefault();
               v.mpReturnPassage = pas;
               if (v.mpNpcs && v.mpNpcs[npcEntry.key]) {
+                v.mpNpcs[npcEntry.key].firstMeet = !v.mpNpcs[npcEntry.key].hasMet;
                 v.mpNpcs[npcEntry.key].hasMet = 1;
               }
               enginePlay(npcEntry.passage);
             }
           });
           nLink.appendChild(dolIconImg(npcEntry.icon));
-          nLink.appendChild(document.createTextNode(npcEntry.linkText));
+          nLink.appendChild(document.createTextNode(npcLinkText));
           nRow.appendChild(nLink);
         })(nItem);
         container.appendChild(nRow);

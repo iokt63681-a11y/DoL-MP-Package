@@ -30,9 +30,9 @@
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
 <<set _exitPas to ($mpReturnPassage or "Danube Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
-多瑙河街十八号铁门前停着黑色轿车。车窗半降，艾弗里看了一眼金表：「站在我身边别让我丢脸，先把衣领理好。」
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>>多瑙河街十八号铁门前停着黑色轿车。车窗半降，艾弗里看了一眼金表：「站在我身边别让我丢脸，先把衣领理好。」
 <<if ($exposed or 0) gte 1>>见你衣衫不整，艾弗里脸色一沉，将后座羊绒大衣甩在你肩上。<<else>>艾弗里探身推开副驾车门，拨正你的领口。<</if>>
-<br><br>
+<<else>>多瑙河街十八号铁门前停着黑色轿车。车窗半降，一个戴金表的人打量你一眼：「新来的？上车，别多话。」<<if ($exposed or 0) gte 1>>见你衣衫不整，对方皱了皱眉，将后座羊绒大衣甩在你肩上。<<else>>对方探身推开副驾车门，朝座位抬了抬下巴。<</if>><</if>><br><br>
 <<getouticon>><<link [[借口门禁离开车道 (0:03)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="mansion-carinvite-choices">
@@ -96,13 +96,13 @@
 <<getouticon>><<link [[下楼离开宅邸露台 (0:04)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="mansion-champagne-choices">
-<<link "挽住艾弗里举杯致意 (0:09)">><<pass 9>><<replace "#mansion-champagne-choices">>
+<<if $NPCNameList and $NPCNameList.includes("Avery")>><<link "挽住艾弗里举杯致意 (0:09)">><<pass 9>><<replace "#mansion-champagne-choices">>
 <<if ($english or 0) gte 250 or ($danceskill or 0) gte 250 or ($seductionskill or 0) gte 260>>
 <span class="green">你自然挽住艾弗里小臂微笑颔首，巧妙避开了关于孤儿院的试探。</span><<stress -5>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
 <<else>>
 <span class="red">面对名流寒暄你手指发僵，回答慢了半拍。</span><<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">挽住艾弗里举杯致意 (0:09)（尚未结识）</span><</if>>
 <br>
 <<sneakicon>><<link "借吹风将酒倒进花盆 (0:04)">><<pass 4>><<replace "#mansion-champagne-choices">>
 <<set $skulduggerydifficulty to 260>><<skulduggerycheck "silent">>
@@ -191,7 +191,7 @@
 	<<stress -3>><<lstress>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
 	<br><br>
-	<<getouticon>><<link [[从窄廊从容离开 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[从窄廊从容离开 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
 	<span class="red">指节不慎撞响铜衣架，保镖猛地回头，你只得把请柬缩回袖口。</span><<stress 6>><<pain 2>><<gstress>><<gpain>>
 	<br><br>
@@ -205,11 +205,11 @@
 <<if ($danceskill or 0) gte 280 or ($athletics or 0) gte 280>>
 	<span class="green">你借着挑拣披肩的动作侧身旋步，将请柬分批塞入内袋。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_briar_distribute_reward")>>
-		<<money 1100>><span class="gold">你收下了末张信封里的 £11 赏金。</span>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="gold">你收下了末张信封里的 £11 信物铜章。</span>
 	<</if>>
 	<<stress -2>><<lstress>>
 	<br><br>
-	<<link [[从窄廊从容离开 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[从窄廊从容离开 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
 	<span class="red">衣架滑轮发出轻响，保镖狐疑地走近两步。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
@@ -334,7 +334,7 @@
 <<if $skulduggerysuccess is 1>>
 <span class="green">你趁保安回亭登记，用细铁丝拨开侧门铜锁钻入冬青回廊。</span><<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["glasshouse_orchid"] to 1>><<skulduggery 3>><<stress -2>><<lstress>>
 <br><br>
-<<walkicon>><<link [[步入秘密温室庄园 (0:02)|MP Region Glasshouse Manor]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[步入秘密温室庄园 (0:02)|MP Region Glasshouse Manor]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
 <span class="red">锁簧发涩，岗亭窗户突然推开，强光手电直照向你。</span><<pain 4>><<stress 5>><<gpain>><<gstress>>
 <</if>>

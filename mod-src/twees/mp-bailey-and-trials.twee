@@ -20,26 +20,53 @@
 <<if _rebStg gte 8>>
 	你们早已将贝利勾结地下钱庄的原件备份交予全镇各方势力。贝利盯着你手里的铜钥匙扣看了两秒，冷哼一声合上账册，挥手带着打手径直上了楼。
 	<br><br>
-	<<getouticon>><<link [[目送贝利离去 (0:03)|_exitPas]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 3>><<stress -10>><<endevent>><</link>><<lstress>>
+	<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[目送贝利离去 (0:03)|_exitPas]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 3>><<stress -10>><<endevent>><</link>><<else>><span class="disabled">目送贝利离去 (0:03)（尚未结识）</span><</if>><<lstress>>
 <<else>>
-	<<if $money gte _demand>>
-		<<baileyicon>><<link [[当场付清这一期的账 £<<print _demandPound>> (0:04)|MP Bailey Biweekly Pay]]>><<set $money -= _demand>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 4>><<stress -4>><</link>><<lstress>>
-		<br>
-	<</if>>
-	<<fisticon>><<link [[跨前替同伴扛下皮鞭 (0:18)|MP Bailey Biweekly Shield]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 18>><<pain 32>><<stress 10>><<willpower 4>><</link>><<ggpain>><<gstress>><<gwillpower>><<glove>>
+	<<baileyicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[上前与贝利交涉账目 (0:02)|MP Bailey Biweekly Negotiate]]>><<pass 2>><</link>><<else>><span class="disabled">上前与贝利交涉账目 (0:02)（尚未结识）</span><</if>>
 	<br>
-	<<trialicon>><<link [[推倒衣柜联手反击打手 (0:15)|MP Elite Encounter Bailey Enforcers]]>><<pass 15>><<def 3>><</link>>
-	<br>
-	<<if $skulduggery gte 550>>
-		<<link [[拿改写银票蒙混过关 (0:06)|MP Bailey Biweekly Bluff]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 6>><<skulduggery 4>><</link>>
-		<br>
-	<</if>>
-	<<link [[交不出钱，被押往地下训诫室 (0:12)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 12>><</link>>
+	<<fisticon>><<link [[护住同伴应对打手 (0:02)|MP Bailey Biweekly Confront]]>><<pass 2>><</link>>
 <</if>>
+
+:: MP Bailey Biweekly Negotiate [nobr]
+<<set $outside to 0>><<set $location to "orphanage">>
+<<effects>><<mpAmbient>>
+<<set _rebStg to ($mpQuestBaileyRebellion or 0)>>
+<<set _demand to Math.max(0, 150000 - (_rebStg * 18000))>>
+<<set _demandPound to Math.round(_demand / 100)>>
+贝利的手指在黑皮账册边缘轻轻敲击，冷眼等着你掏出钱袋或给出交代。
+<br><br>
+<<getouticon>><<link [[退回楼梯转角 (0:02)|MP Bailey Biweekly Tribunal]]>><<pass 2>><</link>>
+<br>
+<<if $money gte _demand>>
+	<<baileyicon>><<link [[当场付清本期账目 £<<print _demandPound>> (0:04)|MP Bailey Biweekly Pay]]>><<pass 4>><</link>><<lstress>>
+	<br>
+<</if>>
+<<if $skulduggery gte 550>>
+	<<sneakicon>><<link [[拿改写银票蒙混过关 (0:06)|MP Bailey Biweekly Bluff]]>><<pass 6>><</link>>
+	<br>
+<</if>>
+<<link [[交不出钱被押往训诫室 (0:12)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 12>><</link>>
+
+:: MP Bailey Biweekly Confront [nobr]
+<<set $outside to 0>><<set $location to "orphanage">>
+<<effects>><<mpAmbient>>
+<<set _compName to (($mpCompanion and $mpCompanion.name) or "同伴")>>
+两名戴黑皮手套的打手往前逼近半步，走廊气氛瞬间紧绷到了极点。你与<<print _compName>>交换了一个眼神。
+<br><br>
+<<getouticon>><<link [[退回楼梯转角交涉 (0:02)|MP Bailey Biweekly Tribunal]]>><<pass 2>><</link>>
+<br>
+<<fisticon>><<link [[跨前替同伴扛下皮鞭 (0:18)|MP Bailey Biweekly Shield]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 18>><<pain 32>><<stress 10>><<willpower 4>><</link>><<ggpain>><<gstress>><<gwillpower>><<glove>>
+<br>
+<<trialicon>><<link [[推倒衣柜联手反击打手 (0:15)|MP Elite Encounter Bailey Enforcers]]>><<pass 15>><<def 3>><</link>>
+<br>
+<<link [[放弃抵抗跟去地下室 (0:12)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 12>><</link>>
 
 :: MP Bailey Biweekly Pay [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>><<mpAmbient>>
+<<set _rebStg to ($mpQuestBaileyRebellion or 0)>><<set _demand to Math.max(0, 150000 - (_rebStg * 18000))>>
+<<if ($money or 0) lt _demand>><<goto "MP Bailey Biweekly Negotiate">><</if>>
+<<set $money -= _demand>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<stress -4>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
 你将点好的钞票拍在贝利摊开的掌心里。贝利捻过纸币边缘确认无误，用钢笔划掉本期的账，带着两名打手转身走上二楼。
@@ -71,8 +98,8 @@
 <<effects>><<mpAmbient>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
-<<if $skulduggery gte random(520, 860)>>
-	你从容地取出一张盖有海事商会火漆的改装汇兑本票递过去。贝利对着走廊灯光检查了水印，没有发现异样，点点头将本票夹进了账册里。<<stress -8>><<willpower 3>>
+<<if $skulduggery gte 680>>
+	你从容地取出一张盖有海事商会火漆的改装汇兑本票递过去。贝利对着走廊灯光检查了水印，没有发现异样，点点头将本票夹进了账册里。<<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<skulduggery 4>><<stress -8>><<willpower 3>>
 	<br><br>
 	<<getouticon>><<link [[与同伴不动声色地离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 	<br>
@@ -92,69 +119,91 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
 <<if _stg gte 4>>
 	你翻开记满前四处暗桩的笔记本，准备追查贝利黑账的后半段下落。
-	<br><br>
-	<<getouticon>><<link [[暂且收起卷宗返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<walkicon>><<link [[继续追查黑账后半段 (0:03)|MP Quest Bailey Rebellion Late]]>><<pass 3>><</link>>
+<<elseif _stg gte 2>>
+	交接单与警局底单已经指向货运站与钟表铺两条暗线。
 <<elseif _stg is 0>>
-	贝利办公室外侧的通风铁栅松动着，里面卡着半张漏碎的双周连坐交接单。
-	<br><br>
-	<<getouticon>><<link [[装作路过离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<sneakicon>><<link [[用铁丝勾出交接单 (0:15)|MP Quest Bailey Rebellion Resolve]]>><<pass 15>><<set $mpQuestBaileyRebellion to 1>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_1")>><<set $money += 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<skulduggery 3>><<stress -4>><</link>>
-<<elseif _stg is 1>>
+	贝利办公室外侧的通风铁栅松动着，里面卡着半张漏碎的查账交接单。
+<<else>>
 	交接单背面印着倒钩街巡警队长私章，今晚旧证物室恰好换班。
-	<br><br>
-	<<link [[暂不打草惊蛇 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<link [[潜入证物室拓印底单 (0:18)|MP Quest Bailey Rebellion Resolve]]>><<pass 18>><<set $mpQuestBaileyRebellion to 2>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_2")>><<set $money += 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<skulduggery 4>><<stress -5>><</link>>
-<<elseif _stg is 2>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[暂且收起卷宗返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<if _stg gte 4>>
+	<<walkicon>><<link [[继续追查黑账后半段 (0:03)|MP Quest Bailey Rebellion Late]]>><<pass 3>><</link>>
+<<elseif _stg gte 2>>
+	<<link [[核对货运站与钟表铺暗桩 (0:03)|MP Quest Bailey Rebellion Mid]]>><<pass 3>><</link>>
+<<elseif _stg is 0>>
+	<<sneakicon>><<link [[用铁丝勾出交接单 (0:15)|MP Quest Bailey Rebellion Resolve]]>><<pass 15>><<set $mpQuestBaileyRebellion to 1>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_1")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<skulduggery 3>><<stress -4>><</link>>
+<<else>>
+	<<link [[潜入证物室拓印底单 (0:18)|MP Quest Bailey Rebellion Resolve]]>><<pass 18>><<set $mpQuestBaileyRebellion to 2>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_2")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<skulduggery 4>><<stress -5>><</link>>
+<</if>>
+
+:: MP Quest Bailey Rebellion Mid [nobr]
+<<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>><<set $daily to ($daily or {})>>
+<<set _stg to ($mpQuestBaileyRebellion or 0)>>
+<<if _stg lt 2>><<goto "MP Quest Bailey Rebellion">><</if>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+<<if _stg is 2>>
 	底单指向麋鹿街黑铁货运站三号装甲车，夹层里锁着两个被借调的院童；林恩已在货运站后门等你。
-	<br><br>
-	<<link [[先退回暗处观察 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<link [[与林恩撬开货车救人夺账 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 3>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_3")>><<set $money += 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<physique 3>><<willpower 2>><</link>>
 <<else>>
 	装甲车搜出的铜钥匙刻着高街钟表铺暗码，钥匙旁还压着一枚火漆印模，需请塞拉配制副匙。
-	<br><br>
-	<<link [[改日再去钟表铺 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<link [[请塞拉比对火漆印模纹路 (0:16)|MP Quest Bailey Rebellion Resolve]]>><<pass 16>><<set $mpQuestBaileyRebellion to 4>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_4")>><<set $money += 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</link>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[先退回走廊观察 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<if _stg is 2>>
+	<<walkicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[与林恩撬开货车救人夺账 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 3>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_3")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<physique 3>><<willpower 2>><</link>><<else>><span class="disabled">与林恩撬开货车救人夺账 (0:20)（尚未结识）</span><</if>>
+<<else>>
+	<<investigateicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[请塞拉比对火漆印模纹路 (0:16)|MP Quest Bailey Rebellion Resolve]]>><<pass 16>><<set $mpQuestBaileyRebellion to 4>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_4")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>><<else>><span class="disabled">请塞拉比对火漆印模纹路 (0:16)（尚未结识）</span><</if>>
 <</if>>
 
 :: MP Quest Bailey Rebellion Late [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>><<set $daily to ($daily or {})>>
-<<set _stg to ($mpQuestBaileyRebellion or 4)>>
+<<set _stg to ($mpQuestBaileyRebellion or 0)>>
+<<if _stg lt 4>><<goto "MP Quest Bailey Rebellion">><</if>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
-<<if _stg is 4>>
+<<if _stg gte 6>>
+	前半本黑账与工业巷密信均已到手，只剩孤儿院暗墙金库与最终摊牌。
+<<elseif _stg is 4>>
 	副匙对应多瑙河街白公馆地窖的联名保险箱，今晚正有假面沙龙。
-	<br><br>
-	<<getouticon>><<link [[暂缓潜入白公馆 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<brothelicon>><<link [[借沙龙掩护取走前半本黑账 (0:22)|MP Quest Bailey Rebellion Resolve]]>><<pass 22>><<set $mpQuestBaileyRebellion to 5>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_5")>><<set $money += 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<danceskill 4>><<skulduggery 4>><</link>>
-<<elseif _stg is 5>>
-	贝利察觉账册失窃，派出清道夫在工业巷设伏拦截。
-	<br><br>
-	<<getouticon>><<link [[绕道避开伏击圈 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<trialicon>><<link [[正面击溃清道夫夺取密信 (0:20)|MP Elite Encounter Bailey Enforcers]]>><<pass 20>><<set $mpQuestBaileyRebellion to 6>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_6")>><<set $money += 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>>
-<<elseif _stg is 6>>
-	密信显示后半本总账藏在孤儿院训诫室暗墙金库内。
-	<br><br>
-	<<link [[等准备万全再动手 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<link [[用双匙开启贝利地下金库 (0:25)|MP Quest Bailey Rebellion Resolve]]>><<pass 25>><<set $mpQuestBaileyRebellion to 7>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_7")>><<set $money += 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<willpower 4>><<control 15>><</link>>
-<<elseif _stg is 7>>
-	八份核心铁证已齐，只需将副本分送市政厅与暗港备份即可斩断连坐。
-	<br><br>
-	<<link [[稍后再去摊牌 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-	<br>
-	<<link [[将铁证拍在贝利办公桌上 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 8>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_8")>><<set $money += 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<control 25>><<trauma -12>><<stress -15>><</link>>
 <<else>>
-	双周连坐规费已彻底废除，贝利再未踏足你们的走廊。
-	<br><br>
-	<<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	贝利察觉账册失窃，派出清道夫在工业巷设伏拦截。
+<</if>>
+<br><br>
+<<getouticon>><<link [[暂缓行动返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<if _stg gte 6>>
+	<<walkicon>><<link [[筹备开启金库与最终摊牌 (0:03)|MP Quest Bailey Rebellion Final]]>><<pass 3>><</link>>
+<<elseif _stg is 4>>
+	<<brothelicon>><<link [[借沙龙掩护取走前半本黑账 (0:22)|MP Quest Bailey Rebellion Resolve]]>><<pass 22>><<set $mpQuestBaileyRebellion to 5>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_5")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<danceskill 4>><<skulduggery 4>><</link>>
+<<else>>
+	<<trialicon>><<link [[正面击溃清道夫夺取密信 (0:20)|MP Elite Encounter Bailey Enforcers]]>><<pass 20>><<set $mpQuestBaileyRebellion to 6>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_6")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><</link>>
+<</if>>
+
+:: MP Quest Bailey Rebellion Final [nobr]
+<<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>><<set $daily to ($daily or {})>>
+<<set _stg to ($mpQuestBaileyRebellion or 0)>>
+<<if _stg lt 6>><<goto "MP Quest Bailey Rebellion">><</if>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
+<<if _stg is 6>>
+	密信显示后半本总账藏在孤儿院训诫室暗墙金库内。
+<<elseif _stg is 7>>
+	八份核心铁证已齐，只需将副本分送市政厅与暗港备份即可斩断盘剥。
+<<else>>
+	查账规费已彻底废除，贝利再未踏足你们的走廊。
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回孤儿院走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<if _stg is 6>>
+	<br>
+	<<sneakicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[用双匙开启贝利地下金库 (0:25)|MP Quest Bailey Rebellion Resolve]]>><<pass 25>><<set $mpQuestBaileyRebellion to 7>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_7")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<willpower 4>><<control 15>><</link>><<else>><span class="disabled">用双匙开启贝利地下金库 (0:25)（尚未结识）</span><</if>>
+<<elseif _stg is 7>>
+	<br>
+	<<baileyicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[将铁证拍在贝利办公桌上 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 8>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_8")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>><<control 25>><<trauma -12>><<stress -15>><</link>><<else>><span class="disabled">将铁证拍在贝利办公桌上 (0:20)（尚未结识）</span><</if>>
 <</if>>
 
 :: MP Quest Bailey Rebellion Resolve [nobr]
@@ -225,9 +274,9 @@
 苍白怨灵发出一声悠长的叹息，半透明的身躯在晨风中寸寸消融，只留下一枚温润剔透的『无瑕象牙月华晶簇』落在青石板上。笼罩四周的血月寒雾随之散去，你的心神与控制感都得到了极大的淬炼。
 <<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpEliteWraith to 1>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_ivory_wraith_win")>>
-	<<set $money += 18000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -18>><<trauma -12>><<control 25>>
+	<<money 18000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -18>><<trauma -12>><<control 25>>
 <<else>>
-	<<set $money += 5000>><<willpower 3>><<stress -10>><<control 10>>
+	<<money 5000>><<willpower 3>><<stress -10>><<control 10>>
 <</if>>
 <br><br>
 <<getouticon>><<link [[收起月华晶簇返回 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
@@ -284,7 +333,7 @@
 <<else>>
 	上涨的潮水淹没了落脚的礁石，数条滑腻的触手趁你脚下一滑缠住了你的腰肢，将你拖向了岸边停泊的暗潮走私船底舱。<<arousal 900>><<stress 10>>
 	<br><br>
-	<<badendicon>><<link [[被暗流卷入走私船底舱 (0:10)|MP BadEnd Smuggler Cargo]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
+	<<badendicon>><<link [[跟紧走私船下到底舱 (0:10)|MP BadEnd Smuggler Cargo]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
 	<br>
 	<<swimicon>><<link [[屏息蹬开岩壁强行浮出水面 (0:08)|MP Elite Encounter Abyssal Tentacles Escape]]>><<pass 8>><<pain 12>><<tiredness 5>><</link>><<gpain>><<gtiredness>>
 <</if>>
@@ -297,9 +346,9 @@
 受创的深渊触手集群彻底缩回海沟裂缝，翻腾的潮水随之平息。你在退潮的石台上拾起了散发幽香的『深海龙涎香』与一只覆满藤壶的古金币箱。
 <<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpEliteTentacles to 1>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_abyssal_tentacles_win")>>
-	<<set $money += 18000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 7>><<stress -16>><<control 20>>
+	<<money 18000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 7>><<stress -16>><<control 20>>
 <<else>>
-	<<set $money += 4500>><<willpower 3>><<stress -8>><<control 10>>
+	<<money 4500>><<willpower 3>><<stress -8>><<control 10>>
 <</if>>
 <br><br>
 <<getouticon>><<link [[带着战利品返回海礁 (0:05)|_exitPas]]>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
@@ -370,9 +419,9 @@
 黑铁水手长轰然倒在蒸汽白雾中人事不省。你用夺来的黄铜主匙打开防波堤主金库，将里面的走私金条、黑市现钞与封存货包一扫而空。
 <<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpEliteBosun to 1>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_blackiron_bosun_win")>>
-	<<set $money += 19000>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 3>><<willpower 8>><<stress -18>><<control 22>>
+	<<money 19000>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 3>><<willpower 8>><<stress -18>><<control 22>>
 <<else>>
-	<<set $money += 5000>><<willpower 3>><<stress -10>><<control 10>>
+	<<money 5000>><<willpower 3>><<stress -10>><<control 10>>
 <</if>>
 <br><br>
 <<getouticon>><<link [[带着金库秘宝返回码头 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
@@ -442,9 +491,9 @@
 你跨过满地的水晶灯碎片，拎起圆桌中央那只沉甸甸的紫檀金匣与不记名金券，与同伴从天鹅绒露台潇洒离去。
 <<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpEliteVelvet to 1>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_velvet_enforcers_win")>>
-	<<set $money += 18000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 7>><<stress -16>><<control 22>>
+	<<money 18000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 7>><<stress -16>><<control 22>>
 <<else>>
-	<<set $money += 5000>><<willpower 3>><<stress -8>><<control 10>>
+	<<money 5000>><<willpower 3>><<stress -8>><<control 10>>
 <</if>>
 <br><br>
 <<getouticon>><<link [[返回康努达图斯街 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
@@ -476,7 +525,7 @@
 <br><br>
 <<fisticon>><<link [[合力推倒高柜砸翻打手 (0:12)|MP Elite Encounter Bailey Enforcers Barricade]]>><<pass 12>><<physique 4>><</link>>
 <br>
-<<trialicon>><<link [[吹响短哨引林恩跃下夹击 (0:14)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 14>><</link>>
+<<trialicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[吹响短哨引林恩跃下夹击 (0:14)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 14>><</link>><<else>><span class="disabled">吹响短哨引林恩跃下夹击 (0:14)（尚未结识）</span><</if>>
 <br>
 <<runicon>><<link [[拉下电闸趁黑退回阁楼 (0:05)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 5>><</link>>
 
@@ -487,7 +536,7 @@
 <<if $physique gte 12500 or $willpower gte 600>>你们趁势夺过被压打手手中的橡胶棍，两棍敲落了后方打手的武器，连同贝利的黑金收款箱一并截获。<<include "MP Elite Encounter Bailey Enforcers Win">>
 <<else>>后方的打手踩着柜顶跃过障碍，但已成了孤军奋战之势。
 	<br><br>
-	<<trialicon>><<link [[引林恩跃下合围打手 (0:10)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 10>><</link>>
+	<<trialicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[引林恩跃下合围打手 (0:10)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 10>><</link>><<else>><span class="disabled">引林恩跃下合围打手 (0:10)（尚未结识）</span><</if>>
 	<br>
 	<<runicon>><<link [[借着木柜阻隔退入卧室 (0:04)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 4>><</link>>
 <</if>>
@@ -501,7 +550,7 @@
 <<else>>
 	橡胶棍重重砸在你的肩头，剧痛令你眼前一黑失去平衡，被两名打手直接拖进了孤儿院地底的训诫室。<<pain 20>><<stress 12>>
 	<br><br>
-	<<badendicon>><<link [[被拖入贝利地下训诫室 (0:10)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>>
+	<<badendicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[跟上押送队伍 (0:10)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>><<else>><span class="disabled">跟上押送队伍 (0:10)（尚未结识）</span><</if>>
 	<br>
 	<<runicon>><<link [[扯出衣袖顺着阁楼绳梯滑下 (0:06)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 6>><<pain 10>><</link>><<gpain>>
 <</if>>
@@ -515,9 +564,9 @@
 <<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>>
 <<if ($mpQuestBaileyRebellion or 0) lt 8>><<set $mpQuestBaileyRebellion to ($mpQuestBaileyRebellion or 0) + 1>><</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_bailey_enforcers_win")>>
-	<<set $money += 15000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<willpower 8>><<stress -18>><<control 25>>
+	<<money 15000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<willpower 8>><<stress -18>><<control 25>>
 <<else>>
-	<<set $money += 4500>><<willpower 3>><<stress -10>><<control 10>>
+	<<money 4500>><<willpower 3>><<stress -10>><<control 10>>
 <</if>>
 <br><br>
 <<getouticon>><<link [[收好战利品返回走廊 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>

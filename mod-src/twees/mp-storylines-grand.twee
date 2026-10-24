@@ -35,7 +35,7 @@
 你的衣角带倒了屏风边的银质谱架，清脆的撞击声惊动了门外侍从，你在匆忙后退时撞青了手肘。
 <<pain 2>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[擦干手心再试 (0:04)|MP Grand Quest Danube Salon Step2]]>><<pass 4>><</link>>
+	<<link [[擦干手心再试 (0:04)|MP Grand Quest Danube Salon Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -64,7 +64,7 @@
 <br>
 <div id="act-mp-grand-quest-danube-salon-step4">
 <<investigateicon>><<link "按音谱旋动地球仪赤道环 (0:08)">><<pass 8>><<replace "#act-mp-grand-quest-danube-salon-step4">>
-<<if ($history or 0) gte 340 or ($skulduggery or 0) gte 340>>
+<<if (($history or 0) + ($mpClues['grand_danube_score'] ? 60 : 0)) gte 340 or ($skulduggery or 0) gte 340>>
 	<<set _sk to Math.max(($history or 0), ($skulduggery or 0))>>
 	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 680>><</if>>
 <<set $mpClues["grand_danube_ledger"] to 1>>
@@ -76,7 +76,7 @@
 你记错了两个升降音阶，地球仪内部的齿轮卡死不动，走廊外逼近的脚步声吓得你满背冷汗。
 <<tiredness 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[垫稳重心再试 (0:04)|MP Grand Quest Danube Salon Step4]]>><<pass 4>><</link>>
+	<<link [[垫稳重心再试 (0:04)|MP Grand Quest Danube Salon Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -106,7 +106,7 @@
 酒架滑轨发出沉闷的摩擦声，搬运工猛地回头呵斥，你在闪避木箱时小腿磕在铁箍桶沿上。
 <<pain 4>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[凑近微光再试 (0:04)|MP Grand Quest Danube Salon Step5]]>><<pass 4>><</link>>
+	<<link [[凑近微光再试 (0:04)|MP Grand Quest Danube Salon Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -146,7 +146,7 @@
 你在执事审视的目光下步伐微乱，只得压低帽檐快步混入梧桐树影之中。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP Grand Quest Danube Salon Resolve]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP Grand Quest Danube Salon Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -158,7 +158,7 @@
 <br><br>
 <<sneakicon>><<link [[用薄刃挑开百叶栓 (0:06)|MP Grand Quest Barb Evidence Step2]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向巷口林恩打听换岗 (0:06)|MP Grand Quest Barb Evidence Step3]]>><<pass 6>><</link>>
+<<socialiseicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[向巷口林恩打听换岗 (0:06)|MP Grand Quest Barb Evidence Step3]]>><<pass 6>><</link>><<else>><span class="disabled">向巷口林恩打听换岗 (0:06)（尚未结识）</span><</if>>
 <br>
 <<if ($mpQuestBarbEvidence or 0) gte 3>>
 	<<investigateicon>><<link [[翻查雾月零七号卷宗 (0:06)|MP Grand Quest Barb Evidence Step4]]>><<pass 6>><</link>>
@@ -182,7 +182,7 @@
 你巧劲一拨便挑开插销，无声滑入证物室铁架后方，顺手从散落的罚没袋里摸出约 £<<print Math.floor(_reward / 100)>> 的旧钞。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_barb_evidence_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[退回巷口向林恩请教 (0:05)|MP Grand Quest Barb Evidence Step3]]>><<set $outside to 1>><<set $location to "barb">><<pass 5>><</link>>
+	<<socialiseicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[退回巷口向林恩请教 (0:05)|MP Grand Quest Barb Evidence Step3]]>><<set $outside to 1>><<set $location to "barb">><<pass 5>><</link>><<else>><span class="disabled">退回巷口向林恩请教 (0:05)（尚未结识）</span><</if>>
 	<br>
 	<<investigateicon>><<link [[开启雾月零七号木箱 (0:08)|MP Grand Quest Barb Evidence Step4]]>><<pass 8>><</link>>
 <<else>>
@@ -217,7 +217,7 @@
 <br>
 <div id="act-mp-grand-quest-barb-evidence-step4">
 <<sneakicon>><<link "撬开箱底密封证物袋 (0:07)">><<pass 7>><<replace "#act-mp-grand-quest-barb-evidence-step4">>
-<<if ($english or 0) gte 320 or ($willpower or 0) gte 420>>
+<<if (($english or 0) + ($mpClues['grand_barb_case07'] ? 60 : 0)) gte 320 or ($willpower or 0) gte 420>>
 	<<set _sk to Math.max(($english or 0), ($willpower or 0))>>
 	<<if _sk gte 750>><<set _reward to 1100>><<elseif _sk gte 500>><<set _reward to 850>><<else>><<set _reward to 600>><</if>>
 <<set $mpKnown["foghorn_pier"] to 1>>
@@ -229,7 +229,7 @@
 发霉的纸页字迹模糊难辨，昏暗的光线看得你眼眶酸胀，只得先把卷宗塞回原处。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[调整手法再试 (0:04)|MP Grand Quest Barb Evidence Step4]]>><<pass 4>><</link>>
+	<<link [[调整手法再试 (0:04)|MP Grand Quest Barb Evidence Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -259,7 +259,7 @@
 防拆钢丝扎破了你的拇指，警员的手电光扫过门缝，你狼狈地滚进铁架底下才没被抓个正着。
 <<pain 4>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[看准位置再试 (0:04)|MP Grand Quest Barb Evidence Step5]]>><<pass 4>><</link>>
+	<<link [[看准位置再试 (0:04)|MP Grand Quest Barb Evidence Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -298,7 +298,7 @@
 你翻墙时靴跟滑脱摔在垃圾桶旁，膝盖磕出一片淤青，好不容易才钻进窄巷甩开警车。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[擦干手心再试 (0:04)|MP Grand Quest Barb Evidence Resolve]]>><<pass 4>><</link>>
+	<<link [[擦干手心再试 (0:04)|MP Grand Quest Barb Evidence Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -338,7 +338,7 @@
 狂风猛地吹迷了你的眼睛，你一脚踩在松动的碎石上滑倒，手掌在粗糙的岩壁上擦破了皮。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[垫稳重心再试 (0:04)|MP Grand Quest Cliff Lighthouse Step2]]>><<pass 4>><</link>>
+	<<link [[垫稳重心再试 (0:04)|MP Grand Quest Cliff Lighthouse Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -380,7 +380,7 @@
 复杂的棱镜折射角让你算错了潮汐时间，冰冷的穿堂风吹得你太阳穴突突直跳。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[活动手指再试 (0:04)|MP Grand Quest Cliff Lighthouse Step4]]>><<pass 4>><</link>>
+	<<link [[活动手指再试 (0:04)|MP Grand Quest Cliff Lighthouse Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -410,7 +410,7 @@
 沉重的配重铅块忽然下滑，擦伤了你的手腕，震耳的哐当声在塔筒内久久回荡。
 <<pain 4>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP Grand Quest Cliff Lighthouse Step5]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP Grand Quest Cliff Lighthouse Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -443,12 +443,12 @@
 你稳步穿过湿滑的崖边栈道，将多余的滤光铜件交予收藏商兑得约 £<<print Math.floor(_reward / 100)>> 的酬金。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_cliff_lighthouse_resolve_1_reward")>><<money _reward>><</if>><<stress -4>>
 	<br><br>
-	<<walkicon>><<link [[顺着暗径继续前行 (0:03)|MP Grand Quest Cliff Lighthouse]]>><<pass 3>><</link>>
+	<<link [[顺着暗径继续前行 (0:03)|MP Grand Quest Cliff Lighthouse]]>><<pass 3>><</link>>
 <<else>>
 陡峭的崖壁让你走得双腿发软，好不容易回到街面时已是气喘吁吁。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[听准动静再试 (0:04)|MP Grand Quest Cliff Lighthouse Resolve]]>><<pass 4>><</link>>
+	<<link [[听准动静再试 (0:04)|MP Grand Quest Cliff Lighthouse Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -489,7 +489,7 @@
 裸露的电容打出一串电火花，麻得你指尖一颤，额头重重磕在机箱塑料挡板上。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[调整手法再试 (0:04)|MP Grand Quest Arcade Basement Step2]]>><<pass 4>><</link>>
+	<<link [[调整手法再试 (0:04)|MP Grand Quest Arcade Basement Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -531,7 +531,7 @@
 闪烁的绿色字符看得你头晕目眩，连续三次输错校验码后驱动器自动锁死退出。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP Grand Quest Arcade Basement Step4]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP Grand Quest Arcade Basement Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -561,7 +561,7 @@
 抽屉边缘的防盗簧片猛地弹起夹伤了你的手指，刺耳的电流啸叫声让你慌忙拔掉电源。
 <<pain 3>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[擦干手心再试 (0:04)|MP Grand Quest Arcade Basement Step5]]>><<pass 4>><</link>>
+	<<link [[擦干手心再试 (0:04)|MP Grand Quest Arcade Basement Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -601,7 +601,7 @@
 沉重的机箱在瓷砖上留下一道白痕，你赶在店员过来查看前快步闪进了人群。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[垫稳重心再试 (0:04)|MP Grand Quest Arcade Basement Resolve]]>><<pass 4>><</link>>
+	<<link [[垫稳重心再试 (0:04)|MP Grand Quest Arcade Basement Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -615,7 +615,7 @@
 <br>
 <<walkicon>><<link [[走进旧翼药剂室 (0:06)|MP Grand Quest Hospital Wing Step2]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向采药归来的诺艾尔请教 (0:06)|MP Grand Quest Hospital Wing Step3]]>><<pass 6>><</link>>
+<<socialiseicon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[向采药归来的诺艾尔请教 (0:06)|MP Grand Quest Hospital Wing Step3]]>><<pass 6>><</link>><<else>><span class="disabled">向采药归来的诺艾尔请教 (0:06)（尚未结识）</span><</if>>
 <br>
 
 :: MP Grand Quest Hospital Wing Step2 [nobr]
@@ -634,9 +634,9 @@
 你熟练地用塞子封好提纯液，并从实验服口袋里摸出约 £<<print Math.floor(_reward / 100)>> 的药材采购经费。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_hospital_wing_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[找诺艾尔辨认草药配比 (0:05)|MP Grand Quest Hospital Wing Step3]]>><<pass 5>><</link>>
+	<<socialiseicon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[找诺艾尔辨认草药配比 (0:05)|MP Grand Quest Hospital Wing Step3]]>><<pass 5>><</link>><<else>><span class="disabled">找诺艾尔辨认草药配比 (0:05)（尚未结识）</span><</if>>
 	<br>
-	<<investigateicon>><<link [[搜寻药剂柜备用铜匙 (0:07)|MP Grand Quest Hospital Wing Step4]]>><<pass 7>><</link>>
+	<<link [[搜寻药剂柜备用铜匙 (0:07)|MP Grand Quest Hospital Wing Step4]]>><<pass 7>><</link>>
 <<else>>
 你不小心碰歪了酒精灯座，挥发的药雾熏得你头重脚轻，只能慌忙退到窗边透气。
 <<tiredness 3>><<stress 5>>
@@ -683,7 +683,7 @@
 锁簧弹回震痛了你的指关节，玻璃柜门发出的晃动声让你心惊肉跳。
 <<pain 2>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[按住底座再试 (0:04)|MP Grand Quest Hospital Wing Step4]]>><<pass 4>><</link>>
+	<<link [[按住底座再试 (0:04)|MP Grand Quest Hospital Wing Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -713,7 +713,7 @@
 冷库铁门合页发出刺耳异响，你在翻越药架躲避时被不锈钢托盘划伤了小臂。
 <<pain 3>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[听准动静再试 (0:04)|MP Grand Quest Hospital Wing Step5]]>><<pass 4>><</link>>
+	<<link [[听准动静再试 (0:04)|MP Grand Quest Hospital Wing Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -752,7 +752,7 @@
 你身上残留的草药味引来值班护士的侧目，吓得你加快步子匆匆推门而出。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[调整手法再试 (0:04)|MP Grand Quest Hospital Wing Resolve]]>><<pass 4>><</link>>
+	<<link [[调整手法再试 (0:04)|MP Grand Quest Hospital Wing Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -764,7 +764,7 @@
 <br><br>
 <<investigateicon>><<link [[核对门框刻痕开锁 (0:06)|MP Grand Quest School Bell Step2]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向走廊边的悉尼请教 (0:05)|MP Grand Quest School Bell Step3]]>><<pass 5>><</link>>
+<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[向走廊边的悉尼请教 (0:05)|MP Grand Quest School Bell Step3]]>><<pass 5>><</link>><<else>><span class="disabled">向走廊边的悉尼请教 (0:05)（尚未结识）</span><</if>>
 <br>
 <<if ($mpQuestSchoolBell or 0) gte 3>>
 	<<walkicon>><<link [[直入报时大钟机芯室 (0:06)|MP Grand Quest School Bell Step4]]>><<pass 6>><</link>>
@@ -788,9 +788,9 @@
 你迅速换算出建校年份转开铜锁，并在门后工具盒里找到约 £<<print Math.floor(_reward / 100)>> 的钟楼修缮备用金。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_school_bell_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[下楼向悉尼请教校史 (0:05)|MP Grand Quest School Bell Step3]]>><<pass 5>><</link>>
+	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[下楼向悉尼请教校史 (0:05)|MP Grand Quest School Bell Step3]]>><<pass 5>><</link>><<else>><span class="disabled">下楼向悉尼请教校史 (0:05)（尚未结识）</span><</if>>
 	<br>
-	<<investigateicon>><<link [[步入机芯室查探钟壁 (0:07)|MP Grand Quest School Bell Step4]]>><<pass 7>><</link>>
+	<<link [[步入机芯室查探钟壁 (0:07)|MP Grand Quest School Bell Step4]]>><<pass 7>><</link>>
 <<else>>
 锈涩的字码轮卡在半途，无论你怎么拨动都无法对齐锁舌，急得额角渗出细汗。
 <<stress 5>>
@@ -836,7 +836,7 @@
 钟体内部的弧面让拓纸频频移位，报时齿轮忽然转动发出的闷响震得你耳膜嗡嗡作响。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[换个角度再试 (0:04)|MP Grand Quest School Bell Step4]]>><<pass 4>><</link>>
+	<<link [[换个角度再试 (0:04)|MP Grand Quest School Bell Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -851,7 +851,7 @@
 <br>
 <div id="act-mp-grand-quest-school-bell-step5">
 <<runicon>><<link "踩稳橡木横梁取下凹槽锡盒 (0:05)">><<pass 5>><<replace "#act-mp-grand-quest-school-bell-step5">>
-<<if ($athletics or 0) gte 350 or ($physique or 0) gte 9500>>
+<<if (($athletics or 0) + ($mpClues['grand_bell_vernier'] ? 60 : 0)) gte 350 or ($physique or 0) gte 9500>>
 	<<set _sk to ($athletics or 0)>>
 	<<if _sk gte 850>><<set _reward to 1400>><<elseif _sk gte 600>><<set _reward to 1080>><<else>><<set _reward to 760>><</if>>
 <<if _sk gte 650 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestSchoolBell_stg_5")>>
@@ -865,7 +865,7 @@
 支架上的润滑油让你脚下一滑，小腿磕在铁护栏上，只能空手滑回平台。
 <<pain 3>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[垫稳重心再试 (0:04)|MP Grand Quest School Bell Step5]]>><<pass 4>><</link>>
+	<<link [[垫稳重心再试 (0:04)|MP Grand Quest School Bell Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -904,7 +904,7 @@
 教职员狐疑地叫住了你，你找借口应付了好一会儿才得以脱身。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[活动手指再试 (0:04)|MP Grand Quest School Bell Resolve]]>><<pass 4>><</link>>
+	<<link [[活动手指再试 (0:04)|MP Grand Quest School Bell Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -916,7 +916,7 @@
 <br><br>
 <<investigateicon>><<link [[转动旁侧泄压手轮 (0:06)|MP Grand Quest Pool Drain Step2]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[找梅森借管钳工具 (0:05)|MP Grand Quest Pool Drain Step3]]>><<pass 5>><</link>>
+<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Mason")>><<link [[找梅森借管钳工具 (0:05)|MP Grand Quest Pool Drain Step3]]>><<pass 5>><</link>><<else>><span class="disabled">找梅森借管钳工具 (0:05)（尚未结识）</span><</if>>
 <br>
 <<if ($mpQuestPoolDrain or 0) gte 3>>
 	<<swimicon>><<link [[进入地下罗马温水池 (0:06)|MP Grand Quest Pool Drain Step4]]>><<pass 6>><</link>>
@@ -940,7 +940,7 @@
 随着一阵白雾排出，检修暗门轰然松动，你在排水滤网槽里捡到了约 £<<print Math.floor(_reward / 100)>> 的遗落硬币与金戒托。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_pool_drain_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[去找梅森问问旧水道 (0:05)|MP Grand Quest Pool Drain Step3]]>><<pass 5>><</link>>
+	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Mason")>><<link [[去找梅森问问旧水道 (0:05)|MP Grand Quest Pool Drain Step3]]>><<pass 5>><</link>><<else>><span class="disabled">去找梅森问问旧水道 (0:05)（尚未结识）</span><</if>>
 	<br>
 	<<walkicon>><<link [[穿过暗门进古浴池 (0:06)|MP Grand Quest Pool Drain Step4]]>><<pass 6>><</link>>
 <<else>>
@@ -975,7 +975,7 @@
 <br>
 <div id="act-mp-grand-quest-pool-drain-step4">
 <<swimicon>><<link "潜入温水池探兽首水口 (0:07)">><<pass 7>><<replace "#act-mp-grand-quest-pool-drain-step4">>
-<<if ($swimmingskill or 0) gte 300 or ($history or 0) gte 300>>
+<<if (($swimmingskill or 0) + ($mpClues['grand_pool_valve'] ? 60 : 0)) gte 300 or ($history or 0) gte 300>>
 	<<set _sk to Math.max(($swimmingskill or 0), ($history or 0))>>
 	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
 <<set $mpClues["grand_pool_roman"] to 1>>
@@ -987,7 +987,7 @@
 温热的泉水让你有些气短，你在滑腻的汉白玉池阶上扑了个空，呛了一小口水。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[稳住呼吸再试 (0:04)|MP Grand Quest Pool Drain Step4]]>><<pass 4>><</link>>
+	<<link [[稳住呼吸再试 (0:04)|MP Grand Quest Pool Drain Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1017,7 +1017,7 @@
 湍急的泉眼暗流把你推向石壁，肩膀撞在青铜兽角上隐隐作痛，你只得先浮出水面换气。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[调整手法再试 (0:04)|MP Grand Quest Pool Drain Step5]]>><<pass 4>><</link>>
+	<<link [[调整手法再试 (0:04)|MP Grand Quest Pool Drain Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1056,7 +1056,7 @@
 你不小心碰倒了门边的浮板架，在众人的注视下匆忙低头快步离开。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP Grand Quest Pool Drain Resolve]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP Grand Quest Pool Drain Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1068,7 +1068,7 @@
 <br><br>
 <<sneakicon>><<link [[顺木跳板潜上甲板 (0:06)|MP Grand Quest Mer Drydock Step2]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向暗处的维斯打听 (0:06)|MP Grand Quest Mer Drydock Step3]]>><<pass 6>><</link>>
+<<socialiseicon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[向暗处的维斯打听 (0:06)|MP Grand Quest Mer Drydock Step3]]>><<pass 6>><</link>><<else>><span class="disabled">向暗处的维斯打听 (0:06)（尚未结识）</span><</if>>
 <br>
 <<if ($mpQuestMerDrydock or 0) gte 3>>
 	<<investigateicon>><<link [[直接进入船长室查账 (0:06)|MP Grand Quest Mer Drydock Step4]]>><<pass 6>><</link>>
@@ -1092,7 +1092,7 @@
 你轻巧地跨过报警麻线翻上甲板，从锚链舱零钱匣里摸出约 £<<print Math.floor(_reward / 100)>> 的海港银币。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_mer_drydock_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[下船找维斯核对船号 (0:05)|MP Grand Quest Mer Drydock Step3]]>><<pass 5>><</link>>
+	<<socialiseicon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[下船找维斯核对船号 (0:05)|MP Grand Quest Mer Drydock Step3]]>><<pass 5>><</link>><<else>><span class="disabled">下船找维斯核对船号 (0:05)（尚未结识）</span><</if>>
 	<br>
 	<<investigateicon>><<link [[推门进入船长室 (0:07)|MP Grand Quest Mer Drydock Step4]]>><<pass 7>><</link>>
 <<else>>
@@ -1140,7 +1140,7 @@
 船身随着船坞底水微微摇晃，杂乱的航海缩写看得你眼花缭乱，半天没能对上账目。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[凑近微光再试 (0:04)|MP Grand Quest Mer Drydock Step4]]>><<pass 4>><</link>>
+	<<link [[凑近微光再试 (0:04)|MP Grand Quest Mer Drydock Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1170,7 +1170,7 @@
 扳手突然打滑撞在铁船肋上，震得你虎口生疼，甲板上方顿时传来守夜水手的脚步声。
 <<pain 4>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[活动手指再试 (0:04)|MP Grand Quest Mer Drydock Step5]]>><<pass 4>><</link>>
+	<<link [[活动手指再试 (0:04)|MP Grand Quest Mer Drydock Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1210,7 +1210,7 @@
 船坞守夜人的猎犬冲着帆布狂吠起来，你只得压低身子快步跑出港区。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[按住底座再试 (0:04)|MP Grand Quest Mer Drydock Resolve]]>><<pass 4>><</link>>
+	<<link [[按住底座再试 (0:04)|MP Grand Quest Mer Drydock Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1222,7 +1222,7 @@
 <br><br>
 <<investigateicon>><<link [[查验台面机关锁芯 (0:06)|MP Grand Quest Elk Workshop Step2]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[请教路过的塞拉 (0:06)|MP Grand Quest Elk Workshop Step3]]>><<pass 6>><</link>>
+<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[请教路过的塞拉 (0:06)|MP Grand Quest Elk Workshop Step3]]>><<pass 6>><</link>><<else>><span class="disabled">请教路过的塞拉 (0:06)（尚未结识）</span><</if>>
 <br>
 <<if ($mpQuestElkWorkshop or 0) gte 3>>
 	<<sneakicon>><<link [[直取图纸架逃生图 (0:06)|MP Grand Quest Elk Workshop Step4]]>><<pass 6>><</link>>
@@ -1246,9 +1246,9 @@
 你用尖嘴钳拨正错位的锁簧将其组装复原，顺手收起绒布下约 £<<print Math.floor(_reward / 100)>> 的定金零钞。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_elk_workshop_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[向门外塞拉请教图纸 (0:05)|MP Grand Quest Elk Workshop Step3]]>><<set $outside to 1>><<set $location to "elk">><<pass 5>><</link>>
+	<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[向门外塞拉请教图纸 (0:05)|MP Grand Quest Elk Workshop Step3]]>><<set $outside to 1>><<set $location to "elk">><<pass 5>><</link>><<else>><span class="disabled">向门外塞拉请教图纸 (0:05)（尚未结识）</span><</if>>
 	<br>
-	<<investigateicon>><<link [[研读天鹅绒定制图纸 (0:07)|MP Grand Quest Elk Workshop Step4]]>><<pass 7>><</link>>
+	<<link [[研读天鹅绒定制图纸 (0:07)|MP Grand Quest Elk Workshop Step4]]>><<pass 7>><</link>>
 <<else>>
 紧绷的发条簧片突然弹开，锋利的铜边划破了你的食指，吓得你连忙放下钳子。
 <<pain 3>><<stress 5>>
@@ -1294,7 +1294,7 @@
 密集的齿轮啮合尺寸看得你头昏眼花，半天也没找准止退销的受力方向。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[看准位置再试 (0:04)|MP Grand Quest Elk Workshop Step4]]>><<pass 4>><</link>>
+	<<link [[看准位置再试 (0:04)|MP Grand Quest Elk Workshop Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1324,7 +1324,7 @@
 锁孔里的防盗刺针扎痛了你的指尖，走廊灯光逼近，你只得慌忙熄灭台灯躲进阴影。
 <<pain 3>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP Grand Quest Elk Workshop Step5]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP Grand Quest Elk Workshop Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1363,7 +1363,7 @@
 锁匠挑剔地压低了收购价，你怕节外生枝只好匆匆收起零件离开后巷。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[换个角度再试 (0:04)|MP Grand Quest Elk Workshop Resolve]]>><<pass 4>><</link>>
+	<<link [[换个角度再试 (0:04)|MP Grand Quest Elk Workshop Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1381,14 +1381,14 @@
 	<<sneakicon>><<link [[直入酒桶后议事室 (0:06)|MP Grand Quest Harvest Cellar Step4]]>><<pass 6>><</link>>
 	<br>
 <</if>>
-<<getouticon>><<link [[退回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[退回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "town">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Harvest Cellar Step2 [nobr]
-<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
 <<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 2)>>
 顺着石阶走下深层酒窖，两侧排列着数十只一人高的陈年橡木桶。你用指节逐一叩击桶壁，最里侧的一只大桶传出空心的回音，侧面的木塞可以左右扳动。
 <br><br>
-<<getouticon>><<link [[返回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "town">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="act-mp-grand-quest-harvest-cellar-step2">
 <<investigateicon>><<link "叩击橡木桶找空心暗门 (0:05)">><<set $outside to 1>><<set $location to "pub">><<pass 5>><<replace "#act-mp-grand-quest-harvest-cellar-step2">>
@@ -1401,7 +1401,7 @@
 	<br><br>
 	<<socialiseicon>><<link [[回后院找酒保套话 (0:05)|MP Grand Quest Harvest Cellar Step3]]>><<set $outside to 1>><<set $location to "pub">><<pass 5>><</link>>
 	<br>
-	<<investigateicon>><<link [[进入酒桶后议事室 (0:07)|MP Grand Quest Harvest Cellar Step4]]>><<pass 7>><</link>>
+	<<link [[进入酒桶后议事室 (0:07)|MP Grand Quest Harvest Cellar Step4]]>><<pass 7>><</link>>
 <<else>>
 木塞机关卡得极紧，你用力过猛扭伤了手腕，酒桶铁箍还刮破了你的袖口。
 <<pain 3>><<stress 5>>
@@ -1418,19 +1418,19 @@
 后院台阶上坐着一名擦酒杯的老酒保，你走过去帮他把空木箱叠好。老酒保吐出一口烟雾，朝活板门方向努了努嘴：「酒桶后面那间议事室是丰收街帮派和私酒商分账的地方，他们最高级的秘酿都是从多瑙河温室庄园的地下酿造室直接运来的。」老酒保提醒你圆桌抽屉底下有个双层夹板。
 <<stress -3>>
 <br><br>
-<<investigateicon>><<link [[进议事室查分成契约 (0:07)|MP Grand Quest Harvest Cellar Step4]]>><<set $outside to 0>><<set $location to "brothel">><<pass 7>><</link>>
+<<investigateicon>><<link [[进议事室查分成契约 (0:07)|MP Grand Quest Harvest Cellar Step4]]>><<set $outside to 0>><<set $location to "pub">><<pass 7>><</link>>
 <br>
-<<sneakicon>><<link [[搜寻圆桌双层暗屉 (0:07)|MP Grand Quest Harvest Cellar Step5]]>><<set $outside to 0>><<set $location to "brothel">><<pass 7>><</link>>
+<<sneakicon>><<link [[搜寻圆桌双层暗屉 (0:07)|MP Grand Quest Harvest Cellar Step5]]>><<set $outside to 0>><<set $location to "pub">><<pass 7>><</link>>
 <br>
-<<getouticon>><<link [[返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Harvest Cellar Step4 [nobr]
-<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 <<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 4)>><<set $mpKnown to ($mpKnown or {})>>
 空心酒桶后方是一间点着煤气灯的地下议事室，空气里飘着浓烈的雪茄烟味。橡木圆桌上散落着帮派与港区私酒商的分成契约，旁边放着一只未上锁的鹿皮钱袋。
 <<if $mpClues["grand_harvest_pact"]>><span class="teal">凭着酒桶底箍上摸到的空心记号，你认出了议事室圆桌下暗藏的机关拉环。</span><</if>>
 <br><br>
-<<getouticon>><<link [[退回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[退回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "town">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="act-mp-grand-quest-harvest-cellar-step4">
 <<investigateicon>><<link "翻阅桌上帮派分账草稿 (0:07)">><<pass 7>><<replace "#act-mp-grand-quest-harvest-cellar-step4">>
@@ -1447,17 +1447,17 @@
 复杂的黑帮分成暗码看得你头疼，头顶地板传来的沉重脚步声让你不敢久留。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP Grand Quest Harvest Cellar Step4]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP Grand Quest Harvest Cellar Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Grand Quest Harvest Cellar Step5 [nobr]
-<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
 <<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 5)>><<set $mpClues to ($mpClues or {})>>
 圆桌主位下方的暗抽屉设有精巧的倒钩暗簧，锁眼隐蔽在雕花木纹之间。夹层里藏着一瓶封存五十年的绝版琥珀威士忌、一枚帮派铜戒与黑市定金。
 <br><br>
-<<getouticon>><<link [[爬出酒窖回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[爬出酒窖回丰收街 (0:03)|Harvest Street]]>><<set $outside to 1>><<set $location to "town">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="act-mp-grand-quest-harvest-cellar-step5">
 <<sneakicon>><<link "避开倒钩暗簧拉抽屉 (0:05)">><<pass 5>><<replace "#act-mp-grand-quest-harvest-cellar-step5">>
@@ -1477,13 +1477,13 @@
 倒钩暗簧弹起划伤了你的手腕，石阶上方传来帮派打手下楼的说话声，吓得你急忙缩回桶后。
 <<pain 3>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[按住底座再试 (0:04)|MP Grand Quest Harvest Cellar Step5]]>><<pass 4>><</link>>
+	<<link [[按住底座再试 (0:04)|MP Grand Quest Harvest Cellar Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Grand Quest Harvest Cellar Step6 [nobr]
-<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 <<set $mpQuestHarvestCellar to Math.max(($mpQuestHarvestCellar or 0), 6)>>
 你将圆桌上的契约纸张按原来的折痕摆好，退回深层酒窖通道，轻轻拉上那扇伪装成陈年橡木桶的暗门。随着木塞机关咔哒一声归位，整排橡木桶看起来毫无二致。你用衣袖擦去木塞上的指印，顺着带有麦芽香气石阶悄然向上爬去，呼吸平稳而轻松。
 <<stress -3>>
@@ -1491,14 +1491,14 @@
 <br><br>
 <<walkicon>><<link [[拉下活板门撒草掩迹 (0:05)|MP Grand Quest Harvest Cellar Resolve]]>><<set $outside to 1>><<set $location to "pub">><<pass 5>><</link>>
 <br>
-<<getouticon>><<link [[直接返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[直接返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Grand Quest Harvest Cellar Resolve [nobr]
 <<set $outside to 1>><<set $location to "pub">><<effects>><<mpAmbient>>
 <<set $mpQuestHarvestCellar to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestHarvestCellar to 1>>
 你将丰收街酒馆后院橡木桶下的地窖铁环放回凹槽，顺手撒上一层干草掩去新翻动的痕迹。后门风灯下正好有两名私酒贩子低声交谈着经过巷口。
 <br><br>
-<<getouticon>><<link [[返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回丰收街 (0:02)|Harvest Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="act-mp-grand-quest-harvest-cellar-resolve">
 <<sneakicon>><<link "撒干草掩铁环悄然离开 (0:03)">><<pass 3>><<replace "#act-mp-grand-quest-harvest-cellar-resolve">>
@@ -1517,7 +1517,7 @@
 后院醉客吵嚷着朝这边走来，你只好压低头快步从侧门溜出后院。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[稳住呼吸再试 (0:04)|MP Grand Quest Harvest Cellar Resolve]]>><<pass 4>><</link>>
+	<<link [[稳住呼吸再试 (0:04)|MP Grand Quest Harvest Cellar Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1529,7 +1529,7 @@
 <br><br>
 <<investigateicon>><<link [[加固帆布整理铁罐 (0:06)|MP Grand Quest Alley Shelter Step2]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[与寻来的罗宾看笔记 (0:06)|MP Grand Quest Alley Shelter Step3]]>><<pass 6>><</link>>
+<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[与寻来的罗宾看笔记 (0:06)|MP Grand Quest Alley Shelter Step3]]>><<pass 6>><</link>><<else>><span class="disabled">与寻来的罗宾看笔记 (0:06)（尚未结识）</span><</if>>
 <br>
 <<if ($mpQuestAlleyShelter or 0) gte 3>>
 	<<sneakicon>><<link [[探查头顶排水管空腔 (0:06)|MP Grand Quest Alley Shelter Step4]]>><<pass 6>><</link>>
@@ -1552,7 +1552,7 @@
 你把避风棚收拾得整洁牢固，并从木托盘凹槽里扫出前人留下的约 £<<print Math.floor(_reward / 100)>> 应急硬币。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_alley_shelter_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[和罗宾共读互助笔记 (0:06)|MP Grand Quest Alley Shelter Step3]]>><<pass 6>><</link>>
+	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[和罗宾共读互助笔记 (0:06)|MP Grand Quest Alley Shelter Step3]]>><<pass 6>><</link>><<else>><span class="disabled">和罗宾共读互助笔记 (0:06)（尚未结识）</span><</if>>
 	<br>
 	<<investigateicon>><<link [[摸索头顶排水管空腔 (0:06)|MP Grand Quest Alley Shelter Step4]]>><<pass 6>><</link>>
 <<else>>
@@ -1600,7 +1600,7 @@
 木托盘突然倾斜，你的手肘擦在粗糙的红砖墙面上，火辣辣地生疼。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[擦干手心再试 (0:04)|MP Grand Quest Alley Shelter Step4]]>><<pass 4>><</link>>
+	<<link [[擦干手心再试 (0:04)|MP Grand Quest Alley Shelter Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1630,7 +1630,7 @@
 生锈的铁丝扭簧崩断划破了你的指腹，巷外忽然传来野狗的吠叫声，让你心头一紧。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[换个角度再试 (0:04)|MP Grand Quest Alley Shelter Step5]]>><<pass 4>><</link>>
+	<<link [[换个角度再试 (0:04)|MP Grand Quest Alley Shelter Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1669,7 +1669,7 @@
 你为了不暴露避风棚位置，只得绕远路穿过泥泞的窄巷才甩开他们。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[凑近微光再试 (0:04)|MP Grand Quest Alley Shelter Resolve]]>><<pass 4>><</link>>
+	<<link [[凑近微光再试 (0:04)|MP Grand Quest Alley Shelter Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1709,7 +1709,7 @@
 飞溅的滚烫砂粒落在你的手背上，烫出一小片红印，沉重的火钳也震得你双臂发酸。
 <<pain 3>><<tiredness 3>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP Grand Quest Foundry Step2]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP Grand Quest Foundry Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1751,7 +1751,7 @@
 钢钎在坚硬的锁梁上打滑，刺耳的金属刮擦声在空旷厂房里回荡，累得你双臂发麻。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[听准动静再试 (0:04)|MP Grand Quest Foundry Step4]]>><<pass 4>><</link>>
+	<<link [[听准动静再试 (0:04)|MP Grand Quest Foundry Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1781,7 +1781,7 @@
 耐火砖边缘残留的高温烫伤了你的指尖，厂房大门外忽然传来工匠返回开锁的动静。
 <<pain 4>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[稳住呼吸再试 (0:04)|MP Grand Quest Foundry Step5]]>><<pass 4>><</link>>
+	<<link [[稳住呼吸再试 (0:04)|MP Grand Quest Foundry Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1819,7 +1819,7 @@
 沉重的金匣坠得你步履蹒跚，好不容易拐出巷口时已经累得直喘粗气。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[看准位置再试 (0:04)|MP Grand Quest Foundry Resolve]]>><<pass 4>><</link>>
+	<<link [[看准位置再试 (0:04)|MP Grand Quest Foundry Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1859,7 +1859,7 @@
 倒数第二根铁脚蹬突然松动下沉，你脚下一空跌坐在沙地上，手掌被铁锈磨破了一块皮。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[擦干手心再试 (0:04)|MP Grand Quest Garden Well Step2]]>><<pass 4>><</link>>
+	<<link [[擦干手心再试 (0:04)|MP Grand Quest Garden Well Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1901,7 +1901,7 @@
 褪色的古体字迹在昏暗光线下难以辨认，涵洞里的冷气冻得你鼻尖发酸。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[垫稳重心再试 (0:04)|MP Grand Quest Garden Well Step4]]>><<pass 4>><</link>>
+	<<link [[垫稳重心再试 (0:04)|MP Grand Quest Garden Well Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1931,7 +1931,7 @@
 锡板边缘锈得锋利如刀，划破了你的食指，涵洞顶部的碎石簌簌落下吓了你一跳。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[凑近微光再试 (0:04)|MP Grand Quest Garden Well Step5]]>><<pass 4>><</link>>
+	<<link [[凑近微光再试 (0:04)|MP Grand Quest Garden Well Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1969,7 +1969,7 @@
 攀爬枯井耗尽了你的力气，回到草坪时小腿还在微微打颤。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP Grand Quest Garden Well Resolve]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP Grand Quest Garden Well Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1981,7 +1981,7 @@
 <br><br>
 <<investigateicon>><<link [[取出蜡布扁平铜盒 (0:05)|MP Grand Quest Bath Pipe Step2]]>><<pass 5>><</link>>
 <br>
-<<socialiseicon>><<link [[请门外罗宾帮忙望风 (0:05)|MP Grand Quest Bath Pipe Step3]]>><<pass 5>><</link>>
+<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[请门外罗宾帮忙望风 (0:05)|MP Grand Quest Bath Pipe Step3]]>><<pass 5>><</link>><<else>><span class="disabled">请门外罗宾帮忙望风 (0:05)（尚未结识）</span><</if>>
 <br>
 <<if ($mpQuestBathPipe or 0) gte 3>>
 	<<sneakicon>><<link [[微调管道后方副阀门 (0:05)|MP Grand Quest Bath Pipe Step4]]>><<pass 5>><</link>>
@@ -2005,7 +2005,7 @@
 你灵巧地避开滚烫管壁抽出铜盒，拨开盒扣摸出前人藏匿的约 £<<print Math.floor(_reward / 100)>> 私房硬币。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_bath_pipe_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[和门口望风的罗宾说话 (0:05)|MP Grand Quest Bath Pipe Step3]]>><<pass 5>><</link>>
+	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[和门口望风的罗宾说话 (0:05)|MP Grand Quest Bath Pipe Step3]]>><<pass 5>><</link>><<else>><span class="disabled">和门口望风的罗宾说话 (0:05)（尚未结识）</span><</if>>
 	<br>
 	<<investigateicon>><<link [[按盒底刻字调副阀门 (0:06)|MP Grand Quest Bath Pipe Step4]]>><<pass 6>><</link>>
 <<else>>
@@ -2053,7 +2053,7 @@
 你旋错了方向，管道里发出一阵剧烈的咕噜声，吓得你一身冷汗连忙拧回原位。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[调整手法再试 (0:04)|MP Grand Quest Bath Pipe Step4]]>><<pass 4>><</link>>
+	<<link [[调整手法再试 (0:04)|MP Grand Quest Bath Pipe Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2083,7 +2083,7 @@
 铅皮暗槽边缘的毛刺刮伤了你的手背，走廊外突然传来院童跑向浴室的脚步声。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[看准位置再试 (0:04)|MP Grand Quest Bath Pipe Step5]]>><<pass 4>><</link>>
+	<<link [[看准位置再试 (0:04)|MP Grand Quest Bath Pipe Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2122,7 +2122,7 @@
 门外有人伸手转动浴室门把，你匆忙间差点把毛巾掉在湿地上。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[擦干手心再试 (0:04)|MP Grand Quest Bath Pipe Resolve]]>><<pass 4>><</link>>
+	<<link [[擦干手心再试 (0:04)|MP Grand Quest Bath Pipe Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2159,7 +2159,7 @@
 	<br><br>
 	<<investigateicon>><<link [[爬上干石台查看水道 (0:05)|MP Grand Quest Grotto Pearl Step3]]>><<pass 5>><</link>>
 	<br>
-	<<swimicon>><<link [[再次下潜摸索青铜盒 (0:07)|MP Grand Quest Grotto Pearl Step4]]>><<pass 7>><</link>>
+	<<link [[再次下潜摸索青铜盒 (0:07)|MP Grand Quest Grotto Pearl Step4]]>><<pass 7>><</link>>
 <<else>>
 冰冷的潭水冻得你小腿抽筋，手指在锋利的礁石边缘划出一道血口，只得浮出水面喘气。
 <<pain 3>><<stress 5>>
@@ -2205,7 +2205,7 @@
 沉重的青铜盒让你在水下耗尽了气息，不得不松手先游回岸边大口喘气。
 <<tiredness 4>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[活动手指再试 (0:04)|MP Grand Quest Grotto Pearl Step4]]>><<pass 4>><</link>>
+	<<link [[活动手指再试 (0:04)|MP Grand Quest Grotto Pearl Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2235,7 +2235,7 @@
 铜扣上的绿锈倒刺扎破了你的指腹，冰冷的潮水漫上石台脚边，催得你心神不宁。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP Grand Quest Grotto Pearl Step5]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP Grand Quest Grotto Pearl Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2274,7 +2274,7 @@
 涨潮的浪花打湿了你的衣摆，你在礁石间走得磕磕绊绊才回到岸上。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[听准动静再试 (0:04)|MP Grand Quest Grotto Pearl Resolve]]>><<pass 4>><</link>>
+	<<link [[听准动静再试 (0:04)|MP Grand Quest Grotto Pearl Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2286,7 +2286,7 @@
 <br><br>
 <<investigateicon>><<link [[拂去弯月浅槽落叶 (0:06)|MP Grand Quest Moon Altar Step2]]>><<pass 6>><</link>>
 <br>
-<<socialiseicon>><<link [[向提灯的阿什请教 (0:06)|MP Grand Quest Moon Altar Step3]]>><<pass 6>><</link>>
+<<socialiseicon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[向提灯的阿什请教 (0:06)|MP Grand Quest Moon Altar Step3]]>><<pass 6>><</link>><<else>><span class="disabled">向提灯的阿什请教 (0:06)（尚未结识）</span><</if>>
 <br>
 <<if ($mpQuestMoonAltar or 0) gte 3>>
 	<<sneakicon>><<link [[引泉水入槽开石匣 (0:06)|MP Grand Quest Moon Altar Step4]]>><<pass 6>><</link>>
@@ -2310,7 +2310,7 @@
 你将二十八宿凹槽清理干净，并从主星凹坑里抠出约 £<<print Math.floor(_reward / 100)>> 的古代奉纳银币。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_moon_altar_step2_1_reward")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<link [[向树下阿什请教机关 (0:05)|MP Grand Quest Moon Altar Step3]]>><<pass 5>><</link>>
+	<<socialiseicon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[向树下阿什请教机关 (0:05)|MP Grand Quest Moon Altar Step3]]>><<pass 5>><</link>><<else>><span class="disabled">向树下阿什请教机关 (0:05)（尚未结识）</span><</if>>
 	<br>
 	<<investigateicon>><<link [[引导林间露水入槽 (0:07)|MP Grand Quest Moon Altar Step4]]>><<pass 7>><</link>>
 <<else>>
@@ -2345,7 +2345,7 @@
 <br>
 <div id="act-mp-grand-quest-moon-altar-step4">
 <<investigateicon>><<link "竹管引清泉注弯月槽 (0:07)">><<pass 7>><<replace "#act-mp-grand-quest-moon-altar-step4">>
-<<if ($science or 0) gte 300 or ($tending or 0) gte 300 or ($willpower or 0) gte 400>>
+<<if (($science or 0) + ($mpClues['grand_moon_star'] ? 60 : 0)) gte 300 or ($tending or 0) gte 300 or ($willpower or 0) gte 400>>
 	<<set _sk to Math.max(($tending or 0), ($willpower or 0))>>
 	<<if _sk gte 800>><<set _reward to 1200>><<elseif _sk gte 550>><<set _reward to 920>><<else>><<set _reward to 650>><</if>>
 <<set $mpKnown["druid_rootcave"] to 1>>
@@ -2357,7 +2357,7 @@
 竹管接口频频漏水，冰凉的泉水浸湿了你的袖口，试了好几次才勉强蓄满浅槽。
 <<tiredness 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP Grand Quest Moon Altar Step4]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP Grand Quest Moon Altar Step4]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2387,7 +2387,7 @@
 平衡锤水漏排空，沉重的石匣盖猛地回弹夹痛了你的手背，惊起林冠一群夜鸦。
 <<pain 4>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[擦干手心再试 (0:04)|MP Grand Quest Moon Altar Step5]]>><<pass 4>><</link>>
+	<<link [[擦干手心再试 (0:04)|MP Grand Quest Moon Altar Step5]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2422,12 +2422,12 @@
 你稳步穿出迷雾林带，将多余的琥珀标本交予商队换得约 £<<print Math.floor(_reward / 100)>> 的酬金。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_grand_quest_moon_altar_resolve_1_reward")>><<money _reward>><</if>><<stress -4>>
 	<br><br>
-	<<walkicon>><<link [[迈步赶往下一处 (0:03)|MP Grand Quest Moon Altar]]>><<pass 3>><</link>>
+	<<link [[迈步赶往下一处 (0:03)|MP Grand Quest Moon Altar]]>><<pass 3>><</link>>
 <<else>>
 林间湿滑的苔藓让你差点崴了脚踝，费了不少功夫才走回主路。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[垫稳重心再试 (0:04)|MP Grand Quest Moon Altar Resolve]]>><<pass 4>><</link>>
+	<<link [[垫稳重心再试 (0:04)|MP Grand Quest Moon Altar Resolve]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>

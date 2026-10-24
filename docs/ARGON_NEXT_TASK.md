@@ -1,78 +1,38 @@
-# 给 Argon 的下一批任务（dev11 接入后）
+# 下一批任务（dev13）
 
-当前源码：**68 个 twee，1991 个 passage**。dev11 的 4 个新文件、7 段拆屏与 57 个返修文件已经接入。
+## 一、必须修
 
-> 写之前先读 `docs/vanilla-ui-style.md`、`ARGON_PROMPT_V7.md`、`docs/argon-dev11-audit.md`。
-> 本批的文字规则与结构已经达标，**重点转向“选择是否真的改变结果”**，不要再大改旧段落结构。
+1. **失败分支降级线索 13 处**
+   - `mp-region-storylines-2.twee`：Velvet Mirage 1–5、Observatory Wing 1–5 的失败 `else` 仍写 `*_alt` 线索。
+   - `mp-storylines-town.twee`：Bedroom Attic Step3、Docks Smuggler Step3、Temple Catacomb Step3 的失败仍写 `town_attic_sketch / town_docks_numbers / town_temple_rubbing`。
+   - 要求：失败只给「错拓/残缺拓片」叙事，不写 `$mpClues`；或保留但明确标为替代进度并加 `$daily` 限次。
 
-## A. 质量返修
+2. **新文件观察给钱 13 处**
+   - `mp-region-moments-7.twee`、`mp-region-storylines-5.twee` 中「架镜比对/举灯细辨/翻看记录」等选项仍可能直接给钱或古董。
+   - 要求：观察项只给 `$mpClues` + 减压，钱/古物只放检定成功分支。
 
-### A1. 双动作同去向
+3. **模板标签**
+   - 「再试」家族 83 种写法、1029 次；「退回/离开」家族 994 种写法、2330 次。
+   - 要求：每个区域固定 3 种再试、2 种离开，其余按场景改写。
 
-多数区域瞬间、关系日、信物页的两个动作成功后仍回同一节点，差异只在金额、`control` 与线索键。请逐段让第二条路有玩家看得见的差别：
-- 成功后去不同的下一节点；或
-- 第二条路不给钱，但给可复用的道具/关系/线索，并在正文写明；或
-- 两条路分别对应同一场景的两个不同藏匿点/两个人。
+4. **同文件 claim 共用键**
+   - Followup / Extra / Partner 的 A/B 仍共用按天键，同日只能拿一份。若两支都应有收益，拆成 `_money` / `_keepsake` 两个键。
 
-至少覆盖本批新增的 80 段和 `mp-region-moments-4/5`、`mp-night-and-wilds-events-2`、`mp-job-seasonal-and-failures-3`、`mp-keepsake-uses-2/3/4`、`mp-npc-intimate-days-3/4/5`。
+5. **正文 NPC 名字**
+   - 旧文件仍有「未认识却点名」的叙述句（入口已门控，正常 UI 不可达）。逐段改为「是 X。/无名替代」二分支。
 
-### A2. `<<control 1>>` 的叙事动机
+## 二、建议
 
-新内容第二动作普遍附带 `<<control 1>>`，部分段落还有 `<<trauma -1>>`。请确认：
-- 如果这是“被照顾/被支配”的关系设计，在正文里写出对应的动作或语气；
-- 如果只是批量模板，删掉或换成与场景匹配的属性（stress/tiredness/trust）。
+- 把 `MP Region Pool Router` 的 165 段区域事件按区域拆成独立 pool，避免一个大 switch。
+- 给所有 Shift 页补 `$daily` 已交班分支，防止历史记录重进。
+- 统一 `$location` 与 `PASSAGE_CN` 的 Blackiron 命名（elk/industrial 二选一）。
+- 继续收敛菜单 Hub 图标到 ≤4，出口置顶。
 
-### A3. 菜单页选项过多
+## 三、验收
 
-`MP Job Followup *`(8)、`MP Job * Progress`(10–11)、`MP Job Extra * 1`(9) 等仍是多入口菜单。请按“2–5 个选项”拆成二级页（例如“今日可做的活计”/“查看熟客”），或把同级入口合并。
-
-### A4. Hub 图标
-
-`MP Town Side Stories Hub`(16)、`MP Wild Side Stories Hub`(12)、`MP Town Extra Stories Hub`(10)、`MP Wild Extra Events Hub`(10)、`MP Town Festivals Hub`(9) 等同屏图标过多。目录页建议只保留 1 个返回图标 + 最多 3 个主分类图标，其余入口不加图标。
-
-### A5. 旧内容语义复核
-
-- `mp-locations` 的 UI 子屏（`MP Player Interact Dates/Intimate`）仍有多入口，属于对话菜单，可保留；
-- `mp-bailey` 的审判页 6–10 个入口，建议按“审问/交涉/离开”分组；
-- `$mpClues` 的读取目前以装饰句为主，若某个 key 只加一句 flavor，考虑改成真正影响检定/奖励。
-
-## B. 新内容（可选，约 80 段）
-
-1. **8 段区域暗线后续**：读取 `$mpQuest*` 阶段。
-2. **8 段信物后续**：读取 `$mpKeepsake`，每枚 1 段。
-3. **12 段 NPC 日常**：原版 6 人 × 2。
-4. **剩余补足到 80 段**：优先区域事件与 NPC 日常，不新增纯菜单 Hub。
-
-## 硬规则（不变）
-
-1. 一个 passage 只写一个瞬间；单屏正文 60–250 汉字。
-2. 一段 2–4 个选项，最多 5 个；移动/离开选项在最上面。
-3. 选项写动作，不写结果；≤12 个汉字；不加句号。
-4. 同一段选项长短不要一样。
-5. 一段图标最多 3–4 个；闲聊、追问、等待不加图标。
-6. 有检定就有成功/失败和具体后果；失败不扣现有钱、不加进度、不推进到发奖段。
-7. 选择要真的改变结果：不能进页面先掷骰，也不能两个选项同一结果。
-8. 不写 Lv/等级/经验/任务/阶段/进度/奖励/你成功了。
-9. 每个 passage 开头 `$outside` / `$location`，加 `[nobr]`。
-10. 一次性奖励用 `claimUniqueReward`；`<<money 1200>>` = £12。
-11. 中文引号必须成对；对话用「」。
-12. 藏品/信物/脏物用 `<<keepsakeicon>>`。
-13. 不要改 `boot.json` / `mp.js`；新文件与 Hub 留好接口，由集成方接线。
-14. **写完后跑栈式 if 检查**：`<<else>>` 不得重复、不得孤立，passage 结束时 `<<if>>` 必须全部闭合。
-
-## 输出
-
-1. 返修直接改对应文件，`manifest.md` 列出改了哪些段、每段是 A1–A5 中的哪一项。
-2. 新内容按主题分文件。
-3. `selfcheck.md`：断链、outside/location、宏闭合、if/else 栈式检查、未注册图标、Lv、失败扣钱、重复句、BFS 可达、引号配对、选项 >12 字、单屏 >250 字。
-4. `manifest.md` 里列出每个新文件对照过的本体 passage（3–5 个）与采用的框架。
-
-## 验收
-
-- 断链 0、宏闭合 0、if/else 栈式错误 0、引号配对 0
-- 每段 `$outside` / `$location` / `[nobr]`
-- 选项 >12 汉字 0、单屏 >250 汉字 0、同文件重复句 0
-- 没有 Lv/等级/经验/阶段
-- 没有失败扣存款、失败推进发奖
-- 新内容可从入口 BFS 到达
-- 抽查 10 对双动作：成功/失败文本与去向不能完全相同
+- 72+ twee，重名 0，断链 0，宏 0，if 栈 0。
+- 失败分支发钱/写线索/发物品 = 0（或明确列白名单）。
+- 观察给钱 = 0。
+- 带名选项未门控 = 0。
+- boot 注册 = 磁盘文件数。
+- `$location` 与正文场景一致，跨区 <8 分钟 = 0。

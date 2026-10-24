@@ -11,17 +11,17 @@
 <<set _traSt to ($daily and $daily.mpJobTrawler) ? "今日已歇" : "正在招手">>
 高街转角那块旧木招工板下新添了一排铁夹，上面夹着六张手写招工木牌。木牌边缘沾着面粉、线头、火漆与海盐，显然是从不同街口刚送过来的。你拂去木牌表面的潮气，把六处差事的时辰与去向依次看了一遍。
 <br><br>
-<<link [[面包房早班 · <<print _bakSt>> (0:03)|MP Job Bakery]]>><<pass 3>><</link>>
+<<link [[面包房早班 · <<print _bakSt>> (0:06)|MP Job Bakery]]>><<pass 6>><</link>>
 <br>
-<<link [[裁缝铺改衣 · <<print _taiSt>> (0:03)|MP Job Tailor]]>><<pass 3>><</link>>
+<<link [[裁缝铺改衣 · <<print _taiSt>> (0:08)|MP Job Tailor]]>><<pass 8>><</link>>
 <br>
-<<link [[街巷跑腿邮差 · <<print _couSt>> (0:03)|MP Job Courier]]>><<pass 3>><</link>>
+<<link [[街巷跑腿邮差 · <<print _couSt>> (0:05)|MP Job Courier]]>><<pass 5>><</link>>
 <br>
-<<link [[丰收酒馆后厨 · <<print _pubSt>> (0:03)|MP Job PubKitchen]]>><<pass 3>><</link>>
+<<link [[丰收酒馆后厨 · <<print _pubSt>> (0:08)|MP Job PubKitchen]]>><<pass 8>><</link>>
 <br>
-<<link [[河湾马厩驮运 · <<print _staSt>> (0:03)|MP Job Stable]]>><<pass 3>><</link>>
+<<link [[河湾马厩驮运 · <<print _staSt>> (0:15)|MP Job Stable]]>><<pass 15>><</link>>
 <br>
-<<link [[旧港近海渔船 · <<print _traSt>> (0:03)|MP Job Trawler]]>><<pass 3>><</link>>
+<<link [[旧港近海渔船 · <<print _traSt>> (0:12)|MP Job Trawler]]>><<pass 12>><</link>>
 <br><br>
 <<investigateicon>><<link [[招工板背后的四季备忘录 (0:02)|MP Extra Job Supplement Hub]]>><<pass 2>><</link>>
 <br>
@@ -32,7 +32,7 @@
 /* ==================== 1. 面包房早班 (Bakery) ==================== */
 
 :: MP Job Bakery [nobr]
-<<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobBakeryCount to ($mpJobBakeryCount or 0)>>
 <<set _stage to ($mpJobBakeryCount gte 15 ? 4 : $mpJobBakeryCount gte 10 ? 3 : $mpJobBakeryCount gte 6 ? 2 : $mpJobBakeryCount gte 3 ? 1 : 0)>>
 砖砌烤炉里透出烘麦芽与黄油的暖香，木案板上撒着一层细白面粉。烤面包师傅正用长柄木铲把第一炉黑麦圆包往铁架上挪，铁盘与砖壁摩擦出沉闷的声响。
@@ -56,7 +56,8 @@
 <<getouticon>><<link [[回到招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Bakery Shift [nobr]
-<<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
+<<if ($mpJobBakerySuspended or 0) is 1>><<goto "MP Job Bakery Progress">><</if>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobBakeryCount to ($mpJobBakeryCount or 0)>>
 <<set _stage to ($mpJobBakeryCount gte 15 ? 4 : $mpJobBakeryCount gte 10 ? 3 : $mpJobBakeryCount gte 6 ? 2 : $mpJobBakeryCount gte 3 ? 1 : 0)>>
 早市的钟声刚响过第一遍，三层铁烤架上的黑麦面团已经鼓起饱满的弧度，前厅橱窗外排起了买热面包的街坊。炉温正高，热浪扑在脸上让人鼻尖冒汗，师傅在案板另一头喊你搭手。
@@ -74,7 +75,7 @@
 	<<set _ok to (_sk gte 260 or _stage gte 3)>>
 	<<set $mpJobBakeryCount to ($mpJobBakeryCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 420 + _stage * 180 + Math.floor(_sk / 5) - (($mpJobBakeryPenalty or 0) is 1 ? 80 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (420 + _stage * 180 + Math.floor(_sk / 5) - (($mpJobBakeryPenalty or 0) is 1 ? 80 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你掐准麦香转浓的瞬间抽动木铲，十二只黑麦圆包外壳金黄酥脆，没有一只焦底。前厅熟客连声夸赞，顺手在木托盘上多压了几枚硬币。">>
 	<<else>>
@@ -90,7 +91,7 @@
 	<<set _ok to (_sk gte 250 or _stage gte 2)>>
 	<<set $mpJobBakeryCount to ($mpJobBakeryCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 380 + _stage * 160 + Math.floor(_sk / 6) - (($mpJobBakeryPenalty or 0) is 1 ? 70 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (380 + _stage * 160 + Math.floor(_sk / 6) - (($mpJobBakeryPenalty or 0) is 1 ? 70 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你利落地用长面包刀切开刚出炉的核桃长棍，油纸折角严丝合缝，找零更是分毫不差。赶着上工的客人们满意地拎包离开。">>
 	<<else>>
@@ -103,7 +104,7 @@
 <br>
 <<walkicon>><<link [[在案板旁筛粉刷烤盘 (0:14)|MP Job Bakery Settle]]>>
 	<<set $mpJobBakeryCount to ($mpJobBakeryCount or 0) + 1>>
-	<<set _pay to Math.min(1500, 310 + _stage * 90 - (($mpJobBakeryPenalty or 0) is 1 ? 50 : 0))>>
+	<<set _pay to Math.min(6000, 4 * (310 + _stage * 90 - (($mpJobBakeryPenalty or 0) is 1 ? 50 : 0)))>>
 	<<set $mpJobResultPay to _pay>>
 	<<set $mpJobResultText to "你守着细铜筛把三大袋麦粉筛得松软均匀，又用猪鬃刷把冷却的铁烤盘擦得锃亮。活计虽然单调，却没出半点差错。">>
 	<<stress 1>><<tiredness 2>>
@@ -113,7 +114,7 @@
 <<getouticon>><<link [[先放下围裙退回前厅 (0:02)|MP Job Bakery]]>><<pass 2>><</link>>
 
 :: MP Job Bakery Progress [nobr]
-<<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobBakeryCount to ($mpJobBakeryCount or 0)>>
 <<set _stage to ($mpJobBakeryCount gte 15 ? 4 : $mpJobBakeryCount gte 10 ? 3 : $mpJobBakeryCount gte 6 ? 2 : $mpJobBakeryCount gte 3 ? 1 : 0)>>
 你站在发酵室木架旁，查看墙上的木号牌与订户竹篮。
@@ -130,8 +131,38 @@
 	整间面包房早班最要紧的甜面团都由你亲手揉制。
 <</if>>
 <br><br>
+<br><br>
+<<getouticon>><<link [[返回面包房烤炉前 (0:02)|MP Job Bakery]]>><<pass 2>><</link>>
+<br>
+<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
+<<investigateicon>><<link [[查看熟客与当班活计 (0:02)|MP Job Bakery Duties]]>><<pass 2>><</link>>
 <<if ($mpJobBakerySuspended or 0) is 1>>
-	由于连续三次在炉前出岔子，师傅暂时收走了你的亚麻手垫。<br><br>
+	<br>
+	<<socialiseicon>><<link [[去消解停工处分 (0:03)|MP Job Bakery Remedy]]>><<pass 3>><</link>>
+<<elseif ($mpJobBakeryStrike or 0) gte 1 or ($mpJobBakeryPenalty or 0) is 1>>
+	<br>
+	<<tendingicon>><<link [[弥补先前的差错 (0:03)|MP Job Bakery StrikeFix]]>><<pass 3>><</link>>
+<</if>>
+
+:: MP Job Bakery Duties [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+你站在发酵室木牌前查看今日的烘焙加急单与后门熟客。
+<br><br>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Bakery Progress]]>><<pass 2>><</link>>
+<br>
+<<if ($mpJobBakeryCount or 0) gte 3>><br><<link [[招呼等在后门的邻街老太太 (0:06)|MP Job Followup Bakery]]>><<pass 6>><</link>><</if>>
+<br>
+<<if $daily and $daily.mpJobBakery>><<link [[应对当班突发状况 (0:05)|MP Job Extra Bakery 1]]>><<pass 5>><</link>><</if>>
+<br>
+<<if $daily and $daily.mpJobBakery>><<link [[与同班搭档合做加急单 (0:05)|MP Job Partner Bakery 2]]>><<pass 5>><</link>><</if>>
+
+:: MP Job Bakery Remedy [nobr]
+<<if ($mpJobBakerySuspended or 0) isnt 1>><<goto "MP Job Bakery Progress">><</if>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Bakery Progress]]>><<pass 2>><</link>>
+<br><br>
+由于连续三次在炉前出岔子，师傅暂时收走了你的亚麻手垫。<br><br>
 	<<runicon>><<link [[送两篮热包去孤儿院 (0:15)|MP Job Bakery Progress]]>>
 		<<set $mpJobBakeryStrike to 0>><<set $mpJobBakerySuspended to 0>><<set $mpJobBakeryPenalty to 0>>
 		<<stress 1>><<tiredness 3>><<pass 15>>
@@ -154,7 +185,12 @@
 			<<stress 4>><<tiredness 3>><<pass 14>>
 		<</if>>
 	<</link>>
-<<elseif ($mpJobBakeryStrike or 0) is 2 or ($mpJobBakeryPenalty or 0) is 1>>
+
+:: MP Job Bakery StrikeFix [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Bakery Progress]]>><<pass 2>><</link>>
+<br><br>
+<<if ($mpJobBakeryStrike or 0) is 2 or ($mpJobBakeryPenalty or 0) is 1>>
 	师傅因你先前的失误收起了铜钥匙，分成也压低了一截。
 	<br><br>
 	<<tendingicon>><<link [[留下替晚班揉老面 (0:12)|MP Job Bakery Progress]]>>
@@ -175,19 +211,10 @@
 		<<set $mpJobBakeryStrike to 0>><<stress 1>><<tiredness 1>><<pass 6>>
 	<</link>>
 <</if>>
-<br>
-<<if ($mpJobBakeryCount or 0) gte 3>><br><<link [[招呼等在后门的邻街老太太 (0:06)|MP Job Followup Bakery]]>><<pass 6>><</link>><</if>>
-<br>
-<<link [[返回面包房烤炉前 (0:02)|MP Job Bakery]]>><<pass 2>><</link>>
-<br>
-<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
-<br>
-<<if $daily and $daily.mpJobBakery>><<link [[应对当班突发状况 (0:05)|MP Job Extra Bakery 1]]>><<pass 5>><</link>><</if>>
-<br>
-<<if $daily and $daily.mpJobBakery>><<link [[与同班搭档合做加急单 (0:05)|MP Job Partner Bakery 2]]>><<pass 5>><</link>><</if>>
 
 :: MP Job Bakery Settle [nobr]
-<<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
+<<if !$mpJobResultText>><<goto "MP Job Bakery Progress">><</if>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobBakeryCount to ($mpJobBakeryCount or 0)>>
 <<set _stage to ($mpJobBakeryCount gte 15 ? 4 : $mpJobBakeryCount gte 10 ? 3 : $mpJobBakeryCount gte 6 ? 2 : $mpJobBakeryCount gte 3 ? 1 : 0)>>
 <<print ($mpJobResultText or "你解下沾着面粉的围裙，把烤盘归置回铁架上。")>>
@@ -211,7 +238,7 @@
 		<<if _msClaimed>>
 			<br><br>
 			收工前，师傅把发酵室的备用黄铜钥匙和一封厚实的红纸赏封推到你面前：「往后早炉的火候，你能独当一面了。」
-			<<money 800>><<stress -3>>
+			<<money 1600>><<stress -3>>
 		<</if>>
 	<</if>>
 <<else>>
@@ -233,7 +260,7 @@
 /* ==================== 2. 裁缝铺改衣 (Tailor) ==================== */
 
 :: MP Job Tailor [nobr]
-<<set $outside to 0>><<set $location to "cabin">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobTailorCount to ($mpJobTailorCount or 0)>>
 <<set _stage to ($mpJobTailorCount gte 15 ? 4 : $mpJobTailorCount gte 10 ? 3 : $mpJobTailorCount gte 6 ? 2 : $mpJobTailorCount gte 3 ? 1 : 0)>>
 高街裁缝铺的木门后挂着厚绒门帘，空气里浮动着蒸汽熨斗与羊毛呢料的气息。老裁缝戴着老花镜坐在靠窗的脚踏缝纫机前，手边放着一盒按色号排开的蚕丝线轴。
@@ -256,7 +283,8 @@
 <<getouticon>><<link [[回到招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Tailor Shift [nobr]
-<<set $outside to 0>><<set $location to "cabin">><<effects>><<mpAmbient>>
+<<if ($mpJobTailorSuspended or 0) is 1>><<goto "MP Job Tailor Progress">><</if>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobTailorCount to ($mpJobTailorCount or 0)>>
 <<set _stage to ($mpJobTailorCount gte 15 ? 4 : $mpJobTailorCount gte 10 ? 3 : $mpJobTailorCount gte 6 ? 2 : $mpJobTailorCount gte 3 ? 1 : 0)>>
 午后的试衣间门帘不时掀动，衣架上挂满了等待收腰、换衬里和钉暗扣的礼服与制服。老裁缝踩着踏板发出规律的哒哒声，把几件标着取衣钟点的衣裳推到你的工作台边。
@@ -274,7 +302,7 @@
 	<<set _ok to (_sk gte 270 or _stage gte 3)>>
 	<<set $mpJobTailorCount to ($mpJobTailorCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 450 + _stage * 185 + Math.floor(_sk / 5) - (($mpJobTailorPenalty or 0) is 1 ? 90 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (450 + _stage * 185 + Math.floor(_sk / 5) - (($mpJobTailorPenalty or 0) is 1 ? 90 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你用极细的盲针将丝绸内衬缝合得看不出半点针眼，暗袋与隐扣位置分毫不差。来取衣的熟客试穿后十分满意，当场留下了丰厚的手工赏钱。">>
 	<<else>>
@@ -290,7 +318,7 @@
 	<<set _ok to (_sk gte 250 or _stage gte 2)>>
 	<<set $mpJobTailorCount to ($mpJobTailorCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 390 + _stage * 165 + Math.floor(_sk / 6) - (($mpJobTailorPenalty or 0) is 1 ? 75 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (390 + _stage * 165 + Math.floor(_sk / 6) - (($mpJobTailorPenalty or 0) is 1 ? 75 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你隔着湿亚麻布用重锤熨斗稳稳压过羊毛大衣的翻领，折痕挺括利落，连陈年褶皱都被熨得平平整整。老裁缝点点头，把手工钱记在了你的单子上。">>
 	<<else>>
@@ -303,7 +331,7 @@
 <br>
 <<walkicon>><<link [[分拣纽扣与碎布料 (0:14)|MP Job Tailor Settle]]>>
 	<<set $mpJobTailorCount to ($mpJobTailorCount or 0) + 1>>
-	<<set _pay to Math.min(1500, 320 + _stage * 90 - (($mpJobTailorPenalty or 0) is 1 ? 50 : 0))>>
+	<<set _pay to Math.min(6000, 4 * (320 + _stage * 90 - (($mpJobTailorPenalty or 0) is 1 ? 50 : 0)))>>
 	<<set $mpJobResultPay to _pay>>
 	<<set $mpJobResultText to "你把三大盒混杂的贝壳扣、牛角扣与包布扣按尺寸归入木格，又将裁剩下的丝绒边角料捆扎整齐。老裁缝照例给了你一份基础辛劳钱。">>
 	<<stress 1>><<tiredness 2>>
@@ -313,7 +341,7 @@
 <<getouticon>><<link [[摘下顶针退回铺面 (0:02)|MP Job Tailor]]>><<pass 2>><</link>>
 
 :: MP Job Tailor Progress [nobr]
-<<set $outside to 0>><<set $location to "cabin">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobTailorCount to ($mpJobTailorCount or 0)>>
 <<set _stage to ($mpJobTailorCount gte 15 ? 4 : $mpJobTailorCount gte 10 ? 3 : $mpJobTailorCount gte 6 ? 2 : $mpJobTailorCount gte 3 ? 1 : 0)>>
 你站在铜镜旁翻看墙钩上的改衣尺码卡。
@@ -330,8 +358,38 @@
 	城里最挑剔的晚礼服与假面舞会披肩都指名交给你改制。
 <</if>>
 <br><br>
+<br><br>
+<<getouticon>><<link [[回到裁缝铺工作台 (0:02)|MP Job Tailor]]>><<pass 2>><</link>>
+<br>
+<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
+<<investigateicon>><<link [[查看熟客与当班活计 (0:02)|MP Job Tailor Duties]]>><<pass 2>><</link>>
 <<if ($mpJobTailorSuspended or 0) is 1>>
-	因为接连弄坏衣料，你的副工作台被锁上了抽屉。<br><br>
+	<br>
+	<<socialiseicon>><<link [[去消解停工处分 (0:03)|MP Job Tailor Remedy]]>><<pass 3>><</link>>
+<<elseif ($mpJobTailorStrike or 0) gte 1 or ($mpJobTailorPenalty or 0) is 1>>
+	<br>
+	<<tendingicon>><<link [[弥补先前的差错 (0:03)|MP Job Tailor StrikeFix]]>><<pass 3>><</link>>
+<</if>>
+
+:: MP Job Tailor Duties [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+你翻开裁缝台旁的预约簿，核对今日的改衣急件与熟客委托。
+<br><br>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Tailor Progress]]>><<pass 2>><</link>>
+<br>
+<<if ($mpJobTailorCount or 0) gte 3>><br><<link [[替首席小提琴手加固燕尾服 (0:07)|MP Job Followup Tailor]]>><<pass 7>><</link>><</if>>
+<br>
+<<if $daily and $daily.mpJobTailor>><<link [[应对当班突发状况 (0:05)|MP Job Extra Tailor 1]]>><<pass 5>><</link>><</if>>
+<br>
+<<if $daily and $daily.mpJobTailor>><<link [[与同班搭档合做加急单 (0:05)|MP Job Partner Tailor 2]]>><<pass 5>><</link>><</if>>
+
+:: MP Job Tailor Remedy [nobr]
+<<if ($mpJobTailorSuspended or 0) isnt 1>><<goto "MP Job Tailor Progress">><</if>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Tailor Progress]]>><<pass 2>><</link>>
+<br><br>
+因为接连弄坏衣料，你的副工作台被锁上了抽屉。<br><br>
 	<<runicon>><<link [[送礼服去多瑙河街 (0:15)|MP Job Tailor Progress]]>>
 		<<set $mpJobTailorStrike to 0>><<set $mpJobTailorSuspended to 0>><<set $mpJobTailorPenalty to 0>>
 		<<stress 1>><<tiredness 3>><<pass 15>>
@@ -354,7 +412,12 @@
 			<<stress 4>><<tiredness 2>><<pass 12>>
 		<</if>>
 	<</link>>
-<<elseif ($mpJobTailorStrike or 0) is 2 or ($mpJobTailorPenalty or 0) is 1>>
+
+:: MP Job Tailor StrikeFix [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Tailor Progress]]>><<pass 2>><</link>>
+<br><br>
+<<if ($mpJobTailorStrike or 0) is 2 or ($mpJobTailorPenalty or 0) is 1>>
 	老裁缝暂时收回了你的镀银裁布剪与私密改衣抽成，只让你做最普通的基础活计。
 	<br><br>
 	<<tendingicon>><<link [[留下把积压裤脚锁边 (0:12)|MP Job Tailor Progress]]>>
@@ -375,19 +438,10 @@
 		<<set $mpJobTailorStrike to 0>><<stress 1>><<tiredness 1>><<pass 5>>
 	<</link>>
 <</if>>
-<br>
-<<if ($mpJobTailorCount or 0) gte 3>><br><<link [[替首席小提琴手加固燕尾服 (0:07)|MP Job Followup Tailor]]>><<pass 7>><</link>><</if>>
-<br>
-<<link [[回到裁缝铺工作台 (0:02)|MP Job Tailor]]>><<pass 2>><</link>>
-<br>
-<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
-<br>
-<<if $daily and $daily.mpJobTailor>><<link [[应对当班突发状况 (0:05)|MP Job Extra Tailor 1]]>><<pass 5>><</link>><</if>>
-<br>
-<<if $daily and $daily.mpJobTailor>><<link [[与同班搭档合做加急单 (0:05)|MP Job Partner Tailor 2]]>><<pass 5>><</link>><</if>>
 
 :: MP Job Tailor Settle [nobr]
-<<set $outside to 0>><<set $location to "cabin">><<effects>><<mpAmbient>>
+<<if !$mpJobResultText>><<goto "MP Job Tailor Progress">><</if>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobTailorCount to ($mpJobTailorCount or 0)>>
 <<set _stage to ($mpJobTailorCount gte 15 ? 4 : $mpJobTailorCount gte 10 ? 3 : $mpJobTailorCount gte 6 ? 2 : $mpJobTailorCount gte 3 ? 1 : 0)>>
 <<print ($mpJobResultText or "你把银针插回绒布针包，将软尺卷好放回抽屉。")>>
@@ -411,7 +465,7 @@
 		<<if _msClaimed>>
 			<br><br>
 			打烊时，老裁缝打开红木匣，取出一把镌刻花纹的镀银裁布剪与一叠整钞递给你：「从今往后，店里的急单与私密委托都准你直接接手。」
-			<<money 900>><<stress -3>>
+			<<money 1800>><<stress -3>>
 		<</if>>
 	<</if>>
 <<else>>
@@ -458,6 +512,7 @@
 <<getouticon>><<link [[回到招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Courier Shift [nobr]
+<<if ($mpJobCourierSuspended or 0) is 1>><<goto "MP Job Courier Progress">><</if>>
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobCourierCount to ($mpJobCourierCount or 0)>>
 <<set _stage to ($mpJobCourierCount gte 15 ? 4 : $mpJobCourierCount gte 10 ? 3 : $mpJobCourierCount gte 6 ? 2 : $mpJobCourierCount gte 3 ? 1 : 0)>>
@@ -476,7 +531,7 @@
 	<<set _ok to (_sk gte 270 or _stage gte 3)>>
 	<<set $mpJobCourierCount to ($mpJobCourierCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 440 + _stage * 180 + Math.floor(_sk / 5) - (($mpJobCourierPenalty or 0) is 1 ? 85 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (440 + _stage * 180 + Math.floor(_sk / 5) - (($mpJobCourierPenalty or 0) is 1 ? 85 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你脚下生风地翻过住宅区与商业巷的矮墙捷径，赶在商行截单前把六封火漆急件全部送达。收件掌柜痛快地在夹板上签了名，还额外赏了跑腿费。">>
 	<<else>>
@@ -492,7 +547,7 @@
 	<<set _ok to (_sk gte 250 or _stage gte 2)>>
 	<<set $mpJobCourierCount to ($mpJobCourierCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 390 + _stage * 160 + Math.floor(_sk / 6) - (($mpJobCourierPenalty or 0) is 1 ? 70 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (390 + _stage * 160 + Math.floor(_sk / 6) - (($mpJobCourierPenalty or 0) is 1 ? 70 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你仔细辨认出被雨水洇开的旧街牌缩写，准确敲开了多瑙河街与狼街的三户偏门。住户们核对完火漆印章，客气地把签收条与小费递回你手里。">>
 	<<else>>
@@ -505,7 +560,7 @@
 <br>
 <<walkicon>><<link [[分拣信件加盖邮戳 (0:14)|MP Job Courier Settle]]>>
 	<<set $mpJobCourierCount to ($mpJobCourierCount or 0) + 1>>
-	<<set _pay to Math.min(1500, 310 + _stage * 90 - (($mpJobCourierPenalty or 0) is 1 ? 50 : 0))>>
+	<<set _pay to Math.min(6000, 4 * (310 + _stage * 90 - (($mpJobCourierPenalty or 0) is 1 ? 50 : 0)))>>
 	<<set $mpJobResultPay to _pay>>
 	<<set $mpJobResultText to "你站在分拣木格前把两百封平信按街名理顺，咔哒咔哒地盖清每一枚日期戳。虽然手腕有些发酸，但一封也没漏。">>
 	<<stress 1>><<tiredness 2>>
@@ -532,8 +587,36 @@
 	全镇最机密的夜间加急信函都指名由你传递。
 <</if>>
 <br><br>
+<br><br>
+<<getouticon>><<link [[回到代办亭窗口 (0:02)|MP Job Courier]]>><<pass 2>><</link>>
+<br>
+<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
+<<investigateicon>><<link [[查看熟客与当班活计 (0:02)|MP Job Courier Duties]]>><<pass 2>><</link>>
 <<if ($mpJobCourierSuspended or 0) is 1>>
-	由于连续误了急件钟点，老邮差暂时扣下了你的帆布挎包。<br><br>
+	<br>
+	<<socialiseicon>><<link [[去消解停工处分 (0:03)|MP Job Courier Remedy]]>><<pass 3>><</link>>
+<<elseif ($mpJobCourierStrike or 0) gte 1 or ($mpJobCourierPenalty or 0) is 1>>
+	<br>
+	<<tendingicon>><<link [[弥补先前的差错 (0:03)|MP Job Courier StrikeFix]]>><<pass 3>><</link>>
+<</if>>
+
+:: MP Job Courier Duties [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+你对照代办亭墙上的时刻表，盘算着今日的专送急件与街坊差事。
+<br><br>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Courier Progress]]>><<pass 2>><</link>>
+<br>
+<<if ($mpJobCourierCount or 0) gte 3>><br><<link [[替老药剂师专送易碎药匣 (0:08)|MP Job Followup Courier]]>><<pass 8>><</link>><</if>>
+<br>
+<<if $daily and $daily.mpJobCourier>><<link [[应对当班突发状况 (0:05)|MP Job Extra Courier 1]]>><<pass 5>><</link>><</if>>
+
+:: MP Job Courier Remedy [nobr]
+<<if ($mpJobCourierSuspended or 0) isnt 1>><<goto "MP Job Courier Progress">><</if>>
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Courier Progress]]>><<pass 2>><</link>>
+<br><br>
+由于连续误了急件钟点，老邮差暂时扣下了你的帆布挎包。<br><br>
 	<<runicon>><<link [[送旧报去学校收发室 (0:15)|MP Job Courier Progress]]>>
 		<<set $mpJobCourierStrike to 0>><<set $mpJobCourierSuspended to 0>><<set $mpJobCourierPenalty to 0>>
 		<<stress 1>><<tiredness 3>><<pass 15>>
@@ -548,7 +631,7 @@
 		<</if>>
 	<</link>>
 	<br>
-	<<runicon>><<link [[去峭壁街补拿回执 (0:14)|MP Job Courier Progress]]>>
+	<<link [[去峭壁街补拿回执 (0:14)|MP Job Courier Progress]]>>
 		<<if ($athletics or 0) gte 270>>
 			<<set $mpJobCourierStrike to 0>><<set $mpJobCourierSuspended to 0>><<set $mpJobCourierPenalty to 0>>
 			<<stress 1>><<tiredness 2>><<pass 14>>
@@ -556,7 +639,12 @@
 			<<stress 4>><<tiredness 3>><<pass 14>>
 		<</if>>
 	<</link>>
-<<elseif ($mpJobCourierStrike or 0) is 2 or ($mpJobCourierPenalty or 0) is 1>>
+
+:: MP Job Courier StrikeFix [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Courier Progress]]>><<pass 2>><</link>>
+<br><br>
+<<if ($mpJobCourierStrike or 0) is 2 or ($mpJobCourierPenalty or 0) is 1>>
 	老邮差暂时收走了你的远线专送铜牌与油布套，只给你派最零碎的平信活。
 	<br><br>
 	<<walkicon>><<link [[替晚班收齐信筒 (0:14)|MP Job Courier Progress]]>>
@@ -577,16 +665,9 @@
 		<<set $mpJobCourierStrike to 0>><<stress 1>><<tiredness 1>><<pass 6>>
 	<</link>>
 <</if>>
-<br>
-<<if ($mpJobCourierCount or 0) gte 3>><br><<link [[替老药剂师专送易碎药匣 (0:08)|MP Job Followup Courier]]>><<pass 8>><</link>><</if>>
-<br>
-<<link [[回到代办亭窗口 (0:02)|MP Job Courier]]>><<pass 2>><</link>>
-<br>
-<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
-<br>
-<<if $daily and $daily.mpJobCourier>><<link [[应对当班突发状况 (0:05)|MP Job Extra Courier 1]]>><<pass 5>><</link>><</if>>
 
 :: MP Job Courier Settle [nobr]
+<<if !$mpJobResultText>><<goto "MP Job Courier Progress">><</if>>
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobCourierCount to ($mpJobCourierCount or 0)>>
 <<set _stage to ($mpJobCourierCount gte 15 ? 4 : $mpJobCourierCount gte 10 ? 3 : $mpJobCourierCount gte 6 ? 2 : $mpJobCourierCount gte 3 ? 1 : 0)>>
@@ -611,7 +692,7 @@
 		<<if _msClaimed>>
 			<br><br>
 			收工时，老邮差把一枚磨得发亮的远线专送铜牌和一笔准点奖金塞进你掌心：「往后跨街区的急件，全交给你调度了。」
-			<<money 850>><<stress -3>>
+			<<money 1700>><<stress -3>>
 		<</if>>
 	<</if>>
 <<else>>
@@ -633,7 +714,7 @@
 /* ==================== 4. 丰收酒馆后厨 (PubKitchen) ==================== */
 
 :: MP Job PubKitchen [nobr]
-<<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
 <<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0)>>
 <<set _stage to ($mpJobPubKitchenCount gte 15 ? 4 : $mpJobPubKitchenCount gte 10 ? 3 : $mpJobPubKitchenCount gte 6 ? 2 : $mpJobPubKitchenCount gte 3 ? 1 : 0)>>
 丰收街酒馆的后厨弥漫着炖牛肉、麦芽酒与烤马铃薯的浓香。两口大铁锅在灶上咕嘟作响，掌勺厨娘正用大铁勺撇去浮沫，水槽边摞着高高一叠锡制酒盘。
@@ -658,7 +739,8 @@
 <<getouticon>><<link [[回到招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job PubKitchen Shift [nobr]
-<<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
+<<if ($mpJobPubKitchenSuspended or 0) is 1>><<goto "MP Job PubKitchen Progress">><</if>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
 <<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0)>>
 <<set _stage to ($mpJobPubKitchenCount gte 15 ? 4 : $mpJobPubKitchenCount gte 10 ? 3 : $mpJobPubKitchenCount gte 6 ? 2 : $mpJobPubKitchenCount gte 3 ? 1 : 0)>>
 前厅酒客的喧哗声隔着摆门传进来，传菜铃接连不断地响起。铁板上的香肠滋滋冒油，地窖楼梯口还堆着刚送来的四桶黑麦啤酒。
@@ -676,7 +758,7 @@
 	<<set _ok to (_sk gte 260 or _stage gte 3)>>
 	<<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 430 + _stage * 180 + Math.floor(_sk / 5) - (($mpJobPubKitchenPenalty or 0) is 1 ? 80 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (430 + _stage * 180 + Math.floor(_sk / 5) - (($mpJobPubKitchenPenalty or 0) is 1 ? 80 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你握稳厚背餐刀将烤肋排切得厚薄一致，浇上滚烫的黑椒肉汁准时推出传菜窗。前厅跑堂带回一叠拼桌酒客留下的打赏铜币。">>
 	<<else>>
@@ -692,7 +774,7 @@
 	<<set _ok to (_sk gte 7500 or _stage gte 2)>>
 	<<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 410 + _stage * 170 + Math.floor(_sk / 120) - (($mpJobPubKitchenPenalty or 0) is 1 ? 75 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (410 + _stage * 170 + Math.floor(_sk / 120) - (($mpJobPubKitchenPenalty or 0) is 1 ? 75 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你一鼓作气把四只橡木酒桶稳稳扛上地窖石阶，又用木槌敲开铅封接上铜龙头。酒保朝你竖起大拇指，分了你一份力气钱。">>
 	<<else>>
@@ -705,7 +787,7 @@
 <br>
 <<walkicon>><<link [[削马铃薯并刷锡盘 (0:14)|MP Job PubKitchen Settle]]>>
 	<<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0) + 1>>
-	<<set _pay to Math.min(1500, 310 + _stage * 90 - (($mpJobPubKitchenPenalty or 0) is 1 ? 50 : 0))>>
+	<<set _pay to Math.min(6000, 4 * (310 + _stage * 90 - (($mpJobPubKitchenPenalty or 0) is 1 ? 50 : 0)))>>
 	<<set $mpJobResultPay to _pay>>
 	<<set $mpJobResultText to "你坐在小木凳上削完满满两竹筐马铃薯，又用碱水把油腻的锡盘刷得反光。虽然满手水汽，但稳稳拿到了当日工钱。">>
 	<<stress 1>><<tiredness 2>>
@@ -715,7 +797,7 @@
 <<getouticon>><<link [[解下围裙退回后门 (0:02)|MP Job PubKitchen]]>><<pass 2>><</link>>
 
 :: MP Job PubKitchen Progress [nobr]
-<<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
 <<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0)>>
 <<set _stage to ($mpJobPubKitchenCount gte 15 ? 4 : $mpJobPubKitchenCount gte 10 ? 3 : $mpJobPubKitchenCount gte 6 ? 2 : $mpJobPubKitchenCount gte 3 ? 1 : 0)>>
 你站在酒馆后厨与地窖交界的石阶旁，墙上的黑板用粉笔写着今晚的炖菜锅数与存酒桶号。
@@ -732,8 +814,36 @@
 	整个丰收街酒馆后厨的备料与菜单都离不开你。
 <</if>>
 <br><br>
+<br><br>
+<<getouticon>><<link [[返回酒馆后厨灶台 (0:02)|MP Job PubKitchen]]>><<pass 2>><</link>>
+<br>
+<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
+<<investigateicon>><<link [[查看熟客与当班活计 (0:02)|MP Job PubKitchen Duties]]>><<pass 2>><</link>>
 <<if ($mpJobPubKitchenSuspended or 0) is 1>>
-	由于连续三次在后厨闯祸，厨娘暂时不准你上灶。<br><br>
+	<br>
+	<<socialiseicon>><<link [[去消解停工处分 (0:03)|MP Job PubKitchen Remedy]]>><<pass 3>><</link>>
+<<elseif ($mpJobPubKitchenStrike or 0) gte 1 or ($mpJobPubKitchenPenalty or 0) is 1>>
+	<br>
+	<<tendingicon>><<link [[弥补先前的差错 (0:03)|MP Job PubKitchen StrikeFix]]>><<pass 3>><</link>>
+<</if>>
+
+:: MP Job PubKitchen Duties [nobr]
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
+你扫了一眼后厨黑板上的加菜粉笔字，准备应付今日的厨房忙活。
+<br><br>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job PubKitchen Progress]]>><<pass 2>><</link>>
+<br>
+<<if ($mpJobPubKitchenCount or 0) gte 3>><br><<link [[掌勺熟客点名的黑啤炖牛肉 (0:07)|MP Job Followup PubKitchen]]>><<pass 7>><</link>><</if>>
+<br>
+<<if $daily and $daily.mpJobPubKitchen>><<link [[应对当班突发状况 (0:05)|MP Job Extra PubKitchen 1]]>><<pass 5>><</link>><</if>>
+
+:: MP Job PubKitchen Remedy [nobr]
+<<if ($mpJobPubKitchenSuspended or 0) isnt 1>><<goto "MP Job PubKitchen Progress">><</if>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job PubKitchen Progress]]>><<pass 2>><</link>>
+<br><br>
+由于连续三次在后厨闯祸，厨娘暂时不准你上灶。<br><br>
 	<<runicon>><<link [[送空酒桶去码头货栈 (0:16)|MP Job PubKitchen Progress]]>>
 		<<set $mpJobPubKitchenStrike to 0>><<set $mpJobPubKitchenSuspended to 0>><<set $mpJobPubKitchenPenalty to 0>>
 		<<stress 1>><<tiredness 3>><<pass 16>>
@@ -748,7 +858,7 @@
 		<</if>>
 	<</link>>
 	<br>
-	<<runicon>><<link [[把地窖酒架重新码正 (0:14)|MP Job PubKitchen Progress]]>>
+	<<link [[把地窖酒架重新码正 (0:14)|MP Job PubKitchen Progress]]>>
 		<<if ($physique or 0) gte 7800>>
 			<<set $mpJobPubKitchenStrike to 0>><<set $mpJobPubKitchenSuspended to 0>><<set $mpJobPubKitchenPenalty to 0>>
 			<<stress -1>><<tiredness 3>><<pass 14>>
@@ -756,7 +866,12 @@
 			<<stress 4>><<pain 2>><<tiredness 3>><<pass 14>>
 		<</if>>
 	<</link>>
-<<elseif ($mpJobPubKitchenStrike or 0) is 2 or ($mpJobPubKitchenPenalty or 0) is 1>>
+
+:: MP Job PubKitchen StrikeFix [nobr]
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job PubKitchen Progress]]>><<pass 2>><</link>>
+<br><br>
+<<if ($mpJobPubKitchenStrike or 0) is 2 or ($mpJobPubKitchenPenalty or 0) is 1>>
 	厨娘暂时收回了你的地窖副匙与宵夜热汤优待，把你的工钱压了一成。
 	<br><br>
 	<<tendingicon>><<link [[打烊后刷净铜酒壶 (0:12)|MP Job PubKitchen Progress]]>>
@@ -777,17 +892,10 @@
 		<<set $mpJobPubKitchenStrike to 0>><<stress 1>><<tiredness 1>><<pass 6>>
 	<</link>>
 <</if>>
-<br>
-<<if ($mpJobPubKitchenCount or 0) gte 3>><br><<link [[掌勺熟客点名的黑啤炖牛肉 (0:07)|MP Job Followup PubKitchen]]>><<pass 7>><</link>><</if>>
-<br>
-<<link [[返回酒馆后厨灶台 (0:02)|MP Job PubKitchen]]>><<pass 2>><</link>>
-<br>
-<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
-<br>
-<<if $daily and $daily.mpJobPubKitchen>><<link [[应对当班突发状况 (0:05)|MP Job Extra PubKitchen 1]]>><<pass 5>><</link>><</if>>
 
 :: MP Job PubKitchen Settle [nobr]
-<<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
+<<if !$mpJobResultText>><<goto "MP Job PubKitchen Progress">><</if>>
+<<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
 <<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0)>>
 <<set _stage to ($mpJobPubKitchenCount gte 15 ? 4 : $mpJobPubKitchenCount gte 10 ? 3 : $mpJobPubKitchenCount gte 6 ? 2 : $mpJobPubKitchenCount gte 3 ? 1 : 0)>>
 <<print ($mpJobResultText or "你擦干手上的水珠，把厨刀插回木刀架。")>>
@@ -811,7 +919,7 @@
 		<<if _msClaimed>>
 			<br><br>
 			收工前，厨娘把酒窖副匙和一卷沉甸甸的硬币拍在你掌心：「后厨有你盯着，我总算能喘口气了，这是给你的红利。」
-			<<money 900>><<stress -3>>
+			<<money 1800>><<stress -3>>
 		<</if>>
 	<</if>>
 <<else>>
@@ -858,6 +966,7 @@
 <<getouticon>><<link [[回到招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Stable Shift [nobr]
+<<if ($mpJobStableSuspended or 0) is 1>><<goto "MP Job Stable Progress">><</if>>
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
 <<set $mpJobStableCount to ($mpJobStableCount or 0)>>
 <<set _stage to ($mpJobStableCount gte 15 ? 4 : $mpJobStableCount gte 10 ? 3 : $mpJobStableCount gte 6 ? 2 : $mpJobStableCount gte 3 ? 1 : 0)>>
@@ -876,7 +985,7 @@
 	<<set _ok to (_sk gte 270 or _stage gte 3)>>
 	<<set $mpJobStableCount to ($mpJobStableCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 450 + _stage * 185 + Math.floor(_sk / 5) - (($mpJobStablePenalty or 0) is 1 ? 85 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (450 + _stage * 185 + Math.floor(_sk / 5) - (($mpJobStablePenalty or 0) is 1 ? 85 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你顺着栗色挽马的脖颈轻柔摩挲，用平稳的口哨声压下它的躁动，稳稳控着双缰穿过泥泞坡道。整车鸡蛋与麦粉完好无损地交到了高街粮商手里。">>
 	<<else>>
@@ -892,7 +1001,7 @@
 	<<set _ok to (_sk gte 260 or _stage gte 2)>>
 	<<set $mpJobStableCount to ($mpJobStableCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 400 + _stage * 165 + Math.floor(_sk / 6) - (($mpJobStablePenalty or 0) is 1 ? 75 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (400 + _stage * 165 + Math.floor(_sk / 6) - (($mpJobStablePenalty or 0) is 1 ? 75 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你在颠簸的石桥坡道上一路小跑扶稳车尾，用双套结把松动的木桶死死勒在车栏上，赶在雨落前把货卸进了丰收街仓库。">>
 	<<else>>
@@ -905,7 +1014,7 @@
 <br>
 <<walkicon>><<link [[留在马厩铡草刷马 (0:15)|MP Job Stable Settle]]>>
 	<<set $mpJobStableCount to ($mpJobStableCount or 0) + 1>>
-	<<set _pay to Math.min(1500, 320 + _stage * 90 - (($mpJobStablePenalty or 0) is 1 ? 50 : 0))>>
+	<<set _pay to Math.min(6000, 4 * (320 + _stage * 90 - (($mpJobStablePenalty or 0) is 1 ? 50 : 0)))>>
 	<<set $mpJobResultPay to _pay>>
 	<<set $mpJobResultText to "你把干草铡碎拌好麦麸倒进食槽，又拿着硬毛刷把四匹挽马的鬃毛刷得顺滑发亮。老伯满意地点点头，把工钱递给你。">>
 	<<stress 1>><<tiredness 2>>
@@ -932,8 +1041,36 @@
 	整支河湾驮运车队的排班与远线押运都由你拿主意。
 <</if>>
 <br><br>
+<br><br>
+<<getouticon>><<link [[回到马厩院内 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+<br>
+<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
+<<investigateicon>><<link [[查看熟客与当班活计 (0:02)|MP Job Stable Duties]]>><<pass 2>><</link>>
 <<if ($mpJobStableSuspended or 0) is 1>>
-	因为接连惊马翻货，老伯暂时不让你碰缰绳。<br><br>
+	<br>
+	<<socialiseicon>><<link [[去消解停工处分 (0:03)|MP Job Stable Remedy]]>><<pass 3>><</link>>
+<<elseif ($mpJobStableStrike or 0) gte 1 or ($mpJobStablePenalty or 0) is 1>>
+	<br>
+	<<tendingicon>><<link [[弥补先前的差错 (0:03)|MP Job Stable StrikeFix]]>><<pass 3>><</link>>
+<</if>>
+
+:: MP Job Stable Duties [nobr]
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
+你摸了摸马厩檐下的铜铃木牌，查看今日的驮运加急趟与老主顾。
+<br><br>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Stable Progress]]>><<pass 2>><</link>>
+<br>
+<<if ($mpJobStableCount or 0) gte 3>><br><<link [[替栗色猎马调试新铜马镫 (0:08)|MP Job Followup Stable]]>><<pass 8>><</link>><</if>>
+<br>
+<<if $daily and $daily.mpJobStable>><<link [[应对当班突发状况 (0:05)|MP Job Extra Stable 1]]>><<pass 5>><</link>><</if>>
+
+:: MP Job Stable Remedy [nobr]
+<<if ($mpJobStableSuspended or 0) isnt 1>><<goto "MP Job Stable Progress">><</if>>
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Stable Progress]]>><<pass 2>><</link>>
+<br><br>
+因为接连惊马翻货，老伯暂时不让你碰缰绳。<br><br>
 	<<runicon>><<link [[送急用马掌去铁匠铺 (0:15)|MP Job Stable Progress]]>>
 		<<set $mpJobStableStrike to 0>><<set $mpJobStableSuspended to 0>><<set $mpJobStablePenalty to 0>>
 		<<stress 1>><<tiredness 3>><<pass 15>>
@@ -948,7 +1085,7 @@
 		<</if>>
 	<</link>>
 	<br>
-	<<runicon>><<link [[填平马厩外的泥沟 (0:15)|MP Job Stable Progress]]>>
+	<<link [[填平马厩外的泥沟 (0:15)|MP Job Stable Progress]]>>
 		<<if ($athletics or 0) gte 270 or ($physique or 0) gte 7800>>
 			<<set $mpJobStableStrike to 0>><<set $mpJobStableSuspended to 0>><<set $mpJobStablePenalty to 0>>
 			<<stress 1>><<tiredness 3>><<pass 15>>
@@ -956,20 +1093,25 @@
 			<<stress 4>><<tiredness 3>><<pass 15>>
 		<</if>>
 	<</link>>
-<<elseif ($mpJobStableStrike or 0) is 2 or ($mpJobStablePenalty or 0) is 1>>
+
+:: MP Job Stable StrikeFix [nobr]
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Stable Progress]]>><<pass 2>><</link>>
+<br><br>
+<<if ($mpJobStableStrike or 0) is 2 or ($mpJobStablePenalty or 0) is 1>>
 	老伯暂时收回了你的远线押运资格与铜马铃，只让你在院里干杂活。
 	<br><br>
 	<<tendingicon>><<link [[留下给皮鞍具抹油 (0:12)|MP Job Stable Progress]]>>
 		<<set $mpJobStablePenalty to 0>><<set $mpJobStableStrike to 1>><<stress 2>><<tiredness 3>><<pass 12>>
 	<</link>>
 	<br>
-	<<link [[请亚历克斯替你说情 (0:06)|MP Job Stable Progress]]>>
+	<<if $NPCNameList and $NPCNameList.includes("Alex")>><<link [[请亚历克斯替你说情 (0:06)|MP Job Stable Progress]]>>
 		<<if ($tending or 0) gte 260 or ($willpower or 0) gte 260>>
 			<<set $mpJobStablePenalty to 0>><<set $mpJobStableStrike to 1>><<stress -1>><<pass 6>>
 		<<else>>
 			<<stress 3>><<pass 6>>
 		<</if>>
-	<</link>>
+	<</link>><<else>><span class="disabled">请亚历克斯替你说情 (0:06)（尚未结识）</span><</if>>
 <<elseif ($mpJobStableStrike or 0) is 1>>
 	老伯还记着你上一趟翻篓子的事，套车前特意检查了两遍你的绳结。
 	<br><br>
@@ -977,16 +1119,9 @@
 		<<set $mpJobStableStrike to 0>><<stress 1>><<tiredness 2>><<pass 6>>
 	<</link>>
 <</if>>
-<br>
-<<if ($mpJobStableCount or 0) gte 3>><br><<link [[替栗色猎马调试新铜马镫 (0:08)|MP Job Followup Stable]]>><<pass 8>><</link>><</if>>
-<br>
-<<link [[回到马厩院内 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
-<br>
-<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
-<br>
-<<if $daily and $daily.mpJobStable>><<link [[应对当班突发状况 (0:05)|MP Job Extra Stable 1]]>><<pass 5>><</link>><</if>>
 
 :: MP Job Stable Settle [nobr]
+<<if !$mpJobResultText>><<goto "MP Job Stable Progress">><</if>>
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
 <<set $mpJobStableCount to ($mpJobStableCount or 0)>>
 <<set _stage to ($mpJobStableCount gte 15 ? 4 : $mpJobStableCount gte 10 ? 3 : $mpJobStableCount gte 6 ? 2 : $mpJobStableCount gte 3 ? 1 : 0)>>
@@ -1011,7 +1146,7 @@
 		<<if _msClaimed>>
 			<br><br>
 			收工时，老伯把一枚黄铜护鞍扣和一袋远线红利交到你手上：「这几匹马现在比听我的话还服你，往后大车队就归你带头了。」
-			<<money 950>><<stress -3>>
+			<<money 1900>><<stress -3>>
 		<</if>>
 	<</if>>
 <<else>>
@@ -1058,6 +1193,7 @@
 <<getouticon>><<link [[回到招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Trawler Shift [nobr]
+<<if ($mpJobTrawlerSuspended or 0) is 1>><<goto "MP Job Trawler Progress">><</if>>
 <<set $outside to 1>><<set $location to "searocks">><<effects>><<mpAmbient>>
 <<set $mpJobTrawlerCount to ($mpJobTrawlerCount or 0)>>
 <<set _stage to ($mpJobTrawlerCount gte 15 ? 4 : $mpJobTrawlerCount gte 10 ? 3 : $mpJobTrawlerCount gte 6 ? 2 : $mpJobTrawlerCount gte 3 ? 1 : 0)>>
@@ -1076,7 +1212,7 @@
 	<<set _ok to (_sk gte 280 or _stage gte 3)>>
 	<<set $mpJobTrawlerCount to ($mpJobTrawlerCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 480 + _stage * 195 + Math.floor(_sk / 5) - (($mpJobTrawlerPenalty or 0) is 1 ? 90 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (480 + _stage * 195 + Math.floor(_sk / 5) - (($mpJobTrawlerPenalty or 0) is 1 ? 90 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你抓紧安全绳探身入水，趁着涌浪抬升的瞬间用钩竿挑开卡在礁石上的底纲。满满一网银鳕鱼与大蟹轰然倾入甲板，船老大乐得合不拢嘴。">>
 	<<else>>
@@ -1092,7 +1228,7 @@
 	<<set _ok to (_sk gte 260 or _stage gte 2)>>
 	<<set $mpJobTrawlerCount to ($mpJobTrawlerCount or 0) + 1 + (_ok ? 1 : 0)>>
 	<<if _ok>>
-		<<set _pay to Math.min(1500, 420 + _stage * 170 + Math.floor(_sk / 6) - (($mpJobTrawlerPenalty or 0) is 1 ? 80 : 0))>>
+		<<set _pay to Math.min(6000, 4 * (420 + _stage * 170 + Math.floor(_sk / 6) - (($mpJobTrawlerPenalty or 0) is 1 ? 80 : 0)))>>
 		<<set $mpJobResultPay to _pay>>
 		<<set $mpJobResultText to "你双脚死死钉在湿滑的甲板上，随着船身起伏的节拍稳稳扳动棘轮，将百斤重的渔网一寸寸绞上船尾。码头鱼商当场按最高价收走了这批鲜货。">>
 	<<else>>
@@ -1105,7 +1241,7 @@
 <br>
 <<tendingicon>><<link [[在底舱铺冰分拣鱼获 (0:15)|MP Job Trawler Settle]]>>
 	<<set $mpJobTrawlerCount to ($mpJobTrawlerCount or 0) + 1>>
-	<<set _pay to Math.min(1500, 330 + _stage * 95 - (($mpJobTrawlerPenalty or 0) is 1 ? 50 : 0))>>
+	<<set _pay to Math.min(6000, 4 * (330 + _stage * 95 - (($mpJobTrawlerPenalty or 0) is 1 ? 50 : 0)))>>
 	<<set $mpJobResultPay to _pay>>
 	<<set $mpJobResultText to "你在底舱将比目鱼、青鱼与海蟹按大小码进木箱，一层层铺实碎冰。虽然手指被冰得通红，但靠岸时稳稳领到了水手份子钱。">>
 	<<stress 1>><<tiredness 2>>
@@ -1132,8 +1268,36 @@
 	整艘拖网渔船的起网号令与近海航线都由你掌舵。
 <</if>>
 <br><br>
+<br><br>
+<<getouticon>><<link [[回到渔船跳板前 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+<br>
+<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
+<<investigateicon>><<link [[查看熟客与当班活计 (0:02)|MP Job Trawler Duties]]>><<pass 2>><</link>>
 <<if ($mpJobTrawlerSuspended or 0) is 1>>
-	因为接连在海上漏网脱钩，船老大暂时不准你登船。<br><br>
+	<br>
+	<<socialiseicon>><<link [[去消解停工处分 (0:03)|MP Job Trawler Remedy]]>><<pass 3>><</link>>
+<<elseif ($mpJobTrawlerStrike or 0) gte 1 or ($mpJobTrawlerPenalty or 0) is 1>>
+	<br>
+	<<tendingicon>><<link [[弥补先前的差错 (0:03)|MP Job Trawler StrikeFix]]>><<pass 3>><</link>>
+<</if>>
+
+:: MP Job Trawler Duties [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+你站在防波堤网架旁望了望潮水，核对今日的渔船急活与老船长交待。
+<br><br>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Trawler Progress]]>><<pass 2>><</link>>
+<br>
+<<if ($mpJobTrawlerCount or 0) gte 3>><br><<link [[帮老船长复查主网纲与涌浪 (0:08)|MP Job Followup Trawler]]>><<pass 8>><</link>><</if>>
+<br>
+<<if $daily and $daily.mpJobTrawler>><<link [[应对当班突发状况 (0:05)|MP Job Extra Trawler 1]]>><<pass 5>><</link>><</if>>
+
+:: MP Job Trawler Remedy [nobr]
+<<if ($mpJobTrawlerSuspended or 0) isnt 1>><<goto "MP Job Trawler Progress">><</if>>
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Trawler Progress]]>><<pass 2>><</link>>
+<br><br>
+因为接连在海上漏网脱钩，船老大暂时不准你登船。<br><br>
 	<<runicon>><<link [[扛桐油与麻缆上船头 (0:16)|MP Job Trawler Progress]]>>
 		<<set $mpJobTrawlerStrike to 0>><<set $mpJobTrawlerSuspended to 0>><<set $mpJobTrawlerPenalty to 0>>
 		<<stress 1>><<tiredness 3>><<pass 16>>
@@ -1156,20 +1320,25 @@
 			<<stress 4>><<pain 2>><<tiredness 3>><<pass 14>>
 		<</if>>
 	<</link>>
-<<elseif ($mpJobTrawlerStrike or 0) is 2 or ($mpJobTrawlerPenalty or 0) is 1>>
+
+:: MP Job Trawler StrikeFix [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<getouticon>><<link [[返回排班木架 (0:02)|MP Job Trawler Progress]]>><<pass 2>><</link>>
+<br><br>
+<<if ($mpJobTrawlerStrike or 0) is 2 or ($mpJobTrawlerPenalty or 0) is 1>>
 	船老大暂时收回了你的老水手分红与鲜鱼福利，只按学徒标准给你算贴补。
 	<br><br>
 	<<tendingicon>><<link [[靠岸后刷净甲板鱼舱 (0:13)|MP Job Trawler Progress]]>>
 		<<set $mpJobTrawlerPenalty to 0>><<set $mpJobTrawlerStrike to 1>><<stress 2>><<tiredness 3>><<pass 13>>
 	<</link>>
 	<br>
-	<<link [[请维斯替你递好烟丝 (0:06)|MP Job Trawler Progress]]>>
+	<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[请维斯替你递好烟丝 (0:06)|MP Job Trawler Progress]]>>
 		<<if ($seductionskill or 0) gte 260 or ($willpower or 0) gte 260>>
 			<<set $mpJobTrawlerPenalty to 0>><<set $mpJobTrawlerStrike to 1>><<stress -1>><<pass 6>>
 		<<else>>
 			<<stress 3>><<pass 6>>
 		<</if>>
-	<</link>>
+	<</link>><<else>><span class="disabled">请维斯替你递好烟丝 (0:06)（尚未结识）</span><</if>>
 <<elseif ($mpJobTrawlerStrike or 0) is 1>>
 	船老大还记着你上一趟破网的事，出海前特意盯着你系了两遍安全绳。
 	<br><br>
@@ -1177,16 +1346,9 @@
 		<<set $mpJobTrawlerStrike to 0>><<stress 1>><<tiredness 1>><<pass 6>>
 	<</link>>
 <</if>>
-<br>
-<<if ($mpJobTrawlerCount or 0) gte 3>><br><<link [[帮老船长复查主网纲与涌浪 (0:08)|MP Job Followup Trawler]]>><<pass 8>><</link>><</if>>
-<br>
-<<link [[回到渔船跳板前 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
-<br>
-<<link [[返回招工木牌前 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
-<br>
-<<if $daily and $daily.mpJobTrawler>><<link [[应对当班突发状况 (0:05)|MP Job Extra Trawler 1]]>><<pass 5>><</link>><</if>>
 
 :: MP Job Trawler Settle [nobr]
+<<if !$mpJobResultText>><<goto "MP Job Trawler Progress">><</if>>
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<set $mpJobTrawlerCount to ($mpJobTrawlerCount or 0)>>
 <<set _stage to ($mpJobTrawlerCount gte 15 ? 4 : $mpJobTrawlerCount gte 10 ? 3 : $mpJobTrawlerCount gte 6 ? 2 : $mpJobTrawlerCount gte 3 ? 1 : 0)>>
@@ -1211,7 +1373,7 @@
 		<<if _msClaimed>>
 			<br><br>
 			下船前，船老大把一枚刻着海锚的黄铜船哨和一叠分红钞票递给你：「你在风浪里的手艺已经不输老水手了，这是给你的头等船份。」
-			<<money 1000>><<stress -3>>
+			<<money 2000>><<stress -3>>
 		<</if>>
 	<</if>>
 <<else>>

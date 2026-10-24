@@ -142,7 +142,7 @@
 圣堂地下古修道院的静思石牢阴冷潮湿，脚下暗渠传来低沉水声。
 <<if $stress gte 5000>>没药烟雾熏得太阳穴直跳，浮雕黑影在烛火下摇晃。<<elseif Time.dayState is "night">>晚祷钟声震落细灰，看守修女的脚步声渐渐远去。<<else>>你把冰凉手腕贴在青苔上，辨认地面排水铁栅的铆钉走向。<</if>>
 <<if ($mpBadEndProgress or 0) gte 100>>
-	银链铆钉彻底松脱，暗河下传来了阿什猎犬的低吠。
+	银链铆钉彻底松脱，暗河下传来了<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守夜人<</if>>猎犬的低吠。
 	<br><br>
 	<<trialicon>><<link [[抽手滑出银链跃入暗渠 (0:14)|MP BadEnd Abbey Penance EscapeWin]]>><<pass 14>><</link>>
 <<else>>
@@ -233,9 +233,9 @@
 <div id="abbey-hound-choices">
 <<mphearticon>><<link "伸手接过猎犬口中油布包 (0:08)">><<pass 8>><<replace "#abbey-hound-choices">>
 <<if ($mpCompanion and ($mpCompanion.love gte 10 or $mpCompanion.trust gte 10)) or (($mpNpcs and $mpNpcs.ash and ($mpNpcs.ash.love or 0) gte 6)) or ($tending or 0) gte 260>>
-<span class="green">阿什的猎犬踩着浅滩游到铁栅正下方，三两下便锯薄了银链母扣。</span>
+<span class="green"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守夜人<</if>>的猎犬踩着浅滩游到铁栅正下方，三两下便锯薄了银链母扣。</span>
 <<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 55)>><<stress -8>><<trauma -5>><<lstress>><<ltrauma>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_abbey", 20, -8, -5, 0, 0, "与阿什在修道院暗河渡口接应你", { love: 1, trust: 2 })>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_abbey", 20, -8, -5, 0, 0, "有人在修道院暗河渡口接应你", { love: 1, trust: 2 })>>
 <<else>>
 <span class="red">暗河水位突然上涨，只能示意它先退回渡口免得暴露。</span>
 <<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
@@ -244,7 +244,7 @@
 <br>
 <<socialiseicon>><<link "顺着水道低声确认木舟位 (0:06)">><<pass 6>><<replace "#abbey-hound-choices">>
 <<if ($willpower or 0) gte 440 or ($swimmingskill or 0) gte 250>>
-<span class="green">你借着拱渠回音与暗河尽头的阿什对准了暗号，确认平底柏木舟就停在下游第一个石弯处等候接应。</span>
+<span class="green">你借着拱渠回音与暗河尽头的<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守夜人<</if>>对准了暗号，确认平底柏木舟就停在下游第一个石弯处等候接应。</span>
 <<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 40)>><<stress -4>><<lstress>>
 <<else>>
 <span class="red">冰冷的水声混杂着风啸在石渠里回荡，你没能听清渡口传来的回音，潮气反而冻得你鼻尖发酸。</span>
@@ -257,16 +257,16 @@
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>><<mpAmbient>>
 <<unset $mpBadEndProgress>><<unset $mpBadEndDays>>
-趁着晚祷钟声掩盖整座地下修道院的声响，你猛地发力扯开锯断的银链，掀开排水铁栅跃入地下暗河。阿什早已撑着木舟在渡口等候，一把将湿透的你拉上船板，顺着暗流划回了神殿后园。
+趁着晚祷钟声掩盖整座地下修道院的声响，你猛地发力扯开锯断的银链，掀开排水铁栅跃入地下暗河。<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守夜人<</if>>早已撑着木舟在渡口等候，一把将湿透的你拉上船板，顺着暗流划回了神殿后园。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_reward_abbey_penance")>>
 	<<money 2500>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 2>><<willpower 8>><<stress -20>><<trauma -12>><<control 25>>
 <<else>>
-	你在阿什的接应下平安脱困，胸中的阴霾被林间晚风吹散。<<willpower 3>><<stress -10>><<control 10>>
+	你在<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守夜人<</if>>的接应下平安脱困，胸中的阴霾被林间晚风吹散。<<willpower 3>><<stress -10>><<control 10>>
 <</if>>
 <br><br>
 <<getouticon>><<link [[从暗渠返回狼街神殿 (0:06)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[随阿什退入森林石径 (0:08)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<walkicon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[随阿什退入森林石径 (0:08)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">随阿什退入森林石径 (0:08)（尚未结识）</span><</if>>
 
 :: MP BadEnd Smuggler Cargo [nobr]
 <<set $outside to 0>><<set $location to "pirate_ship">><<effects>><<mpAmbient>>
@@ -547,7 +547,7 @@
 孤儿院地底训诫室亮着刺眼白炽灯，你的手腕被黑铁短链锁在暖气主管旁，门外传来打手踱步声。
 <<if $pain gte 40>>肩背淤青隐痛，但暖气管温热让手指依然灵活。<<elseif $stress gte 5000>>白光刺得眼眶发酸，你紧盯着墙角运煤铁板。<<else>>你借阴影曲起手指，摸索法兰盘与运煤口位置。<</if>>
 <<if ($mpBadEndProgress or 0) gte 100>>
-	运煤滑道铁盖已撬开，林恩在锅炉房备好了接应撬棍。
+	运煤滑道铁盖已撬开，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>巡夜人<</if>>在锅炉房备好了接应撬棍。
 	<br><br>
 	<<trialicon>><<link [[顺运煤道滑出脱困 (0:12)|MP BadEnd Bailey Basement EscapeWin]]>><<pass 12>><</link>>
 <<else>>
@@ -636,16 +636,16 @@
 <<walkicon>><<link [[放轻铁链静待回音 (0:02)|MP BadEnd Bailey Basement]]>><<pass 2>><</link>>
 <br>
 <div id="bailey-pipe-choices">
-<<mphearticon>><<link "从运煤口接过林恩的撬棍 (0:08)">><<pass 8>><<replace "#bailey-pipe-choices">>
+<<mphearticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link "从运煤口接过林恩的撬棍 (0:08)">><<pass 8>><<replace "#bailey-pipe-choices">>
 <<if ($mpCompanion and ($mpCompanion.love gte 10 or $mpCompanion.isPartnerOnline)) or (($mpNpcs and $mpNpcs.lin and ($mpNpcs.lin.love or 0) gte 6)) or ($willpower or 0) gte 440>>
 <span class="green">管壁很快传来三记沉稳有力的回击，将一根钢制撬棍与一卷护腕绷带塞进你手里。</span>
 <<set $mpBadEndProgress to Math.min(100, ($mpBadEndProgress or 0) + 60)>><<stress -10>><<pain -4>><<lstress>>
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_bailey", 16, -10, -5, 0, 0, "与林恩顺着锅炉房运煤道救你脱离地下训诫室", { love: 2, trust: 2 })>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("badend_bailey", 16, -10, -5, 0, 0, "有人顺着锅炉房运煤道救你脱离地下训诫室", { love: 2, trust: 2 })>>
 <<else>>
 <span class="red">锅炉房正好在排汽放水，门外打手反而敲了敲铁门喝令你安静。</span>
 <<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">从运煤口接过<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>巡夜人<</if>>的撬棍 (0:08)（尚未结识）</span><</if>>
 <br>
 <<sneakicon>><<link "用撬棍别开墙角旧账铁柜 (0:06)">><<pass 6>><<replace "#bailey-pipe-choices">>
 <<if ($skulduggery or 0) gte 320 or ($physique or 10000) gte 12000>>
@@ -662,7 +662,7 @@
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>><<mpAmbient>>
 <<unset $mpBadEndProgress>><<unset $mpBadEndDays>>
-你挣开暖气主管上的黑铁短链，顺着撬开的运煤滑道滑入旧锅炉房。林恩在后方用铁栓反锁了滑道重门，护送你从花园枯井侧门安然返回了孤儿院。
+你挣开暖气主管上的黑铁短链，顺着撬开的运煤滑道滑入旧锅炉房。<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>巡夜人<</if>>在后方用铁栓反锁了滑道重门，护送你从花园枯井侧门安然返回了孤儿院。
 <<if ($mpQuestBaileyRebellion or 0) lt 8>><<set $mpQuestBaileyRebellion to ($mpQuestBaileyRebellion or 0) + 1>><</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("badend_reward_bailey_basement")>>
 	<<money 2100>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<willpower 8>><<stress -20>><<trauma -12>><<control 25>>
