@@ -4106,66 +4106,82 @@
   var NEW_WORLD_REGIONS = [
     {
       locs: ["Sea Rocks", "Docks"],
-      check: function (v) { return (Number(v.mpQuestShipwreck) || 0) >= 1 || (Number(v.mpQuestCliffLighthouse) || 0) >= 1 || (Number(v.mpMainStoryEclipse) || 0) >= 1; },
+      key: "foghorn",
+      discoverCond: function (v) { return (Number(v.mpQuestShipwreck) || 0) >= 1 || (Number(v.mpQuestCliffLighthouse) || 0) >= 1 || (Number(v.mpMainStoryEclipse) || 0) >= 1; },
       hint: "暗礁外侧的铁环上系着一叶旧木舟，海雾尽头隐约浮现出雾角灯塔岛的轮廓。",
+      check: function (v) { return !!(v.mpDiscovered && v.mpDiscovered["foghorn"]); },
       icon: "img/misc/icon/beach.png",
-      linkText: "解缆划向雾角灯塔岛 (0:18)",
+      linkText: "划向灯塔岛 (0:18)",
       passage: "MP Region Foghorn Island"
     },
     {
       locs: ["High Street", "Sewers"],
-      check: function (v) { return (Number(v.mpQuestClocktower) || 0) >= 1 || (Number(v.skulduggery) || 0) >= 150; },
+      key: "clockwork",
+      discoverCond: function (v) { return (Number(v.mpQuestClocktower) || 0) >= 1 || (Number(v.skulduggery) || 0) >= 150; },
       hint: "旧钟塔基座后方的排水铁栅松动着，下方露出带有黄铜齿轮刻痕的石阶。",
+      check: function (v) { return !!(v.mpDiscovered && v.mpDiscovered["clockwork"]); },
       icon: "img/misc/icon/investigate.png",
-      linkText: "顺着齿轮石阶下潜 (0:10)",
+      linkText: "下潜钟塔 (0:10)",
       passage: "MP Region Clockwork Undercity"
     },
     {
       locs: ["Temple", "Forest"],
-      check: function (v) { return (Number(v.mpQuestCatacomb) || 0) >= 1 || (Number(v.mpQuestManorRuins) || 0) >= 1; },
+      key: "abbey",
+      discoverCond: function (v) { return (Number(v.mpQuestCatacomb) || 0) >= 1 || (Number(v.mpQuestManorRuins) || 0) >= 1; },
       hint: "坍塌的石廊拱门后方延伸出一段覆满青苔的古老旋梯。",
+      check: function (v) { return !!(v.mpDiscovered && v.mpDiscovered["abbey"]); },
       icon: "img/misc/icon/temple.png",
-      linkText: "拾级走下地下古修道院 (0:12)",
+      linkText: "走下修道院 (0:12)",
       passage: "MP Region Sunken Abbey"
     },
     {
       locs: ["Danube Street", "Park"],
-      check: function (v) { return (Number(v.mpQuestGreenhouse) || 0) >= 1 || (Number(v.mpQuestDanubeSalon) || 0) >= 1; },
+      key: "glasshouse",
+      discoverCond: function (v) { return (Number(v.mpQuestGreenhouse) || 0) >= 1 || (Number(v.mpQuestDanubeSalon) || 0) >= 1; },
       hint: "高耸的冬青树篱后方藏着一扇半掩的铸铁雕花小门，门内水雾氤氲。",
+      check: function (v) { return !!(v.mpDiscovered && v.mpDiscovered["glasshouse"]); },
       icon: "img/misc/icon/park.png",
-      linkText: "闪身步入秘密温室庄园 (0:08)",
+      linkText: "进入温室 (0:08)",
       passage: "MP Region Glasshouse Manor"
     },
     {
       locs: ["Elk Street", "Industrial Alleyways"],
-      check: function (v) { return (Number(v.skulduggery) || 0) >= 100 || (Number(v.mpContrabandSealed) || 0) > 0; },
+      key: "blackiron",
+      discoverCond: function (v) { return (Number(v.skulduggery) || 0) >= 100 || (Number(v.mpContrabandSealed) || 0) > 0; },
       hint: "生锈的货运铁轨穿过坍塌的砖墙，通向废弃的黑铁调车场。",
+      check: function (v) { return !!(v.mpDiscovered && v.mpDiscovered["blackiron"]); },
       icon: "img/misc/icon/sneak.png",
-      linkText: "沿着铁轨潜入黑铁货运站 (0:09)",
+      linkText: "潜入货站 (0:09)",
       passage: "MP Region Blackiron Yard"
     },
     {
       locs: ["Deep Forest", "Farmland"],
-      check: function (v) { return (Number(v.mpQuestMoonAltar) || 0) >= 1 || (Number(v.mpQuestMill) || 0) >= 1; },
+      key: "druid",
+      discoverCond: function (v) { return (Number(v.mpQuestMoonAltar) || 0) >= 1 || (Number(v.mpQuestMill) || 0) >= 1; },
       hint: "古木交错的迷雾深处立着一圈高大的风化石柱，林间回荡着低沉的风鸣。",
+      check: function (v) { return !!(v.mpDiscovered && v.mpDiscovered["druid"]); },
       icon: "img/misc/icon/forest.png",
-      linkText: "穿林走向古德鲁伊石环 (0:14)",
+      linkText: "走向石环 (0:14)",
       passage: "MP Region Druid Circle"
     },
     {
       locs: ["Connudatus Street", "Cliff Street"],
-      check: function (v) { return (Number(v.mpQuestVelvet) || 0) >= 1 || (Number(v.promiscuity) || 0) >= 35; },
+      key: "velvet",
+      discoverCond: function (v) { return (Number(v.mpQuestVelvet) || 0) >= 1 || (Number(v.promiscuity) || 0) >= 35; },
       hint: "悬崖廊柱下的天鹅绒侧门半掩着，门内飘出低柔的大提琴与暖香。",
+      check: function (v) { return !!(v.mpDiscovered && v.mpDiscovered["velvet"]); },
       icon: "img/misc/icon/brothel.gif",
-      linkText: "步入峭壁天鹅绒暗层 (0:07)",
+      linkText: "进入暗层 (0:07)",
       passage: "MP Region Velvet Mirage"
     },
     {
       locs: ["School Library", "Hallways"],
-      check: function (v) { return (Number(v.mpQuestLibrary) || 0) >= 1 || (Number(v.mpQuestSchoolBell) || 0) >= 1; },
+      key: "observatory",
+      discoverCond: function (v) { return (Number(v.mpQuestLibrary) || 0) >= 1 || (Number(v.mpQuestSchoolBell) || 0) >= 1; },
       hint: "古籍架侧面的木制暗门虚掩着，后方连廊直通旧学园天文翼楼。",
+      check: function (v) { return !!(v.mpDiscovered && v.mpDiscovered["observatory"]); },
       icon: "img/misc/icon/school.png",
-      linkText: "穿过连廊登上旧天文翼楼 (0:08)",
+      linkText: "登上天文翼 (0:08)",
       passage: "MP Region Observatory Wing"
     }
   ];
@@ -4333,8 +4349,11 @@
 
     var oldWorldBox = document.getElementById("mp-world-organic-box");
     if (oldWorldBox && oldWorldBox.parentNode) oldWorldBox.parentNode.removeChild(oldWorldBox);
+    var oldRegionBox = document.getElementById("mp-region-links-box");
+    if (oldRegionBox && oldRegionBox.parentNode) oldRegionBox.parentNode.removeChild(oldRegionBox);
 
     var container = el("div", { id: "mp-world-organic-box", style: "margin:6px 0;" });
+    var regionBox = el("div", { id: "mp-region-links-box", style: "margin:6px 0;" });
     var hasAny = false;
 
     // 1. 房间同伴识别与在线/离线无缝替换：
@@ -4417,10 +4436,32 @@
     }
 
     // 3. 连通的新探索区域入口（仅在满足前置线索或时段条件时自然浮现，每场景最多 1 处）
+    if (!v.mpDiscovered) v.mpDiscovered = {};
+    var _npcRegion = { sera: "clockwork", vesper: "foghorn", noel: "observatory", lin: "abbey", monet: "velvet", ash: "druid" };
+    for (var _nk in _npcRegion) {
+      if (v.mpNpcs && v.mpNpcs[_nk] && v.mpNpcs[_nk].hasMet) v.mpDiscovered[_npcRegion[_nk]] = 1;
+    }
+    if (v.mpKnown) {
+      var _knowRegion = { foghorn: "foghorn", clockwork: "clockwork", abbey: "abbey", glasshouse: "glasshouse", blackiron: "blackiron", druid: "druid", velvet: "velvet", observatory: "observatory" };
+      for (var _mk in v.mpKnown) {
+        for (var _rk in _knowRegion) {
+          if (String(_mk).indexOf(_rk) === 0) v.mpDiscovered[_knowRegion[_rk]] = 1;
+        }
+      }
+    }
     for (var ri = 0; ri < NEW_WORLD_REGIONS.length; ri++) {
       var rItem = NEW_WORLD_REGIONS[ri];
-      if (rItem.locs.indexOf(pas) >= 0 && (!rItem.check || rItem.check(v))) {
-        hasAny = true;
+      if (rItem.locs.indexOf(pas) < 0) continue;
+      if (!v.mpDiscovered[rItem.key] && rItem.discoverCond && rItem.discoverCond(v)) {
+        v.mpDiscovered[rItem.key] = 1;
+      }
+      if (!v.mpDiscovered[rItem.key] && !(v.daily && v.daily.mpRegionAccident) && Math.random() < 0.12) {
+        v.mpDiscovered[rItem.key] = 1;
+        if (!v.daily) v.daily = {};
+        v.daily.mpRegionAccident = 1;
+      }
+      if (rItem.check && !rItem.check(v)) continue;
+      {
         var rRow = el("div", { style: "margin:4px 0;" });
         rRow.appendChild(el("span", { text: rItem.hint + " " }));
         (function (regEntry) {
@@ -4436,7 +4477,7 @@
           rLink.appendChild(document.createTextNode(regEntry.linkText));
           rRow.appendChild(rLink);
         })(rItem);
-        container.appendChild(rRow);
+        regionBox.appendChild(rRow);
         break;
       }
     }
@@ -4537,6 +4578,26 @@
         container.appendChild(jhRow);
         break;
       }
+    }
+
+    if (regionBox.childNodes.length) {
+      var regionHead = el("div", { class: "mp-inline-header", text: "新地点" });
+      regionBox.insertBefore(regionHead, regionBox.firstChild);
+      var pasTop = host.querySelector(".passage") || host;
+      var _anchors = pasTop.querySelectorAll("a.link-internal");
+      var _anchor = _anchors.length ? _anchors[0] : null;
+      if (_anchor) {
+        var _n = _anchor.nextSibling;
+        while (_n) {
+          if (_n.nodeType === 1 && _n.tagName === "BR") { _n = _n.nextSibling; continue; }
+          if (_n.nodeType === 1 && _n.tagName === "A" && _n.className && _n.className.indexOf("link-internal") >= 0) {
+            _anchor = _n; _n = _n.nextSibling; continue;
+          }
+          break;
+        }
+      }
+      if (_anchor && _anchor.parentNode) _anchor.parentNode.insertBefore(regionBox, _anchor.nextSibling);
+      else pasTop.insertBefore(regionBox, pasTop.firstChild);
     }
 
     if (hasAny) {
