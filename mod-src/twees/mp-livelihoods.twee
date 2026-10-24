@@ -28,12 +28,12 @@
 :: MP Job Cafe [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set $mpJobCafeExp to ($mpJobCafeExp or 0)>><<set $mpJobCafeLevel to ($mpJobCafeExp gte 21 ? 5 : $mpJobCafeExp gte 15 ? 4 : $mpJobCafeExp gte 10 ? 3 : $mpJobCafeExp gte 6 ? 2 : $mpJobCafeExp gte 3 ? 1 : 0)>>
-门上的铜铃响到一半就卡住了。咖啡机喷出第一股白汽，Gwylan 把一条洗得发白的围裙搭在吧台上，抬下巴示意你系好。窗边空杯还没收。
+门上铜铃响了一半。咖啡机喷出第一股白汽，格威岚把一条洗得发白的围裙搭在吧台上，抬下巴示意你系好。窗边空杯还没收。
 <br><br>
 <<if $daily and $daily.mpJobCafe>>
 你身上的咖啡味还没散，围裙已经挂回了后厨的钩子。<<elseif ($mpJobCafeLevel or 0) gte 3>>
 吧台最里侧那只杯子是留给你的。<<else>>
-Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那四桌照看好。」
+格威岚用粉笔在排班表上划了一横：「午市缺人，先把窗边那四桌照看好。」
 <</if>>
 <<if !($daily and $daily.mpJobCafe)>>
 	<<if Weather.isSnow>><<include "MP Job Seasonal Cafe Winter">><<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Cafe Rain">>
@@ -44,21 +44,21 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 <<if Weather.precipitation is "rain">>
 	露台的椅子都搬进来了，过道比平时窄，杯碟更容易碰响。
 <<elseif Time.dayState is "night">>
-	最后一桌客人还不肯走，Gwylan 把打烊牌翻过来又放下。
+	最后一桌客人还不肯走，格威岚把打烊牌翻过来又放下。
 <</if>>
 <<if ($upperwet or 0) gte 1>>
-	你衬衫底下湿了一片，Gwylan 从后厨扔来一条干布。
+	你衬衫底下湿了一片，格威岚从后厨扔来一条干布。
 <</if>>
 <<if ($mpJobFarmLevel or 0) gte 2>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_cafe_farm_bread")>>
-		Alex 送来的新麦粉堆在后厨。<<money 300>><<stress -2>>
+		亚历克斯送来的新麦粉堆在后厨。<<money 300>><<stress -2>>
 	<<else>>
-		后厨还留着 Alex 送来的麦粉，Gwylan 说今天不烤。
+		后厨还留着麦粉，今天不烤。
 	<</if>>
 <</if>>
 <<if ($mpJobFishLevel or 0) gte 2>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_cafe_fish_special")>>
-		鱼档送来一筐小银鱼。Gwylan 让你写今日特餐，卖完分你一点。
+		鱼档送来小银鱼，格威岚让你写特餐牌。
 		<<money 250>><<stress -1>>
 	<<else>>
 		鱼档今天没送鱼，特餐牌空着。
@@ -66,7 +66,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 <</if>>
 <br><br>
 <<if ($mpJobCafeSuspended or 0) is 1>>
-	Gwylan 没把围裙递过来。<<link [[去找东家把话说明白 (0:03)|MP Job Punishment Cafe 3]]>><<pass 3>><</link>>
+	格威岚没把围裙递过来。<<link [[去找东家把话说明白 (0:03)|MP Job Punishment Cafe 3]]>><<pass 3>><</link>>
 <<else>>
 	<<walkicon>><<link [[系上围裙上工 (0:20)|MP Job Cafe Shift]]>><</link>>
 <</if>>
@@ -88,11 +88,11 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 		<<if ($mpJobResultPay or 0) gt 0 and !$mpJobResultMilestone and (($mpJobCafeLevel or 0) lte ($mpJobCafeLastLevel or 0))>><<if random(1, 3) is 1 and (Time.season is "spring" or Time.season is "summer")>><<if Time.season is "spring">><<include "MP Job Seasonal Cafe Spring">><<else>><<include "MP Job Seasonal Cafe Summer">><</if>><<else>><<set _rj to random(1, 3)>><<if _rj is 1>><<include "MP Job Random Cafe">><<elseif _rj is 2>><<include "MP Job Random Cafe 1">><<else>><<include "MP Job Random Cafe 2">><</if>><</if>><</if>>
 		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobCafeStrike or 0) gt 0>><<set $mpJobCafeStrike to Math.max(0, $mpJobCafeStrike - 1)>><</if>>
 		<<if ($mpJobCafeLevel or 0) gt ($mpJobCafeLastLevel or 0)>>
-			<<if $mpJobCafeLevel is 1>>Gwylan 开始让你独自看窗边四桌，客人点单时会先看向你。<<elseif $mpJobCafeLevel is 2>>熟客名册上多了一个圈，Gwylan 让你试着调一杯简单的。<<elseif $mpJobCafeLevel is 3>>午市最忙的时候，吧台交给你看。<<elseif $mpJobCafeLevel is 4>>后门钥匙挂到了你的围裙内侧。<<else>>Gwylan 把账本推给你，说这间店有你一份。<</if>>
+			<<if $mpJobCafeLevel is 1>>格威岚开始让你独自看窗边四桌，客人点单时会先看向你。<<elseif $mpJobCafeLevel is 2>>熟客名册上多了一个圈，格威岚让你试着调一杯简单的。<<elseif $mpJobCafeLevel is 3>>午市最忙的时候，吧台交给你看。<<elseif $mpJobCafeLevel is 4>>后门钥匙挂到了你的围裙内侧。<<else>>格威岚把账本推给你，说这间店有你一份。<</if>>
 			<<set $mpJobCafeLastLevel to $mpJobCafeLevel>>
 		<</if>>
 		<<if $mpJobResultMilestone>>
-			打烊前，Gwylan 把你叫到吧台尽头，往你手里塞了一只牛皮纸包的红封。
+			打烊前，格威岚把你叫到吧台尽头，往你手里塞了一只牛皮纸包的红封。
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
@@ -107,9 +107,9 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 	<br><br>
 	<<getouticon>><<link [[回到告示板 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
 <<else>>
-	午后的客人一波接一波涌进来。托盘边沿烫手，奶泡在杯口晃出细小的弧。Gwylan 在吧台后头也不抬地报出桌号，手边的铜铃被碰得叮当响。
+	午后的客人一波接一波涌进来。托盘边沿烫手，奶泡在杯口晃出细小的弧。格威岚在吧台后头也不抬地报出桌号，手边的铜铃被碰得叮当响。
 	<br><br>
-	<<walkicon>><<link [[端盘穿过卡座与后厨 (0:18)|MP Job Cafe Shift]]>><<set _skill to ($tending or 0)>><<set _ok to (_skill gte 260 or ($mpJobCafeLevel or 0) gte 3)>><<set $mpJobCafeExp to ($mpJobCafeExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobCafeLevel to ($mpJobCafeExp gte 21 ? 5 : $mpJobCafeExp gte 15 ? 4 : $mpJobCafeExp gte 10 ? 3 : $mpJobCafeExp gte 6 ? 2 : $mpJobCafeExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 320 + ($mpJobCafeLevel or 0) * 70 + Math.floor(_skill / 6) + (($mpJobCafeLevel or 0) gte 2 ? 60 : 0)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你侧身让过突然后仰的椅背，托盘稳稳落在桌角。客人把几枚铜板压在杯垫底下，没有出声。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "拐角处有人猛地起身，你为了护住杯子撞翻整只托盘。瓷片在砖地上炸开。Gwylan 摆摆手，让你先把碎瓷扫干净，这班没有工钱。">><<stress 6>><<tiredness 2>><</if>><<if ($mpJobCafeLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_cafe_lv3")>><<set $money += 800>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobCafe to 1>><<pass 18>><</link>>
+	<<walkicon>><<link [[端盘穿过卡座与后厨 (0:18)|MP Job Cafe Shift]]>><<set _skill to ($tending or 0)>><<set _ok to (_skill gte 260 or ($mpJobCafeLevel or 0) gte 3)>><<set $mpJobCafeExp to ($mpJobCafeExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobCafeLevel to ($mpJobCafeExp gte 21 ? 5 : $mpJobCafeExp gte 15 ? 4 : $mpJobCafeExp gte 10 ? 3 : $mpJobCafeExp gte 6 ? 2 : $mpJobCafeExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 320 + ($mpJobCafeLevel or 0) * 70 + Math.floor(_skill / 6) + (($mpJobCafeLevel or 0) gte 2 ? 60 : 0)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你侧身让过突然后仰的椅背，托盘稳稳落在桌角。客人把几枚铜板压在杯垫底下，没有出声。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "拐角处有人猛地起身，你为了护住杯子撞翻整只托盘。瓷片在砖地上炸开。格威岚 摆摆手，让你先把碎瓷扫干净，这班没有工钱。">><<stress 6>><<tiredness 2>><</if>><<if ($mpJobCafeLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_cafe_lv3")>><<set $money += 800>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobCafe to 1>><<pass 18>><</link>>
 	<br>
 	<<socialiseicon>><<link [[替熟客调一杯特调 (0:16)|MP Job Cafe Shift]]>><<set _skill to ($seductionskill or 0)>><<set _ok to (_skill gte 260 or ($mpJobCafeLevel or 0) gte 3)>><<set $mpJobCafeExp to ($mpJobCafeExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobCafeLevel to ($mpJobCafeExp gte 21 ? 5 : $mpJobCafeExp gte 15 ? 4 : $mpJobCafeExp gte 10 ? 3 : $mpJobCafeExp gte 6 ? 2 : $mpJobCafeExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 360 + ($mpJobCafeLevel or 0) * 80 + Math.floor(_skill / 5) + (($mpJobCafeLevel or 0) gte 2 ? 60 : 0)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你记得那位常客不加糖，杯沿转了半圈才推过去。对方留下整张小费，指尖在杯垫边缘停了停。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "糖浆挤多了，客人抿一口就皱眉推开杯子。吧台前安静了一瞬，你低头去擦那片水渍。">><<stress 6>><<tiredness 2>><</if>><<if ($mpJobCafeLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_cafe_lv3")>><<set $money += 800>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobCafe to 1>><<pass 16>><</link>>
 	<br>
@@ -121,17 +121,17 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 :: MP Job Cafe Upgrade [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<set $mpJobCafeExp to ($mpJobCafeExp or 0)>><<set $mpJobCafeLevel to ($mpJobCafeExp gte 21 ? 5 : $mpJobCafeExp gte 15 ? 4 : $mpJobCafeExp gte 10 ? 3 : $mpJobCafeExp gte 6 ? 2 : $mpJobCafeExp gte 3 ? 1 : 0)>>
-你坐在吧台最里侧，Gwylan 把账本转过来，指尖点在一排歪歪扭扭的名字上。纸页边缘有咖啡渍，也有几枚被指甲掐出的记号。
+你坐在吧台最里侧，格威岚把账本转过来，指尖点在一排歪歪扭扭的名字上。纸页边缘有咖啡渍，也有几枚被指甲掐出的记号。
 <br><br>
 <<if $mpJobCafeLevel is 0>>
-	你还在记桌号。Gwylan 把窗边四桌圈给你，说先把热汤端稳，再谈别的。
+	你还在记桌号。格威岚把窗边四桌圈给你，说先把热汤端稳，再谈别的。
 <<elseif $mpJobCafeLevel is 1>>
-	你已经能看住窗边四桌。客人开始在你经过时抬手，而不是先喊 Gwylan。
+	你已经能看住窗边四桌。客人开始在你经过时抬手，而不是先喊格威岚。
 <<elseif $mpJobCafeLevel is 2>>
 	熟客名册上有人在你名字旁画了圈。<<elseif $mpJobCafeLevel is 3>>
-	午市忙起来时，Gwylan 会把吧台交给你看。<<elseif $mpJobCafeLevel is 4>>
+	午市忙起来时，格威岚会把吧台交给你看。<<elseif $mpJobCafeLevel is 4>>
 	后门钥匙挂在围裙内侧。<<else>>
-	Gwylan 把账本推给你，说这间店有你一份。<</if>>
+	格威岚把账本推给你，说这间店有你一份。<</if>>
 <br><br>
 <<if ($mpJobCafeLevel or 0) gte 2 and ($mpJobCafePenalty or 0) is 0>>熟客名册上已经有三个人在你的名字旁画了圈。<<else>>名册上还没有你的名字。<</if>>
 <<if ($mpJobCafeLevel or 0) gte 3 and ($mpJobCafePenalty or 0) is 0>>灶台边那只缺口的杯子归你用，咖啡不要钱。<</if>>
@@ -273,14 +273,14 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 :: MP Job Spa [nobr]
 <<set $outside to 0>><<set $location to "spa">><<effects>>
 <<set $mpJobSpaExp to ($mpJobSpaExp or 0)>><<set $mpJobSpaLevel to ($mpJobSpaExp gte 21 ? 5 : $mpJobSpaExp gte 15 ? 4 : $mpJobSpaExp gte 10 ? 3 : $mpJobSpaExp gte 6 ? 2 : $mpJobSpaExp gte 3 ? 1 : 0)>>
-温泉的潮气在更衣室门口凝成一层白雾。Jordan 把叠好的热毛巾放进藤篮，抬眼看你，声音压得很低：「今天池边人多，手脚要稳。」
+温泉的潮气在更衣室门口凝成一层白雾。乔丹把叠好的热毛巾放进藤篮，抬眼看你，声音压得很低：「今天池边人多，手脚要稳。」
 <br><br>
 <<if $daily and $daily.mpJobSpa>>
-你换下的制服搭在长凳上，袖口还是潮的。Jordan 冲你摇摇头，示意今天的班已经排满了。
+你换下的制服搭在长凳上，袖口还是潮的。乔丹冲你摇摇头，示意今天的班已经排满了。
 <<elseif ($mpJobSpaLevel or 0) gte 3>>
-私汤那边的木牌翻到了「使用中」。Jordan 把一串铜钥匙推到你手边，说今晚有位老客人点名要你看着水温。
+私汤木牌翻到了「使用中」，乔丹把铜钥匙推给你，让你替老客人看着水温。
 <<else>>
-池边的铜灯刚点上，水面浮着一层薄雾。Jordan 把班表折好塞进围裙口袋。
+池边的铜灯刚点上，水面浮着一层薄雾。乔丹把班表折好塞进围裙口袋。
 <</if>>
 <<if !($daily and $daily.mpJobSpa)>>
 	<<if Weather.isSnow>><<include "MP Job Seasonal Spa Winter">><<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Spa Rain">>
@@ -294,7 +294,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 	最后一池水放平后，整间浴场只剩铜灯的轻响。
 <</if>>
 <<if ($exposed or 0) gte 1>>
-	Jordan 递来一条宽毛巾，示意你先围好再进池边。
+	乔丹递来一条宽毛巾，示意你先围好再进池边。
 <</if>>
 <<if ($mpJobLaundryLevel or 0) gte 2>>
 	浆洗房送来的毛巾叠得方正，皂角味很淡。
@@ -302,7 +302,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 <</if>>
 <br><br>
 <<if ($mpJobSpaSuspended or 0) is 1>>
-	Jordan 把班表收了起来。你被停了班，得先去前台把话说明白。
+	乔丹把班表收了起来。你被停了班，得先去前台把话说明白。
 	<<link [[去找东家把话说明白 (0:03)|MP Job Punishment Spa 3]]>><<pass 3>><</link>>
 <<else>>
 	<<tendingicon>><<link [[进池边当班 (0:20)|MP Job Spa Shift]]>><</link>>
@@ -325,11 +325,11 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 		<<if ($mpJobResultPay or 0) gt 0 and !$mpJobResultMilestone and (($mpJobSpaLevel or 0) lte ($mpJobSpaLastLevel or 0))>><<if random(1, 3) is 1 and (Time.season is "spring" or Time.season is "summer")>><<if Time.season is "spring">><<include "MP Job Seasonal Spa Spring">><<else>><<include "MP Job Seasonal Spa Summer">><</if>><<else>><<set _rj to random(1, 3)>><<if _rj is 1>><<include "MP Job Random Spa">><<elseif _rj is 2>><<include "MP Job Random Spa 1">><<else>><<include "MP Job Random Spa 2">><</if>><</if>><</if>>
 		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobSpaStrike or 0) gt 0>><<set $mpJobSpaStrike to Math.max(0, $mpJobSpaStrike - 1)>><</if>>
 		<<if ($mpJobSpaLevel or 0) gt ($mpJobSpaLastLevel or 0)>>
-			<<if $mpJobSpaLevel is 1>>你递巾的动作稳了，有客人开始在你经过时抬头。<<elseif $mpJobSpaLevel is 2>>有人点你的手法，私汤的木牌挂到了门边。<<elseif $mpJobSpaLevel is 3>>固定客人会问你哪天当班。<<elseif $mpJobSpaLevel is 4>>你能自己开关池子。<<else>>Jordan 说这间浴场交给你很放心。<</if>>
+			<<if $mpJobSpaLevel is 1>>你递巾的动作稳了，有客人开始在你经过时抬头。<<elseif $mpJobSpaLevel is 2>>有人点你的手法，私汤的木牌挂到了门边。<<elseif $mpJobSpaLevel is 3>>固定客人会问你哪天当班。<<elseif $mpJobSpaLevel is 4>>你能自己开关池子。<<else>>乔丹说这间浴场交给你很放心。<</if>>
 			<<set $mpJobSpaLastLevel to $mpJobSpaLevel>>
 		<</if>>
 		<<if $mpJobResultMilestone>>
-			Jordan 把私汤的木牌和一小串铜钥匙一起放进你掌心，说以后这间归你照看。
+			乔丹把私汤的木牌和一小串铜钥匙一起放进你掌心，说以后这间归你照看。
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
@@ -346,7 +346,7 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 <<else>>
 	热水沿石槽淌下去，蒸汽把铜灯的光晕开。有人靠在池边闭目，湿发贴在颈侧。你端着毛巾从雾里穿过去。
 	<br><br>
-	<<tendingicon>><<link [[替客人擦背递巾 (0:18)|MP Job Spa Shift]]>><<set _skill to ($tending or 0)>><<set _ok to (_skill gte 280 or ($mpJobSpaLevel or 0) gte 3)>><<set $mpJobSpaExp to ($mpJobSpaExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobSpaLevel to ($mpJobSpaExp gte 21 ? 5 : $mpJobSpaExp gte 15 ? 4 : $mpJobSpaExp gte 10 ? 3 : $mpJobSpaExp gte 6 ? 2 : $mpJobSpaExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 700 + ($mpJobSpaLevel or 0) * 100 + Math.floor(_skill / 4) + (($mpJobSpaLevel or 0) gte 4 ? 100 : 0)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把热毛巾搭上客人肩背，力道从肩胛往下压。对方长长吐了口气，临走前往藤篮里压了一张纸币。">><<money _pay>><<stress 4>><<tiredness 3>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "毛巾的水没拧干，顺着客人后背淌进腰际。对方皱着眉叫来 Jordan，Jordan 让你先去后面缓一缓，这班没有工钱。">><<stress 8>><<tiredness 3>><</if>><<if ($mpJobSpaLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_spa_lv3")>><<set $money += 1000>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobSpa to 1>><<pass 18>><</link>>
+	<<tendingicon>><<link [[替客人擦背递巾 (0:18)|MP Job Spa Shift]]>><<set _skill to ($tending or 0)>><<set _ok to (_skill gte 280 or ($mpJobSpaLevel or 0) gte 3)>><<set $mpJobSpaExp to ($mpJobSpaExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobSpaLevel to ($mpJobSpaExp gte 21 ? 5 : $mpJobSpaExp gte 15 ? 4 : $mpJobSpaExp gte 10 ? 3 : $mpJobSpaExp gte 6 ? 2 : $mpJobSpaExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 700 + ($mpJobSpaLevel or 0) * 100 + Math.floor(_skill / 4) + (($mpJobSpaLevel or 0) gte 4 ? 100 : 0)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把热毛巾搭上客人肩背，力道从肩胛往下压。对方长长吐了口气，临走前往藤篮里压了一张纸币。">><<money _pay>><<stress 4>><<tiredness 3>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "毛巾的水没拧干，顺着客人后背淌进腰际。对方皱着眉叫来 乔丹，乔丹 让你先去后面缓一缓，这班没有工钱。">><<stress 8>><<tiredness 3>><</if>><<if ($mpJobSpaLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_spa_lv3")>><<set $money += 1000>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobSpa to 1>><<pass 18>><</link>>
 	<br>
 	<<socialiseicon>><<link [[在池边引位看水 (0:16)|MP Job Spa Shift]]>><<set _skill to Math.max(Math.floor(($beauty or 0) / 100), ($seductionskill or 0))>><<set _ok to (($beauty or 0) gte 3000 or ($seductionskill or 0) gte 280 or ($mpJobSpaLevel or 0) gte 3)>><<set $mpJobSpaExp to ($mpJobSpaExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobSpaLevel to ($mpJobSpaExp gte 21 ? 5 : $mpJobSpaExp gte 15 ? 4 : $mpJobSpaExp gte 10 ? 3 : $mpJobSpaExp gte 6 ? 2 : $mpJobSpaExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 620 + ($mpJobSpaLevel or 0) * 90 + Math.floor(_skill / 4) + (($mpJobSpaLevel or 0) gte 4 ? 100 : 0)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你引着客人绕过湿滑的石阶，顺手把水温调低半格。有人把毛巾搭在你腕上，指尖多停了一瞬，随后留下一笔不小的小费。">><<money _pay>><<stress 3>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "你指错了更衣间的方向，客人裹着浴巾在雾里站了半天。投诉传到前台，这班没有小费，前台让你先去看水。">><<stress 8>><</if>><<if ($mpJobSpaLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_spa_lv3")>><<set $money += 1000>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobSpa to 1>><<pass 16>><</link>>
 	<br>
@@ -358,20 +358,20 @@ Gwylan 用粉笔在排班表上划了一横：「午市缺人，先把窗边那�
 :: MP Job Spa Upgrade [nobr]
 <<set $outside to 0>><<set $location to "spa">><<effects>>
 <<set $mpJobSpaExp to ($mpJobSpaExp or 0)>><<set $mpJobSpaLevel to ($mpJobSpaExp gte 21 ? 5 : $mpJobSpaExp gte 15 ? 4 : $mpJobSpaExp gte 10 ? 3 : $mpJobSpaExp gte 6 ? 2 : $mpJobSpaExp gte 3 ? 1 : 0)>>
-Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表上除了名字，还标着每间池子的水温和客人的习惯。
+乔丹把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表上除了名字，还标着每间池子的水温和客人的习惯。
 <br><br>
 <<if $mpJobSpaLevel is 0>>
-	你还在记池边毛巾和铜灯的位置。Jordan 让你先看水，别急着接客人。
+	你还在记池边毛巾和铜灯的位置。乔丹让你先看水，别急着接客人。
 <<elseif $mpJobSpaLevel is 1>>
 	你递巾的动作稳了。有客人开始在你经过时抬头。
 <<elseif $mpJobSpaLevel is 2>>
 	有人点你的手法。私汤的木牌挂到了门边，背面刻着你的名字缩写。
 <<elseif $mpJobSpaLevel is 3>>
-	固定客人会问你哪天当班。Jordan 把私汤的钥匙交给你。
+	固定客人会问你哪天当班。乔丹把私汤的钥匙交给你。
 <<elseif $mpJobSpaLevel is 4>>
 	你能自己开关池子。打烊后，水汽散尽，整间浴场都听你的。
 <<else>>
-	排班表上的名字你能背下来。Jordan 说这间交给你很放心。
+	排班表上的名字你能背下来。乔丹说这间交给你很放心。
 <</if>>
 <br><br>
 <<if ($mpJobSpaPrivate or 0) is 1 and ($mpJobSpaPenalty or 0) is 0>>私汤的木牌挂在门边，背面刻着你的名字缩写。<</if>>
@@ -390,7 +390,7 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 :: MP Job Farm [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>>
 <<set $mpJobFarmExp to ($mpJobFarmExp or 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>>
-谷仓门半开着，干草和湿土的气味一起涌出来。Alex 把铁锹插进田埂，拍了拍手上的泥，指了指靠河那排空畦。
+谷仓门半开着，干草和湿土的气味一起涌出来。亚历克斯把铁锹插进田埂，拍了拍手上的泥，指了指靠河那排空畦。
 <br><br>
 <<set _today to Math.max(1, ((window.Time && Time.days) or 0))>><<set _planted to ($mpJobFarmPlantedDay or 0)>>
 <<if $daily and $daily.mpJobFarm>>
@@ -407,13 +407,13 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 <<if Weather.precipitation is "rain">>
 	田埂被雨泡软，踩下去会陷半寸。
 <<elseif Time.dayState is "night">>
-	Alex 提着灯从谷仓那头走来，灯影在垄沟里拉得很长。
+	亚历克斯提着灯从谷仓那头走来，灯影在垄沟里拉得很长。
 <</if>>
 <<if ($tiredness or 0) gte 800>>
-	你扶着锹把歇了一会儿，Alex 没催。
+	你扶着锹把歇了一会儿，亚历克斯没催。
 <</if>>
 <<if ($mpJobCafeLevel or 0) gte 2>>
-	Alex 说咖啡馆订了你的麦粉，收成不愁卖。
+	亚历克斯说咖啡馆订了你的麦粉，收成不愁卖。
 	<<stress -1>>
 <</if>>
 <<if ($mpJobFarmGreenhouse or 0) is 1>>
@@ -421,7 +421,7 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 <</if>>
 <br><br>
 <<if ($mpJobFarmSuspended or 0) is 1>>
-	Alex 把铁锹插回田埂，没让你下地。<<link [[去找东家把话说明白 (0:03)|MP Job Punishment Farm 3]]>><<pass 3>><</link>>
+	亚历克斯把铁锹插回田埂，没让你下地。<<link [[去找东家把话说明白 (0:03)|MP Job Punishment Farm 3]]>><<pass 3>><</link>>
 <<else>>
 	<<runicon>><<link [[下地干活 (0:20)|MP Job Farm Shift]]>><</link>>
 <</if>>
@@ -439,16 +439,16 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 	<<if $mpJobResultText>>
 		<<print $mpJobResultText>>
 		<<if ($mpJobResultPay or 0) gt 0>>
-			Alex 把约 £<<print Math.floor($mpJobResultPay / 100)>> 的工钱数给你。
+			亚历克斯把约 £<<print Math.floor($mpJobResultPay / 100)>> 的工钱数给你。
 		<</if>>
 		<<if ($mpJobResultPay or 0) gt 0 and !$mpJobResultMilestone and (($mpJobFarmLevel or 0) lte ($mpJobFarmLastLevel or 0))>><<if random(1, 3) is 1 and (Time.season is "spring" or Time.season is "summer")>><<if Time.season is "spring">><<include "MP Job Seasonal Farm Spring">><<else>><<include "MP Job Seasonal Farm Summer">><</if>><<else>><<set _rj to random(1, 3)>><<if _rj is 1>><<include "MP Job Random Farm">><<elseif _rj is 2>><<include "MP Job Random Farm 1">><<else>><<include "MP Job Random Farm 2">><</if>><</if>><</if>>
 		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobFarmStrike or 0) gt 0>><<set $mpJobFarmStrike to Math.max(0, $mpJobFarmStrike - 1)>><</if>>
 		<<if ($mpJobFarmLevel or 0) gt ($mpJobFarmLastLevel or 0)>>
-			<<if $mpJobFarmLevel is 1>>你能同时照料两畦，Alex 不再跟在后面返工。<<elseif $mpJobFarmLevel is 2>>你拿到温室钥匙，雨天也能育苗。<<elseif $mpJobFarmLevel is 3>>排水沟修好以后，涝天也不减产。<<elseif $mpJobFarmLevel is 4>>三畦轮作已经跑顺。<<else>>Alex 把下一季的种子单交给你。<</if>>
+			<<if $mpJobFarmLevel is 1>>你能同时照料两畦，亚历克斯不再跟在后面返工。<<elseif $mpJobFarmLevel is 2>>你拿到温室钥匙，雨天也能育苗。<<elseif $mpJobFarmLevel is 3>>排水沟修好以后，涝天也不减产。<<elseif $mpJobFarmLevel is 4>>三畦轮作已经跑顺。<<else>>亚历克斯把下一季的种子单交给你。<</if>>
 			<<set $mpJobFarmLastLevel to $mpJobFarmLevel>>
 		<</if>>
 		<<if $mpJobResultMilestone>>
-			Alex 把温室钥匙挂到钉子上，又取下来放进你手里，说以后育苗不用等天。
+			亚历克斯把温室钥匙挂到钉子上，又取下来放进你手里，说以后育苗不用等天。
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
@@ -466,17 +466,17 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 	<<if _planted is 0>>
 		泥地昨夜受了潮，踩下去会陷半寸。种子袋口敞着，风一吹，几粒黑麦种滚到田埂边。
 	<<elseif _ready>>
-		穗子沉得压弯了秆。Alex 把镰刀磨石往你脚边一放，示意你从最靠河的那一垄开始。
+		穗子沉得压弯了秆。亚历克斯把镰刀磨石往你脚边一放，示意你从最靠河的那一垄开始。
 	<<else>>
 		你昨天翻过的畦面冒出一层细芽。表土发白，指头按下去是干的，得赶在日头偏西前浇一遍。
 	<</if>>
 	<br><br>
 	<<if _planted is 0>>
-		<<parkicon>><<link [[翻土播种 (0:18)|MP Job Farm Shift]]>><<set _skill to Math.max(($physique or 0), ($tending or 0))>><<set _ok to (($physique or 0) gte 8000 or ($tending or 0) gte 280 or ($mpJobFarmLevel or 0) gte 4)>><<set $mpJobFarmExp to ($mpJobFarmExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 220 + ($mpJobFarmLevel or 0) * 40>><<set $mpJobFarmPlantedDay to _today>><<set $mpJobFarmGrowth to 0>><<set $mpJobFarmPlots to (1 + (($mpJobFarmLevel or 0) gte 4 ? 2 : (($mpJobFarmLevel or 0) gte 2 ? 1 : 0)))>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把种子按进湿土，覆上一层细土，再用脚背轻轻压实。Alex 在田埂上看了一会儿，没挑出毛病。">><<money _pay>><<stress 2>><<tiredness 4>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "垄沟开歪了，种子撒得太密。Alex 让你返工，日头落下去时只播完半畦。">><<stress 6>><<tiredness 5>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFarm to 1>><<pass 18>><</link>>
+		<<parkicon>><<link [[翻土播种 (0:18)|MP Job Farm Shift]]>><<set _skill to Math.max(($physique or 0), ($tending or 0))>><<set _ok to (($physique or 0) gte 8000 or ($tending or 0) gte 280 or ($mpJobFarmLevel or 0) gte 4)>><<set $mpJobFarmExp to ($mpJobFarmExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 220 + ($mpJobFarmLevel or 0) * 40>><<set $mpJobFarmPlantedDay to _today>><<set $mpJobFarmGrowth to 0>><<set $mpJobFarmPlots to (1 + (($mpJobFarmLevel or 0) gte 4 ? 2 : (($mpJobFarmLevel or 0) gte 2 ? 1 : 0)))>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把种子按进湿土，覆上一层细土，再用脚背轻轻压实。亚历克斯 在田埂上看了一会儿，没挑出毛病。">><<money _pay>><<stress 2>><<tiredness 4>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "垄沟开歪了，种子撒得太密。亚历克斯 让你返工，日头落下去时只播完半畦。">><<stress 6>><<tiredness 5>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFarm to 1>><<pass 18>><</link>>
 	<<elseif _ready>>
-		<<runicon>><<link [[开镰收割 (0:20)|MP Job Farm Shift]]>><<set _skill to ($athletics or 0)>><<set _ok to (_skill gte 300 or ($mpJobFarmLevel or 0) gte 4)>><<set $mpJobFarmExp to ($mpJobFarmExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>><<if _ok>><<set _plots to ($mpJobFarmPlots or 1)>><<set _pay to Math.min(1500, _plots * (300 + ($mpJobFarmLevel or 0) * 70) + Math.floor(_skill / 5) - (_rain ? 80 : 0))>><<set $mpJobFarmPlantedDay to 0>><<set $mpJobFarmGrowth to 0>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "镰刀贴着地皮走，穗子一束束倒进臂弯。你和 Alex 把收成码上板车，麦芒扎得小臂发痒。">><<money _pay>><<tiredness 5>><<stress 2>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "镰刀吃进湿泥，你用力一扯，连根带土翻起半垄。Alex 蹲下去看了看被踩倒的苗，摇了摇头，这一季算白种了。">><<set $mpJobFarmPlantedDay to 0>><<set $mpJobFarmGrowth to 0>><<stress 8>><<tiredness 4>><</if>><<if ($mpJobFarmLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_farm_lv3")>><<set $money += 900>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFarm to 1>><<pass 20>><</link>>
+		<<runicon>><<link [[开镰收割 (0:20)|MP Job Farm Shift]]>><<set _skill to ($athletics or 0)>><<set _ok to (_skill gte 300 or ($mpJobFarmLevel or 0) gte 4)>><<set $mpJobFarmExp to ($mpJobFarmExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>><<if _ok>><<set _plots to ($mpJobFarmPlots or 1)>><<set _pay to Math.min(1500, _plots * (300 + ($mpJobFarmLevel or 0) * 70) + Math.floor(_skill / 5) - (_rain ? 80 : 0))>><<set $mpJobFarmPlantedDay to 0>><<set $mpJobFarmGrowth to 0>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "镰刀贴着地皮走，穗子一束束倒进臂弯。你和 亚历克斯 把收成码上板车，麦芒扎得小臂发痒。">><<money _pay>><<tiredness 5>><<stress 2>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "镰刀吃进湿泥，你用力一扯，连根带土翻起半垄。亚历克斯 蹲下去看了看被踩倒的苗，摇了摇头，这一季算白种了。">><<set $mpJobFarmPlantedDay to 0>><<set $mpJobFarmGrowth to 0>><<stress 8>><<tiredness 4>><</if>><<if ($mpJobFarmLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_farm_lv3")>><<set $money += 900>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFarm to 1>><<pass 20>><</link>>
 	<<else>>
-		<<tendingicon>><<link [[浇水培土 (0:15)|MP Job Farm Shift]]>><<set _skill to Math.max(($physique or 0), ($tending or 0))>><<set _ok to (_rain or ($physique or 0) gte 8000 or ($tending or 0) gte 280 or ($mpJobFarmLevel or 0) gte 4)>><<set $mpJobFarmExp to ($mpJobFarmExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 200 + ($mpJobFarmLevel or 0) * 35>><<set $mpJobFarmGrowth to (($mpJobFarmGrowth or 0) + 1)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你拎着木桶沿垄沟走，水渗进土里，细芽慢慢挺直。Alex 用脚尖拨了拨湿土，说这畦稳了。">><<money _pay>><<tiredness 3>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "水浇得太急，冲出一道浅沟，几株嫩芽被冲得歪倒。Alex 让你重新培土。">><<stress 4>><<tiredness 3>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFarm to 1>><<pass 15>><</link>>
+		<<tendingicon>><<link [[浇水培土 (0:15)|MP Job Farm Shift]]>><<set _skill to Math.max(($physique or 0), ($tending or 0))>><<set _ok to (_rain or ($physique or 0) gte 8000 or ($tending or 0) gte 280 or ($mpJobFarmLevel or 0) gte 4)>><<set $mpJobFarmExp to ($mpJobFarmExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 200 + ($mpJobFarmLevel or 0) * 35>><<set $mpJobFarmGrowth to (($mpJobFarmGrowth or 0) + 1)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你拎着木桶沿垄沟走，水渗进土里，细芽慢慢挺直。亚历克斯 用脚尖拨了拨湿土，说这畦稳了。">><<money _pay>><<tiredness 3>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "水浇得太急，冲出一道浅沟，几株嫩芽被冲得歪倒。亚历克斯 让你重新培土。">><<stress 4>><<tiredness 3>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobFarm to 1>><<pass 15>><</link>>
 	<</if>>
 	<br>
 	<<tendingicon>><<link [[搬草料修补篱笆 (0:16)|MP Job Farm Shift]]>><<set _pay to 280 + ($mpJobFarmLevel or 0) * 50>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把草捆拖进棚里，又用铁丝把松动的篱笆桩重新绑紧。手上的泥干了，搓一搓就往下掉。">><<set $mpJobFarmExp to ($mpJobFarmExp or 0) + 1>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>><<money _pay>><<tiredness 3>><<stress 1>><<set $daily to ($daily or {})>><<set $daily.mpJobFarm to 1>><<pass 16>><</link>>
@@ -487,26 +487,26 @@ Jordan 把排班表铺在干燥的长凳上，纸角用两只铜夹压住。表�
 :: MP Job Farm Upgrade [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>>
 <<set $mpJobFarmExp to ($mpJobFarmExp or 0)>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>>
-Alex 把农活账摊在仓门的木箱上，用一块石头压住被风吹起的纸角。账页上记着畦数、播种日和每次浇水的日子。
+亚历克斯把农活账摊在木箱上，用石头压住纸角。账页上记着畦数、播种日和每次浇水的日子。
 <br><br>
 <<if $mpJobFarmLevel is 0>>
-	你还在学看墒情。Alex 让你先浇一畦，别把苗冲倒。
+	你还在学看墒情。亚历克斯让你先浇一畦，别把苗冲倒。
 <<elseif $mpJobFarmLevel is 1>>
-	你能同时照料两畦。垄沟开得直了，Alex 不再跟在后面返工。
+	你能同时照料两畦。垄沟开得直了，亚历克斯不再跟在后面返工。
 <<elseif $mpJobFarmLevel is 2>>
 	你拿到温室钥匙。雨天也能育苗，河湾那排空地终于不用等天。
 <<elseif $mpJobFarmLevel is 3>>
-	排水沟修好以后，涝天也不减产的把握大了。Alex 让你自己排畦。
+	排水沟修好后涝天也不减产，亚历克斯让你自己排畦。
 <<elseif $mpJobFarmLevel is 4>>
-	三畦轮作已经跑顺。Alex 把下一季的种子单交给你。
+	三畦轮作已经跑顺。亚历克斯把下一季的种子单交给你。
 <<else>>
-	账上的畦数排满了。Alex 说今年的地随你安排。
+	账上的畦数排满了。亚历克斯说今年的地随你安排。
 <</if>>
 <br><br>
 <<set _today to Math.max(1, ((window.Time && Time.days) or 0))>><<set _planted to ($mpJobFarmPlantedDay or 0)>>
 <<if _planted is 0>>地里现在空着。
 <<elseif _today gt _planted>>地里的作物已经熟透，可以收割了。
-<<else>>地里的苗还在长，今天种下的要等明天再收。<</if>>
+<<else>>苗还在长，要等明天再收。<</if>>
 <<if ($mpJobFarmPlantedDay or 0) gt 0>>｜你数了数，畦里共有 <<print ($mpJobFarmPlots or 1)>> 垄作物。<<if ($mpJobFarmGrowth or 0) gte 80>>穗子已经沉甸甸地压弯了秆。<<elseif ($mpJobFarmGrowth or 0) gte 40>>苗已经蹿高了一截。<<else>>新芽才刚破土。<</if>><</if>>
 <br><br>
 <<runicon>><<link [[回田埂 (0:01)|MP Job Farm]]>><<pass 1>><</link>>
@@ -522,14 +522,14 @@ Alex 把农活账摊在仓门的木箱上，用一块石头压住被风吹起的
 :: MP Job Clock [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set $mpJobClockExp to ($mpJobClockExp or 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>>
-Sera 把一枚拆到一半的怀表推到你面前。镊子、油壶和放大镜在墨绿绒布上排成一列，窗外的电车线偶尔擦出一星蓝火。
+塞拉把一枚拆到一半的怀表推到你面前。镊子、油壶和放大镜在墨绿绒布上排成一列，窗外的电车线偶尔擦出一星蓝火。
 <br><br>
 <<if $daily and $daily.mpJobClock>>
-你手上的表油还没洗净，工作台的灯已经关了。Sera 正把工具一件件收回木盒。
+你手上的表油还没洗净，工作台的灯已经关了。塞拉正把工具一件件收回木盒。
 <<elseif ($mpJobClockLevel or 0) gte 3>>
-柜台后头那块「承接委托」的木牌翻了过来。Sera 把一张写着客人姓名的纸条压在放大镜下。
+柜台后头那块「承接委托」的木牌翻了过来。塞拉把一张写着客人姓名的纸条压在放大镜下。
 <<else>>
-Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从废料盒里自己找零件补上。」
+塞拉用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从废料盒里自己找零件补上。」
 <</if>>
 <<if !($daily and $daily.mpJobClock)>>
 	<<if Weather.isSnow>><<include "MP Job Seasonal Clock Winter">><<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Clock Rain">>
@@ -538,16 +538,16 @@ Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从
 	<</if>>
 <</if>>
 <<if Weather.precipitation is "rain">>
-	铺子里潮气重，Sera 让你先把表壳擦干再上手。
+	铺子里潮气重，塞拉让你先把表壳擦干再上手。
 <<elseif Time.dayState is "night">>
 	街上没什么人，挂钟的滴答声显得格外清楚。
 <</if>>
 <<if ($tiredness or 0) gte 800>>
-	你捏镊子的手有点抖，Sera 把灯往你这边挪了挪。
+	你捏镊子的手有点抖，塞拉把灯往你这边挪了挪。
 <</if>>
 <br><br>
 <<if ($mpJobClockSuspended or 0) is 1>>
-	Sera 把工作台的灯关了。你被停了班，得先去柜台把话说明白。
+	塞拉把工作台的灯关了。你被停了班，得先去柜台把话说明白。
 	<<link [[去找东家把话说明白 (0:03)|MP Job Punishment Clock 3]]>><<pass 3>><</link>>
 <<else>>
 	<<investigateicon>><<link [[在工作台前坐下 (0:20)|MP Job Clock Shift]]>><</link>>
@@ -565,16 +565,16 @@ Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从
 	<<if $mpJobResultText>>
 		<<print $mpJobResultText>>
 		<<if ($mpJobResultPay or 0) gt 0>>
-			Sera 把约 £<<print Math.floor($mpJobResultPay / 100)>> 推到你手边。
+			塞拉把约 £<<print Math.floor($mpJobResultPay / 100)>> 推到你手边。
 		<</if>>
 		<<if ($mpJobResultPay or 0) gt 0 and !$mpJobResultMilestone and (($mpJobClockLevel or 0) lte ($mpJobClockLastLevel or 0))>><<if random(1, 3) is 1 and (Time.season is "spring" or Time.season is "summer")>><<if Time.season is "spring">><<include "MP Job Seasonal Clock Spring">><<else>><<include "MP Job Seasonal Clock Summer">><</if>><<else>><<set _rj to random(1, 3)>><<if _rj is 1>><<include "MP Job Random Clock">><<elseif _rj is 2>><<include "MP Job Random Clock 1">><<else>><<include "MP Job Random Clock 2">><</if>><</if>><</if>>
 		<<if ($mpJobResultPay or 0) gt 0 and ($mpJobClockStrike or 0) gt 0>><<set $mpJobClockStrike to Math.max(0, $mpJobClockStrike - 1)>><</if>>
 		<<if ($mpJobClockLevel or 0) gt ($mpJobClockLastLevel or 0)>>
-			<<if $mpJobClockLevel is 1>>你能独立换摆轮，Sera 把简单委托推到你手边。<<elseif $mpJobClockLevel is 2>>你开始接高价维修，柜台里那只银壳三问表只让你碰。<<elseif $mpJobClockLevel is 3>>委托栏上挂了一块刻你名字的小铜牌。<<elseif $mpJobClockLevel is 4>>Sera 让你在招牌上署名。<<else>>委托簿上一半的活已经写着你的名字。<</if>>
+			<<if $mpJobClockLevel is 1>>你能独立换摆轮，塞拉把简单委托推到你手边。<<elseif $mpJobClockLevel is 2>>你开始接高价维修，柜台里那只银壳三问表只让你碰。<<elseif $mpJobClockLevel is 3>>委托栏上挂了一块刻你名字的小铜牌。<<elseif $mpJobClockLevel is 4>>塞拉让你在招牌上署名。<<else>>委托簿上一半的活已经写着你的名字。<</if>>
 			<<set $mpJobClockLastLevel to $mpJobClockLevel>>
 		<</if>>
 		<<if $mpJobResultMilestone>>
-			Sera 把一块刻着你名字的小铜牌挂到委托栏上，说以后高价维修也归你接。
+			塞拉把一块刻着你名字的小铜牌挂到委托栏上，说以后高价维修也归你接。
 			<<set $mpJobResultMilestone to 0>>
 		<</if>>
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
@@ -584,18 +584,18 @@ Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从
 		<</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
 	<<else>>
-		工作台的灯已经熄了。你的镊子放回绒布槽里，Sera 正在锁抽屉。
+		工作台的灯已经熄了。你的镊子放回绒布槽里，塞拉正在锁抽屉。
 	<</if>>
 	<br><br>
 	<<getouticon>><<link [[回到告示板 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
 <<else>>
-	齿轮在镊子尖上咬合，发出极轻的一声。Sera 在柜台那头修一把银壳怀表，头也不抬地说：「先听摆轮，再动螺丝。」
+	齿轮在镊子尖上咬合，发出极轻的一声。塞拉在柜台那头修一把银壳怀表，头也不抬地说：「先听摆轮，再动螺丝。」
 	<br><br>
-	<<investigateicon>><<link [[拆洗表芯重装摆轮 (0:18)|MP Job Clock Shift]]>><<set _skill to ($maths or 0)>><<set _ok to (_skill gte 280 or ($mpJobClockLevel or 0) gte 4)>><<set $mpJobClockExp to ($mpJobClockExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 650 + ($mpJobClockLevel or 0) * 110 + Math.floor(_skill / 5)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把摆轮重新校平，秒针走出一圈均匀的轻响。Sera 凑近听了一会儿，把工钱推过来，没说什么。">><<money _pay>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sera")>><<mpnpcincr Sera trust 1>><</if>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "游丝被你捏变了形，装回去后表针走走停停。Sera 拆下报废的零件，把那枚坏零件丢进废料盒，让你先歇手。">><<stress 5>><</if>><<if ($mpJobClockLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_lv3")>><<set $money += 1200>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobClock to 1>><<pass 18>><</link>>
+	<<investigateicon>><<link [[拆洗表芯重装摆轮 (0:18)|MP Job Clock Shift]]>><<set _skill to ($maths or 0)>><<set _ok to (_skill gte 280 or ($mpJobClockLevel or 0) gte 4)>><<set $mpJobClockExp to ($mpJobClockExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 650 + ($mpJobClockLevel or 0) * 110 + Math.floor(_skill / 5)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把摆轮重新校平，秒针走出一圈均匀的轻响。塞拉 凑近听了一会儿，把工钱推过来，没说什么。">><<money _pay>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sera")>><<mpnpcincr Sera trust 1>><</if>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "游丝被你捏变了形，装回去后表针走走停停。塞拉 拆下报废的零件，把那枚坏零件丢进废料盒，让你先歇手。">><<stress 5>><</if>><<if ($mpJobClockLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_lv3")>><<set $money += 1200>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobClock to 1>><<pass 18>><</link>>
 	<br>
-	<<investigateicon>><<link [[校准齿轮与擒纵叉 (0:17)|MP Job Clock Shift]]>><<set _skill to ($science or 0)>><<set _ok to (_skill gte 300 or ($mpJobClockLevel or 0) gte 4)>><<set $mpJobClockExp to ($mpJobClockExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 700 + ($mpJobClockLevel or 0) * 110 + Math.floor(_skill / 5)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把擒纵叉的角度调了半格，齿轮咬合声立刻变得干净。Sera 把表壳合上，在账本里记了一笔。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "齿轮装反了一面，你硬压下去时崩掉一个齿。Sera 用镊子夹起碎片看了很久。">><<stress 5>><</if>><<if ($mpJobClockLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_lv3")>><<set $money += 1200>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobClock to 1>><<pass 17>><</link>>
+	<<investigateicon>><<link [[校准齿轮与擒纵叉 (0:17)|MP Job Clock Shift]]>><<set _skill to ($science or 0)>><<set _ok to (_skill gte 300 or ($mpJobClockLevel or 0) gte 4)>><<set $mpJobClockExp to ($mpJobClockExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 700 + ($mpJobClockLevel or 0) * 110 + Math.floor(_skill / 5)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把擒纵叉的角度调了半格，齿轮咬合声立刻变得干净。塞拉 把表壳合上，在账本里记了一笔。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "齿轮装反了一面，你硬压下去时崩掉一个齿。塞拉 用镊子夹起碎片看了很久。">><<stress 5>><</if>><<if ($mpJobClockLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_lv3")>><<set $money += 1200>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobClock to 1>><<pass 17>><</link>>
 	<br>
-	<<sneakicon>><<link [[拆旧壳取可用零件 (0:16)|MP Job Clock Shift]]>><<set _skill to ($skulduggery or 0)>><<set _ok to (_skill gte 320 or ($mpJobClockLevel or 0) gte 4)>><<set $mpJobClockExp to ($mpJobClockExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to Math.min(1500, 820 + ($mpJobClockLevel or 0) * 110 + Math.floor(_skill / 5))>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你用薄刃挑开旧壳的卡扣，里头的摆轮和宝石轴承都还完好。Sera 扫了一眼，按零件价给你记了工钱。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "刀尖打滑，在夹板上划出一道深痕，还崩了指尖。Sera 把那块壳子丢进废料盒，把盒子推远，没让你赔。">><<pain 3>><<stress 6>><</if>><<if ($mpJobClockLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_lv3")>><<set $money += 1200>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobClock to 1>><<pass 16>><</link>>
+	<<sneakicon>><<link [[拆旧壳取可用零件 (0:16)|MP Job Clock Shift]]>><<set _skill to ($skulduggery or 0)>><<set _ok to (_skill gte 320 or ($mpJobClockLevel or 0) gte 4)>><<set $mpJobClockExp to ($mpJobClockExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to Math.min(1500, 820 + ($mpJobClockLevel or 0) * 110 + Math.floor(_skill / 5))>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你用薄刃挑开旧壳的卡扣，里头的摆轮和宝石轴承都还完好。塞拉 扫了一眼，按零件价给你记了工钱。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "刀尖打滑，在夹板上划出一道深痕，还崩了指尖。塞拉 把那块壳子丢进废料盒，把盒子推远，没让你赔。">><<pain 3>><<stress 6>><</if>><<if ($mpJobClockLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_lv3")>><<set $money += 1200>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobClock to 1>><<pass 16>><</link>>
 	<br>
 	<<getouticon>><<link [[先回告示板 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
 <</if>>
@@ -603,24 +603,24 @@ Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从
 :: MP Job Clock Upgrade [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<set $mpJobClockExp to ($mpJobClockExp or 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>>
-委托簿摊在柜台上，纸页间夹着几张画了机芯草图的便签。Sera 把放大镜推到一边，让你自己翻。
+委托簿摊在柜台上，纸页间夹着几张画了机芯草图的便签。塞拉把放大镜推到一边，让你自己翻。
 <br><br>
 <<if $mpJobClockLevel is 0>>
-	你还在认零件。Sera 让你先拆旧壳，别碰客人的表。
+	你还在认零件。塞拉让你先拆旧壳，别碰客人的表。
 <<elseif $mpJobClockLevel is 1>>
-	你能独立换摆轮。Sera 把简单委托推到你手边。
+	你能独立换摆轮。塞拉把简单委托推到你手边。
 <<elseif $mpJobClockLevel is 2>>
-	你开始接高价维修。柜台里那只银壳三问表，Sera 只让你碰。
+	你开始接高价维修。柜台里那只银壳三问表，塞拉只让你碰。
 <<elseif $mpJobClockLevel is 3>>
 	名表和复杂机芯的活写着你的名字。委托栏上挂了一块小铜牌。
 <<elseif $mpJobClockLevel is 4>>
-	Sera 让你在招牌上署名。招牌右下角多了一行小字，是你的名字。
+	塞拉让你在招牌上署名。招牌右下角多了一行小字，是你的名字。
 <<else>>
-	委托簿上一半的活已经写着你的名字。Sera 说招牌该重新漆了。
+	委托簿上一半的活已经写着你的名字。塞拉说招牌该重新漆了。
 <</if>>
 <br><br>
 <<if ($mpJobClockCommission or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>委托栏上挂着一块刻你名字的小铜牌。<</if>>
-<<if ($mpJobClockHighEnd or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>柜台里那只银壳三问表，Sera 只让你碰。<</if>>
+<<if ($mpJobClockHighEnd or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>柜台里那只银壳三问表，塞拉只让你碰。<</if>>
 <<if ($mpJobClockPartner or 0) is 1 and ($mpJobClockPenalty or 0) is 0>>招牌右下角多了一行小字，是你的名字。<</if>>
 <br><br>
 <<investigateicon>><<link [[回工作台 (0:01)|MP Job Clock]]>><<pass 1>><</link>>
@@ -636,14 +636,14 @@ Sera 用镊子敲了敲桌面：「先听摆轮，再动螺丝。拆坏了就从
 :: MP Job Laundry [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>>
 <<set $mpJobLaundryExp to ($mpJobLaundryExp or 0)>><<set $mpJobLaundryLevel to ($mpJobLaundryExp gte 21 ? 5 : $mpJobLaundryExp gte 15 ? 4 : $mpJobLaundryExp gte 10 ? 3 : $mpJobLaundryExp gte 6 ? 2 : $mpJobLaundryExp gte 3 ? 1 : 0)>>
-浆洗房的蒸汽把窗玻璃糊成一片白。木盆里的水泛着皂角沫，Robin 抱着一摞床单从走廊那头过来，下巴抵在布堆上。
+浆洗房的蒸汽把窗玻璃糊成一片白。木盆里的水泛着皂角沫，罗宾抱着一摞床单从走廊那头过来，下巴抵在布堆上。
 <br><br>
 <<if $daily and $daily.mpJobLaundry>>
-你换下的袖套搭在盆沿，手背被热水泡得发皱。Robin 说今天的床单已经晾完了。
+你换下的袖套搭在盆沿，手背被热水泡得发皱。罗宾说今天的床单已经晾完了。
 <<elseif ($mpJobLaundryLevel or 0) gte 3>>
 装订台的抽屉没锁，里面放着你的围裙和一把小锥子。旧书摊那边又送来一摞脱线的硬壳书。
 <<else>>
-Robin 把床单放进盆里，皂角沫漫过手背：「先熨这一批，旧书摊的账可以晚点算。」
+罗宾把床单放进盆里，皂角沫漫过手背：「先熨这一批，旧书摊的账可以晚点算。」
 <</if>>
 <<if !($daily and $daily.mpJobLaundry)>>
 	<<if Weather.isSnow>><<include "MP Job Seasonal Laundry Winter">><<elseif Weather.precipitation isnot "none">><<include "MP Job Seasonal Laundry Rain">>
@@ -657,7 +657,7 @@ Robin 把床单放进盆里，皂角沫漫过手背：「先熨这一批，旧�
 	走廊只剩浆洗房这一盏灯，水声显得很响。
 <</if>>
 <<if ($upperwet or 0) gte 1>>
-	你身上的衣服也湿了，Robin 让你先去换一件干的。
+	你身上的衣服也湿了，罗宾让你先去换一件干的。
 <</if>>
 <br><br>
 <<if ($mpJobLaundrySuspended or 0) is 1>>
@@ -705,7 +705,7 @@ Robin 把床单放进盆里，皂角沫漫过手背：「先熨这一批，旧�
 <<else>>
 	熨斗压过湿布，白汽嘶地窜起来。走廊尽头传来孩子跑过的脚步声。旧书摊那边堆着待修的硬壳书，书脊的线已经松了。
 	<br><br>
-	<<tendingicon>><<link [[熨烫床单与桌布 (0:17)|MP Job Laundry Shift]]>><<set _skill to ($housekeeping or 0)>><<set _ok to (_skill gte 250 or ($mpJobLaundryLevel or 0) gte 3)>><<set $mpJobLaundryExp to ($mpJobLaundryExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobLaundryLevel to ($mpJobLaundryExp gte 21 ? 5 : $mpJobLaundryExp gte 15 ? 4 : $mpJobLaundryExp gte 10 ? 3 : $mpJobLaundryExp gte 6 ? 2 : $mpJobLaundryExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 240 + ($mpJobLaundryLevel or 0) * 45 + Math.floor(_skill / 6)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把床单边角抻平，熨斗一路推过去，水痕在热气里散干净。Robin 在旁边叠布，顺手替你擦了把汗。">><<money _pay>><<stress -1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "熨斗停得太久，床单上留下一块焦黄的印子。管事看了一眼，把焦掉的床单收走，这班没有工钱。">><<stress 3>><</if>><<if ($mpJobLaundryLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_lv3")>><<set $money += 400>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobLaundry to 1>><<pass 17>><</link>>
+	<<tendingicon>><<link [[熨烫床单与桌布 (0:17)|MP Job Laundry Shift]]>><<set _skill to ($housekeeping or 0)>><<set _ok to (_skill gte 250 or ($mpJobLaundryLevel or 0) gte 3)>><<set $mpJobLaundryExp to ($mpJobLaundryExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobLaundryLevel to ($mpJobLaundryExp gte 21 ? 5 : $mpJobLaundryExp gte 15 ? 4 : $mpJobLaundryExp gte 10 ? 3 : $mpJobLaundryExp gte 6 ? 2 : $mpJobLaundryExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 240 + ($mpJobLaundryLevel or 0) * 45 + Math.floor(_skill / 6)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把床单边角抻平，熨斗一路推过去，水痕在热气里散干净。罗宾 在旁边叠布，顺手替你擦了把汗。">><<money _pay>><<stress -1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "熨斗停得太久，床单上留下一块焦黄的印子。管事看了一眼，把焦掉的床单收走，这班没有工钱。">><<stress 3>><</if>><<if ($mpJobLaundryLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_lv3")>><<set $money += 400>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobLaundry to 1>><<pass 17>><</link>>
 	<br>
 	<<shopicon>><<link [[装订脱线的旧书 (0:17)|MP Job Laundry Shift]]>><<set _skill to ($english or 0)>><<set _ok to (_skill gte 260 or ($mpJobLaundryLevel or 0) gte 3)>><<set $mpJobLaundryExp to ($mpJobLaundryExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobLaundryLevel to ($mpJobLaundryExp gte 21 ? 5 : $mpJobLaundryExp gte 15 ? 4 : $mpJobLaundryExp gte 10 ? 3 : $mpJobLaundryExp gte 6 ? 2 : $mpJobLaundryExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to 260 + ($mpJobLaundryLevel or 0) * 50 + Math.floor(_skill / 5)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把松脱的书脊拆开，重新穿线，再用浆糊把布面压平。摊主翻了翻，把书放回架子时多给了几枚铜板。">><<money _pay>><<tiredness 2>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "线拉得太紧，书脊被你勒出一道裂口。摊主把书收回去，这班没有工钱。">><<stress 3>><</if>><<if ($mpJobLaundryLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_lv3")>><<set $money += 400>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobLaundry to 1>><<pass 17>><</link>>
 	<br>

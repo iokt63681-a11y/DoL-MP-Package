@@ -1,8 +1,9 @@
+
 :: MP NPC Sera Hub [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
@@ -24,7 +25,7 @@
 
 :: MP NPC Sera Chat [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcChat_sera>><<set $daily.mpNpcChat_sera to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>>
 <<if (_npc.love or 0) gte 18>>你坐在柜台内侧的高脚凳上，看塞拉用绒布擦拭古董三问表。她偏头与你低语，顺手将碎发别到你耳后。<<elseif (_npc.love or 0) gte 6>>你倚在柜台边与塞拉聊起高街近况。她转动游丝扳手，提醒你夜里避开市政厅后巷的巡哨。<<else>>你隔着玻璃展柜看塞拉校准钟摆。她话虽不多，但每当你问起机芯来历，她都会耐心解答。<</if>>
@@ -41,9 +42,10 @@
 	<<walkicon>><<link [[约她打烊后去旧街走走 (0:08)|MP Extra Daily Sera 1]]>><<pass 8>><</link>>
 <</if>>
 <<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[雨夜打烊后留下来陪她 (0:08)|MP RelDay Sera 1]]>><<pass 8>><</link>><</if>>
+
 :: MP NPC Sera Service [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
 <<if ($mpAntiquesUnappraised or 0) gt 0>>
 	<<set _cnt to $mpAntiquesUnappraised>><<set _pay to _cnt * 1500>><<set $mpAntiquesUnappraised to 0>><<money _pay>>
 	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>你取出收集到的未鉴定古物放在绒布垫上。塞拉戴上放大镜细看铭文，从抽屉里点出银币递给你。<span class="gold">你换到了应得的古物折现。</span>
@@ -57,9 +59,10 @@
 <</replace>><</link>>
 </div>
 <<if $mpKeepsake and $mpKeepsake["keepsake_clockwork_core"]>><br><<keepsakeicon>><<link [[取出机括游丝芯请她过目 (0:06)|MP Keepsake Show Core]]>><<pass 6>><</link>><</if>>
+
 :: MP NPC Sera Help [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<set _helpPaid to 0>>
 <<if !$daily.mpNpcHelp_sera>>
@@ -77,7 +80,7 @@
 
 :: MP NPC Sera Flirt [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcFlirt_sera>><<set $daily.mpNpcFlirt_sera to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 2)>><</if>>
 <<if ($seductionskill or 0) gte 240 or (_npc.love or 0) gte 10>>你凑近煤油灯握住塞拉微凉的手腕。她指尖一颤，反手与你十指相扣，耳根染上薄红：「别闹，游丝要偏了。」<span class="green">她眼底满是纵容。</span><<stress -3>><<else>>你借着递镊子轻轻擦过塞拉的手背。她抬眸看了你一眼，嘴角微扬。<span class="teal">气氛柔和了几分。</span><<stress -1>><</if>>
@@ -88,7 +91,7 @@
 
 :: MP NPC Sera Intimate [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.lust to Math.max(0, (_npc.lust or 0) - 3)>>
 阁楼天窗外夜色深沉。塞拉摘下眼镜，任由你将她揽在绒毯边。她温热的呼吸拂过你颈侧，在滴答钟声里紧握着你的手。<span class="green">疲惫与寒意一扫而空。</span><<stress -12>><<tiredness -4>><<trauma -4>>
 <br><br>
@@ -98,7 +101,7 @@
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
 <<if _stg gte 5>>
 	<<include "MP NPC Sera Quest Late">>
 <<elseif _stg is 2>>
@@ -136,7 +139,7 @@
 
 :: MP NPC Sera Quest Late [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _stg to (_npc.stage or 5)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _stg to (_npc.stage or 5)>>
 <<if _stg is 5>>
 	羊皮星盘底图在胡桃木桌上摊开，标着天文翼楼与机括城的三条轴线。塞拉递来分规，让你测算空缺月相轮齿距，或去翻查早年修表底簿。
 	<br><br>
@@ -187,7 +190,7 @@
 
 :: MP NPC Sera Quest 3 Pass [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _npc.stage to 3>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你借煤油润透锁芯，用探针依次挑落三枚铜弹子。铁栅无声敞开，塞拉从竖井底拈起一枚断齿冠轮：「有人故意卡停副钟掩盖抽水声。」<span class="green">你用巧劲挑开了竖井铜锁。</span>
@@ -195,7 +198,7 @@
 	你双手扣住通风活页的生铁栓，憋足力气硬生生将锈死的合页扳开一道容人钻入的缝隙。塞拉探身取出井底的断齿冠轮，赞许地拍了拍你的手背。<span class="green">你借侧壁活页打开了通路。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_3")>>
-	<<money 1500>><span class="gold">塞拉把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">塞拉将初探所得的 £15 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -205,7 +208,7 @@
 
 :: MP NPC Sera Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	探针在潮湿锁芯里打滑，崩断的钢丝划红了指尖。巷口传来巡夜靴声，塞拉连忙拉你退回暗处。<span class="red">锁舌仍死死卡着，今晚只得无功而返。</span>
 <<else>>
@@ -219,7 +222,7 @@
 
 :: MP NPC Sera Quest 6 Pass [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _npc.stage to 6>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你稳住分规量准圆弧夹角，算出缺失零件正是三十六齿蓝钢游丝轮。塞拉合上草图：「明晚我们去多瑙河街后巷把东西拦下来。」<span class="green">你算准了月相轮的制式齿距。</span>
@@ -227,7 +230,7 @@
 	你从旧货铺底层的修表台账里翻出二十年前的进货单，精准查到了那枚三十六齿蓝钢游丝轮的编号与买主。塞拉惊喜地向你点头。<span class="green">你从旧台账查明了零件去向。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_6")>>
-	<<money 1500>><span class="gold">塞拉把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">塞拉取出一封 £15 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -237,7 +240,7 @@
 
 :: MP NPC Sera Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	煤油灯芯爆出火星，分规尖端一抖划破了草图纸面，两套岁差刻度始终对不上。<span class="red">草图被墨迹污损，测算半途中断。</span>
 <<else>>
@@ -251,7 +254,7 @@
 
 :: MP NPC Sera Quest 9 Pass [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>><<set _npc.stage to 9>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你算准擒纵叉回摆的毫厘间隙，手腕一沉将鎏金核心稳稳按入主轮卡槽。钟塔齿轮发出浑厚共鸣，塞拉长舒一口气握紧你的手。<span class="green">你精准将发条核心嵌入主轴。</span>
@@ -259,7 +262,7 @@
 	你双手缠住麻布猛拽配重铁索，硬生生将狂转的副轴拖慢半拍，塞拉趁机将鎏金核心推入卡槽。她转过身替你擦去额角热汗。<span class="green">你凭臂力稳住配重索助她合龙。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_9")>>
-	<<money 1500>><span class="gold">塞拉把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">塞拉与你击掌庆贺，将 £15 终局厚酬放入你衣袋。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -269,7 +272,7 @@
 
 :: MP NPC Sera Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.sera>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	狂风从百叶窗灌入，你推入核心时慢了半秒，副轴安全栓自动锁死，指节也被铜齿刮破。<span class="red">你错过了午夜校准窗口。</span>
 <<else>>
@@ -296,7 +299,7 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Docks">><</if>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
@@ -318,7 +321,7 @@
 
 :: MP NPC Vesper Chat [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcChat_vesper>><<set $daily.mpNpcChat_vesper to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>>
 <<if (_npc.love or 0) gte 18>>你与维斯并肩坐在系船石阶上。他用小刀削着浮木，低声教你分辨走私船的三短一长灯号。<<elseif (_npc.love or 0) gte 6>>维斯靠着货堆与你聊起近期海关巡逻艇的换防路线，顺手扔给你一枚防风铜打火机。<<else>>海风呼啸，维斯言简意赅地指点你哪几座栈桥夜里少有人走。<</if>>
@@ -335,9 +338,10 @@
 	<<walkicon>><<link [[陪他沿着防波堤夜巡 (0:08)|MP Extra Daily Vesper 1]]>><<pass 8>><</link>>
 <</if>>
 <<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[清晨大雾时去栈桥找他 (0:08)|MP RelDay Vesper 1]]>><<pass 8>><</link>><</if>>
+
 :: MP NPC Vesper Service [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
 <<if ($mpContrabandPackages or 0) gt 0>>
 	<<set _cnt to $mpContrabandPackages>><<set _pay to _cnt * 1600>><<set $mpContrabandPackages to 0>><<money _pay>>
 	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>你把封存完好的暗市货包交到维斯手里。他掂了掂分量，利落地抽出几张旧港钞票塞进你掌心。<span class="gold">货包已稳妥折算成现钱。</span>
@@ -351,9 +355,10 @@
 <</replace>><</link>>
 </div>
 <<if $mpKeepsake and $mpKeepsake["keepsake_foghorn_whistle"]>><br><<keepsakeicon>><<link [[取出守塔人铜哨请他辨认 (0:06)|MP Keepsake Show Whistle]]>><<pass 6>><</link>><</if>>
+
 :: MP NPC Vesper Help [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<set _helpPaid to 0>>
 <<if !$daily.mpNpcHelp_vesper>>
@@ -371,7 +376,7 @@
 
 :: MP NPC Vesper Flirt [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcFlirt_vesper>><<set $daily.mpNpcFlirt_vesper to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 2)>><</if>>
 <<if ($seductionskill or 0) gte 240 or (_npc.love or 0) gte 10>>你凑近他手里的风灯，指尖划过他微敞的领口。维斯呼吸一沉，单手揽住你的腰往风衣里带：「再靠近点，别怪我不客气。」<span class="green">他眼底烧着灼人的暗火。</span><<stress -3>><<else>>你替维斯拂去肩头的浪沫。他怔了一瞬，低笑一声替你拉高了衣领。<span class="teal">冷峻眉眼柔和下来。</span><<stress -1>><</if>>
@@ -382,7 +387,7 @@
 
 :: MP NPC Vesper Intimate [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.lust to Math.max(0, (_npc.lust or 0) - 3)>>
 底舱密室隔绝了海浪喧嚣。维斯将你困在铺着厚羊毛毯的木箱间，滚烫的唇擦过你的耳廓，粗糙掌心稳稳护着你的后背。<span class="green">你在煤油灯暖意中彻底放松。</span><<stress -12>><<tiredness -4>><<trauma -4>>
 <br><br>
@@ -392,7 +397,7 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
 <<if _stg gte 5>>
 	<<include "MP NPC Vesper Quest Late">>
 <<elseif _stg is 2>>
@@ -430,7 +435,7 @@
 
 :: MP NPC Vesper Quest Late [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _stg to (_npc.stage or 5)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _stg to (_npc.stage or 5)>>
 <<if _stg is 5>>
 	防水铜账管内壁焊着一圈机关硫酸泡，稍有晃动就会腐蚀底单。维斯屏住呼吸按住管身，让你用细铜丝挑开铅封，或用白蜡先行封堵酸液导槽。
 	<br><br>
@@ -481,7 +486,7 @@
 
 :: MP NPC Vesper Quest 3 Pass [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.stage to 3>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你深吸一口气潜入冰凉海水，将撬棍插进锚链环眼发力一别，顺利抽出底下的防水铜账管。维斯一把将你拉上艇舷裹进大衣。<span class="green">你潜入浪底起出了防水账管。</span>
@@ -489,7 +494,7 @@
 	你将麻缆缠在礁石铁桩上死死绞紧，借着涌浪浮力将沉重锚链吊起半尺，维斯探身抽出铜账管后冲你竖起拇指。<span class="green">你借滑轮巧劲吊起了铁锚链。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_3")>>
-	<<money 1500>><span class="gold">维斯把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">维斯将初探所得的 £15 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -499,7 +504,7 @@
 
 :: MP NPC Vesper Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	暗流突然卷过礁盘，撬棍在藤壶上打滑，冰冷海水呛入喉咙，小腿也被牡蛎壳划破。<span class="red">你被暗流冲回艇边，未能取出账管。</span>
 <<else>>
@@ -513,7 +518,7 @@
 
 :: MP NPC Vesper Quest 6 Pass [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.stage to 6>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你屏息将细铜丝探入管口，稳稳勾住机关簧片卸下玻璃硫酸泡，完整抽出了早年商会骗保的海难底单。<span class="green">你无损拆除了账管内的自毁机关。</span>
@@ -521,7 +526,7 @@
 	你滴入温热白蜡将导流槽严密包裹，哪怕玻璃泡微裂也无法渗入内层，维斯顺利旋开底盖取出了海难底单。<span class="green">你用白蜡封死导槽保住了底单。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_6")>>
-	<<money 1500>><span class="gold">维斯把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">维斯取出一封 £15 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -531,7 +536,7 @@
 
 :: MP NPC Vesper Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	船身被夜浪晃了一下，铜丝磕破玻璃外管，刺鼻白烟瞬间冒出，维斯疾手将铜管浸入水桶才没烧穿底单。<span class="red">白烟呛得你直咳嗽，开锁被迫中断。</span>
 <<else>>
@@ -545,7 +550,7 @@
 
 :: MP NPC Vesper Quest 9 Pass [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>><<set _npc.stage to 9>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你顶着黑浪游上东侧礁盘，将防风诱饵灯系在浮木上推向远海。巡逻艇立刻调头追去，维斯趁机驾船打捞起主金库铁箱。<span class="green">你用诱饵浮灯巧妙调开了巡逻艇。</span>
@@ -553,7 +558,7 @@
 	你与维斯合力拉满斜帆，双桅船借着狂风贴着黑色崖影疾掠而过，在探照灯扫来的前一秒冲入沉船湾捞起主金库。<span class="green">你们凭娴熟控帆穿过封锁线。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_9")>>
-	<<money 1500>><span class="gold">维斯把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">维斯与你击掌庆贺，将 £15 终局厚酬放入你衣袋。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -563,7 +568,7 @@
 
 :: MP NPC Vesper Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>>
-<<set _npc to $mpNpcs.vesper>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	巨浪迎面拍下，诱饵灯被浪花打灭，探照灯立刻扫向礁盘，维斯只得冒险驾艇将湿透的你拉回船舱撤离。<span class="red">海浪拍熄浮灯，你们只得先行退避。</span>
 <<else>>
@@ -590,7 +595,7 @@
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "School Library">><</if>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
@@ -612,7 +617,7 @@
 
 :: MP NPC Noel Chat [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcChat_noel>><<set $daily.mpNpcChat_noel to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>>
 <<if (_npc.love or 0) gte 18>>你挨着诺艾尔翻看手绘本草图鉴。她声音轻柔，时不时把晒干的甜橙片喂到你嘴边。<<elseif (_npc.love or 0) gte 6>>诺艾尔一边给标本换吸水纸，一边教你辨认森林里哪几种浆果能解乏止痛。<<else>>诺艾尔安静地听你说话，偶尔递上写满拉丁学名的书签供你参考。<</if>>
@@ -629,9 +634,10 @@
 	<<walkicon>><<link [[陪她去后园修剪药草垄 (0:08)|MP Extra Daily Noel 1]]>><<pass 8>><</link>>
 <</if>>
 <<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[霜降清晨去药草垄帮她 (0:08)|MP RelDay Noel 1]]>><<pass 8>><</link>><</if>>
+
 :: MP NPC Noel Service [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcSrv_noel>><<set $daily.mpNpcSrv_noel to 1>><<stress -8>><<tiredness -4>><<pain -4>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>诺艾尔为你冲泡了一盅加了野蜂蜜的缬草安神茶。热茶入腹，紧绷的神经与酸痛渐渐平息。<span class="green">你的身心得到了温柔抚慰。</span><<else>>诺艾尔用银匙搅动茶汤，让你捧着瓷杯慢慢小口啜饮。<span class="teal">温润药香驱散了大半疲惫。</span><<stress -2>><</if>>
 <br><br>
@@ -643,9 +649,10 @@
 <</replace>><</link>>
 </div>
 <<if $mpKeepsake and $mpKeepsake["keepsake_glasshouse_amber"]>><br><<keepsakeicon>><<link [[取出夜光琥珀花匣给她看 (0:06)|MP Keepsake Show Amber]]>><<pass 6>><</link>><</if>>
+
 :: MP NPC Noel Help [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<set _helpPaid to 0>>
 <<if !$daily.mpNpcHelp_noel>>
@@ -663,7 +670,7 @@
 
 :: MP NPC Noel Flirt [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcFlirt_noel>><<set $daily.mpNpcFlirt_noel to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 2)>><</if>>
 <<if ($seductionskill or 0) gte 240 or (_npc.love or 0) gte 10>>你伸手替诺艾尔擦去鼻尖的金黄花粉。她瞬间红透了耳廓，轻轻握住你的手腕贴在胸口：「每次你在身边，心跳都比平时快。」<span class="green">她目光澄澈而眷恋。</span><<stress -3>><<else>>你将一朵小雏菊别在诺艾尔领口。她害羞地低下头，耳尖微红。<span class="teal">两人之间多了几分甜意。</span><<stress -1>><</if>>
@@ -674,7 +681,7 @@
 
 :: MP NPC Noel Intimate [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.lust to Math.max(0, (_npc.lust or 0) - 3)>>
 温室暖阁里四季如春。诺艾尔在铺满干草香囊的软榻上轻轻拥住你，微凉的指尖温柔抚过你的眉眼，与你呼吸交融。<span class="green">安心感包裹着全身。</span><<stress -12>><<tiredness -4>><<trauma -4>>
 <br><br>
@@ -684,7 +691,7 @@
 <<set $outside to 0>><<set $location to "school">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
 <<if _stg gte 5>>
 	<<include "MP NPC Noel Quest Late">>
 <<elseif _stg is 2>>
@@ -708,7 +715,7 @@
 	<<if _stg is 0>>诺艾尔在理科旧准备室翻出一册植物图谱，里面夹着半片泛银光的干枯花瓣：「这是失传的雾月银脉兰。」
 	<<elseif _stg is 1>>宵禁后，诺艾尔带你从学园后门溜去公园旧玻璃花房，在荒废花坛下挖出三枚尚有生机的银脉兰块茎。
 	<<elseif _stg is 3>>恒温蒸馏器接口松脱，喷出一团清甜白雾。诺艾尔脸颊绯红地把你拉到通风窗边，两人在微喘中贴在一起平复心跳。
-	<<elseif _stg is 4>>为查最后味辅料，你们在图书馆古籍架死角翻书，礼顿突然巡查经过，诺艾尔慌忙捂住你的嘴躲进阴影。
+	<<elseif _stg is 4>>为查最后味辅料，你们在图书馆古籍架死角翻书，雷顿突然巡查经过，诺艾尔慌忙捂住你的嘴躲进阴影。
 	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_" + _npc.stage)>>
@@ -722,7 +729,7 @@
 
 :: MP NPC Noel Quest Late [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _stg to (_npc.stage or 5)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _stg to (_npc.stage or 5)>>
 <<if _stg is 5>>
 	辅料所需的月光白苔只长在沉没修道院暗河边的滑石上，稍见强光便会枯萎。诺艾尔遮住提灯，让你用骨刀整片刮取，或连着底石整块凿下。
 	<br><br>
@@ -773,7 +780,7 @@
 
 :: MP NPC Noel Quest 3 Pass [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _npc.stage to 3>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你屏住呼吸用竹镊将球茎表面的透明毒刺一根不落地拔除，完好露出了里面晶莹的银白芽尖，诺艾尔欣喜地将其植入营养钵。<span class="green">你干净利落地剥除了块茎毒刺。</span>
@@ -781,7 +788,7 @@
 	你按比例兑好温热薄荷碱水，块茎入水片刻后外层毒膜便自行脱落。诺艾尔捧起发亮的芽球向你露出明媚笑意。<span class="green">你用碱水温和卸去了外层毒膜。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_3")>>
-	<<money 1500>><span class="gold">诺艾尔把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">诺艾尔将初探所得的 £15 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -791,7 +798,7 @@
 
 :: MP NPC Noel Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	竹镊尖端一滑，毒荨麻细刺扎破了手套刺入指尖，火辣辣的麻痒让你手腕一抖碰伤了外层芽皮。<span class="red">毒刺扎伤手指，只能等明日重新处理。</span>
 <<else>>
@@ -805,7 +812,7 @@
 
 :: MP NPC Noel Quest 6 Pass [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _npc.stage to 6>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你在微光中稳稳运刀，连着湿润假根将整片泛着银光的白苔完整剥下，迅速封入诺艾尔举着的黑玻广口瓶。<span class="green">你完好采下了鲜活的月光白苔。</span>
@@ -813,7 +820,7 @@
 	你踩稳暗河边的青苔石阶，用小锤沿页岩层理轻轻一敲，连着薄石片将整簇白苔原封不动地收入暗盒。<span class="green">你连石带苔完整取下了标本。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_6")>>
-	<<money 1500>><span class="gold">诺艾尔把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">诺艾尔取出一封 £15 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -823,7 +830,7 @@
 
 :: MP NPC Noel Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	暗河冷风吹晃了灯影，你在青苔石阶上滑了半步，骨刀刮碎了大半簇白苔，膝盖也磕在石棱上。<span class="red">白苔受损失去药性，只得改日重采。</span>
 <<else>>
@@ -837,7 +844,7 @@
 
 :: MP NPC Noel Quest 9 Pass [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>><<set _npc.stage to 9>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你顶着喷涌的滚烫白雾拧开副炉分流阀，暖流重新注满盘管，双生银脉兰在温润水雾中缓缓舒展花瓣。<span class="green">你及时恢复了温室的恒温供暖。</span>
@@ -845,7 +852,7 @@
 	你麻利地支起竹架罩上双层棉毡，在四角放好温水铜钵，将花床温度稳稳锁在二十度，银脉兰安然盛放。<span class="green">你搭起保温内棚护住了双生花。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_9")>>
-	<<money 1500>><span class="gold">诺艾尔把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">诺艾尔与你击掌庆贺，将 £15 终局厚酬放入你衣袋。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -855,7 +862,7 @@
 
 :: MP NPC Noel Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>>
-<<set _npc to $mpNpcs.noel>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	滚烫铜阀卡在半途，溢出的热汽烫红了你的小臂，温度计水银柱一路下滑，银脉兰花苞紧闭收回。<span class="red">你被热汽烫伤，花期被迫推迟。</span>
 <<else>>
@@ -882,7 +889,7 @@
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
 <<set _exitPas to ($mpReturnPassage or "Domus Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Domus Street">><</if>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
@@ -904,7 +911,7 @@
 
 :: MP NPC Lin Chat [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcChat_lin>><<set $daily.mpNpcChat_lin to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>>
 <<if (_npc.love or 0) gte 18>>林恩靠在木柱边任由你挨着他肩膀。他低声说起小时候在孤儿院顶楼看星星的旧事，语气难得温柔。<<elseif (_npc.love or 0) gte 6>>林恩用树枝在地上画出倒钩街的几处盲区，教你遇到醉汉时如何借墙角脱身。<<else>>林恩简短地回答你的问题，视线始终警惕地替你留意着巷口动静。<</if>>
@@ -921,9 +928,10 @@
 	<<walkicon>><<link [[陪他在晨雾里练早功 (0:08)|MP Extra Daily Lin 1]]>><<pass 8>><</link>>
 <</if>>
 <<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[雪夜巡街后随他回修车库 (0:08)|MP RelDay Lin 1]]>><<pass 8>><</link>><</if>>
+
 :: MP NPC Lin Service [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcSrv_lin>><<set $daily.mpNpcSrv_lin to 1>><<physique 3>><<athletics 2>><<stress -4>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>林恩握住你的小臂带你演练了三遍反关节脱身术。发力技巧融会贯通，你的筋骨愈发舒展。<span class="green">你的防身反应快了一截。</span><<else>>林恩替你纠正了重心不稳的站姿，拍了拍你的肩膀。<span class="teal">你觉得下盘稳健了不少。</span><<stress -2>><</if>>
 <br><br>
@@ -935,9 +943,10 @@
 <</replace>><</link>>
 </div>
 <<if $mpKeepsake and $mpKeepsake["keepsake_blackiron_medal"]>><br><<keepsakeicon>><<link [[取出司炉长铜章给他过目 (0:06)|MP Keepsake Show Medal]]>><<pass 6>><</link>><</if>>
+
 :: MP NPC Lin Help [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<set _helpPaid to 0>>
 <<if !$daily.mpNpcHelp_lin>>
@@ -955,7 +964,7 @@
 
 :: MP NPC Lin Flirt [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcFlirt_lin>><<set $daily.mpNpcFlirt_lin to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 2)>><</if>>
 <<if ($seductionskill or 0) gte 240 or (_npc.love or 0) gte 10>>你低头替林恩系紧皮护腕，指尖摩挲过他脉搏。他耳根微热，反手将你拉进怀里护在风衣下：「别乱动，让我抱一会儿。」<span class="green">他有力双臂将你护得严严实实。</span><<stress -3>><<else>>你替林恩拂去额角细汗。他偏过头轻咳一声，嘴角却压不住笑意。<span class="teal">冷硬的气场融化了几分。</span><<stress -1>><</if>>
@@ -966,7 +975,7 @@
 
 :: MP NPC Lin Intimate [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.lust to Math.max(0, (_npc.lust or 0) - 3)>>
 值班室的铁炉烧得正旺。林恩卸下护具，将你困在行军床与木墙之间，温热指腹轻抚过你肩头旧伤，动作克制而滚烫。<span class="green">你在他怀中睡得无比踏实。</span><<stress -12>><<tiredness -4>><<trauma -4>>
 <br><br>
@@ -976,7 +985,7 @@
 <<set $outside to 1>><<set $location to "town">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
 <<if _stg gte 5>>
 	<<include "MP NPC Lin Quest Late">>
 <<elseif _stg is 2>>
@@ -1014,7 +1023,7 @@
 
 :: MP NPC Lin Quest Late [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _stg to (_npc.stage or 5)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _stg to (_npc.stage or 5)>>
 <<if _stg is 5>>
 	酒馆地窖铁笼里关着被逼签字的大孩子，笼门挂着沉重的棘轮锁。林恩用铁棍卡住门轴，让你撬开棘轮簧片，或合力将生锈的门轴插销直接拔出。
 	<br><br>
@@ -1065,7 +1074,7 @@
 
 :: MP NPC Lin Quest 3 Pass [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _npc.stage to 3>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你将薄钢片顺着窗缝滑入，精准顶起双簧卡舌，无声推开铁窗翻出抽屉里的假拳分红底单。<span class="green">你用薄钢片悄无声息挑开了窗锁。</span>
@@ -1073,7 +1082,7 @@
 	你借着雨水管攀上平顶，推开通气天窗轻巧落地，从桌上拓下假拳分红底单后原路翻出。<span class="green">你从屋顶气窗顺利取得了底单。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_3")>>
-	<<money 1500>><span class="gold">林恩把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">林恩将初探所得的 £15 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1083,7 +1092,7 @@
 
 :: MP NPC Lin Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	双簧窗扣卡得极紧，钢片崩断弹在玻璃上发出脆响，屋里看守瞬间惊醒，林恩一把拉住你翻墙撤离。<span class="red">声响惊动看守，今晚只得空手撤回。</span>
 <<else>>
@@ -1097,7 +1106,7 @@
 
 :: MP NPC Lin Quest 6 Pass [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _npc.stage to 6>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你顶着昏暗光线将钢钎探入棘轮槽，咔哒一声挑开止回爪，铁笼门应声弹开，你们护着人从后巷全身而退。<span class="green">你撬开棘轮锁救出了受困同伴。</span>
@@ -1105,7 +1114,7 @@
 	你与林恩一上一下握紧铁棍同时发力，生锈的门轴铁销被硬生生连根拔起，整扇铁笼门被直接卸下。<span class="green">你们凭爆发力卸下笼门救出人质。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_6")>>
-	<<money 1500>><span class="gold">林恩把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">林恩取出一封 £15 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1115,7 +1124,7 @@
 
 :: MP NPC Lin Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	棘轮咬合极死，钢钎滑脱撞在铁栏上铛的一声巨响，楼上脚步声大作，林恩只得先带你从排气道撤出。<span class="red">铁栏巨响引来打手，营救暂缓。</span>
 <<else>>
@@ -1129,7 +1138,7 @@
 
 :: MP NPC Lin Quest 9 Pass [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>><<set _npc.stage to 9>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你在漫天白雾中如游鱼般贴近账房身侧，刀片轻划搭扣便将整只牛皮总账包顺入怀中，随林恩跃出围墙。<span class="green">你在白雾中神不知鬼不觉截获总账。</span>
@@ -1137,7 +1146,7 @@
 	你合身撞倒巷侧满载木箱的铁货架，将四名护卫严严实实堵在死胡同里，林恩趁机一把夺下总账皮包。<span class="green">你推倒货架断后助林恩夺下总账。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_9")>>
-	<<money 1500>><span class="gold">林恩把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">林恩与你击掌庆贺，将 £15 终局厚酬放入你衣袋。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1147,7 +1156,7 @@
 
 :: MP NPC Lin Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>>
-<<set _npc to $mpNpcs.lin>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	蒸汽白雾被横风吹散，你的刀片刚碰到皮包背带就被护卫挥棍格开，小臂挨了一记闷棍，只得随林恩撤退。<span class="red">白雾散去暴露身形，小臂擦伤。</span>
 <<else>>
@@ -1174,7 +1183,7 @@
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
 <<set _exitPas to ($mpReturnPassage or "Connudatus Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Connudatus Street">><</if>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
@@ -1196,7 +1205,7 @@
 
 :: MP NPC Monet Chat [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcChat_monet>><<set $daily.mpNpcChat_monet to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>>
 <<if (_npc.love or 0) gte 18>>你靠在天鹅绒软垫上，看莫奈用炭笔勾勒你的侧影。她眼神专注而炽热，时不时俯身轻触你的下颌调整角度。<<elseif (_npc.love or 0) gte 6>>莫奈与你聊起近期多瑙河街沙龙的审美风向，还教你如何用一枚胸针巧妙遮住衣领破口。<<else>>莫奈边洗画笔边与你闲谈，语调慵懒却句句透着对人心的敏锐洞察。<</if>>
@@ -1213,11 +1222,12 @@
 	<<walkicon>><<link [[陪她去峭壁露台速写 (0:08)|MP Extra Daily Monet 1]]>><<pass 8>><</link>>
 <</if>>
 <<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[午后去画室帮她绷画布 (0:08)|MP RelDay Monet 1]]>><<pass 8>><</link>><</if>>
+
 :: MP NPC Monet Service [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
-<<if !$daily.mpNpcSrv_monet>><<set $daily.mpNpcSrv_monet to 1>><<upperintegrity 40>><<lowerintegrity 40>><<stress -5>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>莫奈穿引银针，用细密暗绣替你将破损的衣物修补得完好如初。<span class="green">受损的衣物已恢复整洁体面。</span><<else>>莫奈替你抚平衣褶，在领口别了一枚小巧的丝绒花饰。<span class="teal">你的仪态看起来更加得体。</span><<stress -2>><</if>>
+<<if !$daily.mpNpcSrv_monet>><<set $daily.mpNpcSrv_monet to 1>><<set $worn.upper.integrity to window.clothingData("upper", $worn.upper, "integrity_max")>><<set $worn.lower.integrity to window.clothingData("lower", $worn.lower, "integrity_max")>><<stress -5>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>莫奈穿引银针，用细密暗绣替你将破损的衣物修补得完好如初。<span class="green">受损的衣物已恢复整洁体面。</span><<else>>莫奈替你抚平衣褶，在领口别了一枚小巧的丝绒花饰。<span class="teal">你的仪态看起来更加得体。</span><<stress -2>><</if>>
 <br><br>
 <<getouticon>><<link [[退回莫奈身旁 (0:02)|MP NPC Monet Hub]]>><<pass 2>><</link>>
 <br>
@@ -1226,10 +1236,11 @@
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你顺着她的指点旋身收步。<span class="green">举手投足间多了几分从容韵味。</span><<stress -2>><<else>>裙摆缠住鞋跟晃了一下。<span class="red">莫奈伸手扶住你，让你先歇口气。</span><<stress 2>><</if>>
 <</replace>><</link>>
 </div>
-<<if $mpKeepsake and $mpKeepsake["keepsake_druid_antler"]>><br><<keepsakeicon>><<link [[取出白鹿角符牌请她鉴赏 (0:06)|MP Keepsake Show Antler]]>><<pass 6>><</link>><</if>>
+<<if $mpKeepsake and $mpKeepsake["keepsake_druid_antler"]>><br><<keepsakeicon>><<link [[取出白鹿角坠饰请她鉴赏 (0:06)|MP Keepsake Show Antler]]>><<pass 6>><</link>><</if>>
+
 :: MP NPC Monet Help [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<set _helpPaid to 0>>
 <<if !$daily.mpNpcHelp_monet>>
@@ -1247,7 +1258,7 @@
 
 :: MP NPC Monet Flirt [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcFlirt_monet>><<set $daily.mpNpcFlirt_monet to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 2)>><</if>>
 <<if ($seductionskill or 0) gte 240 or (_npc.love or 0) gte 10>>你走到莫奈身后，替她将沾了颜料的长发挽起。她仰头靠在你怀里，涂着丹蔻的指尖轻抚你的唇角：「这抹颜色，比画布上的更好看。」<span class="green">香气与暖意在鼻尖萦绕。</span><<stress -3>><<else>>你夸赞她调出的晚霞色泽绝妙。莫奈眼波流转，用画笔尾端轻轻点了点你的手背。<span class="teal">笑意在她唇边荡开。</span><<stress -1>><</if>>
@@ -1258,7 +1269,7 @@
 
 :: MP NPC Monet Intimate [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.lust to Math.max(0, (_npc.lust or 0) - 3)>>
 丝绒屏风后烛火摇曳。莫奈解开繁复的披肩，与你在微凉的丝绸床单间相拥。她微凉的指尖顺着你的脊线缓缓滑落，低语如梦。<span class="green">你在极致温柔中忘却了烦忧。</span><<stress -12>><<tiredness -4>><<trauma -4>>
 <br><br>
@@ -1268,7 +1279,7 @@
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
 <<if _stg gte 5>>
 	<<include "MP NPC Monet Quest Late">>
 <<elseif _stg is 2>>
@@ -1306,7 +1317,7 @@
 
 :: MP NPC Monet Quest Late [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _stg to (_npc.stage or 5)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _stg to (_npc.stage or 5)>>
 <<if _stg is 5>>
 	用于调包的诱饵画卷必须在天亮前做旧烘干，否则金粉会在展厅射灯下露馅。莫奈调好松烟水，让你用羽扇控温烘烤，或用茶水均匀刷染画背。
 	<br><br>
@@ -1357,7 +1368,7 @@
 
 :: MP NPC Monet Quest 3 Pass [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _npc.stage to 3>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你用银簪拨开红木匣暗扣，将温软蜂蜡按在玛瑙印章上，完整拓下了带缺口的双天鹅印模。<span class="green">你用蜂蜡清晰拓下了交割印模。</span>
@@ -1365,7 +1376,7 @@
 	你借着落地窗透进的斜阳，用极细炭笔将桌角火漆信封上的双天鹅暗纹分毫不差地摹在描图纸上。<span class="green">你精准临摹出了印鉴防伪花押。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_3")>>
-	<<money 1500>><span class="gold">莫奈把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">莫奈将初探所得的 £15 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1375,7 +1386,7 @@
 
 :: MP NPC Monet Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	红木匣内侧连着一根防盗铜铃丝，你刚撬开半寸便响起清脆铃声，只得连忙合上匣盖退回楼梯口。<span class="red">暗铃作响，你只得空手退回前厅。</span>
 <<else>>
@@ -1389,7 +1400,7 @@
 
 :: MP NPC Monet Quest 6 Pass [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _npc.stage to 6>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你手腕轻摇羽扇，让银炭热流均匀拂过绢面，松烟与金粉自然沁入肌理，呈现出毫无破绽的百年古意。<span class="green">你控温烘出了天衣无缝的旧绢光泽。</span>
@@ -1397,7 +1408,7 @@
 	你执起宽排羊毛刷沾取浓茶，力道均匀地刷过整幅画背，干透后的包浆与真迹一般无二，莫奈欣喜地抱住你。<span class="green">你用茶染技法完美复刻了古画包浆。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_6")>>
-	<<money 1500>><span class="gold">莫奈把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">莫奈取出一封 £15 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1407,7 +1418,7 @@
 
 :: MP NPC Monet Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	炭盆火星突然爆跳，热浪熏得画绢边缘微微卷曲泛黄，莫奈连忙移开画架喷水补救。<span class="red">火候过急熏焦画角，做旧被迫重来。</span>
 <<else>>
@@ -1421,7 +1432,7 @@
 
 :: MP NPC Monet Quest 9 Pass [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>><<set _npc.stage to 9>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你屏息将四团软丝绵塞入铃舌，动作行云流水地换上诱饵画芯，将银线织锦真迹卷入画筒全身而退。<span class="green">你止住铜铃无声换出了真迹画卷。</span>
@@ -1429,7 +1440,7 @@
 	你完全不碰外框铜铃，用薄银币旋松背板四颗暗螺丝，从后方将真迹平整抽出并塞入假画，不留一丝痕迹。<span class="green">你从背板夹层巧妙取回了真迹。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_9")>>
-	<<money 1500>><span class="gold">莫奈把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">莫奈与你击掌庆贺，将 £15 终局厚酬放入你衣袋。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1439,7 +1450,7 @@
 
 :: MP NPC Monet Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>>
-<<set _npc to $mpNpcs.monet>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	最后一团丝绵还未塞稳，穿堂风吹晃画框发出一声脆响，后台执事提灯喝问，你只得退入暗门。<span class="red">铜铃微响惊动执事，调包被迫中止。</span>
 <<else>>
@@ -1466,7 +1477,7 @@
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.ash>><<set $mpNpcs.ash to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
 <<set _exitPas to ($mpReturnPassage or "Forest")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Forest">><</if>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
@@ -1488,7 +1499,7 @@
 
 :: MP NPC Ash Chat [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcChat_ash>><<set $daily.mpNpcChat_ash to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>>
 <<if (_npc.love or 0) gte 18>>你依偎在阿什身旁看火苗跳跃。他用骨刀雕出一只小木鹿塞进你掌心，低沉嗓音里满是温和。<<elseif (_npc.love or 0) gte 6>>阿什指着树皮上的青苔厚薄，教你如何在大雾天分辨南北与沼泽边界。<<else>>阿什话不多，但每当你提起林中异动，他都会认真记下并提醒你避开险处。<</if>>
@@ -1505,9 +1516,10 @@
 	<<walkicon>><<link [[陪他去溪流下游收鱼篓 (0:08)|MP Extra Daily Ash 1]]>><<pass 8>><</link>>
 <</if>>
 <<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[清晨去石屋前帮他劈松柴 (0:08)|MP RelDay Ash 1]]>><<pass 8>><</link>><</if>>
+
 :: MP NPC Ash Service [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcSrv_ash>><<set $daily.mpNpcSrv_ash to 1>><<tending 2>><<tiredness -3>><<stress -5>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>阿什带你走过一段隐秘的树根高地，教你用松针掩去气味。你在山林里的步伐愈发轻巧。<span class="green">你熟悉了深林避险的法门。</span><<else>>阿什替你绑紧松脱的靴带，递给你一截驱虫艾草。<span class="teal">你在林间行走安心了许多。</span><<stress -2>><</if>>
 <br><br>
@@ -1519,9 +1531,10 @@
 <</replace>><</link>>
 </div>
 <<if $mpKeepsake and $mpKeepsake["keepsake_abbey_ring"]>><br><<keepsakeicon>><<link [[取出修道院银鸽戒给他看 (0:06)|MP Keepsake Show Ring]]>><<pass 6>><</link>><</if>>
+
 :: MP NPC Ash Help [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<set _helpPaid to 0>>
 <<if !$daily.mpNpcHelp_ash>>
@@ -1539,7 +1552,7 @@
 
 :: MP NPC Ash Flirt [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
 <<if !$daily>><<set $daily to {}>><</if>>
 <<if !$daily.mpNpcFlirt_ash>><<set $daily.mpNpcFlirt_ash to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 2)>><</if>>
 <<if ($seductionskill or 0) gte 240 or (_npc.love or 0) gte 10>>你挨着阿什坐下，把微凉的手探进他斗篷内侧取暖。他身体微僵，随即用宽大手掌将你的手连人一起拢进怀里：「手这么凉，我给你捂着。」<span class="green">他胸膛的温度滚烫而可靠。</span><<stress -3>><<else>>你替阿什摘掉发间沾着的松针。他耳廓微红，低头往火堆里又添了一块柴。<span class="teal">篝火映得他神色柔和。</span><<stress -1>><</if>>
@@ -1550,7 +1563,7 @@
 
 :: MP NPC Ash Intimate [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.lust to Math.max(0, (_npc.lust or 0) - 3)>>
 高耸古橡树冠上的木屋温暖静谧。阿什将你裹在厚实的狼皮毯里，低头吻去你眉睫上的雾水，结实的手臂整夜未曾松开。<span class="green">山林夜风再也吹不进你心里。</span><<stress -12>><<tiredness -4>><<trauma -4>>
 <br><br>
@@ -1560,7 +1573,7 @@
 <<set $outside to 1>><<set $location to "forest">><<effects>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.ash>><<set $mpNpcs.ash to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.hasMet to 1>><<set _stg to (_npc.stage or 0)>>
 <<if _stg gte 5>>
 	<<include "MP NPC Ash Quest Late">>
 <<elseif _stg is 2>>
@@ -1598,7 +1611,7 @@
 
 :: MP NPC Ash Quest Late [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _stg to (_npc.stage or 5)>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _stg to (_npc.stage or 5)>>
 <<if _stg is 5>>
 	古根地穴深处积聚着陈年腐叶瘴气，必须按四象方位依次拨通石壁上的排风孔。阿什举着风向草，让你顺着微风掏空石孔，或爬上树根穹顶推开天窗。
 	<br><br>
@@ -1649,7 +1662,7 @@
 
 :: MP NPC Ash Quest 3 Pass [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _npc.stage to 3>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.stage to 3>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你深吸一口气潜入冰澈潭底，拨开缠绕的水草从碑座凹槽抠出青铜圣徽，拉动麻绳由阿什一把拉上河岸。<span class="green">你潜入寒潭顺利取出了青铜圣徽。</span>
@@ -1657,7 +1670,7 @@
 	你趴在岸边岩石上，借着防风灯光用长竿铁钩精准勾住圣徽挂环，稳稳将其挑出水面收入掌心。<span class="green">你用长竿巧劲勾出了潭底圣徽。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_3")>>
-	<<money 1500>><span class="gold">阿什把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">阿什将初探所得的 £15 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1667,7 +1680,7 @@
 
 :: MP NPC Ash Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	潭底旋涡吸力惊人，冰冷水草缠住你的脚踝，你呛了一口冷水，幸亏阿什及时收绳将你拽回岸上。<span class="red">寒潭旋涡过急，你呛水受寒未能取到。</span>
 <<else>>
@@ -1681,7 +1694,7 @@
 
 :: MP NPC Ash Quest 6 Pass [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _npc.stage to 6>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.stage to 6>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你顺着风向草的摆幅，用短刀依次清开东南西北四处石孔的泥封，林间新风瞬间涌入驱散了浑浊瘴气。<span class="green">你按古法疏通了地穴排风孔道。</span>
@@ -1689,7 +1702,7 @@
 	你踩着盘结的粗壮树根爬上穹顶，用肩膀顶开覆满落叶的换气石板，清冷山风倾泻而下扫清了地穴。<span class="green">你顶开穹顶石板引来了林间清风。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_6")>>
-	<<money 1500>><span class="gold">阿什把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">阿什取出一封 £15 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1699,7 +1712,7 @@
 
 :: MP NPC Ash Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	地穴内雾气迷眼，你挖错了第三处盲孔，一股酸腐冷气迎面扑来呛得你头晕目眩，阿什连忙背你退回洞口。<span class="red">瘴气扑面令人眩晕，只得退出换气。</span>
 <<else>>
@@ -1713,7 +1726,7 @@
 
 :: MP NPC Ash Quest 9 Pass [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>><<set _npc.stage to 9>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _npc.stage to 9>>
 <<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	你双手挥动燃烧的松脂火把在石柱间划出火墙，暴躁的领头野猪畏惧烈焰调头逃入密林，祭坛完好无损。<span class="green">你用松明火墙震退了冲撞的兽群。</span>
@@ -1721,7 +1734,7 @@
 	你翻身跃上风化石柱，吹出悠长尖锐的头狼威慑哨音，受惊的野猪群顿时阵脚大乱，纷纷折向山谷奔逃。<span class="green">你用驱兽骨哨完美引开了野猪群。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_9")>>
-	<<money 1500>><span class="gold">阿什把 £15 分红塞进你口袋。</span>
+	<<money 1500>><span class="gold">阿什与你击掌庆贺，将 £15 终局厚酬放入你衣袋。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
@@ -1731,7 +1744,7 @@
 
 :: MP NPC Ash Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>>
-<<set _npc to $mpNpcs.ash>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>>
 <<if ($mpNpcQuestAct or 1) is 1>>
 	夜雨打湿了松脂，火苗忽明忽暗，一头野猪擦着石柱冲过，飞溅的碎石刮破你的小腿，阿什急忙放箭将你护上高台。<span class="red">火把受潮暗淡，你被碎石擦伤小腿。</span>
 <<else>>

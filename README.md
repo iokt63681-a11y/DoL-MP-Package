@@ -1,6 +1,6 @@
-# DoL-MP 整合包
+﻿# DoL-MP 整合包
 
-**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.2.0-dev8**
+**Degrees of Lewdity 0.5.12.13 汉化版 + DoL-MP 联机模组 v1.2.0-dev9**
 
 > **开发预览版**：城镇/荒野 12 条暗线、22 条小事、6 条长期零工已经并入；region bank 仍待下一批清理。稳定版仍是 v1.0.0。
 
@@ -16,7 +16,7 @@
 
 - 游戏本体（含 ModLoader）
 - 汉化包、官方图片包
-- DoL-MP v1.2.0-dev8 联机模组（含完整源码）
+- DoL-MP v1.2.0-dev9 联机模组（含完整源码）
 - 联机服务器（Node.js，依赖已内置）
 - 中文说明书 `说明书.md`
 
@@ -29,7 +29,7 @@
 | `game/Degrees of Lewdity.html` | 游戏本体（ModLoader 版，64MB） |
 | `mods/ModI18N-0.5.12.13-chs-1.0.1a.mod.zip` | 中文汉化包 |
 | `mods/GameOriginalImagePack-0.5.12.13.mod.zip` | 官方图片包 |
-| `mods/DoL-MP-v1.2.0-dev8.mod.zip` | DoL-MP 联机模组（可直接添加） |
+| `mods/DoL-MP-v1.2.0-dev9.mod.zip` | DoL-MP 联机模组（可直接添加） |
 | `mod-src/` | DoL-MP 模组源码（`boot.json` / JS / CSS / Twee / 图标） |
 | `server/` | 联机服务器（`server.js` + 已内置 `ws` 依赖） |
 | `start-game.bat` | 启动游戏 |
@@ -79,6 +79,16 @@ npm install
 ```
 
 ---
+
+## v1.2.0-dev9 更新要点
+
+- 60 个 twee，1823 个 passage（dev8 为 55 / 1723）
+- **新增**：24 段关系日、36 段区域瞬间/深层交互、20 段零工当班、8 段信物使用、12 段夜事件
+- **重点返修**：清除 A6 压缩造成的 67 段模板句崩坏（`你耐下心神对准…`/`将的木钱匣`），恢复可读文案
+- **结构修复**：6 处 Wilds Step5 双 `<<else>>`、8 处假检定、6 处信物鉴看失败锁死
+- **一致性**：99 行 NPC 英文名/旧译名统一，信物旧名统一，12 段 `$location` 修正
+- **门控**：10 段新内容 + 8 个日常页补时间/季节门控，2 条跨场景链接加天气/时段条件
+- **待下一批**：98 段奖励档位 `if` 绑定、20 段 `_first` 绑定、双动作同奖同去向（详见 `docs/argon-dev9-audit.md`）
 
 ## v1.2.0-dev8 更新要点
 
