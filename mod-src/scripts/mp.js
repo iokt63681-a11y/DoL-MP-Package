@@ -65,7 +65,7 @@
   function isSafePassage(p) {
     if (!p) return false;
     if (SAFE_PASSAGES.indexOf(p) >= 0) return true;
-    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Town Extra|Wild Extra|Extra|Daily|Festival|Town Festivals|Region|Content)/.test(String(p));
+    return /^MP (Livelihood|Job|Jobline|Side|Wild|Town Side|Town Extra|Wild Extra|Extra|Daily|Festival|Town Festivals|Region|Content|Keepsake|RelDay|Mansion)/.test(String(p));
   }
 
   var ACTS = {

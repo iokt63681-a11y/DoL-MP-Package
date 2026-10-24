@@ -65,6 +65,8 @@
 12. **时间文案中性化**：15 段固定“午后/傍晚/黎明”等改为中性，或已在同段门控内。
 13. **选项标签**：318 条 >12 汉字全部压到 ≤12（新内容 158 条 + 旧文件 160 条），当前全库 0 条超限。
 14. **导航标签/图标**：18 条导航标签缩短；“改日再去…”等待链接去掉 `socialiseicon`；13 段线索行移到 `$outside` 之后。
+15. **宅邸 Router P0**：`MP Mansion Pool Router` 的 4 个中文 passage 名（`MP Mansion 艾弗里 …` / `布莱尔 VelvetLedger`）改为实际英文名，随机抽到不会再空页软锁。
+16. **`mp.js` 返回点**：`isSafePassage` 正则补 `Keepsake|RelDay|Mansion`，信物/关系日/宅邸页面不再把 `$mpReturnPassage` 留在上一个安全页。
 
 ## 六、仍然存在的问题（下一批）
 
