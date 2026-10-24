@@ -1,0 +1,91 @@
+:: MP Job Bakery Encounter [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobBakeryEncounter to 1>>
+送粉的车把式把两袋头茬红麦粉卸在发酵室门口，麻袋底角被雨气洇透了半圈，解开绳口一捏就结成硬块。师傅撬开早炉的火门，面团迟迟没有鼓起来，前厅木架上还压着拄拐老太太订的寿宴面包，取货的钟点说到就到。
+<br><br>
+<div id="mp-job-bakery-enc">
+<<mpcookicon>><<if ($tending or 0) gte 220>><<link "掺干粉救面团 (0:06)">><<pass 6>><<replace "#mp-job-bakery-enc">>
+<<if ($tending or 0) gte 240 or random(1, 3) gte 2>>
+	你把结块的粉团摊在案板上用掌根碾开，按手感掺进新磨的干粉重新过筛，又在面盆边添了半勺温水。醒发的面团在炉壁余温里重新鼓起，寿宴面包赶在老太太的马车停稳前出炉。<span class="green">你救回了这一炉受潮的头茬红麦。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_bakery_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 580>><</if>>
+	<<tending 1>><<stress -2>><<lstress>>
+<<else>>
+	干粉掺得少了，面团发得又硬又死，你只能整盆倒掉重来。反复开合炉门把炉温拖低，师傅皱眉添柴，你被热气熏得满脸是汗。<span class="red">寿宴面包险些赶不上取货。</span><<stress 3>><<tiredness 1>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Bakery]]>><<pass 2>><</link>>
+<br>
+<<link [[返回丰收街 (0:08)|Harvest Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<</replace>><</link>><<else>><<link [[掺干粉救面团 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "掺干粉救面团">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpcleanicon>><<if ($housekeeping or 0) gte 220>><<link "分筛晾晒结块 (0:06)">><<pass 6>><<replace "#mp-job-bakery-enc">>
+<<if ($housekeeping or 0) gte 240 or random(1, 3) gte 2>>
+	你把受潮的麻袋整个摊在后墙的干草席上，借着炉壁余温一层层翻晒，再把结块的粉粒过铜筛分装。第二炉开火前，案板边已经码好几袋松散干爽的粉。<span class="green">师傅把早炉的烤盘重新排满了。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_bakery_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 470>><</if>>
+	<<housekeeping 1>><<stress -2>><<lstress>>
+<<else>>
+	炉房后墙的穿堂风太潮，摊开的麦粉非但没干，反倒又沾了一层水汽。你手忙脚乱地收拢麻袋，鞋底踩得满地白印。<span class="red">大半袋头茬红麦只能降级去做粗面包。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Bakery]]>><<pass 2>><</link>>
+<br>
+<<link [[返回丰收街 (0:08)|Harvest Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<</replace>><</link>><<else>><<link [[分筛晾晒结块 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "分筛晾晒结块">><<set $mpInsuffReq to "家政等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<walkicon>><<link "搬湿粉去仓房 (0:05)">><<pass 5>><<replace "#mp-job-bakery-enc">>
+你把受潮的麻袋一袋袋搬去后仓的干木架上摊开，又跟师傅说寿宴面包先改用白面赶出来。老太太的马车在门前停稳时，红绳已经扎好了。<span class="teal">这一单平顺地交了出去。</span><<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Bakery]]>><<pass 2>><</link>>
+<br>
+<<link [[返回丰收街 (0:08)|Harvest Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<</replace>><</link>>
+<br>
+<<link [[返回面包房 (0:02)|MP Job Bakery]]>><<pass 2>><</link>>
+</div>
+
+/* ==================== 高街裁缝铺当班插曲 ==================== */
+
+:: MP Job Tailor Encounter [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobTailorEncounter to 1>>
+浆洗房送来的衬布在蒸箱里多烘了一刻钟，裁开时整幅边缘都往里缩了半寸，赴宴贵妇的礼服前襟因此歪了线。剧团舞者又守在试衣间外催她那身演出服，说今晚就要登台。
+<br><br>
+<div id="mp-job-tailor-enc">
+<<mpsewicon>><<if ($housekeeping or 0) gte 220>><<link "拆线重裁前襟 (0:06)">><<pass 6>><<replace "#mp-job-tailor-enc">>
+<<if ($housekeeping or 0) gte 240 or random(1, 3) gte 2>>
+	你挑开前襟的旧线，把缩过水的衬布沿斜丝重新归拢，再用蒸汽熨斗一点点把歪掉的襟线熨直。贵妇对着铜镜转了两圈，临走把赏钱压在软尺下面。<span class="green">这件赴宴礼服赶在马车来前改妥了。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_tailor_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 620>><</if>>
+	<<housekeeping 1>><<stress -2>><<lstress>>
+<<else>>
+	斜丝没归正，前襟的襟线越理越歪，你只好把整片拆下来重来。银针扎进指腹，熨斗的蒸汽又熏得眼睛发酸。<span class="red">贵妇的取衣钟点被往后拖了半刻。</span><<stress 3>><<tiredness 1>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Tailor]]>><<pass 2>><</link>>
+<br>
+<<link [[返回高街 (0:08)|High Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<</replace>><</link>><<else>><<link [[拆线重裁前襟 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拆线重裁前襟">><<set $mpInsuffReq to "家政等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<socialiseicon>><<if ($seductionskill or 0) gte 220>><<link "安抚剧团舞者 (0:06)">><<pass 6>><<replace "#mp-job-tailor-enc">>
+<<if ($seductionskill or 0) gte 240 or random(1, 3) gte 2>>
+	你先请舞者坐下，量了她抬臂转身时衣料需要的余量，再温声说明加急缝边要花多久。她紧绷的肩线慢慢松下来，临走把剧团明晚的包厢票根塞给你，老裁缝把这份急单的抽成记在你名下。<span class="green">演出服按时交到了她手上。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_tailor_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 480>><</if>>
+	<<seductionskill 1>><<stress -2>><<lstress>>
+<<else>>
+	你越解释，舞者越急，最后拎着半成品赶去了剧院。老裁缝摇了摇头，你只好蹲下身把散落的线头一把把扫进簸箕。<span class="red">加急单的抽成泡了汤。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Tailor]]>><<pass 2>><</link>>
+<br>
+<<link [[返回高街 (0:08)|High Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<</replace>><</link>><<else>><<link [[安抚剧团舞者 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "安抚剧团舞者">><<set $mpInsuffReq to "魅力等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<walkicon>><<link "送改好的衬衣 (0:05)">><<pass 5>><<replace "#mp-job-tailor-enc">>
+你把缩水的衬布挑出来搁到一边，先抱着一摞改好的衬衣送去前厅挂好，散客们各自取了衣裳离开。<span class="teal">这一阵忙乱总算没闹出岔子。</span><<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Tailor]]>><<pass 2>><</link>>
+<br>
+<<link [[返回高街 (0:08)|High Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<</replace>><</link>>
+<br>
+<<link [[返回裁缝铺 (0:02)|MP Job Tailor]]>><<pass 2>><</link>>
+</div>
