@@ -2,6 +2,9 @@
 :: MP Extra Jobs Hub [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<getouticon>>
+<<link [[返回高街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
 <<set _bakSt to ($daily and $daily.mpJobBakery) ? "今日已歇" : "正在招手">>
 <<set _taiSt to ($daily and $daily.mpJobTailor) ? "今日已歇" : "正在招手">>
@@ -26,8 +29,7 @@
 <<investigateicon>><<link [[翻看四季备忘录 (0:02)|MP Extra Job Supplement Hub]]>><<pass 2>><</link>>
 <br>
 <<link [[查看招工板 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
-<br>
-<<link [[返回高街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
 
 /* ==================== 1. 面包房早班 (Bakery) ==================== */
 
@@ -46,20 +48,25 @@
 <br><br>
 <<if ($mpJobBakerySuspended or 0) is 1>>
 	师傅把长柄木铲横在烤炉前，没让你碰案板。<br>
+<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
 	<<socialiseicon>><<link [[去解除停工 (0:04)|MP Job Bakery Progress]]>><<pass 4>><</link>>
 <<elseif !($daily and $daily.mpJobBakery)>>
 	<<tendingicon>><<link [[接下早班 (0:03)|MP Job Bakery Shift]]>><<pass 3>><</link>>
 <</if>>
 <br>
 <<investigateicon>><<link [[查看排班 (0:03)|MP Job Bakery Progress]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Bakery Shift [nobr]
 <<if ($mpJobBakerySuspended or 0) is 1>><<goto "MP Job Bakery Progress">><</if>>
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobBakeryCount to ($mpJobBakeryCount or 0)>>
 <<set _stage to ($mpJobBakeryCount gte 15 ? 4 : $mpJobBakeryCount gte 10 ? 3 : $mpJobBakeryCount gte 6 ? 2 : $mpJobBakeryCount gte 3 ? 1 : 0)>>
+<<if $daily and $daily.mpJobBakery>>
+	面包房早班的烤盘今日已经全部出炉收架，案板擦得干干净净。
+	<br><br>
+	<<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
+<<else>>
 早市的钟声刚响过第一遍，三层铁烤架上的黑麦面团已经鼓起饱满的弧度，前厅橱窗外排起了买热面包的街坊。炉温正高，热浪扑在脸上让人鼻尖冒汗，师傅在案板另一头喊你搭手。
 <<if random(1, 3) is 1>>
 <<if Weather.isSnow>><<include "MP Job Seasonal Bakery Winter">>
@@ -112,6 +119,8 @@
 <</link>>
 <br>
 <<getouticon>><<link [[返回前厅 (0:02)|MP Job Bakery]]>><<pass 2>><</link>>
+<</if>>
+
 
 :: MP Job Bakery Progress [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -273,20 +282,25 @@
 <br><br>
 <<if ($mpJobTailorSuspended or 0) is 1>>
 	老裁缝用绒布盖住了副台上的缝纫机。<br>
+<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
 	<<socialiseicon>><<link [[去处理停工 (0:04)|MP Job Tailor Progress]]>><<pass 4>><</link>>
 <<elseif !($daily and $daily.mpJobTailor)>>
 	<<shopicon>><<link [[戴顶针上工 (0:03)|MP Job Tailor Shift]]>><<pass 3>><</link>>
 <</if>>
 <br>
 <<investigateicon>><<link [[查看改衣单 (0:03)|MP Job Tailor Progress]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Tailor Shift [nobr]
 <<if ($mpJobTailorSuspended or 0) is 1>><<goto "MP Job Tailor Progress">><</if>>
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobTailorCount to ($mpJobTailorCount or 0)>>
 <<set _stage to ($mpJobTailorCount gte 15 ? 4 : $mpJobTailorCount gte 10 ? 3 : $mpJobTailorCount gte 6 ? 2 : $mpJobTailorCount gte 3 ? 1 : 0)>>
+<<if $daily and $daily.mpJobTailor>>
+	裁缝铺今日的改衣单已经全部熨平挂妥，踏板缝纫机上了防尘罩。
+	<br><br>
+	<<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
+<<else>>
 午后的试衣间门帘不时掀动，衣架上挂满了等待收腰、换衬里和钉暗扣的礼服与制服。老裁缝踩着踏板发出规律的哒哒声，把几件标着取衣钟点的衣裳推到你的工作台边。
 <<if random(1, 3) is 1>>
 <<if Weather.isSnow>><<include "MP Job Seasonal Tailor Winter">>
@@ -339,6 +353,8 @@
 <</link>>
 <br>
 <<getouticon>><<link [[返回铺面 (0:02)|MP Job Tailor]]>><<pass 2>><</link>>
+<</if>>
+
 
 :: MP Job Tailor Progress [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -351,7 +367,7 @@
 <<elseif _stage is 1>>
 	老裁缝开始让你独立处理学校制服的收腰与裙摆改短，针脚已经看不出歪斜。
 <<elseif _stage is 2>>
-	你开始接手多瑙河街熟客的改衣委托，莫奈路过时也会点头称赞你的配色眼光。
+	你开始接手多瑙河街熟客的改衣委托，<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>路过时也会点头称赞你的配色眼光。
 <<elseif _stage is 3>>
 	那把最锋利的镀银裁布剪归了你专用。
 <<else>>
@@ -502,20 +518,25 @@
 <<if ($mpJobCourierSuspended or 0) is 1>>
 	老邮差把帆布挎包挂在窗口内侧，没递给你。因为接连送错信件，你已被暂停派件，得先去把漏送的回执处理干净。
 	<br>
+<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<br>
 	<<socialiseicon>><<link [[去说明情况 (0:04)|MP Job Courier Progress]]>><<pass 4>><</link>>
 <<elseif !($daily and $daily.mpJobCourier)>>
 	<<runicon>><<link [[背邮包出班 (0:03)|MP Job Courier Shift]]>><<pass 3>><</link>>
 <</if>>
 <br>
 <<investigateicon>><<link [[查看路线 (0:03)|MP Job Courier Progress]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Courier Shift [nobr]
 <<if ($mpJobCourierSuspended or 0) is 1>><<goto "MP Job Courier Progress">><</if>>
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpJobCourierCount to ($mpJobCourierCount or 0)>>
 <<set _stage to ($mpJobCourierCount gte 15 ? 4 : $mpJobCourierCount gte 10 ? 3 : $mpJobCourierCount gte 6 ? 2 : $mpJobCourierCount gte 3 ? 1 : 0)>>
+<<if $daily and $daily.mpJobCourier>>
+	代办亭今日的跨街急件已经悉数派完，帆布邮包整齐挂回木钩。
+	<br><br>
+	<<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
+<<else>>
 街口的报时钟敲过整点，帆布挎包里塞满了封着红蜡的商行急件与住户包裹。石板路被晨雾润得微滑，几条近道小巷里不时有野狗与推车穿行。
 <<if random(1, 3) is 1>>
 <<if Weather.isSnow>><<include "MP Job Seasonal Courier Winter">>
@@ -568,6 +589,8 @@
 <</link>>
 <br>
 <<getouticon>><<link [[返回亭外 (0:02)|MP Job Courier]]>><<pass 2>><</link>>
+<</if>>
+
 
 :: MP Job Courier Progress [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -580,7 +603,7 @@
 <<elseif _stage is 1>>
 	你已经记熟了住宅区小巷的门牌跳号规律，不用看地图也能避开死胡同。
 <<elseif _stage is 2>>
-	老邮差开始把带火漆的商行专送件交给你，连巡夜的林恩见了你都会让开道口。
+	老邮差开始把带火漆的商行专送件交给你，连巡夜的<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>见了你都会让开道口。
 <<elseif _stage is 3>>
 	你领到了一枚远线专送铜牌与油布防雨套。
 <<else>>
@@ -729,20 +752,25 @@
 <<if ($mpJobPubKitchenSuspended or 0) is 1>>
 	厨娘挡在传菜口前，没让你进灶台区。由于接连砸锅误菜，你已被暂停后厨班次，得先把积压的清洁或地窖活干完。
 	<br>
+<<getouticon>><<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
+<br>
 	<<socialiseicon>><<link [[去说明情况 (0:04)|MP Job PubKitchen Progress]]>><<pass 4>><</link>>
 <<elseif !($daily and $daily.mpJobPubKitchen)>>
 	<<tendingicon>><<link [[系围裙进后厨 (0:03)|MP Job PubKitchen Shift]]>><<pass 3>><</link>>
 <</if>>
 <br>
 <<investigateicon>><<link [[查看排班 (0:03)|MP Job PubKitchen Progress]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job PubKitchen Shift [nobr]
 <<if ($mpJobPubKitchenSuspended or 0) is 1>><<goto "MP Job PubKitchen Progress">><</if>>
 <<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
 <<set $mpJobPubKitchenCount to ($mpJobPubKitchenCount or 0)>>
 <<set _stage to ($mpJobPubKitchenCount gte 15 ? 4 : $mpJobPubKitchenCount gte 10 ? 3 : $mpJobPubKitchenCount gte 6 ? 2 : $mpJobPubKitchenCount gte 3 ? 1 : 0)>>
+<<if $daily and $daily.mpJobPubKitchen>>
+	丰收酒馆后厨今日的烤盘与酒桶已经清点归位，灶火彻底封好。
+	<br><br>
+	<<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
+<<else>>
 前厅酒客的喧哗声隔着摆门传进来，传菜铃接连不断地响起。铁板上的香肠滋滋冒油，地窖楼梯口还堆着刚送来的四桶黑麦啤酒。
 <<if random(1, 3) is 1>>
 <<if Weather.isSnow>><<include "MP Job Seasonal PubKitchen Winter">>
@@ -795,6 +823,8 @@
 <</link>>
 <br>
 <<getouticon>><<link [[返回后门 (0:02)|MP Job PubKitchen]]>><<pass 2>><</link>>
+<</if>>
+
 
 :: MP Job PubKitchen Progress [nobr]
 <<set $outside to 0>><<set $location to "pub">><<effects>><<mpAmbient>>
@@ -817,7 +847,7 @@
 <br><br>
 <<getouticon>><<link [[返回灶台 (0:02)|MP Job PubKitchen]]>><<pass 2>><</link>>
 <br>
-<<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
 <br>
 <<investigateicon>><<link [[查看当班活计 (0:02)|MP Job PubKitchen Duties]]>><<pass 2>><</link>>
 <<if ($mpJobPubKitchenSuspended or 0) is 1>>
@@ -936,7 +966,7 @@
 <br>
 <<walkicon>><<link [[返回后厨 (0:02)|MP Job PubKitchen]]>><<pass 2>><</link>>
 <br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
 
 /* ==================== 5. 河湾马厩驮运 (Stable) ==================== */
 
@@ -956,20 +986,25 @@
 <<if ($mpJobStableSuspended or 0) is 1>>
 	老伯把马厩木栏插上了横栓。因为接连惊马翻车，你已被暂停跟车，得先把马厩里的积活处理妥当。
 	<br>
+<<getouticon>><<link [[返回木牌 (0:12)|MP Extra Jobs Hub]]>><<pass 12>><</link>>
+<br>
 	<<socialiseicon>><<link [[去说明情况 (0:04)|MP Job Stable Progress]]>><<pass 4>><</link>>
 <<elseif !($daily and $daily.mpJobStable)>>
 	<<tendingicon>><<link [[戴护腕套车 (0:03)|MP Job Stable Shift]]>><<pass 3>><</link>>
 <</if>>
 <br>
 <<investigateicon>><<link [[查看马队 (0:03)|MP Job Stable Progress]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Stable Shift [nobr]
 <<if ($mpJobStableSuspended or 0) is 1>><<goto "MP Job Stable Progress">><</if>>
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
 <<set $mpJobStableCount to ($mpJobStableCount or 0)>>
 <<set _stage to ($mpJobStableCount gte 15 ? 4 : $mpJobStableCount gte 10 ? 3 : $mpJobStableCount gte 6 ? 2 : $mpJobStableCount gte 3 ? 1 : 0)>>
+<<if $daily and $daily.mpJobStable>>
+	河湾马厩今日的车队草料与挽具已经打理完毕，马棚木门落了栓。
+	<br><br>
+	<<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
+<<else>>
 田间土路被露水浸得松软，两匹年轻挽马因为远处的雷鸣声有些焦躁地刨着前蹄。板车上摞着十袋新磨的麦粉与几篓易碎的鸡蛋，正等着发车。
 <<if random(1, 3) is 1>>
 <<if Weather.isSnow>><<include "MP Job Seasonal Stable Winter">>
@@ -1022,6 +1057,8 @@
 <</link>>
 <br>
 <<getouticon>><<link [[返回院外 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+<</if>>
+
 
 :: MP Job Stable Progress [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
@@ -1034,7 +1071,7 @@
 <<elseif _stage is 1>>
 	老伯开始让你跟着板车跑近郊短线，马厩里的几匹挽马一闻到你的气味就会亲昵地喷响鼻。
 <<elseif _stage is 2>>
-	你已经能独自赶着轻便马车往高街送货，亚历克斯见了你也会顺手递一篮鲜果让你捎上。
+	你已经能独自赶着轻便马车往高街送货，<<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>见了你也会顺手递一篮鲜果让你捎上。
 <<elseif _stage is 3>>
 	领头栗色马的专用铜铃归你掌管。
 <<else>>
@@ -1044,7 +1081,7 @@
 <br><br>
 <<getouticon>><<link [[返回院内 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
 <br>
-<<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<<link [[返回木牌 (0:12)|MP Extra Jobs Hub]]>><<pass 12>><</link>>
 <br>
 <<investigateicon>><<link [[查看当班活计 (0:02)|MP Job Stable Duties]]>><<pass 2>><</link>>
 <<if ($mpJobStableSuspended or 0) is 1>>
@@ -1163,7 +1200,7 @@
 <br>
 <<walkicon>><<link [[返回院子 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
 <br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回木牌 (0:12)|MP Extra Jobs Hub]]>><<pass 12>><</link>>
 
 /* ==================== 6. 旧港近海渔船 (Trawler) ==================== */
 
@@ -1183,20 +1220,25 @@
 <<if ($mpJobTrawlerSuspended or 0) is 1>>
 	船老大把登船跳板拉回了一半。由于接连在甲板上漏网误事，你已被暂停出海，得先把岸上的修船补网活干完。
 	<br>
+<<getouticon>><<link [[返回木牌 (0:10)|MP Extra Jobs Hub]]>><<pass 10>><</link>>
+<br>
 	<<socialiseicon>><<link [[去说明情况 (0:04)|MP Job Trawler Progress]]>><<pass 4>><</link>>
 <<elseif !($daily and $daily.mpJobTrawler)>>
 	<<swimicon>><<link [[穿油布衣上船 (0:03)|MP Job Trawler Shift]]>><<pass 3>><</link>>
 <</if>>
 <br>
 <<investigateicon>><<link [[查看船队 (0:03)|MP Job Trawler Progress]]>><<pass 3>><</link>>
-<br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 
 :: MP Job Trawler Shift [nobr]
 <<if ($mpJobTrawlerSuspended or 0) is 1>><<goto "MP Job Trawler Progress">><</if>>
-<<set $outside to 1>><<set $location to "searocks">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<set $mpJobTrawlerCount to ($mpJobTrawlerCount or 0)>>
 <<set _stage to ($mpJobTrawlerCount gte 15 ? 4 : $mpJobTrawlerCount gte 10 ? 3 : $mpJobTrawlerCount gte 6 ? 2 : $mpJobTrawlerCount gte 3 ? 1 : 0)>>
+<<if $daily and $daily.mpJobTrawler>>
+	近海拖网船今日的渔获已经全部卸舱过秤，甲板与渔网冲洗得干干净净。
+	<br><br>
+	<<link [[返回木牌 (0:08)|MP Extra Jobs Hub]]>><<pass 8>><</link>>
+<<else>>
 渔船驶出防波堤外，咸冷的海浪拍打着船头，成群的海鸥追着尾流盘旋。船尾的拖网绞盘发出沉闷的吱呀声，网兜在灰绿色的海面下沉甸甸地绷紧了。
 <<if random(1, 3) is 1>>
 <<if Weather.isSnow>><<include "MP Job Seasonal Trawler Winter">>
@@ -1249,6 +1291,8 @@
 <</link>>
 <br>
 <<getouticon>><<link [[返回防波堤 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+<</if>>
+
 
 :: MP Job Trawler Progress [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -1271,7 +1315,7 @@
 <br><br>
 <<getouticon>><<link [[返回跳板 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
 <br>
-<<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
+<<link [[返回木牌 (0:10)|MP Extra Jobs Hub]]>><<pass 10>><</link>>
 <br>
 <<investigateicon>><<link [[查看当班活计 (0:02)|MP Job Trawler Duties]]>><<pass 2>><</link>>
 <<if ($mpJobTrawlerSuspended or 0) is 1>>
@@ -1386,9 +1430,9 @@
 <</if>>
 <<set $mpJobResultText to "">><<set $mpJobResultPay to 0>>
 <br><br>
+<<getouticon>><<link [[返回木牌 (0:10)|MP Extra Jobs Hub]]>><<pass 10>><</link>>
+<br>
 <<investigateicon>><<link [[查看船队 (0:02)|MP Job Trawler Progress]]>><<pass 2>><</link>>
 <br>
 <<walkicon>><<link [[返回船头 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
-<br>
-<<getouticon>><<link [[返回木牌 (0:02)|MP Extra Jobs Hub]]>><<pass 2>><</link>>
 

@@ -1,38 +1,37 @@
-# 下一批任务（dev13）
+# 下一批任务（dev14）
 
-## 一、必须修
+## 必做
 
-1. **失败分支降级线索 13 处**
-   - `mp-region-storylines-2.twee`：Velvet Mirage 1–5、Observatory Wing 1–5 的失败 `else` 仍写 `*_alt` 线索。
-   - `mp-storylines-town.twee`：Bedroom Attic Step3、Docks Smuggler Step3、Temple Catacomb Step3 的失败仍写 `town_attic_sketch / town_docks_numbers / town_temple_rubbing`。
-   - 要求：失败只给「错拓/残缺拓片」叙事，不写 `$mpClues`；或保留但明确标为替代进度并加 `$daily` 限次。
+1. **多行 disabled 镜像文本**
+   - 65 处 `<span class="disabled">…（尚未结识）</span>` 与所在链接不在同一行，仍是旧长标签。
+   - 要求：与对应 `<<link>>` 标签同步，保留 `(0:NN)` 与原因后缀。
 
-2. **新文件观察给钱 13 处**
-   - `mp-region-moments-7.twee`、`mp-region-storylines-5.twee` 中「架镜比对/举灯细辨/翻看记录」等选项仍可能直接给钱或古董。
-   - 要求：观察项只给 `$mpClues` + 减压，钱/古物只放检定成功分支。
+2. **区域池每日轮换**
+   - 确认 `$mpSeenScenes` 在跨日/重进时的重置逻辑，避免池被永久抽干或同一天重复同一场景。
+   - 每个区域池 ≥8 段，抽完后的兜底顺序需固定。
 
-3. **模板标签**
-   - 「再试」家族 83 种写法、1029 次；「退回/离开」家族 994 种写法、2330 次。
-   - 要求：每个区域固定 3 种再试、2 种离开，其余按场景改写。
+3. **发现制旧存档迁移**
+   - 旧档只有 `$mpKnown`/任务阶段，没有 `$mpDiscovered`；确认 8 个区域都能正确补记。
+   - 未发现区域不应在 `mp-content-hubs`、节日 hub 等任何地方露出入口。
 
-4. **同文件 claim 共用键**
-   - Followup / Extra / Partner 的 A/B 仍共用按天键，同日只能拿一份。若两支都应有收益，拆成 `_money` / `_keepsake` 两个键。
+4. **NPC 自有段落门控统一**
+   - 仍有 NPC 日常/关系日使用 `$NPCNameList.includes` 而非 `$mpNpcs.<key>.hasMet`；统一为 hasMet（自定义 6 人）。
+   - 正文点名与选项门控保持同一判定。
 
-5. **正文 NPC 名字**
-   - 旧文件仍有「未认识却点名」的叙述句（入口已门控，正常 UI 不可达）。逐段改为「是 X。/无名替代」二分支。
+5. **标签可见重名**
+   - 互斥分支允许同名；但同一屏同时可见的 `再试一次`/`离开` 仍需区分（加目的地或动作词）。
 
-## 二、建议
+## 建议
 
-- 把 `MP Region Pool Router` 的 165 段区域事件按区域拆成独立 pool，避免一个大 switch。
-- 给所有 Shift 页补 `$daily` 已交班分支，防止历史记录重进。
-- 统一 `$location` 与 `PASSAGE_CN` 的 Blackiron 命名（elk/industrial 二选一）。
-- 继续收敛菜单 Hub 图标到 ≤4，出口置顶。
+- 把 `$mpDiscovered` 的发现提示写进正文一次（“你注意到…”），避免入口凭空出现。
+- 区域池的场景按 `$location` 再分一层，避免同池跨子区域。
+- 统一 `$mpSeenScenes` 与 `$daily` 的键名规范。
+- 继续把“再试”标签按区域收敛到 3 种以内。
 
-## 三、验收
+## 验收
 
 - 72+ twee，重名 0，断链 0，宏 0，if 栈 0。
-- 失败分支发钱/写线索/发物品 = 0（或明确列白名单）。
-- 观察给钱 = 0。
-- 带名选项未门控 = 0。
+- 标签 >8 汉字 0；同屏可见重名 0。
+- 失败分支发钱/写线索/发物品 0；观察给钱 0。
 - boot 注册 = 磁盘文件数。
-- `$location` 与正文场景一致，跨区 <8 分钟 = 0。
+- 跨区 <8 分钟 0。
