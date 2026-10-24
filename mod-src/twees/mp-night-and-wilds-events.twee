@@ -138,7 +138,7 @@
 <<if ($mpAlert or 0) gte 100>>
 <<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
-<<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Docks">><<set $mpAlertReturn to "MP Night Event Docks 1">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
+<<if Math.max(($seductionskill or 0), ($english or 0), ($willpower or 0)) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Docks">><<set $mpAlertReturn to "MP Night Event Docks 1">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
 <<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Docks">><<pass 6>><</link>>
 <<else>>
@@ -199,7 +199,7 @@
 <<if ($mpAlert or 0) gte 100>>
 <<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
-<<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Docks">><<set $mpAlertReturn to "MP Night Event Docks 2">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
+<<if Math.max(($seductionskill or 0), ($english or 0), ($willpower or 0)) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Docks">><<set $mpAlertReturn to "MP Night Event Docks 2">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
 <<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Docks">><<pass 6>><</link>>
 <<else>>
@@ -587,7 +587,8 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 你不再等对方合围，转身钻进货柜之间的窄缝，踩着湿滑的缆绳翻过矮栏。
 <br><br>
-<<if ($athletics or 0) gte 260 or ($skulduggery or 0) gte 260>>
+<<set _flee to Math.max(($athletics or 0), ($skulduggery or 0))>><<set _fleeNeed to 300>>
+<<if _flee + random(1, 80) gte _fleeNeed>>
 身后的呼喝被海风撕碎，你绕了两条栈桥才甩掉追兵。
 <<mpalertclear>>
 <br><br>
