@@ -6,40 +6,57 @@
 	<<set _exitPas to "Mer Street">>
 <</if>>
 梅尔街海员俱乐部外侧的锚链桩下塞着一只防水帆布袋。<<mpAmbient>>你放缓脚步环顾四周，发现防水帆布袋边缘还留着前人封存时的暗记。
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
 <br><br>
-<<getouticon>><<link [[缓步走回梅尔街边 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[缓步走回梅尔街边 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
+<<if ($mpAlert or 0) lt 100>>
 <div id="wev-mp-world-mer-anchorbollardbag">
-<<investigateicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "取出帆布袋 (0:05)">><<pass 5>><<replace "#wev-mp-world-mer-anchorbollardbag">>
+<<investigateicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "取出帆布袋 (0:05)">><<mpalert 8>><<pass 5>><<replace "#wev-mp-world-mer-anchorbollardbag">>
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_mer_anchorbollardbag")>><<money 220>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你顺着梅尔街海的掩护打开水帆布袋，将里面的旧银币与未鉴定古物揣进衣袋。<span class="green">你在梅尔街海顺遂起出了水帆布袋。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <<else>>
 	水帆布袋卡得颇紧，你伸手拨弄时指节蹭在粗糙的边角上，擦出了一道红印。<span class="red">指节被水帆布袋边角刮痛，只得先缩回手。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
 	<<link [[握稳工具重调位置 (0:04)|MP World Mer AnchorBollardBag]]>><<pass 4>><</link>>
 	<br>
-	<<link [[返回梅尔街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[返回梅尔街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">取出帆布袋 (0:05)（能力不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">取出帆布袋 (0:05)（能力不足）</span><</if>><<mpalertgain "锚链桩后的窸窣声">>
 <br>
-<<if ($science or 0) gte 260 or ($athletics or 0) gte 250>><<link "沿石缝抽出 (0:06)">><<pass 6>><<replace "#wev-mp-world-mer-anchorbollardbag">>
+<<if ($science or 0) gte 260 or ($athletics or 0) gte 250>><<link "沿石缝抽出 (0:06)">><<mpalert 6>><<pass 6>><<replace "#wev-mp-world-mer-anchorbollardbag">>
 <<if ($science or 0) gte 240 or ($athletics or 0) gte 240>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_mer_anchorbollardbag_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你顺着边缘探到封蜡口，将防水帆布袋连同夹层里的零钞一并取下。<span class="green">你用巧劲取下了完好无损的防水帆布袋。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
-	<<link [[走回梅尔街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[走回梅尔街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <<else>>
 	街口忽然传来路人交谈声，你动作一滞，袖口蹭上了一点浮灰。<span class="red">为免引人注意，你先停手退开半步。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[压住台面重新着力 (0:04)|MP World Mer AnchorBollardBag]]>><<pass 4>><</link>>
 	<br>
-	<<link [[返回外围通道 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[返回外围通道 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">沿石缝抽出 (0:06)（能力不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">沿石缝抽出 (0:06)（能力不足）</span><</if>><<mpalertgain "罐体在石缝里刮擦">>
 </div>
+<</if>>
+<<if ($mpAlert or 0) gte 80>>
+<br>
+<div id="mp-alert-mer-anchorbollardbag-exit">
+<<if ($mpAlert or 0) gte 100>>
+<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Mer Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<br>
+<<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Mer Street">><<set $mpAlertReturn to "MP World Mer AnchorBollardBag">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Mer Street">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<else>>
+<<link [[硬闯出去 (0:10)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Mer Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
+<</if>>
+</div>
+<</if>>
 
 :: MP World Elk PulleyRailPadlock [nobr]
 <<set $outside to 1>><<set $location to "elk">>
@@ -49,40 +66,57 @@
 	<<set _exitPas to "Elk Street">>
 <</if>>
 麋鹿街三号仓库的滑轮导轨槽里卡着一只黄铜挂锁与钥匙串。<<mpAmbient>>你驻足留心观察四周动静，发现黄铜挂锁与钥匙串边缘还留着前人封存时的暗记。
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
 <br><br>
-<<getouticon>><<link [[返回麋鹿街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回麋鹿街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
+<<if ($mpAlert or 0) lt 100>>
 <div id="wev-mp-world-elk-pulleyrailpadlock">
-<<investigateicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "取出挂锁钥匙 (0:05)">><<pass 5>><<replace "#wev-mp-world-elk-pulleyrailpadlock">>
+<<investigateicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "取出挂锁钥匙 (0:05)">><<mpalert 8>><<pass 5>><<replace "#wev-mp-world-elk-pulleyrailpadlock">>
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_elk_pulleyrailpadlock")>><<money 220>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你顺着麋鹿街三的掩护打开与钥匙串，把内藏的旧银币与古物妥善收入囊中。<span class="green">你在麋鹿街三顺遂起出了与钥匙串。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[收好器物返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[收好器物返回 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <<else>>
 	与钥匙串卡得颇紧，你伸手拨弄时指节蹭在粗糙的边角上，擦出了一道红印。<span class="red">指节被与钥匙串边角刮痛，只得先缩回手。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
 	<<link [[垫上干布重起卡扣 (0:04)|MP World Elk PulleyRailPadlock]]>><<pass 4>><</link>>
 	<br>
-	<<link [[走回麋鹿街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[走回麋鹿街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">取出挂锁钥匙 (0:05)（能力不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">取出挂锁钥匙 (0:05)（能力不足）</span><</if>><<mpalertgain "锁簧在导轨里轻响">>
 <br>
-<<if ($science or 0) gte 260 or ($athletics or 0) gte 250>><<link "顺墙根暗槽移出 (0:06)">><<pass 6>><<replace "#wev-mp-world-elk-pulleyrailpadlock">>
+<<if ($science or 0) gte 260 or ($athletics or 0) gte 250>><<link "顺墙根暗槽移出 (0:06)">><<mpalert 6>><<pass 6>><<replace "#wev-mp-world-elk-pulleyrailpadlock">>
 <<if ($science or 0) gte 240 or ($athletics or 0) gte 240>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_elk_pulleyrailpadlock_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你拨开簧片卸下锁扣，将黄铜挂锁与钥匙串连同夹层里的零钞一并取下。<span class="green">你完好取下了黄铜挂锁与钥匙串。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
-	<<link [[转回麋鹿街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[转回麋鹿街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <<else>>
 	远处响起马车碾过石板的声响，你手腕微偏没能着力。<span class="red">你收回手指，决定等街面安静些再试。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[顺着卯眼重新发力 (0:04)|MP World Elk PulleyRailPadlock]]>><<pass 4>><</link>>
 	<br>
-	<<link [[转回麋鹿街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<link [[转回麋鹿街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">顺墙根暗槽移出 (0:06)（能力不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">顺墙根暗槽移出 (0:06)（能力不足）</span><</if>><<mpalertgain "铁件在水泥地上拖出的摩擦">>
 </div>
+<</if>>
+<<if ($mpAlert or 0) gte 80>>
+<br>
+<div id="mp-alert-elk-pulleyrailpadlock-exit">
+<<if ($mpAlert or 0) gte 100>>
+<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Elk Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<br>
+<<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Elk Street">><<set $mpAlertReturn to "MP World Elk PulleyRailPadlock">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Elk Street">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<else>>
+<<link [[硬闯出去 (0:10)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Elk Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
+<</if>>
+</div>
+<</if>>
 
 :: MP World Harvest FlourSackCashbox [nobr]
 <<set $outside to 1>><<set $location to "pub">>
@@ -182,7 +216,7 @@
 <<getouticon>><<link [[返回商业区 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="wev-mp-world-comalley-freightshaftpurse">
-<<investigateicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "撬开真皮手包 (0:05)">><<pass 5>><<replace "#wev-mp-world-comalley-freightshaftpurse">>
+<<mplockpickicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "撬开真皮手包 (0:05)">><<pass 5>><<replace "#wev-mp-world-comalley-freightshaftpurse">>
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_comalley_freightshaftpurse")>><<money 220>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你顺着商业区小的掩护打开真皮手包，将夹层里的古旧银币与器物悉数收起。<span class="green">你在商业区小顺遂起出了真皮手包。</span><<stress -3>><<lstress>>
@@ -268,7 +302,7 @@
 <<getouticon>><<link [[缓步走回海滩浅岸 (0:12)|_exitPas]]>><<pass 12>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="wev-mp-world-beach-cabanaspyglasstube">
-<<investigateicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "取出望远镜筒 (0:05)">><<pass 5>><<replace "#wev-mp-world-beach-cabanaspyglasstube">>
+<<mpastroicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "取出望远镜筒 (0:05)">><<pass 5>><<replace "#wev-mp-world-beach-cabanaspyglasstube">>
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_beach_cabanaspyglasstube")>><<money 220>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你顺着海滩更衣的掩护打开望远镜筒，将藏在底部的旧钱币与古物取走收妥。<span class="green">你在海滩更衣顺遂起出了望远镜筒。</span><<stress -3>><<lstress>>
@@ -397,7 +431,7 @@
 <<getouticon>><<link [[返回森林小径 (0:12)|_exitPas]]>><<pass 12>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="wev-mp-world-forest-cypressroottin">
-<<investigateicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "撬开锡皮罐 (0:05)">><<pass 5>><<replace "#wev-mp-world-forest-cypressroottin">>
+<<mplockpickicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "撬开锡皮罐 (0:05)">><<pass 5>><<replace "#wev-mp-world-forest-cypressroottin">>
 <<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_forest_cypressroottin")>><<money 220>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你顺着深林古柏的掩护打开的锡皮罐，把里头留存的旧银币与古物收进暗袋。<span class="green">你在深林古柏顺遂起出了的锡皮罐。</span><<stress -3>><<lstress>>

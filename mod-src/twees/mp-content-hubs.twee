@@ -48,7 +48,7 @@
 <</if>>
 这一叠纸条都指向学校、孤儿院和医院那头，纸背还留着孩子们画的小人。最底下压着一张从布告栏背面撕下来的旧纸条。
 <br><br>
-<<tendingicon>><<link [[查看白衬衫 (0:08)|MP Side Orphan Laundry]]>><<pass 8>><</link>>
+<<mptailoricon>><<link [[查看白衬衫 (0:08)|MP Side Orphan Laundry]]>><<pass 8>><</link>>
 <br>
 <<swimicon>><<link [[查看泳镜 (0:08)|MP Side School Goggles]]>><<pass 8>><</link>>
 <br>
@@ -71,11 +71,11 @@
 <</if>>
 剩下的纸条都贴着码头、公园和麋鹿街的方位，边角沾着盐粒和草屑。布告栏侧面还钉着两块旧木牌，写着日常琐事与节日安排。
 <br><br>
-<<tendingicon>><<link [[查看绳结 (0:12)|MP Side Docks Knot]]>><<pass 12>><</link>>
+<<mpsewicon>><<link [[查看绳结 (0:12)|MP Side Docks Knot]]>><<pass 12>><</link>>
 <br>
 <<socialiseicon>><<link [[搭话喂鸽老人 (0:08)|MP Side Park Pigeon]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<link [[查看怀表 (0:10)|MP Side Elk Watch]]>><<pass 10>><</link>>
+<<mpclockworkicon>><<link [[查看怀表 (0:10)|MP Side Elk Watch]]>><<pass 10>><</link>>
 <br>
 <<shopicon>><<link [[查看小木架 (0:03)|MP Daily Life Hub]]>><<pass 3>><</link>>
 <br>
@@ -99,7 +99,7 @@
 <br>
 <<parkicon>><<link [[森林与矿道 (0:02)|MP Wild Side Stories Forest Hub]]>><<pass 2>><</link>>
 <br>
-<<investigateicon>><<link [[翻看背面地图 (0:03)|MP Wild Extra Events Hub]]>><<pass 3>><</link>>
+<<mpmapicon>><<link [[翻看背面地图 (0:03)|MP Wild Extra Events Hub]]>><<pass 3>><</link>>
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
@@ -112,11 +112,11 @@
 <</if>>
 靠海的几张图都用浸过盐水的麻绳系着，边角发硬。图上画的是海蚀洞、礁石、搁浅的船和湖口浅滩。
 <br><br>
-<<investigateicon>><<link [[查看值班表 (0:14)|MP Wild Sea Cave]]>><<pass 14>><</link>>
+<<mpclockworkicon>><<link [[查看值班表 (0:14)|MP Wild Sea Cave]]>><<pass 14>><</link>>
 <br>
 <<runicon>><<link [[查看新木板 (0:14)|MP Wild Cliff Boardwalk]]>><<pass 14>><</link>>
 <br>
-<<walkicon>><<link [[查看海图仪 (0:14)|MP Wild Chart Room]]>><<pass 14>><</link>>
+<<mpmapicon>><<link [[查看海图仪 (0:14)|MP Wild Chart Room]]>><<pass 14>><</link>>
 <br>
 <<swimicon>><<link [[查看玻璃瓶 (0:14)|MP Wild Salt Letter]]>><<pass 14>><</link>>
 <br>
@@ -181,4 +181,85 @@
 	<<else>>
 		<<set $mpLightAmbush to 0>>
 	<</if>>
+<</widget>>
+
+:: Widgets MP Alert [widget nobr]
+<<widget "mpalertinit">>
+	<<if _args[0]>>
+		<<set _area to String(_args[0])>>
+		<<set $mpAlertArea to _area>>
+		<<if _area is "docks">>
+			<<set $mpAlertBase to 1.2>><<set $mpAlert to 10>>
+		<<elseif _area is "blackiron">>
+			<<set $mpAlertBase to 1.4>><<set $mpAlert to 20>>
+		<<elseif _area is "abbey">>
+			<<set $mpAlertBase to 1.3>><<set $mpAlert to 15>>
+		<<elseif _area is "velvet">>
+			<<set $mpAlertBase to 1.5>><<set $mpAlert to 20>>
+		<<elseif _area is "school">>
+			<<set $mpAlertBase to 0.9>><<set $mpAlert to 5>>
+		<<elseif _area is "orphanage">>
+			<<set $mpAlertBase to 1.0>><<set $mpAlert to 5>>
+		<<elseif _area is "catacomb">>
+			<<set $mpAlertBase to 1.1>><<set $mpAlert to 10>>
+		<<else>>
+			<<set $mpAlertBase to 1.0>><<set $mpAlert to 10>>
+		<</if>>
+		<<set $mpAlertCaught to 0>>
+		<<set $mpAlertTier to 0>>
+	<</if>>
+<</widget>>
+
+<<widget "mpalert">>
+	<<if _args[0]>>
+		<<set _delta to Number(_args[0]) * ($mpAlertBase or 1)>>
+		<<if Time.dayState is "night">><<set _delta to _delta * 1.1>><</if>>
+		<<if $mpAlertArea is "catacomb" and $mpLight isnot undefined and $mpLight lt 20>>
+			<<set _delta to _delta * 1.5>>
+		<<elseif $mpAlertArea is "catacomb" and $mpLight isnot undefined and $mpLight gte 60>>
+			<<set _delta to _delta * 0.8>>
+		<</if>>
+		<<set $mpAlert to Math.clamp(($mpAlert or 0) + _delta, 0, 100)>>
+		<<if $mpAlert gte 100>><<set $mpAlertTier to 5>>
+		<<elseif $mpAlert gte 80>><<set $mpAlertTier to 4>>
+		<<elseif $mpAlert gte 60>><<set $mpAlertTier to 3>>
+		<<elseif $mpAlert gte 40>><<set $mpAlertTier to 2>>
+		<<elseif $mpAlert gte 20>><<set $mpAlertTier to 1>>
+		<<else>><<set $mpAlertTier to 0>><</if>>
+	<</if>>
+<</widget>>
+
+<<widget "mpalerttext">>
+	<<set _a to ($mpAlert or 0)>>
+	警戒：<<if _a gte 100>><<set $mpAlertTier to 5>><span class="red">「你已经被盯上。风险：致命」</span>
+	<<elseif _a gte 80>><<set $mpAlertTier to 4>><span class="pink">「你快暴露了。风险：极高」</span>
+	<<elseif _a gte 60>><<set $mpAlertTier to 3>><span class="purple">「有人在找你。风险：高」</span>
+	<<elseif _a gte 40>><<set $mpAlertTier to 2>><span class="blue">「守卫开始留意这边。风险：中」</span>
+	<<elseif _a gte 20>><<set $mpAlertTier to 1>><span class="teal">「有人瞥了你一眼。风险：低」</span>
+	<<else>><<set $mpAlertTier to 0>><span class="green">「无人注意。风险：低」</span><</if>>
+<</widget>>
+
+<<widget "mpalertgain">>
+	<<if !$settings.blindStatsEnabled>> | <span class="red">+ 警戒<<if _args[0]>>（<<print _args[0]>>）<</if>></span><</if>>
+<</widget>>
+
+<<widget "mpalertloss">>
+	<<if !$settings.blindStatsEnabled>> | <span class="green">- 警戒<<if _args[0]>>（<<print _args[0]>>）<</if>></span><</if>>
+<</widget>>
+
+<<widget "mpalertcheck">>
+	<<set $mpAlertCaught to 0>>
+	<<if ($mpAlert or 0) gte 100>>
+		<<set $mpAlertCaught to 1>>
+		<span class="red">搜查队已经封住去路，你被死死盯住了。</span>
+	<<elseif ($mpAlert or 0) gte 40 and random(1, 100) lte ($mpAlert or 0)>>
+		<<set $mpAlertCaught to 1>>
+		<span class="red">巡逻的脚步朝这边靠近，有人注意到你了。</span>
+	<</if>>
+<</widget>>
+
+<<widget "mpalertclear">>
+	<<set $mpAlert to 0>>
+	<<set $mpAlertCaught to 0>>
+	<<set $mpAlertTier to 0>>
 <</widget>>

@@ -1106,6 +1106,9 @@
             img.className = "icon";
             img.src = uri;
             img.style.cssText = "width:30px;height:30px;vertical-align:middle;margin-right:4px;image-rendering:pixelated;";
+            img.addEventListener("error", function () {
+              if (img.src !== CUSTOM_GIFS.lantern) img.src = CUSTOM_GIFS.lantern;
+            });
             this.output.appendChild(img);
           }
         });

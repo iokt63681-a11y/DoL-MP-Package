@@ -7,7 +7,7 @@
 <<if $daily.mpNightEv3_mp_night_event_alley_3 is 1>>
 商业区后巷当铺窗下的首饰袋今夜已处置妥当，巷道安静无声。
 <br>
-<<link [[继续深入 (0:04)|MP Night Event Alley 4]]>><<pass 4>><</link>>
+<<investigateicon>><<link [[继续深入 (0:04)|MP Night Event Alley 4]]>><<pass 4>><</link>>
 <<else>>
 <div id="act-mp-night-event-alley-3">
 <<sneakicon>><<link "踩箱取绒布袋 (0:07)">><<pass 7>><<replace "#act-mp-night-event-alley-3">>
@@ -52,7 +52,7 @@
 印刷房后巷滑落的晚报增刊今夜已整理归位，油墨香气淡淡飘散。
 <<else>>
 <div id="act-mp-night-event-alley-4">
-<<investigateicon>><<link "帮搬晚报 (0:07)">><<pass 7>><<replace "#act-mp-night-event-alley-4">>
+<<mpcarryicon>><<link "帮搬晚报 (0:07)">><<pass 7>><<replace "#act-mp-night-event-alley-4">>
 <<if ($housekeeping or 0) gte 250 or ($physique or 10000) gte 11300>>
 	<<set $daily.mpNightEv3_mp_night_event_alley_4 to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("night_ev3_rew_mp_night_event_alley_4")>><<money 320>>印刷工连声道谢，把那封属于夜班帮工的线报津贴直接分给了你。<<else>>你扶稳倾斜的铅字架并抽回信封，夜班印刷工松了一大口气。<</if>><span class="green">你在夜巷帮印刷房收回了散落增刊。</span><<stress -3>><<lstress>>
@@ -87,16 +87,18 @@
 :: MP Night Event Docks 3 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<set $daily to ($daily or {})>><<if Time.dayState is "night">>午夜涨潮的海浪拍打着四号泊位，<<else>>夜色深沉的旧港四号泊位栈桥边，<</if>>一艘刚靠岸的远洋货轮抛下撇缆，缆头的铜配重球不慎卡进了栈桥木缝。
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
 <br><br>
-<<getouticon>><<link [[返回旧港 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回旧港 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<if $daily.mpNightEv3_mp_night_event_docks_3 is 1>>
 四号泊位栈桥木缝里的撇缆铜球今夜已解开，货轮平稳停泊。
 <br>
-<<link [[继续深入 (0:04)|MP Night Event Docks 4]]>><<pass 4>><</link>>
+<<investigateicon>><<link [[继续深入 (0:04)|MP Night Event Docks 4]]>><<pass 4>><</link>>
 <<else>>
+<<if ($mpAlert or 0) lt 100>>
 <div id="act-mp-night-event-docks-3">
-<<swimicon>><<link "拔出配重球 (0:07)">><<pass 7>><<replace "#act-mp-night-event-docks-3">>
+<<swimicon>><<link "拔出配重球 (0:07)">><<mpalert 8>><<pass 7>><<replace "#act-mp-night-event-docks-3">>
 <<if ($physique or 10000) gte 11400 or ($athletics or 0) gte 250>>
 	<<set $daily.mpNightEv3_mp_night_event_docks_3 to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("night_ev3_rew_mp_night_event_docks_3")>><<money 320>>铜配重球应声拔出，你顺手将缆绳套上系船柱，大副从甲板抛下一袋夜班劳务银币。<<else>>铜配重球应声拔出，你将备用缆绳稳稳套上了系船石柱。<</if>><span class="green">你帮夜航货轮顺利系妥了头缆。</span><<stress -3>><<lstress>>
@@ -107,66 +109,98 @@
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Night Event Docks 3]]>><<pass 4>><</link>>
 	<br>
-	<<link [[离开 (0:03)|Docks]]>><<pass 3>><</link>>
+	<<link [[离开 (0:03)|Docks]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<mpalertgain "金属缆球磕在木栈上">>
 <br>
-<<link "撬缝取铜球 (0:08)">><<pass 8>><<replace "#act-mp-night-event-docks-3">>
+<<link "撬缝取铜球 (0:08)">><<mpalert 8>><<pass 8>><<replace "#act-mp-night-event-docks-3">>
 <<if ($science or 0) gte 240 or ($skulduggery or 0) gte 240>>
 	<<set $daily.mpNightEv3_mp_night_event_docks_3 to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("night_ev3_rew_mp_night_event_docks_3_alt")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>铁撬杆轻轻一别便松开了木缝，大副冲你竖起大拇指并掷下航海纪念铜扣。<<else>>铁撬杆轻轻一别便松开了木缝，卡住的配重球顺利归位。<</if>><<skulduggery 1>><span class="green">你巧借撬杆毫不费力地解救了撇缆。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
-	<<link [[去旧港 (0:04)|Docks]]>><<pass 4>><</link>>
+	<<link [[去旧港 (0:04)|Docks]]>><<pass 4>><<mpalertclear>><</link>>
 <<else>>
 	浪花拍上栈桥，打滑了铁撬杆的支点。<span class="red">你踩稳木板抵住支点准备再撬。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Night Event Docks 3]]>><<pass 4>><</link>>
 	<br>
-	<<link [[回旧港 (0:03)|Docks]]>><<pass 3>><</link>>
+	<<link [[回旧港 (0:03)|Docks]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<mpalertgain "铁撬别开木缝的脆响">>
+</div>
+<</if>>
+<</if>>
+<<if ($mpAlert or 0) gte 80>>
+<br>
+<div id="mp-alert-docks-3-exit">
+<<if ($mpAlert or 0) gte 100>>
+<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<br>
+<<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Docks">><<set $mpAlertReturn to "MP Night Event Docks 3">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Docks">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<else>>
+<<link [[硬闯出去 (0:10)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
+<</if>>
 </div>
 <</if>>
 
 :: MP Night Event Docks 4 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<set $daily to ($daily or {})>><<if Time.dayState is "night">>深夜的港务灯塔信标灯在雾中闪烁，<<else>>夜雾笼罩的码头备用信标台旁，<</if>>蓄电池箱的铜接线柱被海盐结晶包裹，接触不良的灯光忽明忽暗。
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
 <br><br>
-<<getouticon>><<link [[返回旧港 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回旧港 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<if $daily.mpNightEv3_mp_night_event_docks_4 is 1>>
 码头备用信标台的蓄电池接线柱今夜已刮净，航标灯稳定长亮。
 <<else>>
+<<if ($mpAlert or 0) lt 100>>
 <div id="act-mp-night-event-docks-4">
-<<tendingicon>><<link "刮去盐壳 (0:07)">><<pass 7>><<replace "#act-mp-night-event-docks-4">>
+<<mpcleanicon>><<link "刮去盐壳 (0:07)">><<mpalert 8>><<pass 7>><<replace "#act-mp-night-event-docks-4">>
 <<if ($science or 0) gte 250 or ($housekeeping or 0) gte 240>>
 	<<set $daily.mpNightEv3_mp_night_event_docks_4 to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("night_ev3_rew_mp_night_event_docks_4")>><<money 320>>海盐结晶刮净后信标灯瞬间恢复雪亮，值夜港务员塞给你一笔夜巡检修费。<<else>>海盐结晶刮净后，引水信标灯瞬间恢复了雪亮通透的光束。<</if>><span class="green">你及时排除了夜航信标灯的接触故障。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[离开 (0:04)|Docks]]>><<pass 4>><</link>>
+	<<walkicon>><<link [[离开 (0:04)|Docks]]>><<pass 4>><<mpalertclear>><</link>>
 <<else>>
 	铜接线柱跳出一粒细小电火花，惊得你缩回手。<span class="red">你先拉开闸刀开关再动手。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Night Event Docks 4]]>><<pass 4>><</link>>
 	<br>
-	<<link [[回旧港 (0:03)|Docks]]>><<pass 3>><</link>>
+	<<link [[回旧港 (0:03)|Docks]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<mpalertgain "刮刀蹭过铜柱的声响">>
 <br>
-<<link "涂油拧铜螺母 (0:08)">><<pass 8>><<replace "#act-mp-night-event-docks-4">>
+<<link "涂油拧铜螺母 (0:08)">><<mpalert 6>><<pass 8>><<replace "#act-mp-night-event-docks-4">>
 <<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 240>>
 	<<set $daily.mpNightEv3_mp_night_event_docks_4 to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("night_ev3_rew_mp_night_event_docks_4_alt")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>螺母拧紧且裹满凡士林，灯光稳稳照亮水道，港务员欣喜地赠你一枚港务铜章。<<else>>接线螺母拧紧并涂好凡士林，防风信标灯稳稳照亮了夜航水道。<</if>><<skulduggery 1>><span class="green">防潮处理让信标灯在海雾中稳如磐石。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
-	<<link [[返回梅尔街 (0:04)|Mer Street]]>><<pass 4>><</link>>
+	<<link [[返回梅尔街 (0:04)|Mer Street]]>><<pass 4>><<mpalertclear>><</link>>
 <<else>>
 	铜螺母被盐霜咬住，手指拧得有些生疼。<span class="red">你摸出小扳手准备重新拧紧。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[再试一次 (0:04)|MP Night Event Docks 4]]>><<pass 4>><</link>>
 	<br>
-	<<link [[回到旧港 (0:03)|Docks]]>><<pass 3>><</link>>
+	<<link [[回到旧港 (0:03)|Docks]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<mpalertgain "扳手磕在接线柱上">>
+</div>
+<</if>>
+<</if>>
+<<if ($mpAlert or 0) gte 80>>
+<br>
+<div id="mp-alert-docks-4-exit">
+<<if ($mpAlert or 0) gte 100>>
+<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<br>
+<<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Docks">><<set $mpAlertReturn to "MP Night Event Docks 4">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Docks">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<else>>
+<<link [[硬闯出去 (0:10)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
+<</if>>
 </div>
 <</if>>
 
@@ -179,10 +213,10 @@
 <<if $daily.mpNightEv3_mp_night_event_forest_3 is 1>>
 溪石缝间的夜光月见草与铜药铲今夜已采集完毕，溪水潺潺流淌。
 <br>
-<<link [[继续深入 (0:04)|MP Night Event Forest 4]]>><<pass 4>><</link>>
+<<investigateicon>><<link [[继续深入 (0:04)|MP Night Event Forest 4]]>><<pass 4>><</link>>
 <<else>>
 <div id="act-mp-night-event-forest-3">
-<<tendingicon>><<link "掘出月见草 (0:07)">><<pass 7>><<replace "#act-mp-night-event-forest-3">>
+<<mpherbicon>><<link "掘出月见草 (0:07)">><<pass 7>><<replace "#act-mp-night-event-forest-3">>
 <<if ($tending or 0) gte 250 or ($science or 0) gte 240>>
 	<<set $daily.mpNightEv3_mp_night_event_forest_3 to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("night_ev3_rew_mp_night_event_forest_3")>><<money 320>>月见草根系完整无损，连同铜药铲袋里的采药订金一并归入你囊中。<<else>>月见草根系完整无损地移入药篓，散发着清冽的草木香气。<</if>><span class="green">你在夜林溪畔采到了品相完好的月见草。</span><<stress -3>><<lstress>>
@@ -265,7 +299,7 @@
 <<if $daily.mpNightEv3_mp_night_event_park_3 is 1>>
 公园喷泉池底的照明铜灯罩今夜已旋紧，水波在夜色中泛着柔光。
 <br>
-<<link [[继续深入 (0:04)|MP Night Event Park 4]]>><<pass 4>><</link>>
+<<socialiseicon>><<link [[继续深入 (0:04)|MP Night Event Park 4]]>><<pass 4>><</link>>
 <<else>>
 <div id="act-mp-night-event-park-3">
 <<investigateicon>><<link "捞起银币 (0:07)">><<pass 7>><<replace "#act-mp-night-event-park-3">>
@@ -310,7 +344,7 @@
 公园凉亭长椅下的节拍器木盒今夜已收妥，夜风吹过紫藤花架。
 <<else>>
 <div id="act-mp-night-event-park-4">
-<<tendingicon>><<link "拾节拍器盒 (0:07)">><<pass 7>><<replace "#act-mp-night-event-park-4">>
+<<mpclockworkicon>><<link "拾节拍器盒 (0:07)">><<pass 7>><<replace "#act-mp-night-event-park-4">>
 <<if ($tending or 0) gte 250 or ($willpower or 0) gte 420>>
 	<<set $daily.mpNightEv3_mp_night_event_park_4 to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("night_ev3_rew_mp_night_event_park_4")>><<money 320>>守夜园丁见你送来木盒，当即把乐手留下的寻物酬金信封交给了你。<<else>>你把红木节拍器盒擦干收妥，守夜园丁提着风灯朝你温和道谢。<</if>><span class="green">你归还节拍器木盒领到了寻物酬金。</span><<stress -3>><<lstress>>
@@ -351,7 +385,7 @@
 <<if $daily.mpNightEv3_mp_night_event_searocks_3 is 1>>
 海礁背风石湾里的航海日志防水匣今夜已捞起，潮水静静涨落。
 <br>
-<<link [[继续深入 (0:04)|MP Night Event SeaRocks 4]]>><<pass 4>><</link>>
+<<investigateicon>><<link [[继续深入 (0:04)|MP Night Event SeaRocks 4]]>><<pass 4>><</link>>
 <<else>>
 <div id="act-mp-night-event-searocks-3">
 <<swimicon>><<link "捞起防水木匣 (0:07)">><<pass 7>><<replace "#act-mp-night-event-searocks-3">>
@@ -437,10 +471,10 @@
 <<if $daily.mpNightEv3_mp_night_event_orphanage_3 is 1>>
 孤儿院饮水间的热水铜箱龙头今夜已拧紧，走廊安静祥和。
 <br>
-<<link [[继续深入 (0:04)|MP Night Event Orphanage 4]]>><<pass 4>><</link>>
+<<investigateicon>><<link [[继续深入 (0:04)|MP Night Event Orphanage 4]]>><<pass 4>><</link>>
 <<else>>
 <div id="act-mp-night-event-orphanage-3">
-<<tendingicon>><<link "拧龙头取零钱 (0:07)">><<pass 7>><<replace "#act-mp-night-event-orphanage-3">>
+<<mprepairicon>><<link "拧龙头取零钱 (0:07)">><<pass 7>><<replace "#act-mp-night-event-orphanage-3">>
 <<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240>>
 	<<set $daily.mpNightEv3_mp_night_event_orphanage_3 to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("night_ev3_rew_mp_night_event_orphanage_3")>><<money 320>>滴水声戛然而止，你从接水盘里摸出年长院童留下的跑腿谢礼银币。<<else>>铜管滴水声戛然而止，走廊尽头的黄铜接水盘重新擦得干干净净。<</if>><span class="green">你拧紧夜半漏水的铜龙头并收起谢礼。</span><<stress -3>><<lstress>>

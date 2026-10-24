@@ -1,6 +1,7 @@
 :: MP Quest Orphanage Cellar [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>><<mpAmbient>>
+<<mpalertinit "orphanage">><<mpalerttext>><<mpalertcheck>>
 <<set _stg to ($mpQuestCellar or 0)>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -13,15 +14,15 @@
 「昨晚贝利让人搬下去两只箱子，」<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>压低声音，「搬上来只有一只。」
 你把耳朵贴近门板。里面没有人声，只有水一滴一滴落进铁桶。
 	<br><br>
-		<<sneakicon>><<if ($skulduggery or 0) gte 250>><<mplockpickicon>><<link [[撬开木门 (0:05)|MP Quest Orphanage Cellar Step2]]>><<set $mpQuestCellar to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCellar to 1>><<pass 5>><<stress 1>><</link>><<else>><span class="disabled">撬开木门 (0:05)（属性不足）</span><</if>>
+		<<mplockpickicon>><<if ($skulduggery or 0) gte 250>><<link [[撬开木门 (0:05)|MP Quest Orphanage Cellar Step2]]>><<set $mpQuestCellar to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCellar to 1>><<pass 5>><<stress 1>><<mpalert 8>><<mpalertgain "锁簧轻响">><</link>><<else>><span class="disabled">撬开木门 (0:05)（属性不足）</span><</if>>
 	<br>
 	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[问罗宾 (0:03)|MP Quest Orphanage Cellar Step2]]>><<set $mpQuestCellar to 1>><<set $mpTownCellarRobin to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCellar to 1>><<pass 3>><<stress -2>><</link>><<else>><span class="disabled">问罗宾 (0:03)（尚未结识）</span><</if>>
 	<br>
-	<<investigateicon>><<link [[窥看门内 (0:04)|MP Quest Orphanage Cellar Step2]]>><<set $mpQuestCellar to 1>><<set $mpTownCellarPeek to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCellar to 1>><<pass 4>><</link>>
+	<<investigateicon>><<link [[窥看门内 (0:04)|MP Quest Orphanage Cellar Step2]]>><<set $mpQuestCellar to 1>><<set $mpTownCellarPeek to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCellar to 1>><<pass 4>><<mpalert 6>><<mpalertgain "门缝透光">><</link>>
 <<elseif _stg is 1>>
 你回到走廊尽头。木门还虚掩着，门后的潮气比刚才更重。
 	<br><br>
-		<<link [[下到地窖 (0:01)|MP Quest Orphanage Cellar Step2]]>><<pass 1>><</link>>
+		<<walkicon>><<link [[下到地窖 (0:01)|MP Quest Orphanage Cellar Step2]]>><<pass 1>><</link>>
 <<elseif _stg is 2>>
 你回到旧储物室的暗门前，指尖还留着石阶上的凉意。
 	<br><br>
@@ -47,11 +48,12 @@
 	<br><br>
 		<<link [[回看暗门 (0:03)|MP Quest Orphanage Cellar Resolve]]>><<pass 3>><<stress -2>><</link>>
 <</if>>
-<<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Quest Orphanage Cellar Step2 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestCellar to Math.max(($mpQuestCellar or 0), 2)>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -64,17 +66,18 @@
 	你刚才从门缝里看见的，是两只叠在一起的木箱和一条拖过地面的旧划痕。现在那条划痕就在你脚边。
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<investigateicon>><<link [[摸黑下行 (0:06)|MP Quest Orphanage Cellar Step3]]>><<pass 6>><<if ($willpower or 0) gte 300>><<stress 2>><<else>><<set $mpTownCellarNerve to 1>><<stress 5>><</if>><</link>>
+<<investigateicon>><<link [[摸黑下行 (0:06)|MP Quest Orphanage Cellar Step3]]>><<pass 6>><<if ($willpower or 0) gte 300>><<stress 2>><<else>><<set $mpTownCellarNerve to 1>><<stress 5>><</if>><<mpalert 6>><<mpalertgain "石阶回声">><</link>>
 <br>
-<<walkicon>><<link [[点亮油灯 (0:08)|MP Quest Orphanage Cellar Step3]]>><<pass 8>><<stress -2>><</link>>
+<<walkicon>><<link [[点亮油灯 (0:08)|MP Quest Orphanage Cellar Step3]]>><<pass 8>><<stress -2>><<mpalert 4>><<mpalertgain "灯芯亮起">><</link>>
 <br>
-<<mpeavesdropicon>><<link [[听下面动静 (0:04)|MP Quest Orphanage Cellar Step3]]>><<pass 4>><<set $mpTownCellarListen to 1>><</link>>
+<<mpeavesdropicon>><<link [[听下面动静 (0:04)|MP Quest Orphanage Cellar Step3]]>><<pass 4>><<set $mpTownCellarListen to 1>><<mpalert -5>><<mpalertloss "屏住呼吸">><</link>>
 
 :: MP Quest Orphanage Cellar Step3 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestCellar to Math.max(($mpQuestCellar or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
@@ -84,7 +87,7 @@
 半地下的储藏室里码着旧床架、坏掉的木马和一摞发霉的床单。最里面那只木架与地面之间有一道半圆形的刮痕。
 你刚把木架挪开半尺，头顶就传来脚步声。有人在走廊里停住了。
 <br><br>
-<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="act-mp-quest-orphanage-cellar-step3">
 <<investigateicon>><<if ($skulduggery or 0) gte 250>><<link "查看门锁 (0:05)">><<pass 5>><<replace "#act-mp-quest-orphanage-cellar-step3">>
@@ -92,24 +95,25 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpClues or !$mpClues["town_cellar_hidden"]>><<set $mpClues["town_cellar_hidden"] to 1>><span class="blue">线索已记录</span><</if>>
 	你缩进木架与墙之间的缝隙，把呼吸压到最浅。门缝里晃过一盏灯，灯光在石阶上停了一会儿，又慢慢移开。
-	<<stress 2>>
+	<<stress 2>><<mpalert -5>><<mpalertloss "缩进木架缝隙">>
 木架后面露出一扇嵌在石墙里的橡木窄门，门锁上积着薄灰。
 	<br><br>
-<<link [[推开窄门 (0:05)|MP Quest Orphanage Cellar Step4]]>><<pass 5>><</link>>
+<<walkicon>><<link [[推开窄门 (0:05)|MP Quest Orphanage Cellar Step4]]>><<pass 5>><<mpalert 6>><<mpalertgain "门轴轻响">><</link>>
 	<br>
-	<<sneakicon>><<link [[避开楼上人 (0:04)|MP Quest Orphanage Cellar Step4]]>><<pass 4>><<stress -2>><</link>>
+	<<sneakicon>><<link [[避开楼上人 (0:04)|MP Quest Orphanage Cellar Step4]]>><<pass 4>><<stress -2>><<mpalert -5>><<mpalertloss "贴墙屏息">><</link>>
 <<else>>
 	<<set $mpTownCellarNoise to 1>>
 	你后退时膝盖撞上一只空铁桶。桶身滚过半圈，发出一声闷响。上面的脚步立刻加快，你只来得及躲到床架后面。
-	<<stress 6>><<pain 2>>
+	<<stress 6>><<pain 2>><<mpalert 12>><<mpalertgain "铁桶滚响">>
 	<br><br>
 <<link [[擦净指腹重按簧片 (0:04)|MP Quest Orphanage Cellar Step3]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">推开窄门 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">查看门锁 (0:05)（属性不足）</span><</if>>
 </div>
 :: MP Quest Orphanage Cellar Step4 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestCellar to Math.max(($mpQuestCellar or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
@@ -121,17 +125,18 @@
 	你刚才听见的，是楼上有人在说「学园那边的旧档」。现在这句话和纸上的缩写对上了。
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<investigateicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<walkicon>><<link [[比对学园纹章 (0:06)|MP Quest Orphanage Cellar Step5]]>><<if !$mpClues or !$mpClues["town_cellar_school"]>><<set $mpClues["town_cellar_school"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpTownCellarLead to "school">><<pass 6>><</link>><<else>><span class="disabled">比对学园纹章 (0:06)（属性不足）</span><</if>>
+<<investigateicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[比对学园纹章 (0:06)|MP Quest Orphanage Cellar Step5]]>><<if !$mpClues or !$mpClues["town_cellar_school"]>><<set $mpClues["town_cellar_school"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpTownCellarLead to "school">><<pass 6>><<mpalert 8>><<mpalertgain "翻动碎纸">><</link>><<else>><span class="disabled">比对学园纹章 (0:06)（属性不足）</span><</if>>
 <br>
-<<templeicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[比对神殿蜡印 (0:06)|MP Quest Orphanage Cellar Step5]]>><<if !$mpClues or !$mpClues["town_cellar_temple"]>><<set $mpClues["town_cellar_temple"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpTownCellarLead to "temple">><<pass 6>><</link>><<else>><span class="disabled">比对神殿蜡印 (0:06)（属性不足）</span><</if>>
+<<templeicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[比对神殿蜡印 (0:06)|MP Quest Orphanage Cellar Step5]]>><<if !$mpClues or !$mpClues["town_cellar_temple"]>><<set $mpClues["town_cellar_temple"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpTownCellarLead to "temple">><<pass 6>><<mpalert 8>><<mpalertgain "翻动碎纸">><</link>><<else>><span class="disabled">比对神殿蜡印 (0:06)（属性不足）</span><</if>>
 <br>
-<<link [[抄下人名 (0:08)|MP Quest Orphanage Cellar Step5]]>><<if !$mpClues or !$mpClues["town_cellar_names"]>><<set $mpClues["town_cellar_names"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpTownCellarLead to "names">><<pass 8>><<stress 1>><</link>>
+<<walkicon>><<link [[抄下人名 (0:08)|MP Quest Orphanage Cellar Step5]]>><<if !$mpClues or !$mpClues["town_cellar_names"]>><<set $mpClues["town_cellar_names"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpTownCellarLead to "names">><<pass 8>><<stress 1>><<mpalert 8>><<mpalertgain "纸页窸窣">><</link>>
 
 :: MP Quest Orphanage Cellar Step5 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestCellar to Math.max(($mpQuestCellar or 0), 5)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
@@ -141,7 +146,7 @@
 铁皮箱的锁是老式的双排弹子。你蹲下去时，石室外面又传来一次脚步声，这次更近。
 <<if $mpClues["town_cellar_names"]>><span class="teal">你想起方才对上的院童编号，探针拨动双排弹子时心里格外有数。</span><</if>>
 <br><br>
-<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="act-mp-quest-orphanage-cellar-step5">
 <<sneakicon>><<if ($skulduggery or 0) gte 280>><<link "拨开弹子 (0:05)">><<pass 5>><<replace "#act-mp-quest-orphanage-cellar-step5">>
@@ -154,19 +159,19 @@
 		<<set $mpFragLedgerKey to ($mpFragLedgerKey or 0) + 1>>
 	<</if>>
 	<<if !$mpClues or !$mpClues["town_cellar_receipts"]>><<set $mpClues["town_cellar_receipts"] to 1>><span class="blue">线索已记录</span><</if>>
-	<<money _reward>><<stress -2>>
+	<<money _reward>><<stress -2>><<mpalert 8>><<mpalertgain "锁簧弹响">>
 	<br><br>
-	<<investigateicon>><<link [[收好收据 (0:04)|MP Quest Orphanage Cellar Step6]]>><<pass 4>><<stress -1>><</link>>
+	<<investigateicon>><<link [[收好收据 (0:04)|MP Quest Orphanage Cellar Step6]]>><<pass 4>><<stress -1>><<mpalert -8>><<mpalertloss "抹去指纹">><</link>>
 	<br>
-<<link [[再听暗门 (0:04)|MP Quest Orphanage Cellar Step6]]>><<pass 4>><<set $mpTownCellarHeard to 1>><</link>>
+<<link [[再听暗门 (0:04)|MP Quest Orphanage Cellar Step6]]>><<pass 4>><<set $mpTownCellarHeard to 1>><<mpalert -5>><<mpalertloss "屏息静听">><</link>>
 <<else>>
 	<<set $mpTownCellarCaught to 1>>
 	锁芯卡住了。你用力一拧，铁皮箱里发出一声脆响，像是某根细簧断了。门外的人停下脚步，手已经搭上门把。
-	<<stress 7>><<pain 2>>
+	<<stress 7>><<pain 2>><<mpalert 12>><<mpalertgain "细簧断裂">>
 	<br><br>
-<<link [[贴到门后 (0:04)|MP Quest Orphanage Cellar Step6]]>><<pass 4>><<stress 2>><</link>>
+<<link [[贴到门后 (0:04)|MP Quest Orphanage Cellar Step6]]>><<pass 4>><<stress 2>><<mpalert -5>><<mpalertloss "贴到门后">><</link>>
 	<br>
-<<link [[开口应付 (0:03)|MP Quest Orphanage Cellar Step6]]>><<pass 3>><<stress 1>><</link>>
+<<link [[开口应付 (0:03)|MP Quest Orphanage Cellar Step6]]>><<pass 3>><<stress 1>><<mpalert 6>><<mpalertgain "出声应答">><</link>>
 <</if>>
 <</replace>><</link>><<else>><span class="disabled">拨开弹子 (0:05)（属性不足）</span><</if>>
 </div>
@@ -174,6 +179,7 @@
 :: MP Quest Orphanage Cellar Step6 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestCellar to Math.max(($mpQuestCellar or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
@@ -184,11 +190,11 @@
 	门开了。贝利站在门口，手里提着一盏罩着黑布的灯。贝利没有立刻进来，只把灯举高，让光从你脸上慢慢移到身后的铁皮箱。
 	「这么晚，」贝利说，「你在找什么？」
 	<br><br>
-<<socialiseicon>><<if ($willpower or 0) gte 250>><<walkicon>><<link [[说找洗衣单 (0:05)|MP Quest Orphanage Cellar Resolve]]>><<pass 5>><<if ($willpower or 0) gte 350>><<set $mpTownCellarOutcome to "bluff">><<if !$mpClues or !$mpClues["town_cellar_bluff"]>><<set $mpClues["town_cellar_bluff"] to 1>><span class="blue">线索已记录</span><</if>><<stress 2>><<else>><<set $mpTownCellarOutcome to "caught">><<stress 7>><<trauma 2>><</if>><</link>><<else>><span class="disabled">说找洗衣单 (0:05)（意志不足）</span><</if>>
+<<socialiseicon>><<if ($willpower or 0) gte 250>><<link [[说找洗衣单 (0:05)|MP Quest Orphanage Cellar Resolve]]>><<pass 5>><<if ($willpower or 0) gte 350>><<set $mpTownCellarOutcome to "bluff">><<if !$mpClues or !$mpClues["town_cellar_bluff"]>><<set $mpClues["town_cellar_bluff"] to 1>><span class="blue">线索已记录</span><</if>><<stress 2>><<else>><<set $mpTownCellarOutcome to "caught">><<stress 7>><<trauma 2>><</if>><<if ($willpower or 0) gte 350>><<mpalert -10>><<mpalertloss "装成洗衣仆役">><<else>><<mpalert 12>><<mpalertgain "谎话被识破">><</if>><</link>><<else>><span class="disabled">说找洗衣单 (0:05)（意志不足）</span><</if>>
 	<br>
-	<<sneakicon>><<link [[钻出煤槽 (0:06)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "escape">><<pass 6>><<pain 3>><<stress 3>><</link>>
+	<<sneakicon>><<link [[钻出煤槽 (0:06)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "escape">><<pass 6>><<pain 3>><<stress 3>><<mpalert -5>><<mpalertloss "钻进煤槽阴影">><</link>>
 	<br>
-<<link [[交出账册 (0:03)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "surrender">><<set $mpClues["town_cellar_school"] to 0>><<pass 3>><<stress 4>><</link>>
+<<mpreadicon>><<link [[交出账册 (0:03)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "surrender">><<set $mpClues["town_cellar_school"] to 0>><<pass 3>><<stress 4>><<mpalert -8>><<mpalertloss "交出账册抹去痕迹">><</link>>
 <<else>>
 	你把账页、收据和黄铜小钥匙分开放进衣袋。暗门外传来贝利的声音，像是在跟谁交代「明天把旧储物室清空」。
 	<<if $mpTownCellarHeard is 1>>
@@ -196,17 +202,18 @@
 		<<if !$mpClues or !$mpClues["town_cellar_sera"]>><<set $mpClues["town_cellar_sera"] to 1>><span class="blue">线索已记录</span><</if>>
 	<</if>>
 	<br><br>
-<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[交给罗宾 (0:05)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "robin">><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<pass 5>><<stress -4>><</link>><<else>><span class="disabled">交给罗宾 (0:05)（尚未结识）</span><</if>>
+<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[交给罗宾 (0:05)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "robin">><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<pass 5>><<stress -4>><<mpalert -12>><<mpalertloss "罗宾引开注意">><</link>><<else>><span class="disabled">交给罗宾 (0:05)（尚未结识）</span><</if>>
 	<br>
 <<link [[留下账册 (0:04)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "keep">><<pass 4>><<stress -1>><</link>>
 	<br>
-<<link [[放回账册 (0:05)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "return">><<pass 5>><<stress -2>><</link>>
+<<link [[放回账册 (0:05)|MP Quest Orphanage Cellar Resolve]]>><<set $mpTownCellarOutcome to "return">><<pass 5>><<stress -2>><<mpalert -8>><<mpalertloss "放回账册抹去痕迹">><</link>>
 <</if>>
 <br>
-<<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[返回走廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Quest Orphanage Cellar Resolve [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestCellar to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCellar to 1>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -232,6 +239,7 @@
 
 :: MP Quest Orphanage Cellar Payout [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -267,7 +275,7 @@
 	<<stress -2>><<lstress>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<mpreadicon>><<link [[核对账页 (0:03)|MP Quest Orphanage Cellar]]>><<pass 3>><<stress -2>><</link>>
 
@@ -363,7 +371,7 @@
 	<br><br>
 <<link [[扶稳器座重调角度 (0:04)|MP Quest Bedroom Attic Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">打开皮箱 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">稳住心神 (0:05)（属性不足）</span><</if>>
 </div>
 
 :: MP Quest Bedroom Attic Step3 [nobr]
@@ -387,7 +395,7 @@
 <br><br>
 <<getouticon>><<link [[返回卧室 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link [[读日记 (0:08)|MP Quest Bedroom Attic Step4]]>><<pass 8>><<if (($english or 0) + ($mpClues["town_attic_lock"] ? 60 : 0)) gte 280 or ($history or 0) gte 280>><<if !$mpClues or !$mpClues["town_attic_mara"]>><<set $mpClues["town_attic_mara"] to 1>><span class="blue">线索已记录</span><</if>><<stress -2>><<else>><<set $mpTownAtticSketchMiss to 1>><<stress 1>><</if>><</link>><<else>><span class="disabled">读日记 (0:08)（属性不足）</span><</if>>
+<<mpreadicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link [[读日记 (0:08)|MP Quest Bedroom Attic Step4]]>><<pass 8>><<if (($english or 0) + ($mpClues["town_attic_lock"] ? 60 : 0)) gte 280 or ($history or 0) gte 280>><<if !$mpClues or !$mpClues["town_attic_mara"]>><<set $mpClues["town_attic_mara"] to 1>><span class="blue">线索已记录</span><</if>><<stress -2>><<else>><<set $mpTownAtticSketchMiss to 1>><<stress 1>><</if>><</link>><<else>><span class="disabled">读日记 (0:08)（属性不足）</span><</if>>
 <br>
 <<mptailoricon>><<link [[看银顶针 (0:04)|MP Quest Bedroom Attic Step4]]>><<if !$mpClues or !$mpClues["town_attic_thimble"]>><<set $mpClues["town_attic_thimble"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 
@@ -436,14 +444,14 @@
 <<getouticon>><<link [[返回卧室 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="act-mp-quest-bedroom-attic-step5">
-<<investigateicon>><<if ($skulduggery or 0) gte 250>><<link "藏好日记 (0:05)">><<pass 5>><<stress -1>><<replace "#act-mp-quest-bedroom-attic-step5">>
+<<mpsneakicon>><<if ($skulduggery or 0) gte 250>><<link "藏好日记 (0:05)">><<pass 5>><<stress -1>><<replace "#act-mp-quest-bedroom-attic-step5">>
 <<set $skulduggerydifficulty to 260>><<skulduggerycheck "silent">>
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpClues or !$mpClues["town_attic_hidden"]>><<set $mpClues["town_attic_hidden"] to 1>><span class="blue">线索已记录</span><</if>>
 	你把日记塞进梁上的旧衣堆，自己缩到烟囱后面的阴影里。门被推开，有人在屋里站了一会儿，又关上门走了。
 	<<stress 3>>
 	<br><br>
-<<link [[躲进阴影 (0:05)|MP Quest Bedroom Attic Step6]]>><<pass 5>><<stress -1>><</link>>
+<<investigateicon>><<link [[躲进阴影 (0:05)|MP Quest Bedroom Attic Step6]]>><<pass 5>><<stress -1>><</link>>
 	<br>
 <<sneakicon>><<link [[钻下活板门 (0:04)|MP Quest Bedroom Attic Step6]]>><<pass 4>><<stress 1>><</link>>
 <<else>>
@@ -453,7 +461,7 @@
 	<br><br>
 <<link [[握稳工具重调位置 (0:04)|MP Quest Bedroom Attic Step5]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">躲进阴影 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">藏好日记 (0:05)（属性不足）</span><</if>>
 </div>
 :: MP Quest Bedroom Attic Step6 [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
@@ -548,6 +556,7 @@
 :: MP Quest HighStreet Clockshop [nobr]
 <<set $outside to 0>><<set $location to "town">>
 <<effects>><<mpAmbient>>
+<<mpalertinit "school">><<mpalerttext>><<mpalertcheck>>
 <<set _stg to ($mpQuestClocktower or 0)>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -559,9 +568,9 @@
 满墙挂钟各走各的，滴答声挤在一起。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>站在柜台后面，正用一块麂皮擦镜片。
 	「别碰那只，」她头也不抬，「它走得比谁都准，只是不肯走。」
 	<br><br>
-	<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[问怀表来历 (0:05)|MP Quest HighStreet Clockshop Step2]]>><<set $mpQuestClocktower to 1>><<set $mpTownClockSera to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sera")>><<mpnpcincr Sera trust 1>><</if>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestClocktower to 1>><<pass 5>><<stress -2>><</link>><<else>><span class="disabled">问怀表来历 (0:05)（尚未结识）</span><</if>>
+	<<mpclockworkicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[问怀表来历 (0:05)|MP Quest HighStreet Clockshop Step2]]>><<set $mpQuestClocktower to 1>><<set $mpTownClockSera to 1>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestClocktower to 1>><<pass 5>><<stress -2>><</link>><<else>><span class="disabled">问怀表来历 (0:05)（尚未结识）</span><</if>>
 	<br>
-	<<investigateicon>><<link [[看零件匣 (0:05)|MP Quest HighStreet Clockshop Step2]]>><<set $mpQuestClocktower to 1>><<set $mpTownClockParts to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestClocktower to 1>><<pass 5>><</link>>
+	<<investigateicon>><<link [[看零件匣 (0:05)|MP Quest HighStreet Clockshop Step2]]>><<set $mpQuestClocktower to 1>><<set $mpTownClockParts to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestClocktower to 1>><<pass 5>><<mpalert 8>><<mpalertgain "翻动零件匣">><</link>>
 	<br>
 	<<shopicon>><<link [[买旧齿轮 (0:04)|MP Quest HighStreet Clockshop Step2]]>><<set $mpQuestClocktower to 1>><<set $mpTownClockBought to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestClocktower to 1>><<pass 4>><<money -300>><</link>>
 <<elseif _stg is 1>>
@@ -593,11 +602,12 @@
 	<br><br>
 		<<link [[回看怀表 (0:03)|MP Quest HighStreet Clockshop Resolve]]>><<pass 3>><<stress -2>><</link>>
 <</if>>
-<<link [[返回高街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[返回高街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Quest HighStreet Clockshop Step2 [nobr]
 <<set $outside to 0>><<set $location to "town">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpClues to ($mpClues or {})>>
 <<set $mpQuestClocktower to Math.max(($mpQuestClocktower or 0), 2)>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
@@ -616,33 +626,34 @@
 	<<if !$mpClues or !$mpClues["town_clock_spare"]>><<set $mpClues["town_clock_spare"] to 1>><span class="blue">线索已记录</span><</if>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回高街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回高街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="act-mp-quest-highstreet-clockshop-step2">
-<<investigateicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link "读铭文 (0:07)">><<pass 7>><<if !$mpClues or !$mpClues["town_clock_latin"]>><<set $mpClues["town_clock_latin"] to 1>><span class="blue">线索已记录</span><</if>><<stress -2>><<replace "#act-mp-quest-highstreet-clockshop-step2">>
+<<mptranslateicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link "读铭文 (0:07)">><<pass 7>><<if !$mpClues or !$mpClues["town_clock_latin"]>><<set $mpClues["town_clock_latin"] to 1>><span class="blue">线索已记录</span><</if>><<stress -2>><<replace "#act-mp-quest-highstreet-clockshop-step2">>
 <<set $skulduggerydifficulty to 260>><<skulduggerycheck "silent">>
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpClues or !$mpClues["town_clock_open"]>><<set $mpClues["town_clock_open"] to 1>><span class="blue">线索已记录</span><</if>>
 	你用薄刃沿撬痕轻轻一挑，底盖弹开。表芯里多出一层夹底，夹底上刻着一行拉丁文。
-	<<stress -1>>
+	<<stress -1>><<mpalert 8>><<mpalertgain "撬动表盖">>
 	<br><br>
-<<link [[记下铭文 (0:07)|MP Quest HighStreet Clockshop Step3]]>><<if !$mpClues or !$mpClues["town_clock_latin"]>><<set $mpClues["town_clock_latin"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress -2>><</link>>
+<<link [[记下铭文 (0:07)|MP Quest HighStreet Clockshop Step3]]>><<if !$mpClues or !$mpClues["town_clock_latin"]>><<set $mpClues["town_clock_latin"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress -2>><<mpalert 8>><<mpalertgain "纸笔窸窣">><</link>>
 	<br>
-	<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[请塞拉看 (0:06)|MP Quest HighStreet Clockshop Step3]]>><<if !$mpClues or !$mpClues["town_clock_sera_read"]>><<set $mpClues["town_clock_sera_read"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress -1>><</link>><<else>><span class="disabled">请塞拉看 (0:06)（尚未结识）</span><</if>>
+	<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[请塞拉看 (0:06)|MP Quest HighStreet Clockshop Step3]]>><<if !$mpClues or !$mpClues["town_clock_sera_read"]>><<set $mpClues["town_clock_sera_read"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress -1>><<mpalert -12>><<mpalertloss "塞拉引开注意">><</link>><<else>><span class="disabled">请塞拉看 (0:06)（尚未结识）</span><</if>>
 	<br>
-<<link [[量齿轮间距 (0:06)|MP Quest HighStreet Clockshop Step3]]>><<if !$mpClues or !$mpClues["town_clock_measure"]>><<set $mpClues["town_clock_measure"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><</link>>
+<<link [[量齿轮间距 (0:06)|MP Quest HighStreet Clockshop Step3]]>><<if !$mpClues or !$mpClues["town_clock_measure"]>><<set $mpClues["town_clock_measure"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<mpalert 8>><<mpalertgain "齿轮碰撞">><</link>>
 <<else>>
 	<<set $mpTownClockScratch to 1>>
 	薄刃滑了一下，在你虎口划出一道细口。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>抬头看了一眼，没说话，只把放大镜往你这边推了推。
-	<<pain 2>><<stress 2>>
+	<<pain 2>><<stress 2>><<mpalert 12>><<mpalertgain "薄刃滑脱">>
 	<br><br>
 <<link [[借着侧光重对刻痕 (0:04)|MP Quest HighStreet Clockshop Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">记下铭文 (0:07)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">读铭文 (0:07)（属性不足）</span><</if>>
 </div>
 :: MP Quest HighStreet Clockshop Step3 [nobr]
 <<set $outside to 0>><<set $location to "town">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestClocktower to Math.max(($mpQuestClocktower or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
@@ -661,13 +672,14 @@
 <<if !$mpClues or !$mpClues["town_clock_tower"]>><<set $mpClues["town_clock_tower"] to 1>><span class="blue">线索已记录</span><</if>>
 <<getouticon>><<link [[返回高街 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<sneakicon>><<if Time.dayState is "night" or Time.dayState is "dusk">><<link [[趁夜去钟塔 (0:08)|MP Quest HighStreet Clockshop Step4]]>><<pass 8>><<stress 1>><</link>><<else>><span class="disabled">趁夜去钟塔 (0:08)（白天塔里有人当值）</span><</if>>
+<<sneakicon>><<if Time.dayState is "night" or Time.dayState is "dusk">><<link [[趁夜去钟塔 (0:08)|MP Quest HighStreet Clockshop Step4]]>><<pass 8>><<stress 1>><<mpalert 6>><<mpalertgain "贴着钟塔墙根">><</link>><<else>><span class="disabled">趁夜去钟塔 (0:08)（白天塔里有人当值）</span><</if>>
 <br>
-<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[请塞拉同去 (0:09)|MP Quest HighStreet Clockshop Step4]]>><<set $mpTownClockSeraHelp to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sera")>><<mpnpcincr Sera love 1>><</if>><<pass 9>><<stress -2>><</link>><<else>><span class="disabled">请塞拉同去 (0:09)（尚未结识）</span><</if>>
+<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[请塞拉同去 (0:09)|MP Quest HighStreet Clockshop Step4]]>><<set $mpTownClockSeraHelp to 1>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera love 1>><</if>><<pass 9>><<stress -2>><<mpalert -12>><<mpalertloss "塞拉望风引开注意">><</link>><<else>><span class="disabled">请塞拉同去 (0:09)（尚未结识）</span><</if>>
 
 :: MP Quest HighStreet Clockshop Step4 [nobr]
 <<set $outside to 1>><<set $location to "town">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestClocktower to Math.max(($mpQuestClocktower or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
@@ -682,7 +694,7 @@
 <</if>>
 <<if $mpClues["town_clock_tower"]>><span class="teal">顺着<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>指点的钟塔侧巷望去，铁栅锁孔里那点旧表油清晰可辨。</span><</if>>
 <br><br>
-<<getouticon>><<link [[返回高街 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回高街 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="act-mp-quest-highstreet-clockshop-step4">
 <<investigateicon>><<if ($skulduggery or 0) gte 280>><<link "推门进去 (0:05)">><<pass 5>><<replace "#act-mp-quest-highstreet-clockshop-step4">>
@@ -690,24 +702,25 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpClues or !$mpClues["town_clock_gate"]>><<set $mpClues["town_clock_gate"] to 1>><span class="blue">线索已记录</span><</if>>
 	锁舌弹开，铁栅只响了一声。你侧身钻进去，把铁栅虚掩回原位。
-	<<stress 1>>
+	<<stress 1>><<mpalert 8>><<mpalertgain "锁舌弹响">>
 石阶向下，转了两个弯，停在一扇包铁木门前。门缝里透出暖黄的光。
 	<br><br>
-<<link [[走进塔内 (0:05)|MP Quest HighStreet Clockshop Step5]]>><<pass 5>><</link>>
+<<walkicon>><<link [[走进塔内 (0:05)|MP Quest HighStreet Clockshop Step5]]>><<pass 5>><<mpalert 6>><<mpalertgain "钻进铁栅">><</link>>
 	<br>
-<<mpeavesdropicon>><<link [[听里面动静 (0:04)|MP Quest HighStreet Clockshop Step5]]>><<set $mpTownClockListen to 1>><<pass 4>><</link>>
+<<mpeavesdropicon>><<link [[听里面动静 (0:04)|MP Quest HighStreet Clockshop Step5]]>><<set $mpTownClockListen to 1>><<pass 4>><<mpalert -5>><<mpalertloss "屏息听门内">><</link>>
 <<else>>
 	<<set $mpTownClockAlarm to 1>>
 	锁芯卡了一下，铁栅撞在石阶上，声音在塔基里来回撞。巡夜的脚步立刻停了。
-	<<stress 5>>
+	<<stress 5>><<mpalert 12>><<mpalertgain "铁栅撞响">>
 	<br><br>
 <<link [[握稳工具重调位置 (0:04)|MP Quest HighStreet Clockshop Step4]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">走进塔内 (0:05)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">推门进去 (0:05)（属性不足）</span><</if>>
 </div>
 :: MP Quest HighStreet Clockshop Step5 [nobr]
 <<set $outside to 0>><<set $location to "town">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestClocktower to Math.max(($mpQuestClocktower or 0), 5)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
@@ -722,15 +735,16 @@
 	上面的铁栅又响了一下。有人在塔外停住了。
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回高街 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回高街 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<investigateicon>><<if ($maths or 0) gte 280 or ($science or 0) gte 280>><<link [[校准铜键 (0:08)|MP Quest HighStreet Clockshop Step6]]>><<pass 8>><<if ($maths or 0) gte 300 or ($science or 0) gte 300>><<if !$mpClues or !$mpClues["town_clock_calibrate"]>><<set $mpClues["town_clock_calibrate"] to 1>><span class="blue">线索已记录</span><</if>><<stress -2>><<else>><<set $mpTownClockSlow to 1>><<stress 2>><</if>><</link>><<else>><span class="disabled">校准铜键 (0:08)（属性不足）</span><</if>>
+<<mprepairicon>><<if ($maths or 0) gte 280 or ($science or 0) gte 280>><<link [[校准铜键 (0:08)|MP Quest HighStreet Clockshop Step6]]>><<pass 8>><<mpalert 8>><<mpalertgain "铜管低鸣">><<if ($maths or 0) gte 300 or ($science or 0) gte 300>><<if !$mpClues or !$mpClues["town_clock_calibrate"]>><<set $mpClues["town_clock_calibrate"] to 1>><span class="blue">线索已记录</span><</if>><<stress -2>><<else>><<set $mpTownClockSlow to 1>><<stress 2>><</if>><</link>><<else>><span class="disabled">校准铜键 (0:08)（属性不足）</span><</if>>
 <br>
-<<mplockpickicon>><<link [[撬开石砖 (0:06)|MP Quest HighStreet Clockshop Step6]]>><<if !$mpClues or !$mpClues["town_clock_brick"]>><<set $mpClues["town_clock_brick"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress 1>><</link>>
+<<mplockpickicon>><<link [[撬开石砖 (0:06)|MP Quest HighStreet Clockshop Step6]]>><<if !$mpClues or !$mpClues["town_clock_brick"]>><<set $mpClues["town_clock_brick"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress 1>><<mpalert 8>><<mpalertgain "石砖摩擦">><</link>>
 
 :: MP Quest HighStreet Clockshop Step6 [nobr]
 <<set $outside to 0>><<set $location to "town">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestClocktower to Math.max(($mpQuestClocktower or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
@@ -745,21 +759,22 @@
 <</if>>
 <<if $mpClues["town_clock_brick"]>><span class="teal">循着中空石砖后传来的擒纵轻响，你稳稳捧出了那只黄铜发条匣。</span><</if>>
 <br><br>
-<<socialiseicon>><<link [[带匣退走 (0:05)|MP Quest HighStreet Clockshop Resolve]]>><<set $mpTownClockOutcome to "leave">><<pass 5>><<stress 1>><</link>>
+<<socialiseicon>><<link [[带匣退走 (0:05)|MP Quest HighStreet Clockshop Resolve]]>><<set $mpTownClockOutcome to "leave">><<pass 5>><<stress 1>><<mpalert 6>><<mpalertgain "抱匣下楼">><</link>>
 <br>
-<<investigateicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link [[抄下铭文 (0:07)|MP Quest HighStreet Clockshop Resolve]]>><<set $mpTownClockOutcome to "copy">><<if !$mpClues or !$mpClues["town_clock_copy"]>><<set $mpClues["town_clock_copy"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress -2>><</link>><<else>><span class="disabled">抄下铭文 (0:07)（属性不足）</span><</if>>
+<<mptranslateicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link [[抄下铭文 (0:07)|MP Quest HighStreet Clockshop Resolve]]>><<set $mpTownClockOutcome to "copy">><<if !$mpClues or !$mpClues["town_clock_copy"]>><<set $mpClues["town_clock_copy"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress -2>><<mpalert 8>><<mpalertgain "纸笔窸窣">><</link>><<else>><span class="disabled">抄下铭文 (0:07)（属性不足）</span><</if>>
 <br>
-<<walkicon>><<link [[放回匣子 (0:05)|MP Quest HighStreet Clockshop Resolve]]>><<set $mpTownClockOutcome to "return">><<pass 5>><<stress -3>><</link>>
+<<walkicon>><<link [[放回匣子 (0:05)|MP Quest HighStreet Clockshop Resolve]]>><<set $mpTownClockOutcome to "return">><<pass 5>><<stress -3>><<mpalert -8>><<mpalertloss "抹去指纹">><</link>>
 <br>
 <<if $mpTownClockSeraHelp is 1>>
-	<<sneakicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[交给塞拉 (0:04)|MP Quest HighStreet Clockshop Resolve]]>><<set $mpTownClockOutcome to "sera">><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sera")>><<mpnpcincr Sera trust 1>><</if>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">交给塞拉 (0:04)（尚未结识）</span><</if>>
+	<<sneakicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[交给塞拉 (0:04)|MP Quest HighStreet Clockshop Resolve]]>><<set $mpTownClockOutcome to "sera">><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>><<pass 4>><<stress -2>><<mpalert -12>><<mpalertloss "塞拉引开注意">><</link>><<else>><span class="disabled">交给塞拉 (0:04)（尚未结识）</span><</if>>
 	<br>
 <</if>>
-<<link [[返回高街 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[返回高街 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Quest HighStreet Clockshop Resolve [nobr]
 <<set $outside to 0>><<set $location to "town">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestClocktower to 7>><<set $mpClues to ($mpClues or {})>>
 <<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestClocktower to 1>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
@@ -809,13 +824,14 @@
 
 <<if $mpClues["town_clock_copy"]>><span class="teal">口袋里那纸拓印完好的拉丁铭文与齿比草图，足够<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>复原整组机芯。</span><</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<investigateicon>><<link [[回看钟塔 (0:03)|MP Quest HighStreet Clockshop]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP Quest Docks Smuggler [nobr]
 <<set $outside to 1>><<set $location to "docks">>
 <<effects>><<mpAmbient>>
+<<mpalertinit "docks">><<mpalerttext>><<mpalertcheck>>
 <<set _stg to ($mpQuestSmuggler or 0)>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -826,15 +842,15 @@
 <<if Time.dayState is "dusk" or Time.dayState is "night">>傍晚的港口飘着柴油和咸鱼混在一起的味道。<<else>>海风吹拂的港口飘着柴油和咸鱼混在一起的味道。<</if>>
 一个穿短打的男人正蹲在箱边，用粉笔在箱角画记号。
 	<br><br>
-		<<sneakicon>><<if Time.dayState is "night" or Time.dayState is "dusk">><<walkicon>><<link [[跟上去看 (0:06)|MP Quest Docks Smuggler Step2]]>><<set $mpQuestSmuggler to 1>><<set $mpTownDocksFollow to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSmuggler to 1>><<pass 6>><<stress 1>><</link>><<else>><span class="disabled">跟上去看 (0:06)（白天码头人多容易暴露）</span><</if>>
+		<<sneakicon>><<if Time.dayState is "night" or Time.dayState is "dusk">><<link [[跟上去看 (0:06)|MP Quest Docks Smuggler Step2]]>><<set $mpQuestSmuggler to 1>><<set $mpTownDocksFollow to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSmuggler to 1>><<pass 6>><<stress 1>><<mpalert 6>><<mpalertgain "贴着集装箱跟踪">><</link>><<else>><span class="disabled">跟上去看 (0:06)（白天码头人多容易暴露）</span><</if>>
 	<br>
 	<<socialiseicon>><<link [[找码头工 (0:05)|MP Quest Docks Smuggler Step2]]>><<set $mpQuestSmuggler to 1>><<set $mpTownDocksAsk to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSmuggler to 1>><<pass 5>><<money -100>><<stress -1>><</link>>
 	<br>
-	<<mpclimbicon>><<link [[爬上箱顶 (0:05)|MP Quest Docks Smuggler Step2]]>><<set $mpQuestSmuggler to 1>><<set $mpTownDocksClimb to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSmuggler to 1>><<pass 5>><<stress 2>><</link>>
+	<<mpclimbicon>><<link [[爬上箱顶 (0:05)|MP Quest Docks Smuggler Step2]]>><<set $mpQuestSmuggler to 1>><<set $mpTownDocksClimb to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSmuggler to 1>><<pass 5>><<stress 2>><<mpalert 6>><<mpalertgain "爬上箱顶">><</link>>
 <<elseif _stg is 1>>
 	集装箱后面的粉笔记号还没有被擦掉。海风把防雨布吹得啪啪响。
 	<br><br>
-		<<link [[回到箱后 (0:01)|MP Quest Docks Smuggler Step2]]>><<pass 1>><</link>>
+		<<investigateicon>><<link [[回到箱后 (0:01)|MP Quest Docks Smuggler Step2]]>><<pass 1>><</link>>
 <<elseif _stg is 2>>
 	你已经记住了记号的样子。值班室的灯在栈桥尽头亮着。
 	<br><br>
@@ -860,11 +876,12 @@
 	<br><br>
 		<<link [[回看泊位 (0:03)|MP Quest Docks Smuggler Resolve]]>><<pass 3>><<stress -2>><</link>>
 <</if>>
-<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Quest Docks Smuggler Step2 [nobr]
 <<set $outside to 1>><<set $location to "docks">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestSmuggler to Math.max(($mpQuestSmuggler or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
@@ -886,7 +903,7 @@
 	<<stress 1>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="act-mp-quest-docks-smuggler-step2">
 <<investigateicon>><<if ($skulduggery or 0) gte 280>><<link "去查货单 (0:06)">><<pass 6>><<replace "#act-mp-quest-docks-smuggler-step2">>
@@ -894,23 +911,24 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpClues or !$mpClues["town_docks_seal"]>><<set $mpClues["town_docks_seal"] to 1>><span class="blue">线索已记录</span><</if>>
 你用刀尖挑开箱角的一块铅封，里面塞着防潮的油纸。
-	<<stress -1>>
+	<<stress -1>><<mpalert 8>><<mpalertgain "铅封撬响">>
 	<br><br>
-<<link [[溜进值班室 (0:06)|MP Quest Docks Smuggler Step3]]>><<pass 6>><</link>>
+<<walkicon>><<link [[溜进值班室 (0:06)|MP Quest Docks Smuggler Step3]]>><<pass 6>><<mpalert 6>><<mpalertgain "贴着墙根">><</link>>
 	<br>
-<<mpsneakicon>><<link [[躲开喊话人 (0:04)|MP Quest Docks Smuggler Step3]]>><<pass 4>><<stress -2>><</link>>
+<<mpsneakicon>><<link [[躲开喊话人 (0:04)|MP Quest Docks Smuggler Step3]]>><<pass 4>><<stress -2>><<mpalert -5>><<mpalertloss "缩进缆绳阴影">><</link>>
 <<else>>
 	<<set $mpTownDocksNoise to 1>>
 	铅封比你想的硬。刀尖一滑，在箱面上划出一道白痕。栈桥那头有人喊了一声。
-	<<stress 4>><<pain 1>>
+	<<stress 4>><<pain 1>><<mpalert 12>><<mpalertgain "刀尖划响箱面">>
 	<br><br>
 <<link [[理顺纹理重压边缘 (0:04)|MP Quest Docks Smuggler Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">溜进值班室 (0:06)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">去查货单 (0:06)（属性不足）</span><</if>>
 </div>
 :: MP Quest Docks Smuggler Step3 [nobr]
 <<set $outside to 0>><<set $location to "docks">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestSmuggler to Math.max(($mpQuestSmuggler or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
@@ -923,15 +941,16 @@
 	「代收」旁边的记号，和你在集装箱上看到的一模一样。
 <</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<investigateicon>><<if ($maths or 0) gte 260 or ($english or 0) gte 260>><<link [[核对重量 (0:06)|MP Quest Docks Smuggler Step4]]>><<pass 6>><<if (($maths or 0) + ($mpClues["town_docks_mark"] ? 60 : 0)) gte 260 or ($english or 0) gte 260>><<if !$mpClues or !$mpClues["town_docks_weight"]>><<set $mpClues["town_docks_weight"] to 1>><span class="blue">线索已记录</span><</if>><<stress -1>><<else>><<set $mpTownDocksNumbersMiss to 1>><<stress 1>><</if>><</link>><<else>><span class="disabled">核对重量 (0:06)（属性不足）</span><</if>>
+<<mpcalculateicon>><<if ($maths or 0) gte 260 or ($english or 0) gte 260>><<link [[核对重量 (0:06)|MP Quest Docks Smuggler Step4]]>><<pass 6>><<mpalert 8>><<mpalertgain "翻动货单">><<if (($maths or 0) + ($mpClues["town_docks_mark"] ? 60 : 0)) gte 260 or ($english or 0) gte 260>><<if !$mpClues or !$mpClues["town_docks_weight"]>><<set $mpClues["town_docks_weight"] to 1>><span class="blue">线索已记录</span><</if>><<stress -1>><<else>><<set $mpTownDocksNumbersMiss to 1>><<stress 1>><</if>><</link>><<else>><span class="disabled">核对重量 (0:06)（属性不足）</span><</if>>
 <br>
-<<socialiseicon>><<link [[翻铁皮柜 (0:06)|MP Quest Docks Smuggler Step4]]>><<if !$mpClues or !$mpClues["town_docks_ledger"]>><<set $mpClues["town_docks_ledger"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress 2>><</link>>
+<<socialiseicon>><<link [[翻铁皮柜 (0:06)|MP Quest Docks Smuggler Step4]]>><<if !$mpClues or !$mpClues["town_docks_ledger"]>><<set $mpClues["town_docks_ledger"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress 2>><<mpalert 8>><<mpalertgain "柜门吱呀">><</link>>
 
 :: MP Quest Docks Smuggler Step4 [nobr]
 <<set $outside to 1>><<set $location to "docks">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestSmuggler to Math.max(($mpQuestSmuggler or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
@@ -946,17 +965,18 @@
 <</if>>
 <<if $mpClues["town_docks_ledger"]>><span class="teal">你对照铁皮柜底单上的三组吃水编号，在三号泊位准确认出了那艘夜航船。</span><</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<mpclimbicon>><<link [[爬上船尾 (0:08)|MP Quest Docks Smuggler Step5]]>><<if !$mpClues or !$mpClues["town_docks_board"]>><<set $mpClues["town_docks_board"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><<stress 3>><</link>>
+<<mpclimbicon>><<link [[爬上船尾 (0:08)|MP Quest Docks Smuggler Step5]]>><<if !$mpClues or !$mpClues["town_docks_board"]>><<set $mpClues["town_docks_board"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><<stress 3>><<mpalert 6>><<mpalertgain "攀上船尾">><</link>>
 <br>
-<<sneakicon>><<link [[借吊影靠近 (0:07)|MP Quest Docks Smuggler Step5]]>><<if !$mpClues or !$mpClues["town_docks_shadow"]>><<set $mpClues["town_docks_shadow"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress 1>><</link>>
+<<sneakicon>><<link [[借吊影靠近 (0:07)|MP Quest Docks Smuggler Step5]]>><<if !$mpClues or !$mpClues["town_docks_shadow"]>><<set $mpClues["town_docks_shadow"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress 1>><<mpalert 6>><<mpalertgain "借吊影潜行">><</link>>
 <br>
-<<socialiseicon>><<link [[通知巡港 (0:09)|MP Quest Docks Smuggler Step5]]>><<set $mpTownDocksPatrol to 1>><<pass 9>><<stress -2>><</link>>
+<<socialiseicon>><<link [[通知巡港 (0:09)|MP Quest Docks Smuggler Step5]]>><<set $mpTownDocksPatrol to 1>><<pass 9>><<stress -2>><<mpalert -12>><<mpalertloss "巡港引开注意">><</link>>
 
 :: MP Quest Docks Smuggler Step5 [nobr]
 <<set $outside to 0>><<set $location to "docks">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestSmuggler to Math.max(($mpQuestSmuggler or 0), 5)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
@@ -973,17 +993,18 @@
 <br><br>
 箱子后面绑着一个人。嘴被布条勒住，手腕上留着绳印。那人看见你时，眼睛先是一亮，接着拼命摇头，示意你别出声。
 <br><br>
-<<getouticon>><<link [[返回甲板 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回甲板 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<socialiseicon>><<link [[割开麻绳 (0:06)|MP Quest Docks Smuggler Step6]]>><<set $mpTownDocksFree to 1>><<if !$mpClues or !$mpClues["town_docks_captive"]>><<set $mpClues["town_docks_captive"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress -2>><</link>>
+<<socialiseicon>><<link [[割开麻绳 (0:06)|MP Quest Docks Smuggler Step6]]>><<set $mpTownDocksFree to 1>><<if !$mpClues or !$mpClues["town_docks_captive"]>><<set $mpClues["town_docks_captive"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress -2>><<mpalert -5>><<mpalertloss "屏息割绳">><</link>>
 <br>
-<<investigateicon>><<link [[翻箱找货单 (0:06)|MP Quest Docks Smuggler Step6]]>><<if !$mpClues or !$mpClues["town_docks_manifest"]>><<set $mpClues["town_docks_manifest"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress 1>><</link>>
+<<investigateicon>><<link [[翻箱找货单 (0:06)|MP Quest Docks Smuggler Step6]]>><<if !$mpClues or !$mpClues["town_docks_manifest"]>><<set $mpClues["town_docks_manifest"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress 1>><<mpalert 8>><<mpalertgain "翻箱窸窣">><</link>>
 <br>
-<<sneakicon>><<link [[挪开箱子 (0:05)|MP Quest Docks Smuggler Step6]]>><<set $mpTownDocksBox to 1>><<pass 5>><<stress 2>><</link>>
+<<sneakicon>><<link [[挪开箱子 (0:05)|MP Quest Docks Smuggler Step6]]>><<set $mpTownDocksBox to 1>><<pass 5>><<stress 2>><<mpalert 12>><<mpalertgain "木箱拖响">><</link>>
 
 :: MP Quest Docks Smuggler Step6 [nobr]
 <<set $outside to 0>><<set $location to "docks">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestSmuggler to Math.max(($mpQuestSmuggler or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
@@ -1001,38 +1022,39 @@
 <br><br>
 甲板上传来脚步声。有人正在往下走。
 <br><br>
-<<getouticon>><<link [[返回甲板 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回甲板 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="act-mp-quest-docks-smuggler-step6">
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link "灭灯躲箱后 (0:04)">><<pass 4>><<replace "#act-mp-quest-docks-smuggler-step6">>
+<<mpsneakicon>><<if ($skulduggery or 0) gte 280>><<link "灭灯躲箱后 (0:04)">><<pass 4>><<replace "#act-mp-quest-docks-smuggler-step6">>
 <<set $skulduggerydifficulty to 320>><<skulduggerycheck "silent">>
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpClues or !$mpClues["town_docks_escape"]>><<set $mpClues["town_docks_escape"] to 1>><span class="blue">线索已记录</span><</if>>
 	你灭掉风灯，把舱门虚掩，拉着那人躲进空箱后面。下来的人踢了两脚箱子，骂了一句，又上去了。
-	<<stress 2>>
+	<<stress 2>><<mpalert -8>><<mpalertloss "熄灭风灯">><<mpalert -5>><<mpalertloss "躲进空箱后">>
 	<br><br>
-<<link [[带人下船 (0:05)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "free">><<pass 5>><<stress -2>><</link>>
+<<link [[带人下船 (0:05)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "free">><<pass 5>><<stress -2>><<mpalert -5>><<mpalertloss "沿阴影下船">><</link>>
 	<br>
-	<<investigateicon>><<link [[带货单离开 (0:04)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "evidence">><<pass 4>><<stress -1>><</link>>
+	<<investigateicon>><<link [[带货单离开 (0:04)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "evidence">><<pass 4>><<stress -1>><<mpalert 6>><<mpalertgain "贴着货堆离开">><</link>>
 	<br>
-<<link [[封好夹层 (0:06)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "seal">><<pass 6>><<stress -3>><</link>>
+<<link [[封好夹层 (0:06)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "seal">><<pass 6>><<stress -3>><<mpalert -8>><<mpalertloss "抹平粉笔灰">><</link>>
 <<else>>
 	<<set $mpTownDocksCaught to 1>>
 	风灯被你不小心碰倒。灯油泼在木板上，火苗窜起来，甲板上的人立刻朝舱口跑来。
-	<<stress 7>><<pain 2>>
+	<<stress 7>><<pain 2>><<mpalert 12>><<mpalertgain "风灯翻倒">>
 	<br><br>
-<<link [[反锁舱门 (0:04)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "lock">><<pass 4>><<stress 2>><</link>>
+<<link [[反锁舱门 (0:04)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "lock">><<pass 4>><<stress 2>><<mpalert 6>><<mpalertgain "反锁舱门">><</link>>
 	<br>
-<<link [[跳海逃生 (0:06)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "sea">><<pass 6>><<pain 3>><<stress 4>><</link>>
+<<link [[跳海逃生 (0:06)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "sea">><<pass 6>><<pain 3>><<stress 4>><<mpalert 12>><<mpalertgain "撞翻木桶">><</link>>
 	<br>
-<<link [[举货单谈判 (0:05)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "deal">><<pass 5>><<stress 1>><</link>>
+<<link [[举货单谈判 (0:05)|MP Quest Docks Smuggler Resolve]]>><<set $mpTownDocksOutcome to "deal">><<pass 5>><<stress 1>><<mpalert -10>><<mpalertloss "装成收货人">><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">反锁舱门 (0:04)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">灭灯躲箱后 (0:04)（属性不足）</span><</if>>
 </div>
 
 :: MP Quest Docks Smuggler Resolve [nobr]
 <<set $outside to 1>><<set $location to "docks">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestSmuggler to 7>><<set $mpClues to ($mpClues or {})>>
 <<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestSmuggler to 1>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
@@ -1084,13 +1106,14 @@
 <</if>>
 
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<investigateicon>><<link [[回看泊位 (0:03)|MP Quest Docks Smuggler]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP Quest School Archives [nobr]
 <<set $outside to 0>><<set $location to "school">>
 <<effects>><<mpAmbient>>
+<<mpalertinit "school">><<mpalerttext>><<mpalertcheck>>
 <<set _stg to ($mpQuestLibrary or 0)>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -1103,13 +1126,13 @@
 	<br><br>
 	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[问悉尼卷宗 (0:05)|MP Quest School Archives Step2]]>><<set $mpQuestLibrary to 1>><<set $mpTownSchoolSydney to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestLibrary to 1>><<pass 5>><<stress -2>><</link>><<else>><span class="disabled">问悉尼卷宗 (0:05)（尚未结识）</span><</if>>
 	<br>
-	<<sneakicon>><<link [[抽出卷宗 (0:06)|MP Quest School Archives Step2]]>><<set $mpQuestLibrary to 1>><<set $mpTownSchoolSneak to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestLibrary to 1>><<pass 6>><<stress 1>><</link>>
+	<<sneakicon>><<link [[抽出卷宗 (0:06)|MP Quest School Archives Step2]]>><<set $mpQuestLibrary to 1>><<set $mpTownSchoolSneak to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestLibrary to 1>><<pass 6>><<stress 1>><<mpalert 6>><<mpalertgain "书架后抽出卷宗">><</link>>
 	<br>
-		<<investigateicon>><<if Time.dayState is "day" or Time.dayState is "dusk">><<walkicon>><<link [[等到闭馆 (0:08)|MP Quest School Archives Step2]]>><<set $mpQuestLibrary to 1>><<set $mpTownSchoolLate to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestLibrary to 1>><<pass 8>><<stress -1>><</link>><<else>><span class="disabled">等到闭馆 (0:08)（图书馆已关门）</span><</if>>
+		<<investigateicon>><<if Time.dayState is "day" or Time.dayState is "dusk">><<link [[等到闭馆 (0:08)|MP Quest School Archives Step2]]>><<set $mpQuestLibrary to 1>><<set $mpTownSchoolLate to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestLibrary to 1>><<pass 8>><<stress -1>><<mpalert -5>><<mpalertloss "熄灯后蹲进阴影">><</link>><<else>><span class="disabled">等到闭馆 (0:08)（图书馆已关门）</span><</if>>
 <<elseif _stg is 1>>
 无编号卷宗还在档案架底层。<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>已经推着书车去了另一排。
 	<br><br>
-		<<link [[回到架前 (0:01)|MP Quest School Archives Step2]]>><<pass 1>><</link>>
+		<<walkicon>><<link [[回到架前 (0:01)|MP Quest School Archives Step2]]>><<pass 1>><</link>>
 <<elseif _stg is 2>>
 卷宗摊在阅览桌上。纸页间夹着几张没有署名的照片。
 	<br><br>
@@ -1135,11 +1158,12 @@
 	<br><br>
 		<<link [[回看铁盒 (0:03)|MP Quest School Archives Resolve]]>><<pass 3>><<stress -2>><</link>>
 <</if>>
-<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Quest School Archives Step2 [nobr]
 <<set $outside to 0>><<set $location to "school">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestLibrary to Math.max(($mpQuestLibrary or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
@@ -1158,15 +1182,16 @@
 <</if>>
 卷宗里是十年前的教学记录。班级名单、成绩册、郊游申请都齐全，唯独毕业照那一页被整齐地撕掉了。
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<investigateicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<mpcalculateicon>><<link [[核对年份 (0:06)|MP Quest School Archives Step3]]>><<pass 6>><<if !$mpClues or !$mpClues["town_school_year"]>><<set $mpClues["town_school_year"] to 1>><span class="blue">线索已记录</span><</if>><<stress -1>><</link>><<else>><span class="disabled">核对年份 (0:06)（属性不足）</span><</if>>
+<<mpcalculateicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[核对年份 (0:06)|MP Quest School Archives Step3]]>><<pass 6>><<mpalert 8>><<mpalertgain "翻动卷宗">><<if !$mpClues or !$mpClues["town_school_year"]>><<set $mpClues["town_school_year"] to 1>><span class="blue">线索已记录</span><</if>><<stress -1>><</link>><<else>><span class="disabled">核对年份 (0:06)（属性不足）</span><</if>>
 <br>
 <<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[问毕业班 (0:06)|MP Quest School Archives Step3]]>><<if !$mpClues or !$mpClues["town_school_sydney"]>><<set $mpClues["town_school_sydney"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress -2>><</link>><<else>><span class="disabled">问毕业班 (0:06)（尚未结识）</span><</if>>
 
 :: MP Quest School Archives Step3 [nobr]
 <<set $outside to 0>><<set $location to "school">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestLibrary to Math.max(($mpQuestLibrary or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
@@ -1177,17 +1202,18 @@
 「他们没去郊游，」<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>站在你身后，声音很轻，「学校把钟塔借给了一个研究小组。后来小组解散，学生也转走了。」
 <<if $mpClues["town_school_sydney"]>><span class="teal">按<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>提过的旧档分类规矩，你很快从郊游卷宗里翻出了那张实习照。</span><</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<investigateicon>><<link [[拆开装订线 (0:06)|MP Quest School Archives Step4]]>><<if !$mpClues or !$mpClues["town_school_map"]>><<set $mpClues["town_school_map"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress 1>><</link>>
+<<investigateicon>><<link [[拆开装订线 (0:06)|MP Quest School Archives Step4]]>><<if !$mpClues or !$mpClues["town_school_map"]>><<set $mpClues["town_school_map"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress 1>><<mpalert 8>><<mpalertgain "拆线窸窣">><</link>>
 <br>
 <<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[问悉尼去向 (0:05)|MP Quest School Archives Step4]]>><<if !$mpClues or !$mpClues["town_school_transfer"]>><<set $mpClues["town_school_transfer"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><<stress -2>><</link>><<else>><span class="disabled">问悉尼去向 (0:05)（尚未结识）</span><</if>>
 <br>
-<<sneakicon>><<link [[放回卷宗 (0:04)|MP Quest School Archives Step4]]>><<set $mpTownSchoolHide to 1>><<pass 4>><<stress -3>><</link>>
+<<sneakicon>><<link [[放回卷宗 (0:04)|MP Quest School Archives Step4]]>><<set $mpTownSchoolHide to 1>><<pass 4>><<stress -3>><<mpalert -8>><<mpalertloss "抹平折角">><</link>>
 
 :: MP Quest School Archives Step4 [nobr]
 <<set $outside to 0>><<set $location to "school">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestLibrary to Math.max(($mpQuestLibrary or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
@@ -1199,15 +1225,16 @@
 	<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>说，转走的学生里有三个后来在神殿和孤儿院的记录里出现过。你想起账册上的缩写。
 <</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
-<<sneakicon>><<if Time.dayState is "night" or Time.dayState is "dusk">><<link [[进夹墙 (0:08)|MP Quest School Archives Step5]]>><<pass 8>><<if Time.dayState is "night">><<if !$mpClues or !$mpClues["town_school_wall"]>><<set $mpClues["town_school_wall"] to 1>><span class="blue">线索已记录</span><</if>><<stress 2>><<else>><<if !$mpClues or !$mpClues["town_school_wall"]>><<set $mpClues["town_school_wall"] to 1>><span class="blue">线索已记录</span><</if>><<stress 1>><</if>><</link>><<else>><span class="disabled">进夹墙 (0:08)（白天走廊有人巡视）</span><</if>>
+<<sneakicon>><<if Time.dayState is "night" or Time.dayState is "dusk">><<link [[进夹墙 (0:08)|MP Quest School Archives Step5]]>><<pass 8>><<mpalert 6>><<mpalertgain "贴墙钻进夹墙">><<if Time.dayState is "night">><<if !$mpClues or !$mpClues["town_school_wall"]>><<set $mpClues["town_school_wall"] to 1>><span class="blue">线索已记录</span><</if>><<stress 2>><<else>><<if !$mpClues or !$mpClues["town_school_wall"]>><<set $mpClues["town_school_wall"] to 1>><span class="blue">线索已记录</span><</if>><<stress 1>><</if>><</link>><<else>><span class="disabled">进夹墙 (0:08)（白天走廊有人巡视）</span><</if>>
 <br>
-<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[拉悉尼同去 (0:09)|MP Quest School Archives Step5]]>><<set $mpTownSchoolSydneyHelp to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<pass 9>><<stress -2>><</link>><<else>><span class="disabled">拉悉尼同去 (0:09)（尚未结识）</span><</if>>
+<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[拉悉尼同去 (0:09)|MP Quest School Archives Step5]]>><<set $mpTownSchoolSydneyHelp to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<pass 9>><<stress -2>><<mpalert -12>><<mpalertloss "悉尼引开注意">><</link>><<else>><span class="disabled">拉悉尼同去 (0:09)（尚未结识）</span><</if>>
 
 :: MP Quest School Archives Step5 [nobr]
 <<set $outside to 0>><<set $location to "school">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestLibrary to Math.max(($mpQuestLibrary or 0), 5)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
@@ -1221,7 +1248,7 @@
 <</if>>
 <<if $mpClues["town_school_wall"]>><span class="teal">顺着刚才敲出的夹墙空响位置，你一拧黄铜烛台便让开了书架暗缝。</span><</if>>
 <br><br>
-<<getouticon>><<link [[返回图书馆 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回图书馆 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="act-mp-quest-school-archives-step5">
 <<investigateicon>><<if ($skulduggery or 0) gte 280>><<link "翻档案 (0:06)">><<pass 6>><<replace "#act-mp-quest-school-archives-step5">>
@@ -1229,23 +1256,24 @@
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpClues or !$mpClues["town_school_box"]>><<set $mpClues["town_school_box"] to 1>><span class="blue">线索已记录</span><</if>>
 	铁盒的锁很简单。你拨开锁舌，盒里是一叠学生档案和一把小钥匙。
-	<<stress -1>>
+	<<stress -1>><<mpalert 8>><<mpalertgain "锁扣弹开">>
 	<br><br>
-<<link [[取走档案 (0:06)|MP Quest School Archives Step6]]>><<pass 6>><</link>>
+<<walkicon>><<link [[取走档案 (0:06)|MP Quest School Archives Step6]]>><<pass 6>><<mpalert 6>><<mpalertgain "贴墙取档">><</link>>
 	<br>
-	<<mpeavesdropicon>><<link [[听墙外动静 (0:04)|MP Quest School Archives Step6]]>><<set $mpTownSchoolListen to 1>><<pass 4>><</link>>
+	<<mpeavesdropicon>><<link [[听墙外动静 (0:04)|MP Quest School Archives Step6]]>><<set $mpTownSchoolListen to 1>><<pass 4>><<mpalert -5>><<mpalertloss "屏息听墙外">><</link>>
 <<else>>
 	<<set $mpTownSchoolNoise to 1>>
 	锁扣弹了一下，铁盒从石台上滑下去，砸在地上。声音在夹墙里传得很远。
-	<<stress 5>>
+	<<stress 5>><<mpalert 12>><<mpalertgain "铁盒坠地">>
 	<br><br>
 <<link [[扶稳器座重调角度 (0:04)|MP Quest School Archives Step5]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">取走档案 (0:06)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">翻档案 (0:06)（属性不足）</span><</if>>
 </div>
 :: MP Quest School Archives Step6 [nobr]
 <<set $outside to 0>><<set $location to "school">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestLibrary to Math.max(($mpQuestLibrary or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
@@ -1258,19 +1286,20 @@
 	墙外传来<<if $NPCNameList and $NPCNameList.includes("Leighton")>>礼顿<<else>>值班校官<</if>>先生的声音。他在问管理员，今晚谁最后一个离开图书馆。
 <</if>>
 <br><br>
-<<socialiseicon>><<link [[带档案离开 (0:05)|MP Quest School Archives Resolve]]>><<set $mpTownSchoolOutcome to "take">><<pass 5>><<stress 1>><</link>>
+<<socialiseicon>><<link [[带档案离开 (0:05)|MP Quest School Archives Resolve]]>><<set $mpTownSchoolOutcome to "take">><<pass 5>><<stress 1>><<mpalert 6>><<mpalertgain "贴着走廊离开">><</link>>
 <br>
-<<investigateicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<mpreadicon>><<link [[抄下名单 (0:07)|MP Quest School Archives Resolve]]>><<set $mpTownSchoolOutcome to "copy">><<if !$mpClues or !$mpClues["town_school_names"]>><<set $mpClues["town_school_names"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress -2>><</link>><<else>><span class="disabled">抄下名单 (0:07)（属性不足）</span><</if>>
+<<mpreadicon>><<if ($english or 0) gte 260 or ($history or 0) gte 260>><<link [[抄下名单 (0:07)|MP Quest School Archives Resolve]]>><<set $mpTownSchoolOutcome to "copy">><<if !$mpClues or !$mpClues["town_school_names"]>><<set $mpClues["town_school_names"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress -2>><<mpalert 8>><<mpalertgain "纸笔窸窣">><</link>><<else>><span class="disabled">抄下名单 (0:07)（属性不足）</span><</if>>
 <br>
-<<walkicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[交给悉尼 (0:05)|MP Quest School Archives Resolve]]>><<set $mpTownSchoolOutcome to "sydney">><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<pass 5>><<stress -3>><</link>><<else>><span class="disabled">交给悉尼 (0:05)（尚未结识）</span><</if>>
+<<walkicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[交给悉尼 (0:05)|MP Quest School Archives Resolve]]>><<set $mpTownSchoolOutcome to "sydney">><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<pass 5>><<stress -3>><<mpalert -12>><<mpalertloss "悉尼引开注意">><</link>><<else>><span class="disabled">交给悉尼 (0:05)（尚未结识）</span><</if>>
 <br>
-<<link [[放回铁盒 (0:04)|MP Quest School Archives Resolve]]>><<set $mpTownSchoolOutcome to "return">><<pass 4>><<stress -3>><</link>>
+<<investigateicon>><<link [[放回铁盒 (0:04)|MP Quest School Archives Resolve]]>><<set $mpTownSchoolOutcome to "return">><<pass 4>><<stress -3>><<mpalert -8>><<mpalertloss "抹去指纹">><</link>>
 <br>
-<<link [[返回图书馆 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[返回图书馆 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Quest School Archives Resolve [nobr]
 <<set $outside to 0>><<set $location to "school">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpQuestLibrary to 7>><<set $mpClues to ($mpClues or {})>>
 <<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestLibrary to 1>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
@@ -1317,13 +1346,14 @@
 
 <<if $mpClues["town_school_names"]>><span class="teal">你把铁盒里抄下的转学名单与旧档案袋逐一对上，来龙去脉已然清晰。</span><</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<investigateicon>><<link [[回看档案架 (0:03)|MP Quest School Archives]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP Quest Temple Catacomb [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>><<mpAmbient>>
+<<mpalertinit "catacomb">><<mpalerttext>><<mpalertcheck>>
 <<mplightinit>><<mplighttext>><<mplightambush>>
 <br>
 <<set _stg to ($mpQuestCatacomb or 0)>>
@@ -1337,11 +1367,11 @@
 	「你也听见了？」<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>问，「昨晚的钟声。不是塔上的那口。」
 	<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>把灯放在烛台旁边，没有点。
 	<br><br>
-	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Jordan")>><<link [[问乔丹钟声 (0:05)|MP Quest Temple Catacomb Step2]]>><<set $mpQuestCatacomb to 1>><<set $mpTownTempleJordan to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCatacomb to 1>><<pass 5>><<stress -2>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">问乔丹钟声 (0:05)（尚未结识）</span><</if>>
+	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Jordan")>><<link [[问乔丹钟声 (0:05)|MP Quest Temple Catacomb Step2]]>><<set $mpQuestCatacomb to 1>><<set $mpTownTempleJordan to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCatacomb to 1>><<pass 5>><<stress -2>><<mplight -5>><<mpalert 6>><<mpalertgain "跟着脚步下侧廊">><</link>><<mplightloss>><<else>><span class="disabled">问乔丹钟声 (0:05)（尚未结识）</span><</if>>
 	<br>
-	<<mpritualicon>><<link [[转动烛台 (0:06)|MP Quest Temple Catacomb Step2]]>><<set $mpQuestCatacomb to 1>><<set $mpTownTempleTurn to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCatacomb to 1>><<pass 6>><<stress 1>><<mplight -5>><</link>><<mplightloss>>
+	<<mpritualicon>><<link [[转动烛台 (0:06)|MP Quest Temple Catacomb Step2]]>><<set $mpQuestCatacomb to 1>><<set $mpTownTempleTurn to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCatacomb to 1>><<pass 6>><<stress 1>><<mplight -5>><<mpalert 8>><<mpalertgain "石壁摩擦">><</link>><<mplightloss>>
 	<br>
-	<<mpeavesdropicon>><<link [[留下听钟声 (0:08)|MP Quest Temple Catacomb Step2]]>><<set $mpQuestCatacomb to 1>><<set $mpTownTempleListen to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCatacomb to 1>><<pass 8>><<stress -1>><<mplight -5>><</link>><<mplightloss>>
+	<<mpeavesdropicon>><<link [[留下听钟声 (0:08)|MP Quest Temple Catacomb Step2]]>><<set $mpQuestCatacomb to 1>><<set $mpTownTempleListen to 1>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCatacomb to 1>><<pass 8>><<stress -1>><<mplight -5>><<mpalert -5>><<mpalertloss "靠墙屏息">><</link>><<mplightloss>>
 <<elseif _stg is 1>>
 	侧廊的烛台已经被你转过半圈。石壁后面的冷风从缝里渗出来。
 	<br><br>
@@ -1371,7 +1401,7 @@
 	<br><br>
 		<<link [[回看壁画 (0:03)|MP Quest Temple Catacomb Resolve]]>><<pass 3>><<stress -2>><<mplight -5>><</link>><<mplightloss>>
 <</if>>
-<<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
+<<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><<mpalertclear>><</link>>
 
 <br>
 <<if $mpLightAmbush is 1>>
@@ -1381,6 +1411,7 @@
 :: MP Quest Temple Catacomb Step2 [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<mplighttext>><<mplightambush>>
 <br>
 <<set $mpQuestCatacomb to Math.max(($mpQuestCatacomb or 0), 2)>>
@@ -1388,6 +1419,48 @@
 <<set _exitPas to ($mpReturnPassage or "Temple")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Temple">>
+<</if>>
+<<if ($mpAlert or 0) gte 80>>
+<div id="mp-catacomb-alert">
+<<if ($mpAlert or 0) gte 100>>
+<strong>石阶上下都是脚步声，搜查队已经把墓穴围死。</strong>
+<br>
+<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:06)|MP Elite Encounter Ivory Wraith]]>><<pass 6>><<mpalertclear>><</link>><<else>><span class="disabled">拼死一搏 (0:06)（体魄或战斗不足）</span><</if>>
+<br>
+<<socialiseicon>><<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link "虚张声势 (0:05)">><<pass 5>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (45 + Math.min(35, Math.floor((Math.max(($seductionskill or 0), ($english or 0)) - 260) / 8)))>>
+你抬起下巴，用神殿执事的腔调呵斥他们越权搜查。灰袍人彼此看了一眼，慢慢让开了石阶。
+<<mpalert -20>><<mpalertloss "口才压过守卫">><<set $mpAlertCaught to 0>>
+<br><br>
+<<getouticon>><<link [[趁乱退出侧廊 (0:03)|_exitPas]]>><<pass 3>><<mpalertclear>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+你的声音在暗室里发虚。灰袍人没有让路，反而收紧了包围。
+<<mpalert 15>><<mpalertgain "虚张声势被识破">>
+<br><br>
+<<badendicon>><<link [[被搜查队押走 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">虚张声势 (0:05)（口才不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link "转身就跑 (0:04)">><<pass 4>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (55 + Math.min(35, Math.floor((($athletics or 0) - 260) / 8)))>>
+你撞开最近的火盆，趁灰烟腾起冲上石阶，一路跑回侧廊。
+<<mpalertclear>>你保住了已经查到的线索，只丢下了这一趟还没拿到手的东西。
+<br><br>
+<<link [[撤离侧廊 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+石阶上的铜灯被撞得摇晃，你还没跑出三步就被按倒在石壁上。
+<br><br>
+<<link [[被拖回石牢 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">转身就跑 (0:04)（运动不足）</span><</if>>
+<br>
+<<link [[束手就擒 (0:04)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 4>><<mpalertclear>><</link>>
+<<else>>
+<strong>灰袍人堵住了石阶，只有硬闯才能出去。</strong>
+<br>
+<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[硬闯出去 (0:03)|MP Elite Encounter Ivory Wraith]]>><<pass 3>><<mpalertclear>><<set $mpReturnPassage to "MP Quest Temple Catacomb">><</link>><<else>><span class="disabled">硬闯出去 (0:03)（体魄或战斗不足）</span><</if>>
+<</if>>
+</div>
 <</if>>
 <<if $mpTownTempleJordan is 1>>
 	<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>把灯递给你，自己没有跟下来。
@@ -1400,11 +1473,11 @@
 <</if>>
 石阶向下，冷风里带着没药和旧檀香。你走到一半，手里的光忽然暗了一下。
 <br><br>
-<<getouticon>><<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
+<<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><<mpalertclear>><</link>>
 <br>
-<<investigateicon>><<link [[稳住呼吸 (0:07)|MP Quest Temple Catacomb Step3]]>><<pass 7>><<if !$mpClues or !$mpClues["town_temple_nerve"]>><<set $mpClues["town_temple_nerve"] to 1>><span class="blue">线索已记录</span><</if>><<stress 1>><<mplight -5>><</link>><<mplightloss>>
+<<if ($mpAlert or 0) lt 100>><<link [[稳住呼吸 (0:07)|MP Quest Temple Catacomb Step3]]>><<pass 7>><<if !$mpClues or !$mpClues["town_temple_nerve"]>><<set $mpClues["town_temple_nerve"] to 1>><span class="blue">线索已记录</span><</if>><<stress 1>><<mplight -5>><<mpalert -5>><<mpalertloss "稳住呼吸">><</link>><<mplightloss>>
 <br>
-<<templeicon>><<link [[石阶上停步 (0:05)|MP Quest Temple Catacomb Step3]]>><<pass 5>><<stress -2>><<mplight -5>><</link>><<mplightloss>>
+<<link [[石阶上停步 (0:05)|MP Quest Temple Catacomb Step3]]>><<pass 5>><<stress -2>><<mplight -5>><<mpalert -5>><<mpalertloss "靠墙屏息">><</link>><<mplightloss>><</if>>
 
 <br>
 <<if $mpLightAmbush is 1>>
@@ -1414,6 +1487,7 @@
 :: MP Quest Temple Catacomb Step3 [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<mplighttext>><<mplightambush>>
 <br>
 <<set $mpQuestCatacomb to Math.max(($mpQuestCatacomb or 0), 3)>>
@@ -1422,6 +1496,48 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Temple">>
 <</if>>
+<<if ($mpAlert or 0) gte 80>>
+<div id="mp-catacomb-alert">
+<<if ($mpAlert or 0) gte 100>>
+<strong>石阶上下都是脚步声，搜查队已经把墓穴围死。</strong>
+<br>
+<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:06)|MP Elite Encounter Ivory Wraith]]>><<pass 6>><<mpalertclear>><</link>><<else>><span class="disabled">拼死一搏 (0:06)（体魄或战斗不足）</span><</if>>
+<br>
+<<socialiseicon>><<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link "虚张声势 (0:05)">><<pass 5>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (45 + Math.min(35, Math.floor((Math.max(($seductionskill or 0), ($english or 0)) - 260) / 8)))>>
+你抬起下巴，用神殿执事的腔调呵斥他们越权搜查。灰袍人彼此看了一眼，慢慢让开了石阶。
+<<mpalert -20>><<mpalertloss "口才压过守卫">><<set $mpAlertCaught to 0>>
+<br><br>
+<<getouticon>><<link [[趁乱退出侧廊 (0:03)|_exitPas]]>><<pass 3>><<mpalertclear>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+你的声音在暗室里发虚。灰袍人没有让路，反而收紧了包围。
+<<mpalert 15>><<mpalertgain "虚张声势被识破">>
+<br><br>
+<<badendicon>><<link [[被搜查队押走 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">虚张声势 (0:05)（口才不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link "转身就跑 (0:04)">><<pass 4>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (55 + Math.min(35, Math.floor((($athletics or 0) - 260) / 8)))>>
+你撞开最近的火盆，趁灰烟腾起冲上石阶，一路跑回侧廊。
+<<mpalertclear>>你保住了已经查到的线索，只丢下了这一趟还没拿到手的东西。
+<br><br>
+<<link [[撤离侧廊 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+石阶上的铜灯被撞得摇晃，你还没跑出三步就被按倒在石壁上。
+<br><br>
+<<link [[被拖回石牢 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">转身就跑 (0:04)（运动不足）</span><</if>>
+<br>
+<<link [[束手就擒 (0:04)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 4>><<mpalertclear>><</link>>
+<<else>>
+<strong>灰袍人堵住了石阶，只有硬闯才能出去。</strong>
+<br>
+<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[硬闯出去 (0:03)|MP Elite Encounter Ivory Wraith]]>><<pass 3>><<mpalertclear>><<set $mpReturnPassage to "MP Quest Temple Catacomb">><</link>><<else>><span class="disabled">硬闯出去 (0:03)（体魄或战斗不足）</span><</if>>
+<</if>>
+</div>
+<</if>>
 地下墓穴比上面的神殿更旧。石壁上的壁画一层压着一层，最上面一层画的是雾月之蚀：月亮被一条细线切开，线下面站着七个人。
 祭台暗龛里放着一只红蜡封口的银质圣油瓶，旁边是半卷羊皮祝祷文。
 <<if $mpTownTempleFear is 1>>
@@ -1429,11 +1545,11 @@
 <</if>>
 <<if $mpClues["town_temple_nerve"]>><span class="teal">你稳住呼吸走下石阶，借着微光看清了墓穴石壁上层叠的旧壁画。</span><</if>>
 <br><br>
-<<getouticon>><<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
+<<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><<mpalertclear>><</link>>
 <br>
-<<investigateicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[读壁画铭文 (0:07)|MP Quest Temple Catacomb Step4]]>><<pass 7>><<if (($history or 0) + ($mpClues["town_temple_nerve"] ? 60 : 0)) gte 280 or ($english or 0) gte 280>><<if !$mpClues or !$mpClues["town_temple_mural"]>><<set $mpClues["town_temple_mural"] to 1>><span class="blue">线索已记录</span><</if>><<stress -1>><<else>><<set $mpTownTempleRubbingMiss to 1>><<stress 1>><</if>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">读壁画铭文 (0:07)（属性不足）</span><</if>>
+<<if ($mpAlert or 0) lt 100>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[读壁画铭文 (0:07)|MP Quest Temple Catacomb Step4]]>><<pass 7>><<mpalert 8>><<mpalertgain "拓印壁画">><<if (($history or 0) + ($mpClues["town_temple_nerve"] ? 60 : 0)) gte 280 or ($english or 0) gte 280>><<if !$mpClues or !$mpClues["town_temple_mural"]>><<set $mpClues["town_temple_mural"] to 1>><span class="blue">线索已记录</span><</if>><<stress -1>><<else>><<set $mpTownTempleRubbingMiss to 1>><<stress 1>><</if>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">读壁画铭文 (0:07)（属性不足）</span><</if>>
 <br>
-<<templeicon>><<link [[看圣油瓶 (0:05)|MP Quest Temple Catacomb Step4]]>><<if !$mpClues or !$mpClues["town_temple_oil"]>><<set $mpClues["town_temple_oil"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><<mplight -5>><</link>><<mplightloss>>
+<<link [[看圣油瓶 (0:05)|MP Quest Temple Catacomb Step4]]>><<if !$mpClues or !$mpClues["town_temple_oil"]>><<set $mpClues["town_temple_oil"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><<mplight -5>><<mpalert 8>><<mpalertgain "挪动暗龛">><</link>><<mplightloss>><</if>>
 
 <br>
 <<if $mpLightAmbush is 1>>
@@ -1443,6 +1559,7 @@
 :: MP Quest Temple Catacomb Step4 [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<mplighttext>><<mplightambush>>
 <br>
 <<set $mpQuestCatacomb to Math.max(($mpQuestCatacomb or 0), 4)>>
@@ -1450,6 +1567,48 @@
 <<set _exitPas to ($mpReturnPassage or "Temple")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Temple">>
+<</if>>
+<<if ($mpAlert or 0) gte 80>>
+<div id="mp-catacomb-alert">
+<<if ($mpAlert or 0) gte 100>>
+<strong>石阶上下都是脚步声，搜查队已经把墓穴围死。</strong>
+<br>
+<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:06)|MP Elite Encounter Ivory Wraith]]>><<pass 6>><<mpalertclear>><</link>><<else>><span class="disabled">拼死一搏 (0:06)（体魄或战斗不足）</span><</if>>
+<br>
+<<socialiseicon>><<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link "虚张声势 (0:05)">><<pass 5>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (45 + Math.min(35, Math.floor((Math.max(($seductionskill or 0), ($english or 0)) - 260) / 8)))>>
+你抬起下巴，用神殿执事的腔调呵斥他们越权搜查。灰袍人彼此看了一眼，慢慢让开了石阶。
+<<mpalert -20>><<mpalertloss "口才压过守卫">><<set $mpAlertCaught to 0>>
+<br><br>
+<<getouticon>><<link [[趁乱退出侧廊 (0:03)|_exitPas]]>><<pass 3>><<mpalertclear>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+你的声音在暗室里发虚。灰袍人没有让路，反而收紧了包围。
+<<mpalert 15>><<mpalertgain "虚张声势被识破">>
+<br><br>
+<<badendicon>><<link [[被搜查队押走 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">虚张声势 (0:05)（口才不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link "转身就跑 (0:04)">><<pass 4>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (55 + Math.min(35, Math.floor((($athletics or 0) - 260) / 8)))>>
+你撞开最近的火盆，趁灰烟腾起冲上石阶，一路跑回侧廊。
+<<mpalertclear>>你保住了已经查到的线索，只丢下了这一趟还没拿到手的东西。
+<br><br>
+<<link [[撤离侧廊 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+石阶上的铜灯被撞得摇晃，你还没跑出三步就被按倒在石壁上。
+<br><br>
+<<link [[被拖回石牢 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">转身就跑 (0:04)（运动不足）</span><</if>>
+<br>
+<<link [[束手就擒 (0:04)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 4>><<mpalertclear>><</link>>
+<<else>>
+<strong>灰袍人堵住了石阶，只有硬闯才能出去。</strong>
+<br>
+<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[硬闯出去 (0:03)|MP Elite Encounter Ivory Wraith]]>><<pass 3>><<mpalertclear>><<set $mpReturnPassage to "MP Quest Temple Catacomb">><</link>><<else>><span class="disabled">硬闯出去 (0:03)（体魄或战斗不足）</span><</if>>
+<</if>>
+</div>
 <</if>>
 <<if $mpClues["town_temple_mural"]>>
 	铭文说，雾月之蚀那晚，七个人会在地下等一个「替他们记住名字的人」。壁画最下方有一排被刮掉的名字，只剩首字母。
@@ -1461,28 +1620,28 @@
 暗龛后面的石门没有锁，只靠一块石头顶着。门缝里有人在低声念诵，声音很平，像在数数。
 <<if $mpClues["town_temple_oil"]>><span class="teal">指尖沾着的一点冷香圣油，让你在辨认壁画下方刮痕时看出了端倪。</span><</if>>
 <br><br>
-<<getouticon>><<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
+<<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><<mpalertclear>><</link>>
 <br>
-<div id="act-mp-quest-temple-catacomb-step4">
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link "窥看门内 (0:05)">><<pass 5>><<mplight -5>><<replace "#act-mp-quest-temple-catacomb-step4">>
+<<if ($mpAlert or 0) lt 100>><div id="act-mp-quest-temple-catacomb-step4">
+<<if ($skulduggery or 0) gte 250>><<link "窥看门内 (0:05)">><<pass 5>><<mplight -5>><<replace "#act-mp-quest-temple-catacomb-step4">>
 <<set $skulduggerydifficulty to 260>><<skulduggerycheck "silent">>
 <<if $skulduggerysuccess is 1>>
 	<<if !$mpClues or !$mpClues["town_temple_door"]>><<set $mpClues["town_temple_door"] to 1>><span class="blue">线索已记录</span><</if>>
 	你把顶门的石头一点点挪开，门只响了一声。念诵没有停。
-	<<stress 1>>
+	<<stress 1>><<mpalert 8>><<mpalertgain "石头摩擦">>
 	<br><br>
-<<link [[钻进石门 (0:05)|MP Quest Temple Catacomb Step5]]>><<pass 5>><<mplight -5>><</link>><<mplightloss>>
+<<link [[钻进石门 (0:05)|MP Quest Temple Catacomb Step5]]>><<pass 5>><<mplight -5>><<mpalert 6>><<mpalertgain "贴墙钻进">><</link>><<mplightloss>>
 	<br>
-	<<templeicon>><<link [[退到祭台后 (0:04)|MP Quest Temple Catacomb Step5]]>><<set $mpTownTempleHide to 1>><<pass 4>><<stress 1>><<mplight -5>><</link>><<mplightloss>>
+	<<link [[退到祭台后 (0:04)|MP Quest Temple Catacomb Step5]]>><<set $mpTownTempleHide to 1>><<pass 4>><<stress 1>><<mplight -5>><<mpalert -5>><<mpalertloss "躲到祭台后">><</link>><<mplightloss>>
 <<else>>
 	<<set $mpTownTempleStone to 1>>
 	石头滑了一下，砸在你的脚背上。门里的念诵停了。
-	<<pain 3>><<stress 4>>
+	<<pain 3>><<stress 4>><<mpalert 12>><<mpalertgain "石头砸落">>
 	<br><br>
 <<link [[扶稳器座重调角度 (0:04)|MP Quest Temple Catacomb Step4]]>><<pass 4>><<mplight -5>><</link>><<mplightloss>>
 <</if>>
-<</replace>><</link>><<mplightloss>><<else>><span class="disabled">钻进石门 (0:05)（属性不足）</span><</if>>
-</div>
+<</replace>><</link>><<mplightloss>><<else>><span class="disabled">窥看门内 (0:05)（属性不足）</span><</if>>
+</div><</if>>
 
 <br>
 <<if $mpLightAmbush is 1>>
@@ -1492,6 +1651,7 @@
 :: MP Quest Temple Catacomb Step5 [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<mplighttext>><<mplightambush>>
 <br>
 <<set $mpQuestCatacomb to Math.max(($mpQuestCatacomb or 0), 5)>>
@@ -1499,6 +1659,48 @@
 <<set _exitPas to ($mpReturnPassage or "Temple")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Temple">>
+<</if>>
+<<if ($mpAlert or 0) gte 80>>
+<div id="mp-catacomb-alert">
+<<if ($mpAlert or 0) gte 100>>
+<strong>石阶上下都是脚步声，搜查队已经把墓穴围死。</strong>
+<br>
+<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:06)|MP Elite Encounter Ivory Wraith]]>><<pass 6>><<mpalertclear>><</link>><<else>><span class="disabled">拼死一搏 (0:06)（体魄或战斗不足）</span><</if>>
+<br>
+<<socialiseicon>><<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link "虚张声势 (0:05)">><<pass 5>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (45 + Math.min(35, Math.floor((Math.max(($seductionskill or 0), ($english or 0)) - 260) / 8)))>>
+你抬起下巴，用神殿执事的腔调呵斥他们越权搜查。灰袍人彼此看了一眼，慢慢让开了石阶。
+<<mpalert -20>><<mpalertloss "口才压过守卫">><<set $mpAlertCaught to 0>>
+<br><br>
+<<getouticon>><<link [[趁乱退出侧廊 (0:03)|_exitPas]]>><<pass 3>><<mpalertclear>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+你的声音在暗室里发虚。灰袍人没有让路，反而收紧了包围。
+<<mpalert 15>><<mpalertgain "虚张声势被识破">>
+<br><br>
+<<badendicon>><<link [[被搜查队押走 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">虚张声势 (0:05)（口才不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link "转身就跑 (0:04)">><<pass 4>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (55 + Math.min(35, Math.floor((($athletics or 0) - 260) / 8)))>>
+你撞开最近的火盆，趁灰烟腾起冲上石阶，一路跑回侧廊。
+<<mpalertclear>>你保住了已经查到的线索，只丢下了这一趟还没拿到手的东西。
+<br><br>
+<<link [[撤离侧廊 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+石阶上的铜灯被撞得摇晃，你还没跑出三步就被按倒在石壁上。
+<br><br>
+<<link [[被拖回石牢 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">转身就跑 (0:04)（运动不足）</span><</if>>
+<br>
+<<link [[束手就擒 (0:04)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 4>><<mpalertclear>><</link>>
+<<else>>
+<strong>灰袍人堵住了石阶，只有硬闯才能出去。</strong>
+<br>
+<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[硬闯出去 (0:03)|MP Elite Encounter Ivory Wraith]]>><<pass 3>><<mpalertclear>><<set $mpReturnPassage to "MP Quest Temple Catacomb">><</link>><<else>><span class="disabled">硬闯出去 (0:03)（体魄或战斗不足）</span><</if>>
+<</if>>
+</div>
 <</if>>
 石门后是一间圆形的暗室，地上刻着一圈名字。七个穿灰袍的人围着圈站，脸都藏在兜帽里。他们念的不是祷词，是名字。
 念到第三个名字时，其中一个人抬起头，朝门缝这边看过来。
@@ -1509,13 +1711,13 @@
 	你和那个抬头的人对上了视线。那人没有喊，只是抬起手，朝你招了招。
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
+<<if ($mpAlert or 0) lt 80 or $mpLightAmbush isnot 1>><<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><<mpalertclear>><</link>><</if>>
 <br>
-<<investigateicon>><<link [[站着不动 (0:06)|MP Quest Temple Catacomb Step6]]>><<pass 6>><<if !$mpClues or !$mpClues["town_temple_stand"]>><<set $mpClues["town_temple_stand"] to 1>><span class="blue">线索已记录</span><</if>><<stress 2>><<mplight -5>><</link>><<mplightloss>>
+<<if ($mpAlert or 0) lt 100>><<link [[站着不动 (0:06)|MP Quest Temple Catacomb Step6]]>><<pass 6>><<if !$mpClues or !$mpClues["town_temple_stand"]>><<set $mpClues["town_temple_stand"] to 1>><span class="blue">线索已记录</span><</if>><<stress 2>><<mplight -5>><</link>><<mplightloss>>
 <br>
-<<sneakicon>><<link [[退到石门 (0:05)|MP Quest Temple Catacomb Step6]]>><<set $mpTownTempleRetreat to 1>><<pass 5>><<stress 3>><<mplight -5>><</link>><<mplightloss>>
+<<link [[退到石门 (0:05)|MP Quest Temple Catacomb Step6]]>><<set $mpTownTempleRetreat to 1>><<pass 5>><<stress 3>><<mplight -5>><<mpalert -5>><<mpalertloss "退回石门阴影">><</link>><<mplightloss>>
 <br>
-<<templeicon>><<link [[问他们是谁 (0:05)|MP Quest Temple Catacomb Step6]]>><<if !$mpClues or !$mpClues["town_temple_ask"]>><<set $mpClues["town_temple_ask"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><<stress 1>><<mplight -5>><</link>><<mplightloss>>
+<<link [[问他们是谁 (0:05)|MP Quest Temple Catacomb Step6]]>><<if !$mpClues or !$mpClues["town_temple_ask"]>><<set $mpClues["town_temple_ask"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><<stress 1>><<mplight -5>><<mpalert 6>><<mpalertgain "开口试探">><</link>><<mplightloss>><</if>>
 
 <br>
 <<if $mpLightAmbush is 1>>
@@ -1525,6 +1727,7 @@
 :: MP Quest Temple Catacomb Step6 [nobr]
 <<set $outside to 0>><<set $location to "temple">>
 <<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<mplighttext>><<mplightambush>>
 <br>
 <<set $mpQuestCatacomb to Math.max(($mpQuestCatacomb or 0), 6)>>
@@ -1533,17 +1736,59 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Temple">>
 <</if>>
+<<if ($mpAlert or 0) gte 80>>
+<div id="mp-catacomb-alert">
+<<if ($mpAlert or 0) gte 100>>
+<strong>石阶上下都是脚步声，搜查队已经把墓穴围死。</strong>
+<br>
+<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:06)|MP Elite Encounter Ivory Wraith]]>><<pass 6>><<mpalertclear>><</link>><<else>><span class="disabled">拼死一搏 (0:06)（体魄或战斗不足）</span><</if>>
+<br>
+<<socialiseicon>><<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link "虚张声势 (0:05)">><<pass 5>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (45 + Math.min(35, Math.floor((Math.max(($seductionskill or 0), ($english or 0)) - 260) / 8)))>>
+你抬起下巴，用神殿执事的腔调呵斥他们越权搜查。灰袍人彼此看了一眼，慢慢让开了石阶。
+<<mpalert -20>><<mpalertloss "口才压过守卫">><<set $mpAlertCaught to 0>>
+<br><br>
+<<getouticon>><<link [[趁乱退出侧廊 (0:03)|_exitPas]]>><<pass 3>><<mpalertclear>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+你的声音在暗室里发虚。灰袍人没有让路，反而收紧了包围。
+<<mpalert 15>><<mpalertgain "虚张声势被识破">>
+<br><br>
+<<badendicon>><<link [[被搜查队押走 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">虚张声势 (0:05)（口才不足）</span><</if>>
+<br>
+<<if ($athletics or 0) gte 260>><<link "转身就跑 (0:04)">><<pass 4>><<replace "#mp-catacomb-alert">>
+<<if random(1, 100) lte (55 + Math.min(35, Math.floor((($athletics or 0) - 260) / 8)))>>
+你撞开最近的火盆，趁灰烟腾起冲上石阶，一路跑回侧廊。
+<<mpalertclear>>你保住了已经查到的线索，只丢下了这一趟还没拿到手的东西。
+<br><br>
+<<link [[撤离侧廊 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+石阶上的铜灯被撞得摇晃，你还没跑出三步就被按倒在石壁上。
+<br><br>
+<<link [[被拖回石牢 (0:05)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 5>><<mpalertclear>><</link>>
+<</if>>
+<</replace>><</link>><<else>><span class="disabled">转身就跑 (0:04)（运动不足）</span><</if>>
+<br>
+<<link [[束手就擒 (0:04)|MP BadEnd Abbey Penance]]>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 4>><<mpalertclear>><</link>>
+<<else>>
+<strong>灰袍人堵住了石阶，只有硬闯才能出去。</strong>
+<br>
+<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[硬闯出去 (0:03)|MP Elite Encounter Ivory Wraith]]>><<pass 3>><<mpalertclear>><<set $mpReturnPassage to "MP Quest Temple Catacomb">><</link>><<else>><span class="disabled">硬闯出去 (0:03)（体魄或战斗不足）</span><</if>>
+<</if>>
+</div>
+<</if>>
 <<if $mpTownTempleLocked is 1>>
 	石门在你身后合上了。暗室里没有风，烛火却一起矮了下去。灰袍人没有靠近，只是继续念名字。
 	你听见自己的名字被夹在中间，念得很轻，像怕惊动什么。
 	<br><br>
-	<<mpritualicon>><<link [[跟着念诵 (0:06)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "pray">><<if !$mpClues or !$mpClues["town_temple_pray"]>><<set $mpClues["town_temple_pray"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress -4>><<mplight -5>><</link>><<mplightloss>>
+	<<if ($mpAlert or 0) lt 100>><<link [[跟着念诵 (0:06)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "pray">><<if !$mpClues or !$mpClues["town_temple_pray"]>><<set $mpClues["town_temple_pray"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><<stress -4>><<mplight -5>><<mpalert -5>><<mpalertloss "跟着念诵混过去">><</link>><<mplightloss>>
 	<br>
-	<<mpsewicon>><<link [[找墙缝风 (0:05)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "draft">><<if !$mpClues or !$mpClues["town_temple_draft"]>><<set $mpClues["town_temple_draft"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><<stress -2>><<mplight -5>><</link>><<mplightloss>>
+	<<link [[找墙缝风 (0:05)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "draft">><<if !$mpClues or !$mpClues["town_temple_draft"]>><<set $mpClues["town_temple_draft"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><<stress -2>><<mplight -5>><<mpalert -5>><<mpalertloss "贴墙找缝">><</link>><<mplightloss>>
 	<br>
-	<<mplockpickicon>><<link [[撬开底缝 (0:07)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "pry">><<pass 7>><<pain 3>><<stress 3>><<mplight -5>><</link>><<mplightloss>>
+	<<link [[撬开底缝 (0:07)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "pry">><<pass 7>><<pain 3>><<stress 3>><<mplight -5>><<mpalert 12>><<mpalertgain "石底撬响">><</link>><<mplightloss>>
 	<br>
-	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Jordan")>><<link [[喊乔丹名字 (0:04)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "jordan">><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<pass 4>><<stress -2>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">喊乔丹名字 (0:04)（尚未结识）</span><</if>>
+	<<if $NPCNameList and $NPCNameList.includes("Jordan")>><<link [[喊乔丹名字 (0:04)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "jordan">><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<pass 4>><<stress -2>><<mplight -5>><<mpalert -12>><<mpalertloss "乔丹引开注意">><</link>><<mplightloss>><<else>><span class="disabled">喊乔丹名字 (0:04)（尚未结识）</span><</if>><</if>>
 <<else>>
 	<<if $mpTownTempleRetreat is 1>>
 		你沿墙退回石门，灰袍人没有追。门外的石阶上，<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>留下的灯还亮着。
@@ -1554,14 +1799,14 @@
 		你站着没动。灰袍人看了你一会儿，继续念名字。念到第七个时，暗室尽头的石门自己开了。
 	<</if>>
 	<br><br>
-<<link [[拿走圣油瓶 (0:05)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "oil">><<pass 5>><<stress 1>><<mplight -5>><</link>><<mplightloss>>
+<<if ($mpAlert or 0) lt 100>><<link [[拿走圣油瓶 (0:05)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "oil">><<pass 5>><<stress 1>><<mplight -5>><<mpalert 8>><<mpalertgain "拿起圣油瓶">><</link>><<mplightloss>>
 	<br>
-<<link [[抄下七个名字 (0:07)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "names">><<if !$mpClues or !$mpClues["town_temple_names"]>><<set $mpClues["town_temple_names"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress -2>><<mplight -5>><</link>><<mplightloss>>
+<<link [[抄下七个名字 (0:07)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "names">><<if !$mpClues or !$mpClues["town_temple_names"]>><<set $mpClues["town_temple_names"] to 1>><span class="blue">线索已记录</span><</if>><<pass 7>><<stress -2>><<mplight -5>><<mpalert 8>><<mpalertgain "纸笔窸窣">><</link>><<mplightloss>>
 	<br>
-<<link [[留灯离开 (0:04)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "leave">><<pass 4>><<stress -3>><<mplight -5>><</link>><<mplightloss>>
+<<link [[留灯离开 (0:04)|MP Quest Temple Catacomb Resolve]]>><<set $mpTownTempleOutcome to "leave">><<pass 4>><<stress -3>><<mplight -5>><<mpalert -8>><<mpalertloss "抹掉足迹">><</link>><<mplightloss>><</if>>
 <</if>>
 <br>
-<<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
+<<if ($mpAlert or 0) lt 80 or (($mpTownTempleLocked or 0) isnot 1 and $mpLightAmbush isnot 1)>><<link [[返回侧廊 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><<mpalertclear>><</link>><</if>>
 
 <br>
 <<if $mpLightAmbush is 1 and ($mpTownTempleLocked or 0) is not 1>>
@@ -1570,6 +1815,7 @@
 <</if>>
 :: MP Quest Temple Catacomb Resolve [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpLight to 0>>
 <<set $mpQuestCatacomb to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestCatacomb to 1>>
 <<set _exitPas to ($mpReturnPassage or "Temple")>>
@@ -1598,6 +1844,7 @@
 
 :: MP Quest Temple Catacomb Payout [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _exitPas to ($mpReturnPassage or "Temple")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
@@ -1632,7 +1879,7 @@
 	<<stress -3>><<lstress>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<mpritualicon>><<link [[回看烛台 (0:03)|MP Quest Temple Catacomb]]>><<pass 3>><<stress -2>><</link>>
 

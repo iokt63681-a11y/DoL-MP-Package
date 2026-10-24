@@ -98,7 +98,7 @@
 	<br>
 	<br>
 	<br>
-	<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[交支线图给塞拉 (0:04)|High Street]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sera")>><<mpnpcincr Sera trust 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">交支线图给塞拉 (0:04)（尚未结识）</span><</if>>
+	<<socialiseicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[交支线图给塞拉 (0:04)|High Street]]>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">交支线图给塞拉 (0:04)（尚未结识）</span><</if>>
 	<br>
 	<br>
 	<br>
@@ -177,7 +177,7 @@
 	<br>
 	<<link [[返回入口 (0:08)|Cliff Street]]>><<pass 8>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">扣紧边沿重新提拉 (0:04)（学识不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">还纸给格威岚 (0:04)（学识不足）</span><</if>>
 </div>
 
 :: MP Side Cafe Alley Resolve [nobr]
@@ -212,33 +212,34 @@
 
 :: MP Side Orphan Laundry [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<mpalertinit "orphanage">><<mpalerttext>><<mpalertcheck>>
 <<set $mpSideClues to ($mpSideClues or {})>>
 孤儿院洗衣房的门一推开，热蒸汽就糊住了你的睫毛。碱水和湿棉布的味道堵在喉咙里，像含了一口肥皂。三台滚筒洗衣机同时转着，铁皮外壳震得墙上的挂钩叮当响。洗衣筐最上面搭着一件男士衬衫，领口绣着院长的缩写。
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="side-act-mp-side-orphan-laundry">
-<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link "问衬衫来历 (0:05)">><<pass 5>><<replace "#side-act-mp-side-orphan-laundry">>
+<<mptailoricon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link "问衬衫来历 (0:05)">><<pass 5>><<replace "#side-act-mp-side-orphan-laundry">>
 <<set $skulduggerydifficulty to 250>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
-	<<set $mpSideClues["laundry_slip"] to 1>><span class="green">你翻到洗衣筐后面的硬纸板，抽出一张受潮的收衣单。</span><<stress -1>><<lstress>>
+	<<set $mpSideClues["laundry_slip"] to 1>><span class="green">你翻到洗衣筐后面的硬纸板，抽出一张受潮的收衣单。</span><<stress -1>><<lstress>><<mpalert 8>><<mpalertgain "翻动洗衣筐">>
 	<br><br>
 	<<walkicon>><<link [[沿石阶探看 (0:04)|MP Side Orphan Laundry Step2]]>><<pass 4>><</link>>
 <<else>>
-	<span class="red">你弯腰时碰翻了碱水桶，灰白的液体泼在鞋面和裤脚上，皮肤很快泛起刺痛。</span><<pain 2>><<stress 3>><<gstress>>
+	<span class="red">你弯腰时碰翻了碱水桶，灰白的液体泼在鞋面和裤脚上，皮肤很快泛起刺痛。</span><<pain 2>><<stress 3>><<gstress>><<mpalert 12>><<mpalertgain "碱水桶翻倒">>
 	<br><br>
 	<<link [[握稳工具重调位置 (0:04)|MP Side Orphan Laundry]]>><<pass 4>><</link>>
 	<br>
-	<<link [[暂退一步 (0:03)|Orphanage]]>><<pass 3>><</link>>
+	<<link [[暂退一步 (0:03)|Orphanage]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>><<else>><span class="disabled">问衬衫来历 (0:05)（尚未结识）</span><</if>>
 <br>
 <<link "翻查储物柜下层 (0:06)">><<pass 6>><<replace "#side-act-mp-side-orphan-laundry">>
 <<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
-	<<set $mpSideClues["laundry_slip"] to 1>><<set $mpSideClues["laundry_box"] to 1>><span class="green">你稳住呼吸沉住气观察片刻，在不起眼的夹缝间看清了端倪。</span><<stress -2>><<lstress>>
+	<<set $mpSideClues["laundry_slip"] to 1>><<set $mpSideClues["laundry_box"] to 1>><span class="green">你稳住呼吸沉住气观察片刻，在不起眼的夹缝间看清了端倪。</span><<stress -2>><<lstress>><<mpalert 6>><<mpalertgain "翻找储物柜">>
 	<br><br>
 	<<link [[循线追查 (0:04)|Orphanage]]>><<pass 4>><</link>>
 <<else>>
-	<span class="red">冷风吹得你肩头微僵，稍一分神便错过了最佳时机。</span><<stress 4>><<tiredness 1>><<gstress>>
+	<span class="red">冷风吹得你肩头微僵，稍一分神便错过了最佳时机。</span><<stress 4>><<tiredness 1>><<gstress>><<mpalert 12>><<mpalertgain "柜门碰响">>
 	<br><br>
 	<<link [[压住台面重新着力 (0:04)|MP Side Orphan Laundry]]>><<pass 4>><</link>>
 	<br>
@@ -249,23 +250,24 @@
 
 :: MP Side Orphan Laundry Step2 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpSideClues to ($mpSideClues or {})>>
 你把收衣单摊在熨衣板上。最下面一行写着码头旧衣铺的地址，旁边盖着一枚褪色的圆章。院长看了一眼，没有伸手去拿。「<<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>以前住二楼最里面那间。」她说，「后来从洗衣房后窗爬出去，再没回来。」
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="side-act-mp-side-orphan-laundry-step2">
 <<investigateicon>><<if ($skulduggery or 0) gte 280>><<link "拆开上面的信 (0:05)">><<pass 5>><<replace "#side-act-mp-side-orphan-laundry-step2">>
 <<set $skulduggerydifficulty to 280>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
-	<<set $mpSideClues["laundry_letters"] to 1>><span class="green">你用发卡挑开簧片，盒盖弹起一条缝。</span><<stress -1>><<lstress>>
+	<<set $mpSideClues["laundry_letters"] to 1>><span class="green">你用发卡挑开簧片，盒盖弹起一条缝。</span><<stress -1>><<lstress>><<mpalert 8>><<mpalertgain "挑开簧片">>
 	<br><br>
 	<<walkicon>><<link [[理清头绪 (0:04)|MP Side Orphan Laundry Resolve]]>><<pass 4>><</link>>
 <<else>>
-	<span class="red">簧片突然回弹，夹住你的指节，疼得你倒吸一口气。</span><<pain 2>><<stress 4>><<gstress>>
+	<span class="red">簧片突然回弹，夹住你的指节，疼得你倒吸一口气。</span><<pain 2>><<stress 4>><<gstress>><<mpalert 12>><<mpalertgain "簧片回弹响动">>
 	<br><br>
 	<<link [[垫上干布重起卡扣 (0:04)|MP Side Orphan Laundry Step2]]>><<pass 4>><</link>>
 	<br>
-	<<link [[返回孤儿院 (0:03)|Orphanage]]>><<pass 3>><</link>>
+	<<link [[返回孤儿院 (0:03)|Orphanage]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>><<else>><span class="disabled">拆开上面的信 (0:05)（潜行不足）</span><</if>>
 <br>
@@ -279,16 +281,17 @@
 	<br><br>
 	<<link [[顺着卯眼重新发力 (0:04)|MP Side Orphan Laundry Step2]]>><<pass 4>><</link>>
 	<br>
-	<<link [[走回孤儿院 (0:03)|Orphanage]]>><<pass 3>><</link>>
+	<<link [[走回孤儿院 (0:03)|Orphanage]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">顺着卯眼重新发力 (0:04)（尚未结识）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">交铁皮盒给贝利 (0:04)（尚未结识）</span><</if>>
 </div>
 
 :: MP Side Orphan Laundry Resolve [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set _first to true>>
 <br><br>
-<<getouticon>><<link [[返回孤儿院 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回孤儿院 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="res-mp-side-orphan-laundry-resolve">
 <<investigateicon>><<link "当面印证 (0:05)">><<pass 5>><<replace "#res-mp-side-orphan-laundry-resolve">>
@@ -306,7 +309,7 @@
 <br><br>
 	<br>
 	<br>
-	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[晾起衬衫 (0:04)|Orphanage]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">晾起衬衫 (0:04)（尚未结识）</span><</if>>
+	<<mptailoricon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[晾起衬衫 (0:04)|Orphanage]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>><<else>><span class="disabled">晾起衬衫 (0:04)（尚未结识）</span><</if>>
 	<br>
 	<br>
 	<br>
@@ -316,15 +319,16 @@
 
 :: MP Side School Goggles [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<mpalertinit "school">><<mpalerttext>><<mpalertcheck>>
 <<set $mpSideClues to ($mpSideClues or {})>>
 <<if Time.hour gte 15 or Time.dayState is "dusk">>放学后的更衣室空得能听见水滴。<<else>>课间安静的更衣室空得能听见水滴。<</if>>氯气味从泳池那边渗过来，混着湿毛巾和橡胶拖鞋的酸味。失物招领箱搁在长凳尽头，箱盖半开，里面堆着单只手套、断带凉鞋和一团缠死的泳帽。箱底压着一副泳镜，镜腿内侧用记号笔写着一串数字。
 <br><br>
-<<getouticon>><<link [[返回学校 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回学校 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="side-act-mp-side-school-goggles">
 <<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Mason")>><<link "问梅森学生事 (0:05)">><<pass 5>><<replace "#side-act-mp-side-school-goggles">>
 <<if ($science or 0) gte 320 or ($maths or 0) gte 320>>
-	<<set $mpSideClues["goggles_coord"] to 1>><span class="green">你借了梅森桌上的地图册，把坐标按比例换算。</span><<stress -1>><<lstress>>
+	<<set $mpSideClues["goggles_coord"] to 1>><span class="green">你借了梅森桌上的地图册，把坐标按比例换算。</span><<stress -1>><<lstress>><<mpalert 8>><<mpalertgain "翻动地图册">>
 	<br><br>
 	<<walkicon>><<link [[前往下一处 (0:04)|MP Side School Goggles Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -332,17 +336,17 @@
 	<br><br>
 	<<link [[扶稳器座重调角度 (0:04)|MP Side School Goggles]]>><<pass 4>><</link>>
 	<br>
-	<<link [[走回学校 (0:03)|Hallways]]>><<pass 3>><</link>>
+	<<link [[走回学校 (0:03)|Hallways]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>><<else>><span class="disabled">问梅森学生事 (0:05)（尚未结识）</span><</if>>
 <br>
 <<link "摸到更衣室后墙 (0:06)">><<pass 6>><<replace "#side-act-mp-side-school-goggles">>
 <<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
-	<<set $mpSideClues["goggles_coord"] to 1>><<set $mpSideClues["goggles_door"] to 1>>你先稳住下盘重心，再分寸不差地完成了最后一步。<span class="green">阻碍迎刃而解，手头收获已贴身收好。</span><<stress -2>><<lstress>>
+	<<set $mpSideClues["goggles_coord"] to 1>><<set $mpSideClues["goggles_door"] to 1>>你先稳住下盘重心，再分寸不差地完成了最后一步。<span class="green">阻碍迎刃而解，手头收获已贴身收好。</span><<stress -2>><<lstress>><<mpalert 6>><<mpalertgain "贴墙摸索">>
 	<br><br>
 	<<link [[循线追查 (0:04)|Hallways]]>><<pass 4>><</link>>
 <<else>>
-	器物边角沾着湿滑的潮气，你捏紧使劲时还是滑脱了一下。<span class="red">掌心擦出一道红印，眼下未能得手。</span><<stress 4>><<tiredness 1>><<gstress>>
+	器物边角沾着湿滑的潮气，你捏紧使劲时还是滑脱了一下。<span class="red">掌心擦出一道红印，眼下未能得手。</span><<stress 4>><<tiredness 1>><<gstress>><<mpalert 12>><<mpalertgain "长凳碰响">>
 	<br><br>
 	<<link [[屏住气息重新摸索 (0:04)|MP Side School Goggles]]>><<pass 4>><</link>>
 	<br>
@@ -353,46 +357,48 @@
 
 :: MP Side School Goggles Step2 [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpSideClues to ($mpSideClues or {})>>
 坐标指向的不是学校。夜里，泳池的灯只留了一盏。水面上浮着薄薄一层氯雾，深水区的浮标线轻轻晃。
 <br><br>
-<<getouticon>><<link [[返回更衣室 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回更衣室 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="side-act-mp-side-school-goggles-step2">
 <<walkicon>><<if Time.dayState is "night">><<if ($skulduggery or 0) gte 300>><<link "下过滤房摸袋 (0:06)">><<pass 6>><<replace "#side-act-mp-side-school-goggles-step2">>
 <<set $skulduggerydifficulty to 300>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
-	<<set $mpSideClues["goggles_bag"] to 1>><span class="green">你用胶带固定住门轴，无声推开一条缝。</span><<stress -1>><<lstress>>
+	<<set $mpSideClues["goggles_bag"] to 1>><span class="green">你用胶带固定住门轴，无声推开一条缝。</span><<stress -1>><<lstress>><<mpalert 8>><<mpalertgain "推开过滤房门">>
 	<br><br>
 	<<link [[理清头绪 (0:04)|MP Side School Goggles Resolve]]>><<pass 4>><</link>>
 <<else>>
-	<span class="red">铁门轴发出干涩的尖叫，过滤房里的水声停了。</span><<pain 2>><<stress 5>><<gstress>>
+	<span class="red">铁门轴发出干涩的尖叫，过滤房里的水声停了。</span><<pain 2>><<stress 5>><<gstress>><<mpalert 12>><<mpalertgain "门轴尖叫">>
 	<br><br>
 	<<link [[借着侧光重对刻痕 (0:04)|MP Side School Goggles Step2]]>><<pass 4>><</link>>
 	<br>
-	<<link [[暂退一步 (0:03)|Hallways]]>><<pass 3>><</link>>
+	<<link [[暂退一步 (0:03)|Hallways]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>><<else>><span class="disabled">下过滤房摸袋 (0:06)（潜行不足）</span><</if>><<else>><span class="disabled">下过滤房摸袋 (0:06)（只有夜里）</span><</if>>
 <br>
 <<link "看仪表盘记录 (0:05)">><<pass 5>><<replace "#side-act-mp-side-school-goggles-step2">>
 <<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
-	<<set $mpSideClues["goggles_bag"] to 1>><<set $mpSideClues["goggles_log"] to 1>>你换了个顺手的角度切入，原本棘手的阻碍顿时迎刃而解。<span class="green">不费吹灰之力便拿到了里层物件。</span><<stress -2>><<lstress>>
+	<<set $mpSideClues["goggles_bag"] to 1>><<set $mpSideClues["goggles_log"] to 1>>你换了个顺手的角度切入，原本棘手的阻碍顿时迎刃而解。<span class="green">不费吹灰之力便拿到了里层物件。</span><<stress -2>><<lstress>><<mpalert 8>><<mpalertgain "翻动仪表盘">>
 	<br><br>
 	<<link [[顺藤查证 (0:04)|Hallways]]>><<pass 4>><</link>>
 <<else>>
-	光线忽明忽暗晃花了眼，你探手的角度差了毫厘。<span class="red">指节磕在硬物上生疼，只得暂且作罢。</span><<stress 4>><<tiredness 1>><<gstress>>
+	光线忽明忽暗晃花了眼，你探手的角度差了毫厘。<span class="red">指节磕在硬物上生疼，只得暂且作罢。</span><<stress 4>><<tiredness 1>><<gstress>><<mpalert 12>><<mpalertgain "仪表盘碰响">>
 	<br><br>
 	<<link [[扣紧边沿重新提拉 (0:04)|MP Side School Goggles Step2]]>><<pass 4>><</link>>
 	<br>
-	<<link [[返回学校 (0:03)|Hallways]]>><<pass 3>><</link>>
+	<<link [[返回学校 (0:03)|Hallways]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Side School Goggles Resolve [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set _first to true>>
 <br><br>
-<<getouticon>><<link [[返回更衣室 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回更衣室 (0:02)|Hallways]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="res-mp-side-school-goggles-resolve">
 <<investigateicon>><<link "当面印证 (0:05)">><<pass 5>><<replace "#res-mp-side-school-goggles-resolve">>
@@ -410,7 +416,7 @@
 <br><br>
 	<br>
 	<br>
-	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Mason")>><<link [[帮梅森收起浮板 (0:04)|Hallways]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Mason")>><<npcincr Mason love 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">帮梅森收起浮板 (0:04)（尚未结识）</span><</if>>
+	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Mason")>><<link [[帮梅森收起浮板 (0:04)|Hallways]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Mason")>><<npcincr Mason love 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>><<else>><span class="disabled">帮梅森收起浮板 (0:04)（尚未结识）</span><</if>>
 	<br>
 	<br>
 	<br>
@@ -528,83 +534,86 @@
 
 :: MP Side Docks Knot [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<mpalertinit "docks">><<mpalerttext>><<mpalertcheck>>
 <<set $mpSideClues to ($mpSideClues or {})>>
 码头的系船柱被海水泡得发黑，铁环上挂着一层白霜似的盐。你蹲下来，看见柱身上的绳结又换了。昨天是双套结，今天是一个你没见过的活结，绳尾压在三圈主绳下面。<<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>蹲在旁边的货箱上记账，抬头看了你一眼。
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="side-act-mp-side-docks-knot">
 <<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Wren")>><<link "问绳结来历 (0:05)">><<pass 5>><<replace "#side-act-mp-side-docks-knot">>
 <<if ($history or 0) gte 300 or ($skulduggery or 0) gte 300>>
-	<<set $mpSideClues["dock_paper"] to 1>><span class="green">你顺着收尾的方向摸过去，发现结心压着一张浸过蜡的薄纸。</span><<stress -1>><<lstress>>
+	<<set $mpSideClues["dock_paper"] to 1>><span class="green">你顺着收尾的方向摸过去，发现结心压着一张浸过蜡的薄纸。</span><<stress -1>><<lstress>><<mpalert 8>><<mpalertgain "解开绳结">>
 	<br><br>
 	<<walkicon>><<link [[前往下一处 (0:04)|MP Side Docks Knot Step2]]>><<pass 4>><</link>>
 <<else>>
-	<span class="red">你用力扯了扯绳尾，麻绳突然滑动，粗糙的纤维从掌心犁过，留下一道火辣辣的红痕。</span><<pain 2>><<stress 3>><<gstress>>
+	<span class="red">你用力扯了扯绳尾，麻绳突然滑动，粗糙的纤维从掌心犁过，留下一道火辣辣的红痕。</span><<pain 2>><<stress 3>><<gstress>><<mpalert 12>><<mpalertgain "缆绳滑脱">>
 	<br><br>
 	<<link [[扶稳器座重调角度 (0:04)|MP Side Docks Knot]]>><<pass 4>><</link>>
 	<br>
-	<<link [[返回旧港栈桥 (0:03)|Docks]]>><<pass 3>><</link>>
+	<<link [[返回旧港栈桥 (0:03)|Docks]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>><<else>><span class="disabled">问绳结来历 (0:05)（尚未结识）</span><</if>>
 <br>
 <<if ($maths or 0) gte 260 or ($housekeeping or 0) gte 250>><<link "趁隙细看结心 (0:06)">><<pass 6>><<replace "#side-act-mp-side-docks-knot">>
 <<if ($maths or 0) gte 250 or ($housekeeping or 0) gte 250>>
-	<<set $mpSideClues["dock_paper"] to 1>><<set $mpSideClues["dock_watch"] to 1>>你耐着性子一点点理清脉络，终于将关键线索握在手中。<span class="green">这一趟工夫没有白费，收获颇丰。</span><<stress -2>><<lstress>>
+	<<set $mpSideClues["dock_paper"] to 1>><<set $mpSideClues["dock_watch"] to 1>>你耐着性子一点点理清脉络，终于将关键线索握在手中。<span class="green">这一趟工夫没有白费，收获颇丰。</span><<stress -2>><<lstress>><<mpalert 8>><<mpalertgain "细看结心">>
 	<br><br>
 	<<link [[循线追查 (0:04)|Docks]]>><<pass 4>><</link>>
 <<else>>
-	你操之过急失了准头，衣袖还在粗糙的边沿挂了一下。<span class="red">你连忙拢好衣角，打算定下神再来。</span><<stress 3>><<tiredness 2>><<gstress>>
+	你操之过急失了准头，衣袖还在粗糙的边沿挂了一下。<span class="red">你连忙拢好衣角，打算定下神再来。</span><<stress 3>><<tiredness 2>><<gstress>><<mpalert 12>><<mpalertgain "衣物挂响">>
 	<br><br>
 	<<link [[屏住气息重新摸索 (0:04)|MP Side Docks Knot]]>><<pass 4>><</link>>
 	<br>
-	<<link [[走回旧港栈桥 (0:03)|Docks]]>><<pass 3>><</link>>
+	<<link [[走回旧港栈桥 (0:03)|Docks]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>><<else>><span class="disabled">趁隙细看结心 (0:06)（能力不足）</span><</if>>
 </div>
 
 :: MP Side Docks Knot Step2 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set $mpSideClues to ($mpSideClues or {})>>
 你解开外圈，发现结心压着一张浸过蜡的薄纸。纸上画着潮汐表，几个时刻被圈了出来，旁边标着船名的缩写。最下面有一行小字：「初七，四号柱，换绳。」纸边被海水泡得起皱，字迹却很清楚。
 <br><br>
-<<getouticon>><<link [[返回码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="side-act-mp-side-docks-knot-step2">
-<<walkicon>><<if Time.dayState is "night">><<if ($maths or 0) gte 280>><<link "趁换班去四号柱 (0:07)">><<pass 7>><<replace "#side-act-mp-side-docks-knot-step2">>
+<<mpwatchicon>><<if Time.dayState is "night">><<if ($maths or 0) gte 280>><<link "趁换班去四号柱 (0:07)">><<pass 7>><<replace "#side-act-mp-side-docks-knot-step2">>
 <<if ($maths or 0) gte 280>>
-	<<set $mpSideClues["dock_time"] to 1>><span class="green">你按潮汐表推算出换绳的时间在凌晨两点，那时巡逻艇正好交班。</span><<stress -1>><<lstress>>
+	<<set $mpSideClues["dock_time"] to 1>><span class="green">你按潮汐表推算出换绳的时间在凌晨两点，那时巡逻艇正好交班。</span><<stress -1>><<lstress>><<mpalert 6>><<mpalertgain "摸黑靠近四号柱">>
 	<br><br>
 	<<link [[理清头绪 (0:04)|MP Side Docks Knot Resolve]]>><<pass 4>><</link>>
 <<else>>
-	<span class="red">你算错了潮时，把凌晨两点记成了四点。</span><<tiredness 2>><<stress 3>><<gstress>>
+	<span class="red">你算错了潮时，把凌晨两点记成了四点。</span><<tiredness 2>><<stress 3>><<gstress>><<mpalert 12>><<mpalertgain "在柱间绕出声响">>
 	<br><br>
 	<<link [[借着侧光重对刻痕 (0:04)|MP Side Docks Knot Step2]]>><<pass 4>><</link>>
 	<br>
-	<<link [[返回旧港栈桥 (0:03)|Docks]]>><<pass 3>><</link>>
+	<<link [[返回旧港栈桥 (0:03)|Docks]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>><<else>><span class="disabled">趁换班去四号柱 (0:07)（算术不足）</span><</if>><<else>><span class="disabled">趁换班去四号柱 (0:07)（只有夜里）</span><</if>>
 <br>
 <<link "查四号柱旧绳 (0:06)">><<pass 6>><<replace "#side-act-mp-side-docks-knot-step2">>
 <<if ($history or 0) gte 250 or ($english or 0) gte 250>>
-	<<set $mpSideClues["dock_time"] to 1>><<set $mpSideClues["dock_oldrope"] to 1>>你趁周围无人留意果断出手，眨眼间便把事情办得滴水不漏。<span class="green">顺手起出了封存完好的贴身收存。</span><<stress -2>><<lstress>>
+	<<set $mpSideClues["dock_time"] to 1>><<set $mpSideClues["dock_oldrope"] to 1>>你趁周围无人留意果断出手，眨眼间便把事情办得滴水不漏。<span class="green">顺手起出了封存完好的贴身收存。</span><<stress -2>><<lstress>><<mpalert 8>><<mpalertgain "翻查旧绳">>
 	<br><br>
 	<<link [[顺藤查证 (0:04)|Docks]]>><<pass 4>><</link>>
 <<else>>
-	暗处的缝隙比预想更窄，手指探进去半分便被卡住。<span class="red">指腹磨得发红，一时半会儿难以寸进。</span><<stress 3>><<tiredness 1>><<gstress>>
+	暗处的缝隙比预想更窄，手指探进去半分便被卡住。<span class="red">指腹磨得发红，一时半会儿难以寸进。</span><<stress 3>><<tiredness 1>><<gstress>><<mpalert 12>><<mpalertgain "旧绳摩擦">>
 	<br><br>
 	<<link [[扣紧边沿重新提拉 (0:04)|MP Side Docks Knot Step2]]>><<pass 4>><</link>>
 	<br>
-	<<link [[返回入口 (0:03)|Docks]]>><<pass 3>><</link>>
+	<<link [[返回入口 (0:03)|Docks]]>><<pass 3>><<mpalertclear>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 
 :: MP Side Docks Knot Resolve [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<mpalerttext>><<mpalertcheck>>
 <<set _first to true>>
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Wren")>><<link [[离开 (0:04)|Docks]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">离开 (0:04)（尚未结识）</span><</if>>
+<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Wren")>><<link [[离开 (0:04)|Docks]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 1>><</if>><<pass 4>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>><<else>><span class="disabled">离开 (0:04)（尚未结识）</span><</if>>
 <br>
 <div id="res-mp-side-docks-knot-resolve">
 <<investigateicon>><<link "当面印证 (0:05)">><<pass 5>><<replace "#res-mp-side-docks-knot-resolve">>
@@ -622,7 +631,7 @@
 <br><br>
 	<br>
 	<br>
-	<<walkicon>><<link [[返回码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+	<<walkicon>><<link [[返回码头 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 	<br>
 	<br>
 	<br>
@@ -642,7 +651,7 @@
 <<getouticon>><<link [[离开 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="side-act-mp-side-park-pigeon">
-<<socialiseicon>><<link "坐到长椅另一端 (0:05)">><<pass 5>><<replace "#side-act-mp-side-park-pigeon">>
+<<mpcarryicon>><<link "坐到长椅另一端 (0:05)">><<pass 5>><<replace "#side-act-mp-side-park-pigeon">>
 <<if ($willpower or 0) gte 280>>
 	<span class="green">你在长椅另一端坐下，没有急着说话。</span><<stress -1>><<lstress>>
 	<br><br>
@@ -746,7 +755,7 @@
 <<getouticon>><<link [[离开 (0:02)|Elk Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="side-act-mp-side-elk-watch">
-<<shopicon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link "问怀表来路 (0:05)">><<pass 5>><<replace "#side-act-mp-side-elk-watch">>
+<<mpclockworkicon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link "问怀表来路 (0:05)">><<pass 5>><<replace "#side-act-mp-side-elk-watch">>
 <<set $skulduggerydifficulty to 260>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
 	<<set $mpSideClues["watch_photo"] to 1>><span class="green">你用放大镜柄轻轻拨开表盖的卡簧，照片背面露出一行钢笔字：「给 B，海边的风很大。」</span><<stress -1>><<lstress>>
 	<br><br>
@@ -1162,7 +1171,7 @@
 <<getouticon>><<link [[离开 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="side-act-mp-side-clock-chalk">
-<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link "翻旧钟塔年表 (0:06)">><<pass 6>><<replace "#side-act-mp-side-clock-chalk">>
+<<mpclockworkicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link "翻旧钟塔年表 (0:06)">><<pass 6>><<replace "#side-act-mp-side-clock-chalk">>
 <<if ($maths or 0) gte 320 or ($history or 0) gte 320>>
 	<<set $mpSideClues["chalk_date"] to 1>><span class="green">你按日期往回推算，发现倒计时归零那天正好是钟塔落成纪念日。</span><<stress -1>><<lstress>>
 	<br><br>
@@ -1250,7 +1259,7 @@
 <br><br>
 	<br>
 	<br>
-	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[搬钟锤回学校 (0:05)|High Street]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">搬钟锤回学校 (0:05)（尚未结识）</span><</if>>
+	<<mpcarryicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[搬钟锤回学校 (0:05)|High Street]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">搬钟锤回学校 (0:05)（尚未结识）</span><</if>>
 	<br>
 	<br>
 	<br>

@@ -95,6 +95,7 @@
 
 :: MP Extra Deep Abbey 4 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set $daily to ($daily or {})>><<set $mpClues to ($mpClues or {})>>
 <<if Weather.precipitation is "rain">>湖面雨声透过修道院水下拱廊隐隐传来，<<else>>幽暗静谧的修道院水下石拱暗室里，<</if>>你在先前起出古老契约残页的石台背面发现了一座刻着七曜圣徽的青铜圣物匣，匣边石凹里摆着一枚调音音叉与一柄银质挑针。<<if (($mpQuestCatacomb or 0) + ($mpClues['clue_abbey_parchment'] ? 60 : 0)) gte 2>>你回忆起神殿地下墓穴的圣咏节拍，认出了七曜圣徽的按压次序。<</if>>
 
@@ -107,7 +108,7 @@
 水下石拱暗室的七曜圣物匣今日已启封查验，长明石灯静静燃烧。
 <<else>>
 <div id="act-mp-extra-deep-abbey-4">
-<<templeicon>><<link "敲音叉 (0:07)">><<pass 7>><<replace "#act-mp-extra-deep-abbey-4">>
+<<templeicon>><<link "敲音叉 (0:07)">><<mpalert 8>><<pass 7>><<replace "#act-mp-extra-deep-abbey-4">>
 <<if ($history or 0) gte 260 or ($english or 0) gte 250>>
 	<<set $daily.mpDeep4_abbey to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("deep_abbey_4_rew")>><<money 430>>清越的共鸣声中圣物匣缓缓弹开，里面整齐码放着早年修会封存的渡口奉纳银币。<<else>>音叉余音在石拱间回荡，圣物匣内衬依然干燥如初。<</if>><span class="green">你借古修会音律解开了水下圣物匣。</span><<stress -3>><<lstress>>
@@ -120,9 +121,9 @@
 	<br>
 	<<link [[回暗河渡口 (0:03)|MP Region Abbey Ferry]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
 <br>
-<<link "拨开蜂蜡销 (0:08)">><<pass 8>><<replace "#act-mp-extra-deep-abbey-4">>
+<<link "拨开蜂蜡销 (0:08)">><<mpalert 8>><<pass 8>><<replace "#act-mp-extra-deep-abbey-4">>
 <<if ($skulduggery or 0) gte 260 or ($willpower or 0) gte 430>>
 	<<set $daily.mpDeep4_abbey to 1>><<if !$mpClues or !$mpClues["clue_abbey_deep_relig"]>><<set $mpClues["clue_abbey_deep_relig"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("deep_abbey_4_rew_alt")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>蜂蜡销完好退下，匣底夹层里露出一卷附带修会私印的信物铜牌与手抄祷文。<<else>>蜂蜡封口平整依旧，你将内页抄文再次核对无误。<</if>><span class="green">你分毫未损地打开了圣物匣底夹层。</span><<tiredness -2>><<stress -2>><<skulduggery 1>><<ltiredness>><<lstress>>
@@ -135,7 +136,7 @@
 	<br>
 	<<link [[回到暗河渡口 (0:03)|MP Region Abbey Ferry]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
 </div>
 <</if>>
 <br>
@@ -155,7 +156,7 @@
 冷香窖深处的恒温玉瓷瓶今日已取样封存，兰花冷香清冽怡人。
 <<else>>
 <div id="act-mp-extra-deep-glasshouse-4">
-<<tendingicon>><<link "调冷香阀 (0:07)">><<pass 7>><<replace "#act-mp-extra-deep-glasshouse-4">>
+<<mpclockworkicon>><<link "调冷香阀 (0:07)">><<pass 7>><<replace "#act-mp-extra-deep-glasshouse-4">>
 <<if ($tending or 0) gte 260 or ($science or 0) gte 250>>
 	<<set $daily.mpDeep4_glasshouse to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("deep_glasshouse_4_rew")>><<money 450>>阀门刻度稳稳停在最佳温区，托盘暗格自动弹出药师预留的配药酬金袋。<<else>>冷香窖温湿度分毫不差，玉瓷瓶中的原液澄澈透亮。<</if>><span class="green">你精准稳住了夜雾兰原液的窖藏温度。</span><<stress -3>><<lstress>>
@@ -191,6 +192,7 @@
 
 :: MP Extra Deep Blackiron 4 [nobr]
 <<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "blackiron">><<mpalertinit "blackiron">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set $daily to ($daily or {})>><<set $mpClues to ($mpClues or {})>>
 <<if Weather.precipitation is "rain">>地面雨声顺着黑铁货运站盲段通风井传下，<<else>>黑铁货运站盲段水闸后的备用调度室里，<</if>>你在先前起出暗轨总表的铁柜侧面发现了一台仍通着弱电的穿孔发报机，桌角放着一盒黄铜校验插销与一本货运暗码簿。<<if (($mpQuestSmuggler or 0) + ($mpClues['clue_blackiron_manifest'] ? 60 : 0)) gte 2 or ($mpQuestUnderground or 0) gte 2>>你对照码头与下水道暗市的交接代号，立刻读懂了纸带上的发车班次。<</if>>
 
@@ -203,7 +205,7 @@
 盲段备用调度室的穿孔发报机今日已校验完毕，信号灯闪着稳定的绿光。
 <<else>>
 <div id="act-mp-extra-deep-blackiron-4">
-<<investigateicon>><<link "译纸带 (0:07)">><<pass 7>><<replace "#act-mp-extra-deep-blackiron-4">>
+<<mptranslateicon>><<link "译纸带 (0:07)">><<mpalert 8>><<pass 7>><<replace "#act-mp-extra-deep-blackiron-4">>
 <<if ($maths or 0) gte 250 or ($english or 0) gte 250>>
 	<<set $daily.mpDeep4_blackiron to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("deep_blackiron_4_rew")>><<money 460>>你将译出的特快专列时刻抄录妥当，并从发报机底匣取出了值班调度员的备用津贴。<<else>>纸带上的穿孔编码清晰明了，你顺手整理好了归档卷轴。<</if>><span class="green">你彻底掌握了黑铁盲段的夜间发车时刻。</span><<stress -3>><<lstress>>
@@ -216,7 +218,7 @@
 	<br>
 	<<link [[回走私月台 (0:03)|MP Region Blackiron Platform]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<mpalertgain "铁件与道砟的响动">>
 <br>
 <<link "插三号孔 (0:08)">><<pass 8>><<replace "#act-mp-extra-deep-blackiron-4">>
 <<if ($science or 0) gte 260 or ($skulduggery or 0) gte 260>>
@@ -251,7 +253,7 @@
 树心暗穴的翡翠石盘今日已引露完毕，萤石微光映着翠绿苔痕。
 <<else>>
 <div id="act-mp-extra-deep-druid-4">
-<<tendingicon>><<link "疏通引水星纹 (0:07)">><<pass 7>><<replace "#act-mp-extra-deep-druid-4">>
+<<mprepairicon>><<link "疏通引水星纹 (0:07)">><<pass 7>><<replace "#act-mp-extra-deep-druid-4">>
 <<if ($tending or 0) gte 260 or ($history or 0) gte 250>>
 	<<set $daily.mpDeep4_druid to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("deep_druid_4_rew")>><<money 440>>清冽晨露顺着星纹注满中心凹槽，石盘下方的根须缓缓让开，露出一袋守林长老留下的古银币。<<else>>晨露在翡翠石盘中流转自如，散发出令人心神宁静的草木清香。<</if>><span class="green">你疏通了树心暗穴的古德鲁伊引露盘。</span><<stress -3>><<lstress>>
@@ -287,6 +289,7 @@
 
 :: MP Quest Velvet Mirage 8 [nobr]
 <<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set $daily to ($daily or {})>><<set $mpClues to ($mpClues or {})>>
 <<if Time.dayState is "night">>华灯初上的天鹅绒暗层旋转舞台后台，<<else>>安静私密的天鹅绒暗层顶层金库外廊，<</if>>你在先前查获假面拍卖总账的密室深处发现了一扇嵌着双狐徽记的玫瑰木暗柜，柜台上放着一枚纯银调音钥与一盏紫晶验钞灯。<<if (($mpQuestVelvetMirage or 0) + ($mpClues['clue_velvet_master_ledger'] ? 60 : 0)) gte 7>>总账上的包厢代号与柜门的音簧刻度一一对应，正是暗层幕后股东留下的备用分红柜。<</if>>
 
@@ -299,7 +302,7 @@
 玫瑰木暗柜的音簧锁今日已开启核验，丝绒内衬在暖光下泛着微光。
 <<else>>
 <div id="act-mp-quest-velvet-mirage-8">
-<<sneakicon>><<link "拨双狐音簧 (0:07)">><<pass 7>><<replace "#act-mp-quest-velvet-mirage-8">>
+<<sneakicon>><<link "拨双狐音簧 (0:07)">><<mpalert 8>><<pass 7>><<replace "#act-mp-quest-velvet-mirage-8">>
 <<if ($skulduggery or 0) gte 270 or ($danceskill or 0) gte 250>>
 	<<set $daily.mpVelvetQ8 to 1>><<set $mpQuestVelvetMirage to Math.max(($mpQuestVelvetMirage or 0), 8)>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("velvet_mirage_8_rew")>><<money 520>>五枚音簧同时发出柔和共鸣，柜门悄然滑开，里面放着一叠不记名的贵宾包厢分红金券。<<else>>音簧共鸣清脆悦耳，柜中备用的假面徽章排列得整整齐齐。<</if>><span class="green">你凭总账代号开启了天鹅绒幕后分红柜。</span><<stress -3>><<lstress>>
@@ -312,7 +315,7 @@
 	<br>
 	<<link [[回拍卖暗厅 (0:03)|MP Region Velvet Auction]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<mpalertgain "帷幔后的细响">>
 <br>
 <<link "烘显柜门密纹 (0:08)">><<pass 8>><<replace "#act-mp-quest-velvet-mirage-8">>
 <<if ($science or 0) gte 250 or ($english or 0) gte 260>>
