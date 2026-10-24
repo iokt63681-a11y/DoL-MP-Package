@@ -75,6 +75,8 @@
 18. **人名**：`布里尔` 12 处统一为 `布莱尔`。Sydney 以本机汉化包为准统一为 **悉尼**（不是“西德尼”）。
 19. **`MP Romance Confess`**：`generateNPC` 加 `<<if !$pronoun>>` 守卫，不再重掷目标 NPC。
 20. **剩余时间文案**：`雪夜`、`阳光斜照`、`清晨露水`、`下午四点` 改中性；`Market Mule → NightAlley Lantern` 加夜间门控。
+21. **P0 `$mpClues` 未兜底**：`mp-region-storylines-2` 的 Velvet Mirage 2–6 / Observatory Wing 2–6 共 10 段补 `<<set $mpClues to ($mpClues or {})>>`。
+22. **Stage 8/9 任务变量**：成功分支补 `$mpQuestVelvetMirage` / `$mpQuestObservatoryWing` 推进到 8/9。
 
 ## 五、仍然存在的问题（下一批）
 
