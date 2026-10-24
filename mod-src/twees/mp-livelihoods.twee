@@ -2,27 +2,13 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
-
-<<set _cafeSt to ($daily and $daily.mpJobCafe) ? "已收工" : "可上工">><<set _fishSt to ($daily and $daily.mpJobFish) ? "已收工" : "可上工">><<set _spaSt to ($daily and $daily.mpJobSpa) ? "已收工" : "可上工">><<set _farmSt to ($daily and $daily.mpJobFarm) ? "已收工" : "可上工">><<set _clockSt to ($daily and $daily.mpJobClock) ? "已收工" : "可上工">><<set _laundrySt to ($daily and $daily.mpJobLaundry) ? "已收工" : "可上工">>
-街角面包房的炉火刚熄，告示板上的图钉被晨风吹得发亮。六张招工纸条的边角都卷了起来，墨迹被潮气晕开。你抬手按平最上面那张，指腹沾了一点陈年浆糊。
+高街布告栏最下面一排钉着几张补充说明：六家铺子的长期班次各自在店门口招人，这里只留零工与季节招工的纸条。
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><</link>>
 <br>
-<<socialiseicon>><<link [[海风咖啡馆 <<print _cafeSt>> (0:08)|MP Job Cafe]]>><<pass 8>><</link>>
-<br>
-<<beachicon>><<link [[码头鱼档 <<print _fishSt>> (0:10)|MP Job Fish]]>><<pass 10>><</link>>
-<br>
-<<templeicon>><<link [[温泉桑拿 <<print _spaSt>> (0:08)|MP Job Spa]]>><<pass 8>><</link>>
-<br>
-<<link [[河湾农场 <<print _farmSt>> (0:15)|MP Job Farm]]>><<pass 15>><</link>>
-<br>
-<<if Time.hour gte 8 and Time.hour lt 21>><<link [[钟表铺学徒 <<print _clockSt>> (0:05)|MP Job Clock]]>><<pass 5>><</link>><<else>><<link [[钟表铺学徒 (0:05)|MP NotNow]]>><<set $mpNotNowRet to (State.passage)>><<set $mpNotNowLabel to "钟表铺学徒">><<set $mpNotNowReq to "8:00–21:00">><<pass 5>><</link>><</if>>
-<br>
-<<link [[孤儿院浆洗房 <<print _laundrySt>> (0:08)|MP Job Laundry]]>><<pass 8>><</link>>
+<<socialiseicon>><<link [[查看零工与补充招工 (0:03)|MP Extra Jobs Hub]]>><<pass 3>><</link>>
 <br><br>
 纸条背面用铅笔写着一行小字：每条路线的班次一天只算一次；做得久了，东家才会记住你。
-<br><br>
-<<link [[查看招工板 (0:03)|MP Extra Jobs Hub]]>><<pass 3>><</link>>
 
 :: MP Job Cafe [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -65,7 +51,7 @@
 <</if>>
 <br><br>
 <<if ($mpJobCafeSuspended or 0) is 1>>
-<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+<<getouticon>><<link [[返回咖啡馆 (0:08)|Ocean Breeze]]>><<pass 8>><</link>>
 <br>
 	<<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>没把围裙递过来。<<link [[找东家说理 (0:03)|MP Job Punishment Cafe 3]]>><<pass 3>><</link>>
 <<else>>
@@ -73,6 +59,8 @@
 <</if>>
 <br>
 <<mpreadicon>><<link [[翻看熟客名册 (0:03)|MP Job Cafe Upgrade]]>><<pass 3>><</link>>
+<br>
+<<getouticon>><<link [[离开 (0:02)|Ocean Breeze]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Job Cafe Shift [nobr]
 <<if ($mpJobCafeSuspended or 0) is 1>><<goto "MP Job Cafe">><</if>>
@@ -82,7 +70,7 @@
 <<if $daily and $daily.mpJobCafe>>
 	咖啡馆今日的班次已经交接完毕，吧台擦得锃亮。
 	<br><br>
-	<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[返回咖啡馆 (0:08)|Ocean Breeze]]>><<pass 8>><</link>>
 <<else>>
 	午后的客人一波接一波涌进来。托盘边沿烫手，奶泡在杯口晃出细小的弧。<<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>在吧台后头也不抬地报出桌号，手边的铜铃被碰得叮当响。
 	<br><br>
@@ -94,7 +82,7 @@
 	<br>
 	<<mpcleanicon>><<link [[擦杯备料 (0:14)|MP Job Cafe Settle]]>><<set $mpJobCafeExp to ($mpJobCafeExp or 0) + 1>><<set $mpJobCafeLevel to ($mpJobCafeExp gte 21 ? 5 : $mpJobCafeExp gte 15 ? 4 : $mpJobCafeExp gte 10 ? 3 : $mpJobCafeExp gte 6 ? 2 : $mpJobCafeExp gte 3 ? 1 : 0)>><<set _pay to 4 * (260 + ($mpJobCafeLevel or 0) * 50)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把杯子一只只擦干，按大小码回架子。后厨的热气贴着后背，至少没人打翻东西。">><<money _pay>><<stress 1>><<tiredness 2>><<set $daily to ($daily or {})>><<set $daily.mpJobCafe to 1>><<pass 14>><</link>>
 	<br>
-	<<link [[离开 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<link [[离开 (0:08)|Ocean Breeze]]>><<pass 8>><</link>>
 <</if>>
 
 :: MP Job Cafe Settle [nobr]
@@ -120,7 +108,7 @@
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
 			<<set $mpJobCafeStrike to Math.min(3, ($mpJobCafeStrike or 0) + 1)>><<if $mpJobCafeStrike gte 3>><<set $mpJobCafeSuspended to 1>><</if>>
 			<<if $mpJobCafeStrike is 1>><<include "MP Job Failure Cafe 1">><<elseif $mpJobCafeStrike is 2>><<include "MP Job Failure Cafe 2">><<else>><<include "MP Job Failure Cafe 3">><</if>>
-	<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[返回咖啡馆 (0:08)|Ocean Breeze]]>><<pass 8>><</link>>
 <br>
 			<<socialiseicon>><<link "去说明情况 (0:03)">><<set _pun to "MP Job Punishment Cafe " + ($mpJobCafeStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
@@ -152,7 +140,7 @@
 <br>
 <<walkicon>><<link [[回吧台帮忙 (0:01)|MP Job Cafe]]>><<pass 1>><</link>>
 <br>
-<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+<<getouticon>><<link [[返回咖啡馆 (0:08)|Ocean Breeze]]>><<pass 8>><</link>>
 <br>
 <<if $daily and $daily.mpJobCafe>><<mprepairicon>><<link [[处理突发 (0:05)|MP Job Extra Cafe 1]]>><<pass 5>><</link>><</if>>
 <br>
@@ -193,7 +181,7 @@
 <br><br>
 <<if ($mpJobFishSuspended or 0) is 1>>
 	鱼贩把你的竿收进了棚子。你被停了班，得先去鱼档把话说明白。
-<<getouticon>><<link [[返回告示板 (0:10)|MP Livelihood Hub]]>><<pass 10>><<mpalertclear>><</link>>
+<<getouticon>><<link [[返回鱼档 (0:10)|Docks]]>><<pass 10>><<mpalertclear>><</link>>
 <br>
 	<<walkicon>><<link [[找东家说理 (0:03)|MP Job Punishment Fish 3]]>><<pass 3>><</link>>
 <<else>>
@@ -201,6 +189,8 @@
 <</if>>
 <br>
 <<investigateicon>><<link [[看竿具潮位 (0:03)|MP Job Fish Upgrade]]>><<pass 3>><</link>>
+<br>
+<<getouticon>><<link [[离开 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Job Fish Shift [nobr]
 <<if ($mpJobFishSuspended or 0) is 1>><<goto "MP Job Fish">><</if>>
@@ -212,7 +202,7 @@
 <<if $daily and $daily.mpJobFish>>
 	鱼档今日的渔获已经分拣收秤，鱼篓冲洗得干干净净。
 	<br><br>
-	<<getouticon>><<link [[返回告示板 (0:10)|MP Livelihood Hub]]>><<pass 10>><<mpalertclear>><</link>>
+	<<getouticon>><<link [[返回鱼档 (0:10)|Docks]]>><<pass 10>><<mpalertclear>><</link>>
 <<else>>
 	海风把鱼线吹出一道弧。礁石背阴处的水洼里，几条小鱼被浪推得打转。鱼贩的秤在身后吱呀作响。
 	<br><br>
@@ -229,7 +219,7 @@
 		<span class="disabled">夜钓外海 (0:20)（要等天黑）</span>
 	<</if>>
 	<br>
-	<<link [[离开 (0:10)|MP Livelihood Hub]]>><<pass 10>><<mpalertclear>><</link>>
+	<<link [[离开 (0:10)|Docks]]>><<pass 10>><<mpalertclear>><</link>>
 <</if>>
 
 :: MP Job Fish Settle [nobr]
@@ -257,7 +247,7 @@
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
 			<<set $mpJobFishStrike to Math.min(3, ($mpJobFishStrike or 0) + 1)>><<if $mpJobFishStrike gte 3>><<set $mpJobFishSuspended to 1>><</if>>
 			<<if $mpJobFishStrike is 1>><<include "MP Job Failure Fish 1">><<elseif $mpJobFishStrike is 2>><<include "MP Job Failure Fish 2">><<else>><<include "MP Job Failure Fish 3">><</if>>
-	<<getouticon>><<link [[返回告示板 (0:10)|MP Livelihood Hub]]>><<pass 10>><<mpalertclear>><</link>>
+	<<getouticon>><<link [[返回鱼档 (0:10)|Docks]]>><<pass 10>><<mpalertclear>><</link>>
 <br>
 			<<socialiseicon>><<link "去说明情况 (0:03)">><<set _pun to "MP Job Punishment Fish " + ($mpJobFishStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
@@ -293,7 +283,7 @@
 <br>
 <<if ($mpJobFishExp or 0) gte 3>><br><<link [[接待采买厨师 (0:08)|MP Job Followup Fish]]>><<pass 8>><</link>><</if>>
 <br>
-<<getouticon>><<link [[返回告示板 (0:10)|MP Livelihood Hub]]>><<pass 10>><<mpalertclear>><</link>>
+<<getouticon>><<link [[返回鱼档 (0:10)|Docks]]>><<pass 10>><<mpalertclear>><</link>>
 <br>
 <<if $daily and $daily.mpJobFish>><<mprepairicon>><<link [[处理突发 (0:05)|MP Job Extra Fish 1]]>><<pass 5>><</link>><</if>>
 <br>
@@ -332,7 +322,7 @@
 <br><br>
 <<if ($mpJobSpaSuspended or 0) is 1>>
 	<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>把班表收了起来。你被停了班，得先去前台把话说明白。
-<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+<<getouticon>><<link [[返回桑拿 (0:08)|Spa]]>><<pass 8>><</link>>
 <br>
 	<<walkicon>><<link [[找东家说理 (0:03)|MP Job Punishment Spa 3]]>><<pass 3>><</link>>
 <<else>>
@@ -340,6 +330,8 @@
 <</if>>
 <br>
 <<investigateicon>><<link [[查看排班 (0:03)|MP Job Spa Upgrade]]>><<pass 3>><</link>>
+<br>
+<<getouticon>><<link [[离开 (0:02)|Spa]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Job Spa Shift [nobr]
 <<if ($mpJobSpaSuspended or 0) is 1>><<goto "MP Job Spa">><</if>>
@@ -349,7 +341,7 @@
 <<if $daily and $daily.mpJobSpa>>
 	温泉桑拿房今日的值班已经结束，木桶与毛巾皆已归位。
 	<br><br>
-	<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[返回桑拿 (0:08)|Spa]]>><<pass 8>><</link>>
 <<else>>
 	热水沿石槽淌下去，蒸汽把铜灯的光晕开。有人靠在池边闭目，湿发贴在颈侧。你端着毛巾从雾里穿过去。
 	<br><br>
@@ -361,7 +353,7 @@
 	<br>
 	<<investigateicon>><<link [[清理蒸汽房 (0:15)|MP Job Spa Settle]]>><<set _pay to 4 * (420 + ($mpJobSpaLevel or 0) * 60)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你掀开排水口的铜盖，把缠在滤网上的头发一点点扯出来。蒸汽熏得眼睛发酸，但没人再来挑毛病。">><<set $mpJobSpaExp to ($mpJobSpaExp or 0) + 1>><<set $mpJobSpaLevel to ($mpJobSpaExp gte 21 ? 5 : $mpJobSpaExp gte 15 ? 4 : $mpJobSpaExp gte 10 ? 3 : $mpJobSpaExp gte 6 ? 2 : $mpJobSpaExp gte 3 ? 1 : 0)>><<money _pay>><<tiredness 4>><<stress 2>><<set $daily to ($daily or {})>><<set $daily.mpJobSpa to 1>><<pass 15>><</link>>
 	<br>
-	<<link [[离开 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<link [[离开 (0:08)|Spa]]>><<pass 8>><</link>>
 <</if>>
 
 :: MP Job Spa Settle [nobr]
@@ -387,7 +379,7 @@
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
 			<<set $mpJobSpaStrike to Math.min(3, ($mpJobSpaStrike or 0) + 1)>><<if $mpJobSpaStrike gte 3>><<set $mpJobSpaSuspended to 1>><</if>>
 			<<if $mpJobSpaStrike is 1>><<include "MP Job Failure Spa 1">><<elseif $mpJobSpaStrike is 2>><<include "MP Job Failure Spa 2">><<else>><<include "MP Job Failure Spa 3">><</if>>
-	<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[返回桑拿 (0:08)|Spa]]>><<pass 8>><</link>>
 <br>
 			<<socialiseicon>><<link "去说明情况 (0:03)">><<set _pun to "MP Job Punishment Spa " + ($mpJobSpaStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
@@ -422,7 +414,7 @@
 <br>
 <<if ($mpJobSpaExp or 0) gte 3>><br><<link [[接待女高音 (0:08)|MP Job Followup Spa]]>><<pass 8>><</link>><</if>>
 <br>
-<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+<<getouticon>><<link [[返回桑拿 (0:08)|Spa]]>><<pass 8>><</link>>
 <br>
 <<if $daily and $daily.mpJobSpa>><<mprepairicon>><<link [[处理突发 (0:05)|MP Job Extra Spa 1]]>><<pass 5>><</link>><</if>>
 <br>
@@ -462,7 +454,7 @@
 <</if>>
 <br><br>
 <<if ($mpJobFarmSuspended or 0) is 1>>
-<<getouticon>><<link [[返回告示板 (0:12)|MP Livelihood Hub]]>><<pass 12>><</link>>
+<<getouticon>><<link [[返回农场 (0:12)|Farmland]]>><<pass 12>><</link>>
 <br>
 	<<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>把铁锹插回田埂，没让你下地。<<link [[找东家说理 (0:03)|MP Job Punishment Farm 3]]>><<pass 3>><</link>>
 <<else>>
@@ -470,6 +462,8 @@
 <</if>>
 <br>
 <<mpcalculateicon>><<link [[看农活账 (0:03)|MP Job Farm Upgrade]]>><<pass 3>><</link>>
+<br>
+<<getouticon>><<link [[离开 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Job Farm Shift [nobr]
 <<if ($mpJobFarmSuspended or 0) is 1>><<goto "MP Job Farm">><</if>>
@@ -480,7 +474,7 @@
 <<if $daily and $daily.mpJobFarm>>
 	农场田垄今日的农活已经忙完，农具整齐挂回了棚屋。
 	<br><br>
-	<<getouticon>><<link [[返回告示板 (0:12)|MP Livelihood Hub]]>><<pass 12>><</link>>
+	<<getouticon>><<link [[返回农场 (0:12)|Farmland]]>><<pass 12>><</link>>
 <<else>>
 	<<if _planted is 0>>
 		泥地昨夜受了潮，踩下去会陷半寸。种子袋口敞着，风一吹，几粒黑麦种滚到田埂边。
@@ -503,7 +497,7 @@
 	<br>
 	<<link [[搬料补篱笆 (0:16)|MP Job Farm Settle]]>><<set _pay to 4 * (280 + ($mpJobFarmLevel or 0) * 50)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你把草捆拖进棚里，又用铁丝把松动的篱笆桩重新绑紧。手上的泥干了，搓一搓就往下掉。">><<set $mpJobFarmExp to ($mpJobFarmExp or 0) + 1>><<set $mpJobFarmLevel to ($mpJobFarmExp gte 21 ? 5 : $mpJobFarmExp gte 15 ? 4 : $mpJobFarmExp gte 10 ? 3 : $mpJobFarmExp gte 6 ? 2 : $mpJobFarmExp gte 3 ? 1 : 0)>><<money _pay>><<tiredness 3>><<stress 1>><<set $daily to ($daily or {})>><<set $daily.mpJobFarm to 1>><<pass 16>><</link>>
 	<br>
-	<<link [[离开 (0:12)|MP Livelihood Hub]]>><<pass 12>><</link>>
+	<<link [[离开 (0:12)|Farmland]]>><<pass 12>><</link>>
 <</if>>
 
 :: MP Job Farm Settle [nobr]
@@ -530,7 +524,7 @@
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
 			<<set $mpJobFarmStrike to Math.min(3, ($mpJobFarmStrike or 0) + 1)>><<if $mpJobFarmStrike gte 3>><<set $mpJobFarmSuspended to 1>><</if>>
 			<<if $mpJobFarmStrike is 1>><<include "MP Job Failure Farm 1">><<elseif $mpJobFarmStrike is 2>><<include "MP Job Failure Farm 2">><<else>><<include "MP Job Failure Farm 3">><</if>>
-	<<getouticon>><<link [[返回告示板 (0:12)|MP Livelihood Hub]]>><<pass 12>><</link>>
+	<<getouticon>><<link [[返回农场 (0:12)|Farmland]]>><<pass 12>><</link>>
 <br>
 			<<socialiseicon>><<link "去说明情况 (0:03)">><<set _pun to "MP Job Punishment Farm " + ($mpJobFarmStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
@@ -568,7 +562,7 @@
 <br>
 <<if ($mpJobFarmExp or 0) gte 3>><br><<link [[挑头茬红麦 (0:07)|MP Job Followup Farm]]>><<pass 7>><</link>><</if>>
 <br>
-<<getouticon>><<link [[返回告示板 (0:12)|MP Livelihood Hub]]>><<pass 12>><</link>>
+<<getouticon>><<link [[返回农场 (0:12)|Farmland]]>><<pass 12>><</link>>
 <br>
 <<if $daily and $daily.mpJobFarm>><<mprepairicon>><<link [[处理突发 (0:05)|MP Job Extra Farm 1]]>><<pass 5>><</link>><</if>>
 <br>
@@ -603,7 +597,7 @@
 <br><br>
 <<if ($mpJobClockSuspended or 0) is 1>>
 	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>把工作台的灯关了。你被停了班，得先去柜台把话说明白。
-<<getouticon>><<link [[返回告示板 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回钟表铺 (0:02)|High Street]]>><<pass 2>><</link>>
 <br>
 	<<walkicon>><<link [[找东家说理 (0:03)|MP Job Punishment Clock 3]]>><<pass 3>><</link>>
 <<else>>
@@ -611,6 +605,8 @@
 <</if>>
 <br>
 <<mpcarryicon>><<link [[翻看委托簿 (0:03)|MP Job Clock Upgrade]]>><<pass 3>><</link>>
+<br>
+<<getouticon>><<link [[离开 (0:02)|High Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Job Clock Shift [nobr]
 <<if ($mpJobClockSuspended or 0) is 1>><<goto "MP Job Clock">><</if>>
@@ -620,7 +616,7 @@
 <<if $daily and $daily.mpJobClock>>
 	钟表铺工作台今日的学徒活计已经收工，零件盒全部锁妥。
 	<br><br>
-	<<getouticon>><<link [[返回告示板 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
+	<<getouticon>><<link [[返回钟表铺 (0:02)|High Street]]>><<pass 2>><</link>>
 <<else>>
 	齿轮在镊子尖上咬合，发出极轻的一声。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>在柜台那头修一把银壳怀表，头也不抬地说：「先听摆轮，再动螺丝。」
 	<br><br>
@@ -633,7 +629,7 @@
 	<<if ($skulduggery or 0) gte 320 or ($mpJobClockLevel or 0) gte 4>><<sneakicon>><<link [[拆壳取零件 (0:16)|MP Job Clock Settle]]>><<set _skill to ($skulduggery or 0)>><<set _ok to (_skill gte 320 or ($mpJobClockLevel or 0) gte 4)>><<set $mpJobClockExp to ($mpJobClockExp or 0) + 1 + (_ok ? 1 : 0)>><<set $mpJobClockLevel to ($mpJobClockExp gte 21 ? 5 : $mpJobClockExp gte 15 ? 4 : $mpJobClockExp gte 10 ? 3 : $mpJobClockExp gte 6 ? 2 : $mpJobClockExp gte 3 ? 1 : 0)>><<if _ok>><<set _pay to Math.min(6000, 4 * (820 + ($mpJobClockLevel or 0) * 110 + Math.floor(_skill / 5)))>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你用薄刃挑开旧壳的卡扣，里头的摆轮和宝石轴承都还完好。" + (($mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet) ? "塞拉" : "修表师") + "扫了一眼，按零件价给你记了工钱。">><<money _pay>><<else>><<set $mpJobResultPay to 0>><<set $mpJobResultText to "刀尖打滑，在夹板上划出一道深痕，还崩了指尖。" + (($mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet) ? "塞拉" : "修表师") + "把那块壳子丢进废料盒，把盒子推远，没让你赔。">><<pain 3>><<stress 6>><</if>><<if ($mpJobClockLevel or 0) gte 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_lv3_3")>><<set $money += 1200>><<set $mpJobResultMilestone to 1>><</if>><</if>><<set $daily to ($daily or {})>><<set $daily.mpJobClock to 1>><<pass 16>><</link>>
 	<<else>><<sneakicon>><<link [[拆壳取零件 (0:16)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拆壳取零件">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D+</span> 或 钟表等级 4">><<pass 16>><</link>><</if>>
 	<br>
-	<<link [[离开 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
+	<<link [[离开 (0:02)|High Street]]>><<pass 2>><</link>>
 <</if>>
 
 :: MP Job Clock Settle [nobr]
@@ -659,7 +655,7 @@
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
 			<<set $mpJobClockStrike to Math.min(3, ($mpJobClockStrike or 0) + 1)>><<if $mpJobClockStrike gte 3>><<set $mpJobClockSuspended to 1>><</if>>
 			<<if $mpJobClockStrike is 1>><<include "MP Job Failure Clock 1">><<elseif $mpJobClockStrike is 2>><<include "MP Job Failure Clock 2">><<else>><<include "MP Job Failure Clock 3">><</if>>
-	<<getouticon>><<link [[返回告示板 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
+	<<getouticon>><<link [[返回钟表铺 (0:02)|High Street]]>><<pass 2>><</link>>
 <br>
 			<<socialiseicon>><<link "去说明情况 (0:03)">><<set _pun to "MP Job Punishment Clock " + ($mpJobClockStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
@@ -695,7 +691,7 @@
 <br>
 <<if ($mpJobClockExp or 0) gte 3>><br><<link [[保养铁路怀表 (0:08)|MP Job Followup Clock]]>><<pass 8>><</link>><</if>>
 <br>
-<<getouticon>><<link [[返回告示板 (0:02)|MP Livelihood Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回钟表铺 (0:02)|High Street]]>><<pass 2>><</link>>
 <br>
 <<if $daily and $daily.mpJobClock>><<mprepairicon>><<link [[处理突发 (0:05)|MP Job Extra Clock 1]]>><<pass 5>><</link>><</if>>
 <br>
@@ -730,7 +726,7 @@
 <br><br>
 <<if ($mpJobLaundrySuspended or 0) is 1>>
 	管事把你的袖套收走了。你被停了班，得先去浆洗房把话说明白。
-<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+<<getouticon>><<link [[返回浆洗房 (0:08)|Orphanage]]>><<pass 8>><</link>>
 <br>
 	<<investigateicon>><<link [[找东家说理 (0:03)|MP Job Punishment Laundry 3]]>><<pass 3>><</link>>
 <<else>>
@@ -738,6 +734,8 @@
 <</if>>
 <br>
 <<mpreadicon>><<link [[看旧书摊账 (0:03)|MP Job Laundry Upgrade]]>><<pass 3>><</link>>
+<br>
+<<getouticon>><<link [[离开 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Job Laundry Shift [nobr]
 <<if ($mpJobLaundrySuspended or 0) is 1>><<goto "MP Job Laundry">><</if>>
@@ -747,7 +745,7 @@
 <<if $daily and $daily.mpJobLaundry>>
 	孤儿院浆洗房今日的床单已经熨平叠好，铜熨斗彻底放凉。
 	<br><br>
-	<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[返回浆洗房 (0:08)|Orphanage]]>><<pass 8>><</link>>
 <<else>>
 	熨斗压过湿布，白汽嘶地窜起来。走廊尽头传来孩子跑过的脚步声。旧书摊那边堆着待修的硬壳书，书脊的线已经松了。
 	<br><br>
@@ -759,7 +757,7 @@
 	<br>
 	<<investigateicon>><<link [[送洗好床单 (0:15)|MP Job Laundry Settle]]>><<set _pay to 4 * (200 + ($mpJobLaundryLevel or 0) * 35)>><<set $mpJobResultPay to _pay>><<set $mpJobResultText to "你抱着还带余温的床单穿过走廊，一间间铺好。楼梯扶手上的漆被摸得发亮，脚下没有停。">><<set $mpJobLaundryExp to ($mpJobLaundryExp or 0) + 1>><<set $mpJobLaundryLevel to ($mpJobLaundryExp gte 21 ? 5 : $mpJobLaundryExp gte 15 ? 4 : $mpJobLaundryExp gte 10 ? 3 : $mpJobLaundryExp gte 6 ? 2 : $mpJobLaundryExp gte 3 ? 1 : 0)>><<money _pay>><<tiredness 2>><<set $daily to ($daily or {})>><<set $daily.mpJobLaundry to 1>><<pass 15>><</link>>
 	<br>
-	<<link [[离开 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<link [[离开 (0:08)|Orphanage]]>><<pass 8>><</link>>
 <</if>>
 
 :: MP Job Laundry Settle [nobr]
@@ -785,7 +783,7 @@
 				<<if ($mpJobResultPay or 0) is 0 and $mpJobResultText>>
 			<<set $mpJobLaundryStrike to Math.min(3, ($mpJobLaundryStrike or 0) + 1)>><<if $mpJobLaundryStrike gte 3>><<set $mpJobLaundrySuspended to 1>><</if>>
 			<<if $mpJobLaundryStrike is 1>><<include "MP Job Failure Laundry 1">><<elseif $mpJobLaundryStrike is 2>><<include "MP Job Failure Laundry 2">><<else>><<include "MP Job Failure Laundry 3">><</if>>
-	<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[返回浆洗房 (0:08)|Orphanage]]>><<pass 8>><</link>>
 <br>
 			<<socialiseicon>><<link "去说明情况 (0:03)">><<set _pun to "MP Job Punishment Laundry " + ($mpJobLaundryStrike or 1)>><<pass 3>><<goto _pun>><</link>>
 		<</if>>
@@ -820,7 +818,7 @@
 <br>
 <<if ($mpJobLaundryExp or 0) gte 3>><br><<link [[重订地方志 (0:08)|MP Job Followup Laundry]]>><<pass 8>><</link>><</if>>
 <br>
-<<getouticon>><<link [[返回告示板 (0:08)|MP Livelihood Hub]]>><<pass 8>><</link>>
+<<getouticon>><<link [[返回浆洗房 (0:08)|Orphanage]]>><<pass 8>><</link>>
 <br>
 <<if $daily and $daily.mpJobLaundry>><<mprepairicon>><<link [[处理突发 (0:05)|MP Job Extra Laundry 1]]>><<pass 5>><</link>><</if>>
 <br>

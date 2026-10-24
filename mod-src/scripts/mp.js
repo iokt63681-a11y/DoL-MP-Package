@@ -4336,12 +4336,52 @@
 
   var LIVELIHOOD_HOOKS = [
     {
-      locs: ["Ocean Breeze", "Spa", "Docks", "Farmland", "Orphanage", "High Street"],
+      locs: ["Ocean Breeze"],
       check: function (v) { return true; },
-      hint: "街角的木告示板上钉着几张招工纸条，边角写着工钱和时辰。",
+      hint: "海风咖啡馆后门的排班表还留着空位，门缝里飘出烤面包和咖啡的香气。",
       icon: "img/misc/icon/shop.png",
-      linkText: "看看今天的零工 (0:03)",
-      passage: "MP Livelihood Hub"
+      linkText: "去咖啡馆上工 (0:05)",
+      passage: "MP Job Cafe"
+    },
+    {
+      locs: ["Docks"],
+      check: function (v) { return true; },
+      hint: "鱼档把一筐碎冰拖到栈桥边，鱼贩正朝礁石方向张望。",
+      icon: "img/misc/icon/beach.png",
+      linkText: "去鱼档上工 (0:05)",
+      passage: "MP Job Fish"
+    },
+    {
+      locs: ["Spa"],
+      check: function (v) { return true; },
+      hint: "温泉桑拿的前台把一块写着「招临时帮工」的木牌摆到了门口。",
+      icon: "img/misc/icon/temple.png",
+      linkText: "去桑拿上工 (0:05)",
+      passage: "MP Job Spa"
+    },
+    {
+      locs: ["Farmland"],
+      check: function (v) { return true; },
+      hint: "农场谷仓门口的活计牌还挂着，远处传来拖拉机的闷响。",
+      icon: "img/misc/icon/forest.png",
+      linkText: "去农场上工 (0:05)",
+      passage: "MP Job Farm"
+    },
+    {
+      locs: ["High Street"],
+      check: function (v) { return getHourNow() >= 8 && getHourNow() < 21; },
+      hint: "钟表铺的招工牌翻到了正面，橱窗里的座钟正指到整点。",
+      icon: "img/misc/icon/shop.png",
+      linkText: "去钟表铺上工 (0:05)",
+      passage: "MP Job Clock"
+    },
+    {
+      locs: ["Orphanage"],
+      check: function (v) { return true; },
+      hint: "浆洗房的管事站在走廊里点人手，门后传来熨斗压过布面的声响。",
+      icon: "img/misc/icon/socialise.png",
+      linkText: "去浆洗房上工 (0:05)",
+      passage: "MP Job Laundry"
     }
   ];
 
