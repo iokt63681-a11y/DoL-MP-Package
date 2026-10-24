@@ -149,3 +149,36 @@
 <br>
 <<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
+:: Widgets MP Light [widget nobr]
+<<widget "mplightinit">>
+	<<set $mpLight to 100>>
+	<<set $mpLightAmbush to 0>>
+<</widget>>
+
+<<widget "mplight">>
+	<<if _args[0]>>
+		<<set $mpLight to Math.clamp(($mpLight or 0) + Number(_args[0]), 0, 100)>>
+	<</if>>
+<</widget>>
+
+<<widget "mplighttext">>
+	<<set _mpLightNow to ($mpLight or 0)>>
+	火光：<<if _mpLightNow gte 100>><span class="green">「火把正旺」</span><<elseif _mpLightNow gte 80>><span class="teal">「火光稳定」</span><<elseif _mpLightNow gte 60>><span class="lblue">「火苗弱了些」</span><<elseif _mpLightNow gte 40>><span class="blue">「火光偏低」</span><<elseif _mpLightNow gte 20>><span class="purple">「快烧尽了」</span><<elseif _mpLightNow gte 1>><span class="pink">「只剩一点火星」</span><<else>><span class="red">「火把熄了」</span><</if>>
+<</widget>>
+
+<<widget "mplightloss">>
+	<<if ($mpLight or 0) gte 1 and !$settings.blindStatsEnabled>> | <span class="red">- 火光</span><</if>>
+<</widget>>
+
+<<widget "mplightgain">>
+	<<if !$settings.blindStatsEnabled>> | <span class="green">+ 火光</span><</if>>
+<</widget>>
+
+<<widget "mplightambush">>
+	<<if ($mpLight or 0) lt 20 and random(1, 100) gt ($mpLight or 0)>>
+		<<set $mpLightAmbush to 1>>
+		<span class="red">火把的光弱得照不清脚边，黑暗里有什么东西正朝你靠近。</span>
+	<<else>>
+		<<set $mpLightAmbush to 0>>
+	<</if>>
+<</widget>>

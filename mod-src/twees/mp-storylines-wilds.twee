@@ -194,45 +194,62 @@
 :: MP Quest Forest Ruins [nobr]
 <<set $outside to 1>><<set $location to "forest">>
 <<effects>><<mpAmbient>>
+<<mplightinit>><<mplighttext>><<mplightambush>>
+<br>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 1)>>
 荆棘在坍塌的铁栅间织成一张带刺的网，网后露出一角灰白石墙和被树根顶歪的日晷。庄园荒了不知多少年，门厅的屋顶早没了，只剩一排石柱撑着湿漉漉的天空。干涸喷泉边的泥地里有一串新脚印，鞋底沾着只有地窖才有的白霉。
 <br><br>
-<<getouticon>><<link [[返回森林 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回森林 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
 <br>
-<<walkicon>><<if ($athletics or 0) gte 250>><<socialiseicon>><<link [[翻墙看日晷 (0:06)|MP Quest Forest Ruins Step2]]>><<pass 6>><</link>><<else>><span class="disabled">翻墙看日晷 (0:06)（体魄不足）</span><</if>>
+<<walkicon>><<if ($athletics or 0) gte 250>><<socialiseicon>><<link [[翻墙看日晷 (0:06)|MP Quest Forest Ruins Step2]]>><<pass 6>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">翻墙看日晷 (0:06)（体魄不足）</span><</if>>
 <br>
-<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[问伊甸旧事 (0:07)|MP Quest Forest Ruins Step3]]>><<pass 7>><</link>><<else>><span class="disabled">问伊甸旧事 (0:07)（尚未结识）</span><</if>>
+<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[问伊甸旧事 (0:07)|MP Quest Forest Ruins Step3]]>><<pass 7>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">问伊甸旧事 (0:07)（尚未结识）</span><</if>>
 
+<br>
+<<if $mpLightAmbush is 1>>
+<<link [[摸黑应付 (0:04)|MP Quest Forest Ruins]]>><<pass 4>><<pain 2>><<stress 5>><<set $mpLightAmbush to 0>><</link>>
+<br>
+<</if>>
 :: MP Quest Forest Ruins Step2 [nobr]
 <<set $outside to 1>><<set $location to "forest">>
 <<effects>><<mpAmbient>>
+<<mplighttext>><<mplightambush>>
+<br>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 日晷盘面被青苔填满，中央插晷针的石孔却空着。你蹲下去拨开湿叶，发现孔底卡着一小截断铜，盘缘还刻着七个彼此错开的刻度。要看清它们，得先把整块晷盘从树根里抬起来。
 <br><br>
-<<getouticon>><<link [[返回森林 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回森林 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
 <br>
 <div id="act-mp-quest-forest-ruins-step2">
-<<investigateicon>><<if Math.max(($physique or 0), ($skulduggery or 0)) gte 280>><<link "撬起日晷盘 (0:06)">><<pass 6>><<replace "#act-mp-quest-forest-ruins-step2">>
+<<investigateicon>><<if Math.max(($physique or 0), ($skulduggery or 0)) gte 280>><<link "撬起日晷盘 (0:06)">><<pass 6>><<mplight -5>><<replace "#act-mp-quest-forest-ruins-step2">>
 <<if Math.max(($physique or 0), ($skulduggery or 0)) gte 300>>
 	<<if !$mpClues or !$mpClues["wilds_ruin_sundial"]>><<set $mpClues["wilds_ruin_sundial"] to 1>><span class="blue">线索已记录</span><</if>>
 	你用断枝作杠杆，把晷盘撬离树根。断铜下压着一枚刻有橡叶纹的铜片，背面记着一个被划掉的地窖日期。树影落在盘面时，七个刻度刚好指向庄园西侧。
 	<<money 300>><<stress -2>>
 	<br><br>
-	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[带铜片找伊甸 (0:06)|MP Quest Forest Ruins Step3]]>><<pass 6>><</link>><<else>><span class="disabled">带铜片找伊甸 (0:06)（尚未结识）</span><</if>>
+	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[带铜片找伊甸 (0:06)|MP Quest Forest Ruins Step3]]>><<pass 6>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">带铜片找伊甸 (0:06)（尚未结识）</span><</if>>
 	<br>
-<<link [[摸到地窖门 (0:08)|MP Quest Forest Ruins Step4]]>><<pass 8>><</link>>
+<<link [[摸到地窖门 (0:08)|MP Quest Forest Ruins Step4]]>><<pass 8>><<mplight -5>><</link>><<mplightloss>>
 <<else>>
 	树根比你想象中韧，晷盘只挪开半寸便重新卡死。你手背被荆刺划出几道血痕，断铜也滚进落叶缝里不见了。
 	<<pain 3>><<stress 5>>
 	<br><br>
-<<link [[擦净指腹重按簧片 (0:04)|MP Quest Forest Ruins Step2]]>><<pass 4>><</link>>
+<<link [[擦净指腹重按簧片 (0:04)|MP Quest Forest Ruins Step2]]>><<pass 4>><<mplight -5>><</link>><<mplightloss>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">带铜片找伊甸 (0:06)（属性不足）</span><</if>>
+<</replace>><</link>><<mplightloss>><<else>><span class="disabled">带铜片找伊甸 (0:06)（属性不足）</span><</if>>
 </div>
+
+<br>
+<<if $mpLightAmbush is 1>>
+<<link [[摸黑应付 (0:04)|MP Quest Forest Ruins Step2]]>><<pass 4>><<pain 2>><<stress 5>><<set $mpLightAmbush to 0>><</link>>
+<br>
+<</if>>
 :: MP Quest Forest Ruins Step3 [nobr]
 <<set $outside to 1>><<set $location to "forest">>
 <<effects>><<mpAmbient>>
+<<mplighttext>><<mplightambush>>
+<br>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<if $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>林间猎人<</if>>靠在林缘的倒木旁削一支木楔，听完你的来意才抬起眼。他用刀尖在泥地上画出庄园的旧界：「那家人不是搬走的。最后一夜，收荒人赶着三辆空车进去，天亮前只出来两辆。」他告诉你，地窖口每逢阴雨天会从石缝里冒白霉，还提醒你别碰戴铜戒指的人递来的东西。
@@ -240,15 +257,22 @@
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>>
 <<stress -3>>
 <br><br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<walkicon>><<link [[摸进地窖 (0:08)|MP Quest Forest Ruins Step4]]>><<pass 8>><</link>><<else>><span class="disabled">摸进地窖 (0:08)（属性不足）</span><</if>>
+<<sneakicon>><<if ($skulduggery or 0) gte 250>><<walkicon>><<link [[摸进地窖 (0:08)|MP Quest Forest Ruins Step4]]>><<pass 8>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">摸进地窖 (0:08)（属性不足）</span><</if>>
 <br>
-<<socialiseicon>><<link [[去西侧回廊 (0:12)|MP Quest Forest Ruins Step5]]>><<pass 12>><<tiredness 1>><</link>>
+<<socialiseicon>><<link [[去西侧回廊 (0:12)|MP Quest Forest Ruins Step5]]>><<pass 12>><<tiredness 1>><<mplight -5>><</link>><<mplightloss>>
 <br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[返回森林 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">返回森林 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[返回森林 (0:03)|Forest]]>><<pass 3>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>><<else>><span class="disabled">返回森林 (0:03)（尚未结识）</span><</if>>
 
+<br>
+<<if $mpLightAmbush is 1>>
+<<link [[摸黑应付 (0:04)|MP Quest Forest Ruins Step3]]>><<pass 4>><<pain 2>><<stress 5>><<set $mpLightAmbush to 0>><</link>>
+<br>
+<</if>>
 :: MP Quest Forest Ruins Step4 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
 <<effects>><<mpAmbient>>
+<<mplighttext>><<mplightambush>>
+<br>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set $mpForestCaught to ($mpForestCaught or 0)>>
@@ -258,24 +282,31 @@
 	你认出蜡封上的庄园旧押印，用铜片一点点剔开干蜡，铁锁应声弹开。门内桌面上摊着半本佃户账，最末一页记着三辆收荒车与一个港务处的名字。
 	<<money 400>><<stress -2>>
 	<br><br>
-	<<mpcalculateicon>><<link [[摸进账房 (0:06)|MP Quest Forest Ruins Step5]]>><<pass 6>><</link>>
+	<<mpcalculateicon>><<link [[摸进账房 (0:06)|MP Quest Forest Ruins Step5]]>><<pass 6>><<mplight -5>><</link>><<mplightloss>>
 	<br>
-	<<investigateicon>><<link [[拓下旧押印 (0:05)|MP Quest Forest Ruins Step6]]>><<pass 5>><</link>>
+	<<investigateicon>><<link [[拓下旧押印 (0:05)|MP Quest Forest Ruins Step6]]>><<pass 5>><<mplight -5>><</link>><<mplightloss>>
 <<else>>
 	<<set $mpForestCaught to 1>>
 	你辨认押印花了太久，门后的数数声忽然停了。橡木门从里面拉开，两个戴铜戒指的收荒人一左一右夹住你，账本被其中一人顺手塞进火盆。你闻到纸张烧焦的味道，后脑又挨了一下。
 	<<pain 4>><<stress 7>><<trauma 1>>
 	<br><br>
-	<<walkicon>><<link [[跟进地窖 (0:04)|MP Quest Forest Ruins Step5]]>><<pass 4>><</link>>
+	<<walkicon>><<link [[跟进地窖 (0:04)|MP Quest Forest Ruins Step5]]>><<pass 4>><<mplight -5>><</link>><<mplightloss>>
 	<br>
-<<runicon>><<link [[撞灯滚下石阶 (0:05)|MP Quest Forest Ruins Step5]]>><<pain 2>><<stress 3>><<pass 5>><</link>>
+<<runicon>><<link [[撞灯滚下石阶 (0:05)|MP Quest Forest Ruins Step5]]>><<pain 2>><<stress 3>><<pass 5>><<mplight -5>><</link>><<mplightloss>>
 <</if>>
 <br>
-<<link [[返回石缝 (0:12)|Forest]]>><<pass 12>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[返回石缝 (0:12)|Forest]]>><<pass 12>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
 
+<br>
+<<if $mpLightAmbush is 1>>
+<<link [[摸黑应付 (0:04)|MP Quest Forest Ruins Step4]]>><<pass 4>><<pain 2>><<stress 5>><<set $mpLightAmbush to 0>><</link>>
+<br>
+<</if>>
 :: MP Quest Forest Ruins Step5 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
 <<effects>><<mpAmbient>>
+<<mplighttext>><<mplightambush>>
+<br>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 5)>>
 <<if ($mpForestCaught or 0) is 1>>
 地窖深处有一座废弃蓄水池，池壁的排水孔被铁栅封死。
@@ -291,10 +322,10 @@
 			<<pain 3>><<stress 5>>
 		<</if>>
 		<<set $mpForestCaught to 0>><<pass 6>>
-	<</link>><<else>><span class="disabled">求学徒帮忙 (0:06)（属性或人脉不足）</span><</if>>
+	<<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">求学徒帮忙 (0:06)（属性或人脉不足）</span><</if>>
 	<br>
 	<<if ($money or 0) gte 500>>
-		<<shopicon>><<link [[买通学徒 (0:03)|MP Quest Forest Ruins Step6]]>><<money -500>><<set $mpForestCaught to 0>><<stress 2>><<pass 3>>学徒接过钱，先把铁栅拉开，又塞给你一小截没烧完的账页边角。你听见他把剩下的钱藏进鞋底。<</link>>
+		<<shopicon>><<link [[买通学徒 (0:03)|MP Quest Forest Ruins Step6]]>><<money -500>><<set $mpForestCaught to 0>><<stress 2>><<pass 3>>学徒接过钱，先把铁栅拉开，又塞给你一小截没烧完的账页边角。你听见他把剩下的钱藏进鞋底。<<mplight -5>><</link>><<mplightloss>>
 	<<else>>
 		<span class="disabled">用五镑买通学徒（钱不够）</span><</if>>
 	
@@ -308,52 +339,65 @@
 			<<pain 4>><<stress 6>>
 		<</if>>
 		<<set $mpForestCaught to 0>><<pass 7>>
-	<</link>><<else>><span class="disabled">撬蓄水池铁栅 (0:07)（属性不足）</span><</if>>
+	<<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">撬蓄水池铁栅 (0:07)（属性不足）</span><</if>>
 	<br>
-<<link [[等狼群惊动 (0:18)|Forest]]>><<set $mpForestCaught to 0>><<pass 18>><<stress 3>><<set $eventskip to 1>><<endevent>><</link>>
+<<link [[等狼群惊动 (0:18)|Forest]]>><<set $mpForestCaught to 0>><<pass 18>><<stress 3>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
 <<else>>
 西侧回廊的地砖下有一道暗缝，冷风从缝里往上灌。墙角的木箱上刻着「佃户名册」四个字。
 	
 <br><br>
-<<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[返回森林 (0:12)|Forest]]>><<pass 12>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">返回森林 (0:12)（尚未结识）</span><</if>>
+<<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[返回森林 (0:12)|Forest]]>><<pass 12>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>><<else>><span class="disabled">返回森林 (0:12)（尚未结识）</span><</if>>
 <br>
-<<link [[下暗缝进账房 (0:07)|MP Quest Forest Ruins Step6]]>><<pass 7>><<stress 2>><</link>>
+<<link [[下暗缝进账房 (0:07)|MP Quest Forest Ruins Step6]]>><<pass 7>><<stress 2>><<mplight -5>><</link>><<mplightloss>>
 <br>
-<<if ($maths or 0) gte 260 or ($history or 0) gte 260>><<link [[数墙上刻痕 (0:06)|MP Quest Forest Ruins Step6]]>><<pass 6>><<stress 2>><</link>><<else>><span class="disabled">数墙上刻痕 (0:06)（属性不足）</span><</if>>
+<<if ($maths or 0) gte 260 or ($history or 0) gte 260>><<link [[数墙上刻痕 (0:06)|MP Quest Forest Ruins Step6]]>><<pass 6>><<stress 2>><<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">数墙上刻痕 (0:06)（属性不足）</span><</if>>
 <</if>>
 
+<br>
+<<if $mpLightAmbush is 1>>
+<<link [[摸黑应付 (0:04)|MP Quest Forest Ruins Step5]]>><<pass 4>><<pain 2>><<stress 5>><<set $mpLightAmbush to 0>><</link>>
+<br>
+<</if>>
 :: MP Quest Forest Ruins Step6 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
 <<effects>><<mpAmbient>>
+<<mplighttext>><<mplightambush>>
+<br>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 账房比外面更像一间被时间遗忘的办公室。石桌上的银墨台已经发黑，账册却保存得意外完整；铁匣里压着庄园地契、三枚佃户按过手印的欠条，以及一枚刻着日晷的银印。墙角的木箱忽然动了一下，里面传出压抑的咳嗽声。
 <br><br>
-<<getouticon>><<link [[返回森林 (0:12)|Forest]]>><<pass 12>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[返回森林 (0:12)|Forest]]>><<pass 12>><<set $eventskip to 1>><<endevent>><<set $mpLight to 0>><</link>>
 <br>
 <<investigateicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<walkicon>><<link [[取地契银印 (0:12)|MP Quest Forest Ruins Resolve]]>>
 	<<if !$mpClues or !$mpClues["wilds_ruin_deed"]>><<set $mpClues["wilds_ruin_deed"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestManorRuins_v2_deed")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你把地契和银印用油纸包好，又在木箱里找到一个被关了许久的老佃户。他抓住你的袖子，反复说庄园的地从来不属于那家人。
 	<<stress -3>><<pass 12>>
-<</link>><<else>><span class="disabled">取地契银印 (0:12)（属性不足）</span><</if>>
+<<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">取地契银印 (0:12)（属性不足）</span><</if>>
 <br>
 <<socialiseicon>><<link [[放走老佃户 (0:12)|MP Quest Forest Ruins Resolve]]>>
 	<<if !$mpClues or !$mpClues["wilds_ruin_tenants"]>><<set $mpClues["wilds_ruin_tenants"] to 1>><span class="blue">线索已记录</span><</if>>
 	你撬开木箱，把水囊递给里面的人。老佃户说收荒人每年都来逼问地契下落，还告诉你哪些欠条是伪造的。你只抄下名字，把原件留在原处。
 	<<stress -4>><<pass 12>>
-<</link>>
+<<mplight -5>><</link>><<mplightloss>>
 <br>
 <<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[交给伊甸 (0:12)|MP Quest Forest Ruins Resolve]]>>
 	<<if !$mpClues or !$mpClues["wilds_ruin_witness"]>><<set $mpClues["wilds_ruin_witness"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>>
 	你把账册和欠条包好，打算带出去交给伊甸。石桌上的银印太扎眼，你把它重新塞回铁匣，只留下一张拓片。
 	<<stress -2>><<pass 12>>
-<</link>><<else>><span class="disabled">把账册交给伊甸保管 (0:05)（尚未结识）</span><</if>>
+<<mplight -5>><</link>><<mplightloss>><<else>><span class="disabled">把账册交给伊甸保管 (0:05)（尚未结识）</span><</if>>
 
+<br>
+<<if $mpLightAmbush is 1>>
+<<link [[摸黑应付 (0:04)|MP Quest Forest Ruins Step6]]>><<pass 4>><<pain 2>><<stress 5>><<set $mpLightAmbush to 0>><</link>>
+<br>
+<</if>>
 :: MP Quest Forest Ruins Resolve [nobr]
 <<set $outside to 1>><<set $location to "forest">>
 <<effects>><<mpAmbient>>
+<<set $mpLight to 0>>
 <<set $mpQuestManorRuins to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestManorRuins to 1>>
 <<set $mpClues to ($mpClues or {})>>
 <<set _clues to 0>><<if $mpClues["wilds_ruin_sundial"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ruin_ledger"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ruin_deed"] or $mpClues["wilds_ruin_witness"] or $mpClues["wilds_ruin_tenants"]>><<set _clues += 1>><</if>>
