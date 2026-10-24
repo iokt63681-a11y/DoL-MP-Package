@@ -136,11 +136,11 @@
 <br>
 <div id="mp-alert-docks-1-exit">
 <<if ($mpAlert or 0) gte 100>>
-<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
 <<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Docks">><<set $mpAlertReturn to "MP Night Event Docks 1">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
-<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Docks">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Docks">><<pass 6>><</link>>
 <<else>>
 <<link [[硬闯出去 (0:10)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
@@ -197,11 +197,11 @@
 <br>
 <div id="mp-alert-docks-2-exit">
 <<if ($mpAlert or 0) gte 100>>
-<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<<link [[拼死一搏 (0:12)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
 <<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Docks Bluff]]>><<set $mpReturnPassage to "Docks">><<set $mpAlertReturn to "MP Night Event Docks 2">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
-<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Docks">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<link [[转身就跑 (0:06)|MP Alert Docks Flee]]>><<set $mpReturnPassage to "Docks">><<pass 6>><</link>>
 <<else>>
 <<link [[硬闯出去 (0:10)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to "Docks">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
@@ -572,18 +572,30 @@
 	<<set $mpAlert to Math.clamp(($mpAlert or 0) - 20, 0, 100)>>
 	<span class="green">他们暂时信了你的说辞。</span><<mpalertloss "口才周旋">>
 	<br><br>
-	<<getouticon>><<link [[退回暗处 (0:06)|($mpAlertReturn or $mpReturnPassage or "Docks")]]>><<pass 6>><</link>>
+	<<getouticon>><<set _mpExitPas to ($mpAlertReturn or $mpReturnPassage or "Docks")>><<link [[退回暗处 (0:06)|_mpExitPas]]>><<pass 6>><</link>>
 <<else>>
 	你的话没说完就被手电光打断，对方喝令你站在原地别动。
 	<<set $mpAlert to Math.clamp(($mpAlert or 0) + 15, 0, 100)>>
 	<span class="red">谎话没能圆上，搜查队反而更盯紧了你。</span><<mpalertgain "口供前后矛盾">>
 	<br><br>
-	<<walkicon>><<link [[退回阴影 (0:04)|($mpAlertReturn or $mpReturnPassage or "Docks")]]>><<pass 4>><</link>>
+	<<walkicon>><<set _mpExitPas to ($mpAlertReturn or $mpReturnPassage or "Docks")>><<link [[退回阴影 (0:04)|_mpExitPas]]>><<pass 4>><</link>>
+	<br><<fisticon>><<link [[被围住，拼死一搏 (0:10)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to ($mpReturnPassage or "Docks")>><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
 
 :: MP Alert Docks Flee [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
-你不再等对方合围，转身钻进货柜之间的窄缝，踩着湿滑的缆绳翻过矮栏。身后的呼喝被海风撕碎，你绕了两条栈桥才甩掉追兵。
+你不再等对方合围，转身钻进货柜之间的窄缝，踩着湿滑的缆绳翻过矮栏。
+<br><br>
+<<if ($athletics or 0) gte 260 or ($skulduggery or 0) gte 260>>
+身后的呼喝被海风撕碎，你绕了两条栈桥才甩掉追兵。
 <<mpalertclear>>
 <br><br>
-<<getouticon>><<link [[撤离码头 (0:06)|($mpReturnPassage or "Docks")]]>><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<set _mpExitPas to ($mpReturnPassage or "Docks")>><<link [[撤离码头 (0:06)|_mpExitPas]]>><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+矮栏上积着湿滑的海藻，你翻到一半便滑了回来。手电光从三面压上来，退路被货柜堵死。<span class="red">你被困在了栈桥尽头。</span>
+<<pain 5>><<stress 8>><<gpain>><<gstress>>
+<br><br>
+<<fisticon>><<link [[拼死一搏 (0:10)|MP Elite Encounter Abyssal Tentacles]]>><<set $mpReturnPassage to ($mpReturnPassage or "Docks")>><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
+<br>
+<<badendicon>><<link [[束手就擒 (0:08)|MP BadEnd Smuggler Cargo]]>><<set $mpAlert to 0>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 8>><</link>>
+<</if>>

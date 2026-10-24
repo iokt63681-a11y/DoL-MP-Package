@@ -4366,6 +4366,122 @@
     }
   ];
 
+  // 街头随机小事：只在这些街区出现，每件事每天最多一次。
+  var RANDOM_STREET_EVENTS = [
+    {
+      key: "cargo",
+      dailyKey: "mpStreetCargo",
+      locs: ["High Street", "Docks", "Elk Street", "Domus Street"],
+      hint: "一名脚夫的手推车卡进石缝，几只木箱歪倒在路中央。",
+      icon: "img/mp/icon_carry.gif",
+      linkText: "上前搭把手",
+      passage: "MP Street Event Cargo"
+    },
+    {
+      key: "work",
+      dailyKey: "mpStreetWork",
+      locs: ["High Street", "Docks", "Elk Street", "Domus Street"],
+      hint: "一个背着旧行囊的陌生人正四处打听哪里能找到活计。",
+      icon: "img/mp/icon_map.gif",
+      linkText: "替他指条路",
+      passage: "MP Street Event Work"
+    },
+    {
+      key: "busker",
+      dailyKey: "mpStreetBusker",
+      locs: ["High Street", "Park", "Docks", "Domus Street"],
+      hint: "街角的旧琴声断断续续，琴盒里落着几枚零散的铜板。",
+      icon: "img/mp/icon_eavesdrop.gif",
+      linkText: "听街头卖艺",
+      passage: "MP Street Event Busker"
+    },
+    {
+      key: "purse",
+      dailyKey: "mpStreetPurse",
+      locs: ["High Street", "Docks", "Elk Street", "Domus Street", "Park"],
+      hint: "石阶旁的排水口边躺着一只鼓囊囊的旧皮钱袋。",
+      icon: "img/mp/icon_bargain.gif",
+      linkText: "看看地上钱袋",
+      passage: "MP Street Event Purse"
+    },
+    {
+      key: "tea",
+      dailyKey: "mpStreetTea",
+      locs: ["High Street", "Docks", "Park", "Domus Street"],
+      hint: "路边的小推车冒着白汽，摊主正往纸杯里舀茶汤。",
+      icon: "img/mp/icon_drink.gif",
+      linkText: "看看茶摊",
+      passage: "MP Street Event Tea"
+    },
+    {
+      key: "child",
+      dailyKey: "mpStreetChild",
+      locs: ["High Street", "Park", "Domus Street", "Docks"],
+      hint: "一个孩子站在人群边上，攥着衣角四处张望。",
+      icon: "img/mp/icon_firstaid.gif",
+      linkText: "问问走丢孩子",
+      passage: "MP Street Event Child"
+    },
+    {
+      key: "food",
+      dailyKey: "mpStreetFood",
+      locs: ["High Street", "Docks", "Elk Street", "Domus Street"],
+      hint: "街边摊子飘来油脂和香料的气味，勾得人脚步发慢。",
+      icon: "img/mp/icon_cook.gif",
+      linkText: "闻闻街边小吃",
+      passage: "MP Street Event Food"
+    },
+    {
+      key: "letter",
+      dailyKey: "mpStreetLetter",
+      locs: ["High Street", "Docks", "Elk Street", "Domus Street"],
+      hint: "一名信使的邮袋搭扣松了，几封火漆信从袋边滑落。",
+      icon: "img/mp/icon_read.gif",
+      linkText: "看看掉落信件",
+      passage: "MP Street Event Letter"
+    }
+  ];
+
+  // 同一场景只掷一次骰子，避免本地重绘时反复刷出不同的事件。
+  var _streetEventRoll = { key: "", event: null };
+
+  function randomStreetEventFor(pas, v) {
+    if (!v || v.combat === 1 || !pas) return null;
+    if (pas === HUB || pas === BEDROOM || pas === "Start" || pas === "Start2") return null;
+    if (SAFE_PASSAGES.indexOf(pas) < 0) return null;
+
+    var day = 0;
+    try {
+      if (window.Time && Number.isFinite(Time.days)) day = Time.days;
+    } catch (e) {}
+    var stamp = 0;
+    try {
+      if (window.Time && Time.date && Number.isFinite(Time.date.timeStamp)) stamp = Time.date.timeStamp;
+    } catch (e) {}
+    if (!stamp) stamp = Number(v.timeStamp) || 0;
+
+    var key = pas + "|" + day + "|" + stamp;
+    if (_streetEventRoll.key !== key) {
+      _streetEventRoll.key = key;
+      _streetEventRoll.event = null;
+      var pool = [];
+      for (var i = 0; i < RANDOM_STREET_EVENTS.length; i++) {
+        var ev = RANDOM_STREET_EVENTS[i];
+        if (!ev || ev.locs.indexOf(pas) < 0) continue;
+        if (v.daily && v.daily[ev.dailyKey]) continue;
+        if (ev.check && !ev.check(v)) continue;
+        pool.push(ev);
+      }
+      if (pool.length > 0 && Math.random() < 0.12) {
+        _streetEventRoll.event = pool[Math.floor(Math.random() * pool.length)];
+      }
+    }
+
+    var active = _streetEventRoll.event;
+    if (active && v.daily && v.daily[active.dailyKey]) active = null;
+    return active;
+  }
+
   function isNpcInScheduleHour(npcEntry) {
     if (!npcEntry || !Array.isArray(npcEntry.hours)) return true;
     var h = getHourNow();
@@ -4612,6 +4728,34 @@
         break;
       }
     }
+
+    // 6. 街头随机小事：约 12% 概率在对应街区出现，每件事每天最多一次
+    try {
+      var streetEvt = randomStreetEventFor(pas, v);
+      if (streetEvt) {
+        hasAny = true;
+        var seRow = el("div", { style: "margin:4px 0;" });
+        seRow.appendChild(el("span", { text: streetEvt.hint + " " }));
+        (function (evtDef, curPas) {
+          var seLink = el("a", {
+            class: "link-internal",
+            onclick: function (ev) {
+              ev.preventDefault();
+              try {
+                if (!v.daily) v.daily = {};
+                v.daily[evtDef.dailyKey] = 1;
+              } catch (e) {}
+              v.mpReturnPassage = curPas;
+              enginePlay(evtDef.passage);
+            }
+          });
+          seLink.appendChild(dolIconImg(evtDef.icon));
+          seLink.appendChild(document.createTextNode(evtDef.linkText));
+          seRow.appendChild(seLink);
+        })(streetEvt, pas);
+        container.appendChild(seRow);
+      }
+    } catch (e) {}
 
     if (regionBox.childNodes.length) {
       var pasTop = host.querySelector(".passage") || host;

@@ -294,3 +294,222 @@
 <</if>>
 <</replace>><</link>>
 </div>
+
+:: MP Street Event Cargo [nobr]
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<set $outside to 1>>
+<<if _exitPas is "Docks">><<set $location to "docks">><<elseif _exitPas is "Park">><<set $location to "park">><<else>><<set $location to "town">><</if>>
+<<effects>><<mpAmbient>>
+一辆装满杂货的木箱车碾过路面的凹坑，捆绳应声崩断，几只箱子歪倒在街心，罐头和粗布散了一地。推车的脚夫一边扶住车把，一边手忙脚乱地捡拾。
+<br><br>
+<<getouticon>><<link [[转身离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<div id="mp-street-cargo">
+<<mpcarryicon>><<link "帮忙归拢 (0:05)">><<pass 5>><<replace "#mp-street-cargo">>
+<<if ($athletics or 0) gte 250 or ($physique or 10000) gte 11500>>
+	你扶住车沿，把散落的箱子一一归位，又用断绳把最上面那只捆牢。脚夫抹了把汗，从钱袋里数出几枚硬币塞给你。
+	<span class="green">他连声道谢，答应下回在码头替你留个好位置。</span>
+	<<money 250>><<stress -2>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<<else>>
+	箱子比看上去沉，你抱起一只时脚下一滑，箱角磕在小腿上，罐头滚得更远。脚夫叹了口气，只好自己弯腰去捡。
+	<span class="red">你没能帮上忙，还蹭破了手背。</span>
+	<<pain 2>><<stress 3>><<gpain>><<gstress>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpsneakicon>><<link "顺走小件 (0:04)">><<pass 4>><<replace "#mp-street-cargo">>
+<<if ($skulduggery or 0) gte 250>>
+	你趁乱把一小盒钉子揣进袖口，又若无其事地帮着扶正箱子。脚夫没有察觉，只顾着清点货物。
+	<span class="gold">盒里的钉子能换几个铜板。</span>
+	<<money 120>><<crimeUp 2 "thievery">><<crime "thievery">><<mpalert 5>><<mpalertgain "脚夫回头看了一眼">><<stress 1>><<gstress>>
+<<else>>
+	你的手刚碰到箱子，脚夫就警觉地转过头来。你只好装作在帮他扶车，讪讪地收回手。
+	<span class="red">他盯着你看了好一会儿，你没能拿走任何东西。</span>
+	<<mpalert 8>><<mpalertgain "脚夫起了疑心">><<stress 3>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Street Event Work [nobr]
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<set $outside to 1>>
+<<if _exitPas is "Docks">><<set $location to "docks">><<elseif _exitPas is "Park">><<set $location to "park">><<else>><<set $location to "town">><</if>>
+<<effects>><<mpAmbient>>
+一个背着旧行囊的陌生人拦住你，问这附近哪里能找到当天结算的活计。他说话时一直攥着肩带，像是走了很远的路。
+<br><br>
+<<getouticon>><<link [[转身离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<div id="mp-street-work">
+<<mpmapicon>><<link "指向零工板 (0:03)">><<pass 3>><<replace "#mp-street-work">>
+	你告诉他高街和码头边的木告示板上常钉着招工纸条，又说了说哪几个东家给钱爽快。陌生人认真记下，朝你点了点头。
+	<<stress -1>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<</replace>><</link>>
+<br>
+<<socialiseicon>><<link "指向酒馆 (0:03)">><<pass 3>><<replace "#mp-street-work">>
+	你让他去收成街的酒馆后门问问，那里时常缺洗杯子和搬酒桶的人手。陌生人露出一点笑意，说总算没白问。
+	<<stress -1>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<</replace>><</link>>
+<br>
+<<mpsneakicon>><<link "随口指错 (0:02)">><<pass 2>><<replace "#mp-street-work">>
+	你随手朝反方向一指，说那边有活。陌生人道了谢便匆匆走了。看着他拐进死巷，你心里并不怎么痛快。
+	<<stress 2>><<gstress>>
+<</replace>><</link>>
+</div>
+
+:: MP Street Event Busker [nobr]
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<set $outside to 1>>
+<<if _exitPas is "Docks">><<set $location to "docks">><<elseif _exitPas is "Park">><<set $location to "park">><<else>><<set $location to "town">><</if>>
+<<effects>><<mpAmbient>>
+街角的老墙下，一个抱着旧琴的人正拨着弦。琴盒敞着，里面落着几枚零散的铜板，调子断断续续，却把路人的脚步放慢了些。
+<br><br>
+<<getouticon>><<link [[转身离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<div id="mp-street-busker">
+<<mpeavesdropicon>><<link "驻足聆听 (0:05)">><<pass 5>><<replace "#mp-street-busker">>
+	你靠着墙听完一整段曲子，紧绷的肩膀慢慢松下来。琴声停下时，街头那些杂乱的声响也不那么刺耳了。
+	<<stress -3>><<lstress>>
+<</replace>><</link>>
+<br>
+<<mpbargainicon>><<if ($money or 0) gte 100>><<link "投枚硬币 (0:03)">><<pass 3>><<replace "#mp-street-busker">>
+	你把一枚硬币放进琴盒。乐手朝你抬了抬下巴，换了一首更轻快的调子，周围的行人也跟着放慢了脚步。
+	<<money -100>><<stress -5>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<</replace>><</link>><<else>><span class="disabled">投枚硬币 (0:03)（钱不够）</span><</if>>
+<br>
+<<socialiseicon>><<link "加入合奏 (0:06)">><<pass 6>><<replace "#mp-street-busker">>
+<<if ($seductionskill or 0) gte 250 or ($danceskill or 0) gte 250>>
+	你顺着拍子轻轻踏步，很快接上了乐手的节奏。有人停下看你们，琴盒里落下几枚新的铜板。乐手笑着把其中一半推给你。
+	<span class="green">你分到了几枚铜板，心情也松快起来。</span>
+	<<money 150>><<stress -4>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<<else>>
+	你跟错了一拍，脚步在石板上一绊，差点撞到路过的行人。乐手停下来看了你一眼，摇了摇头，重新起了一段慢板。
+	<span class="red">你红着脸退到人群外，没敢再往前凑。</span>
+	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Street Event Purse [nobr]
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<set $outside to 1>>
+<<if _exitPas is "Docks">><<set $location to "docks">><<elseif _exitPas is "Park">><<set $location to "park">><<else>><<set $location to "town">><</if>>
+<<effects>><<mpAmbient>>
+石阶旁的排水口边躺着一只旧皮钱袋，袋口松开，露出几枚银币。四下人来人往，似乎还没人注意到。
+<br><br>
+<<getouticon>><<link [[转身离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<div id="mp-street-purse">
+<<mpbargainicon>><<link "归还钱袋 (0:05)">><<pass 5>><<replace "#mp-street-purse">>
+<<set _tip to random(2, 5) * 100>>
+	你捡起钱袋，在附近问了几声，终于找到正沿着原路低头寻找的失主。对方接过钱袋，连声道谢，硬塞给你几枚银币作谢礼。
+	<span class="green">失主记住了你的脸，街坊们也对这件事议论了几句。</span>
+	<<money _tip>><<stress -2>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<</replace>><</link>>
+<br>
+<<mpsneakicon>><<link "揣进怀里 (0:03)">><<pass 3>><<replace "#mp-street-purse">>
+<<if ($skulduggery or 0) gte 260>>
+	你借着弯腰系鞋带的动作把钱袋拢进袖中，起身混进人群。直到拐过街角，才听见身后有人懊恼地骂了一声。
+	<span class="gold">钱袋里装着不少银币。</span>
+	<<money 350>><<crimeUp 3 "thievery">><<crime "thievery">><<mpalert 8>><<mpalertgain "失主在街口张望">><<stress 2>><<gstress>>
+<<else>>
+	你的手刚碰到钱袋，失主就从人群里挤了回来，正撞见你弯腰的动作。你只好把袋子递过去，对方狐疑地打量着你。
+	<span class="red">你没能拿走钱袋，还被周围几个人多看了几眼。</span>
+	<<mpalert 10>><<mpalertgain "失主起了疑心">><<stress 3>><<gstress>>
+<</if>>
+<</replace>><</link>>
+</div>
+
+:: MP Street Event Tea [nobr]
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<set $outside to 1>>
+<<if _exitPas is "Docks">><<set $location to "docks">><<elseif _exitPas is "Park">><<set $location to "park">><<else>><<set $location to "town">><</if>>
+<<effects>><<mpAmbient>>
+一辆小推车停在路边，铜壶嘴冒着白汽，摊主正往纸杯里舀茶汤。热气里混着糖和肉桂的味道。
+<br><br>
+<<getouticon>><<link [[转身离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<div id="mp-street-tea">
+<<mpdrinkicon>><<if ($money or 0) gte 150>><<link "买一杯热茶 (0:04)">><<pass 4>><<replace "#mp-street-tea">>
+	你付了钱，捧起纸杯。热茶顺着喉咙滑下去，暖意从胃里慢慢散开，连带着街上的嘈杂也远了。
+	<<money -150>><<stress -4>><<lstress>><<tiredness -1>><<ltiredness>>
+<</replace>><</link>><<else>><span class="disabled">买一杯热茶 (0:04)（钱不够）</span><</if>>
+<br>
+<<socialiseicon>><<link "找摊主闲聊 (0:05)">><<pass 5>><<replace "#mp-street-tea">>
+	你靠在推车边和摊主聊了几句，从今天的天气说到码头新到的货。摊主说得高兴，顺手给你舀了一小杯试喝。
+	<<stress -2>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<</replace>><</link>>
+</div>
+
+:: MP Street Event Child [nobr]
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<set $outside to 1>>
+<<if _exitPas is "Docks">><<set $location to "docks">><<elseif _exitPas is "Park">><<set $location to "park">><<else>><<set $location to "town">><</if>>
+<<effects>><<mpAmbient>>
+一个孩子站在面包房外的墙边，攥着衣角四处张望，眼眶已经有些发红。周围的人群来去匆匆，没有人停下。
+<br><br>
+<<getouticon>><<link [[转身离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<div id="mp-street-child">
+<<mpfirstaidicon>><<link "帮忙找家长 (0:06)">><<pass 6>><<replace "#mp-street-child">>
+	你蹲下来问清孩子的名字和走散的地方，牵着他沿街慢慢找。转过两个路口，一个神色慌张的大人冲了过来，一把抱住孩子，又腾出手来向你道谢。
+	<span class="green">对方硬塞给你几枚铜板，孩子也小声说了句谢谢。</span>
+	<<money 100>><<stress -2>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<</replace>><</link>>
+<br>
+<<mpmapicon>><<link "指个方向 (0:03)">><<pass 3>><<replace "#mp-street-child">>
+	你顺着孩子指的方向看了看，告诉他沿着这条街走到路口，再问穿制服的人。孩子点点头，小跑着去了。
+	<<stress -1>><<lstress>>
+<</replace>><</link>>
+</div>
+
+:: MP Street Event Food [nobr]
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<set $outside to 1>>
+<<if _exitPas is "Docks">><<set $location to "docks">><<elseif _exitPas is "Park">><<set $location to "park">><<else>><<set $location to "town">><</if>>
+<<effects>><<mpAmbient>>
+街边的铁板上滋滋作响，油香混着胡椒味飘出老远。摊主翻动铲子，把刚出锅的小吃拨进纸包。
+<br><br>
+<<getouticon>><<link [[转身离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<div id="mp-street-food">
+<<mpcookicon>><<if ($money or 0) gte 200>><<link "买份小吃 (0:04)">><<pass 4>><<replace "#mp-street-food">>
+	你接过热腾腾的纸包，站在路边吃了几口。咸香的味道压下了胃里的空落，连脚步都轻了些。
+	<<money -200>><<stress -3>><<lstress>><<tiredness -2>><<ltiredness>>
+<</replace>><</link>><<else>><span class="disabled">买份小吃 (0:04)（钱不够）</span><</if>>
+<br>
+<<mpeavesdropicon>><<link "闻香解馋 (0:02)">><<pass 2>><<replace "#mp-street-food">>
+	你在摊边站了一会儿，深深吸了两口香气，才依依不舍地走开。肚子还是空的，心情倒是松快了一点。
+	<<stress -1>><<lstress>>
+<</replace>><</link>>
+</div>
+
+:: MP Street Event Letter [nobr]
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<set $outside to 1>>
+<<if _exitPas is "Docks">><<set $location to "docks">><<elseif _exitPas is "Park">><<set $location to "park">><<else>><<set $location to "town">><</if>>
+<<effects>><<mpAmbient>>
+一名信使抱着一摞邮件匆匆拐过街角，邮袋搭扣松了，一封封着火漆的信从他腋下滑落，飘到人行道边。信使毫无察觉，脚步越来越远。
+<br><br>
+<<getouticon>><<link [[转身离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
+<div id="mp-street-letter">
+<<investigateicon>><<link "拾起信件 (0:04)">><<pass 4>><<replace "#mp-street-letter">>
+	你捡起那封信，封皮上的火漆印已经磕掉一角，收件地址写着河对岸的一处旧仓库。你把这个地址记在心里，把信重新封好。
+	<span class="blue">你记住了一条也许用得上的线索。</span>
+	<<set $mpStreetLetterClue to 1>><<stress -1>><<lstress>>
+<</replace>><</link>>
+<br>
+<<socialiseicon>><<link "交还信使 (0:03)">><<pass 3>><<replace "#mp-street-letter">>
+	你追了两步叫住信使，把散落的信件交还给他。信使手忙脚乱地清点了一遍，松了口气，从口袋里摸出几枚硬币谢你。
+	<span class="green">他答应下回送信时替你留意街上的消息。</span>
+	<<money 300>><<stress -1>><<lstress>><<set $mpStreetGoodwill to (($mpStreetGoodwill or 0) + 1)>>
+<</replace>><</link>>
+</div>

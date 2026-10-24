@@ -19,7 +19,7 @@
 <<if Time.dayState is "dusk" or Time.dayState is "night">>
 <<set _pool to _mansionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
 <<if _pool.length is 0>>
-	<<run _mansionScenes.forEach(function (n) { delete V.mpSeenScenes[n]; })>>
+	<<run _mansionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
 	<<set _pick to _mansionScenes[0]>>
 <<else>>
 	<<set _pick to _pool.random()>>
@@ -159,11 +159,11 @@
 <br>
 <div id="mp-alert-quinn-exit">
 <<if ($mpAlert or 0) gte 100>>
-<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<<fisticon>><<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
 <<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Mansion Bluff]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlertReturn to "MP Mansion Quinn WineCellar">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
-<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>>
 <<else>>
 <<link [[硬闯出去 (0:10)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
@@ -182,7 +182,7 @@
 「来得正好。」<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>把一叠洒金请柬推到你面前，「今晚的贵客散场后要去天鹅绒暗层，替我把这些塞进他们的大衣口袋。」
 <<if ($exposed or 0) gte 1>>你衣衫不整地站在屏风边，<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>的目光在你肩上停了停。<<else>><<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>替你抚平袖口，指尖在你腕上轻轻一按。<</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:08)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
+<<getouticon>><<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[离开 (0:08)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<socialiseicon>><<link [[接过洒金请柬 (0:08)|MP Mansion Briar Cloakroom]]>><<pass 8>><</link>>
 <br>
@@ -206,7 +206,7 @@
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
 两排呢料大衣垂在黄铜挂架上，门边的保镖正背过身擦火柴点烟，袖口里的洒金请柬随时可以滑入大衣内袋。
 <br><br>
-<<getouticon>><<link [[离开 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
+<<getouticon>><<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[离开 (0:03)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<if ($mpAlert or 0) lt 100>>
 <div id="briar-dist-act">
@@ -222,7 +222,7 @@
 	<<stress -3>><<lstress>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
 	<br><br>
-	<<link [[退出 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
+	<<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[退出 (0:03)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <<else>>
 	<span class="red">指节不慎撞响铜衣架，保镖猛地回头，你只得把请柬缩回袖口。</span><<stress 6>><<pain 2>><<gstress>><<gpain>>
 	<br><br>
@@ -255,11 +255,11 @@
 <br>
 <div id="mp-alert-briar-distribute-exit">
 <<if ($mpAlert or 0) gte 100>>
-<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<<fisticon>><<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
 <<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Mansion Bluff]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlertReturn to "MP Mansion Briar Distribute">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
-<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>>
 <<else>>
 <<link [[硬闯出去 (0:10)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
@@ -280,7 +280,7 @@
 <</if>>
 <<mpalert -5>><<mpalertloss "借窄廊阴影观察">>
 <br><br>
-<<getouticon>><<link [[离开 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
+<<getouticon>><<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[离开 (0:03)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<walkicon>><<link [[返回衣帽间 (0:02)|MP Mansion Briar Cloakroom]]>><<pass 2>><</link>>
 
@@ -307,7 +307,7 @@
 	你不敢再动，等脚步声彻底消失才从帘幕后出来。<<stress 2>><<trauma 1>><<gstress>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
+<<getouticon>><<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[离开 (0:03)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Mansion Briar Bargain [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">>
@@ -315,7 +315,7 @@
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
 「报酬呢？」你没有立刻接那叠请柬。<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>笑了一声，把钢笔搁在茶几上：「先让我看看你值不值这个价。」
 <br><br>
-<<getouticon>><<link [[离开 (0:02)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
+<<getouticon>><<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[离开 (0:02)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<mpbargainicon>><<link [[应声抬价 (0:04)|MP Mansion Briar Deal]]>><<pass 4>><</link>>
 
@@ -348,7 +348,7 @@
 	他摇了摇头，把请柬收回抽屉。你在偏厅里站了片刻，只能离开。<<stress 4>><<gstress>>
 <</if>>
 <br><br>
-<<getouticon>><<link [[离开 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
+<<getouticon>><<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[离开 (0:03)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 
 :: MP Mansion Servant SilverTray [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
@@ -408,11 +408,11 @@
 <br>
 <div id="mp-alert-guardrain-exit">
 <<if ($mpAlert or 0) gte 100>>
-<<fisticon>><<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<<fisticon>><<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
 <<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Mansion Bluff]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlertReturn to "MP Mansion Gate GuardRain">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
-<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>>
 <<else>>
 <<link [[硬闯出去 (0:10)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
@@ -546,11 +546,11 @@
 <br>
 <div id="mp-alert-guestlist-exit">
 <<if ($mpAlert or 0) gte 100>>
-<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
 <<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Mansion Bluff]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlertReturn to "MP Mansion Auction GuestList">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
-<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>>
 <<else>>
 <<link [[硬闯出去 (0:10)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
@@ -592,11 +592,11 @@
 <br>
 <div id="mp-alert-cufflink-exit">
 <<if ($mpAlert or 0) gte 100>>
-<<if ($physique or 0) gte 280 or ($combat or 0) gte 260>><<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>><<else>><span class="disabled">拼死一搏 (0:12)（属性不足）</span><</if>>
+<<link [[拼死一搏 (0:12)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 12>><</link>>
 <br>
 <<if ($seductionskill or 0) gte 260 or ($english or 0) gte 260>><<link [[虚张声势 (0:08)|MP Alert Mansion Bluff]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlertReturn to "MP Mansion Glasshouse Cufflink">><<pass 8>><</link>><<else>><span class="disabled">虚张声势 (0:08)（属性不足）</span><</if>>
 <br>
-<<if ($athletics or 0) gte 260>><<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>><<else>><span class="disabled">转身就跑 (0:06)（属性不足）</span><</if>>
+<<link [[转身就跑 (0:06)|MP Alert Mansion Flee]]>><<set $mpReturnPassage to "Danube Street">><<pass 6>><</link>>
 <<else>>
 <<link [[硬闯出去 (0:10)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
@@ -614,18 +614,30 @@
 	<<set $mpAlert to Math.clamp(($mpAlert or 0) - 20, 0, 100)>>
 	<span class="green">保镖暂时收起了疑心。</span><<mpalertloss "宴会宾客的口吻">>
 	<br><br>
-	<<getouticon>><<link [[退回帘幕后 (0:06)|($mpAlertReturn or $mpReturnPassage or "Danube Street")]]>><<pass 6>><</link>>
+	<<getouticon>><<set _mpExitPas to ($mpAlertReturn or $mpReturnPassage or "Danube Street")>><<link [[退回帘幕后 (0:06)|_mpExitPas]]>><<pass 6>><</link>>
 <<else>>
 	保镖眯起眼打量你的鞋尖，手已经按上警棍。你只得慢慢后退。
 	<<set $mpAlert to Math.clamp(($mpAlert or 0) + 15, 0, 100)>>
 	<span class="red">你的说法没能镇住对方。</span><<mpalertgain "口音露出破绽">>
 	<br><br>
-	<<runicon>><<link [[退回暗处 (0:04)|($mpAlertReturn or $mpReturnPassage or "Danube Street")]]>><<pass 4>><</link>>
+	<<runicon>><<set _mpExitPas to ($mpAlertReturn or $mpReturnPassage or "Danube Street")>><<link [[退回暗处 (0:04)|_mpExitPas]]>><<pass 4>><</link>>
+	<br><<fisticon>><<link [[被围住，拼死一搏 (0:10)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
 <</if>>
 
 :: MP Alert Mansion Flee [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-你把手里的银器往托盘上一撂，趁保镖侧身避让的刹那撞开侍者门，沿着仆役窄梯一路冲下。宴会乐声很快盖过了身后的呵斥。
+你把手里的银器往托盘上一撂，趁保镖侧身避让的刹那撞开侍者门，沿着仆役窄梯一路冲下。
+<br><br>
+<<if ($athletics or 0) gte 260 or ($skulduggery or 0) gte 260>>
+宴会乐声很快盖过了身后的呵斥。你从仆役侧门钻出宅邸，把追兵甩在暖房的长廊里。
 <<mpalertclear>>
 <br><br>
-<<getouticon>><<link [[从仆役侧门离开 (0:06)|($mpReturnPassage or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<set _mpExitPas to ($mpReturnPassage or "Danube Street")>><<link [[从仆役侧门离开 (0:06)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 6>><<set $eventskip to 1>><<endevent>><</link>>
+<<else>>
+窄梯尽头的门被人从外面顶住，你撞了两下没能撞开。保镖的皮鞋声已经追到楼梯口。<span class="red">你被堵在仆役通道里。</span>
+<<pain 5>><<stress 8>><<gpain>><<gstress>>
+<br><br>
+<<fisticon>><<link [[拼死一搏 (0:10)|MP Elite Encounter Velvet Enforcers]]>><<set $mpReturnPassage to "Danube Street">><<set $mpAlert to 0>><<set $mpAlertCaught to 0>><<pass 10>><</link>>
+<br>
+<<badendicon>><<link [[束手就擒 (0:08)|MP BadEnd Velvet Doll]]>><<set $mpAlert to 0>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 8>><</link>>
+<</if>>
