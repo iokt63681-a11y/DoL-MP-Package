@@ -24,6 +24,8 @@
 	<<mpcalculateicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<if ($willpower or 0) gte 250>><<link [[交涉账目 (0:02)|MP Bailey Biweekly Negotiate]]>><<stress 1>><<pass 2>><</link>><<else>><<link [[交涉账目 (0:02)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "交涉账目">><<set $mpInsuffReq to "意志等级：<span class='purple'>D</span>">><<pass 2>><</link>><</if>><<else>><span class="disabled">交涉账目 (0:02)（尚未结识）</span><</if>>
 	<br>
 	<<fisticon>><<if ($physique or 0) gte 250>><<link [[护住同伴 (0:02)|MP Bailey Biweekly Confront]]>><<pass 2>><</link>><<else>><<link [[护住同伴 (0:02)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "护住同伴">><<set $mpInsuffReq to "体魄：250">><<pass 2>><</link>><</if>>
+	<br>
+	<<getouticon>><<link [[离开 (0:03)|_exitPas]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 
 :: MP Bailey Biweekly Negotiate [nobr]
@@ -201,7 +203,7 @@
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<if _stg is 6>>
 	<br>
-	<<sneakicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($skulduggery or 0) gte 820>><<link [[开启地下金库 (0:25)|MP Quest Bailey Rebellion Resolve]]>><<pass 25>><<set $mpQuestBaileyRebellion to 7>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_7")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<willpower 4>><<control 15>><</link>><<else>><<link [[开启地下金库 (0:25)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "开启地下金库">><<set $mpInsuffReq to "诡术等级：<span class='teal'>A</span>">><<pass 25>><</link>><</if>><<else>><span class="disabled">开启地下金库 (0:25)（白天人多眼杂）</span><</if>><<else>><span class="disabled">开启地下金库 (0:25)（尚未结识）</span><</if>>
+	<<sneakicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($skulduggery or 0) gte 820>><<link [[开启地下金库 (0:25)|MP Quest Bailey Rebellion Resolve]]>><<pass 25>><<set $mpQuestBaileyRebellion to 7>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_7")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<willpower 4>><<control 15>><</link>><<else>><<link [[开启地下金库 (0:25)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "开启地下金库">><<set $mpInsuffReq to "诡术等级：<span class='teal'>A</span>">><<pass 25>><</link>><</if>><<else>><<link [[开启地下金库 (0:25)|MP NotNow]]>><<set $mpNotNowRet to (State.passage)>><<set $mpNotNowLabel to "开启地下金库">><<set $mpNotNowReq to "夜晚 或 黄昏">><<pass 25>><</link>><</if>><<else>><span class="disabled">开启地下金库 (0:25)（尚未结识）</span><</if>>
 <<elseif _stg is 7>>
 	<br>
 	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<if ($willpower or 0) gte 860>><<link [[摊出铁证 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 8>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_8")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<control 25>><<trauma -12>><<stress -15>><</link>><<else>><<link [[摊出铁证 (0:20)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "摊出铁证">><<set $mpInsuffReq to "意志等级：<span class='teal'>A</span>">><<pass 20>><</link>><</if>><<else>><span class="disabled">摊出铁证 (0:20)（尚未结识）</span><</if>>
@@ -563,7 +565,7 @@
 <<if _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
 两名黑衣清道夫狼狈地倒在走廊上动弹不得。贝利冷冷地看了你们一眼，没敢再上前纠缠便退回了办公室。你不仅免除了这一期的账，还当场截获了打手随身携带的 <span class="gold">£2</span>,500 黑金箱！
 <<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>>
-<<if ($mpQuestBaileyRebellion or 0) lt 8>><<set $mpQuestBaileyRebellion to ($mpQuestBaileyRebellion or 0) + 1>><</if>>
+<<if ($mpQuestBaileyRebellion or 0) is 7>><<set $mpQuestBaileyRebellion to 8>><</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("elite_bailey_enforcers_win")>>
 	<<money 15000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><<willpower 8>><<stress -18>><<control 25>>
 <<else>>

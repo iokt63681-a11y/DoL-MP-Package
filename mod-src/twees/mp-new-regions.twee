@@ -990,20 +990,25 @@
 
 :: MP Region Clockwork Vault [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["clockwork_vault"] to 1>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["clockwork_vault"] to 1>><<set $mpClues to ($mpClues or {})>>
 由多重机械字码锁守护的干燥石库内，整齐排列着编号从 A 到 M 的黑铁卷宗柜。最里侧的石台上摆着一台老式黄铜差分机，空气干燥而冷冽。
 <<if $maths gte 300 or $skulduggery gte 320>>你一眼看出了卷宗柜底座滑轨的开启顺序。<<else>>厚重的防爆铁门与成排的密码锁透着森严的压迫感。<</if>>
 <br><br>
 <<getouticon>><<link [[返回机括城 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
 <br>
+<<if $mpClues["clockwork_vault_twelfth"]>>
 <<investigateicon>><<link [[细看十二号卷宗柜 (0:14)|MP Region Clockwork Vault Search]]>><<pass 14>><</link>>
 <br>
+<</if>>
 <<walkicon>><<link [[坐密库矮凳上调息 (0:08)|MP Region Clockwork Vault Rest]]>><<pass 8>><</link>>
 <br>
+<<if $mpClues["clockwork_vault_twelfth"]>>
 <<socialiseicon>><<link [[查十二号柜暗门 (0:08)|MP Extra Deep Clockwork 1]]>><<pass 8>><</link>>
 <br>
+<</if>>
 <<link "看柜脚滑轨 (0:03)">><<pass 3>><<replace "#obs-clockwork-vault">>
 <<if $maths gte 300 or $skulduggery gte 320>>
+<<if !$mpClues["clockwork_vault_twelfth"]>><<set $mpClues["clockwork_vault_twelfth"] to 1>><span class="blue">线索已记录</span><</if>>
 你注意到 A 到 M 号柜的滑轨磨损并不均匀，十二号柜底座有一道被反复拉开的亮痕。
 <<else>>
 铁柜底座积着厚灰，你只看见一排差不多的滑轨，分不出哪只常被打开。
@@ -1275,7 +1280,7 @@
 :: MP Region Abbey Confess [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["abbey_confess"] to 1>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["abbey_confess"] to 1>><<set $mpClues to ($mpClues or {})>>
 雕花胡桃木隔扇虽已斑驳，高挑的声学穹顶依然能将最轻微的耳语清晰传递。弧形石墙下摆着两排旧祈祷椅，隔间内幽暗僻静。
 <<if $skulduggery gte 260 or $willpower gte 450>>你放轻脚步踩过八角青石盘，没有激起半点多余的回音。<<else>>你轻微的脚步声在穹顶下被放大了数倍，显得格外清晰。<</if>>
 <br><br>
@@ -1286,13 +1291,16 @@
 	<<mpsneakicon>><<link [[去灰烬藏经阁 (0:11)|MP Region Abbey Scriptorium]]>><<pass 11>><</link>>
 	<br>
 <</if>>
+<<if $mpClues["abbey_confess_third"]>>
 <<investigateicon>><<link [[闪进第三间告解室 (0:10)|MP Region Abbey Confess Search]]>><<pass 10>><</link>>
 <br>
+<</if>>
 <<bedicon>><<link [[入告解木隔间静坐 (0:08)|MP Region Abbey Confess Rest]]>><<pass 8>><</link>>
 <br>
 <<if ($mpAlert or 0) lt 80>>
 <<link "听隔间传声 (0:03)">><<pass 3>><<replace "#obs-abbey-confess">>
 <<if $skulduggery gte 260 or $willpower gte 450>>
+<<if !$mpClues["abbey_confess_third"]>><<set $mpClues["abbey_confess_third"] to 1>><span class="blue">线索已记录</span><</if>>
 你听见穹顶把远处翻书声送进第三间隔间，跪凳下方有一块木榫被反复摩挲得发亮；隔扇后连着藏经阁的石廊。
 <<set $mpKnown["abbey_scriptorium"] to 1>>
 <<else>>
@@ -1781,7 +1789,7 @@
 
 :: MP Region Glasshouse Specimen [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["glasshouse_specimen"] to 1>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["glasshouse_specimen"] to 1>><<set $mpClues to ($mpClues or {})>>
 胡桃木高柜沿着长廊两侧排开，水晶瓶里浸泡着泛着幽蓝微光的珍稀植物标本与花露原液。中段的铜制解剖台上架着一具双筒显微镜。
 <<if $science gte 280 or $tending gte 260>>你对照展柜上的罗马数字签牌，一眼看出了珍品陈列的位置。<<else>>幽蓝色的荧光液体在暗处静静闪烁，透着几分诡秘。<</if>>
 <br><br>
@@ -1791,12 +1799,15 @@
 	<<walkicon>><<link [[去穹顶露台 (0:05)|MP Region Glasshouse Dome]]>><<pass 5>><</link>>
 	<br>
 <</if>>
+<<if $mpClues["glasshouse_specimen_seventh"]>>
 <<investigateicon>><<link [[凑近第七号展柜 (0:11)|MP Region Glasshouse Specimen Search]]>><<pass 11>><</link>>
 <br>
+<</if>>
 <<bedicon>><<link [[倚胡桃木柜旁小憩 (0:08)|MP Region Glasshouse Specimen Rest]]>><<pass 8>><</link>>
 <br>
 <<link "看标本签号 (0:03)">><<pass 3>><<replace "#obs-glasshouse-specimen">>
 <<if $science gte 280 or $tending gte 260>>
+<<if !$mpClues["glasshouse_specimen_seventh"]>><<set $mpClues["glasshouse_specimen_seventh"] to 1>><span class="blue">线索已记录</span><</if>>
 你发现展柜的罗马数字从六直接跳到八，七号的位置留着一道新擦痕，正对着通往穹顶露台的铁梯。
 <<set $mpKnown["glasshouse_dome"] to 1>>
 <<else>>
@@ -1983,20 +1994,23 @@
 
 :: MP Region Glasshouse Cellar [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["glasshouse_cellar"] to 1>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["glasshouse_cellar"] to 1>><<set $mpClues to ($mpClues or {})>>
 温室下方的恒温砖砌地窖里排列着十二只法国橡木桶，角落的紫铜蒸馏器正一滴滴萃取出高纯度的草木秘露。地窖内弥漫着醇厚的果木酒香。
 <<if $science gte 280 or $housekeeping gte 260>>你借着壁灯看清了橡木桶上的年份烙印与冷凝水阀。<<else>>微暗的拱顶地窖里酒气浓郁，吸多了让人有些微醺。<</if>>
 <br><br>
 <<getouticon>><<link [[返回秘密温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
 <br>
-<<mpdrinkicon>><<link [[走到第三只酒桶前 (0:14)|MP Region Glasshouse Cellar Search]]>><<pass 14>><</link>>
+<<if $mpClues["glasshouse_cellar_third"]>>
+<<mpdrinkicon>><<link [[掀开第三只桶塞 (0:14)|MP Region Glasshouse Cellar Search]]>><<pass 14>><</link>>
 <br>
+<</if>>
 <<investigateicon>><<link [[返回地下酿造室 (0:08)|MP Region Glasshouse Cellar Rest]]>><<pass 8>><</link>>
 <br>
 <<walkicon>><<link [[步入冷香窖 (0:08)|MP Extra Deep Glasshouse 1]]>><<pass 8>><</link>>
 <br>
 <<link "听酒桶回声 (0:03)">><<pass 3>><<replace "#obs-glasshouse-cellar">>
 <<if $science gte 280 or $housekeeping gte 260>>
+<<if !$mpClues["glasshouse_cellar_third"]>><<set $mpClues["glasshouse_cellar_third"] to 1>><span class="blue">线索已记录</span><</if>>
 你轻叩第三只橡木桶，回声比旁边几只空了一截；桶底箍上有一道被反复撬动的划痕。
 <<else>>
 酒气熏得人微醺，你敲了几只桶，只听见一片沉闷的咚咚声。
@@ -2183,7 +2197,7 @@
 :: MP Region Blackiron Siding [nobr]
 <<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "blackiron">><<mpalertinit "blackiron">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["blackiron_siding"] to 1>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["blackiron_siding"] to 1>><<set $mpClues to ($mpClues or {})>>
 布满道岔扳手的铁轨汇集区里，枯黄的野草从枕木缝隙间钻出地面。几节脱轨的敞篷煤车歪斜在止冲挡旁，铁壳在风里发出沉闷的轻响。
 <<if $physique gte 11500 or $athletics gte 260>>你利落地跨过生锈的道岔拉杆，落脚悄无声息。<<else>>横七竖八的枕木与铁拉杆很容易绊住脚踝。<</if>>
 <br><br>
@@ -2193,12 +2207,15 @@
 	<<walkicon>><<link [[去三号装甲车 (0:08)|MP Region Blackiron Armored]]>><<pass 8>><</link>>
 	<br>
 <</if>>
+<<if $mpClues["blackiron_siding_seventh"]>>
 <<investigateicon>><<link [[蹲到七号扳道器旁 (0:10)|MP Region Blackiron Siding Search]]>><<pass 10>><</link>>
 <br>
+<</if>>
 <<bedicon>><<link [[返回蒸汽侧线 (0:08)|MP Region Blackiron Siding Rest]]>><<pass 8>><</link>>
 <br>
 <<link "看道岔磨痕 (0:03)">><<pass 3>><<replace "#obs-blackiron-siding">>
 <<if $athletics gte 260 or $physique gte 11500>>
+<<if !$mpClues["blackiron_siding_seventh"]>><<set $mpClues["blackiron_siding_seventh"] to 1>><span class="blue">线索已记录</span><</if>>
 你看见七号道岔的拉杆上有一层新抹的黄油，油迹一路延伸到防雨棚下的三号装甲货车。
 <<set $mpKnown["blackiron_armored"] to 1>>
 <<else>>

@@ -2163,6 +2163,23 @@
 
   function onEventPicked(name, content, eventPrng) {
     if (!name && !content) return;
+    // 街头小事被原版事件池抽中时：记下当日键与返回来路，事件页据此收尾。
+    try {
+      if (name && String(name).indexOf("mp_street_") === 0) {
+        var sev = null;
+        for (var si = 0; si < RANDOM_STREET_EVENTS.length; si++) {
+          if ("mp_street_" + RANDOM_STREET_EVENTS[si].key === name) { sev = RANDOM_STREET_EVENTS[si]; break; }
+        }
+        if (sev) {
+          var vsev = V();
+          if (vsev) {
+            if (!vsev.daily) vsev.daily = {};
+            vsev.daily[sev.dailyKey] = 1;
+            vsev.mpReturnPassage = (window.State && State.passage) || "";
+          }
+        }
+      }
+    } catch (e) {}
     S.lastEventPick = {
       name: name || "inline_event",
       content: content || "",
@@ -2209,6 +2226,16 @@
                 if (!tt.eventpool.some(function (x) { return x.name === wev.name; })) {
                   tt.eventpool.push({ name: wev.name, weight: wev.weight, content: wev.content });
                 }
+              }
+            });
+            // 街头随机小事并入原版事件池：进入街区时随机触发、占满屏幕，不再做成内联提示行。
+            RANDOM_STREET_EVENTS.forEach(function (sev) {
+              if (sev.locs.indexOf(curPasNow) < 0) return;
+              if (sev.hours && !isNpcInScheduleHour(sev)) return;
+              if (vv.daily && vv.daily[sev.dailyKey]) return;
+              var evName = "mp_street_" + sev.key;
+              if (!tt.eventpool.some(function (x) { return x.name === evName; })) {
+                tt.eventpool.push({ name: evName, weight: sev.weight || 0.35, content: "<<include \"" + sev.passage + "\">>" });
               }
             });
             // 组队同行时注入双人随机事件
@@ -3889,7 +3916,7 @@
     },
     {
       locs: ["Bedroom"],
-      check: function (v) { return (Number(v.mpQuestAttic) || 0) < 6 && (!v.daily || !v.daily.mpQuestAttic) && (getHourNow() >= 20 || getHourNow() < 8 || (Number(v.mpQuestAttic) || 0) > 0); },
+      check: function (v) { return (Number(v.mpQuestAttic) || 0) < 7 && (!v.daily || !v.daily.mpQuestAttic) && (getHourNow() >= 20 || getHourNow() < 8 || (Number(v.mpQuestAttic) || 0) > 0); },
       hint: "天花板角落的活板门边垂下一截磨损的麻绳。",
       icon: "img/misc/icon/investigate.png",
       linkText: "拉动阁楼的麻绳 (0:05)",
@@ -3905,7 +3932,7 @@
     },
     {
       locs: ["Elk Street", "Docks", "Industrial Alleyways"],
-      check: function (v) { return ((Number(v.skulduggery) || 0) >= 120 || (Number(v.blackmoney) || 0) > 0 || (Number(v.mpContrabandSealed) || 0) > 0 || isDuskOrNightNow()) && (!v.daily || !v.daily.mpQuestSmuggler); },
+      check: function (v) { return ((Number(v.skulduggery) || 0) >= 120 || (Number(v.blackmoney) || 0) > 0 || (Number(v.mpContrabandSealed) || 0) > 0 || isDuskOrNightNow()) && (Number(v.mpQuestSmuggler) || 0) < 7 && (!v.daily || !v.daily.mpQuestSmuggler); },
       hint: "生锈的货运集装箱后方传出低沉的金属叩击声，似乎有人在暗处清点货箱。",
       icon: "img/misc/icon/sneak.png",
       linkText: "绕到集装箱后方查看 (0:07)",
@@ -3977,7 +4004,7 @@
     },
     {
       locs: ["Danube Street", "MP Region Glasshouse Manor"],
-      check: function (v) { return true; },
+      check: function (v) { return isDuskOrNightNow(); },
       hint: "多瑙河街名流宅邸的雕花铁门与温室连廊间车马往来，隐约传来艾弗里与宴会宾客的交谈声。",
       icon: "img/misc/icon/socialise.png",
       linkText: "走近多瑙河街宅邸圈层 (0:05)",
@@ -4448,47 +4475,6 @@
     }
   ];
 
-  // 同一场景只掷一次骰子，避免本地重绘时反复刷出不同的事件。
-  var _streetEventRoll = { key: "", event: null };
-
-  function randomStreetEventFor(pas, v) {
-    if (!v || v.combat === 1 || !pas) return null;
-    if (pas === HUB || pas === BEDROOM || pas === "Start" || pas === "Start2") return null;
-    if (SAFE_PASSAGES.indexOf(pas) < 0) return null;
-
-    var day = 0;
-    try {
-      if (window.Time && Number.isFinite(Time.days)) day = Time.days;
-    } catch (e) {}
-    var stamp = 0;
-    try {
-      if (window.Time && Time.date && Number.isFinite(Time.date.timeStamp)) stamp = Time.date.timeStamp;
-    } catch (e) {}
-    if (!stamp) stamp = Number(v.timeStamp) || 0;
-
-    var key = pas + "|" + day + "|" + stamp;
-    if (_streetEventRoll.key !== key) {
-      _streetEventRoll.key = key;
-      _streetEventRoll.event = null;
-      var pool = [];
-      for (var i = 0; i < RANDOM_STREET_EVENTS.length; i++) {
-        var ev = RANDOM_STREET_EVENTS[i];
-        if (!ev || ev.locs.indexOf(pas) < 0) continue;
-        if (v.daily && v.daily[ev.dailyKey]) continue;
-        if (ev.hours && !isNpcInScheduleHour(ev)) continue;
-        if (ev.check && !ev.check(v)) continue;
-        pool.push(ev);
-      }
-      if (pool.length > 0 && Math.random() < 0.12) {
-        _streetEventRoll.event = pool[Math.floor(Math.random() * pool.length)];
-      }
-    }
-
-    var active = _streetEventRoll.event;
-    if (active && v.daily && v.daily[active.dailyKey]) active = null;
-    return active;
-  }
-
   function isNpcInScheduleHour(npcEntry) {
     if (!npcEntry || !Array.isArray(npcEntry.hours)) return true;
     var h = getHourNow();
@@ -4737,33 +4723,7 @@
       }
     }
 
-    // 6. 街头随机小事：约 12% 概率在对应街区出现，每件事每天最多一次
-    try {
-      var streetEvt = randomStreetEventFor(pas, v);
-      if (streetEvt) {
-        hasAny = true;
-        var seRow = el("div", { style: "margin:4px 0;" });
-        seRow.appendChild(el("span", { text: streetEvt.hint + " " }));
-        (function (evtDef, curPas) {
-          var seLink = el("a", {
-            class: "link-internal",
-            onclick: function (ev) {
-              ev.preventDefault();
-              try {
-                if (!v.daily) v.daily = {};
-                v.daily[evtDef.dailyKey] = 1;
-              } catch (e) {}
-              v.mpReturnPassage = curPas;
-              enginePlay(evtDef.passage);
-            }
-          });
-          seLink.appendChild(dolIconImg(evtDef.icon));
-          seLink.appendChild(document.createTextNode(evtDef.linkText));
-          seRow.appendChild(seLink);
-        })(streetEvt, pas);
-        container.appendChild(seRow);
-      }
-    } catch (e) {}
+    // 街头随机小事已并入原版事件池（见 installEventPoolHook），不再在页面底部注入提示行。
 
     if (regionBox.childNodes.length) {
       var pasTop = host.querySelector(".passage") || host;
@@ -5845,7 +5805,7 @@
 
     var subQuestDefs = [
       { varName: "mpQuestCellar", max: 7, title: "孤儿院旧储物室暗门", loc: "孤儿院走廊" },
-      { varName: "mpQuestAttic", max: 6, title: "卧室阁楼尘封旧箱", loc: "孤儿院卧室" },
+      { varName: "mpQuestAttic", max: 7, title: "卧室阁楼尘封旧箱", loc: "孤儿院卧室" },
       { varName: "mpQuestClocktower", max: 7, title: "高街钟表铺的停摆怀表", loc: "高街" },
       { varName: "mpQuestSmuggler", max: 7, title: "港区集装箱后的暗哨", loc: "码头与麋鹿街" },
       { varName: "mpQuestLibrary", max: 7, title: "图书馆无编号皮革卷宗", loc: "学校图书馆" },

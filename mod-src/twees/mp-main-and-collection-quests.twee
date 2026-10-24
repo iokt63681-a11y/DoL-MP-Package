@@ -45,14 +45,14 @@
 		<br><br>
 		<<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[拓下藏经阁碑文 (0:12)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_4"]>><<set $mpClues["main_eclipse_4"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 4>><<pass 12>><</link>><<else>><<link [[拓下藏经阁碑文 (0:12)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拓下藏经阁碑文">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 英语等级：<span class='purple'>D</span>">><<pass 12>><</link>><</if>>
 		<br>
-		<<link [[调查线索 (0:08)|MP Main Story Eclipse Mid]]>><<pass 8>><</link>>
+		<<if ($mpMainStoryEclipse or 0) gte 4>><<link [[调查线索 (0:08)|MP Main Story Eclipse Mid]]>><<pass 8>><</link>><</if>>
 	<</if>>
 <</if>>
 
 :: MP Main Story Eclipse Mid [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
 <<set $mpClues to ($mpClues or {})>>
-<<set _stg to ($mpMainStoryEclipse or 4)>>
+<<set _stg to Math.max(($mpMainStoryEclipse or 0), 4)>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Orphanage">><</if>>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
