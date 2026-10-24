@@ -1,6 +1,6 @@
 /* 八大探索区域与发现检定系统（V6精修版：含Search每日门控、便条线索接入、深层探索入口与原版UI规范） */
 :: MP Region Pool Router [nobr]
-<<set $outside to 0>><<set $location to "underground">><<effects>>
+<<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
 <<set $mpSeenScenes to ($mpSeenScenes or {})>>
 <<set _reg to ($mpCurrentRegion or "Foghorn")>>
 <<set _ret to ($mpReturnPassage or "")>>
@@ -83,7 +83,7 @@
 	<<if !$mpKnown["foghorn_echo"]>><<set $mpKnown["foghorn_echo"] to 1>>你站在礁脊高处看清了崖下暗径，<span class="green">锁定了海蚀回音廊的入口。</span><<elseif !$mpKnown["foghorn_wreck"]>><<set $mpKnown["foghorn_wreck"] to 1>><span class="green">锁定了断桅沉船滩的入口。</span><<elseif !$mpKnown["foghorn_keeper"]>><<set $mpKnown["foghorn_keeper"] to 1>><span class="green">锁定了守塔人旧居的入口。</span>
 	<<else>>镜面里各处门道都已被你看遍，<span class="teal">没有新的暗门。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	横风夹浪扑来，你在礁盘上晃了晃，<span class="red">没敢再往深处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	横风夹浪扑来，你在礁盘上晃了晃，<span class="red">只得先退回外围观察。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -102,7 +102,7 @@
 	<<if !$mpKnown["foghorn_keeper"]>><<set $mpKnown["foghorn_keeper"] to 1>>老汉抬起烟斗指了指雾中方向：<span class="green">告诉了你守塔人旧居的走法。</span><<elseif !$mpKnown["foghorn_wreck"]>><<set $mpKnown["foghorn_wreck"] to 1>><span class="green">告诉了你断桅沉船滩的走法。</span><<elseif !$mpKnown["foghorn_echo"]>><<set $mpKnown["foghorn_echo"] to 1>><span class="green">告诉了你海蚀回音廊的走法。</span>
 	<<else>>对方笑了笑，<span class="teal">说这儿的门道你已摸得一清二楚。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	老汉拧紧油壶盖转身不理，<span class="red">让你碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	老汉拧紧油壶盖转身不理，<span class="red">半句口风都不肯漏给你。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -111,7 +111,7 @@
 	<<if !$mpKnown["foghorn_wreck"]>><<set $mpKnown["foghorn_wreck"] to 1>>老汉听出你懂水路规矩，压低嗓音指点：<span class="green">为你指明了断桅沉船滩的暗径。</span><<elseif !$mpKnown["foghorn_echo"]>><<set $mpKnown["foghorn_echo"] to 1>><span class="green">为你指明了海蚀回音廊的暗径。</span><<elseif !$mpKnown["foghorn_keeper"]>><<set $mpKnown["foghorn_keeper"] to 1>><span class="green">为你指明了守塔人旧居的暗径。</span>
 	<<else>>对方冲你点点头，<span class="teal">提醒你里头陈设一切照旧。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	你说的切口不够地道，老汉警惕地眯起眼，<span class="red">只让你老实在外头待着。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你说的切口不够地道，老汉警惕地眯起眼，<span class="red">警告你别往深处乱闯。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -145,7 +145,7 @@
 <div id="obs-foghorn-pier"></div>
 <br>
 <<link [[顺栈桥石柱探看海鸟 (0:04)|MP Region Moment Foghorn 1]]>><<pass 4>><</link>>
-<<if $mpKeepsake and $mpKeepsake["keepsake_foghorn_whistle"]>><br><<keepsakeicon>><<link [[吹响守塔人铜哨探路 (0:04)|MP Keepsake Use Whistle]]>><<pass 4>><</link>><</if>>
+<<if $mpKeepsake and $mpKeepsake["keepsake_foghorn_whistle"]>><br><<link [[吹响守塔人铜哨探路 (0:04)|MP Keepsake Use Whistle]]>><<pass 4>><</link>><</if>>
 
 :: MP Region Foghorn Pier Search [nobr]
 <<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
@@ -546,7 +546,7 @@
 	<<if !$mpKnown["clockwork_vault"]>><<set $mpKnown["clockwork_vault"] to 1>>你从高处横梁看清了齿轮后方的暗廊，<span class="green">锁定了档案馆密库的入口。</span><<elseif !$mpKnown["clockwork_astro"]>><<set $mpKnown["clockwork_astro"] to 1>><span class="green">锁定了停摆天文台的入口。</span><<elseif !$mpKnown["clockwork_steam"]>><<set $mpKnown["clockwork_steam"] to 1>><span class="green">锁定了蒸汽压力室的入口。</span>
 	<<else>>高处视野开阔，<span class="teal">下方各处小径都已了然于胸。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	横梁满是滑腻机油，你差点踩空跌落，<span class="red">没敢再往深处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	横梁满是滑腻机油，你差点踩空跌落，<span class="red">只好暂且收住深入的念头。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -565,7 +565,7 @@
 	<<if !$mpKnown["clockwork_steam"]>><<set $mpKnown["clockwork_steam"] to 1>>学徒擦了擦汗，指了指侧方通道：<span class="green">告诉了你蒸汽压力室的走法。</span><<elseif !$mpKnown["clockwork_astro"]>><<set $mpKnown["clockwork_astro"] to 1>><span class="green">告诉了你停摆天文台的走法。</span><<elseif !$mpKnown["clockwork_vault"]>><<set $mpKnown["clockwork_vault"] to 1>><span class="green">告诉了你档案馆密库的走法。</span>
 	<<else>>对方笑了笑，<span class="teal">说这片地方的底细你早已知晓。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	学徒赶着去添机油，摇手让你别挡路，<span class="red">让你碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	学徒赶着去添机油，摇手让你别挡路，<span class="red">冷淡地将你打发了回去。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -574,7 +574,7 @@
 	<<if !$mpKnown["clockwork_astro"]>><<set $mpKnown["clockwork_astro"] to 1>>学徒认出塞拉的修表暗号，低声透露：<span class="green">为你指明了停摆天文台的暗径。</span><<elseif !$mpKnown["clockwork_vault"]>><<set $mpKnown["clockwork_vault"] to 1>><span class="green">为你指明了档案馆密库的暗径。</span><<elseif !$mpKnown["clockwork_steam"]>><<set $mpKnown["clockwork_steam"] to 1>><span class="green">为你指明了蒸汽压力室的暗径。</span>
 	<<else>>对方冲你点点头，<span class="teal">说里面眼下平顺如常。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	你报错了齿号，学徒狐疑地退后半步，<span class="red">只让你老实在外头待着。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你报错了齿号，学徒狐疑地退后半步，<span class="red">示意你立刻退回外围区域。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -803,7 +803,7 @@
 <</replace>><</link>>
 <br>
 <div id="obs-clockwork-astro"></div>
-<<if $mpKeepsake and $mpKeepsake["keepsake_clockwork_core"]>><br><<keepsakeicon>><<link [[嵌入蓝钢怀表芯 (0:04)|MP Keepsake Use Core]]>><<pass 4>><</link>><</if>>
+<<if $mpKeepsake and $mpKeepsake["keepsake_clockwork_core"]>><br><<link [[嵌入蓝钢怀表芯 (0:04)|MP Keepsake Use Core]]>><<pass 4>><</link>><</if>>
 
 :: MP Region Clockwork Astro Search [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
@@ -968,7 +968,7 @@
 </div>
 
 :: MP Region Sunken Abbey [nobr]
-<<set $outside to 1>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["abbey_steps"] to 1>>
 顺着坍塌石廊后的古老旋梯拾级而下，百年前因地基沉降而没入地底的哥特式修道院外庭映入眼帘。长明石灯在潮湿的柱廊间投下肃穆的光影。
 <<if $willpower gte 450 or $history gte 260>>你借着石灯微光看清了脚下的青苔石阶，心神保持着笃定。<<else>>幽暗石廊间回荡的水滴声让你不自觉屏住了呼吸。<</if>>
@@ -1009,7 +1009,7 @@
 	<<if !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>>你从残廊高处看清了地底水声的来向，<span class="green">锁定了地下暗河渡口的入口。</span><<elseif !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>><span class="green">锁定了灰烬藏经阁的入口。</span><<elseif !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>><span class="green">锁定了告解回音壁的入口。</span>
 	<<else>>高处视野开阔，<span class="teal">蜿蜒的暗道走向已尽收眼底。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	残廊石阶松动摇晃，你只得退回地面，<span class="red">没敢再往深处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	残廊石阶松动摇晃，你只得退回地面，<span class="red">没敢贸然越过前方的暗障。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1028,7 +1028,7 @@
 	<<if !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>>苦修士合十低语，指了指石阶深处：<span class="green">告诉了你告解回音壁的走法。</span><<elseif !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>><span class="green">告诉了你灰烬藏经阁的走法。</span><<elseif !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>><span class="green">告诉了你地下暗河渡口的走法。</span>
 	<<else>>对方笑了笑，<span class="teal">说这里的关窍你已经全盘掌握。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	苦修士闭目诵经不予理会，<span class="red">让你碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	苦修士闭目诵经不予理会，<span class="red">毫不客气地拒绝了你的打探。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -1037,7 +1037,7 @@
 	<<if !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>>苦修士听出古教团祝词，侧身指路：<span class="green">为你指明了灰烬藏经阁的暗径。</span><<elseif !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>><span class="green">为你指明了地下暗河渡口的暗径。</span><<elseif !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>><span class="green">为你指明了告解回音壁的暗径。</span>
 	<<else>>对方冲你点点头，<span class="teal">说内里并无新的变化。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	你念错了音节，苦修士冷淡地请你就此止步，<span class="red">只让你老实在外头待着。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你念错了音节，苦修士冷淡地请你就此止步，<span class="red">冷冷叮嘱你安分守己。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1266,7 +1266,7 @@
 <</replace>><</link>>
 <br>
 <div id="obs-abbey-scriptorium"></div>
-<<if $mpKeepsake and $mpKeepsake["keepsake_abbey_ring"]>><br><<keepsakeicon>><<link [[按入深渊银鸽指环 (0:04)|MP Keepsake Use Ring]]>><<pass 4>><</link>><</if>>
+<<if $mpKeepsake and $mpKeepsake["keepsake_abbey_ring"]>><br><<link [[按入深渊银鸽指环 (0:04)|MP Keepsake Use Ring]]>><<pass 4>><</link>><</if>>
 
 :: MP Region Abbey Scriptorium Search [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
@@ -1472,7 +1472,7 @@
 	<<if !$mpKnown["glasshouse_cellar"]>><<set $mpKnown["glasshouse_cellar"] to 1>>你登高俯瞰看清了温室深处的通道，<span class="green">锁定了地下酿造室的入口。</span><<elseif !$mpKnown["glasshouse_dome"]>><<set $mpKnown["glasshouse_dome"] to 1>><span class="green">锁定了玻璃穹顶露台的入口。</span><<elseif !$mpKnown["glasshouse_specimen"]>><<set $mpKnown["glasshouse_specimen"] to 1>><span class="green">锁定了夜光标本廊的入口。</span>
 	<<else>>高处视野开阔，<span class="teal">周遭地形脉络已一清二楚。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	湿滑铁梯让你脚底打滑，<span class="red">没敢再往深处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	湿滑铁梯让你脚底打滑，<span class="red">只得原路折返从长计议。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1491,7 +1491,7 @@
 	<<if !$mpKnown["glasshouse_specimen"]>><<set $mpKnown["glasshouse_specimen"] to 1>>园丁放下花剪，善意地指了指内侧：<span class="green">告诉了你夜光标本廊的走法。</span><<elseif !$mpKnown["glasshouse_dome"]>><<set $mpKnown["glasshouse_dome"] to 1>><span class="green">告诉了你玻璃穹顶露台的走法。</span><<elseif !$mpKnown["glasshouse_cellar"]>><<set $mpKnown["glasshouse_cellar"] to 1>><span class="green">告诉了你地下酿造室的走法。</span>
 	<<else>>对方笑了笑，<span class="teal">说这一带的门路你比谁都熟。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	园丁怕担责，摆手让你只在前厅走动，<span class="red">让你碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	园丁怕担责，摆手让你只在前厅走动，<span class="red">只留给你一个冷淡的背影。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -1500,7 +1500,7 @@
 	<<if !$mpKnown["glasshouse_dome"]>><<set $mpKnown["glasshouse_dome"] to 1>>园丁惊讶于你的草木学识，主动指点：<span class="green">为你指明了玻璃穹顶露台的暗径。</span><<elseif !$mpKnown["glasshouse_cellar"]>><<set $mpKnown["glasshouse_cellar"] to 1>><span class="green">为你指明了地下酿造室的暗径。</span><<elseif !$mpKnown["glasshouse_specimen"]>><<set $mpKnown["glasshouse_specimen"] to 1>><span class="green">为你指明了夜光标本廊的暗径。</span>
 	<<else>>对方冲你点点头，<span class="teal">示意你里边各处都安稳无事。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	你说错了育种年份，园丁催你快些离开，<span class="red">只让你老实在外头待着。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你说错了育种年份，园丁催你快些离开，<span class="red">挥手催你快些离开此地。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1631,7 +1631,7 @@
 <</replace>><</link>>
 <br>
 <div id="obs-glasshouse-specimen"></div>
-<<if $mpKeepsake and $mpKeepsake["keepsake_glasshouse_amber"]>><br><<keepsakeicon>><<link [[对准琥珀香膏瓶折光 (0:04)|MP Keepsake Use Amber]]>><<pass 4>><</link>><</if>>
+<<if $mpKeepsake and $mpKeepsake["keepsake_glasshouse_amber"]>><br><<link [[对准琥珀香膏瓶折光 (0:04)|MP Keepsake Use Amber]]>><<pass 4>><</link>><</if>>
 
 :: MP Region Glasshouse Specimen Search [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
@@ -1935,7 +1935,7 @@
 	<<if !$mpKnown["blackiron_platform"]>><<set $mpKnown["blackiron_platform"] to 1>>你从铁梯高处看清了场站深处的灯火，<span class="green">锁定了地下走私月台的入口。</span><<elseif !$mpKnown["blackiron_signal"]>><<set $mpKnown["blackiron_signal"] to 1>><span class="green">锁定了信号塔值班室的入口。</span><<elseif !$mpKnown["blackiron_armored"]>><<set $mpKnown["blackiron_armored"] to 1>><span class="green">锁定了三号装甲货车的入口。</span>
 	<<else>>高处视野开阔，<span class="teal">各条隐秘通路都已记熟。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	铁梯满是冰霜，冻僵的手指险些抓空，<span class="red">没敢再往深处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	铁梯满是冰霜，冻僵的手指险些抓空，<span class="red">只好先在安全处稳住身形。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1954,7 +1954,7 @@
 	<<if !$mpKnown["blackiron_armored"]>><<set $mpKnown["blackiron_armored"] to 1>>老工吐了口烟圈，朝东侧股道努嘴：<span class="green">告诉了你三号装甲货车的走法。</span><<elseif !$mpKnown["blackiron_signal"]>><<set $mpKnown["blackiron_signal"] to 1>><span class="green">告诉了你信号塔值班室的走法。</span><<elseif !$mpKnown["blackiron_platform"]>><<set $mpKnown["blackiron_platform"] to 1>><span class="green">告诉了你地下走私月台的走法。</span>
 	<<else>>对方笑了笑，<span class="teal">说这儿的线索你都已经问透了。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	老工敲了敲铁轨让你别乱闯重地，<span class="red">让你碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	老工敲了敲铁轨让你别乱闯重地，<span class="red">摆摆手示意你别多管闲事。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -1963,7 +1963,7 @@
 	<<if !$mpKnown["blackiron_signal"]>><<set $mpKnown["blackiron_signal"] to 1>>老工接过火柴点烟，压低声音透露：<span class="green">为你指明了信号塔值班室的暗径。</span><<elseif !$mpKnown["blackiron_platform"]>><<set $mpKnown["blackiron_platform"] to 1>><span class="green">为你指明了地下走私月台的暗径。</span><<elseif !$mpKnown["blackiron_armored"]>><<set $mpKnown["blackiron_armored"] to 1>><span class="green">为你指明了三号装甲货车的暗径。</span>
 	<<else>>对方冲你点点头，<span class="teal">说里头各处一切妥帖。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	老工警惕地收起扳手不再多话，<span class="red">只让你老实在外头待着。</span><<stress 3>><<tiredness 1>><<gstress>>
+	老工警惕地收起扳手不再多话，<span class="red">严词告诫你莫要越界半步。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2398,7 +2398,7 @@
 	<<if !$mpKnown["druid_watchtower"]>><<set $mpKnown["druid_watchtower"] to 1>>你攀上高枝透过浓雾看清了林间方位，<span class="green">锁定了守林人瞭望台的入口。</span><<elseif !$mpKnown["druid_rootcave"]>><<set $mpKnown["druid_rootcave"] to 1>><span class="green">锁定了古根地穴的入口。</span><<elseif !$mpKnown["druid_moonwell"]>><<set $mpKnown["druid_moonwell"] to 1>><span class="green">锁定了月泉祭坛的入口。</span>
 	<<else>>高处视野开阔，<span class="teal">往来路径早已成竹在胸。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	湿滑树皮让你脚下一滑差点摔落，<span class="red">没敢再往深处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	湿滑树皮让你脚下一滑差点摔落，<span class="red">不敢在毫无准备下硬闯。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2417,7 +2417,7 @@
 	<<if !$mpKnown["druid_moonwell"]>><<set $mpKnown["druid_moonwell"] to 1>>猎手安抚好猎犬，抬手指了指雾中：<span class="green">告诉了你月泉祭坛的走法。</span><<elseif !$mpKnown["druid_rootcave"]>><<set $mpKnown["druid_rootcave"] to 1>><span class="green">告诉了你古根地穴的走法。</span><<elseif !$mpKnown["druid_watchtower"]>><<set $mpKnown["druid_watchtower"] to 1>><span class="green">告诉了你守林人瞭望台的走法。</span>
 	<<else>>对方笑了笑，<span class="teal">说此处的来龙去脉你已尽数知悉。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	猎犬冲你低吠，猎手劝你趁早出林，<span class="red">让你碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	猎犬冲你低吠，猎手劝你趁早出林，<span class="red">把话头堵得死死的。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -2426,7 +2426,7 @@
 	<<if !$mpKnown["druid_rootcave"]>><<set $mpKnown["druid_rootcave"] to 1>>猎手见你认得阿什的巡山记号，点头告知：<span class="green">为你指明了古根地穴的暗径。</span><<elseif !$mpKnown["druid_watchtower"]>><<set $mpKnown["druid_watchtower"] to 1>><span class="green">为你指明了守林人瞭望台的暗径。</span><<elseif !$mpKnown["druid_moonwell"]>><<set $mpKnown["druid_moonwell"] to 1>><span class="green">为你指明了月泉祭坛的暗径。</span>
 	<<else>>对方冲你点点头，<span class="teal">说内部没有异样动静。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	你认错了记号，猎手冷淡地摇了摇头，<span class="red">只让你老实在外头待着。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你认错了记号，猎手冷淡地摇了摇头，<span class="red">只准你在外廊附近活动。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -2557,7 +2557,7 @@
 <</replace>><</link>>
 <br>
 <div id="obs-druid-moonwell"></div>
-<<if $mpKeepsake and $mpKeepsake["keepsake_druid_antler"]>><br><<keepsakeicon>><<link [[举起白鹿角坠饰引路 (0:04)|MP Keepsake Use Antler]]>><<pass 4>><</link>><</if>>
+<<if $mpKeepsake and $mpKeepsake["keepsake_druid_antler"]>><br><<link [[举起白鹿角坠饰引路 (0:04)|MP Keepsake Use Antler]]>><<pass 4>><</link>><</if>>
 
 :: MP Region Druid Moonwell Search [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -2876,7 +2876,7 @@
 	<<if !$mpKnown["velvet_salon"]>><<set $mpKnown["velvet_salon"] to 1>>侍者微微躬身，朝丝绒长廊示意：<span class="green">告诉了你镜面试衣沙龙的走法。</span><<elseif !$mpKnown["velvet_terrace"]>><<set $mpKnown["velvet_terrace"] to 1>><span class="green">告诉了你露台观海雅座的走法。</span><<elseif !$mpKnown["velvet_auction"]>><<set $mpKnown["velvet_auction"] to 1>><span class="green">告诉了你私人拍卖暗厅的走法。</span>
 	<<else>>对方笑了笑，<span class="teal">说这地方再没什么能瞒过你了。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	侍者礼貌却坚决地拦下了你的话头，<span class="red">让你碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	侍者礼貌却坚决地拦下了你的话头，<span class="red">警惕地收起东西不再理你。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -2885,7 +2885,7 @@
 	<<if !$mpKnown["velvet_terrace"]>><<set $mpKnown["velvet_terrace"] to 1>>侍者听出暗层切口，低声为你引路：<span class="green">为你指明了露台观海雅座的暗径。</span><<elseif !$mpKnown["velvet_auction"]>><<set $mpKnown["velvet_auction"] to 1>><span class="green">为你指明了私人拍卖暗厅的暗径。</span><<elseif !$mpKnown["velvet_salon"]>><<set $mpKnown["velvet_salon"] to 1>><span class="green">为你指明了镜面试衣沙龙的暗径。</span>
 	<<else>>对方冲你点点头，<span class="teal">说里头还是老样子。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	你说漏了半句行话，侍者微笑不语，<span class="red">只让你老实在外头待着。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你说漏了半句行话，侍者微笑不语，<span class="red">让你赶紧原路退回去。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -3316,7 +3316,7 @@
 	<<if !$mpKnown["observatory_bridge"]>><<set $mpKnown["observatory_bridge"] to 1>>你登上铁梯半层看清了拱廊走向，<span class="green">锁定了钟楼连廊的入口。</span><<elseif !$mpKnown["observatory_cabinet"]>><<set $mpKnown["observatory_cabinet"] to 1>><span class="green">锁定了标本陈列暗阁的入口。</span><<elseif !$mpKnown["observatory_star"]>><<set $mpKnown["observatory_star"] to 1>><span class="green">锁定了星图档案室的入口。</span>
 	<<else>>高处视野开阔，<span class="teal">底下的街巷与暗径已尽数摸清。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	旧铁梯发出吱呀长鸣惊动了值日生，<span class="red">没敢再往深处迈步。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	旧铁梯发出吱呀长鸣惊动了值日生，<span class="red">只得先退回外围观察。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -3335,7 +3335,7 @@
 	<<if !$mpKnown["observatory_star"]>><<set $mpKnown["observatory_star"] to 1>>图书员推了推眼镜，指了指走廊内侧：<span class="green">告诉了你星图档案室的走法。</span><<elseif !$mpKnown["observatory_cabinet"]>><<set $mpKnown["observatory_cabinet"] to 1>><span class="green">告诉了你标本陈列暗阁的走法。</span><<elseif !$mpKnown["observatory_bridge"]>><<set $mpKnown["observatory_bridge"] to 1>><span class="green">告诉了你钟楼连廊的走法。</span>
 	<<else>>对方笑了笑，<span class="teal">说周围的暗记你早已了然于心。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	图书员合上登记簿让你别往封存区走，<span class="red">让你碰了一鼻子灰。</span><<stress 4>><<gstress>>
+	图书员合上登记簿让你别往封存区走，<span class="red">半句口风都不肯漏给你。</span><<stress 4>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
@@ -3344,7 +3344,7 @@
 	<<if !$mpKnown["observatory_cabinet"]>><<set $mpKnown["observatory_cabinet"] to 1>>图书员见你熟悉旧档编号，小声告知：<span class="green">为你指明了标本陈列暗阁的暗径。</span><<elseif !$mpKnown["observatory_bridge"]>><<set $mpKnown["observatory_bridge"] to 1>><span class="green">为你指明了钟楼连廊的暗径。</span><<elseif !$mpKnown["observatory_star"]>><<set $mpKnown["observatory_star"] to 1>><span class="green">为你指明了星图档案室的暗径。</span>
 	<<else>>对方冲你点点头，<span class="teal">告知你里面今日并无变故。</span><</if>><<stress -2>><<lstress>>
 <<else>>
-	你报出的索引号不对，图书员摇了摇头，<span class="red">只让你老实在外头待着。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你报出的索引号不对，图书员摇了摇头，<span class="red">警告你别往深处乱闯。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -3378,7 +3378,7 @@
 <div id="obs-observatory-dome"></div>
 <br>
 <<link [[查看滑轨断齿铜轮 (0:04)|MP Quest Observatory Wing 1]]>><<pass 4>><</link>>
-<<if $mpKeepsake and $mpKeepsake["keepsake_observatory_lens"]>><br><<keepsakeicon>><<link [[旋入消色差古透镜 (0:04)|MP Keepsake Use Lens]]>><<pass 4>><</link>><</if>>
+<<if $mpKeepsake and $mpKeepsake["keepsake_observatory_lens"]>><br><<link [[旋入消色差古透镜 (0:04)|MP Keepsake Use Lens]]>><<pass 4>><</link>><</if>>
 
 :: MP Region Observatory Dome Search [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>

@@ -13,7 +13,7 @@
 */
 :: MP Quest Beach Shipwreck [nobr]
 <<set $outside to 1>><<set $location to "beach">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestShipwreck to Math.max(($mpQuestShipwreck or 0), 1)>>
 退潮把一截黑黢黢的船骨从沙里吐了出来，断裂的肋木上挂满藤壶，像某种巨兽半开的胸腔。你在第三根肋木上摸到一枚被盐蚀得只剩半边翅膀的白鸥徽记。沙面留着两道新鲜拖痕，从船首一直延伸到礁缝，今早显然还有人进出。
 <br><br>
@@ -25,7 +25,7 @@
 
 :: MP Quest Beach Shipwreck Step2 [nobr]
 <<set $outside to 1>><<set $location to "beach">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestShipwreck to Math.max(($mpQuestShipwreck or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 船首像的底座灌满了湿沙，铜板边缘又被牡蛎壳咬死，单靠手指根本撼不动。你从腰间摸出撬片，试着沿锈蚀的接缝一点点别开它。
@@ -46,13 +46,13 @@
 	撬片突然打滑，你的虎口被铜边划开一道口子，血珠很快被海水冲淡。船骨深处传来空荡荡的回声，像在嘲笑你的笨手笨脚。
 	<<pain 2>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[按住底座再试 (0:04)|MP Quest Beach Shipwreck Step2]]>><<pass 4>><</link>>
+	<<link [[按住底座再试 (0:04)|MP Quest Beach Shipwreck Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP Quest Beach Shipwreck Step3 [nobr]
 <<set $outside to 1>><<set $location to "beach">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestShipwreck to Math.max(($mpQuestShipwreck or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 格威岚蹲在翻扣的小艇旁补网，脚边压着一本被海水泡皱的接货簿。听见你问白鸥号，他手上的梭子停了一瞬，随后用下巴点了点礁缝方向：「那船沉得不干净。每隔几年就有人半夜来割一块铜走，领头的左手少了半截小指。」他翻到三十年前那页，潮位一栏被人用浓墨涂死，只剩纸背一道压痕。
@@ -68,7 +68,7 @@
 
 :: MP Quest Beach Shipwreck Step4 [nobr]
 <<set $outside to 0>><<set $location to "cabin">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestShipwreck to Math.max(($mpQuestShipwreck or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set $mpBeachCaught to ($mpBeachCaught or 0)>>
@@ -95,9 +95,8 @@
 
 :: MP Quest Beach Shipwreck Step5 [nobr]
 <<set $outside to 0>><<set $location to "cabin">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestShipwreck to Math.max(($mpQuestShipwreck or 0), 5)>>
-<<set $mpClues to ($mpClues or {})>>
 <<if ($mpBeachCaught or 0) is 1>>
 打捞队的棚屋是用船板临时钉起来的，门缝里漏进一线灰白的海光。
 	
@@ -146,7 +145,7 @@
 
 :: MP Quest Beach Shipwreck Step6 [nobr]
 <<set $outside to 1>><<set $location to "searocks">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestShipwreck to Math.max(($mpQuestShipwreck or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 夜潮把一只没有灯的小艇推到礁背。艇上的人披着油布斗篷，左手果然少了半截小指；他没有问你来意，只把一只装钱的铁盒放在船板上，又指了指你怀里的日志。远处港务巡官的提灯正沿着防波堤一寸寸移近。
@@ -174,14 +173,13 @@
 
 :: MP Quest Beach Shipwreck Resolve [nobr]
 <<set $outside to 1>><<set $location to "beach">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestShipwreck to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestShipwreck to 1>>
 <<set $mpClues to ($mpClues or {})>>
-<<set _clues to 0>><<if $mpClues["wilds_ship_bow"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ship_tide"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ship_log"]>><<set _clues += 1>><</if>>
+<<set _clues to 0>><<if $mpClues["wilds_ship_bow"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ship_tide"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ship_log"] or $mpClues["wilds_ship_buyer"] or $mpClues["wilds_ship_justice"] or $mpClues["wilds_ship_truth"]>><<set _clues += 1>><</if>>
 <<set _sk to Math.max(($skulduggery or 0), ($history or 0))>>
 <<if _clues gte 3 and _sk gte 600>><<set _reward to 2600>><<elseif _clues gte 2>><<set _reward to 2000>><<elseif _sk gte 450>><<set _reward to 1400>><<else>><<set _reward to 800>><</if>>
 <<if Time.dayState is "dawn" or Time.dayState is "night">>天亮前，港务处的人在防波堤尽头拦住你。<<else>>涨潮前，港务处的人在防波堤尽头拦住你。<</if>>海风把纸角吹得啪啪响。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["wilds_ship_buyer"] or $mpClues["wilds_ship_justice"] or $mpClues["wilds_ship_truth"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回海礁高处 (0:02)|Sea Rocks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -189,7 +187,7 @@
 <<socialiseicon>><<link "潮位货单日志串成证据 (0:03)">><<pass 3>><<replace "#act-mp-quest-beach-shipwreck-resolve">>
 <<if ($skulduggery or 0) gte 350 or ($history or 0) gte 350>>
 	你按潮位、货单编号和日志页码把整件事串成一条线，连那名少指的中间人也没能藏住。巡官收下抄件。
-	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_ship_payout"))>><<if _first>>对方把一份线报酬金推到你面前。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
+	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_ship_payout"))>><<if _first>>港务执事把一封航道线报酬金推到你面前。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
 <<if !_first>>巡官翻过旧记录，只让你补签了一份抄件，没有再点钱。<<stress -1>><</if>>
 	<br><br>
 	<<walkicon>><<link [[循着痕迹往深处走 (0:03)|MP Quest Beach Shipwreck]]>><<pass 3>><</link>>
@@ -208,7 +206,7 @@
 
 :: MP Quest Forest Ruins [nobr]
 <<set $outside to 1>><<set $location to "forest">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 1)>>
 荆棘在坍塌的铁栅间织成一张带刺的网，网后露出一角灰白石墙和被树根顶歪的日晷。庄园荒了不知多少年，门厅的屋顶早没了，只剩一排石柱撑着湿漉漉的天空。干涸喷泉边的泥地里有一串新脚印，鞋底沾着只有地窖才有的白霉。
 <br><br>
@@ -220,7 +218,7 @@
 
 :: MP Quest Forest Ruins Step2 [nobr]
 <<set $outside to 1>><<set $location to "forest">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 日晷盘面被青苔填满，中央插晷针的石孔却空着。你蹲下去拨开湿叶，发现孔底卡着一小截断铜，盘缘还刻着七个彼此错开的刻度。要看清它们，得先把整块晷盘从树根里抬起来。
@@ -241,13 +239,13 @@
 	树根比你想象中韧，晷盘只挪开半寸便重新卡死。你手背被荆刺划出几道血痕，断铜也滚进落叶缝里不见了。
 	<<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[换个角度再试 (0:04)|MP Quest Forest Ruins Step2]]>><<pass 4>><</link>>
+	<<link [[换个角度再试 (0:04)|MP Quest Forest Ruins Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP Quest Forest Ruins Step3 [nobr]
 <<set $outside to 1>><<set $location to "forest">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 伊甸靠在林缘的倒木旁削一支木楔，听完你的来意才抬起眼。他用刀尖在泥地上画出庄园的旧界：「那家人不是搬走的。最后一夜，收荒人赶着三辆空车进去，天亮前只出来两辆。」他告诉你，地窖口每逢阴雨天会从石缝里冒白霉，还提醒你别碰戴铜戒指的人递来的东西。
@@ -263,7 +261,7 @@
 
 :: MP Quest Forest Ruins Step4 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set $mpForestCaught to ($mpForestCaught or 0)>>
@@ -290,15 +288,14 @@
 
 :: MP Quest Forest Ruins Step5 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 5)>>
-<<set $mpClues to ($mpClues or {})>>
 <<if ($mpForestCaught or 0) is 1>>
 地窖深处有一座废弃蓄水池，池壁的排水孔被铁栅封死。
 	
 <br><br>
 
-	<<socialiseicon>><<link [[说服学徒替你开栅 (0:06)|MP Quest Forest Ruins Step6]]>>
+	<<socialiseicon>><<link [[隔着木栏向学徒低声求助 (0:06)|MP Quest Forest Ruins Step6]]>>
 		<<if ($willpower or 0) gte 320 or ($NPCName and $NPCNameList and $NPCNameList.includes("Eden"))>>
 你提起伊甸说过的话，又指出收荒人绝不会分给学徒多少好处。
 			<<stress -2>>
@@ -340,7 +337,7 @@
 
 :: MP Quest Forest Ruins Step6 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 账房比外面更像一间被时间遗忘的办公室。石桌上的银墨台已经发黑，账册却保存得意外完整；铁匣里压着庄园地契、三枚佃户按过手印的欠条，以及一枚刻着日晷的银印。墙角的木箱忽然动了一下，里面传出压抑的咳嗽声。
@@ -369,14 +366,13 @@
 
 :: MP Quest Forest Ruins Resolve [nobr]
 <<set $outside to 1>><<set $location to "forest">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestManorRuins to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestManorRuins to 1>>
 <<set $mpClues to ($mpClues or {})>>
-<<set _clues to 0>><<if $mpClues["wilds_ruin_sundial"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ruin_ledger"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ruin_deed"]>><<set _clues += 1>><</if>>
+<<set _clues to 0>><<if $mpClues["wilds_ruin_sundial"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ruin_ledger"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_ruin_deed"] or $mpClues["wilds_ruin_witness"] or $mpClues["wilds_ruin_tenants"]>><<set _clues += 1>><</if>>
 <<set _sk to Math.max(($willpower or 0), ($history or 0))>>
 <<if _clues gte 3 and _sk gte 600>><<set _reward to 2500>><<elseif _clues gte 2>><<set _reward to 2000>><<elseif _sk gte 450>><<set _reward to 1400>><<else>><<set _reward to 800>><</if>>
 你从荆棘拱门钻出来时，天光已经从树冠缝隙里斜斜切下。伊甸站在车辙边，朝你伸出手。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["wilds_ruin_tenants"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回森林小径 (0:02)|Forest]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -384,7 +380,7 @@
 <<socialiseicon>><<link "与伊甸截车夫摊开地契 (0:03)">><<pass 3>><<replace "#act-mp-quest-forest-ruins-resolve">>
 <<if ($skulduggery or 0) gte 350 or ($willpower or 0) gte 350>>
 	你和伊甸一前一后截住车夫，把地契拓片和佃户证词摊在他面前。对方脸色变了几变，最终把车斗里的空木箱搬下来。
-	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_ruin_payout"))>><<if _first>>对方把一份线报酬金推到你面前。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
+	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_ruin_payout"))>><<if _first>>伊甸把装着寻访酬金的鹿皮袋递到你手里。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
 <<if !_first>>林务官说这桩事已经结过账，只收下了你补交的抄件。<<stress -1>><</if>>
 	<br><br>
 	<<walkicon>><<link [[收好东西继续走 (0:03)|MP Quest Forest Ruins]]>><<pass 3>><</link>>
@@ -403,7 +399,7 @@
 
 :: MP Quest Park Greenhouse [nobr]
 <<set $outside to 1>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestGreenhouse to Math.max(($mpQuestGreenhouse or 0), 1)>>
 玻璃花房的弧形顶棚缺了三块，断口被麻绳和木板草草盖住。还没走近，一股温热的甜香便顺着门缝钻进鼻腔，甜里带着一点金属似的凉意。侧门挂着新换的铜锁，锁孔周围却有一圈旧划痕。花房深处传来水滴落在铁皮上的回响。
 <br><br>
@@ -415,7 +411,7 @@
 
 :: MP Quest Park Greenhouse Step2 [nobr]
 <<set $outside to 0>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestGreenhouse to Math.max(($mpQuestGreenhouse or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 侧窗后的空气又潮又暖，你的靴底刚踩上碎陶片，头顶的喷雾管便嘶嘶喷出一阵白雾。窗框内侧缠着一圈细铜线，线头接着一只旧铃铛；要进去，得先让铜线保持不动。
@@ -436,13 +432,13 @@
 	铜线在你手心里滑了一下，铃铛只响半声便被你攥住。花房深处有人推开椅子，你急忙缩回窗外，膝盖在碎砖上磕出一片淤青，轮值表也没能看清。
 	<<pain 2>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[稳住呼吸再试 (0:04)|MP Quest Park Greenhouse Step2]]>><<pass 4>><</link>>
+	<<link [[稳住呼吸再试 (0:04)|MP Quest Park Greenhouse Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP Quest Park Greenhouse Step3 [nobr]
 <<set $outside to 1>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestGreenhouse to Math.max(($mpQuestGreenhouse or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 乔丹正在工作间门口冲洗一排空花盆，袖口沾着银灰色的花粉。他看见你从花房方向过来，先往左右看了看，才压低声音说：「夜雾兰的甜香会让人犯困，闻久了连自己签过什么都记不清。老板只让我们在夜里采蜜，白天锁门。」他把一张折起来的班次表塞进你手里。
@@ -458,7 +454,7 @@
 
 :: MP Quest Park Greenhouse Step4 [nobr]
 <<set $outside to 0>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestGreenhouse to Math.max(($mpQuestGreenhouse or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set $mpGreenhouseCaught to ($mpGreenhouseCaught or 0)>>
@@ -485,15 +481,14 @@
 
 :: MP Quest Park Greenhouse Step5 [nobr]
 <<set $outside to 0>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestGreenhouse to Math.max(($mpQuestGreenhouse or 0), 5)>>
-<<set $mpClues to ($mpClues or {})>>
 <<if ($mpGreenhouseCaught or 0) is 1>>
 棚屋里堆着半人高的空陶盆，门从外面用木楔别住，窗上蒙着防虫纱。
 	
 <br><br>
 
-	<<socialiseicon>><<link [[说服帮工放你出去 (0:06)|MP Quest Park Greenhouse Step6]]>>
+	<<socialiseicon>><<link [[敲响玻璃窗向帮工求助 (0:06)|MP Quest Park Greenhouse Step6]]>>
 		<<if ($willpower or 0) gte 320 or ($NPCName and $NPCNameList and $NPCNameList.includes("Jordan"))>>
 你提起乔丹说过的夜班和工钱，又提醒他白烟吸多了会忘事。
 			<<stress -2>>
@@ -535,7 +530,7 @@
 
 :: MP Quest Park Greenhouse Step6 [nobr]
 <<set $outside to 0>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestGreenhouse to Math.max(($mpQuestGreenhouse or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 花房办公室的百叶窗半合着，桌上摆着一只镶铜边的配方匣、几瓶贴好标签的夜雾兰蜜。墙上的便笺钉着一张香料商的收货印样，旁边还压着乔丹被扣下的工钱袋。
@@ -565,14 +560,13 @@
 
 :: MP Quest Park Greenhouse Resolve [nobr]
 <<set $outside to 1>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestGreenhouse to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestGreenhouse to 1>>
 <<set $mpClues to ($mpClues or {})>>
-<<set _clues to 0>><<if $mpClues["wilds_green_schedule"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_green_recipe"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_green_buyer"]>><<set _clues += 1>><</if>>
+<<set _clues to 0>><<if $mpClues["wilds_green_schedule"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_green_recipe"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_green_buyer"] or $mpClues["wilds_green_tenants"]>><<set _clues += 1>><</if>>
 <<set _sk to Math.max(($science or 0), ($skulduggery or 0))>>
 <<if _clues gte 3 and _sk gte 600>><<set _reward to 2400>><<elseif _clues gte 2>><<set _reward to 1900>><<elseif _sk gte 450>><<set _reward to 1300>><<else>><<set _reward to 800>><</if>>
 公园的洒水器在晨光里转开，水雾落在花房残破的玻璃顶上。你绕过堆肥棚，把抄下的交货日期、买家印样和一小瓶样蜜交给等在矮墙外的园务管事。管事翻看单据时，乔丹站在远处没有过来。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["wilds_green_tenants"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回公园碎石径 (0:02)|Park]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -580,7 +574,7 @@
 <<socialiseicon>><<link "向管事核对夜雾兰货单 (0:03)">><<pass 3>><<replace "#act-mp-quest-park-greenhouse-resolve">>
 <<if ($science or 0) gte 350 or ($willpower or 0) gte 350>>
 	你把夜雾兰的发作时辰和订单数量对得严丝合缝，管事当场封了香料铺的送货单。
-	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_greenhouse_payout"))>><<if _first>>对方把一份线报酬金推到你面前。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
+	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_greenhouse_payout"))>><<if _first>>接应人把一封花房查访津贴放进你掌心。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
 <<if !_first>>花房管事没有再点钱，只把侧门替你带上。<<stress -1>><</if>>
 	<br><br>
 	<<walkicon>><<link [[趁势往里追查 (0:03)|MP Quest Park Greenhouse]]>><<pass 3>><</link>>
@@ -599,7 +593,7 @@
 
 :: MP Quest Connudatus Velvet [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestVelvet to Math.max(($mpQuestVelvet or 0), 1)>>
 后巷的雨棚滴着水，天鹅绒侧门上的铜铃被一根红绳拴住，绳结还是新打的。门缝里飘出脂粉、雪茄和湿羽毛的味道。门房刚送走一位戴半面金狐面具的客人，转身时顺手把暗红木牌翻到了背面。街口有辆封闭马车正在下客。
 <br><br>
@@ -613,7 +607,7 @@
 
 :: MP Quest Connudatus Velvet Step2 [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestVelvet to Math.max(($mpQuestVelvet or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 侧门后的走廊铺着深红长绒地毯，墙上的油画全被换成了半面金狐的变体徽记。一个舞台杂役抱着一箱羽毛披风匆匆走过，箱底漏下一张写有更衣室号码的纸片。走廊尽头的门帘后传来排练用的钢琴声，但节拍断断续续。
@@ -634,13 +628,13 @@
 	你踩到地毯下翘起的铜条，纸片被风卷进门帘。杂役警觉地回头，你只好装作找洗手间，退进一旁的帘幕后。膝盖撞上堆在地上的木箱角。
 	<<pain 2>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[凑近微光再试 (0:04)|MP Quest Connudatus Velvet Step2]]>><<pass 4>><</link>>
+	<<link [[凑近微光再试 (0:04)|MP Quest Connudatus Velvet Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP Quest Connudatus Velvet Step3 [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestVelvet to Math.max(($mpQuestVelvet or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 布里尔倚在后台的化妆镜旁，指间夹着一支没有点燃的烟。他听完你要找的人名，先用粉扑在镜面上抹开一小块雾，才说：「那孩子最后一次上台，是从镜厅的暗门被叫走的。经理说她欠了私演的钱，可她的工钱袋一直锁在我这儿。」他从镜台抽屉里取出一封被拆开的信。
@@ -656,7 +650,7 @@
 
 :: MP Quest Connudatus Velvet Step4 [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestVelvet to Math.max(($mpQuestVelvet or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set $mpVelvetCaught to ($mpVelvetCaught or 0)>>
@@ -683,15 +677,14 @@
 
 :: MP Quest Connudatus Velvet Step5 [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestVelvet to Math.max(($mpQuestVelvet or 0), 5)>>
-<<set $mpClues to ($mpClues or {})>>
 <<if ($mpVelvetCaught or 0) is 1>>
 更衣室隔间没有窗，只有一扇通舞台的百叶门。
 	
 <br><br>
 
-	<<socialiseicon>><<link [[说服隔壁演员帮你开门 (0:06)|MP Quest Connudatus Velvet Step6]]>>
+	<<socialiseicon>><<link [[隔着门板向隔壁演员求助 (0:06)|MP Quest Connudatus Velvet Step6]]>>
 		<<if ($willpower or 0) gte 320 or ($NPCName and $NPCNameList and $NPCNameList.includes("Briar"))>>
 你隔着板缝报出布里尔的名字，又让她去够门后的插销。
 			<<stress -2>>
@@ -733,7 +726,7 @@
 
 :: MP Quest Connudatus Velvet Step6 [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestVelvet to Math.max(($mpQuestVelvet or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 镜厅深处搭着一座半圆形小台，台上没有布景，只摆了一张高背椅。失踪的演员被按在椅子里，手边放着编号铜牌。舞台经理正在念一份「私演契约」，声音压得很低。
@@ -741,7 +734,7 @@
 <br><br>
 <<getouticon>><<link [[从镜厅侧门退走 (0:03)|Connudatus Street]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<brothelicon>><<link [[当众揭开演员的面具 (0:06)|MP Quest Connudatus Velvet Resolve]]>>
+<<brothelicon>><<link [[上前摘下演员的假面 (0:06)|MP Quest Connudatus Velvet Resolve]]>>
 	<<set $mpClues["wilds_velvet_actor"] to 1>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestVelvet_v2_mask")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>>
 	你绕过屏风走上小台，在所有人反应过来前摘下面具。演员脸上的妆已经花了，但台下有人认出了她。经理的念诵戛然而止，客人们纷纷起身。
@@ -762,14 +755,13 @@
 
 :: MP Quest Connudatus Velvet Resolve [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestVelvet to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestVelvet to 1>>
 <<set $mpClues to ($mpClues or {})>>
-<<set _clues to 0>><<if $mpClues["wilds_velvet_letter"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_velvet_program"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_velvet_actor"]>><<set _clues += 1>><</if>>
+<<set _clues to 0>><<if $mpClues["wilds_velvet_letter"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_velvet_program"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_velvet_actor"] or $mpClues["wilds_velvet_buyers"]>><<set _clues += 1>><</if>>
 <<set _sk to Math.max(($willpower or 0), ($skulduggery or 0))>>
 <<if _clues gte 3 and _sk gte 600>><<set _reward to 2500>><<elseif _clues gte 2>><<set _reward to 2000>><<elseif _sk gte 450>><<set _reward to 1400>><<else>><<set _reward to 800>><</if>>
 后巷的雨已经停了，侧门铜铃被谁用布条缠住。失踪的演员裹着借来的外套站在马车旁，布里尔隔着车窗朝你点头。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["wilds_velvet_buyers"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回康努达图斯街 (0:02)|Connudatus Street]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -777,7 +769,7 @@
 <<socialiseicon>><<link "当众陈述契约与铜牌编号 (0:03)">><<pass 3>><<replace "#act-mp-quest-connudatus-velvet-resolve">>
 <<if ($willpower or 0) gte 350 or ($skulduggery or 0) gte 350>>
 	你迎上去，把私演契约、铜牌编号和演员的证词按顺序说清。
-	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_velvet_payout"))>><<if _first>>对方把一份线报酬金推到你面前。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
+	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_velvet_payout"))>><<if _first>>布莱尔隔着车窗把一封封口花红递到你手里。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
 <<if !_first>>后台执事摆了摆手，示意你从侧门走，不必再结一次账。<<stress -1>><</if>>
 	<br><br>
 	<<walkicon>><<link [[顺着暗径继续前行 (0:03)|MP Quest Connudatus Velvet]]>><<pass 3>><</link>>
@@ -796,7 +788,7 @@
 
 :: MP Quest Farmland Mill [nobr]
 <<set $outside to 1>><<set $location to "farm">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestMill to Math.max(($mpQuestMill or 0), 1)>>
 风车叶片停在半空，帆布被夜露浸得发黑，磨坊里却传出缓慢的齿轮咬合声。田埂上的车辙比白天深得多，一路压到磨坊后门。窗缝里没有灯光，只有一股混着麦糠、机油和湿木头的怪味。远处农舍的狗叫了两声，又安静下去。
 <br><br>
@@ -808,7 +800,7 @@
 
 :: MP Quest Farmland Mill Step2 [nobr]
 <<set $outside to 0>><<set $location to "industrial">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestMill to Math.max(($mpQuestMill or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 磨坊一层堆着空麻袋和拆开的齿轮箱，地面覆着一层细糠，踩上去几乎没有声音。通往磨盘的过道中间拉着一根细铁丝，铁丝末端系着铜铃；旁边木柱上还钉着半截粉笔写的「夜班三圈」。你听见楼上有人挪动木箱。
@@ -829,13 +821,13 @@
 	你的袖子挂上铁丝，铜铃只响了一声便被你按住，可楼上的脚步声已经停在楼梯口。你缩进空麻袋堆里，膝盖磕在齿轮箱角上，等那人走开才敢动。
 	<<pain 2>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[看准位置再试 (0:04)|MP Quest Farmland Mill Step2]]>><<pass 4>><</link>>
+	<<link [[看准位置再试 (0:04)|MP Quest Farmland Mill Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP Quest Farmland Mill Step3 [nobr]
 <<set $outside to 1>><<set $location to "farm">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestMill to Math.max(($mpQuestMill or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 亚历克斯正在谷仓边给空车轴上油，听见磨坊方向的齿轮声便皱起眉。他抹了把汗说：「那磨坊早就不磨麦了。每隔几晚就有空车进去，出来时车斗压得很低，盖布上还撒一层糠。」他告诉你，夜班的人只认三圈粉笔和一枚铜扣，外人进去多半会被当成偷粮的。
@@ -851,7 +843,7 @@
 
 :: MP Quest Farmland Mill Step4 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestMill to Math.max(($mpQuestMill or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set $mpMillCaught to ($mpMillCaught or 0)>>
@@ -878,15 +870,14 @@
 
 :: MP Quest Farmland Mill Step5 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestMill to Math.max(($mpQuestMill or 0), 5)>>
-<<set $mpClues to ($mpClues or {})>>
 <<if ($mpMillCaught or 0) is 1>>
 谷仓里堆着喂牲口的干草和几只上锁的木箱，门从外面用铁钩扣住。
 	
 <br><br>
 
-	<<socialiseicon>><<link [[说服年轻学徒放你走 (0:06)|MP Quest Farmland Mill Step6]]>>
+	<<socialiseicon>><<link [[向守门的年轻学徒恳求 (0:06)|MP Quest Farmland Mill Step6]]>>
 		<<if ($willpower or 0) gte 320 or ($NPCName and $NPCNameList and $NPCNameList.includes("Alex"))>>
 你提起亚历克斯和农场夜班的工钱，又说明天一早空车对不上数会先查到学徒头上。
 			<<stress -2>>
@@ -928,7 +919,7 @@
 
 :: MP Quest Farmland Mill Step6 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestMill to Math.max(($mpQuestMill or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 计数房的灯罩被掀开一角，光落在账册和成排木牌上。
@@ -958,14 +949,13 @@
 
 :: MP Quest Farmland Mill Resolve [nobr]
 <<set $outside to 1>><<set $location to "farm">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestMill to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestMill to 1>>
 <<set $mpClues to ($mpClues or {})>>
-<<set _clues to 0>><<if $mpClues["wilds_mill_cart"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_mill_ledger"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_mill_marks"]>><<set _clues += 1>><</if>>
+<<set _clues to 0>><<if $mpClues["wilds_mill_cart"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_mill_ledger"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_mill_marks"] or $mpClues["wilds_mill_tenants"]>><<set _clues += 1>><</if>>
 <<set _sk to Math.max(($willpower or 0), ($physique or 0))>>
 <<if _clues gte 3 and _sk gte 600>><<set _reward to 2400>><<elseif _clues gte 2>><<set _reward to 1900>><<elseif _sk gte 450>><<set _reward to 1300>><<else>><<set _reward to 800>><</if>>
 天快亮时，磨坊的水轮重新转了起来，亚历克斯赶着空车停在田埂边。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["wilds_mill_tenants"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回农场田埂 (0:02)|Farmland]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -973,7 +963,7 @@
 <<socialiseicon>><<link "向管事核对夜车分成账 (0:03)">><<pass 3>><<replace "#act-mp-quest-farmland-mill-resolve">>
 <<if ($skulduggery or 0) gte 350 or ($willpower or 0) gte 350>>
 	你把夜车时刻、三角记号和账册上的分成比例逐条对给管事听。管事脸色越来越沉，最后让人把磨坊后门锁死。
-	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_mill_payout"))>><<if _first>>对方把一份线报酬金推到你面前。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
+	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_mill_payout"))>><<if _first>>亚历克斯从车斗旁摸出一份粮坊酬金塞给你。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
 <<if !_first>>磨坊主把账本合上，说这季的工钱已经结清。<<stress -1>><</if>>
 	<br><br>
 	<<walkicon>><<link [[迈步前往下一处地点 (0:03)|MP Quest Farmland Mill]]>><<pass 3>><</link>>
@@ -992,7 +982,7 @@
 
 :: MP Quest Sewers Market [nobr]
 <<set $outside to 0>><<set $location to "sewers">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestUnderground to Math.max(($mpQuestUnderground or 0), 1)>>
 排水渠在第三个拱口分成三岔，砖壁上各画着一道粉笔箭头：左道朝下，右道朝上，中间那道被水淹了一半。粉笔灰还是新的，旁边却按着一枚沾煤灰的指印。你贴着墙听了一会儿，左道深处有铁器轻碰，右道只有滴水声。
 <br><br>
@@ -1004,7 +994,7 @@
 
 :: MP Quest Sewers Market Step2 [nobr]
 <<set $outside to 0>><<set $location to "sewers">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestUnderground to Math.max(($mpQuestUnderground or 0), 2)>>
 <<set $mpClues to ($mpClues or {})>>
 左道越走越窄，最后被一扇用废铁栅伪装的活门挡住。铁栅后透出干燥的煤灰味，门轴却被人上过油。门边粉笔画着三道短横，下面压着一枚被踩扁的铜扣；要开门，得先把铁栅下方那块活动砖抽出来。
@@ -1025,13 +1015,13 @@
 	活动砖被水垢粘死，你用力一掰，整块砖碎在手里。铁栅只晃了一下，反倒把门后的煤灰震得满处都是。你捂着嘴退开，手掌在粗糙砖面上擦掉一层皮。
 	<<pain 2>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP Quest Sewers Market Step2]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP Quest Sewers Market Step2]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP Quest Sewers Market Step3 [nobr]
 <<set $outside to 0>><<set $location to "sewers">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestUnderground to Math.max(($mpQuestUnderground or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 雷恩蹲在一截断管上抽烟，脚边放着一只盖着麻布的提灯。听见三下敲管声，他先看了看你身后，才把烟按灭：「三岔粉笔是给送货人看的。左道通黑市，右道是假的，中间那道涨水时才会开。」他教你用铜扣在铁栅上敲两短一长，又提醒你别碰穿灰斗篷的人递来的货。
@@ -1047,7 +1037,7 @@
 
 :: MP Quest Sewers Market Step4 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestUnderground to Math.max(($mpQuestUnderground or 0), 4)>>
 <<set $mpClues to ($mpClues or {})>>
 <<set $mpSewerCaught to ($mpSewerCaught or 0)>>
@@ -1074,15 +1064,14 @@
 
 :: MP Quest Sewers Market Step5 [nobr]
 <<set $outside to 0>><<set $location to "sewers">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestUnderground to Math.max(($mpQuestUnderground or 0), 5)>>
-<<set $mpClues to ($mpClues or {})>>
 <<if ($mpSewerCaught or 0) is 1>>
 蓄水暗间原本是检修闸房，水面齐到小腿，墙上的铁梯断了两级。
 	
 <br><br>
 
-	<<socialiseicon>><<link [[说服少年替你割绳 (0:06)|MP Quest Sewers Market Step6]]>>
+	<<socialiseicon>><<link [[朝角落的少年示意割绳 (0:06)|MP Quest Sewers Market Step6]]>>
 		<<if ($willpower or 0) gte 320 or ($NPCName and $NPCNameList and $NPCNameList.includes("Wren"))>>
 你报出雷恩的暗号，又告诉少年黑市散场后没人会记得给他留份。
 			<<stress -2>>
@@ -1124,7 +1113,7 @@
 
 :: MP Quest Sewers Market Step6 [nobr]
 <<set $outside to 0>><<set $location to "underground">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestUnderground to Math.max(($mpQuestUnderground or 0), 6)>>
 <<set $mpClues to ($mpClues or {})>>
 暗市设在一间拱顶很高的旧泵房里，货摊之间只用麻绳和油布隔开。
@@ -1153,14 +1142,13 @@
 
 :: MP Quest Sewers Market Resolve [nobr]
 <<set $outside to 0>><<set $location to "sewers">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<set $mpQuestUnderground to 7>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpQuestUnderground to 1>>
 <<set $mpClues to ($mpClues or {})>>
-<<set _clues to 0>><<if $mpClues["wilds_sewer_chalk"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_sewer_manifest"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_sewer_password"]>><<set _clues += 1>><</if>>
+<<set _clues to 0>><<if $mpClues["wilds_sewer_chalk"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_sewer_manifest"]>><<set _clues += 1>><</if>><<if $mpClues["wilds_sewer_password"] or $mpClues["wilds_sewer_patron"] or $mpClues["wilds_sewer_workers"]>><<set _clues += 1>><</if>>
 <<set _sk to Math.max(($willpower or 0), ($skulduggery or 0))>>
 <<if _clues gte 3 and _sk gte 600>><<set _reward to 2500>><<elseif _clues gte 2>><<set _reward to 2000>><<elseif _sk gte 450>><<set _reward to 1400>><<else>><<set _reward to 800>><</if>>
 你回到三岔拱口时，粉笔记号已经被鞋底蹭掉大半，只剩三角形还剩一道边。主渠方向传来铁门开启的回声，两名下水道巡夜人提着灯走来，问你为什么从封死的泵房那边出来。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["wilds_sewer_patron"] or $mpClues["wilds_sewer_workers"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回下水道主渠 (0:02)|Sewers Algae]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1168,7 +1156,7 @@
 <<socialiseicon>><<link "向巡夜人交代筹码货单 (0:03)">><<pass 3>><<replace "#act-mp-quest-sewers-market-resolve">>
 <<if ($willpower or 0) gte 350 or ($skulduggery or 0) gte 350>>
 	你把铜筹码、货单编号和雷恩教的暗号按顺序交代清楚，又指出旧仓里还压着未离港的货箱。巡夜人互相看了一眼，收起灯。
-	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_sewer_payout"))>><<if _first>>对方把一份线报酬金推到你面前。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
+	<<set _first to (window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("wilds_sewer_payout"))>><<if _first>>暗市管事从柜台下抽出一封线报红利推给你。<<money _reward>><<stress -4>><<else>><<stress -2>><</if>>
 <<if !_first>>黑市看巷人把粉笔收进兜里，没再数钱。<<stress -1>><</if>>
 	<br><br>
 	<<walkicon>><<link [[迈步赶往下一处 (0:03)|MP Quest Sewers Market]]>><<pass 3>><</link>>

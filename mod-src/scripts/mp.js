@@ -2071,7 +2071,7 @@
     for (var j = hist.length - 1; j >= 0; j--) {
       var p = hist[j] || "";
       if (!p) continue;
-      if (p === MP_COMBAT_PASSAGE || p === "MP Native Combat Finish" || p === "Tutorial") continue;
+      if (p === MP_COMBAT_PASSAGE || (p === "MP Native Combat Finish" || p === "MP Native Combat Aftermath") || p === "Tutorial") continue;
       if (p === "Start" || p === "Start2" || p === "Orphanage Intro") continue;
       if (p.indexOf("MP ") === 0) continue;
       return p;
@@ -3544,7 +3544,7 @@
       if (S.bypassLinkIntercept || !S.connected || !S.room || !S.syncMode) return;
       var v = V();
       var curPas = (window.State && State.passage) || "";
-      if ((v && v.combat === 1) || curPas === MP_COMBAT_PASSAGE || curPas === "MP Native Combat Finish" || curPas.indexOf("MP Player Interact") === 0 || curPas.indexOf("MP Companion") === 0 || curPas === "Start" || curPas === "Start2") return;
+      if ((v && v.combat === 1) || curPas === MP_COMBAT_PASSAGE || (curPas === "MP Native Combat Finish" || curPas === "MP Native Combat Aftermath") || curPas.indexOf("MP Player Interact") === 0 || curPas.indexOf("MP Companion") === 0 || curPas === "Start" || curPas === "Start2") return;
 
       var a = ev.target && ev.target.closest ? ev.target.closest("a.link-internal") : null;
       if (!a || a.closest("#mp-inline-root")) return;
@@ -5905,11 +5905,11 @@
         var targetPas = msg.passage || "";
         if (!targetPas) break;
         S.currentEventKey = msg.eventKey || "";
-        var badPas = ["Start", "Start2", "Orphanage Intro", MP_COMBAT_PASSAGE, "MP Native Combat Finish"];
+        var badPas = ["Start", "Start2", "Orphanage Intro", MP_COMBAT_PASSAGE, "MP Native Combat Finish", "MP Native Combat Aftermath"];
         if (badPas.indexOf(targetPas) >= 0 || targetPas.indexOf("MP Player Interact") === 0 || targetPas.indexOf("MP Companion") === 0) break;
 
         var curPas = (window.State && State.passage) || "";
-        if (curPas === MP_COMBAT_PASSAGE || curPas === "MP Native Combat Finish" || (vj && vj.combat === 1 && !msg.inCombat)) {
+        if (curPas === MP_COMBAT_PASSAGE || (curPas === "MP Native Combat Finish" || curPas === "MP Native Combat Aftermath") || (vj && vj.combat === 1 && !msg.inCombat)) {
           cleanupNativeCombatState();
         }
         if (msg.weatherPack) {
@@ -7276,7 +7276,7 @@
       } else if (curPasNow === "Tutorial" && !vNow.mpTutorialSprayClaimed && canClaimUniqueReward("tutorial_first_spray")) {
         vNow.mpWasTutorial = 1;
         if (!vNow.tutorialExit) vNow.tutorialExit = "Domus Street";
-      } else if (curPasNow !== MP_COMBAT_PASSAGE && curPasNow !== "MP Native Combat Finish") {
+      } else if (curPasNow !== MP_COMBAT_PASSAGE && curPasNow !== "MP Native Combat Finish" && curPasNow !== "MP Native Combat Aftermath") {
         delete vNow.mpWasTutorial;
       }
     }
@@ -7332,7 +7332,7 @@
 
     var isSafePas = isSafePassage(curPasNow);
     var isEventPas = !!curPasNow && !isSafePas &&
-      curPasNow !== MP_COMBAT_PASSAGE && curPasNow !== "MP Native Combat Finish" &&
+      curPasNow !== MP_COMBAT_PASSAGE && curPasNow !== "MP Native Combat Finish" && curPasNow !== "MP Native Combat Aftermath" &&
       curPasNow !== "Start" && curPasNow !== "Start2" && curPasNow !== "Orphanage Intro" &&
       curPasNow.indexOf("MP ") !== 0;
     var reportKey = curPasNow + "#" + (vNow && vNow.phase !== undefined ? vNow.phase : "");

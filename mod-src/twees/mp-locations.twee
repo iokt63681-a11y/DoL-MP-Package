@@ -15,7 +15,7 @@
 <<case "cabin">><<print either("炉膛里的柴火偶尔噼啪一声。", "木墙缝里渗进松脂和兽皮的味道。", "窗外的风把屋檐吹得轻轻作响。", "桌上的旧陶杯还留着一点余温。", "地板在脚下发出一声干涩的吱呀。")>>
 <<case "bedroom">><<print either("窗帘缝里漏进一线天光。", "旧木床在身下轻轻吱呀。", "床头柜上的水杯还留着余温。", "走廊里传来远处关门的轻响。", "被褥上有淡淡的肥皂味。")>>
 <<case "orphanage">><<print either("走廊里飘着消毒水和旧床单的味道。", "楼下传来孩子们压低的嬉闹声。", "楼梯扶手被摸得发亮。", "某个房间里有人轻轻咳嗽。", "暖气片偶尔发出轻响。")>>
-<<case "cafe">><<print either("咖啡机的蒸汽声压过了低语。", "空气里浮着黄油和烤面包的味道。", "杯碟碰撞的轻响从吧台后传来。", "窗边的座位被午后的光照得发暖。")>>
+<<case "cafe">><<print either("咖啡机的蒸汽声压过了低语。", "空气里浮着黄油和烤面包的味道。", "杯碟碰撞的轻响从吧台后传来。", "窗边的座位被透进来的光照得发暖。")>>
 <<case "arcade" "shopping_centre" "commercial">><<print either("街机的电子音效在昏暗的厅里此起彼伏。", "霓虹灯把地板染成一片紫红。", "兑换处的玻璃柜里堆着廉价奖品。", "通风口吹出一股温热的塑料味。")>>
 <<case "park">><<print either("树叶在头顶轻轻摩擦。", "长椅上的漆皮被晒得发烫。", "远处传来孩子追逐的笑声。", "喷泉的水声盖过了脚步。")>>
 <<case "farm">><<print either("谷仓里有干草和牲口的气味。", "远处的鸡舍传来零星的扑翅声。", "木栅栏被风吹得轻轻作响。", "泥地被踩出深浅不一的脚印。")>>
@@ -96,84 +96,81 @@
 <<if $mpCombatConsensual is 1>>
 	<<if $enemyarousal gte $enemyarousalmax or $mpCombatOutcome is "peer_arousal" or $mpCombatOutcome is "me_arousal">>
 		<<ejaculation>>
-		潮水般的快感渐渐退去，你们汗湿地交叠在一起，胸口贴着彼此剧烈起伏。温热的鼻息交错，残余的悸动顺着指尖缓缓平息。
-		<br><br>
-		<<if _mpRelStage is "soulmate" or _mpRelStage is "lover">>
-			<<He>>用指腹拭去你眼角的湿意，低头吻了吻你的唇角，手臂仍揽在你的腰侧不肯松开。
-		<<elseif _mpRelCorruption gte 25>>
-			<<He>>舔了舔嘴唇，指尖又在你敏感的腰窝上轻刮了一下，引得你发出一声轻颤。
-		<<else>>
-			<<He>>红着耳根靠在你肩头平复呼吸，替你理顺鬓边汗湿的碎发。
-		<</if>>
+		快感如潮退去，你们汗湿地交叠相拥，温热鼻息交错。
 	<<else>>
-		<<He>>体贴地收拢了动作，替你拢好微敞的衣领，与你相视一笑。
+		<<He>>体贴地收拢动作，替你拢好衣领相视一笑。
 	<</if>>
 	<<stress -12>><<trauma -6>><<lstress>><<ltrauma>>
 	<<run window.dolmp && window.dolmp.notifyRomanceDelta && window.dolmp.notifyRomanceDelta(1, 1, -4, -1, 1, "在温存过后与你相拥平复呼吸")>>
-	<br><br>
-	<<tearful>>你们各自整理好身上的衣物。
 <<elseif $mpCombatOutcome is "escaped">>
-	<span class="green">你趁对方重心不稳猛地发力，一举挣开钳制，转身退到了安全距离之外。</span>
+	<span class="green">你趁对方重心不稳猛然发力，挣开钳制退到安全距离外。</span>
 	<<stress -4>><<lstress>>
-	<br><br>
-	<<tearful>>你扶着墙平复喘息，迅速整理好凌乱的衣衫。
 <<elseif $mpCombatOutcome is "peer_escaped">>
-	<span class="purple"><<print ($mpOpponentName or "对方")>>抓住空隙猛地挣开你的束缚，连退几步消失在了街角阴影里。</span>
-	<br><br>
-	<<tearful>>你稳住身形，整理好身上的衣物。
+	<span class="purple"><<print ($mpOpponentName or "对方")>>抓住空隙挣开束缚，连退几步隐入街角阴影。</span>
 <<elseif $mpCombatOutcome is "me_pain_full" or ($pain gte 100 and $mpCombatOutcome isnot "peer_down")>>
-	<span class="red">剧痛彻底越过了承受极限，你眼前阵阵发黑，酸软的四肢再也使不出半分力气，跌坐在地面上。</span>
+	<span class="red">剧痛越过极限，你四肢酸软无力地跌坐在地。</span>
 	<<stress 12>><<trauma 6>><<gstress>><<gtrauma>>
-	<br><br>
-	<<print ($mpOpponentName or "对方")>>见你失去反抗能力，停下动作转身离开。<<tearful>>你缓了片刻才咬牙撑起身体。
 <<elseif $mpCombatOutcome is "peer_down" or ($mpCombatOutcome is undefined and $enemyhealth lte 0)>>
 	<<if $mpCombatMode is "coop_pve">>
-		在你们两人的夹击下，<<person>>痛得闷哼一声蜷起身体，捂着伤处跌跌撞撞地逃进了暗处。
+		在你们两人夹击下，<<person>>闷哼一声捂伤逃进暗处。
 		<<stress -8>><<trauma -4>><<lstress>><<ltrauma>>
 		<<run window.dolmp && window.dolmp.notifyRomanceDelta && window.dolmp.notifyRomanceDelta(1, 1, 0, -1, 0, "与你并肩击退了袭击者")>>
-		<br><br>
-		<<tearful>>你与同伴互相搀扶着站起身，拍去衣上的灰尘。
 	<<else>>
-		<<print ($mpOpponentName or "对方")>>在你的攻势下跌倒在地，失去了继续压制你的力气。
+		<<print ($mpOpponentName or "对方")>>在你的攻势下跌倒在地，再无力气纠缠。
 		<<stress -6>><<lstress>>
-		<br><br>
-		<<tearful>>你长舒一口气，站起身整理好身上的衣物。
 	<</if>>
 <<elseif $mpCombatOutcome is "me_down">>
-	你在交锋中体力不支被<<print ($mpOpponentName or "对方")>>按倒在地。对方低头看了你片刻，松开手转身离去。
+	你体力不支被<<print ($mpOpponentName or "对方")>>按倒在地，对方片刻后松手离去。
 	<<pain 15>><<stress 12>><<trauma 6>><<gpain>><<gstress>><<gtrauma>>
-	<br><br>
-	<<tearful>>你缓了一会儿，才撑起酸痛的身体整理好衣物。
 <<elseif $mpCombatOutcome is "peer_arousal" or ($mpCombatOutcome is undefined and $enemyarousal gte $enemyarousalmax)>>
 	<<ejaculation>>
 	<<if $mpCombatMode is "coop_pve">>
-		<<person>>在强烈的快感冲击下浑身痉挛，双腿发软地扶着墙摇晃离去。
+		<<person>>在快感冲击下双腿发软，扶墙摇晃离去。
 		<<stress -6>><<lstress>>
 		<<run window.dolmp && window.dolmp.notifyRomanceDelta && window.dolmp.notifyRomanceDelta(1, 1, 2, -1, 1, "与你配合脱身")>>
-		<br><br>
-		<<tearful>>你与同伴对视一眼，各自整理好身上的衣物。
 	<<else>>
-		<<print ($mpOpponentName or "对方")>>在剧烈的喘息中泄出精力，松开钳制转身离开。
-		<br><br>
-		<<tearful>>你抓紧时间站起身，整理好身上的衣物。
+		<<print ($mpOpponentName or "对方")>>在急促喘息中松开钳制转身离开。
 	<</if>>
 <<elseif $mpCombatOutcome is "me_arousal">>
 	<<ejaculation>>
-	强烈的高潮席卷全身，令你双腿发软、一时使不出力气。待余韵平息，<<print ($mpOpponentName or "对方")>>已经松开你离开了。
+	强烈高潮令你双腿发软，待余韵平息时对方已松手离开。
 	<<stress 6>><<trauma 4>><<gstress>><<gtrauma>>
-	<br><br>
-	<<tearful>>你定下神来，慢慢站起身整理好衣物。
 <<else>>
-	双方在缠斗中各自退开，结束了这次冲突。
-	<br><br>
-	<<tearful>>你抓紧时间站起身，整理好衣物。
+	双方在缠斗中各自退开，结束了这场冲突。
 <</if>>
 <br><br>
 <<clotheson>>
 <<endcombat>>
 <<run window.dolmp && window.dolmp.onNativeCombatFinished && window.dolmp.onNativeCombatFinished()>>
 <<unset $mpWasTutorial>>
-<<getouticon>><<link [[继续|_exitPas]]>><<set $eventskip to 1>><<endevent>><<unset $mpReturnPassage>><<unset $mpCombatOutcome>><<unset $mpCombatMode>><<unset $mpCombatConsensual>><<unset $mpCombatIsHost>><</link>>
+<<walkicon>><<link [[平复喘息整理衣衫 (0:02)|MP Native Combat Aftermath]]>><<pass 2>><</link>>
+<br>
+<<getouticon>><<link [[直接离开|_exitPas]]>><<set $eventskip to 1>><<endevent>><<unset $mpReturnPassage>><<unset $mpCombatOutcome>><<unset $mpCombatMode>><<unset $mpCombatConsensual>><<unset $mpCombatIsHost>><</link>>
+
+:: MP Native Combat Aftermath [nobr]
+<<effects>><<set $eventskip to 1>>
+<<set _exitPas to ($mpReturnPassage or "Domus Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas is "Orphanage Intro" or _exitPas is "MP Native Combat" or _exitPas is "MP Native Combat Finish" or _exitPas is "Tutorial">>
+	<<set _exitPas to "Domus Street">>
+<</if>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if $mpCombatConsensual is 1>>
+	<<if _mpRelStage is "soulmate" or _mpRelStage is "lover">>
+		同伴用指腹拭去你眼角的湿意，低头吻了吻你的唇角，替你系好微敞的衣领。
+	<<elseif _mpRelCorruption gte 25>>
+		对方指尖在你腰窝上轻刮了一下，笑着替你拍去衣角褶皱。
+	<<else>>
+		对方红着耳根靠在你肩头平复呼吸，替你理顺鬓边汗湿的碎发。
+	<</if>>
+<<elseif $mpCombatMode is "coop_pve">>
+	<<tearful>>你与同伴互相搀扶着站起身，拍去衣上的灰尘，确认彼此都没有大碍。
+<<else>>
+	<<tearful>>你扶着墙平复急促的呼吸，仔细拢好凌乱的衣衫，确认四周已无异样动静。
+<</if>>
+<br><br>
+<<walkicon>><<link [[整理衣装再走 (0:02)|_exitPas]]>><<pass 2>><<stress -1>><<set $eventskip to 1>><<endevent>><<unset $mpReturnPassage>><<unset $mpCombatOutcome>><<unset $mpCombatMode>><<unset $mpCombatConsensual>><<unset $mpCombatIsHost>><</link>>
+<br>
+<<getouticon>><<link [[继续前行|_exitPas]]>><<set $eventskip to 1>><<endevent>><<unset $mpReturnPassage>><<unset $mpCombatOutcome>><<unset $mpCombatMode>><<unset $mpCombatConsensual>><<unset $mpCombatIsHost>><</link>>
 
 :: MP Player Interact [nobr]
 <<effects>>
@@ -187,110 +184,77 @@
 <<person1>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<if _mpRelStage is "soulmate">>
-	<<if $location is "home" or _exitPas is "Orphanage" or _exitPas is "Bedroom">>
-		你走到<<print ($mpInteractTargetName or "同伴")>>身边。刚听到你的脚步声，<<he>>便放下了手头的事迎上前来，胸前的银质挂坠在灯光下微微闪烁。"欢迎回来，亲爱的，"<<he>>自然而然地伸出双臂将你拢入怀中，温热的唇印上你的嘴角。
-	<<elseif $location is "park" or _exitPas is "Park">>
-		你靠近长椅与树桩。<<print ($mpInteractTargetName or "同伴")>>一抬头看见你，眼底瞬间亮了起来，合上膝头的画册迎上来抱住你的腰。"我刚刚还在想你什么时候来，结果一抬头你就出现在我眼前了。"
-	<<elseif $location is "school" or _exitPas is "Hallways" or _exitPas is "School Library">>
-		你穿过人群走到角落。<<print ($mpInteractTargetName or "同伴")>>一看见你便露出温柔的笑意，趁周围没人注意，悄悄伸手将你拉近身侧，在你脸颊上落下一吻。"日安，亲爱的。我总是能为你腾出时间。"
-	<<else>>
-		你走近<<print ($mpInteractTargetName or "同伴")>>身旁。<<He>>第一时间向你张开怀抱，十指紧扣地握住你的手。"你来啦，我一直在等你。"
-	<</if>>
+	你走到<<print ($mpInteractTargetName or "同伴")>>身边。听到脚步声，<<he>>立刻放下手头的事迎上前，银质挂坠在光下微闪。「欢迎回来，亲爱的，」<<he>>伸臂将你拢入怀中，温热的唇印上你嘴角。
 <<elseif _mpRelStage is "lover">>
-	<<if $location is "park" or _exitPas is "Park">>
-		你靠近<<print ($mpInteractTargetName or "同伴")>>坐着的树桩。当<<he>>看到你时，<<he>>笑了，把怀里的速写本收起来向你伸出手。"你来了，亲爱的，"<<he>>轻轻吻了一下你的脸颊，示意你挨着<<he>>坐下。
-	<<elseif $location is "school" or $location is "temple" or _exitPas is "Temple" or _exitPas is "Hallways" or _exitPas is "School Library">>
-		你靠近柜台旁。当看见你时，<<print ($mpInteractTargetName or "同伴")>>的眼睛顿时亮了起来。"日安，亲爱的，"<<he>>一边说着一边吻上了你的脸颊，示意你绕过来和<<he>>坐在一起。"我总是能为你腾出时间。"
-	<<else>>
-		你走近<<print ($mpInteractTargetName or "同伴")>>所在的位置。当看见你时，<<his>>的眼睛顿时亮了起来，主动挽住你的手臂，亲昵地用脸颊蹭了蹭你的肩头。"日安，亲爱的。"
-	<</if>>
+	你走近<<print ($mpInteractTargetName or "同伴")>>身旁。看见你时，<<his>>眼底顿时亮了起来，主动挽住你的手臂，用脸颊亲昵地蹭了蹭你的肩头：「日安，亲爱的，我一直在等你。」
 <<elseif _mpRelStage is "crush">>
-	你靠近<<print ($mpInteractTargetName or "同伴")>>所在的位置。当<<he>>看到你时，耳根微微泛红，对上了你的视线又慌忙移开，随后向你露出了羞涩的微笑。<<He>>往旁边挪了挪，示意你坐到<<he>>身旁。
+	你靠近<<print ($mpInteractTargetName or "同伴")>>身侧。<<He>>耳根微红地与你对视一眼又慌忙移开，随即露出羞涩微笑，往旁挪了挪示意你坐下。
 <<elseif _mpRelStage is "friend">>
-	你走近<<print ($mpInteractTargetName or "同伴")>>身旁。一看到你的身影，<<he>>便放松下神色，熟稔地朝你招了招手，往旁边让出半步位置示意你过来并肩待着。
+	你走到<<print ($mpInteractTargetName or "同伴")>>身旁。<<He>>放松下神色，熟稔地朝你招手，让出半步位置示意你并肩待着。
 <<else>>
-	你走到<<print ($mpInteractTargetName or "同伴")>>附近。听到脚步声，<<he>>转过头打量了你一眼，目光里还带着几分初识的审视与拘谨，随后礼貌地朝你点了点头。
-<</if>>
-<<if $exposed gte 1>>
-	<br><span class="lewd">注意到你此刻衣不蔽体的模样，<<his>>的呼吸明显一滞，眼神变得幽深滚烫，随即立刻侧过身替你挡住了四周的视线。</span>
-<</if>>
-<<if _mpRelJealousy gte 25>>
-	<br><span class="purple"><<He>>的视线紧紧黏在你身上，鼻尖凑近你的颈侧轻轻嗅了嗅，似乎在确认你身上有没有沾染别人的气息。</span>
-<</if>>
-<<if _mpRelCorruption gte 25>>
-	<br><span class="lewd">趁着四下无人注意，<<his>>的指尖若有若无地滑过你的腰侧与臀线，眼底藏着一抹暗火。</span>
+	你走到<<print ($mpInteractTargetName or "同伴")>>附近。<<He>>转头打量了你一眼，目光带着几分初识的审视与拘谨，礼貌地朝你点头。
 <</if>>
 <br><br>
+<<getouticon>><<link [[离开|_exitPas]]>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<walkicon>><<link [[与同伴一起出门 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<run window.dolmp && window.dolmp.sendMeetFromInteract && window.dolmp.sendMeetFromInteract()>><</link>>
+<br>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("chat")>>
-	<<socialiseicon>><<link [[聊天 (0:08)|MP Player Interact Chat]]>><<pass 8>><<stress -6>><<trauma -3>><</link>><<lstress>><<ltrauma>><<glove>>
-	<br>
-<</if>>
-<<if !window.dolmp || window.dolmp.canDoDailyInteract("flirt")>>
-	<<brothelicon>><<link [[调情 (0:05)|MP Player Interact Flirt]]>><<pass 5>><<stress -4>><<arousal 600>><</link>><<promiscuous1>><<lstress>><<glove>><<garousal>>
+	<<socialiseicon>><<link [[促膝交谈 (0:08)|MP Player Interact Chat]]>><<pass 8>><<stress -6>><<trauma -3>><</link>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("rest")>>
 	<<bedicon "zzz">><<link [[依偎休息 (0:20)|MP Player Interact Rest]]>><<pass 20>><<tiredness -4>><<stress -6>><</link>><<ltiredness>><<lstress>><<glove>>
 	<br>
 <</if>>
+<<link [[日常照拂与邀约 (0:01)|MP Player Interact Dates]]>><<pass 1>><</link>>
+<br>
+<<link [[贴近耳语与亲昵抚触 (0:01)|MP Player Interact Intimate]]>><<pass 1>><</link>>
+
+:: MP Player Interact Dates [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas is "Orphanage Intro" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Orphanage">>
+<</if>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>>
+	<<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
+	<<person1>>
+<</if>>
+你与<<print ($mpInteractTargetName or "同伴")>>并肩立在安静处，留意着彼此的衣饰与神色。
+<<if _mpRelJealousy gte 25>>
+	<br><span class="purple"><<He>>的视线紧紧黏在你身上，鼻尖凑近你的颈侧轻轻嗅了嗅，似乎在确认你身上有没有沾染别人的气息。</span>
+<<else>>
+	<br>只要待在彼此身边，镇上的风雨便显得不再那么难熬。
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回同伴身旁 (0:01)|MP Player Interact]]>><<pass 1>><</link>>
+<br>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("snack")>>
 	<<foodicon "milkshake">><<link [[分享饮品 (0:12)|MP Player Interact Snack]]>><<pass 12>><<stress -8>><<tiredness -3>><</link>><<lstress>><<ltiredness>><<glove>>
 	<br>
 <</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("care")>>
-	<<bathroomicon "robe">><<link [[替<<him>>整理衣装 (0:04)|MP Player Interact Care]]>><<pass 4>><<pain -8>><<stress -5>><</link>><<lpain>><<lstress>><<glove>>
-	<br>
-<</if>>
-<<if (_mpRelLove gte 10 or hasSexStat("promiscuity", 2) or $promiscuity gte 15) and (!window.dolmp || window.dolmp.canDoDailyInteract("kiss"))>>
-	<<loveicon "kiss">><<link [[亲吻 (0:03)|MP Player Interact Kiss]]>><<pass 3>><<stress -6>><<trauma -3>><<arousal 900>><</link>><<promiscuous2>><<lstress>><<ltrauma>><<glove>><<garousal>>
+	<<link [[替<<him>>整理衣装 (0:04)|MP Player Interact Care]]>><<pass 4>><<pain -8>><<stress -5>><</link>><<lpain>><<lstress>><<glove>>
 	<br>
 <</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("jealous_ask")>>
-	<<socialiseicon "ask">><<link [[追问<<his>>的行踪 (0:04)|MP Player Interact JealousAsk]]>><<pass 4>><<arousal 400>><</link>><<garousal>>
+	<<link [[追问<<his>>的行踪 (0:04)|MP Player Interact JealousAsk]]>><<pass 4>><<arousal 400>><</link>><<garousal>>
 	<br>
 <</if>>
 <<if _mpRelJealousy gte 10 and (!window.dolmp || window.dolmp.canDoDailyInteract("jealous_calm"))>>
-	<<loveicon "hug">><<link [[安抚<<his>>的不安 (0:07)|MP Player Interact JealousCalm]]>><<pass 7>><<stress -6>><<trauma -2>><</link>><<lstress>><<ltrauma>><<glove>>
+	<<link [[安抚<<his>>的不安 (0:07)|MP Player Interact JealousCalm]]>><<pass 7>><<stress -6>><<trauma -2>><</link>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
 <<if $harpy gte 6 and (!window.dolmp || window.dolmp.canDoDailyInteract("sing"))>>
-	<<tficon "harpy">><<link [[唱歌 (0:06)|MP Player Interact Sing]]>><<pass 6>><<tiredness 2>><<stress -8>><<trauma -4>><</link>><<harpy>><<gtiredness>><<lstress>><<ltrauma>><<glove>>
+	<<link [[展喉轻唱 (0:06)|MP Player Interact Sing]]>><<pass 6>><<tiredness 2>><<stress -8>><<trauma -4>><</link>><<harpy>><<gtiredness>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
 <<if ($wolfgirl gte 6 or $cat gte 6 or $fox gte 6 or $cow gte 6) and (!window.dolmp || window.dolmp.canDoDailyInteract("nuzzle"))>>
-	<<tficon "wolf">><<link [[用耳朵蹭<<him>> (0:03)|MP Player Interact Nuzzle]]>><<pass 3>><<stress -6>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
+	<<link [[用耳朵蹭<<him>> (0:03)|MP Player Interact Nuzzle]]>><<pass 3>><<stress -6>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
-<<if ($demon gte 6 or $angel gte 6 or $fallenangel gte 2) and (!window.dolmp || window.dolmp.canDoDailyInteract("wing_tease"))>>
-	<<tficon "demon">><<link [[用羽翼与尾尖轻拢<<him>> (0:04)|MP Player Interact WingTease]]>><<pass 4>><<stress -6>><<arousal 1000>><</link>><<lstress>><<glove>><<garousal>>
-	<br>
-<</if>>
-<<if (hasSexStat("promiscuity", 2) or $promiscuity gte 15 or _mpRelLove gte 18) and (!window.dolmp || window.dolmp.canDoDailyInteract("bath"))>>
-	<<bathroomicon "shower">><<link [[共浴擦身 (0:25)|MP Player Interact Bath]]>><<pass 25>><<stress -10>><<tiredness -6>><<arousal 1200>><</link>><<promiscuous2>><<lstress>><<ltiredness>><<glove>><<garousal>>
-	<br>
-<</if>>
-<<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelStage is "lover" or _mpRelStage is "soulmate") and (!window.dolmp || window.dolmp.canDoDailyInteract("whisper_lewd"))>>
-	<<symbol "lust">><<link [[贴耳低语并探入衣内 (0:06)|MP Player Interact WhisperLewd]]>><<pass 6>><<arousal 1400>><<stress -4>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
-	<br>
-<</if>>
-<<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelStage is "lover" or _mpRelStage is "soulmate") and (!window.dolmp || window.dolmp.canDoDailyInteract("expose_tease"))>>
-	<<wardrobeicon>><<link [[掀起衣摆诱惑<<him>> (0:02)|MP Player Interact ExposeTease]]>><<pass 2>><<arousal 1300>><</link>><<exhibitionist2>><<ggarousal>>
-	<br>
-<</if>>
-<<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelCorruption gte 20) and (!window.dolmp || window.dolmp.canDoDailyInteract("sex_toys"))>>
-	<<sextoysicon "strap-on">><<link [[取出贴身道具玩弄<<him>> (0:14)|MP Player Interact Toys]]>><<pass 14>><<arousal 1800>><<stress -6>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
-	<br>
-<</if>>
-<<if (hasSexStat("promiscuity", 4) or $promiscuity gte 55 or _mpRelCorruption gte 30) and (!window.dolmp || window.dolmp.canDoDailyInteract("sub"))>>
-	<<shopicon "adult">><<link [[爬到下面凑近双腿之间 (0:12)|MP Player Interact Sub]]>><<pass 12>><<arousal 2000>><<stress -6>><</link>><<promiscuous4>><<lstress>><<ggarousal>>
-	<br>
-<</if>>
-<<if ($cow gte 4 or $lactating is 1 or $demon gte 4 or hasSexStat("promiscuity", 4) or $promiscuity gte 55) and (!window.dolmp || window.dolmp.canDoDailyInteract("lactate"))>>
-	<<tficon "cow">><<link [[解开衣襟喂哺<<him>> (0:09)|MP Player Interact Lactate]]>><<pass 9>><<arousal 1800>><<stress -8>><<trauma -4>><</link>><<promiscuous4>><<lstress>><<ltrauma>><<glove>><<ggarousal>>
-	<br>
-<</if>>
-<<brothelicon "stage">><<link [[拥抱爱抚|MP Player Interact Consensual]]>><</link>><<promiscuous1>><<glove>><<garousal>>
-<br>
 <<if (_mpRelStage is "stranger" or _mpRelStage is "friend" or _mpRelStage is "crush") and _mpRelLove gte 25>>
 	<<loveicon>><<link [[握住<<his>>的手倾诉心意 (0:12)|MP Romance Confess]]>><<pass 12>><<stress -10>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
 	<br>
@@ -301,78 +265,144 @@
 <</if>>
 <<if _mpRelLove gte 15 or _mpRelStage is "lover" or _mpRelStage is "soulmate">>
 	<<if ($location is "beach" or $location is "sea" or _exitPas is "Beach" or _exitPas is "Starfish Street") and (!$daily or !$daily.mpDateBeach)>>
-		<<beachicon>><<link [[牵手漫步海滩 (0:35)|MP Date Beach]]>><<set $daily.mpDateBeach to 1>><<pass 35>><<stress -12>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
+		<<link [[牵手漫步海滩 (0:35)|MP Date Beach]]>><<set $daily.mpDateBeach to 1>><<pass 35>><<stress -12>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
 		<br>
 	<</if>>
 	<<if ($location is "park" or $location is "town" or _exitPas is "Park") and (!$daily or !$daily.mpDatePark)>>
-		<<parkicon>><<link [[在树荫长椅旁共度时光 (0:30)|MP Date Park]]>><<set $daily.mpDatePark to 1>><<pass 30>><<stress -12>><<trauma -5>><</link>><<lstress>><<ltrauma>><<glove>>
+		<<link [[在树荫长椅共度时光 (0:30)|MP Date Park]]>><<set $daily.mpDatePark to 1>><<pass 30>><<stress -12>><<trauma -5>><</link>><<lstress>><<ltrauma>><<glove>>
 		<br>
 	<</if>>
 	<<if (Time.hour gte 17 or Time.dayState is "dusk" or Time.dayState is "night") and (!$daily or !$daily.mpDateDinner)>>
-		<<socialiseicon "dance">><<link [[共进烛光晚餐 (0:50)|MP Date Dinner]]>><<set $daily.mpDateDinner to 1>><<pass 50>><<stress -15>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
+		<<link [[共进烛光晚餐 (0:50)|MP Date Dinner]]>><<set $daily.mpDateDinner to 1>><<pass 50>><<stress -15>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
 		<br>
 	<</if>>
 	<<if ($location is "home" or _exitPas is "Orphanage" or _exitPas is "Bedroom" or Time.dayState is "night") and (!$daily or !$daily.mpLoverSleepover)>>
-		<<bedicon "double">><<link [[同床相拥入眠 (0:40)|MP Lover Sleepover]]>><<set $daily.mpLoverSleepover to 1>><<pass 40>><<tiredness -12>><<stress -15>><<trauma -8>><</link>><<ltiredness>><<lstress>><<ltrauma>><<glove>>
+		<<link [[同床相拥入眠 (0:40)|MP Lover Sleepover]]>><<set $daily.mpLoverSleepover to 1>><<pass 40>><<tiredness -12>><<stress -15>><<trauma -8>><</link>><<ltiredness>><<lstress>><<ltrauma>><<glove>>
 		<br>
 	<</if>>
 <</if>>
 <<if _mpRelJealousy gte 20 and (!$daily or !$daily.mpJealousyScene)>>
-	<<kylarmanoricon>><<link [[将<<him>>堵在墙角逼问 (0:08)|MP Lover Jealousy Scene]]>><<set $daily.mpJealousyScene to 1>><<pass 8>><</link>><<garousal>>
+	<<link [[将<<him>>堵在墙角逼问 (0:08)|MP Lover Jealousy Scene]]>><<set $daily.mpJealousyScene to 1>><<pass 8>><</link>><<garousal>>
 	<br>
 <</if>>
 <<if ($location is "temple" or _exitPas is "Temple" or _exitPas is "Wolf Street" or _mpRelCorruption gte 20) and (!$daily or !$daily.mpCorruptScene)>>
-	<<templeicon>><<link [[走进帷幕后的隔间 (0:14)|MP Lover Corrupt Scene]]>><<set $daily.mpCorruptScene to 1>><<pass 14>><</link>>
+	<<link [[走进帷幕后的隔间 (0:14)|MP Lover Corrupt Scene]]>><<set $daily.mpCorruptScene to 1>><<pass 14>><</link>>
 	<br>
 <</if>>
+
+:: MP Player Interact Intimate [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas is "Orphanage Intro" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Orphanage">>
+<</if>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>>
+	<<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
+	<<person1>>
+<</if>>
+你往<<print ($mpInteractTargetName or "同伴")>>身前贴近半步，彼此温热的呼吸在近处交错。
+<<if $exposed gte 1>>
+	<br><span class="lewd">注意到你衣不蔽体的模样，<<his>>呼吸明显一滞，眼神幽深滚烫，立刻侧身替你挡住四周视线。</span>
+<</if>>
+<<if _mpRelCorruption gte 25>>
+	<br><span class="lewd">趁四下无人注意，<<his>>指尖若有若无地擦过你的腰侧与臀线，眼底藏着一抹暗火。</span>
+<</if>>
+<br><br>
+<<getouticon>><<link [[退开半步平复呼吸 (0:01)|MP Player Interact]]>><<pass 1>><</link>>
 <br>
-<<walkicon>><<link [[一起出门|_exitPas]]>><<set $eventskip to 1>><<endevent>><<run window.dolmp && window.dolmp.sendMeetFromInteract && window.dolmp.sendMeetFromInteract()>><</link>>
-<br>
-<<getouticon>><<link [[离开|_exitPas]]>><<set $eventskip to 1>><<endevent>><</link>>
+<<if !window.dolmp || window.dolmp.canDoDailyInteract("flirt")>>
+	<<brothelicon>><<link [[眼神调情 (0:05)|MP Player Interact Flirt]]>><<pass 5>><<stress -4>><<arousal 600>><</link>><<promiscuous1>><<lstress>><<glove>><<garousal>>
+	<br>
+<</if>>
+<<if (_mpRelLove gte 10 or hasSexStat("promiscuity", 2) or $promiscuity gte 15) and (!window.dolmp || window.dolmp.canDoDailyInteract("kiss"))>>
+	<<loveicon "kiss">><<link [[凑近亲吻 (0:03)|MP Player Interact Kiss]]>><<pass 3>><<stress -6>><<trauma -3>><<arousal 900>><</link>><<promiscuous2>><<lstress>><<ltrauma>><<glove>><<garousal>>
+	<br>
+<</if>>
+<<if ($demon gte 6 or $angel gte 6 or $fallenangel gte 2) and (!window.dolmp || window.dolmp.canDoDailyInteract("wing_tease"))>>
+	<<link [[用羽翼尾尖轻拢<<him>> (0:04)|MP Player Interact WingTease]]>><<pass 4>><<stress -6>><<arousal 1000>><</link>><<lstress>><<glove>><<garousal>>
+	<br>
+<</if>>
+<<if (hasSexStat("promiscuity", 2) or $promiscuity gte 15 or _mpRelLove gte 18) and (!window.dolmp || window.dolmp.canDoDailyInteract("bath"))>>
+	<<link [[共浴擦身 (0:25)|MP Player Interact Bath]]>><<pass 25>><<stress -10>><<tiredness -6>><<arousal 1200>><</link>><<promiscuous2>><<lstress>><<ltiredness>><<glove>><<garousal>>
+	<br>
+<</if>>
+<<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelStage is "lover" or _mpRelStage is "soulmate") and (!window.dolmp || window.dolmp.canDoDailyInteract("whisper_lewd"))>>
+	<<link [[贴耳低语探入衣内 (0:06)|MP Player Interact WhisperLewd]]>><<pass 6>><<arousal 1400>><<stress -4>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
+	<br>
+<</if>>
+<<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelStage is "lover" or _mpRelStage is "soulmate") and (!window.dolmp || window.dolmp.canDoDailyInteract("expose_tease"))>>
+	<<link [[掀起衣摆诱惑<<him>> (0:02)|MP Player Interact ExposeTease]]>><<pass 2>><<arousal 1300>><</link>><<exhibitionist2>><<ggarousal>>
+	<br>
+<</if>>
+<<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelCorruption gte 20) and (!window.dolmp || window.dolmp.canDoDailyInteract("sex_toys"))>>
+	<<link [[取出贴身道具抚弄 (0:14)|MP Player Interact Toys]]>><<pass 14>><<arousal 1800>><<stress -6>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
+	<br>
+<</if>>
+<<if (hasSexStat("promiscuity", 4) or $promiscuity gte 55 or _mpRelCorruption gte 30) and (!window.dolmp || window.dolmp.canDoDailyInteract("sub"))>>
+	<<link [[俯身凑近双腿之间 (0:12)|MP Player Interact Sub]]>><<pass 12>><<arousal 2000>><<stress -6>><</link>><<promiscuous4>><<lstress>><<ggarousal>>
+	<br>
+<</if>>
+<<if ($cow gte 4 or $lactating is 1 or $demon gte 4 or hasSexStat("promiscuity", 4) or $promiscuity gte 55) and (!window.dolmp || window.dolmp.canDoDailyInteract("lactate"))>>
+	<<link [[敞开衣襟喂哺<<him>> (0:09)|MP Player Interact Lactate]]>><<pass 9>><<arousal 1800>><<stress -8>><<trauma -4>><</link>><<promiscuous4>><<lstress>><<ltrauma>><<glove>><<ggarousal>>
+	<br>
+<</if>>
+<<brothelicon "stage">><<link [[拥抱爱抚|MP Player Interact Consensual]]>><</link>><<promiscuous1>><<glove>><<garousal>>
 
 :: MP Player Interact Chat [nobr]
 <<effects>>
-你和<<print ($mpInteractTargetName or "同伴")>>肩并肩坐在一起，低声聊起了最近在镇上的见闻——从孤儿院里贝利愈发严苛的催款、学校走廊里的流言蜚语，到街巷深处到了夜晚便蠢蠢欲动的黑影。
+你和<<print ($mpInteractTargetName or "同伴")>>肩并肩坐在一起，低声聊起镇上的近况——从孤儿院里贝利严苛的催款、走廊里的流言，到夜巷深处蠢蠢欲动的黑影。
 <br><br>
 <<if $speech_attitude is "meek">>
-	你轻轻拉着<<his>>的衣袖，声音轻柔而带着依赖："还好有你在我身边……如果只有我一个人的话，真不知道该怎么熬过那些难捱的日子。"
+	你轻拉着<<his>>的衣袖，声音带着依赖：「还好有你在身边……若只有我一个人，真不知怎么熬过那些难捱的日子。」
 <<elseif $speech_attitude is "bratty">>
-	你轻哼了一声，不服输地扬起下巴，肩膀却挨在<<he>>身上："不管是贝利还是镇上那些心怀不轨的家伙，敢招惹我们，迟早叫他们好看。"
+	你轻哼一声扬起下巴，肩膀却挨着<<he>>：「不管是贝利还是心怀不轨的家伙，敢招惹我们，迟早叫他们好看。」
 <<else>>
-	你温和地注视着<<his>>的眼睛，轻声说道："这座小镇虽然危机四伏，但只要我们两个人守望相助，就总能撑下去。"
-<</if>>
-<br><br>
-<<if _mpRelStage is "soulmate" or _mpRelStage is "lover">>
-	<<He>>心疼地将你揽进怀里，手指轻柔地摩挲着你的发丝，在你发顶落下一吻。"别怕，不管发生什么我都会陪你一起扛。"
-<<elseif _mpRelStage is "crush">>
-	<<He>>专注地凝视着你的侧脸，目光在触及你嘴唇时微微闪烁了一下，随后轻声应道："只要能像这样和你待在一起，再难捱的日子也变得有盼头了。"
-<<elseif _mpRelStage is "friend">>
-	<<He>>深有同感地点了点头，伸手拍了拍你的肩膀："在这座镇子上单打独斗太吃亏了，以后有什么风吹草动，我们互相通个气。"
-<<else>>
-	<<He>>安静地听完你的话，紧绷的戒备稍稍放下了几分，低声回应道："你说得对，在这地方确实得格外留心。"
+	你温和地注视着<<his>>的眼睛轻声道：「这座小镇虽然危机四伏，但只要我们守望相助，就总能撑下去。」
 <</if>>
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("chat", 8, -6, -3, 0, 0, "与你促膝交谈了一会儿", { love: 1, trust: 1, jealousy: -1 })>>
 <br><br>
-<<socialiseicon>><<link [[继续|MP Player Interact]]>><</link>>
-<br>
 <<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<socialiseicon>><<link [[倾听<<his>>的回应 (0:04)|MP Player Interact Chat Reply]]>><<pass 4>><</link>>
+
+:: MP Player Interact Chat Reply [nobr]
+<<effects>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>>
+	<<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
+	<<person1>>
+<</if>>
+<<if _mpRelStage is "soulmate" or _mpRelStage is "lover">>
+	<<He>>心疼地将你揽进怀里，手指轻柔摩挲着你的发丝，在你发顶落下一吻：「别怕，不管发生什么我都会陪你一起扛。」
+<<elseif _mpRelStage is "crush">>
+	<<He>>专注地凝视着你的侧脸，目光微微闪烁，轻声应道：「只要能像这样和你待在一起，再难捱的日子也有盼头了。」
+<<elseif _mpRelStage is "friend">>
+	<<He>>深有同感地点头，拍了拍你的肩膀：「在这镇上单打独斗太吃亏了，以后有什么风吹草动，我们互相通个气。」
+<<else>>
+	<<He>>安静听完你的话，紧绷的戒备放下了几分，低声道：「你说得对，在这地方确实得格外留心。」
+<</if>>
+<br><br>
+<<getouticon>><<link [[离开|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<socialiseicon>><<link [[继续待在一起|MP Player Interact]]>><</link>>
 
 :: MP Player Interact Flirt [nobr]
 <<effects>>
 你往<<print ($mpInteractTargetName or "同伴")>>身边凑近了几分，大腿外侧贴着<<his>>的腿，指尖顺着<<his>>的手腕内侧缓缓滑向掌心，轻轻挠了挠<<his>>的掌心。
 <<promiscuity1>>
 <<if $speech_attitude is "meek">>
-	你垂下眼帘，睫毛轻颤着小声呢喃："一直被你这样看着，我的心跳得好快……"
+	你垂下眼帘，睫毛轻颤着小声呢喃：「一直被你这样看着，我的心跳得好快……」
 <<elseif $speech_attitude is "bratty">>
-	你伸出食指勾起<<his>>的下巴，温热的吐息喷洒在<<his>>唇角："从刚才起你的眼神就一直往我身上飘吧？想摸的话，怎么不干脆直接点？"
+	你伸出食指勾起<<his>>的下巴，温热的吐息喷洒在<<his>>唇角：「从刚才起你的眼神就一直往我身上飘吧？想摸的话，怎么不干脆直接点？」
 <<else>>
 	你凑在<<he>>耳边，压低嗓音轻声挑逗着，目光在<<his>>的眉眼与嘴唇之间流连。
 <</if>>
 <br><br>
 <<if _mpRelCorruption gte 25>>
-	<<He>>眼底腾起幽暗的火光，反手一把揽住你的细腰将你按向自己怀里，隔着衣料摩挲了一下你的腰臀："这可是你主动招惹我的。"
+	<<He>>眼底腾起幽暗的火光，反手一把揽住你的细腰将你按向自己怀里，隔着衣料摩挲了一下你的腰臀：「这可是你主动招惹我的。」
 <<else>>
-	<<He>>的脸颊泛起一层薄红，呼吸也随之加快了几分，反手握住了你的手指。"你总是这么会招惹人……"<<he>>低声呢喃着。
+	<<He>>的脸颊泛起一层薄红，呼吸也随之加快了几分，反手握住了你的手指。「你总是这么会招惹人……」<<he>>低声呢喃着。
 <</if>>
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("flirt", 5, -4, 0, 0, 600, "凑在你耳边轻声调情", { love: 1, lust: 1 })>>
 <br><br>
@@ -393,7 +423,7 @@
 
 :: MP Player Interact Snack [nobr]
 <<effects>>
-你拿出一杯冰凉香甜的草莓奶昔与刚烤好的热松饼，与<<print ($mpInteractTargetName or "同伴")>>分着品尝。<<He>>凑着吸管喝了一大口奶昔，唇角沾上了一点雪白的奶沫。你伸出拇指替<<he>>抹去，<<he>>却突然张口含住了你的指尖，温热湿软的舌尖在你的指腹上轻轻一卷。"果然很甜，"<<he>>看着你微怔的模样，眼底漾开笑意。
+你拿出一杯冰凉香甜的草莓奶昔与刚烤好的热松饼，与<<print ($mpInteractTargetName or "同伴")>>分着品尝。<<He>>凑着吸管喝了一大口奶昔，唇角沾上了一点雪白的奶沫。你伸出拇指替<<he>>抹去，<<he>>却突然张口含住了你的指尖，温热湿软的舌尖在你的指腹上轻轻一卷。「果然很甜，」<<he>>看着你微怔的模样，眼底漾开笑意。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("snack", 12, -8, -2, -3, 350, "与你分享了奶昔与松饼", { love: 1, trust: 1, lust: 1 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Player Interact]]>><</link>>
@@ -402,7 +432,7 @@
 
 :: MP Player Interact Care [nobr]
 <<effects>>
-你拿出干净的湿帕子，轻柔地替<<print ($mpInteractTargetName or "同伴")>>擦拭脸颊、脖颈与手腕上的红痕，又帮<<he>>把松脱的衣领重新系好。当你的指尖擦过<<he>>敏感的颈侧皮肤时，<<he>>微微眯起眼睛，目光一瞬不瞬地凝视着你："只要被你的手这样碰触着，就觉得一点也不疼了。"
+你拿出干净的湿帕子，轻柔地替<<print ($mpInteractTargetName or "同伴")>>擦拭脸颊、脖颈与手腕上的红痕，又帮<<he>>把松脱的衣领重新系好。当你的指尖擦过<<he>>敏感的颈侧皮肤时，<<he>>微微眯起眼睛，目光一瞬不瞬地凝视着你：「只要被你的手这样碰触着，就觉得一点也不疼了。」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("care", 4, -5, -3, 0, 150, "细心地替你擦拭并整理好衣装", { love: 1, trust: 1, jealousy: -1 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Player Interact]]>><</link>>
@@ -427,14 +457,14 @@
 你走近<<print ($mpInteractTargetName or "同伴")>>，单手撑在<<he>>耳侧，俯下身将鼻尖埋进<<his>>的颈窝深吸了一口气。
 <br><br>
 <<if $speech_attitude is "meek">>
-	"刚才没和我在一起的时候……有没有别人碰过你？"你攥着<<his>>的衣袖，眼底泛着湿润的执拗，"我一想到别人可能会看你、碰你，心里就难受得要命……只看我一个人好不好？"
+	「刚才没和我在一起的时候……有没有别人碰过你？」你攥着<<his>>的衣袖，眼底泛着湿润的执拗，「我一想到别人可能会看你、碰你，心里就难受得要命……只看我一个人好不好？」
 <<elseif $speech_attitude is "bratty">>
-	"老实交代，刚才我不在的时候，有没有哪个不长眼的家伙敢凑过来？"你捏住<<his>>的下巴迫使<<he>>直视你的眼睛，"给我记清楚了，从头到脚你全都是我的。"
+	「老实交代，刚才我不在的时候，有没有哪个不长眼的家伙敢凑过来？」你捏住<<his>>的下巴迫使<<he>>直视你的眼睛，「给我记清楚了，从头到脚你全都是我的。」
 <<else>>
-	"刚才分开的时候，没有别人纠缠你吧？"你手指摩挲着<<his>>的锁骨，低声说道，"你的视线和身体，我一点都不想分给别人。"
+	「刚才分开的时候，没有别人纠缠你吧？」你手指摩挲着<<his>>的锁骨，低声说道，「你的视线和身体，我一点都不想分给别人。」
 <</if>>
 <br><br>
-<<He>>被你突如其来的占有欲逼得呼吸一滞，身体却泛起一阵战栗，手指悄悄勾住了你的腰带："我谁也没看……不信的话，你现在就可以亲自检查。"
+<<He>>被你突如其来的占有欲逼得呼吸一滞，身体却泛起一阵战栗，手指悄悄勾住了你的腰带：「我谁也没看……不信的话，你现在就可以亲自检查。」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("jealous_ask", 4, -2, 0, 0, 600, "贴近你的颈窝追问你的行踪", { love: 1, jealousy: 1, lust: 1 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Player Interact]]>><</link>>
@@ -443,9 +473,9 @@
 
 :: MP Player Interact JealousCalm [nobr]
 <<effects>>
-察觉到<<print ($mpInteractTargetName or "同伴")>>眼神里紧绷的不安，你主动伸出双臂将<<he>>拥入怀中，抓起<<his>>的手贴在自己胸口上："听到了吗？不管镇上有多少人，我心里最在乎的始终只有你一个。"
+察觉到<<print ($mpInteractTargetName or "同伴")>>眼神里紧绷的不安，你主动伸出双臂将<<he>>拥入怀中，抓起<<his>>的手贴在自己胸口上：「听到了吗？不管镇上有多少人，我心里最在乎的始终只有你一个。」
 <br><br>
-<<He>>紧绷的肩膀柔和了下来，双臂用力回抱住你的腰，将脸埋在你的颈窝里轻轻咬了一下你的锁骨："……这是你亲口答应我的，绝对不准反悔。"
+<<He>>紧绷的肩膀柔和了下来，双臂用力回抱住你的腰，将脸埋在你的颈窝里轻轻咬了一下你的锁骨：「……这是你亲口答应我的，绝对不准反悔。」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("jealous_calm", 7, -6, -3, 0, 300, "将你拥入怀中温柔安抚", { love: 1, trust: 1, jealousy: -2 })>>
 <br><br>
 <<socialiseicon>><<link [[继续|MP Player Interact]]>><</link>>
@@ -458,7 +488,7 @@
 <<promiscuity2>>
 温热的水波漫过胸膛与双腿。你掬起一捧细腻的泡沫，手掌贴上<<print ($mpInteractTargetName or "同伴")>>滑腻的肌肤，从微颤的锁骨、柔嫩的胸口一路向下游走，揉搓过腰窝、臀瓣与大腿内侧。
 <br><br>
-"唔嗯……那里已经洗得很干净了……"<<he>>浑身泛着桃花粉，双手无力地扶在你的肩膀上，随着你指尖在水下似有若无地擦过充血敏感的部位，发出一声声压抑不住的轻喘。
+「唔嗯……那里已经洗得很干净了……」<<he>>浑身泛着桃花粉，双手无力地扶在你的肩膀上，随着你指尖在水下似有若无地擦过充血敏感的部位，发出一声声压抑不住的轻喘。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("bath", 25, -10, -4, -6, 1200, "在温水浴中与你赤裸相拥，用泡沫揉搓爱抚你的全身", { love: 1, trust: 1, lust: 1, corruption: 1 })>>
 <br><br>
 <<bathroomicon "shower">><<link [[在水下探入指尖继续挑弄 (0:08)|MP Player Interact Bath Lewd]]>><<pass 8>><<arousal 2000>><<stress -6>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
@@ -478,28 +508,39 @@
 
 :: MP Player Interact WhisperLewd [nobr]
 <<effects>>
-你趁四周无人留意，从身后贴上<<print ($mpInteractTargetName or "同伴")>>的后背，湿热的舌尖顺着<<his>>敏感的耳廓舔过一圈，同时双手顺着<<his>>的衣摆与裤腰直接探入贴身内衣里。
+你趁四周无人留意，从身后贴上<<print ($mpInteractTargetName or "同伴")>>的后背，湿热的舌尖顺着<<his>>敏感的耳廓轻舔一圈，双手顺着衣摆探入贴身内衣。
 <<promiscuity3>>
+<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("whisper_lewd", 6, -4, 0, 0, 1400, "贴在你耳畔低语，并将手探入你的内衣里揉弄", { love: 1, lust: 1, corruption: 1 })>>
 <<if $speech_attitude is "bratty">>
-	"嘴上装得那么正经，里面怎么早就湿得一塌糊涂了？"你的手指隔着薄薄的内衣布料打着圈按压着<<he>>充血凸起的敏感点，低笑着在<<he>>耳边吹气。
+	「嘴上装得正经，里面怎么早就湿透了？」你的手指隔着薄料打圈按压敏感点，低笑着在<<he>>耳边吹气。
 <<elseif $speech_attitude is "meek">>
-	"对、对不起……可是我实在忍不住想碰你了……"你声音软糯，藏在<<he>>衣服底下的手指却大胆地揉捏着<<he>>滚烫的软肉。
+	「对、对不起……可我实在忍不住想碰你了……」你声音软糯，衣下的手指却大胆揉捏着滚烫软肉。
 <<else>>
-	"别出声，交给我就好……"你一边用只有你们两人能听见的低哑嗓音耳语，一边拨开<<his>>的内衣边缘，指腹直接贴上那片湿热泥泞的隐秘之地缓缓摩挲。
+	「别出声，交给我就好……」你低哑耳语着，拨开内衣边缘，指腹直接贴上湿热隐秘处缓缓摩挲。
 <</if>>
 <br><br>
-<<He>>浑身猛地一颤，死死咬住自己的手背才没叫出声来，双腿发软地靠在你怀里，内衣已经被分泌出的体液彻底浸透。
-<<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("whisper_lewd", 6, -4, 0, 0, 1400, "贴在你耳畔低语，并将手探入你的内衣里揉弄", { love: 1, lust: 1, corruption: 1 })>>
-<br><br>
-<<brothelicon>><<link [[将<<him>>拉进暗处|MP Player Interact Consensual]]>><</link>><<promiscuous3>>
+<<getouticon>><<link [[抽出手整理衣角|MP Player Interact]]>><</link>>
 <br>
+<<brothelicon>><<link [[指尖加深力道 (0:03)|MP Player Interact WhisperLewd Reply]]>><<pass 3>><</link>>
+
+:: MP Player Interact WhisperLewd Reply [nobr]
+<<effects>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>>
+	<<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
+	<<person1>>
+<</if>>
+随着你指腹的深入摩挲，<<He>>浑身猛地一颤，死死咬住手背才没叫出声来，双腿发软地靠在你怀里，贴身内衣已被分泌出的体液彻底浸透，连耳根都烧得通红。
+<br><br>
 <<socialiseicon>><<link [[抽出手整理衣角|MP Player Interact]]>><</link>>
+<br>
+<<brothelicon>><<link [[将<<him>>拉进暗处|MP Player Interact Consensual]]>><</link>><<promiscuous3>>
 
 :: MP Player Interact ExposeTease [nobr]
 <<effects>>
 你确认四周无人注意这个角落后，背靠着墙壁朝<<print ($mpInteractTargetName or "同伴")>>勾了勾手指。当<<he>>凑近时，你抓起自己的衣摆缓缓掀起，将毫无防备、正泛着水光的私密部位展露在<<he>>眼前。
 <<exhibitionism2>>
-微凉的空气刺激得你裸露的肌肤轻轻战栗。"只给你一个人看……"<<if $speech_attitude is "bratty">>你挑衅地微张双腿，"愣着干什么？"<<else>>你满脸通红地咬着下唇，"因为想你，这里已经变成这样了……"<</if>>
+微凉的空气刺激得你裸露的肌肤轻轻战栗。「只给你一个人看……」<<if $speech_attitude is "bratty">>你挑衅地微张双腿，「愣着干什么？」<<else>>你满脸通红地咬着下唇，「因为想你，这里已经变成这样了……」<</if>>
 <br><br>
 <<He>>的呼吸停滞了一瞬，瞳孔骤然放大，几乎是本能地上前一步用身体将你挡在墙角，滚烫的手掌迫不及待地覆上了你裸露的肌肤。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("expose_tease", 2, -4, 0, 0, 1300, "在角落掀起衣摆向你展示私密处", { love: 1, lust: 1, corruption: 1 })>>
@@ -514,7 +555,7 @@
 <<promiscuity3>>
 你半跪下身，隔着<<his>>微湿的内裤将跳蛋塞进最贴合敏感点的地方，用内裤紧紧固定住，随后将震动档位一格格调高。
 <br><br>
-细密而强烈的震波瞬间穿透了神经末梢。<<He>>双膝一软差点跪倒在地，双手死死抓着你的肩膀，嘴里漏出破碎的呜咽："啊、太强了……开关在你手里的话，我连路都没法走了……"
+细密而强烈的震波瞬间穿透了神经末梢。<<He>>双膝一软差点跪倒在地，双手死死抓着你的肩膀，嘴里漏出破碎的呜咽：「啊、太强了……开关在你手里的话，我连路都没法走了……」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("sex_toys", 14, -6, 0, 0, 1800, "在你的贴身内衣里塞入震动跳蛋并调高档位", { love: 1, lust: 1, corruption: 1 })>>
 <br><br>
 <<sextoysicon "dildo">><<link [[将功率推到最大 (0:04)|MP Player Interact Toys Climax]]>><<pass 4>><<arousal 2500>><</link>><<promiscuous4>><<ggarousal>>
@@ -536,7 +577,7 @@
 <<promiscuity4>>
 你熟练地解开<<his>>的下装搭扣，将脸埋进<<he>>腿间。温热湿滑的舌尖先是从大腿根部一路舔吻至最核心的敏感处，随后张开嘴唇将那滚烫充血的部位含入口中，用舌腹与口腔内壁细致地包裹、吮吸起来。
 <br><br>
-<<He>>倒吸了一口凉气，手指颤抖着插进你的发间，既想压低声音又控制不住地按着你的头往深处送："唔……别发出太大的水声，被人发现就糟了……但、但是别停下来……"
+<<He>>倒吸了一口凉气，手指颤抖着插进你的发间，既想压低声音又控制不住地按着你的头往深处送：「唔……别发出太大的水声，被人发现就糟了……但、但是别停下来……」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("sub", 12, -6, 0, 0, 2000, "蹲跪在你的双腿之间，用温热的口舌侍奉你", { love: 1, lust: 1, corruption: 1 })>>
 <br><br>
 <<shopicon "adult">><<link [[加快唇舌吞吐的频率 (0:05)|MP Player Interact Sub Climax]]>><<pass 5>><<arousal 1600>><<oralskill 5>><</link>><<promiscuous4>><<ggarousal>>
@@ -556,7 +597,7 @@
 <<effects>>
 你解开胸前紧绷的衣襟，露出一对饱满浑圆的乳房，挺立的乳尖上正挂着几滴散发着甜香的乳白汁液。
 <<promiscuity4>>
-你将<<print ($mpInteractTargetName or "同伴")>>的头轻轻按向自己温软的胸前："来，喝吧。" <<He>>眼神瞬间变得迷离，张开嘴含住你敏感肿胀的乳首，大口吮吸吞咽起来。每一次有力的吸吮都带起一阵直通小腹的强烈酥麻，让你忍不住抱紧<<his>>的脑袋发出轻吟。
+你将<<print ($mpInteractTargetName or "同伴")>>的头轻轻按向自己温软的胸前：「来，喝吧。」 <<He>>眼神瞬间变得迷离，张开嘴含住你敏感肿胀的乳首，大口吮吸吞咽起来。每一次有力的吸吮都带起一阵直通小腹的强烈酥麻，让你忍不住抱紧<<his>>的脑袋发出轻吟。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("lactate", 9, -8, -4, 0, 1800, "解开衣襟将你的头按在胸前，让你吸吮温热的乳汁", { love: 1, trust: 1, lust: 1, corruption: 1 })>>
 <br><br>
 <<brothelicon>><<link [[抱紧怀里的<<him>>继续深入|MP Player Interact Consensual]]>><</link>><<promiscuous4>>
@@ -602,23 +643,34 @@
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
-四周的喧嚣似乎在这一刻悄然远去。你深吸了一口气，上前一步握住<<print ($mpInteractTargetName or "对方")>>的双手，认真地注视着<<his>>的双眼。
+四周的喧嚣悄然远去。你深吸一口气，上前握住<<print ($mpInteractTargetName or "对方")>>的双手，认真注视着<<his>>的双眼。
 <br><br>
-"在这座冷漠而危险的小镇里，是你一直陪在我身边，"<<if $speech_attitude is "meek">>你声音微颤却坚定地抬起眼帘，"我、我不只是把你当成普通的同伴……我早就喜欢上你了，想成为你的恋人，可以吗？"<<elseif $speech_attitude is "bratty">>你扬起下巴，耳尖微红却紧紧扣住<<his>>的十指，"听好了，我早就喜欢上你了。不管以后遇到什么麻烦，你都是我的人，不许拒绝！"<<else>>你坦诚而温柔地凝视着<<him>>，"我喜欢你，想和你一直并肩走下去——做我的恋人，好吗？"<</if>>
-<br><br>
-<<He>>怔怔地看着你，眼眶微微泛红，随即绽放出动人的笑颜。"我也是……从很早以前起，我的目光就再也离不开你了，"<<he>>反手将你紧紧拥入怀中，声音带着压抑不住的喜悦与颤抖，"不管以后遇到什么，我们都绝不分开。"
+「在这座冷漠的小镇里，是你一直陪在我身边，」<<if $speech_attitude is "meek">>你声音微颤却坚定地抬眼，「我早就喜欢上你了，想成为你的恋人，可以吗？」<<elseif $speech_attitude is "bratty">>你耳尖微红却紧扣住<<his>>的十指，「听好了，我早就喜欢上你了，以后你就是我的人，不许拒绝！」<<else>>你坦诚而温柔地凝视着<<him>>，「我喜欢你，想和你一直并肩走下去——做我的恋人，好吗？」<</if>>
 <<run window.dolmp && window.dolmp.notifyRomanceMilestone && window.dolmp.notifyRomanceMilestone("lover", "向你郑重倾诉了爱意", { love: 2, trust: 2, jealousy: -2, lust: 1 })>>
 <br><br>
-<<loveicon "kiss">><<link [[拥吻 (0:04)|MP Romance Confess Embrace]]>><<pass 4>><<stress -12>><<trauma -8>><<arousal 1000>><</link>><<lstress>><<ltrauma>><<glove>><<garousal>>
+<<getouticon>><<link [[收住话头退后半步|MP Player Interact]]>><</link>>
 <br>
+<<loveicon>><<link [[等待<<his>>的回应 (0:02)|MP Romance Confess Reply]]>><<pass 2>><</link>>
+
+:: MP Romance Confess Reply [nobr]
+<<effects>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>>
+	<<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
+	<<person1>>
+<</if>>
+<<He>>怔怔地看着你，眼眶微微泛红，随即绽放出动人的笑颜。「我也是……从很早以前起，我的目光就再也离不开你了，」<<he>>反手将你紧紧拥入怀中，声音带着压抑不住的喜悦与颤抖，「不管以后遇到什么，我们都绝不分开。」
+<br><br>
 <<socialiseicon>><<link [[牵着手返回|MP Player Interact]]>><</link>>
+<br>
+<<loveicon "kiss">><<link [[倾身拥吻 (0:04)|MP Romance Confess Embrace]]>><<pass 4>><<stress -12>><<trauma -8>><<arousal 1000>><</link>><<lstress>><<ltrauma>><<glove>><<garousal>>
 
 :: MP Romance Confess Embrace [nobr]
 <<effects>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
-你们在彼此的怀抱中交换了一个绵长而滚烫的吻。<<He>>的手掌温柔地托着你的后颈，舌尖细细描摹着你的唇形。当唇瓣分开时，<<he>>笑着抵着你的额头："以后请多指教了，我的恋人。"
+你们在彼此的怀抱中交换了一个绵长而滚烫的吻。<<He>>的手掌温柔地托着你的后颈，舌尖细细描摹着你的唇形。当唇瓣分开时，<<he>>笑着抵着你的额头：「以后请多指教了，我的恋人。」
 <br><br>
 <<brothelicon>><<link [[抱紧彼此|MP Player Interact Consensual]]>><</link>><<promiscuous1>>
 <br>
@@ -631,9 +683,9 @@
 <<person1>>
 你从贴身的衣袋里取出一对银质同心挂坠，内侧刻着你们两人的名字缩写。当你打开丝绒小盒递到<<print ($mpInteractTargetName or "恋人")>>面前时，<<he>>惊讶地捂住了嘴。
 <br><br>
-"这是……特意为我准备的吗？"<<he>>小心翼翼地接过其中一枚挂坠，指腹摩挲着上面的刻痕，眼底泛起晶莹的泪光。你替<<he>>将挂坠戴在颈间，冰凉的银链贴上<<he>>温热的锁骨；<<he>>也双手微颤地将另一枚戴在了你的胸前。
+「这是……特意为我准备的吗？」<<he>>小心翼翼地接过其中一枚挂坠，指腹摩挲着上面的刻痕，眼底泛起晶莹的泪光。你替<<he>>将挂坠戴在颈间，冰凉的银链贴上<<he>>温热的锁骨；<<he>>也双手微颤地将另一枚戴在了你的胸前。
 <br><br>
-"无论今后在小镇遭遇什么，无论清醒还是沉沦，我都永远属于你，"<<he>>握着你胸前的挂坠，低下头虔诚地吻上了你的锁骨与双唇。
+「无论今后在小镇遭遇什么，无论清醒还是沉沦，我都永远属于你，」<<he>>握着你胸前的挂坠，低下头虔诚地吻上了你的锁骨与双唇。
 <<run window.dolmp && window.dolmp.notifyRomanceMilestone && window.dolmp.notifyRomanceMilestone("soulmate", "与你交换了刻有彼此名字的银质挂坠", { love: 2, trust: 2, jealousy: -2, lust: 1 })>>
 <br><br>
 <<loveicon "kiss">><<link [[深吻|MP Romance Confess Embrace]]>><<stress -15>><<trauma -10>><</link>><<lstress>><<ltrauma>>
@@ -642,13 +694,13 @@
 
 :: MP Date Beach [nobr]
 <<set $outside to 1>><<set $location to "beach">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
 你牵着<<print ($mpInteractTargetName or "恋人")>>的手穿过星鱼街来到海滩。夕阳正缓缓沉入远方的海平线，将翻涌的浪花染成一片橘红与淡紫。微咸的海风吹拂着你们的发梢，远处的礁石群在暮色中若隐若现。
 <br><br>
-<<He>>脱下鞋子赤脚踩在温凉的细沙上，海浪漫过<<he>>的脚踝。<<He>>回头朝你伸出手："快来呀，傍晚的海水好舒服。"
+<<He>>脱下鞋子赤脚踩在温凉的细沙上，海浪漫过<<he>>的脚踝。<<He>>回头朝你伸出手：「快来呀，浅滩的海水好舒服。」
 <br><br>
 <<beachicon>><<link [[赤脚踏浪嬉戏 (0:14)|MP Date Beach Walk]]>><<pass 14>><<stress -8>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
 <br>
@@ -658,11 +710,11 @@
 
 :: MP Date Beach Walk [nobr]
 <<set $outside to 1>><<set $location to "beach">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
-你们在浅滩的浪花间奔跑嬉戏，清凉的海水打湿了裤脚与裙摆。<<He>>弯腰捡起一枚色泽温润的粉色海螺塞进你手心里，凑到你耳边轻声笑道："听说把海螺贴在耳边，就能听见大海替我说的喜欢你。"
+你们在浅滩的浪花间奔跑嬉戏，清凉的海水打湿了裤脚与裙摆。<<He>>弯腰捡起一枚色泽温润的粉色海螺塞进你手心里，凑到你耳边轻声笑道：「听说把海螺贴在耳边，就能听见大海替我说的喜欢你。」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("date_beach", 20, -10, -5, 0, 300, "在海滩与你赤脚踏浪，送了你一枚粉色海螺", { love: 1, trust: 1, jealousy: -1 })>>
 <br><br>
 <<loveicon "kiss">><<link [[拉进礁石后拥吻|MP Date Beach Kiss]]>><<arousal 800>><</link>><<promiscuous1>>
@@ -671,7 +723,7 @@
 
 :: MP Date Beach Sunset [nobr]
 <<set $outside to 1>><<set $location to "beach">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -684,7 +736,7 @@
 
 :: MP Date Beach Kiss [nobr]
 <<set $outside to 1>><<set $location to "beach">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -697,7 +749,7 @@
 
 :: MP Date Park [nobr]
 <<set $outside to 1>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -711,13 +763,13 @@
 
 :: MP Date Park Sketch [nobr]
 <<set $outside to 1>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
 你按住速写本的一角——前半本密密麻麻画的全是你的侧脸与微笑；而翻到后半本时，上面竟全是令人面红耳赤的私密素描：有你衣衫半解地跨坐在<<he>>腿上的画面，甚至还有你在高潮时失神流泪的模样。
 <br><br>
-<<He>>的脸瞬间红到了脖子根，抓着你的袖口小声说道："因、因为不管什么时候，我脑子里想的全都是你……那些画面，你也愿意陪我一起实现吗？"
+<<He>>的脸瞬间红到了脖子根，抓着你的袖口小声说道：「因、因为不管什么时候，我脑子里想的全都是你……那些画面，你也愿意陪我一起实现吗？」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("date_park_sketch", 15, -8, -4, 0, 800, "翻看了画满你肖像与私密幻想的速写本", { love: 1, trust: 1, jealousy: -1, lust: 1, corruption: 1 })>>
 <br><br>
 <<bedicon>><<link [[枕在<<his>>膝头|MP Date Park Lap]]>><</link>>
@@ -728,7 +780,7 @@
 
 :: MP Date Park Feed [nobr]
 <<set $outside to 1>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -739,7 +791,7 @@
 
 :: MP Date Park Lap [nobr]
 <<set $outside to 1>><<set $location to "park">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -752,7 +804,7 @@
 
 :: MP Date Dinner [nobr]
 <<set $outside to 0>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -764,7 +816,7 @@
 
 :: MP Date Dinner Toast [nobr]
 <<set $outside to 0>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -781,7 +833,7 @@
 
 :: MP Date Dinner Dance [nobr]
 <<set $outside to 0>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -792,26 +844,26 @@
 
 :: MP Lover Sleepover [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
 夜深人静，窗外传来细碎的风声。你掀开被角钻进床铺，<<print ($mpInteractTargetName or "伴侣")>>立刻贴了过来，解开彼此碍事的外衣，用温热的躯体将你整个拥进怀里。
 <br><br>
-"别怕，我在呢，"<<he>>轻声哄着你，温热的手掌顺着你的脊背一路安抚到尾椎，双腿也亲密地夹住你的大腿。听着<<he>>胸膛里沉稳的心跳声，你在彼此交缠的体温中沉沉睡去。
+「别怕，我在呢，」<<he>>轻声哄着你，温热的手掌顺着你的脊背一路安抚到尾椎，双腿也亲密地夹住你的大腿。听着<<he>>胸膛里沉稳的心跳声，你在彼此交缠的体温中沉沉睡去。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("lover_sleepover", 30, -15, -8, -12, 600, "整夜在被窝里与你肌肤相贴、相拥入眠", { love: 1, trust: 1, jealousy: -1, lust: 1 })>>
 <br><br>
 <<bedicon "double">><<link [[在清晨的阳光中醒来 (0:10)|MP Lover Sleepover Morning]]>><<pass 10>><<stress -6>><<arousal 1200>><</link>><<lstress>><<ggarousal>>
 
 :: MP Lover Sleepover Morning [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
 当清晨的第一缕阳光透过窗帘缝隙洒在床头时，你在阵阵酥麻的快感中睁开双眼——被窝里早已是一片湿热，<<print ($mpInteractTargetName or "伴侣")>>的大腿正夹在你的双腿之间缓慢磨蹭着，一只手还揣在你睡衣底下揉弄着你的胸口。
 <br><br>
-见你醒来，<<he>>俯下身给了你一个慵懒而缠绵的早安吻，声音带着刚睡醒的沙哑："早安……谁让你睡着的时候抱得那么紧，把我都蹭得受不了了。"
+见你醒来，<<he>>俯下身给了你一个慵懒而缠绵的早安吻，声音带着刚睡醒的沙哑：「早安……谁让你睡着的时候抱得那么紧，把我都蹭得受不了了。」
 <br><br>
 <<brothelicon>><<link [[在温暖的被窝里迎合<<him>>|MP Player Interact Consensual]]>><</link>><<promiscuous1>>
 <br>
@@ -819,13 +871,13 @@
 
 :: MP Lover Jealousy Scene [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
 刚走到僻静的拐角，<<print ($mpInteractTargetName or "恋人")>>突然伸手扣住了你的手腕，顺势将你困在冰冷的墙壁与<<his>>滚烫的胸膛之间。<<His>>的呼吸急促而沉重，眼神幽深得吓人：
 <br><br>
-"我刚才全都看到了……镇上那些家伙看你的眼神有多下流！"<<he>>咬着牙，一只手托起你的下巴，另一只手顺着你的大腿外侧探入衣内，"你是属于我一个人的，对不对？快看着我的眼睛告诉我，你的身体和心到底是谁的？"
+「我刚才全都看到了……镇上那些家伙看你的眼神有多下流！」<<he>>咬着牙，一只手托起你的下巴，另一只手顺着你的大腿外侧探入衣内，「你是属于我一个人的，对不对？快看着我的眼睛告诉我，你的身体和心到底是谁的？」
 <br><br>
 <<loveicon "hug">><<link [[环住<<his>>的脖子低声承诺 (0:04)|MP Lover Jealousy Soothe]]>><<pass 4>><<stress -6>><<sub 1>><</link>><<lstress>><<glove>>
 <br>
@@ -835,26 +887,26 @@
 
 :: MP Lover Jealousy Soothe [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
-你顺从地伸出双臂环住<<his>>的脖颈，用脸颊轻轻蹭了蹭<<his>>微颤的掌心："我从头到脚都只属于你一个人。不管别人怎么看，我永远不会离开你。"
+你顺从地伸出双臂环住<<his>>的脖颈，用脸颊轻轻蹭了蹭<<his>>微颤的掌心：「我从头到脚都只属于你一个人。不管别人怎么看，我永远不会离开你。」
 <br><br>
-听到你的承诺，<<he>>眼中紧绷的戾气瞬间融化，紧紧把你揉进怀里："我就知道你是爱我的。"
+听到你的承诺，<<he>>眼中紧绷的戾气瞬间融化，紧紧把你揉进怀里：「我就知道你是爱我的。」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("jealousy_soothe", 10, -6, -4, 0, 500, "乖巧地向你承诺永远只属于你一人", { love: 1, trust: 1, jealousy: -2 })>>
 <br><br>
 <<socialiseicon>><<link [[返回|MP Player Interact]]>><</link>>
 
 :: MP Lover Jealousy Kiss [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
-你主动扯开自己的衣领，露出白皙的脖颈与锁骨，凑到<<he>>唇边轻声呢喃："既然你这么不安，那就干脆在我身上咬下你的印记吧。"
+你主动扯开自己的衣领，露出白皙的脖颈与锁骨，凑到<<he>>唇边轻声呢喃：「既然你这么不安，那就干脆在我身上咬下你的印记吧。」
 <br><br>
-<<He>>的瞳孔骤然收缩，低头一口咬在你敏感的锁骨与颈侧上，用力吮吸留下一枚深紫红艳的吻痕与齿印，同时手指火热地探入你的双腿之间："这下谁也抢不走你了。"
+<<He>>的瞳孔骤然收缩，低头一口咬在你敏感的锁骨与颈侧上，用力吮吸留下一枚深紫红艳的吻痕与齿印，同时手指火热地探入你的双腿之间：「这下谁也抢不走你了。」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("jealousy_kiss", 15, -4, 0, 0, 1500, "敞开衣领让你在锁骨上咬下专属的吻痕与齿印", { love: 1, lust: 1, jealousy: -1, corruption: 1 })>>
 <br><br>
 <<brothelicon>><<link [[任由<<him>>在墙角占有你|MP Player Interact Consensual]]>><</link>><<promiscuous2>>
@@ -863,13 +915,13 @@
 
 :: MP Lover Jealousy Brat [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
-你勾起嘴角，用膝盖轻轻顶了顶<<he>>早已发烫的腿间："嘴上说得这么凶，那得看你能不能让我满意了。"
+你勾起嘴角，用膝盖轻轻顶了顶<<he>>早已发烫的腿间：「嘴上说得这么凶，那得看你能不能让我满意了。」
 <br><br>
-<<He>>的理智彻底绷断，一把将你的双手按在头顶墙面上，低头狠狠堵住了你的嘴："今天要是不把你弄到连路都走不动，我就不放你出去。"
+<<He>>的理智彻底绷断，一把将你的双手按在头顶墙面上，低头狠狠堵住了你的嘴：「今天要是不把你弄到连路都走不动，我就不放你出去。」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("jealousy_brat", 10, 0, 0, 0, 1800, "用膝盖顶弄挑衅吃醋的你", { love: 1, jealousy: 1, lust: 2, corruption: 1 })>>
 <br><br>
 <<brothelicon>><<link [[迎上<<him>>炽热的动作|MP Player Interact Consensual]]>><</link>><<promiscuous2>>
@@ -878,7 +930,7 @@
 
 :: MP Lover Corrupt Scene [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -890,7 +942,7 @@
 
 :: MP Lover Corrupt Pray [nobr]
 <<set $outside to 0>><<set $location to "temple">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
@@ -901,13 +953,13 @@
 
 :: MP Lover Corrupt Tempt [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
 <<generateNPC 1 "a" _mpOppPronoun _mpOppGender>>
 <<person1>>
 你拽住<<his>>的衣袖，将<<he>>一把拉进角落幽暗狭小的木制忏悔室隔间里，扣上了门锁。外头吟唱圣歌的声音清晰可闻，而你却在昏暗中直接撩起<<his>>的下摆，滚烫的手掌顺着大腿内侧探入最隐秘的禁地，同时用嘴唇堵住了<<he>>的惊呼。
 <<promiscuity3>>
-"唔……外面还有人在经过……会被听见的……"<<he>>死死咬着嘴唇，紧绷的身体却在背德的刺激下剧烈战栗起来，滚烫的体液顺着你的指缝滑落，双臂死死抱紧了你的后背。
+「唔……外面还有人在经过……会被听见的……」<<he>>死死咬着嘴唇，紧绷的身体却在背德的刺激下剧烈战栗起来，滚烫的体液顺着你的指缝滑落，双臂死死抱紧了你的后背。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("corrupt_tempt", 25, -6, 0, 0, 2000, "在狭小的忏悔室隔间里与你隐秘欢好", { love: 1, lust: 1, corruption: 2 })>>
 <br><br>
 <<brothelicon "gloryhole">><<link [[在忏悔室木椅上抱紧<<him>>|MP Player Interact Consensual]]>><</link>><<promiscuous3>>
@@ -916,9 +968,9 @@
 
 :: MP Event Alley Ambush [nobr]
 <<set $outside to 1>><<set $location to "residential_alley">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<generate1>><<person1>>
-你们正并肩沿着街边行走，拐角阴影里忽然窜出一名神色不善的<<person>>，拦住了你们的去路。"只有两个小鬼？把身上值钱的东西交出来，或者陪我玩玩！"
+你们正并肩沿着街边行走，拐角阴影里忽然窜出一名神色不善的<<person>>，拦住了你们的去路。「只有两个小鬼？把身上值钱的东西交出来，或者陪我玩玩！」
 <br><br>
 你的同伴立刻上前一步与你背靠背站定，警惕地盯着对方。
 <br><br>
@@ -930,7 +982,7 @@
 
 :: MP Event Alley Ambush Fight [nobr]
 <<set $outside to 1>><<set $location to "residential_alley">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<if $combat isnot 1>>
 	<<controlloss>><<violence 1>><<neutral 1>><<molested>><<maninit>>
 <</if>>
@@ -941,7 +993,7 @@
 
 :: MP Event Alley Ambush Run [nobr]
 <<set $outside to 1>><<set $location to "residential_alley">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<if $athleticsSuccess>>
 	你一把抓紧同伴的手腕，趁对方立足未稳之际全速冲出巷口，三拐两绕便将身后的叫骂声甩在了远处。你在狂奔中还顺手踢翻了巷口的一只旧木箱，一枚沾着灰尘的铜质怀表滚落到你脚边。
 	<<set $blackmoney to ($blackmoney or 0) + 25>>
@@ -956,7 +1008,7 @@
 
 :: MP Event Alley Ambush Distract [nobr]
 <<set $outside to 1>><<set $location to "residential_alley">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<promiscuity1>>
 你朝同伴使了个眼色，主动上前一步冲那名<<person>>露出暧昧的笑意，指尖故意拂过自己的衣领。趁对方眼神发直、防备松懈的刹那，你的同伴从侧面一脚踹在<<his>>膝弯上，顺手拽下了<<he>>腰间鼓囊囊的暗袋，拉起你飞快地跑出了巷子。
 <<set $blackmoney to ($blackmoney or 0) + 35>>
@@ -966,7 +1018,7 @@
 
 :: MP Event Sudden Downpour [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 天空毫无预兆地阴沉下来，豆大的雨点瞬间倾盆而下，冰凉的雨水很快打湿了你们的发梢与外衣。街边正好有一座狭小的旧电话亭与半掩的屋檐。
 <br><br>
 <<sheltericon>><<link [[拉着同伴躲进狭小的电话亭 (0:08)|MP Event Sudden Downpour Booth]]>><<pass 8>><<stress -6>><<arousal 800>><</link>><<lstress>><<glove>><<garousal>>
@@ -975,7 +1027,7 @@
 
 :: MP Event Sudden Downpour Booth [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 你们挤进狭小的玻璃电话亭里，空间窄得只能胸口贴着胸口。温热的吐息很快在四周的玻璃窗上凝结出一层白雾，遮蔽了外界的视线。湿透的衣服紧贴着彼此起伏的曲线，同伴温热的手掌贴在你的后腰上替你驱散寒意，眼神在逼仄的空间里愈发灼热。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("downpour_booth", 10, -6, -2, 0, 800, "在起雾的狭小电话亭里与你紧贴取暖", { love: 1, lust: 1 })>>
 <br><br>
@@ -985,7 +1037,7 @@
 
 :: MP Event Sudden Downpour Lewd [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<promiscuity2>>
 借着四周玻璃上浓重白雾的掩护，你仰起头吻住同伴的唇，同时将手伸进对方半透明的湿衣下用力揉弄。外头是哗啦啦的暴雨声与匆匆跑过的行人，而电话亭内却是急促滚烫的喘息与泥泞的水声，直到雨停时你们才红着脸整理好凌乱的衣衫。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("downpour_lewd", 10, -8, -4, 0, 1600, "在暴雨起雾的电话亭里与你偷欢", { love: 1, lust: 1, corruption: 1 })>>
@@ -994,7 +1046,7 @@
 
 :: MP Event Sudden Downpour Dance [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 你们索性不再躲雨，十指紧扣地在雨幕中纵情奔跑旋转，清脆的笑声回荡在湿漉漉的街道上，心中的阴霾被雨水冲刷得一干二净。在跑过排水口时，你注意到雨水冲出了一枚刻有旧王室纹章的银币，便顺手拾了起来。
 <<set $antiquemoney to ($antiquemoney or 0) + 20>>
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("downpour_dance", 10, -10, -4, 2, 200, "在倾盆大雨中与你牵手奔跑共舞", { love: 1, trust: 1 })>>
@@ -1003,7 +1055,7 @@
 
 :: MP Event Street Busking [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 街角的广场上有几名街头艺人刚刚收摊，周围还聚拢着不少散步的路人。你的同伴看了看地上的空绒布帽，提议不如趁人多一起表演出赚点零花钱。
 <br><br>
 <<socialiseicon "dance">><<link [[与同伴合跳一段轻快街舞 (0:16)|MP Event Street Busking Pure]]>><<pass 16>><<danceskill 5>><<tiredness 3>><</link>><<gdanceskill>><<glove>>
@@ -1014,7 +1066,7 @@
 
 :: MP Event Street Busking Pure [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 你和同伴配合默契地踏着节拍起舞，旋转、交手与腾跃一气呵成。围观的路人纷纷停下脚步鼓掌叫好，不少硬币叮叮当当地落进帽子里。你们平分了赚到的赏钱，相视一笑。
 <<money 1200>><<stress -6>><<lstress>>
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("busking_pure", 20, -6, -2, 3, 0, "与你在街头合跳了一曲双人舞", { love: 1, trust: 1 })>>
@@ -1023,7 +1075,7 @@
 
 :: MP Event Street Busking Lewd [nobr]
 <<set $outside to 1>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<promiscuity2>>
 你贴上同伴的后背，双手顺着对方的胸口与腰臀曲线一路下滑，两具身体在大庭广众之下紧密贴合、交错厮磨。围观的人群中响起阵阵口哨声与惊呼，大把钞票与硬币扔进了帽子里。其中一名衣着考究的看客还随手扔进了一枚镶着碎石的旧胸针。
 <<money 2200>><<set $antiquemoney to ($antiquemoney or 0) + 30>>
@@ -1033,7 +1085,7 @@
 
 :: MP Event Wardrobe Malfunction [nobr]
 <<set $outside to 0>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 一阵狂风猛地卷过街口，吹得你身上的衣物剧烈翻飞，原本就有些松动的搭扣啪的一声崩开，大片白皙的肌肤顿时暴露在微凉的空气中，街对面几名路人的视线立刻朝这边投了过来！
 <br><br>
 <<wardrobeicon>><<link [[躲进同伴外套怀里系好搭扣 (0:02)|MP Event Wardrobe Shield]]>><<pass 2>><<stress -6>><</link>><<lstress>><<glove>>
@@ -1042,7 +1094,7 @@
 
 :: MP Event Wardrobe Shield [nobr]
 <<set $outside to 0>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 你的同伴反应极快，第一时间上前一步张开外套将你严严实实地挡在怀里，背对着路人替你阻隔了所有窥探的目光。你在对方温暖的胸膛前飞快地系好搭扣，抬头时正对上同伴微红的耳廓与温柔的眼神。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("wardrobe_shield", 5, -6, -2, 0, 300, "第一时间张开外套替你挡住了走光", { love: 1, trust: 1 })>>
 <br><br>
@@ -1050,16 +1102,16 @@
 
 :: MP Event Wardrobe Tease [nobr]
 <<set $outside to 0>><<set $location to "town">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<exhibitionism2>>
-当同伴慌忙上前用身体替你遮挡视线时，你非但没有立刻系上搭扣，反而抓起对方的手直接按在了自己裸露滚烫的肌肤上。"帮我捂一会儿……"你咬着唇低声呢喃。同伴的手指猛地一颤，喉结滚动了一下，在遮掩下用力揉捏了一把才替你系好衣服。
+当同伴慌忙上前用身体替你遮挡视线时，你非但没有立刻系上搭扣，反而抓起对方的手直接按在了自己裸露滚烫的肌肤上。「帮我捂一会儿……」你咬着唇低声呢喃。同伴的手指猛地一颤，喉结滚动了一下，在遮掩下用力揉捏了一把才替你系好衣服。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("wardrobe_tease", 5, -4, 0, 0, 1100, "趁着替你挡风走光时在衣下揉弄你的肌肤", { love: 1, lust: 1, corruption: 1 })>>
 <br><br>
 <<getouticon>><<link [[继续|($mpReturnPassage or "High Street")]]>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Event Cafe PartTime [nobr]
 <<set $outside to 0>><<set $location to "cafe">>
-<<effects>>
+<<effects>><<mpAmbient>>
 路过街边飘出浓郁奶油香气的甜品店时，店主正忙得焦头烂额，见你们两人经过，连忙招手询问能不能帮忙端半小时盘子，工钱现结，还附赠两份刚出炉的奶油泡芙。
 <br><br>
 <<foodicon "bun">><<link [[和同伴一起帮忙并互喂泡芙 (0:28)|MP Event Cafe Work]]>><<pass 28>><<money 1500>><<stress -8>><<tiredness 3>><</link>><<lstress>><<glove>>
@@ -1068,7 +1120,7 @@
 
 :: MP Event Cafe Work [nobr]
 <<set $outside to 0>><<set $location to "cafe">>
-<<effects>>
+<<effects>><<mpAmbient>>
 你和同伴麻利地帮店主收拾好桌椅、端送餐盘。忙完后，店主爽快地付了工钱，还端来两只填满香甜鲜奶油的泡芙。你在后台休息角一口咬下泡芙，溢出的一抹奶油沾在了唇边，同伴凑过来直接用舌尖替你舔去了那抹甜香的奶油，惹得你耳根一阵发烫。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("cafe_work", 25, -8, -3, 3, 600, "与你一起在甜品店帮工并舔去了你唇角的奶油", { love: 1, trust: 1, lust: 1 })>>
 <br><br>
@@ -1076,7 +1128,7 @@
 
 :: MP Event Night Nightmare Comfort [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 四周的光线幽暗，一阵突如其来的寒意与过往的糟糕记忆涌上心头，令你的呼吸瞬间急促起来，指尖不受控制地微微发抖。身旁的同伴立刻察觉到了你的异样，停下脚步转过身握住你的肩膀。
 <br><br>
 <<loveicon "hug">><<link [[埋进同伴怀里汲取温暖 (0:09)|MP Event Night Comfort Hug]]>><<pass 9>><<stress -12>><<trauma -8>><</link>><<lstress>><<ltrauma>><<glove>>
@@ -1085,15 +1137,15 @@
 
 :: MP Event Night Comfort Hug [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
-你把脸深深埋进同伴温暖的颈窝里。对方一言不发地将你紧紧圈在怀中，手掌一下又一下轻柔地拍抚着你的后背："没事的，那些都已经过去了，有我在，谁也别想再伤害你。" 在令人安心的气息包裹下，你紧绷的心弦终于一点点放松下来。
+<<effects>><<mpAmbient>>
+你把脸深深埋进同伴温暖的颈窝里。对方一言不发地将你紧紧圈在怀中，手掌一下又一下轻柔地拍抚着你的后背：「没事的，那些都已经过去了，有我在，谁也别想再伤害你。」 在令人安心的气息包裹下，你紧绷的心弦终于一点点放松下来。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("night_comfort_hug", 15, -12, -8, 0, 0, "在夜色中紧紧拥抱并安抚了你的创伤", { love: 1, trust: 1, jealousy: -1 })>>
 <br><br>
 <<getouticon>><<link [[继续|($mpReturnPassage or "Orphanage")]]>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Event Night Comfort Kiss [nobr]
 <<set $outside to 0>><<set $location to "bedroom">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<promiscuity1>>
 你伸手勾住同伴的脖颈，近乎急切地吻上了对方的唇，试图用真实的体温与快感驱散脑海中的寒意。同伴先是一怔，随即用力托住你的后脑与腰肢，热情而深入地回应着你的索求，直到你浑身发软地靠在对方怀里喘息。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("night_comfort_kiss", 15, -10, -6, 0, 1000, "以深吻与体温替你驱散了内心的梦魇", { love: 1, trust: 1, lust: 1 })>>
@@ -1102,7 +1154,7 @@
 
 :: MP Event Temple Blessing [nobr]
 <<set $outside to 0>><<set $location to "temple">>
-<<effects>>
+<<effects>><<mpAmbient>>
 远处神殿的钟声穿过街巷悠悠传来，余音清澈而庄严。风中飘落几片洁白的花瓣，落在你们相牵的手背上。
 <br><br>
 <<templeicon "pray">><<link [[与同伴十指相扣默念心愿 (0:08)|MP Event Temple Blessing Pray]]>><<pass 8>><<stress -10>><<trauma -6>><<purity 3>><</link>><<lstress>><<ltrauma>><<glove>>
@@ -1111,7 +1163,7 @@
 
 :: MP Event Temple Blessing Pray [nobr]
 <<set $outside to 0>><<set $location to "temple">>
-<<effects>>
+<<effects>><<mpAmbient>>
 你们在悠扬的钟声里十指紧扣，闭上眼睛许下永远守望相助的心愿。当睁开眼时，你们恰好撞进彼此温柔的目光里，心中涌起一股难以言喻的宁静与力量。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("temple_blessing_pray", 10, -10, -6, 0, 0, "在神殿钟声下与你十指紧扣共同祈愿", { love: 1, trust: 1 })>>
 <br><br>
@@ -1119,9 +1171,9 @@
 
 :: MP Event Temple Blessing Kiss [nobr]
 <<set $outside to 0>><<set $location to "temple">>
-<<effects>>
+<<effects>><<mpAmbient>>
 <<promiscuity1>>
-趁着同伴虔诚地闭上双眼默念心愿，你踮起脚尖一口吻在了对方温软的唇上。同伴惊愕地睁开眼睛，随即耳根通红地反手揽住你的腰，加深了这个带着些许恶作剧意味的吻："我刚刚许下的心愿……就是能一直这样吻你。"
+趁着同伴虔诚地闭上双眼默念心愿，你踮起脚尖一口吻在了对方温软的唇上。同伴惊愕地睁开眼睛，随即耳根通红地反手揽住你的腰，加深了这个带着些许恶作剧意味的吻：「我刚刚许下的心愿……就是能一直这样吻你。」
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("temple_blessing_kiss", 10, -6, -4, 0, 700, "在钟声回荡时偷吻了闭眼祈愿的你", { love: 1, lust: 1, corruption: 1 })>>
 <br><br>
 <<getouticon>><<link [[继续|($mpReturnPassage or "Wolf Street")]]>><<set $eventskip to 1>><<endevent>><</link>>

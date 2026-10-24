@@ -1,6 +1,6 @@
 /* 大世界街巷与荒野奇遇库 / V5 分情况设计：发现→动手→结果页检定→后续推进 / 100 passages */
 :: MP World Deep Router [nobr]
-<<set $outside to 1>><<set $location to "town">><<effects>>
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpSeenScenes to ($mpSeenScenes or {})>>
 <<set _allWorldScenes to ["MP World Event Loose Cobble", "MP World Event Curio Peddler", "MP World Event Smuggler Drop", "MP World Event Driftwood Chest", "MP World Event Forest Shrine", "MP World Event Park Sketchbook", "MP World Event Temple Censer", "MP World Event Sewer Cache", "MP World Event Barb Patrol", "MP World Event Danube Carriage", "MP World Event School Corridor", "MP World Event Pool Steam", "MP World Event Arcade Neon", "MP World Event Shopping Mirror", "MP World Event Hospital Night", "MP World Event Brothel Backdoor", "MP World Event Farmland Hedgerow", "MP World Domus PostboxEnvelope", "MP World Barb CrushedWhistleTin", "MP World Danube IronGateSpectacles", "MP World Connudatus PosterCompactBox", "MP World Cliff BenchArmrestRoll", "MP World Wolf HitchingRingPouch", "MP World High HydrantCardCase", "MP World Starfish IceCreamPostTin", "MP World Nightingale VentAmberVial", "MP World Oxford UmbrellaStandPenBox", "MP World Mer AnchorBollardBag", "MP World Elk PulleyRailPadlock", "MP World Harvest FlourSackCashbox", "MP World ResAlley GeraniumPotWrap", "MP World ComAlley FreightShaftPurse", "MP World IndAlley BoilerColdAshBox", "MP World Beach CabanaSpyglassTube", "MP World SeaRocks ReefCorkBottle", "MP World BeachCave StalactiteTinderbox", "MP World Forest CypressRootTin", "MP World Library TopBeamBookmarkTin", "MP World Canteen MilkCrateCoinPurse", "MP World TempleGarden RosebushCeladonVial", "MP World OceanBreeze ParasolTieClip", "MP World Pub KegStackWineskin", "MP World Police ReportBoxParchment", "MP World AdultShop ExhaustVelvetBag", "MP World Garden ToolshedRustedCan", "MP World Orphanage UnderstairsWoodBox", "MP World Bedroom BaseboardIronTin"]>>
 <<set _pool to _allWorldScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
@@ -48,7 +48,7 @@
 石板底下卡着一根生锈的防盗铁钉，猛地划破了你的食指指腹。院墙内传来猎犬凶狠的狂吠，你只好空手把石板放回原位。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP World Event Loose Cobble Inspect]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP World Event Loose Cobble Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -57,7 +57,7 @@
 <<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
 你缩进修剪整齐的冬青树篱后方，借着浓密的枝叶遮住身形。过了不到一刻钟，一名压低帽檐的少年快步走过拐角，用鞋尖在青石板右侧轻轻磕了两下。他确认石板未动便匆匆离去，让你看清了避开砖槽铁钉的巧劲。你缓缓吐出一口气，紧绷的神经放松下来。
 <<stress -3>>
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["bailey_domus_drop"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["bailey_domus_drop"]>><span class="teal">你记着松动青石板下的暗号磕击声，隔着冬青树篱一眼认出了交接少年的手势。</span><</if>>
 <br><br>
 <<investigateicon>><<link [[趁没人撬开石板 (0:05)|MP World Event Loose Cobble Inspect]]>><<set $mpDomusRunnerSeen to 1>><<pass 5>><</link>>
 <br>
@@ -67,8 +67,7 @@
 
 :: MP World Event Loose Cobble Talk [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-罗宾正抱着一摞洗净的亚麻床单从街对面走来，看见你蹲在墙角便停下了脚步。「你也注意到那个白粉笔三角了吗？」罗宾左右看了看，压低声音对你说，「前天夜里贝利派人去工业区地下的高压泵站送过一样的账袋。」说完罗宾冲你露出关切的微笑，叮嘱你在街上多加小心。
+<<set $mpKnown to ($mpKnown or {})>>罗宾正抱着一摞洗净的亚麻床单从街对面走来，看见你蹲在墙角便停下了脚步。「你也注意到那个白粉笔三角了吗？」罗宾左右看了看，压低声音对你说，「前天夜里贝利派人去工业区地下的高压泵站送过一样的账袋。」说完罗宾冲你露出关切的微笑，叮嘱你在街上多加小心。
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<stress -2>>
 <br><br>
 <<investigateicon>><<link [[回头查探青石板 (0:05)|MP World Event Loose Cobble Inspect]]>><<set $mpKnown["clockwork_vault"] to 1>><<pass 5>><</link>>
@@ -105,9 +104,9 @@
 </div>
 
 :: MP World Event Loose Cobble Shed [nobr]
-<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 巷口忽然传来沉重的皮靴声，一名替贝利收账的打手正朝拐角走来。你立刻翻过低矮的木栅栏，闪身钻进邻院堆放园艺工具的木棚里。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["bailey_ledger_code"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["bailey_ledger_code"]>><span class="teal">凭着刚默记下来的黑皮账册收款缩略码，你在工具棚暗处迅速理清了脱身路线。</span><</if>>
 <br><br>
 <<getouticon>><<link [[从侧门回街上 (0:02)|Domus Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -164,7 +163,7 @@
 你用力掰扯盒盖时发出咔哒异响，货郎立刻伸手把鼻烟盒收回绒布袋里，冷冷地盯着你看了半晌。
 <<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP World Event Curio Peddler Inspect]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP World Event Curio Peddler Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -222,9 +221,9 @@
 <<getouticon>><<link [[离开帆布棚 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Curio Peddler Watch [nobr]
-<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 两名便衣巡警忽然从高街路口走来，目光径直锁定了廊檐下的流动旧货摊。货郎脸色微变，急忙用胳膊肘碰了碰你，示意你帮他把那匣未打税的怀表塞进排水沟暗格。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["smuggler_compass_mark"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["smuggler_compass_mark"]>><span class="teal">你认出怀表底盖上的私港罗盘暗记，赶在巡警靠近前不动声色地替货郎遮住了木匣。</span><</if>>
 <br><br>
 <<getouticon>><<link [[快步离开高街 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -282,19 +281,18 @@
 	<br><br>
 	<<socialiseicon>><<link [[去缆绳堆找熟人 (0:05)|MP World Event Smuggler Drop Wren]]>><<pass 5>><</link>>
 	<br>
-	<<runicon>><<link [[跨过跳板脱身 (0:04)|MP World Event Smuggler Drop Escape]]>><<pass 4>><</link>>
+	<<runicon>><<link [[踩稳跳板退回岸边 (0:04)|MP World Event Smuggler Drop Escape]]>><<pass 4>><</link>>
 <<else>>
 沉重的生铁栅栏突然滑落，狠狠夹中了你的手腕。巷口哨兵的手电光柱扫了过来，你只好忍痛缩手退后。
 <<pain 4>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP World Event Smuggler Drop Inspect]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP World Event Smuggler Drop Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP World Event Smuggler Drop Signal [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-你躲进堆满防水油布的货垛后面，静静听着外海雾角传来两长一短的低鸣。紧接着，东侧防波堤尽头的旧船坞亮起三下绿光，一艘无标驳船顺着暗流滑进了黑铁货运滑道。你看清了哨兵换岗的间隙，心里对接下来的行动更有把握了。
+<<set $mpKnown to ($mpKnown or {})>>你躲进堆满防水油布的货垛后面，静静听着外海雾角传来两长一短的低鸣。紧接着，东侧防波堤尽头的旧船坞亮起三下绿光，一艘无标驳船顺着暗流滑进了黑铁货运滑道。你看清了哨兵换岗的间隙，心里对接下来的行动更有把握了。
 <<stress -2>>
 <br><br>
 <<investigateicon>><<link [[回头取油布包 (0:05)|MP World Event Smuggler Drop Inspect]]>><<set $mpKnown["blackiron_siding"] to 1>><<set $mpDockDropEdge to 1>><<pass 5>><</link>>
@@ -332,16 +330,16 @@
 一名戴着毛线帽的码头水手正靠在粗麻缆绳堆上抽烟，看见你手里的石蜡碎屑便挑了挑眉。「雷恩交代过，这批货要是有人动过就改走雾角水道。」水手吐出一口白烟，把一张画着暗礁航标的草图塞进你手心。他压低声音催促你别在铁栅边久留，因为海关快艇今晚查得很严。
 <<stress -2>>
 <br><br>
-<<runicon>><<link [[避开海关巡逻快艇脱身 (0:04)|MP World Event Smuggler Drop Escape]]>><<set $mpClues["smuggler_wren_route"] to 1>><<pass 4>><</link>>
+<<runicon>><<link [[贴防波堤绕开巡逻艇 (0:04)|MP World Event Smuggler Drop Escape]]>><<set $mpClues["smuggler_wren_route"] to 1>><<pass 4>><</link>>
 <br>
 <<walkicon>><<link [[回到排水栅栏 (0:03)|MP World Event Smuggler Drop]]>><<set $mpClues["smuggler_wren_route"] to 1>><<pass 3>><</link>>
 <br>
 <<getouticon>><<link [[直接离开码头 (0:02)|Docks]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Smuggler Drop Escape [nobr]
-<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 尖锐的铜哨声忽然划破码头夜雾，两名提着防风灯的海关稽查员从栈桥另一端包抄过来。你必须趁他们合围前跨过湿滑的系船浮板。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["smuggler_wren_route"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["smuggler_wren_route"]>><span class="teal">你想起雷恩用粉笔标出的系船浮板捷径，踩上湿滑跳板时步点丝毫不乱。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回码头大道 (0:02)|Docks]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -398,14 +396,13 @@
 一股暗涌突然拍在你的膝弯上，你的脚掌滑进布满藤壶的石槽，锋利的贝壳划破了脚踝皮肤。
 <<pain 4>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP World Event Driftwood Chest Inspect]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP World Event Driftwood Chest Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP World Event Driftwood Chest Tide [nobr]
 <<set $outside to 1>><<set $location to "beach">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-你没有急着下水，而是坐在一块晒得微温的花岗岩上，静静数着拍岸的浪头。等到第七道大浪退向深海，礁盘凹槽里的积水顺着石缝哗哗流干，那只樟木小匣完完全全露在了干爽的沙砾上。温和的海风拂过脸颊，让你紧绷的肩背松弛下来。
+<<set $mpKnown to ($mpKnown or {})>>你没有急着下水，而是坐在一块晒得微温的花岗岩上，静静数着拍岸的浪头。等到第七道大浪退向深海，礁盘凹槽里的积水顺着石缝哗哗流干，那只樟木小匣完完全全露在了干爽的沙砾上。温和的海风拂过脸颊，让你紧绷的肩背松弛下来。
 <<stress -3>>
 <br><br>
 <<investigateicon>><<link [[上前打开木匣 (0:04)|MP World Event Driftwood Chest Inspect]]>><<set $mpBeachTideCalm to 1>><<pass 4>><</link>>
@@ -446,7 +443,7 @@
 <<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
 梅森正站在防波堤阶梯旁用毛巾擦拭湿发，看见你手里拿着一块带船徽的樟木片便走了过来。「这是早年雾角商船上的徽记，」梅森指了指远海雾气笼罩的方向，「灯塔岛东侧有片断桅沉船滩，退潮时经常能看到整排的旧船肋木。」梅森笑着拍了拍你的肩膀，叮嘱你下水时注意暗流。
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Mason")>><<npcincr Mason love 1>><</if>><<stress -2>>
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["wreck_chart_fragment"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["wreck_chart_fragment"]>><span class="teal">你捏着从漂流木箱里起出的商船樟木徽记，与梅森核对起远海暗礁的旧航道。</span><</if>>
 <br><br>
 <<runicon>><<link [[去浅滩边缘试水 (0:04)|MP World Event Driftwood Chest Undertow]]>><<set $mpKnown["foghorn_wreck"] to 1>><<pass 4>><</link>>
 <br>
@@ -512,7 +509,7 @@
 隐藏在枯叶底下的黑刺李尖刺扎进了你的掌心，火辣辣的刺痛让你急忙把手指缩了回来。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP World Event Forest Shrine Inspect]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP World Event Forest Shrine Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -541,8 +538,7 @@
 
 :: MP World Event Forest Shrine Gwylan [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-林间鹿径上传来踩踏枯枝的轻响，一名背着竹篓的采药人停在石龛旁歇脚。「这座小龛只是外围的路标，」对方看了一眼你衣角沾着的苔藓，抬手指向密林深处，「顺着双生橡树北面的白桦林走，就能找到真正的德鲁伊石环祭坛。」说完对方朝你点点头，转身隐入林雾之中。
+<<set $mpKnown to ($mpKnown or {})>>林间鹿径上传来踩踏枯枝的轻响，一名背着竹篓的采药人停在石龛旁歇脚。「这座小龛只是外围的路标，」对方看了一眼你衣角沾着的苔藓，抬手指向密林深处，「顺着双生橡树北面的白桦林走，就能找到真正的德鲁伊石环祭坛。」说完对方朝你点点头，转身隐入林雾之中。
 <<stress -2>>
 <br><br>
 <<walkicon>><<link [[躲进古树根洞 (0:04)|MP World Event Forest Shrine Hollow]]>><<set $mpKnown["druid_pillars"] to 1>><<pass 4>><</link>>
@@ -564,9 +560,9 @@
 <<getouticon>><<link [[返回森林 (0:02)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Forest Shrine Howl [nobr]
-<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 灌木丛后方忽然响起两声低沉的咆哮，几双幽绿的眼睛在昏暗的蕨类植物间一闪而过。你深吸一口气，伸手抓住古橡树垂下的粗壮横枝。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["forest_shrine_rubbing"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["forest_shrine_rubbing"]>><span class="teal">借着先前拓下的指路古祠符文，你在昏暗林影里一眼认出了可借力攀爬的古橡树枝。</span><</if>>
 <br><br>
 <<getouticon>><<link [[快步返回森林 (0:02)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -622,7 +618,7 @@
 未干的炭笔粉末蹭脏了你的袖口，你看不懂卡片上的拉丁文缩写，生怕被人当成小偷而心神不宁。
 <<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP World Event Park Sketchbook Inspect]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP World Event Park Sketchbook Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -643,7 +639,7 @@
 <<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
 你走进公园中央的彩窗玻璃凉亭，把速写本平铺在干燥的石圆桌上。中间几页用精细的钢笔线条画着一座高大的铸铁玻璃穹顶，旁边标注着从宅邸花园通往镜面温室的侧门路线。凉亭隔开了外面的湿气，你安心地记下了图纸上的方位。
 <<stress -3>>
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["park_sketch_initials"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["park_sketch_initials"]>><span class="teal">你翻到速写本上带有花房缩写的那一页，顺着钢笔线条找准了玻璃穹顶的方位。</span><</if>>
 <br><br>
 <<investigateicon>><<link [[去喷泉边当模特 (0:10)|MP World Event Park Sketchbook Pose]]>><<set $outside to 1>><<set $location to "park">><<set $mpKnown["glasshouse_dome"] to 1>><<pass 10>><</link>>
 <br>
@@ -706,7 +702,7 @@
 <br><br>
 <<investigateicon>><<link [[抽出香炉下拓片 (0:05)|MP World Event Temple Censer Inspect]]>><<pass 5>><</link>>
 <br>
-<<socialiseicon>><<link [[向西德尼请教铭文 (0:05)|MP World Event Temple Censer Sydney]]>><<pass 5>><</link>>
+<<socialiseicon>><<link [[向悉尼请教铭文 (0:05)|MP World Event Temple Censer Sydney]]>><<pass 5>><</link>>
 <br>
 <<investigateicon>><<link [[帮忙擦拭铜烛台 (0:12)|MP World Event Temple Censer Chore]]>><<pass 12>><</link>>
 <br>
@@ -737,14 +733,13 @@
 你的指节碰响了沉重的黄铜炉盖，清脆的金属回声在长廊里荡开，引来不远处执事严厉的注视。
 <<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP World Event Temple Censer Inspect]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP World Event Temple Censer Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
 :: MP World Event Temple Censer Sydney [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-西德尼正捧着一盒白蜂蜡烛从祈祷室走出来，看见你手里的宣纸拓片便好奇地凑近看了看。「这是三百年前旧修会用的圣咏编号，」西德尼轻声推了推眼镜，语气认真地告诉你，「城外那座沉没修道院的残破圣堂里，石柱上还留着完全一样的铭文。」西德尼冲你温和地笑了笑，抱着蜡烛继续去忙了。
+<<set $mpKnown to ($mpKnown or {})>>悉尼正捧着一盒白蜂蜡烛从祈祷室走出来，看见你手里的宣纸拓片便好奇地凑近看了看。「这是三百年前旧修会用的圣咏编号，」悉尼轻声推了推眼镜，语气认真地告诉你，「城外那座沉没修道院的残破圣堂里，石柱上还留着完全一样的铭文。」悉尼冲你温和地笑了笑，抱着蜡烛继续去忙了。
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<stress -2>>
 <br><br>
 <<investigateicon>><<link [[去告解室后方核对 (0:06)|MP World Event Temple Censer CryptDoor]]>><<set $mpKnown["abbey_confess"] to 1>><<pass 6>><</link>>
@@ -790,9 +785,9 @@
 <<getouticon>><<link [[返回神殿大厅 (0:02)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Temple Censer Vigil [nobr]
-<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 一名身穿深紫长袍的戒律执事忽然从圣器室侧门走出，目光冰冷地落在你袖口沾着的香灰上。「非祈祷时段不得在后廊逗留，」执事沉声质问你的来意。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["temple_censer_psalm"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["temple_censer_psalm"]>><span class="teal">你记着铜香炉底座镌刻的晚祷赞美诗节拍，面对戒律执事盘问时应答得从容得体。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回神殿正厅 (0:02)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -849,7 +844,7 @@
 铜丝崩断的瞬间弹起一只生锈的捕鼠铁夹，啪地打在你的手背上，火辣辣的剧痛让你差点滑下高台。
 <<pain 4>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP World Event Sewer Cache Inspect]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP World Event Sewer Cache Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -892,10 +887,10 @@
 <<getouticon>><<link [[返回下水道 (0:02)|Sewers Algae]]>><<set $outside to 0>><<set $location to "sewers">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Sewer Cache Peddler [nobr]
-<<set $outside to 0>><<set $location to "sewers">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "sewers">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 对岸步道上走来一名提着油灯的巡渠老汉，因为火柴受潮正对着熄灭的灯芯发愁。你从口袋里摸出干燥的火柴递过去替他点亮油灯，老汉感激地朝你点了点头。「上游水闸再过两分钟就要放水冲淤了，」他指了指高台旁边的防滑铁梯，「快往上爬两格，别被浑水冲着。」
 <<stress -3>>
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["sewer_wax_mark"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["sewer_wax_mark"]>><span class="teal">你认出巡渠老汉袖口那枚与暗渠防水匣相同的红蜡记号，主动递上火柴搭话。</span><</if>>
 <br><br>
 <<runicon>><<link [[立刻爬上防滑铁梯 (0:04)|MP World Event Sewer Cache Surge]]>><<pass 4>><</link>>
 <br>
@@ -962,7 +957,7 @@
 靴底踢翻了墙角的空啤酒罐，巡警猛地转过身用手电筒照住你，上前粗暴地推了你一把将你赶开。
 <<pain 3>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP World Event Barb Patrol Inspect]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP World Event Barb Patrol Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -979,10 +974,10 @@
 <<getouticon>><<link [[走出公寓门 (0:02)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Barb Patrol Whitney [nobr]
-<<set $outside to 1>><<set $location to "barb">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "barb">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 惠特尼正靠在公寓外侧的铁艺栏杆上抽烟，冷笑着看街口的巡警来回盘查。看见你从阴影里走出来，惠特尼吐出一口烟圈挑起眉梢：「算你跑得快，那帮条子今晚是替贝利催黑账的。」你靠在栏杆边替惠特尼挡住街风，惠特尼哼了一声，没再找你麻烦。
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Whitney")>><<npcincr Whitney love 1>><</if>><<stress -2>>
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["barb_patrol_receipt"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["barb_patrol_receipt"]>><span class="teal">你揣着楼梯间拾到的巡警换岗签收条，迎着惠特尼挑起的眉梢从容走出阴影。</span><</if>>
 <br><br>
 <<investigateicon>><<link [[去后巷接跑腿差事 (0:08)|MP World Event Barb Patrol BribeDrop]]>><<pass 8>><</link>>
 <br>
@@ -1073,7 +1068,7 @@
 二楼雕花铁窗后忽然亮起烛光，一名老管家隔着玻璃朝街面张望，吓得你急忙松手退开。
 <<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP World Event Danube Carriage Inspect]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP World Event Danube Carriage Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1117,9 +1112,9 @@
 <<getouticon>><<link [[返回多瑙河街 (0:02)|Danube Street]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Danube Carriage Errand [nobr]
-<<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 宅邸侧门的女仆领班正捧着一叠名流拜帖忙得不可开交，见你在门边驻足，便招手请你过去搭把手。她递给你一把硬毛铜刷和一只银托盘，让你帮忙刷净脚踏毯再按姓氏排好拜帖。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["danube_crest_seal"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["danube_crest_seal"]>><span class="teal">凭着先前认出的马车门板鸢尾家徽，你在帮女仆领班分拣名流拜帖时一眼挑出了急件。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回多瑙河街 (0:02)|Danube Street]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1187,7 +1182,7 @@
 变形的铁皮柜门突然发出刺耳的摩擦声，走廊另一头传来风纪委员的脚步声，吓得你连忙合上柜门。
 <<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP World Event School Corridor Inspect]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP World Event School Corridor Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1216,10 +1211,10 @@
 </div>
 
 :: MP World Event School Corridor Leighton [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 礼顿正抱着两摞厚重的牛皮纸试卷袋从楼梯口走上来，镜片后的目光扫过储物柜边的你。你主动上前接过上面那摞档案袋，帮礼顿一路抱到教研室门前。「<<if Time.hour gte 15>>放学后还留在学校倒也难得<<else>>课余还主动在走廊搭把手倒也难得<</if>>，」礼顿伸手接过试卷袋，语气比平时缓和了几分，叮嘱你整理完储物柜就早点回去。
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -2>>
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["school_star_log"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["school_star_log"]>><span class="teal">你记着旧储物柜里那页天文观测日志的编号，帮礼顿整理试卷袋时顺手对上了目录。</span><</if>>
 <br><br>
 <<investigateicon>><<link [[去长椅辅导低年级生 (0:10)|MP World Event School Corridor Tutoring]]>><<pass 10>><</link>>
 <br>
@@ -1297,7 +1292,7 @@
 湿滑的杉木格栅突然脱手砸下，压痛了你的无名指指尖，你只好揉着手指先站起身来。
 <<pain 3>><<stress 4>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP World Event Pool Steam Inspect]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP World Event Pool Steam Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1349,9 +1344,9 @@
 <<getouticon>><<link [[返回游泳池 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Pool Steam Prank [nobr]
-<<set $outside to 0>><<set $location to "pool">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "pool">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 更衣室弹簧门忽然被一群刚下课的学生推开，几个人手里端着水盆在过道里互相泼水起哄。你抓起架子上的干浴巾披在肩上，准备从侧面绕出去。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["pool_locker_token"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["pool_locker_token"]>><span class="teal">你攥着在更衣室排水格栅边摸到的铜号牌，趁学生泼水哄闹时贴着墙根绕向侧门。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回游泳池大厅 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1408,7 +1403,7 @@
 你拍得太重触发了防盗蜂鸣器，刺耳的警报声引来值班店员的不满瞪视，手掌也被震得生疼。
 <<pain 2>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP World Event Arcade Neon Inspect]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP World Event Arcade Neon Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1430,9 +1425,9 @@
 <<getouticon>><<link [[返回游戏厅 (0:02)|Arcade]]>><<set $outside to 0>><<set $location to "arcade">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Arcade Neon Repair [nobr]
-<<set $outside to 0>><<set $location to "arcade">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "arcade">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 值班店员正对着一台画面闪烁的立式格斗街机叹气，机箱后方散发出微弱的焦糊味。见你懂些电路门道，他连忙递给你一把十字螺丝刀，请你帮忙把后盖里松脱的排线插紧。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["arcade_token_stamp"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["arcade_token_stamp"]>><span class="teal">你认出街机投币器内侧的改装钢印，接过店员递来的螺丝刀时已摸清了松动的排线。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回游戏厅 (0:02)|Arcade]]>><<set $outside to 0>><<set $location to "arcade">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1527,7 +1522,7 @@
 木抽屉滑轨发出吱呀轻响，廊道外传来清脆的高跟鞋声，你只好缩回手指装作整理衣领。
 <<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[放轻力道再试 (0:04)|MP World Event Shopping Mirror Inspect]]>><<pass 4>><</link>>
+	<<link [[放轻力道再试 (0:04)|MP World Event Shopping Mirror Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1544,9 +1539,9 @@
 <<getouticon>><<link [[返回购物中心 (0:02)|Shopping Centre]]>><<set $outside to 0>><<set $location to "shopping_centre">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Shopping Mirror Fold [nobr]
-<<set $outside to 0>><<set $location to "shopping_centre">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "shopping_centre">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 专柜导购正对着一排刚拆箱的真丝衬衫发愁，见你站在试衣廊口，便询问你愿不愿意帮忙用蒸汽挂烫机把衣领和袖口熨平。你接过喷头开始干活。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["shopping_tailor_note"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["shopping_tailor_note"]>><span class="teal">你按试衣镜夹缝里那张裁缝改衣便笺上的尺寸，拿起蒸汽挂烫机利落地压平了领口。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回购物中心 (0:02)|Shopping Centre]]>><<set $outside to 0>><<set $location to "shopping_centre">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1569,8 +1564,7 @@
 
 :: MP World Event Shopping MirrorFitting [nobr]
 <<set $outside to 0>><<set $location to "shopping_centre">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-你拉上最里侧试衣间的厚重天鹅绒门帘，柔和的暖光灯照亮了三面环绕的镜子。衣钩上挂着一件待送的暗红丝绒斗篷，你翻开领口内衬，看到里面用金线缝着一张印有天鹅绒暗层旋转舞台路线图的硬卡。你将路线记熟后把斗篷挂回原处，呼吸也平缓下来。
+<<set $mpKnown to ($mpKnown or {})>>你拉上最里侧试衣间的厚重天鹅绒门帘，柔和的暖光灯照亮了三面环绕的镜子。衣钩上挂着一件待送的暗红丝绒斗篷，你翻开领口内衬，看到里面用金线缝着一张印有天鹅绒暗层旋转舞台路线图的硬卡。你将路线记熟后把斗篷挂回原处，呼吸也平缓下来。
 <<stress -2>>
 <br><br>
 <<socialiseicon>><<link [[出门应对商场保安 (0:04)|MP World Event Shopping Mirror Guard]]>><<set $mpKnown["velvet_salon"] to 1>><<pass 4>><</link>>
@@ -1639,7 +1633,7 @@
 你不小心碰裂了一支装着苦味酊剂的玻璃管，刺鼻的药水味沾在指尖，吓得你连忙合上箱盖。
 <<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[避开滑处再试 (0:04)|MP World Event Hospital Night Inspect]]>><<pass 4>><</link>>
+	<<link [[避开滑处再试 (0:04)|MP World Event Hospital Night Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1656,9 +1650,9 @@
 <<getouticon>><<link [[走出医院回庭院 (0:02)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Hospital Night Sort [nobr]
-<<set $outside to 0>><<set $location to "hospital">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "hospital">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 室内耗材室的白炽灯还亮着，玻璃柜里摆满了刚消毒完的器皿。一名<<if Time.dayState is "night">>夜班药剂师<<else>>当班药剂师<</if>>正对着满桌未贴签的药瓶发愁，见你经过便请你搭把手按浓度贴好标签。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["hospital_sedative_log"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["hospital_sedative_log"]>><span class="teal">对照值班室记录本上的宁神剂批号，你帮夜班药剂师分拣无签药瓶时没有出一处差错。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回医院庭院 (0:02)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1734,12 +1728,12 @@
 	<br><br>
 	<<socialiseicon>><<link [[闪进后台化妆廊 (0:05)|MP World Event Brothel Backdoor Dancer]]>><<pass 5>><</link>>
 	<br>
-	<<runicon>><<link [[翻越酒桶堆脱身 (0:04)|MP World Event Brothel Backdoor Bouncer]]>><<pass 4>><</link>>
+	<<runicon>><<link [[踩着木酒桶翻过矮墙 (0:04)|MP World Event Brothel Backdoor Bouncer]]>><<pass 4>><</link>>
 <<else>>
 沉重的铁皮侧门猛地向外推开，门沿擦过你的手背，你在打手的喝骂声中慌忙缩手退向巷口。
 <<pain 3>><<stress 6>>
 	<br><br>
-	<<walkicon>><<link [[看准位置再试 (0:04)|MP World Event Brothel Backdoor Inspect]]>><<pass 4>><</link>>
+	<<link [[看准位置再试 (0:04)|MP World Event Brothel Backdoor Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1756,9 +1750,9 @@
 <<getouticon>><<link [[返回妓院前厅 (0:02)|Brothel]]>><<set $outside to 0>><<set $location to "brothel">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Brothel Backdoor Briar [nobr]
-<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 布莱尔正站在后台走廊尽头核对今晚的酒单，听见脚步声便抬起头打量了你一眼。随后布莱尔指着吧台上一盘盛满樱桃利口酒的水晶杯，让你趁开场前送到二楼包厢。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["brothel_dancer_cipher"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["brothel_dancer_cipher"]>><span class="teal">你记着后台化妆镜边留下的舞者排班暗码，端起樱桃利口酒托盘时精准避开了眼线。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回妓院前厅 (0:02)|Brothel]]>><<set $outside to 0>><<set $location to "brothel">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1841,7 +1835,7 @@
 洞口边缘的刺荨麻蛰到了你的手腕，火辣辣的麻痒感让你急忙把手缩了回来。
 <<pain 3>><<stress 5>>
 	<br><br>
-	<<walkicon>><<link [[凑近微光再试 (0:04)|MP World Event Farmland Hedgerow Inspect]]>><<pass 4>><</link>>
+	<<link [[凑近微光再试 (0:04)|MP World Event Farmland Hedgerow Inspect]]>><<pass 4>><</link>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -1858,9 +1852,9 @@
 <<getouticon>><<link [[走出谷仓回农田 (0:02)|Farmland]]>><<set $outside to 1>><<set $location to "farm">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP World Event Farmland Hedgerow Bale [nobr]
-<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 一辆装满草料的平板拖车停在泥泞的田埂边，车轮陷进了浅沟里。满头大汗的农夫见你走近，便招呼你搭把手把地上六捆干草叉上车斗，答应干完现结工钱。
-<<set $mpClues to ($mpClues or {})>><<if $mpClues["farm_deed_boundary"]>><span class="teal">结合先前留心记下的蛛丝马迹，你对眼前的局势更多了几分把握。</span><</if>>
+<<if $mpClues["farm_deed_boundary"]>><span class="teal">你对照田埂界石旁记下的旧农庄地界，帮农夫往车斗叉干草时找准了最省力的支点。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回农田小径 (0:02)|Farmland]]>><<set $outside to 1>><<set $location to "farm">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
