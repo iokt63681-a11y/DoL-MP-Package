@@ -35,7 +35,7 @@
 <div id="act-mp-quest-beach-shipwreck-step2">
 <<investigateicon>><<if Math.max(($physique or 0), ($skulduggery or 0)) gte 280>><<link "别开船首铜板 (0:07)">><<pass 7>><<replace "#act-mp-quest-beach-shipwreck-step2">>
 <<if Math.max(($physique or 0), ($skulduggery or 0)) gte 300>>
-	<<set $mpClues["wilds_ship_bow"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ship_bow"]>><<set $mpClues["wilds_ship_bow"] to 1>><span class="blue">线索已记录</span><</if>>
 	铜板终于发出一声闷响弹开，里面滚出三枚发黑的旧先令和一卷油布。油布上记着白鸥号最后一批货的装船序号，其中两箱被改写成「压舱石」。
 	<<money 250>><<stress -2>>
 	<br><br>
@@ -48,7 +48,7 @@
 	<br><br>
 <<link [[垫上干布重起卡扣 (0:04)|MP Quest Beach Shipwreck Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">别开船首铜板 (0:07)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">找杂货商对账 (0:07)（属性不足）</span><</if>>
 </div>
 :: MP Quest Beach Shipwreck Step3 [nobr]
 <<set $outside to 1>><<set $location to "beach">>
@@ -56,7 +56,7 @@
 <<set $mpQuestShipwreck to Math.max(($mpQuestShipwreck or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>蹲在翻扣的小艇旁补网，脚边压着一本被海水泡皱的接货簿。听见你问白鸥号，他手上的梭子停了一瞬，随后用下巴点了点礁缝方向：「那船沉得不干净。每隔几年就有人半夜来割一块铜走，领头的左手少了半截小指。」他翻到三十年前那页，潮位一栏被人用浓墨涂死，只剩纸背一道压痕。
-<<set $mpClues["wilds_ship_tide"] to 1>><span class="blue">线索已记录</span>
+<<if !$mpClues or !$mpClues["wilds_ship_tide"]>><<set $mpClues["wilds_ship_tide"] to 1>><span class="blue">线索已记录</span><</if>>
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Gwylan")>><<npcincr Gwylan love 1>><</if>>
 <<stress -3>>
 <br><br>
@@ -74,7 +74,7 @@
 <<set $mpBeachCaught to ($mpBeachCaught or 0)>>
 船长舱的地板已经塌成斜坡，咸水在脚踝边来回晃。红木书桌的抽屉被撬过，唯独桌腿内侧还卡着一只薄铁匣；匣盖上刻着和白鸥徽记相同的翅膀纹。你正要去够它，舱门外忽然传来靴底碾过碎贝壳的声响。
 <<if ($history or 0) gte 330 or ($skulduggery or 0) gte 330>>
-	<<set $mpClues["wilds_ship_log"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ship_log"]>><<set $mpClues["wilds_ship_log"] to 1>><span class="blue">线索已记录</span><</if>>
 	你抢在脚步声靠近前拨开铁匣卡榫，取出用蜡封住的船长日志和一柄小铜钥匙。日志最后几页反复提到「灯塔外的新买家」，字迹被水洇开，却还能认出日期。
 	<<money 350>><<stress -2>>
 	<br><br>
@@ -153,20 +153,20 @@
 <<getouticon>><<link [[返回海礁 (0:03)|Sea Rocks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<socialiseicon>><<link [[存档日志 (0:06)|MP Quest Beach Shipwreck Resolve]]>>
-	<<set $mpClues["wilds_ship_justice"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ship_justice"]>><<set $mpClues["wilds_ship_justice"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestShipwreck_v2_badge")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你把日志和铜钥匙一起交给巡官，只留下那枚白鸥徽记作证物。小艇在提灯照过来前熄了灯，像一块被海吞掉的影子。
 	<<stress -3>><<pass 6>>
 <</link>>
 <br>
 <<shopicon>><<link [[卖副本给斗篷 (0:05)|MP Quest Beach Shipwreck Resolve]]>>
-	<<set $mpClues["wilds_ship_buyer"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ship_buyer"]>><<set $mpClues["wilds_ship_buyer"] to 1>><span class="blue">线索已记录</span><</if>>
 	你抽出副本换回铁盒，盒里的旧钞带着机油味。斗篷人翻了两页便把它塞进防水袋，临走前告诉你，白鸥号的货从来不是给镇上人的。
 	<<money 900>><<stress 2>><<pass 5>>
 <</link>>
 <br>
 <<investigateicon>><<link [[沉回暗洞 (0:07)|MP Quest Beach Shipwreck Resolve]]>>
-	<<set $mpClues["wilds_ship_truth"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ship_truth"]>><<set $mpClues["wilds_ship_truth"] to 1>><span class="blue">线索已记录</span><</if>>
 	你把日志重新封进油布，沉进只有退潮才露出的石缝。斗篷人盯着你看了很久，最终什么也没说，只把铁盒踢进海里。
 	<<stress -4>><<pass 7>>
 <</link>>
@@ -197,7 +197,7 @@
 	<br><br>
 	<<runicon>><<link [[握稳工具重调位置 (0:04)|MP Quest Beach Shipwreck Resolve]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">整理证据 (0:03)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">循迹深入 (0:03)（属性不足）</span><</if>>
 </div>
 /* ===== 线2 日晷庄园地窖 =====
    大目标：找回庄园最后一任主人留下的地契与佃户名册，弄清庄园一夜废弃的原因。
@@ -228,7 +228,7 @@
 <div id="act-mp-quest-forest-ruins-step2">
 <<investigateicon>><<if Math.max(($physique or 0), ($skulduggery or 0)) gte 280>><<link "撬起日晷盘 (0:06)">><<pass 6>><<replace "#act-mp-quest-forest-ruins-step2">>
 <<if Math.max(($physique or 0), ($skulduggery or 0)) gte 300>>
-	<<set $mpClues["wilds_ruin_sundial"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ruin_sundial"]>><<set $mpClues["wilds_ruin_sundial"] to 1>><span class="blue">线索已记录</span><</if>>
 	你用断枝作杠杆，把晷盘撬离树根。断铜下压着一枚刻有橡叶纹的铜片，背面记着一个被划掉的地窖日期。树影落在盘面时，七个刻度刚好指向庄园西侧。
 	<<money 300>><<stress -2>>
 	<br><br>
@@ -241,7 +241,7 @@
 	<br><br>
 <<link [[擦净指腹重按簧片 (0:04)|MP Quest Forest Ruins Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">撬起日晷盘 (0:06)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">带铜片找伊甸 (0:06)（属性不足）</span><</if>>
 </div>
 :: MP Quest Forest Ruins Step3 [nobr]
 <<set $outside to 1>><<set $location to "forest">>
@@ -249,7 +249,7 @@
 <<set $mpQuestManorRuins to Math.max(($mpQuestManorRuins or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<if $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>林间猎人<</if>>靠在林缘的倒木旁削一支木楔，听完你的来意才抬起眼。他用刀尖在泥地上画出庄园的旧界：「那家人不是搬走的。最后一夜，收荒人赶着三辆空车进去，天亮前只出来两辆。」他告诉你，地窖口每逢阴雨天会从石缝里冒白霉，还提醒你别碰戴铜戒指的人递来的东西。
-<<set $mpClues["wilds_ruin_witness"] to 1>><span class="blue">线索已记录</span>
+<<if !$mpClues or !$mpClues["wilds_ruin_witness"]>><<set $mpClues["wilds_ruin_witness"] to 1>><span class="blue">线索已记录</span><</if>>
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>>
 <<stress -3>>
 <br><br>
@@ -267,7 +267,7 @@
 <<set $mpForestCaught to ($mpForestCaught or 0)>>
 石阶往下走了十几级便浸进冷水，墙上的白霉在手灯下像一层薄霜。地窖门是整块橡木包铁，锁孔里塞着干硬的蜡。门后忽然传来拖动木箱的摩擦声，还有人在低声数数。
 <<if ($history or 0) gte 330 or ($english or 0) gte 330>>
-	<<set $mpClues["wilds_ruin_ledger"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ruin_ledger"]>><<set $mpClues["wilds_ruin_ledger"] to 1>><span class="blue">线索已记录</span><</if>>
 	你认出蜡封上的庄园旧押印，用铜片一点点剔开干蜡，铁锁应声弹开。门内桌面上摊着半本佃户账，最末一页记着三辆收荒车与一个港务处的名字。
 	<<money 400>><<stress -2>>
 	<br><br>
@@ -345,20 +345,20 @@
 <<getouticon>><<link [[返回森林 (0:12)|Forest]]>><<pass 12>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<investigateicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[取地契银印 (0:12)|MP Quest Forest Ruins Resolve]]>>
-	<<set $mpClues["wilds_ruin_deed"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ruin_deed"]>><<set $mpClues["wilds_ruin_deed"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestManorRuins_v2_deed")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>
 	你把地契和银印用油纸包好，又在木箱里找到一个被关了许久的老佃户。他抓住你的袖子，反复说庄园的地从来不属于那家人。
 	<<stress -3>><<pass 12>>
 <</link>><<else>><span class="disabled">取地契银印 (0:12)（属性不足）</span><</if>>
 <br>
 <<socialiseicon>><<link [[放走老佃户 (0:12)|MP Quest Forest Ruins Resolve]]>>
-	<<set $mpClues["wilds_ruin_tenants"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ruin_tenants"]>><<set $mpClues["wilds_ruin_tenants"] to 1>><span class="blue">线索已记录</span><</if>>
 	你撬开木箱，把水囊递给里面的人。老佃户说收荒人每年都来逼问地契下落，还告诉你哪些欠条是伪造的。你只抄下名字，把原件留在原处。
 	<<stress -4>><<pass 12>>
 <</link>>
 <br>
 <<walkicon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[交给伊甸 (0:12)|MP Quest Forest Ruins Resolve]]>>
-	<<set $mpClues["wilds_ruin_witness"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_ruin_witness"]>><<set $mpClues["wilds_ruin_witness"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>>
 	你把账册和欠条包好，打算带出去交给伊甸。石桌上的银印太扎眼，你把它重新塞回铁匣，只留下一张拓片。
 	<<stress -2>><<pass 12>>
@@ -390,7 +390,7 @@
 	<br><br>
 <<runicon>><<link [[垫上干布重起卡扣 (0:04)|MP Quest Forest Ruins Resolve]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">截车夫摊地契 (0:03)（属性不足）</span><</if>><<else>><span class="disabled">与伊甸截车夫摊开地契 (0:03)（尚未结识）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">继续前进 (0:03)（属性不足）</span><</if>><<else>><span class="disabled">继续前进 (0:03)（尚未结识）</span><</if>>
 </div>
 /* ===== 线3 玻璃花房异香 =====
    大目标：查清夜雾兰的配方、买家，以及花房用甜香控制工人的手段。
@@ -421,7 +421,7 @@
 <div id="act-mp-quest-park-greenhouse-step2">
 <<sneakicon>><<if Math.max(($skulduggery or 0), ($physique or 0)) gte 280>><<link "挑开铃舌潜入 (0:07)">><<pass 7>><<replace "#act-mp-quest-park-greenhouse-step2">>
 <<if Math.max(($skulduggery or 0), ($physique or 0)) gte 300>>
-	<<set $mpClues["wilds_green_schedule"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_green_schedule"]>><<set $mpClues["wilds_green_schedule"] to 1>><span class="blue">线索已记录</span><</if>>
 	你捏住铜线两端，用撬片把线从铃舌上挑开，再把窗框抬到刚好容身的高度。工作台角落压着一张浇水轮值表，夜班一栏被人用红笔圈了又圈。
 	<<money 250>><<stress -2>>
 	<br><br>
@@ -434,7 +434,7 @@
 	<br><br>
 <<link [[扶稳器座重调角度 (0:04)|MP Quest Park Greenhouse Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">挑开铃舌潜入 (0:07)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">找乔丹对班次 (0:07)（属性不足）</span><</if>>
 </div>
 :: MP Quest Park Greenhouse Step3 [nobr]
 <<set $outside to 1>><<set $location to "park">>
@@ -442,7 +442,7 @@
 <<set $mpQuestGreenhouse to Math.max(($mpQuestGreenhouse or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>正在工作间门口冲洗一排空花盆，袖口沾着银灰色的花粉。他看见你从花房方向过来，先往左右看了看，才压低声音说：「夜雾兰的甜香会让人犯困，闻久了连自己签过什么都记不清。老板只让我们在夜里采蜜，白天锁门。」他把一张折起来的班次表塞进你手里。
-<<set $mpClues["wilds_green_schedule"] to 1>><span class="blue">线索已记录</span>
+<<if !$mpClues or !$mpClues["wilds_green_schedule"]>><<set $mpClues["wilds_green_schedule"] to 1>><span class="blue">线索已记录</span><</if>>
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>>
 <<stress -3>>
 <br><br>
@@ -460,7 +460,7 @@
 <<set $mpGreenhouseCaught to ($mpGreenhouseCaught or 0)>>
 蒸馏室的铜锅还温着，冷凝管里的液体一滴一滴落进水晶瓶，瓶身贴着写着时辰的纸签。墙上钉着一排买家订单，名字都被剪掉了，只剩交货码头和数量。你翻到最底下那张时，门外的木地板忽然吱呀一响。
 <<if ($science or 0) gte 330 or ($english or 0) gte 330>>
-	<<set $mpClues["wilds_green_recipe"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_green_recipe"]>><<set $mpClues["wilds_green_recipe"] to 1>><span class="blue">线索已记录</span><</if>>
 	你根据冷凝温度和纸签上的时辰，推断出夜雾兰蜜需要掺入少量海盐才能保持药性。订单背面还盖着一枚香料商的菱形小印，和港务处常用的编号格式一模一样。
 	<<money 350>><<stress -2>>
 	<br><br>
@@ -539,21 +539,21 @@
 <<getouticon>><<link [[返回公园 (0:03)|Park]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<investigateicon>><<link [[换配方留假瓶 (0:06)|MP Quest Park Greenhouse Resolve]]>>
-	<<set $mpClues["wilds_green_buyer"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_green_buyer"]>><<set $mpClues["wilds_green_buyer"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestGreenhouse_v2_recipe")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>>
 	你把真配方塞进内袋，照原样灌了一瓶颜色相近的糖水放回匣中。出门前，你又把乔丹的工钱袋压到显眼处，让帮工们一眼能看见。
 	<<stress -3>><<pass 6>>
 <</link>>
 <br>
 <<socialiseicon>><<link [[烧母株留工钱 (0:07)|MP Quest Park Greenhouse Resolve]]>>
-	<<set $mpClues["wilds_green_tenants"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_green_tenants"]>><<set $mpClues["wilds_green_tenants"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>>
 	你把煤油浇在母株根部的苔藓上，火苗很快顺着玻璃墙爬成一片暖光。乔丹带着几个帮工从后门冲进来，先抢出工钱袋，再把你拉出花房。
 	<<stress -4>><<pass 7>>
 <</link>>
 <br>
 <<shopicon>><<link [[卖配方给香料商 (0:05)|MP Quest Park Greenhouse Resolve]]>>
-	<<set $mpClues["wilds_green_buyer"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_green_buyer"]>><<set $mpClues["wilds_green_buyer"] to 1>><span class="blue">线索已记录</span><</if>>
 香料商在公园侧门验过样蜜，当场付了一叠旧钞。
 	<<money 900>><<stress 3>><<pass 5>>
 <</link>>
@@ -584,7 +584,7 @@
 	<br><br>
 <<runicon>><<link [[擦净指腹重按簧片 (0:04)|MP Quest Park Greenhouse Resolve]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">交接夜雾货单 (0:03)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">趁势追查 (0:03)（属性不足）</span><</if>>
 </div>
 /* ===== 线4 天鹅绒侧门 =====
    大目标：找回失踪的演员，并摸清后台私演拍卖背后的客人网络。
@@ -617,7 +617,7 @@
 <div id="act-mp-quest-connudatus-velvet-step2">
 <<sneakicon>><<if Math.max(($skulduggery or 0), ($physique or 0)) gte 280>><<link "跟杂役勾纸片 (0:06)">><<pass 6>><<replace "#act-mp-quest-connudatus-velvet-step2">>
 <<if Math.max(($skulduggery or 0), ($physique or 0)) gte 300>>
-	<<set $mpClues["wilds_velvet_program"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_velvet_program"]>><<set $mpClues["wilds_velvet_program"] to 1>><span class="blue">线索已记录</span><</if>>
 	你贴着墙跟上去，在杂役拐弯时用脚尖勾住那张纸片。更衣室号码旁边还有一行小字：「失踪者私物，暂存镜厅。」你把纸片压进袖口，没人回头。
 	<<money 300>><<stress -2>>
 	<br><br>
@@ -630,7 +630,7 @@
 	<br><br>
 <<link [[对准包厢暗扣再试 (0:04)|MP Quest Connudatus Velvet Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">跟杂役勾纸片 (0:06)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">找布莱尔问话 (0:06)（属性不足）</span><</if>>
 </div>
 :: MP Quest Connudatus Velvet Step3 [nobr]
 <<set $outside to 0>><<set $location to "brothel">>
@@ -638,7 +638,7 @@
 <<set $mpQuestVelvet to Math.max(($mpQuestVelvet or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>倚在后台的化妆镜旁，指间夹着一支没有点燃的烟。他听完你要找的人名，先用粉扑在镜面上抹开一小块雾，才说：「那孩子最后一次上台，是从镜厅的暗门被叫走的。经理说她欠了私演的钱，可她的工钱袋一直锁在我这儿。」他从镜台抽屉里取出一封被拆开的信。
-<<set $mpClues["wilds_velvet_letter"] to 1>><span class="blue">线索已记录</span>
+<<if !$mpClues or !$mpClues["wilds_velvet_letter"]>><<set $mpClues["wilds_velvet_letter"] to 1>><span class="blue">线索已记录</span><</if>>
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><</if>>
 <<stress -3>>
 <br><br>
@@ -656,7 +656,7 @@
 <<set $mpVelvetCaught to ($mpVelvetCaught or 0)>>
 更衣室比走廊安静，梳妆台上摊着没卸完的妆油和一只落锁的紫檀匣。镜框背面刻着与信封火漆相同的狐狸纹，锁孔里却插着半截断掉的银匙。门外传来舞台经理点名的声音，脚步声正一间间逼近。
 <<if ($english or 0) gte 330 or ($skulduggery or 0) gte 330>>
-	<<set $mpClues["wilds_velvet_actor"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_velvet_actor"]>><<set $mpClues["wilds_velvet_actor"] to 1>><span class="blue">线索已记录</span><</if>>
 	你用发夹把断匙顶出锁孔，又从镜框夹层里找到备用的银匙。匣中是一叠私演契约和一枚演员的银面具，契约末尾的签名与信上的笔迹一致。
 	<<money 400>><<stress -2>>
 	<br><br>
@@ -735,20 +735,20 @@
 <<getouticon>><<link [[返回后巷 (0:08)|Connudatus Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<mphearticon>><<link [[摘下假面 (0:08)|MP Quest Connudatus Velvet Resolve]]>>
-	<<set $mpClues["wilds_velvet_actor"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_velvet_actor"]>><<set $mpClues["wilds_velvet_actor"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestVelvet_v2_mask")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>>
 	你绕过屏风走上小台，在所有人反应过来前摘下面具。演员脸上的妆已经花了，但台下有人认出了她。经理的念诵戛然而止，客人们纷纷起身。
 	<<stress -3>><<pass 8>>
 <</link>>
 <br>
 <<if ($money or 0) gte 800>>
-	<<shopicon>><<link [[买下演员契约 (0:08)|MP Quest Connudatus Velvet Resolve]]>><<money -800>><<set $mpClues["wilds_velvet_actor"] to 1>><span class="blue">线索已记录</span><<stress 2>><<pass 8>>你把八镑压在铜牌下，经理飞快地收起钱，把契约推过来。演员从椅子上站起，手腕还留着绳痕，却先朝你低声道了谢。<</link>>
+	<<shopicon>><<link [[买下演员契约 (0:08)|MP Quest Connudatus Velvet Resolve]]>><<money -800>><<if !$mpClues or !$mpClues["wilds_velvet_actor"]>><<set $mpClues["wilds_velvet_actor"] to 1>><span class="blue">线索已记录</span><</if>><<stress 2>><<pass 8>>你把八镑压在铜牌下，经理飞快地收起钱，把契约推过来。演员从椅子上站起，手腕还留着绳痕，却先朝你低声道了谢。<</link>>
 <<else>>
 	<span class="disabled">用八镑买下演员契约（钱不够）</span>
 <</if>>
 <br>
 <<investigateicon>><<link [[记铜牌编号 (0:08)|MP Quest Connudatus Velvet Resolve]]>>
-	<<set $mpClues["wilds_velvet_buyers"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_velvet_buyers"]>><<set $mpClues["wilds_velvet_buyers"] to 1>><span class="blue">线索已记录</span><</if>>
 	你退到屏风阴影里，把台下铜牌和客人的衣饰一件件记下。经理发现你时，你已经把最后一组编号默念了两遍，转身从侍者通道离开。
 	<<stress -2>><<pass 8>>
 <</link>>
@@ -779,7 +779,7 @@
 	<br><br>
 <<runicon>><<link [[借帷幕影再试 (0:04)|MP Quest Connudatus Velvet Resolve]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">陈述契约铜牌 (0:03)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">继续前进 (0:03)（属性不足）</span><</if>>
 </div>
 /* ===== 线5 夜间磨坊 =====
    大目标：查明磨坊夜间磨的究竟是什么货，以及农场里谁在替它遮掩。
@@ -810,7 +810,7 @@
 <div id="act-mp-quest-farmland-mill-step2">
 <<sneakicon>><<if Math.max(($skulduggery or 0), ($physique or 0)) gte 280>><<link "压铃过线 (0:07)">><<pass 7>><<replace "#act-mp-quest-farmland-mill-step2">>
 <<if Math.max(($skulduggery or 0), ($physique or 0)) gte 300>>
-	<<set $mpClues["wilds_mill_marks"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_mill_marks"]>><<set $mpClues["wilds_mill_marks"] to 1>><span class="blue">线索已记录</span><</if>>
 	你从铁丝下方慢慢钻过去，又用麻袋压住铜铃。木柱背后画着三圈粉笔记号，旁边标着不同农作物的缩写，最下面一行却写着「银货、干运、不要开灯」。
 	<<money 300>><<stress -2>>
 	<br><br>
@@ -831,7 +831,7 @@
 <<set $mpQuestMill to Math.max(($mpQuestMill or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>正在谷仓边给空车轴上油，听见磨坊方向的齿轮声便皱起眉。他抹了把汗说：「那磨坊早就不磨麦了。每隔几晚就有空车进去，出来时车斗压得很低，盖布上还撒一层糠。」他告诉你，夜班的人只认三圈粉笔和一枚铜扣，外人进去多半会被当成偷粮的。
-<<set $mpClues["wilds_mill_cart"] to 1>><span class="blue">线索已记录</span>
+<<if !$mpClues or !$mpClues["wilds_mill_cart"]>><<set $mpClues["wilds_mill_cart"] to 1>><span class="blue">线索已记录</span><</if>>
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Alex")>><<npcincr Alex love 1>><</if>>
 <<stress -3>>
 <br><br>
@@ -849,7 +849,7 @@
 <<set $mpMillCaught to ($mpMillCaught or 0)>>
 底层的水轮转得很慢，锈铁轴每转一圈便发出沉闷的咔哒声。传动轴旁堆着盖糠的麻袋，袋缝里露出包着油纸的扁平木盒。墙上用炭笔列着一串数字，末尾都带着同样的三角形记号。你正要看清楚，头顶的楼板忽然传来重物拖动的声响。
 <<if ($maths or 0) gte 330 or ($history or 0) gte 330>>
-	<<set $mpClues["wilds_mill_ledger"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_mill_ledger"]>><<set $mpClues["wilds_mill_ledger"] to 1>><span class="blue">线索已记录</span><</if>>
 	你算出水轮转速与记号间隔的关系，认出那是按班次记录的出入账。麻袋底下压着一本油布账册和一枚黄铜扣，扣面上刻着与墙上相同的三角形。
 	<<money 350>><<stress -2>>
 	<br><br>
@@ -928,24 +928,24 @@
 <<getouticon>><<link [[返回农场 (0:03)|Farmland]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<investigateicon>><<link [[取赌账银筹码 (0:06)|MP Quest Farmland Mill Resolve]]>>
-	<<set $mpClues["wilds_mill_ledger"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_mill_ledger"]>><<set $mpClues["wilds_mill_ledger"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestMill_v2_seal")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>>
 	你把账册、银筹码和那根扁担一并收好，又用糠袋把桌上的痕迹盖住。水轮停转后的寂静里，你能听见自己的心跳。
 	<<stress -3>><<pass 6>>
 <</link>>
 <br>
 <<socialiseicon>><<link [[抄欠债名单 (0:07)|MP Quest Farmland Mill Resolve]]>>
-	<<set $mpClues["wilds_mill_tenants"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_mill_tenants"]>><<set $mpClues["wilds_mill_tenants"] to 1>><span class="blue">线索已记录</span><</if>>
 	你只抄下被记在「欠债」栏里的农户姓名和日期，把账册原样合上。那些名字里有几个你白天在田里见过，他们显然不知道自己被写进了这种账。
 	<<stress -2>><<pass 7>>
 <</link>>
 <br>
 <<walkicon>><<if $NPCNameList and $NPCNameList.includes("Alex")>><<link [[交给亚历克斯 (0:05)|MP Quest Farmland Mill Resolve]]>>
-	<<set $mpClues["wilds_mill_cart"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_mill_cart"]>><<set $mpClues["wilds_mill_cart"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Alex")>><<npcincr Alex love 1>><</if>>
 	你把账册塞进糠袋，打算从水渠带出去交给亚历克斯。计数房门外传来空车倒车的吆喝声，正好替你遮住开门的响动。
 	<<stress -2>><<pass 5>>
-<</link>><<else>><span class="disabled">把账册交给亚历克斯 (0:05)（尚未结识）</span><</if>>
+<</link>><<else>><span class="disabled">交给亚历克斯 (0:05)（尚未结识）</span><</if>>
 
 :: MP Quest Farmland Mill Resolve [nobr]
 <<set $outside to 1>><<set $location to "farm">>
@@ -973,7 +973,7 @@
 	<br><br>
 <<runicon>><<link [[借着侧光重对刻痕 (0:04)|MP Quest Farmland Mill Resolve]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">交接分成账 (0:03)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">去下一处 (0:03)（属性不足）</span><</if>>
 </div>
 /* ===== 线6 三岔粉笔黑市 =====
    大目标：摸清下水道黑市的暗号、货单，以及替它提供庇护的人。
@@ -1004,7 +1004,7 @@
 <div id="act-mp-quest-sewers-market-step2">
 <<investigateicon>><<if Math.max(($skulduggery or 0), ($physique or 0)) gte 280>><<link "抽砖开石门 (0:07)">><<pass 7>><<replace "#act-mp-quest-sewers-market-step2">>
 <<if Math.max(($skulduggery or 0), ($physique or 0)) gte 300>>
-	<<set $mpClues["wilds_sewer_chalk"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_sewer_chalk"]>><<set $mpClues["wilds_sewer_chalk"] to 1>><span class="blue">线索已记录</span><</if>>
 	你抽出活动砖，铁栅便顺着暗槽滑开半尺。门后是一间早年防空洞改成的石室，地上留着货箱拖痕和几片火漆碎屑，墙上还写着下一次开市的时辰。
 	<<money 250>><<stress -2>>
 	<br><br>
@@ -1017,7 +1017,7 @@
 	<br><br>
 <<link [[握稳工具重调位置 (0:04)|MP Quest Sewers Market Step2]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">抽砖开石门 (0:07)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">找雷恩对暗号 (0:07)（属性不足）</span><</if>>
 </div>
 :: MP Quest Sewers Market Step3 [nobr]
 <<set $outside to 0>><<set $location to "sewers">>
@@ -1025,7 +1025,7 @@
 <<set $mpQuestUnderground to Math.max(($mpQuestUnderground or 0), 3)>>
 <<set $mpClues to ($mpClues or {})>>
 <<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>蹲在一截断管上抽烟，脚边放着一只盖着麻布的提灯。听见三下敲管声，他先看了看你身后，才把烟按灭：「三岔粉笔是给送货人看的。左道通黑市，右道是假的，中间那道涨水时才会开。」他教你用铜扣在铁栅上敲两短一长，又提醒你别碰穿灰斗篷的人递来的货。
-<<set $mpClues["wilds_sewer_password"] to 1>><span class="blue">线索已记录</span>
+<<if !$mpClues or !$mpClues["wilds_sewer_password"]>><<set $mpClues["wilds_sewer_password"] to 1>><span class="blue">线索已记录</span><</if>>
 <<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 1>><</if>>
 <<stress -3>>
 <br><br>
@@ -1043,7 +1043,7 @@
 <<set $mpSewerCaught to ($mpSewerCaught or 0)>>
 石室里摆着用木板搭成的货架，架上只剩空木匣和几段封货用的火漆绳。墙上钉着一张湿软的货单，字迹被水汽晕开，数量栏却还能辨认；货单旁挂着一枚铜筹码，和<<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>说的暗号扣不是同一种。你正要把货单揭下来，身后铁栅忽然滑回原位。
 <<if ($maths or 0) gte 330 or ($english or 0) gte 330>>
-	<<set $mpClues["wilds_sewer_manifest"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_sewer_manifest"]>><<set $mpClues["wilds_sewer_manifest"] to 1>><span class="blue">线索已记录</span><</if>>
 	你把货单上的代号和数量按列相加，认出其中有三个编号属于港务处上月报失的货箱。铜筹码背面刻着开市时辰，边缘还有被反复摩挲的痕迹。
 	<<money 400>><<stress -2>>
 	<br><br>
@@ -1122,23 +1122,23 @@
 <<getouticon>><<link [[返回下水道 (0:03)|Sewers Algae]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<investigateicon>><<link [[取货单铜筹码 (0:06)|MP Quest Sewers Market Resolve]]>>
-	<<set $mpClues["wilds_sewer_manifest"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_sewer_manifest"]>><<set $mpClues["wilds_sewer_manifest"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mpQuestUnderground_v2_token")>><<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>><</if>>
 	你把货单和铜筹码扫进内袋，又踢翻油布摊子挡住追来的脚。灰斗篷的人没有追远，似乎在顾忌外头越来越近的巡逻火把。
 	<<stress -3>><<pass 6>>
 <</link>>
 <br>
 <<socialiseicon>><<link [[放走搬运工 (0:07)|MP Quest Sewers Market Resolve]]>>
-	<<set $mpClues["wilds_sewer_workers"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_sewer_workers"]>><<set $mpClues["wilds_sewer_workers"] to 1>><span class="blue">线索已记录</span><</if>>
 你割开搬运工手上的绳，让他们从检修管先走。其中一个瘦小的男人临走前告诉你，灰斗篷每周都会把「退货运」送进港务处的旧仓，那些货箱从来没有真正离港。
 	<<stress -4>><<pass 7>>
 <</link>>
 <br>
 <<shopicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[卖位置给贝利 (0:05)|MP Quest Sewers Market Resolve]]>>
-	<<set $mpClues["wilds_sewer_patron"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["wilds_sewer_patron"]>><<set $mpClues["wilds_sewer_patron"] to 1>><span class="blue">线索已记录</span><</if>>
 你在暗市出口拦住贝利手下收账的人，把泵房位置和开市时辰报了过去。
 	<<money 900>><<stress 3>><<pass 5>>
-<</link>><<else>><span class="disabled">把黑市位置卖给贝利 (0:05)（尚未结识）</span><</if>>
+<</link>><<else>><span class="disabled">卖位置给贝利 (0:05)（尚未结识）</span><</if>>
 
 :: MP Quest Sewers Market Resolve [nobr]
 <<set $outside to 0>><<set $location to "sewers">>
@@ -1166,5 +1166,5 @@
 	<br><br>
 <<runicon>><<link [[理顺纹理重压边缘 (0:04)|MP Quest Sewers Market Resolve]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">交代筹码货单 (0:03)（属性不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">去下一处 (0:03)（属性不足）</span><</if>>
 </div>

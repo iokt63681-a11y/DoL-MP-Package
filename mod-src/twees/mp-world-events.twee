@@ -37,7 +37,7 @@
 <<if $skulduggerysuccess is 1>>
 	<<set _sk to currentSkillValue("skulduggery")>>
 	<<if _sk gte 800>><<set _reward to 900>><<elseif _sk gte 600>><<set _reward to 780>><<elseif _sk gte 400>><<set _reward to 650>><<else>><<set _reward to 520>><</if>>
-<<set $mpClues["bailey_domus_drop"] to 1>><span class="blue">线索已记录</span>
+<<if !$mpClues or !$mpClues["bailey_domus_drop"]>><<set $mpClues["bailey_domus_drop"] to 1>><span class="blue">线索已记录</span><</if>>
 你顺着砖缝轻轻抽起油纸包，摸出几枚旧银币与半张记着门牌缩写的催缴底单。你把大约 <span class="gold">£<<print Math.floor(_reward / 100)>></span> 的硬币收进口袋。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_event_loose_cobble_inspect")>><<money _reward>><</if>><<stress -3>>
 	<br><br>
@@ -50,7 +50,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Loose Cobble Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">指尖撬青石板 (0:06)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">核对底单门牌 (0:06)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Loose Cobble Wait [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -86,7 +86,7 @@
 <div id="act-mp-world-event-loose-cobble-cipher">
 <<investigateicon>><<if ($maths or 0) gte 300 or ($english or 0) gte 300>><<link "推算门牌规律 (0:04)">><<pass 4>><<replace "#act-mp-world-event-loose-cobble-cipher">>
 <<if ($maths or 0) gte 300 or ($english or 0) gte 300>>
-	<<set $mpClues["bailey_ledger_code"] to 1>><span class="blue">线索已记录</span>
+	<<if !$mpClues or !$mpClues["bailey_ledger_code"]>><<set $mpClues["bailey_ledger_code"] to 1>><span class="blue">线索已记录</span><</if>>
 	<<if (($maths or 0) gte 600 or ($english or 0) gte 600) and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_cobble_cipher")>>
 		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
 	<</if>>
@@ -100,7 +100,7 @@
 	<br><br>
 	<<tendingicon>><<link [[理顺纹理重压边缘 (0:04)|MP World Event Loose Cobble Cipher]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">推算门牌规律 (0:04)（能力不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">理顺纹理重压边缘 (0:04)（能力不足）</span><</if>>
 </div>
 
 :: MP World Event Loose Cobble Shed [nobr]
@@ -165,7 +165,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Curio Peddler Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">拨鼻烟盒底盖 (0:04)（能力不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">擦净指腹重按簧片 (0:04)（能力不足）</span><</if>>
 </div>
 :: MP World Event Curio Peddler Bargain [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -205,7 +205,7 @@
 	<br><br>
 	<<socialiseicon>><<link [[借着侧光重对刻痕 (0:04)|MP World Event Curio Peddler Appraise]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">刷净齿轮分拣 (0:04)（能力不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">借着侧光重对刻痕 (0:04)（能力不足）</span><</if>>
 </div>
 
 :: MP World Event Curio Peddler Tent [nobr]
@@ -216,9 +216,9 @@
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|High Street]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<sneakicon>><<link [[替货郎望哨 (0:06)|MP World Event Curio Peddler Watch]]>><<set $mpClues["smuggler_compass_mark"] to 1>><span class="blue">线索已记录</span><<pass 6>><</link>>
+<<sneakicon>><<link [[替货郎望哨 (0:06)|MP World Event Curio Peddler Watch]]>><<if !$mpClues or !$mpClues["smuggler_compass_mark"]>><<set $mpClues["smuggler_compass_mark"] to 1>><span class="blue">线索已记录</span><</if>><<pass 6>><</link>>
 <br>
-<<walkicon>><<link [[返回摊位 (0:02)|MP World Event Curio Peddler]]>><<set $outside to 1>><<set $location to "town">><<set $mpClues["smuggler_compass_mark"] to 1>><span class="blue">线索已记录</span><<pass 2>><</link>>
+<<walkicon>><<link [[返回摊位 (0:02)|MP World Event Curio Peddler]]>><<set $outside to 1>><<set $location to "town">><<if !$mpClues or !$mpClues["smuggler_compass_mark"]>><<set $mpClues["smuggler_compass_mark"] to 1>><span class="blue">线索已记录</span><</if>><<pass 2>><</link>>
 
 :: MP World Event Curio Peddler Watch [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -246,7 +246,7 @@
 	<br><br>
 	<<tendingicon>><<link [[握稳工具重调位置 (0:04)|MP World Event Curio Peddler Watch]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">借披肩藏匣 (0:02)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">离开 (0:02)（潜行不足）</span><</if>>
 </div>
 
 :: MP World Event Smuggler Drop [nobr]
@@ -288,7 +288,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Smuggler Drop Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">勾油布包麻绳 (0:05)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">去缆绳堆找熟人 (0:05)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Smuggler Drop Signal [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -332,9 +332,9 @@
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|Docks]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<runicon>><<link [[贴防波堤绕艇 (0:04)|MP World Event Smuggler Drop Escape]]>><<set $mpClues["smuggler_wren_route"] to 1>><span class="blue">线索已记录</span><<pass 4>><</link>>
+<<runicon>><<link [[贴防波堤绕艇 (0:04)|MP World Event Smuggler Drop Escape]]>><<if !$mpClues or !$mpClues["smuggler_wren_route"]>><<set $mpClues["smuggler_wren_route"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 <br>
-<<walkicon>><<link [[返回栅栏 (0:03)|MP World Event Smuggler Drop]]>><<set $mpClues["smuggler_wren_route"] to 1>><span class="blue">线索已记录</span><<pass 3>><</link>>
+<<walkicon>><<link [[返回栅栏 (0:03)|MP World Event Smuggler Drop]]>><<if !$mpClues or !$mpClues["smuggler_wren_route"]>><<set $mpClues["smuggler_wren_route"] to 1>><span class="blue">线索已记录</span><</if>><<pass 3>><</link>>
 
 :: MP World Event Smuggler Drop Escape [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -424,7 +424,7 @@
 <<if $skulduggerysuccess is 1>>
 	<<set _sk to currentSkillValue("skulduggery")>>
 	<<if _sk gte 750>><<set _reward to 1000>><<elseif _sk gte 500>><<set _reward to 760>><<else>><<set _reward to 540>><</if>>
-<<set $mpClues["wreck_chart_fragment"] to 1>><span class="blue">线索已记录</span>
+<<if !$mpClues or !$mpClues["wreck_chart_fragment"]>><<set $mpClues["wreck_chart_fragment"] to 1>><span class="blue">线索已记录</span><</if>>
 你避开腐朽的木刺拧开铜筒，抽出半卷标着暗礁水道的羊皮海图，并在船板下捡到约 <span class="gold">£<<print Math.floor(_reward / 100)>></span> 的硬币。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_event_driftwood_chest_cave")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
@@ -511,7 +511,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Forest Shrine Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">拨刺藤摸供台 (0:04)（能力不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">擦净指腹重按簧片 (0:04)（能力不足）</span><</if>>
 </div>
 :: MP World Event Forest Shrine Herbs [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -555,9 +555,9 @@
 <br><br>
 <<getouticon>><<link [[返回森林 (0:02)|Forest]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<runicon>><<link [[应对林外狼嚎 (0:04)|MP World Event Forest Shrine Howl]]>><<set $outside to 1>><<set $location to "forest">><<set $mpClues["forest_shrine_rubbing"] to 1>><span class="blue">线索已记录</span><<pass 4>><</link>>
+<<runicon>><<link [[应对林外狼嚎 (0:04)|MP World Event Forest Shrine Howl]]>><<set $outside to 1>><<set $location to "forest">><<if !$mpClues or !$mpClues["forest_shrine_rubbing"]>><<set $mpClues["forest_shrine_rubbing"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 <br>
-<<walkicon>><<link [[钻出树洞回石龛 (0:02)|MP World Event Forest Shrine]]>><<set $outside to 1>><<set $location to "forest">><<set $mpClues["forest_shrine_rubbing"] to 1>><span class="blue">线索已记录</span><<pass 2>><</link>>
+<<walkicon>><<link [[钻出树洞回石龛 (0:02)|MP World Event Forest Shrine]]>><<set $outside to 1>><<set $location to "forest">><<if !$mpClues or !$mpClues["forest_shrine_rubbing"]>><<set $mpClues["forest_shrine_rubbing"] to 1>><span class="blue">线索已记录</span><</if>><<pass 2>><</link>>
 
 :: MP World Event Forest Shrine Howl [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -620,7 +620,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Park Sketchbook Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">挑麻线取书签 (0:10)（学识不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">替学生摆姿势 (0:10)（学识不足）</span><</if>>
 </div>
 :: MP World Event Park Sketchbook Kylar [nobr]
 <<set $outside to 1>><<set $location to "park">><<effects>><<mpAmbient>>
@@ -630,9 +630,9 @@
 <br><br>
 <<getouticon>><<link [[返回公园 (0:02)|Park]]>><<set $outside to 1>><<set $location to "park">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[凉亭看图纸 (0:05)|MP World Event Park Sketchbook Pavilion]]>><<set $mpClues["park_sketch_initials"] to 1>><span class="blue">线索已记录</span><<pass 5>><</link>>
+<<walkicon>><<link [[凉亭看图纸 (0:05)|MP World Event Park Sketchbook Pavilion]]>><<if !$mpClues or !$mpClues["park_sketch_initials"]>><<set $mpClues["park_sketch_initials"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><</link>>
 <br>
-<<investigateicon>><<link [[看速写本封底 (0:05)|MP World Event Park Sketchbook Inspect]]>><<set $mpClues["park_sketch_initials"] to 1>><span class="blue">线索已记录</span><<pass 5>><</link>>
+<<investigateicon>><<link [[看速写本封底 (0:05)|MP World Event Park Sketchbook Inspect]]>><<if !$mpClues or !$mpClues["park_sketch_initials"]>><<set $mpClues["park_sketch_initials"] to 1>><span class="blue">线索已记录</span><</if>><<pass 5>><</link>>
 
 :: MP World Event Park Sketchbook Pavilion [nobr]
 <<set $outside to 0>><<set $location to "park">><<effects>><<mpAmbient>>
@@ -693,7 +693,7 @@
 	<br><br>
 	<<tendingicon>><<link [[握稳工具重调位置 (0:04)|MP World Event Park Sketchbook Bully]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">踩青苔石阶晃开 (0:02)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">离开 (0:02)（潜行不足）</span><</if>>
 </div>
 
 :: MP World Event Temple Censer [nobr]
@@ -735,7 +735,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Temple Censer Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">借理香灰摸底槽 (0:06)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">按拓片找暗格 (0:06)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Temple Censer Sydney [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
@@ -780,9 +780,9 @@
 <br><br>
 <<getouticon>><<link [[返回神殿 (0:02)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<runicon>><<link [[应对执事盘问 (0:04)|MP World Event Temple Censer Vigil]]>><<set $mpClues["temple_censer_psalm"] to 1>><span class="blue">线索已记录</span><<pass 4>><</link>>
+<<runicon>><<link [[应对执事盘问 (0:04)|MP World Event Temple Censer Vigil]]>><<if !$mpClues or !$mpClues["temple_censer_psalm"]>><<set $mpClues["temple_censer_psalm"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 <br>
-<<walkicon>><<link [[返回长廊 (0:02)|MP World Event Temple Censer]]>><<set $mpClues["temple_censer_psalm"] to 1>><span class="blue">线索已记录</span><<pass 2>><</link>>
+<<walkicon>><<link [[返回长廊 (0:02)|MP World Event Temple Censer]]>><<if !$mpClues or !$mpClues["temple_censer_psalm"]>><<set $mpClues["temple_censer_psalm"] to 1>><span class="blue">线索已记录</span><</if>><<pass 2>><</link>>
 
 :: MP World Event Temple Censer Vigil [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -846,7 +846,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Sewer Cache Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">避开铜丝取烟盒 (0:05)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">问拾荒人 (0:05)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Sewer Cache Valve [nobr]
 <<set $outside to 0>><<set $location to "sewers">><<effects>><<mpAmbient>>
@@ -882,9 +882,9 @@
 <br><br>
 <<walkicon>><<link [[返回下水道 (0:02)|Sewers Algae]]>><<set $outside to 0>><<set $location to "sewers">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<if ($skulduggery or 0) gte 250>><<link [[取出铁皮盒 (0:05)|MP World Event Sewer Cache Inspect]]>><<set $mpClues["sewer_wax_mark"] to 1>><span class="blue">线索已记录</span><<set $mpSewerLedgeDry to 1>><<pass 5>><</link>><<else>><span class="disabled">取出铁皮盒 (0:05)（潜行不足）</span><</if>>
+<<investigateicon>><<if ($skulduggery or 0) gte 250>><<link [[取出铁皮盒 (0:05)|MP World Event Sewer Cache Inspect]]>><<if !$mpClues or !$mpClues["sewer_wax_mark"]>><<set $mpClues["sewer_wax_mark"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpSewerLedgeDry to 1>><<pass 5>><</link>><<else>><span class="disabled">取出铁皮盒 (0:05)（潜行不足）</span><</if>>
 <br>
-<<socialiseicon>><<link [[向提灯人招呼 (0:05)|MP World Event Sewer Cache Peddler]]>><<set $mpClues["sewer_wax_mark"] to 1>><span class="blue">线索已记录</span><<set $mpSewerLedgeDry to 1>><<pass 5>><</link>>
+<<socialiseicon>><<link [[向提灯人招呼 (0:05)|MP World Event Sewer Cache Peddler]]>><<if !$mpClues or !$mpClues["sewer_wax_mark"]>><<set $mpClues["sewer_wax_mark"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpSewerLedgeDry to 1>><<pass 5>><</link>>
 
 :: MP World Event Sewer Cache Peddler [nobr]
 <<set $outside to 0>><<set $location to "sewers">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -959,7 +959,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Barb Patrol Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">猫腰勾出钱夹 (0:08)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">替跑腿人送信 (0:08)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Barb Patrol Stairwell [nobr]
 <<set $outside to 0>><<set $location to "flats">><<effects>><<mpAmbient>>
@@ -969,9 +969,9 @@
 <br><br>
 <<getouticon>><<link [[离开 (0:08)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<if $NPCNameList and $NPCNameList.includes("Whitney")>><<link [[上楼找惠特尼 (0:08)|MP World Event Barb Patrol Whitney]]>><<set $outside to 1>><<set $location to "barb">><<set $mpClues["barb_patrol_receipt"] to 1>><span class="blue">线索已记录</span><<pass 8>><</link>><<else>><span class="disabled">上楼找惠特尼 (0:08)（尚未结识）</span><</if>>
+<<walkicon>><<if $NPCNameList and $NPCNameList.includes("Whitney")>><<link [[上楼找惠特尼 (0:08)|MP World Event Barb Patrol Whitney]]>><<set $outside to 1>><<set $location to "barb">><<if !$mpClues or !$mpClues["barb_patrol_receipt"]>><<set $mpClues["barb_patrol_receipt"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><</link>><<else>><span class="disabled">上楼找惠特尼 (0:08)（尚未结识）</span><</if>>
 <br>
-<<runicon>><<link [[回排水管查探 (0:08)|MP World Event Barb Patrol Inspect]]>><<set $outside to 1>><<set $location to "barb">><<set $mpClues["barb_patrol_receipt"] to 1>><span class="blue">线索已记录</span><<pass 8>><</link>>
+<<runicon>><<link [[回排水管查探 (0:08)|MP World Event Barb Patrol Inspect]]>><<set $outside to 1>><<set $location to "barb">><<if !$mpClues or !$mpClues["barb_patrol_receipt"]>><<set $mpClues["barb_patrol_receipt"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><</link>>
 
 :: MP World Event Barb Patrol Whitney [nobr]
 <<set $outside to 1>><<set $location to "barb">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -1070,7 +1070,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Danube Carriage Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">借树影收盒 (0:12)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">去侧门帮佣 (0:12)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Danube Carriage Footman [nobr]
 <<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
@@ -1107,9 +1107,9 @@
 <br><br>
 <<walkicon>><<link [[返回多瑙河街 (0:08)|Danube Street]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<link [[帮女仆清扫车毯 (0:12)|MP World Event Danube Carriage Errand]]>><<set $outside to 1>><<set $location to "avery_mansion">><<set $mpClues["danube_crest_seal"] to 1>><span class="blue">线索已记录</span><<pass 12>><</link>>
+<<investigateicon>><<link [[帮女仆清扫车毯 (0:12)|MP World Event Danube Carriage Errand]]>><<set $outside to 1>><<set $location to "avery_mansion">><<if !$mpClues or !$mpClues["danube_crest_seal"]>><<set $mpClues["danube_crest_seal"] to 1>><span class="blue">线索已记录</span><</if>><<pass 12>><</link>>
 <br>
-<<socialiseicon>><<link [[应对门房护卫 (0:04)|MP World Event Danube Carriage Guard]]>><<set $outside to 1>><<set $location to "avery_mansion">><<set $mpClues["danube_crest_seal"] to 1>><span class="blue">线索已记录</span><<pass 4>><</link>>
+<<socialiseicon>><<link [[应对门房护卫 (0:04)|MP World Event Danube Carriage Guard]]>><<set $outside to 1>><<set $location to "avery_mansion">><<if !$mpClues or !$mpClues["danube_crest_seal"]>><<set $mpClues["danube_crest_seal"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 
 :: MP World Event Danube Carriage Errand [nobr]
 <<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -1133,7 +1133,7 @@
 	<br><br>
 	<<investigateicon>><<link [[理顺纹理重压边缘 (0:04)|MP World Event Danube Carriage Errand]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">铜刷扫毯排拜帖 (0:04)（学识不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">理顺纹理重压边缘 (0:04)（学识不足）</span><</if>>
 </div>
 
 :: MP World Event Danube Carriage Guard [nobr]
@@ -1184,7 +1184,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event School Corridor Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">摸索防尘袋 (0:10)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">改低年级文章 (0:10)（潜行不足）</span><</if>>
 </div>
 :: MP World Event School Corridor Logbook [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -1196,7 +1196,7 @@
 <div id="act-mp-world-event-school-corridor-logbook">
 <<investigateicon>><<if ($science or 0) gte 300 or ($maths or 0) gte 300>><<link "推算赤纬坐标 (0:05)">><<pass 5>><<replace "#act-mp-world-event-school-corridor-logbook">>
 <<if ($science or 0) gte 300 or ($maths or 0) gte 300>>
-	<<set $mpKnown["observatory_dome"] to 1>><<set $mpClues["school_star_log"] to 1>><span class="blue">线索已记录</span>
+	<<set $mpKnown["observatory_dome"] to 1>><<if !$mpClues or !$mpClues["school_star_log"]>><<set $mpClues["school_star_log"] to 1>><span class="blue">线索已记录</span><</if>>
 	你顺着游标读数很快算出交点就在断崖观星台的主穹顶，手札末尾还记着观星台备用侧门的开启方式。
 	<<stress -3>>
 	<br><br>
@@ -1243,7 +1243,7 @@
 	<br><br>
 	<<tendingicon>><<link [[理顺纹理重压边缘 (0:04)|MP World Event School Corridor Tutoring]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">润色报告引文 (0:04)（学识不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">理顺纹理重压边缘 (0:04)（学识不足）</span><</if>>
 </div>
 
 :: MP World Event School Corridor Prefect [nobr]
@@ -1339,9 +1339,9 @@
 <br><br>
 <<getouticon>><<link [[返回游泳池 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<runicon>><<link [[避开门外人群 (0:04)|MP World Event Pool Steam Prank]]>><<set $mpClues["pool_locker_token"] to 1>><span class="blue">线索已记录</span><<pass 4>><</link>>
+<<runicon>><<link [[避开门外人群 (0:04)|MP World Event Pool Steam Prank]]>><<if !$mpClues or !$mpClues["pool_locker_token"]>><<set $mpClues["pool_locker_token"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 <br>
-<<walkicon>><<link [[返回格栅 (0:02)|MP World Event Pool Steam]]>><<set $mpClues["pool_locker_token"] to 1>><span class="blue">线索已记录</span><<pass 2>><</link>>
+<<walkicon>><<link [[返回格栅 (0:02)|MP World Event Pool Steam]]>><<if !$mpClues or !$mpClues["pool_locker_token"]>><<set $mpClues["pool_locker_token"] to 1>><span class="blue">线索已记录</span><</if>><<pass 2>><</link>>
 
 :: MP World Event Pool Steam Prank [nobr]
 <<set $outside to 0>><<set $location to "pool">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -1405,13 +1405,13 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Arcade Neon Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">拍落卡死铜币 (0:05)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">识破赌币老千 (0:05)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Arcade Neon Counter [nobr]
 <<set $outside to 0>><<set $location to "arcade">><<effects>><<mpAmbient>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
 <<if $money gte 200>>
-<<money -200>><<set $mpKnown["clockwork_corridor"] to 1>><<set $mpClues["arcade_token_stamp"] to 1>><span class="blue">线索已记录</span>
+<<money -200>><<set $mpKnown["clockwork_corridor"] to 1>><<if !$mpClues or !$mpClues["arcade_token_stamp"]>><<set $mpClues["arcade_token_stamp"] to 1>><span class="blue">线索已记录</span><</if>>
 你走到奖品柜台前，把两镑零钱推给正嚼着口香糖的值班店员，向他打听那种带锯齿边缘的厚重黄铜币。店员压低帽檐看了看四周，从抽屉底层摸出一枚印着双齿轮戳记的铜币推给你。「这是地下机括城发条游乐场流出来的旧代币，从后巷检修井底下就能通过去。」
 <<stress -2>>
 <br><br>
@@ -1482,7 +1482,7 @@
 	<br><br>
 	<<tendingicon>><<link [[握稳工具重调位置 (0:04)|MP World Event Arcade Neon Hustler]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">揭穿双面硬币 (0:02)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">返回游戏厅 (0:02)（潜行不足）</span><</if>>
 </div>
 
 :: MP World Event Shopping Mirror [nobr]
@@ -1524,7 +1524,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Shopping Mirror Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">抽出镜后暗屉 (0:04)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">擦净指腹重按簧片 (0:04)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Shopping Mirror Clerk [nobr]
 <<set $outside to 0>><<set $location to "shopping_centre">><<effects>><<mpAmbient>>
@@ -1534,9 +1534,9 @@
 <br><br>
 <<getouticon>><<link [[返回购物中心 (0:02)|Shopping Centre]]>><<set $outside to 0>><<set $location to "shopping_centre">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[查内侧试衣间 (0:04)|MP World Event Shopping MirrorFitting]]>><<set $mpClues["shopping_tailor_note"] to 1>><span class="blue">线索已记录</span><<pass 4>><</link>>
+<<walkicon>><<link [[查内侧试衣间 (0:04)|MP World Event Shopping MirrorFitting]]>><<if !$mpClues or !$mpClues["shopping_tailor_note"]>><<set $mpClues["shopping_tailor_note"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 <br>
-<<investigateicon>><<link [[熨烫真丝衬衫 (0:12)|MP World Event Shopping Mirror Fold]]>><<set $mpClues["shopping_tailor_note"] to 1>><span class="blue">线索已记录</span><<pass 12>><</link>>
+<<investigateicon>><<link [[熨烫真丝衬衫 (0:12)|MP World Event Shopping Mirror Fold]]>><<if !$mpClues or !$mpClues["shopping_tailor_note"]>><<set $mpClues["shopping_tailor_note"] to 1>><span class="blue">线索已记录</span><</if>><<pass 12>><</link>>
 
 :: MP World Event Shopping Mirror Fold [nobr]
 <<set $outside to 0>><<set $location to "shopping_centre">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -1635,7 +1635,7 @@
 	<br><br>
 	<<link [[擦净指腹重按簧片 (0:04)|MP World Event Hospital Night Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">排好安瓿编码 (0:05)（学识不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">走进走廊找护士 (0:05)（学识不足）</span><</if>>
 </div>
 :: MP World Event Hospital Night Nurse [nobr]
 <<set $outside to 0>><<set $location to "hospital">><<effects>><<mpAmbient>>
@@ -1645,9 +1645,9 @@
 <br><br>
 <<walkicon>><<link [[返回庭院 (0:02)|Hospital front]]>><<set $outside to 1>><<set $location to "hospital">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<link [[分装纱布 (0:12)|MP World Event Hospital Night Sort]]>><<set $mpClues["hospital_sedative_log"] to 1>><span class="blue">线索已记录</span><<pass 12>><</link>>
+<<investigateicon>><<link [[分装纱布 (0:12)|MP World Event Hospital Night Sort]]>><<if !$mpClues or !$mpClues["hospital_sedative_log"]>><<set $mpClues["hospital_sedative_log"] to 1>><span class="blue">线索已记录</span><</if>><<pass 12>><</link>>
 <br>
-<<runicon>><<link [[绕过护工 (0:04)|MP World Event Hospital Night Orderly]]>><<set $mpClues["hospital_sedative_log"] to 1>><span class="blue">线索已记录</span><<pass 4>><</link>>
+<<runicon>><<link [[绕过护工 (0:04)|MP World Event Hospital Night Orderly]]>><<if !$mpClues or !$mpClues["hospital_sedative_log"]>><<set $mpClues["hospital_sedative_log"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 
 :: MP World Event Hospital Night Sort [nobr]
 <<set $outside to 0>><<set $location to "hospital">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -1745,9 +1745,9 @@
 <br><br>
 <<walkicon>><<link [[返回妓院 (0:02)|Brothel]]>><<set $outside to 0>><<set $location to "brothel">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[端甜酒给布莱尔 (0:10)|MP World Event Brothel Backdoor Briar]]>><<set $mpClues["brothel_dancer_cipher"] to 1>><span class="blue">线索已记录</span><<pass 10>><</link>><<else>><span class="disabled">端甜酒给布莱尔 (0:10)（尚未结识）</span><</if>>
+<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[端甜酒给布莱尔 (0:10)|MP World Event Brothel Backdoor Briar]]>><<if !$mpClues or !$mpClues["brothel_dancer_cipher"]>><<set $mpClues["brothel_dancer_cipher"] to 1>><span class="blue">线索已记录</span><</if>><<pass 10>><</link>><<else>><span class="disabled">端甜酒给布莱尔 (0:10)（尚未结识）</span><</if>>
 <br>
-<<getouticon>><<link [[离开 (0:08)|MP World Event Brothel Backdoor Bouncer]]>><<set $outside to 1>><<set $location to "pub">><<set $mpClues["brothel_dancer_cipher"] to 1>><span class="blue">线索已记录</span><<pass 8>><</link>>
+<<getouticon>><<link [[离开 (0:08)|MP World Event Brothel Backdoor Bouncer]]>><<set $outside to 1>><<set $location to "pub">><<if !$mpClues or !$mpClues["brothel_dancer_cipher"]>><<set $mpClues["brothel_dancer_cipher"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><</link>>
 
 :: MP World Event Brothel Backdoor Briar [nobr]
 <<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
@@ -1837,7 +1837,7 @@
 	<br><br>
 	<<link [[握稳工具重调位置 (0:04)|MP World Event Farmland Hedgerow Inspect]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">压倒荨麻摸盒 (0:05)（潜行不足）</span><</if>>
+<</replace>><</link>><<else>><span class="disabled">进谷仓看地契 (0:05)（潜行不足）</span><</if>>
 </div>
 :: MP World Event Farmland Hedgerow Barn [nobr]
 <<set $outside to 0>><<set $location to "farm">><<effects>><<mpAmbient>>
@@ -1847,9 +1847,9 @@
 <br><br>
 <<walkicon>><<link [[返回农田 (0:02)|Farmland]]>><<set $outside to 1>><<set $location to "farm">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<investigateicon>><<link [[帮农夫搬草捆 (0:15)|MP World Event Farmland Hedgerow Bale]]>><<set $outside to 1>><<set $location to "farm">><<set $mpKnown["abbey_scriptorium"] to 1>><<set $mpClues["farm_deed_boundary"] to 1>><span class="blue">线索已记录</span><<pass 15>><</link>>
+<<investigateicon>><<link [[帮农夫搬草捆 (0:15)|MP World Event Farmland Hedgerow Bale]]>><<set $outside to 1>><<set $location to "farm">><<set $mpKnown["abbey_scriptorium"] to 1>><<if !$mpClues or !$mpClues["farm_deed_boundary"]>><<set $mpClues["farm_deed_boundary"] to 1>><span class="blue">线索已记录</span><</if>><<pass 15>><</link>>
 <br>
-<<runicon>><<link [[应对田埂护院犬 (0:04)|MP World Event Farmland HedgerowHound]]>><<set $outside to 1>><<set $location to "farm">><<set $mpKnown["abbey_scriptorium"] to 1>><<set $mpClues["farm_deed_boundary"] to 1>><span class="blue">线索已记录</span><<pass 4>><</link>>
+<<runicon>><<link [[应对田埂护院犬 (0:04)|MP World Event Farmland HedgerowHound]]>><<set $outside to 1>><<set $location to "farm">><<set $mpKnown["abbey_scriptorium"] to 1>><<if !$mpClues or !$mpClues["farm_deed_boundary"]>><<set $mpClues["farm_deed_boundary"] to 1>><span class="blue">线索已记录</span><</if>><<pass 4>><</link>>
 
 :: MP World Event Farmland Hedgerow Bale [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>

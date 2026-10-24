@@ -7,27 +7,57 @@
 <</if>>
 猎人小径尽头的告示板上，最近多了一排用炭笔画的简图。画的人显然不擅长写字，箭头、圆圈和几道波浪线代替了地名。守林人说，这些地方都不远，只是没人愿意在雾散之前去看。
 <br><br>
-你把八张图按方向排开，发现它们分别指着海岸、林子、农田和湖。纸角用不同的绳结系着，有的结朝海，有的结朝山。最旧的一张已经卷边，图上还沾着盐粒。
+你把八张图按方向排开，发现它们分别指着海岸、林子、农田和湖。纸角用不同的绳结系着，有的结朝海，有的结朝山。最旧的一张已经卷边，图上还沾着盐粒。按绳结的朝向，八张图正好分成靠海与靠林两摞。
+<br><br>
+<<beachicon>><<link [[海岸与海蚀洞 (0:02)|MP Wild Extra Coast Hub]]>><<pass 2>><</link>>
+<br>
+<<parkicon>><<link [[森林与矿道 (0:02)|MP Wild Extra Forest Hub]]>><<pass 2>><</link>>
+<br>
+<<investigateicon>><<link [[看巡山速写簿 (0:03)|MP Region Extra Events Hub]]>><<pass 3>><</link>>
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Wild Extra Coast Hub [nobr]
+<<set $outside to 1>><<set $location to "park">>
+<<effects>><<mpAmbient>>
+<<set _exitPas to ($mpReturnPassage or "Park")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Park">>
+<</if>>
+朝海的几张图都用浸盐的绳结系着，画着海蚀洞、峭壁、搁浅的船和湖口的雾。纸面被海风吹得发脆。
+<br><br>
+<<investigateicon>><<link [[看贝壳箭头 (0:12)|MP Wild Extra Shell Arrows]]>><<pass 12>><</link>>
 <br>
-<<caveicon>><<link [[看贝壳箭头 (0:12)|MP Wild Extra Shell Arrows]]>><<pass 12>><</link>>
+<<tendingicon>><<link [[查峭壁红绳 (0:08)|MP Wild Extra Red Thread Herbs]]>><<pass 8>><</link>>
 <br>
+<<socialiseicon>><<link [[看厨房热汤 (0:12)|MP Wild Extra Galley Pot]]>><<pass 12>><</link>>
+<br>
+<<walkicon>><<if Time.dayState is "dawn">><<link [[查清晨雾笛 (0:12)|MP Wild Extra Fog Whistle]]>><<pass 12>><</link>><<else>><span class="disabled">查清晨雾笛 (0:12)（只有清晨）</span><</if>>
+<br><br>
+<<link [[返回猎人告示板 (0:02)|MP Wild Extra Events Hub]]>><<pass 2>><</link>>
+<br>
+<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+
+:: MP Wild Extra Forest Hub [nobr]
+<<set $outside to 1>><<set $location to "park">>
+<<effects>><<mpAmbient>>
+<<set _exitPas to ($mpReturnPassage or "Park")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Park">>
+<</if>>
+朝林的几张图用草绳捆着，标的是倒木、渠底、废弃通风井和森林深处的石环。纸角沾着松针，还压着几粒干土。
+<br><br>
 <<investigateicon>><<link [[看倒木圈铁锅 (0:12)|MP Wild Extra Log Circle]]>><<pass 12>><</link>>
 <br>
 <<walkicon>><<link [[查渠底界石 (0:12)|MP Wild Extra Boundary Stone]]>><<pass 12>><</link>>
 <br>
-<<if Time.dayState is "dawn">><<link [[查清晨雾笛 (0:12)|MP Wild Extra Fog Whistle]]>><<pass 12>><</link>><<else>><span class="disabled">查清晨雾笛 (0:12)（只有清晨）</span><</if>>
+<<sneakicon>><<link [[查通风井布条 (0:08)|MP Wild Extra Vent Flags]]>><<pass 8>><</link>>
 <br>
-<<link [[查峭壁红绳 (0:08)|MP Wild Extra Red Thread Herbs]]>><<pass 8>><</link>>
+<<templeicon>><<link [[查石环石子 (0:12)|MP Wild Extra Pebble Pattern]]>><<pass 12>><</link>>
+<br><br>
+<<link [[返回猎人告示板 (0:02)|MP Wild Extra Events Hub]]>><<pass 2>><</link>>
 <br>
-<<link [[查通风井布条 (0:08)|MP Wild Extra Vent Flags]]>><<pass 8>><</link>>
-<br>
-<<link [[看厨房热汤 (0:12)|MP Wild Extra Galley Pot]]>><<pass 12>><</link>>
-<br>
-<<link [[查石环石子 (0:12)|MP Wild Extra Pebble Pattern]]>><<pass 12>><</link>>
-<br>
-<<link [[看巡山速写簿 (0:03)|MP Region Extra Events Hub]]>><<pass 3>><</link>>
+<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 
 :: MP Wild Extra Shell Arrows [nobr]
 <<set $outside to 1>><<set $location to "searocks">><<effects>><<mpAmbient>>
@@ -39,7 +69,7 @@
 <div id="side-act-mp-wild-extra-shell-arrows">
 <<walkicon>><<link "沿箭头进深处 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-shell-arrows">>
 <<set _sk to ($english or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_shell_path"] to 1>><span class="blue">线索已记录</span><span class="green">你顺着箭头的转折数了一遍：朝里、朝上、朝地，三段方向对应潮水的涨落和两条岔道。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_shell_path"]>><<set $mpClues["wild_extra_shell_path"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你顺着箭头的转折数了一遍：朝里、朝上、朝地，三段方向对应潮水的涨落和两条岔道。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<investigateicon>><<link [[转过拐角查访 (0:04)|Sea Rocks]]>><<pass 4>><</link>>
 <<else>>
@@ -53,7 +83,7 @@
 <br>
 <<link "看被取走那枚 (0:05)">><<pass 5>><<replace "#side-act-mp-wild-extra-shell-arrows">>
 <<if ($science or 0) gte 250 or ($tending or 0) gte 240>>
-	<<set $mpClues["wild_extra_shell_path"] to 1>><span class="blue">线索已记录</span><span class="green">你屏住呼吸顺着器物纹理摸索，没惊动四周便找准了关窍。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_shell_path"]>><<set $mpClues["wild_extra_shell_path"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你屏住呼吸顺着器物纹理摸索，没惊动四周便找准了关窍。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[循线追查 (0:04)|MP Wild Extra Shell Arrows Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -77,7 +107,7 @@
 <div id="side-act-mp-wild-extra-shell-arrows-step2">
 <<caveicon>><<if ($skulduggery or 0) gte 300>><<link "抽出油布包 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-shell-arrows-step2">>
 <<set $skulduggerydifficulty to 300>><<skulduggerycheck "silent">><<if $skulduggerysuccess is 1>>
-	<<set $mpClues["wild_extra_shell_niche"] to 1>><span class="blue">线索已记录</span><span class="green">你用铜扣的边沿顶住贝壳，顺着凿痕一旋，鸟腹整块弹开。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_shell_niche"]>><<set $mpClues["wild_extra_shell_niche"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你用铜扣的边沿顶住贝壳，顺着凿痕一旋，鸟腹整块弹开。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[理清头绪 (0:04)|Sea Rocks]]>><<pass 4>><</link>>
 <<else>>
@@ -91,7 +121,7 @@
 <br>
 <<link "听洞外水声 (0:05)">><<pass 5>><<replace "#side-act-mp-wild-extra-shell-arrows-step2">>
 <<if (($willpower or 0) + ($mpClues['wild_extra_shell_path'] ? 60 : 0)) gte 420 or ($athletics or 0) gte 250>>
-	<<set $mpClues["wild_extra_shell_niche"] to 1>><span class="blue">线索已记录</span>你找准受力支点稳稳使力，手头动作一气呵成。<span class="green">事情办得干净利落，没有留下半点疏漏。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_shell_niche"]>><<set $mpClues["wild_extra_shell_niche"] to 1>><span class="blue">线索已记录</span><</if>>你找准受力支点稳稳使力，手头动作一气呵成。<span class="green">事情办得干净利落，没有留下半点疏漏。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[持凭证对质 (0:04)|MP Wild Extra Shell Arrows Resolve]]>><<pass 4>><</link>>
 <<else>>
@@ -134,7 +164,7 @@
 <div id="side-act-mp-wild-extra-log-circle">
 <<walkicon>><<link "跨进圈看铁锅 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-log-circle">>
 <<set _sk to ($athletics or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_log_ring"] to 1>><span class="blue">线索已记录</span><span class="green">你选了一棵最细的倒木，蹬住树根发力，把它挪开半尺。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_log_ring"]>><<set $mpClues["wild_extra_log_ring"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你选了一棵最细的倒木，蹬住树根发力，把它挪开半尺。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<investigateicon>><<link [[顺暗径前行 (0:04)|Forest]]>><<pass 4>><</link>>
 <<else>>
@@ -148,7 +178,7 @@
 <br>
 <<link "查石头灶灰 (0:05)">><<pass 5>><<replace "#side-act-mp-wild-extra-log-circle">>
 <<if ($history or 0) gte 250 or ($english or 0) gte 250>>
-	<<set $mpClues["wild_extra_log_ring"] to 1>><span class="blue">线索已记录</span>你顺着器物纹理巧施寸劲，原本卡滞的关窍应声松开。<span class="green">你将内里藏着的收获稳稳纳入怀中。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_log_ring"]>><<set $mpClues["wild_extra_log_ring"] to 1>><span class="blue">线索已记录</span><</if>>你顺着器物纹理巧施寸劲，原本卡滞的关窍应声松开。<span class="green">你将内里藏着的收获稳稳纳入怀中。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[循线追查 (0:04)|MP Wild Extra Log Circle Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -172,7 +202,7 @@
 <div id="side-act-mp-wild-extra-log-circle-step2">
 <<investigateicon>><<link "照刻痕找 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-log-circle-step2">>
 <<set _sk to ($skulduggery or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_log_cache"] to 1>><span class="blue">线索已记录</span><span class="green">你用锡勺柄撬开锅底补丁的一角，铜片后面是空的。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_log_cache"]>><<set $mpClues["wild_extra_log_cache"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你用锡勺柄撬开锅底补丁的一角，铜片后面是空的。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[理清头绪 (0:04)|Forest]]>><<pass 4>><</link>>
 <<else>>
@@ -186,7 +216,7 @@
 <br>
 <<link "锅盖原样盖回 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-log-circle-step2">>
 <<if (($science or 0) + ($mpClues['wild_extra_log_ring'] ? 60 : 0)) gte 250 or ($tending or 0) gte 240>>
-	<<set $mpClues["wild_extra_log_cache"] to 1>><span class="blue">线索已记录</span>你听准林间的斧声，趁空档把散落的木柴码成齐整一垛。<span class="green">柴垛码得齐整，火塘边清爽了许多。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_log_cache"]>><<set $mpClues["wild_extra_log_cache"] to 1>><span class="blue">线索已记录</span><</if>>你听准林间的斧声，趁空档把散落的木柴码成齐整一垛。<span class="green">柴垛码得齐整，火塘边清爽了许多。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[带凭证核实 (0:04)|MP Wild Extra Log Circle Resolve]]>><<pass 4>><</link>>
 <<else>>
@@ -235,7 +265,7 @@
 <div id="side-act-mp-wild-extra-boundary-stone">
 <<investigateicon>><<link "撬起整块石头 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-boundary-stone">>
 <<set _sk to ($english or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_boundary_old"] to 1>><span class="blue">线索已记录</span><span class="green">你用麦秸当刷子，一点点刮开泥壳。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_boundary_old"]>><<set $mpClues["wild_extra_boundary_old"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你用麦秸当刷子，一点点刮开泥壳。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[转过拐角查访 (0:04)|Farmland]]>><<pass 4>><</link>>
 <<else>>
@@ -249,7 +279,7 @@
 <br>
 <<link "沿支沟到南边 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-boundary-stone">>
 <<if ($maths or 0) gte 250 or ($housekeeping or 0) gte 250>>
-	<<set $mpClues["wild_extra_boundary_old"] to 1>><span class="blue">线索已记录</span><span class="green">你按次序将前后的痕迹逐一印证，很快发现了藏在底下的暗记。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_boundary_old"]>><<set $mpClues["wild_extra_boundary_old"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你按次序将前后的痕迹逐一印证，很快发现了藏在底下的暗记。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[循线追查 (0:04)|MP Wild Extra Boundary Stone Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -273,7 +303,7 @@
 <div id="side-act-mp-wild-extra-boundary-stone-step2">
 <<socialiseicon>><<link "去柳树下问雇工 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-boundary-stone-step2">>
 <<set _sk to ($history or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_boundary_moved"] to 1>><span class="blue">线索已记录</span><span class="green">你按新旧两组刻痕的间隔推算，旧界往北偏了整整一垄。被挪走的不是石头，是一条水路。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_boundary_moved"]>><<set $mpClues["wild_extra_boundary_moved"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你按新旧两组刻痕的间隔推算，旧界往北偏了整整一垄。被挪走的不是石头，是一条水路。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[理清头绪 (0:04)|Farmland]]>><<pass 4>><</link>>
 <<else>>
@@ -287,7 +317,7 @@
 <br>
 <<link "下支沟查看 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-boundary-stone-step2">>
 <<if (($history or 0) + ($mpClues['wild_extra_boundary_old'] ? 60 : 0)) gte 250 or ($english or 0) gte 250>>
-	<<set $mpClues["wild_extra_boundary_moved"] to 1>><span class="blue">线索已记录</span>你借着微光看清细微缝隙，指尖轻拨便理顺了症结。<span class="green">你把暗格深处的旧物一举取了出来。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_boundary_moved"]>><<set $mpClues["wild_extra_boundary_moved"] to 1>><span class="blue">线索已记录</span><</if>>你借着微光看清细微缝隙，指尖轻拨便理顺了症结。<span class="green">你把暗格深处的旧物一举取了出来。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[持凭证对质 (0:04)|MP Wild Extra Boundary Stone Resolve]]>><<pass 4>><</link>>
 <<else>>
@@ -336,7 +366,7 @@
 <div id="side-act-mp-wild-extra-fog-whistle">
 <<swimicon>><<link "涉水去浅湾 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-fog-whistle">>
 <<set _sk to ($willpower or 0)>><<if _sk gte 320>>
-	<<set $mpClues["wild_extra_fog_direction"] to 1>><span class="blue">线索已记录</span><span class="green">你闭上眼睛，只听。声音起来时，左耳的震感比右耳重，尾音被水面拉长。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_fog_direction"]>><<set $mpClues["wild_extra_fog_direction"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你闭上眼睛，只听。声音起来时，左耳的震感比右耳重，尾音被水面拉长。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[顺暗径前行 (0:12)|MP Region Foghorn Pier]]>><<pass 12>><</link>>
 <<else>>
@@ -350,7 +380,7 @@
 <br>
 <<link "沿芦苇道摸 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-fog-whistle">>
 <<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
-	<<set $mpClues["wild_extra_fog_direction"] to 1>><span class="blue">线索已记录</span>你先稳住下盘重心，再分寸不差地完成了最后一步。<span class="green">阻碍迎刃而解，手头收获已贴身收好。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_fog_direction"]>><<set $mpClues["wild_extra_fog_direction"] to 1>><span class="blue">线索已记录</span><</if>>你先稳住下盘重心，再分寸不差地完成了最后一步。<span class="green">阻碍迎刃而解，手头收获已贴身收好。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[循线追查 (0:04)|MP Wild Extra Fog Whistle Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -374,7 +404,7 @@
 <div id="side-act-mp-wild-extra-fog-whistle-step2">
 <<investigateicon>><<link "顺水下细绳摸 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-fog-whistle-step2">>
 <<set _sk to ($skulduggery or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_fog_device"] to 1>><span class="blue">线索已记录</span><span class="green">你拆开风箱侧面的木盖，里面不是普通的皮囊，而是一只可以调音的簧片盒。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_fog_device"]>><<set $mpClues["wild_extra_fog_device"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你拆开风箱侧面的木盖，里面不是普通的皮囊，而是一只可以调音的簧片盒。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[理清头绪 (0:12)|MP Region Foghorn Pier]]>><<pass 12>><</link>>
 <<else>>
@@ -388,7 +418,7 @@
 <br>
 <<link "木排上等天亮 (0:08)">><<pass 8>><<replace "#side-act-mp-wild-extra-fog-whistle-step2">>
 <<if (($maths or 0) + ($mpClues['wild_extra_fog_direction'] ? 60 : 0)) gte 250 or ($housekeeping or 0) gte 250>>
-	<<set $mpClues["wild_extra_fog_device"] to 1>><span class="blue">线索已记录</span>你换了个顺手的角度切入，原本棘手的阻碍顿时迎刃而解。<span class="green">不费吹灰之力便拿到了里层物件。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_fog_device"]>><<set $mpClues["wild_extra_fog_device"] to 1>><span class="blue">线索已记录</span><</if>>你换了个顺手的角度切入，原本棘手的阻碍顿时迎刃而解。<span class="green">不费吹灰之力便拿到了里层物件。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[带凭证核实 (0:04)|MP Wild Extra Fog Whistle Resolve]]>><<pass 4>><</link>>
 <<else>>
@@ -433,7 +463,7 @@
 <div id="side-act-mp-wild-extra-red-thread-herbs">
 <<walkicon>><<link "沿小径往前 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-red-thread-herbs">>
 <<set _sk to ($tending or 0)>><<if _sk gte 260>>
-	<<set $mpClues["wild_extra_red_knot"] to 1>><span class="blue">线索已记录</span><span class="green">你解开红绳，发现绳结的收口朝着海，绳头却回折向山。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_red_knot"]>><<set $mpClues["wild_extra_red_knot"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你解开红绳，发现绳结的收口朝着海，绳头却回折向山。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<investigateicon>><<link [[转过拐角查访 (0:04)|Cliff Street]]>><<pass 4>><</link>>
 <<else>>
@@ -447,7 +477,7 @@
 <br>
 <<link "下崖壁查看 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-red-thread-herbs">>
 <<if ($science or 0) gte 250 or ($tending or 0) gte 240>>
-	<<set $mpClues["wild_extra_red_knot"] to 1>><span class="blue">线索已记录</span><span class="green">你屏住呼吸顺着器物纹理摸索，没惊动四周便找准了关窍。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_red_knot"]>><<set $mpClues["wild_extra_red_knot"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你屏住呼吸顺着器物纹理摸索，没惊动四周便找准了关窍。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[循线追查 (0:04)|MP Wild Extra Red Thread Herbs Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -471,7 +501,7 @@
 <div id="side-act-mp-wild-extra-red-thread-herbs-step2">
 <<investigateicon>><<link "推开岩片看看 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-red-thread-herbs-step2">>
 <<set _sk to ($willpower or 0)>><<if _sk gte 320>>
-	<<set $mpClues["wild_extra_red_partner"] to 1>><span class="blue">线索已记录</span><span class="green">你没有立刻去碰那块岩片，先数了数盒里的干草。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_red_partner"]>><<set $mpClues["wild_extra_red_partner"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你没有立刻去碰那块岩片，先数了数盒里的干草。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<walkicon>><<link [[理清头绪 (0:04)|Cliff Street]]>><<pass 4>><</link>>
 <<else>>
@@ -485,7 +515,7 @@
 <br>
 <<link "回小径等采药人 (0:08)">><<pass 8>><<replace "#side-act-mp-wild-extra-red-thread-herbs-step2">>
 <<if (($willpower or 0) + ($mpClues['wild_extra_red_knot'] ? 60 : 0)) gte 420 or ($athletics or 0) gte 250>>
-	<<set $mpClues["wild_extra_red_partner"] to 1>><span class="blue">线索已记录</span>你按老手传授的诀窍沉腕发力，几下便将首尾料理妥当。<span class="green">现场被你收拾得井井有条。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_red_partner"]>><<set $mpClues["wild_extra_red_partner"] to 1>><span class="blue">线索已记录</span><</if>>你按老手传授的诀窍沉腕发力，几下便将首尾料理妥当。<span class="green">现场被你收拾得井井有条。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[持凭证对质 (0:04)|MP Wild Extra Red Thread Herbs Resolve]]>><<pass 4>><</link>>
 <<else>>
@@ -532,7 +562,7 @@
 <div id="side-act-mp-wild-extra-vent-flags">
 <<caveicon>><<link "沿铁梯下到井底 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-vent-flags">>
 <<set _sk to ($english or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_vent_signal"] to 1>><span class="blue">线索已记录</span><span class="green">你把颜色按长短排开，看出这不是随手的晾布：蓝长是安全，白短是有人来，红最短是别下来。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_vent_signal"]>><<set $mpClues["wild_extra_vent_signal"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你把颜色按长短排开，看出这不是随手的晾布：蓝长是安全，白短是有人来，红最短是别下来。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[顺暗径前行 (0:12)|Forest]]>><<pass 12>><</link>>
 <<else>>
@@ -546,7 +576,7 @@
 <br>
 <<link "看井壁刮痕 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-vent-flags">>
 <<if ($history or 0) gte 250 or ($english or 0) gte 250>>
-	<<set $mpClues["wild_extra_vent_signal"] to 1>><span class="blue">线索已记录</span>你耐着性子一点点理清脉络，终于将关键线索握在手中。<span class="green">这一趟工夫没有白费，收获颇丰。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_vent_signal"]>><<set $mpClues["wild_extra_vent_signal"] to 1>><span class="blue">线索已记录</span><</if>>你耐着性子一点点理清脉络，终于将关键线索握在手中。<span class="green">这一趟工夫没有白费，收获颇丰。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[循线追查 (0:04)|MP Wild Extra Vent Flags Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -571,7 +601,7 @@
 <div id="side-act-mp-wild-extra-vent-flags-step2">
 <<socialiseicon>><<link "敲铁皮箱问话 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-vent-flags-step2">>
 <<set _sk to ($skulduggery or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_vent_hider"] to 1>><span class="blue">线索已记录</span><span class="green">你用剪子尖挑开箱盖的搭扣，里面没有锁，只有一根别住的铁丝。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_vent_hider"]>><<set $mpClues["wild_extra_vent_hider"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你用剪子尖挑开箱盖的搭扣，里面没有锁，只有一根别住的铁丝。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<investigateicon>><<link [[理清头绪 (0:12)|Forest]]>><<pass 12>><</link>>
 <<else>>
@@ -585,7 +615,7 @@
 <br>
 <<link "退上铁梯等着 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-vent-flags-step2">>
 <<if (($science or 0) + ($mpClues['wild_extra_vent_signal'] ? 60 : 0)) gte 250 or ($tending or 0) gte 240>>
-	<<set $mpClues["wild_extra_vent_hider"] to 1>><span class="blue">线索已记录</span>你趁周围无人留意果断出手，眨眼间便把事情办得滴水不漏。<span class="green">顺手起出了封存完好的贴身收存。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_vent_hider"]>><<set $mpClues["wild_extra_vent_hider"] to 1>><span class="blue">线索已记录</span><</if>>你趁周围无人留意果断出手，眨眼间便把事情办得滴水不漏。<span class="green">顺手起出了封存完好的贴身收存。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[带凭证核实 (0:04)|MP Wild Extra Vent Flags Resolve]]>><<pass 4>><</link>>
 <<else>>
@@ -629,7 +659,7 @@
 <div id="side-act-mp-wild-extra-galley-pot">
 <<walkicon>><<link "沿湿脚印去货舱 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-galley-pot">>
 <<set _sk to ($english or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_galley_soup"] to 1>><span class="blue">线索已记录</span><span class="green">你捞起一片根茎，断面有细密的放射纹，是海边人用来退烧的苦根。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_galley_soup"]>><<set $mpClues["wild_extra_galley_soup"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你捞起一片根茎，断面有细密的放射纹，是海边人用来退烧的苦根。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<investigateicon>><<link [[转过拐角查访 (0:12)|Docks]]>><<pass 12>><</link>>
 <<else>>
@@ -643,7 +673,7 @@
 <br>
 <<link "看灶膛里的纸 (0:05)">><<pass 5>><<replace "#side-act-mp-wild-extra-galley-pot">>
 <<if ($maths or 0) gte 250 or ($housekeeping or 0) gte 250>>
-	<<set $mpClues["wild_extra_galley_soup"] to 1>><span class="blue">线索已记录</span><span class="green">你按次序将前后的痕迹逐一印证，很快发现了藏在底下的暗记。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_galley_soup"]>><<set $mpClues["wild_extra_galley_soup"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你按次序将前后的痕迹逐一印证，很快发现了藏在底下的暗记。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[循线追查 (0:04)|MP Wild Extra Galley Pot Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -667,7 +697,7 @@
 <div id="side-act-mp-wild-extra-galley-pot-step2">
 <<socialiseicon>><<link "把汤热上 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-galley-pot-step2">>
 <<set _sk to ($skulduggery or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_galley_patient"] to 1>><span class="blue">线索已记录</span><span class="green">你用铁丝重新别住货舱门，又检查了病人手腕上的绳结。结是活扣，越挣越紧，但不会勒伤。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_galley_patient"]>><<set $mpClues["wild_extra_galley_patient"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你用铁丝重新别住货舱门，又检查了病人手腕上的绳结。结是活扣，越挣越紧，但不会勒伤。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<investigateicon>><<link [[理清头绪 (0:12)|Docks]]>><<pass 12>><</link>>
 <<else>>
@@ -681,7 +711,7 @@
 <br>
 <<if (($history or 0) + ($mpClues['wild_extra_galley_soup'] ? 60 : 0)) gte 250 or ($english or 0) gte 260>><<link "藏货架后等人 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-galley-pot-step2">>
 <<if (($history or 0) + ($mpClues['wild_extra_galley_soup'] ? 60 : 0)) gte 250 or ($english or 0) gte 250>>
-	<<set $mpClues["wild_extra_galley_patient"] to 1>><span class="blue">线索已记录</span>你借着旁侧遮挡掩去身形，指下轻巧地解开了最后一道束缚。<span class="green">轻巧地将卡在深处的东西收入囊中。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_galley_patient"]>><<set $mpClues["wild_extra_galley_patient"] to 1>><span class="blue">线索已记录</span><</if>>你借着旁侧遮挡掩去身形，指下轻巧地解开了最后一道束缚。<span class="green">轻巧地将卡在深处的东西收入囊中。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[持凭证对质 (0:04)|MP Wild Extra Galley Pot Resolve]]>><<pass 4>><</link>>
 <<else>>
@@ -725,7 +755,7 @@
 <div id="side-act-mp-wild-extra-pebble-pattern">
 <<investigateicon>><<link "看刻记号的桦树 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-pebble-pattern">>
 <<set _sk to ($maths or 0)>><<if _sk gte 260>>
-	<<set $mpClues["wild_extra_pebble_message"] to 1>><span class="blue">线索已记录</span><span class="green">你把折线按转折点数了一遍：四段，三个点。四点像一条路，三点像三个人。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_pebble_message"]>><<set $mpClues["wild_extra_pebble_message"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你把折线按转折点数了一遍：四段，三个点。四点像一条路，三点像三个人。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[顺暗径前行 (0:04)|Forest]]>><<pass 4>><</link>>
 <<else>>
@@ -739,7 +769,7 @@
 <br>
 <<link "躲等摆石人 (0:08)">><<pass 8>><<replace "#side-act-mp-wild-extra-pebble-pattern">>
 <<if ($willpower or 0) gte 420 or ($athletics or 0) gte 250>>
-	<<set $mpClues["wild_extra_pebble_message"] to 1>><span class="blue">线索已记录</span>你细致比对前人留下的暗记，顺藤摸瓜找出了隐藏的门道。<span class="green">来龙去脉在你眼中已是一清二楚。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_pebble_message"]>><<set $mpClues["wild_extra_pebble_message"] to 1>><span class="blue">线索已记录</span><</if>>你细致比对前人留下的暗记，顺藤摸瓜找出了隐藏的门道。<span class="green">来龙去脉在你眼中已是一清二楚。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[循线追查 (0:04)|MP Wild Extra Pebble Pattern Step2]]>><<pass 4>><</link>>
 <<else>>
@@ -763,7 +793,7 @@
 <div id="side-act-mp-wild-extra-pebble-pattern-step2">
 <<socialiseicon>><<link "朝灌木出声 (0:06)">><<pass 6>><<replace "#side-act-mp-wild-extra-pebble-pattern-step2">>
 <<set _sk to ($english or 0)>><<if _sk gte 300>>
-	<<set $mpClues["wild_extra_pebble_note"] to 1>><span class="blue">线索已记录</span><span class="green">你把锡片举到光下，认出上面划的是：北边第三个点，等我。字迹很急，最后一笔拖得很长。</span><<stress -1>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_pebble_note"]>><<set $mpClues["wild_extra_pebble_note"] to 1>><span class="blue">线索已记录</span><</if>><span class="green">你把锡片举到光下，认出上面划的是：北边第三个点，等我。字迹很急，最后一笔拖得很长。</span><<stress -1>><<lstress>>
 	<br><br>
 	<<getouticon>><<link [[理清头绪 (0:04)|Forest]]>><<pass 4>><</link>>
 <<else>>
@@ -777,7 +807,7 @@
 <br>
 <<link "绕到石环北侧 (0:07)">><<pass 7>><<replace "#side-act-mp-wild-extra-pebble-pattern-step2">>
 <<if (($maths or 0) + ($mpClues['wild_extra_pebble_message'] ? 60 : 0)) gte 250 or ($housekeeping or 0) gte 250>>
-	<<set $mpClues["wild_extra_pebble_note"] to 1>><span class="blue">线索已记录</span>你放轻呼吸贴近细看，用巧劲化解了原本僵死的卡扣。<span class="green">妥善取出了藏在夹缝里的那份收获。</span><<stress -2>><<lstress>>
+	<<if !$mpClues or !$mpClues["wild_extra_pebble_note"]>><<set $mpClues["wild_extra_pebble_note"] to 1>><span class="blue">线索已记录</span><</if>>你放轻呼吸贴近细看，用巧劲化解了原本僵死的卡扣。<span class="green">妥善取出了藏在夹缝里的那份收获。</span><<stress -2>><<lstress>>
 	<br><br>
 	<<link [[带凭证核实 (0:04)|MP Wild Extra Pebble Pattern Resolve]]>><<pass 4>><</link>>
 <<else>>
