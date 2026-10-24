@@ -7,14 +7,14 @@
 	铜牌背面尚未到下一场半日节令的集期，最近的一场还要再等些日子。
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回上排铜牌 (0:02)|MP Town Festivals 3 Hub]]>><<pass 2>><</link>>
+<<walkicon>><<link [[返回上排铜牌 (0:02)|MP Town Festivals 3 Hub]]>><<pass 2>><</link>>
 <br>
 <<if _m is 3 and _d gte 18 and _d lte 24>>
 	<<shopicon>><<link [[看茜草染缸 (0:04)|MP Festival SpringDye 1]]>><<pass 4>><</link>>
 	<br>
 <</if>>
 <<if _m is 6 and _d gte 21 and _d lte 27>>
-	<<beachicon>><<link [[看浅滩篝火 (0:12)|MP Festival Tidesong 1]]>><<pass 12>><</link>>
+	<<beachicon>><<if Time.dayState is "dusk">><<link [[看浅滩篝火 (0:12)|MP Festival Tidesong 1]]>><<pass 12>><</link>><<else>><span class="disabled">看浅滩篝火 (0:12)（只有黄昏）</span><</if>>
 	<br>
 <</if>>
 <<if (_m is 9 and _d gte 26) or (_m is 10 and _d lte 2)>>
@@ -30,7 +30,7 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpFestScore to 0>>
 高街裁缝铺外的青石小院支起了三口紫铜染缸，茜草根与栀子果在沸水里翻滚出明艳的赤金汤色。老染匠正招手请路人帮忙搅动染棒。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <br><br>
 <div id="fest-springdye-1">
 <<tendingicon>><<link "搅匀染缸 (0:07)">><<pass 7>><<replace "#fest-springdye-1">>
@@ -38,17 +38,17 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	染汤色泽透亮均匀，老染匠笑眯眯地递给你一条刚染好的茜草红丝帕。<span class="green">你帮染坊稳住了头缸春色。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[去扎染长桌 (0:04)|MP Festival SpringDye 2]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[去扎染长桌 (0:04)|MP Festival SpringDye 2]]>><<pass 4>><</link>>
 <<else>>
 	滚烫染汤溅出一滴落在鞋尖上，热气熏得你鼻尖冒汗。<span class="red">热气扑面，鞋尖沾上了一点红汁。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[垫上干布重起卡扣 (0:04)|MP Festival SpringDye 1]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[垫上干布重起卡扣 (0:04)|MP Festival SpringDye 1]]>><<pass 4>><</link>>
 	<br>
 	<<link [[收妥行囊回木牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<link "添柴稳汤温 (0:07)">><<pass 7>><<replace "#fest-springdye-1">>
+<<if ($tending or 0) gte 250 or ($science or 0) gte 260>><<link "添柴稳汤温 (0:07)">><<pass 7>><<replace "#fest-springdye-1">>
 <<if ($tending or 0) gte 240 or ($science or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>你往紫铜染缸炉膛里添入两块干燥桦木柴，用长火钳拨匀炭火，将茜草染汤稳稳控在微沸状态。<span class="green">汤色透亮鲜艳，老染匠眉开眼笑地送了你一条红丝帕。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
@@ -60,32 +60,32 @@
 	<br>
 	<<link [[返回入口 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">添柴稳汤温 (0:07)（能力不足）</span><</if>>
 </div>
 
 :: MP Festival SpringDye 2 [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 染坊廊下的长木桌上铺满洁白生丝帕，<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>正教几个学徒用麻线扎出云纹与蝴蝶花结，准备浸入靛蓝冷染缸。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <br><br>
 <div id="fest-springdye-2">
-<<tendingicon>><<link "扎四角蝶翼结 (0:07)">><<pass 7>><<replace "#fest-springdye-2">>
+<<tendingicon>><<if ($danceskill or 0) gte 250 or ($skulduggery or 0) gte 250>><<link "扎四角蝶翼结 (0:07)">><<pass 7>><<replace "#fest-springdye-2">>
 <<if ($danceskill or 0) gte 240 or ($skulduggery or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	解开麻线后蓝白蝶纹栩栩如生，莫奈赞许地朝你颔首。<span class="green">你扎染出了全场最灵动的蝶翼花帕。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[晾晒彩幡 (0:04)|MP Festival SpringDye 3]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[晾晒彩幡 (0:04)|MP Festival SpringDye 3]]>><<pass 4>><</link>>
 <<else>>
 	麻线打结略松，靛蓝染汁渗进了留白处，花纹晕成了一团。<span class="red">麻线松脱导致染汁渗入留白。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[擦净指腹重按簧片 (0:04)|MP Festival SpringDye 2]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[擦净指腹重按簧片 (0:04)|MP Festival SpringDye 2]]>><<pass 4>><</link>>
 	<br>
 	<<link [[拍净衣袖回木牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">扎四角蝶翼结 (0:07)（能力不足）</span><</if>>
 <br>
-<<link "按图谱排染序 (0:07)">><<pass 7>><<replace "#fest-springdye-2">>
+<<if ($english or 0) gte 260 or ($science or 0) gte 260>><<link "按图谱排染序 (0:07)">><<pass 7>><<replace "#fest-springdye-2">>
 <<if ($english or 0) gte 240 or ($science or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>	你对照莫奈的染谱按浅蓝、靛青、深紫排好浸缸时长，挂起丝帕时过渡如水墨晕染。<span class="green">莫奈笑着夸你对色彩层次极有灵气。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
@@ -97,14 +97,14 @@
 	<br>
 	<<link [[顺着街巷回木牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">按图谱排染序 (0:07)（学识不足）</span><</if>>
 </div>
 
 :: MP Festival SpringDye 3 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 院心高高架起的晾布竹竿上挂满五彩春幡，一阵春风吹来，最高处那幅金线彩绸缠在了竹梢枝杈上。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <br><br>
 <div id="fest-springdye-3">
 <<tendingicon>><<link "竹竿挑开绸角 (0:07)">><<pass 7>><<replace "#fest-springdye-3">>
@@ -112,17 +112,17 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	五彩春幡迎风舒展飘扬，围观街坊爆发出一阵喝彩。<span class="green">春幡完好无损地在晴空下迎风招展。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[参加彩缕评比 (0:04)|MP Festival SpringDye 4]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[参加彩缕评比 (0:04)|MP Festival SpringDye 4]]>><<pass 4>><</link>>
 <<else>>
 	木凳在青石板上晃了一下，你扶住晾衣架才站稳，手心擦破一点皮。<span class="red">木凳摇晃擦红了你的掌心。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[扶稳器座重调角度 (0:04)|MP Festival SpringDye 3]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[扶稳器座重调角度 (0:04)|MP Festival SpringDye 3]]>><<pass 4>><</link>>
 	<br>
 	<<link [[暂退一步 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<link "拉绳解开绸 (0:07)">><<pass 7>><<replace "#fest-springdye-3">>
+<<if ($skulduggery or 0) gte 250 or ($willpower or 0) gte 420>><<link "拉绳解开绸 (0:07)">><<pass 7>><<replace "#fest-springdye-3">>
 <<if ($skulduggery or 0) gte 250 or ($willpower or 0) gte 420>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>你握住晾布竹架侧面的副引绳，顺着春风吹拂的方向轻轻一抖，缠在横竿上的五彩春幡顿时顺滑解开。<span class="green">满院春幡迎风招展，围观街坊纷纷向你投来赞许目光。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
@@ -134,14 +134,14 @@
 	<br>
 	<<link [[顺着街巷回木牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">拉绳解开绸 (0:07)（能力不足）</span><</if>>
 </div>
 
 :: MP Festival SpringDye 4 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 午后阳光最暖时，染匠们把各色丝缕挂在街心花架下请路人品评，还要给孤儿院的孩子们分赠辟邪五色线。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <br><br>
 <div id="fest-springdye-4">
 <<tendingicon>><<link "给孩子系丝缕 (0:07)">><<pass 7>><<replace "#fest-springdye-4">>
@@ -149,11 +149,11 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	孩子们欢天喜地地围着你转，几位外地游客也大方地投下了赞赏银币。<span class="green">热闹的评比席间充满了欢声笑语。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[收染架去案前 (0:04)|MP Festival SpringDye 5]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[收染架去案前 (0:04)|MP Festival SpringDye 5]]>><<pass 4>><</link>>
 <<else>>
 	人流拥挤中有人踩了你的脚背一下，五色线也乱成了一团。<span class="red">人群拥挤让你脚背被踩得生疼。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[借着侧光重对刻痕 (0:04)|MP Festival SpringDye 4]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[借着侧光重对刻痕 (0:04)|MP Festival SpringDye 4]]>><<pass 4>><</link>>
 	<br>
 	<<link [[整好衣领回木牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -181,9 +181,9 @@
 	<span class="teal">染彩集几道工序都出了岔子，老染匠只塞给你一碗姜汤驱寒。</span>
 <<elseif window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_springdye_reward")>>
 	<<if ($mpFestScore or 0) gte 4>>
-		<<money 650>><span class="gold">你圆满完成了染彩集四道工序，收下 £6.50 全勤红封。</span>
+		<<money 650>><span class="gold">你圆满完成了染彩集四道工序，收下 <span class="gold">£6.50</span> 全勤红封。</span>
 	<<else>>
-		<<money 350>><span class="gold">你帮衬了染彩集部分工序，收下 £3.50 帮工红封。</span>
+		<<money 350>><span class="gold">你帮衬了染彩集部分工序，收下 <span class="gold">£3.50</span> 帮工红封。</span>
 	<</if>>
 <<else>>
 	染彩集红封已经拆过，只剩淡淡的纸香。
@@ -196,23 +196,23 @@
 <<set $outside to 1>><<set $location to "beach">><<effects>><<mpAmbient>><<set $mpFestScore to 0>>
 仲夏傍晚的海滩上堆起了干燥的浮木篝火堆，海风带着微咸暖意，渔民们正忙着在防风槽里淋松脂助燃。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <br><br>
 <div id="fest-tidesong-1">
-<<tendingicon>><<link "按风向垒浮木 (0:07)">><<pass 7>><<replace "#fest-tidesong-1">>
+<<tendingicon>><<if ($science or 0) gte 260 or ($housekeeping or 0) gte 250>><<link "按风向垒浮木 (0:07)">><<pass 7>><<replace "#fest-tidesong-1">>
 <<if ($science or 0) gte 240 or ($housekeeping or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	橘红色的篝火腾空而起照亮浅滩，老水手递给你一串烤得滋滋冒油的扇贝。<span class="green">海滩篝火熊熊燃起映红了暮色。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[串贝壳风铃 (0:04)|MP Festival Tidesong 2]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[串贝壳风铃 (0:04)|MP Festival Tidesong 2]]>><<pass 4>><</link>>
 <<else>>
 	海风倒卷吹来一团浓烟，呛得你连咳数声，眼角直泛泪花。<span class="red">逆风浓烟呛得你嗓子发痒。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[握稳工具重调位置 (0:04)|MP Festival Tidesong 1]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[握稳工具重调位置 (0:04)|MP Festival Tidesong 1]]>><<pass 4>><</link>>
 	<br>
 	<<link [[缓步走回木牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">按风向垒浮木 (0:07)（能力不足）</span><</if>>
 <br>
 <<link "举火点松脂 (0:07)">><<pass 7>><<replace "#fest-tidesong-1">>
 <<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>>
@@ -233,7 +233,7 @@
 <<set $outside to 1>><<set $location to "beach">><<effects>><<mpAmbient>>
 浅滩凉棚下摆着成筐的白螺壳与彩贝，姑娘们正用细铜丝串制仲夏祈福风铃，挂上栈桥栏杆听海风伴奏。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <br><br>
 <div id="fest-tidesong-2">
 <<tendingicon>><<link "编扇贝风铃 (0:07)">><<pass 7>><<replace "#fest-tidesong-2">>
@@ -241,17 +241,17 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	海风拂过时贝壳风铃叮咚作响，宛如潮水低吟，摊主送了你一枚珍珠母贝挂件。<span class="green">你串制的贝壳风铃音色最为清越。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[加入踏浪合唱 (0:04)|MP Festival Tidesong 3]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[加入踏浪合唱 (0:04)|MP Festival Tidesong 3]]>><<pass 4>><</link>>
 <<else>>
 	贝壳边缘锋利，穿铜丝时不小心在指腹上划出了一道浅印。<span class="red">锋利贝壳边沿刮痛了你的指腹。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[垫上干布重起卡扣 (0:04)|MP Festival Tidesong 2]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[垫上干布重起卡扣 (0:04)|MP Festival Tidesong 2]]>><<pass 4>><</link>>
 	<br>
 	<<link [[暂退一步 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<link "白螺顶钻小孔 (0:07)">><<pass 7>><<replace "#fest-tidesong-2">>
+<<if ($skulduggery or 0) gte 250 or ($science or 0) gte 260>><<link "白螺顶钻小孔 (0:07)">><<pass 7>><<replace "#fest-tidesong-2">>
 <<if ($skulduggery or 0) gte 250 or ($science or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>你借着凉棚马灯微光，用细钢锥抵住白螺壳顶端螺旋中心，指尖轻旋便钻出了圆润匀称的穿线孔。<span class="green">串起的白螺风铃清脆悦耳，摊主高兴地送了你一枚母贝挂件。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
@@ -263,14 +263,14 @@
 	<br>
 	<<link [[收妥行囊回木牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">白螺顶钻小孔 (0:07)（能力不足）</span><</if>>
 </div>
 
 :: MP Festival Tidesong 3 [nobr]
 <<set $outside to 1>><<set $location to "beach">><<effects>><<mpAmbient>>
 手风琴声在篝火旁响起，镇民们挽着手臂赤脚踩进温凉的浪花里，齐声哼唱古老的仲夏平潮歌。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <br><br>
 <div id="fest-tidesong-3">
 <<tendingicon>><<link "踩浪花旋身共舞 (0:07)">><<pass 7>><<replace "#fest-tidesong-3">>
@@ -278,17 +278,17 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	欢快的歌声与浪涛声融为一体，身旁的舞伴将一顶编满海石竹的花环戴在你头上。<span class="green">你在踏浪歌舞中忘却了所有烦恼。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[端碗灯去放灯 (0:04)|MP Festival Tidesong 4]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[端碗灯去放灯 (0:04)|MP Festival Tidesong 4]]>><<pass 4>><</link>>
 <<else>>
 	一个浪头打来，你脚底在湿沙上一滑，裙摆裤脚全湿透了。<span class="red">浪花打湿了半截衣裤。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[擦净指腹重按簧片 (0:04)|MP Festival Tidesong 3]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[擦净指腹重按簧片 (0:04)|MP Festival Tidesong 3]]>><<pass 4>><</link>>
 	<br>
 	<<link [[拍净衣袖回木牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<link "唱准副歌高音 (0:07)">><<pass 7>><<replace "#fest-tidesong-3">>
+<<if ($english or 0) gte 260 or ($seductionskill or 0) gte 250>><<link "唱准副歌高音 (0:07)">><<pass 7>><<replace "#fest-tidesong-3">>
 <<if ($english or 0) gte 250 or ($seductionskill or 0) gte 250>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>	你顺着手风琴扬起的尾音清亮起调，将仲夏平潮歌的高音部稳稳托向夜海。<span class="green">篝火四周响起一片喝彩与掌声。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
@@ -300,30 +300,30 @@
 	<br>
 	<<link [[顺着街巷回木牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">唱准副歌高音 (0:07)（能力不足）</span><</if>>
 </div>
 
 :: MP Festival Tidesong 4 [nobr]
 <<set $outside to 1>><<set $location to "searocks">><<effects>><<mpAmbient>>
 夜潮退向远海，人们捧着点亮蜂蜡的木碗水灯走上礁石浅湾，准备顺着退潮暗流将心愿放入夜海。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <br><br>
 <div id="fest-tidesong-4">
-<<tendingicon>><<link "顺水湾推水灯 (0:07)">><<pass 7>><<replace "#fest-tidesong-4">>
+<<tendingicon>><<if ($swimmingskill or 0) gte 250 or ($science or 0) gte 260>><<link "顺水湾推水灯 (0:07)">><<pass 7>><<replace "#fest-tidesong-4">>
 <<if ($swimmingskill or 0) gte 250 or ($science or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	点点烛光顺着黑丝绸般的海面漂向远方星海，壮美得令人屏息。<span class="green">你的水灯稳稳汇入了远海的灯河。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[回栈道领补贴 (0:04)|MP Festival Tidesong 5]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[回栈道领补贴 (0:04)|MP Festival Tidesong 5]]>><<pass 4>><</link>>
 <<else>>
 	礁石湿滑，你弯腰放灯时手掌按在了粗糙的藤壶壳上。<span class="red">藤壶壳硌痛了你的掌心。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[扶稳器座重调角度 (0:04)|MP Festival Tidesong 4]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[扶稳器座重调角度 (0:04)|MP Festival Tidesong 4]]>><<pass 4>><</link>>
 	<br>
 	<<link [[顺着街巷回木牌前 (0:12)|MP Town Festivals 4 Hub]]>><<pass 12>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">顺水湾推水灯 (0:07)（能力不足）</span><</if>>
 <br>
 <<link "淌水送木灯 (0:07)">><<pass 7>><<replace "#fest-tidesong-4">>
 <<if ($athletics or 0) gte 250 or ($willpower or 0) gte 430>>
@@ -347,9 +347,9 @@
 	<span class="teal">潮歌会几道工序都出了岔子，老水手只分给你一碗热鱼汤暖胃。</span>
 <<elseif window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_tidesong_reward")>>
 	<<if ($mpFestScore or 0) gte 4>>
-		<<money 650>><span class="gold">你圆满完成了潮歌会四道工序，收下 £6.50 全勤红封。</span>
+		<<money 650>><span class="gold">你圆满完成了潮歌会四道工序，收下 <span class="gold">£6.50</span> 全勤红封。</span>
 	<<else>>
-		<<money 350>><span class="gold">你帮衬了潮歌会部分工序，收下 £3.50 帮工红封。</span>
+		<<money 350>><span class="gold">你帮衬了潮歌会部分工序，收下 <span class="gold">£3.50</span> 帮工红封。</span>
 	<</if>>
 <<else>>
 	潮歌会红封已经拆过，只剩淡淡的纸香。
@@ -362,7 +362,7 @@
 <<set $outside to 1>><<set $location to "pub">><<effects>><<mpAmbient>><<set $mpFestScore to 0>>
 九月秋风送爽，丰收街酒馆前院摆开长案，木盆里堆满刚摘的青苹果与核桃仁，正要切丁拌入烤鹅腹馅。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <br><br>
 <div id="fest-michaelmas-1">
 <<tendingicon>><<link "切苹果洋葱片 (0:07)">><<pass 7>><<replace "#fest-michaelmas-1">>
@@ -370,11 +370,11 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	拌上鼠尾草的果木馅料清香扑鼻，厨娘塞给你一小把裹了蜜糖的核桃仁。<span class="green">你备好的苹果核桃馅香气四溢。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[照看脆皮烤鹅 (0:08)|MP Festival Michaelmas 2]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[照看脆皮烤鹅 (0:08)|MP Festival Michaelmas 2]]>><<pass 8>><</link>>
 <<else>>
 	洋葱辛辣的气味熏得你眼泪直流，刀背还磕了一下指节。<span class="red">洋葱熏眼，手指被刀背磕了一下。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[理顺纹理重压边缘 (0:04)|MP Festival Michaelmas 1]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[理顺纹理重压边缘 (0:04)|MP Festival Michaelmas 1]]>><<pass 4>><</link>>
 	<br>
 	<<link [[暂退一步 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
@@ -399,7 +399,7 @@
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
 后院大砖炉里果木炭火正旺，六只刷满麦芽蜂蜜的肥鹅在铁叉上缓缓转动，金黄油脂滴在接油盘里滋滋作响。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <br><br>
 <div id="fest-michaelmas-2">
 <<tendingicon>><<link "摇柄烤鹅上色 (0:07)">><<pass 7>><<replace "#fest-michaelmas-2">>
@@ -407,17 +407,17 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	出炉的烤鹅皮脆肉嫩、金黄油亮，引得满院食客阵阵赞叹。<span class="green">你烤出了色泽金黄的绝佳秋鹅。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[帮开新麦酒 (0:08)|MP Festival Michaelmas 3]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[帮开新麦酒 (0:08)|MP Festival Michaelmas 3]]>><<pass 8>><</link>>
 <<else>>
 	砖炉热浪扑面而来，一滴滚油溅在你的手腕上烫出红点。<span class="red">炉口滚油溅红了你的手腕。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[握稳工具重调位置 (0:04)|MP Festival Michaelmas 2]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[握稳工具重调位置 (0:04)|MP Festival Michaelmas 2]]>><<pass 4>><</link>>
 	<br>
 	<<link [[缓步走回木牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<link "刷蜜汁烤鹅 (0:07)">><<pass 7>><<replace "#fest-michaelmas-2">>
+<<if ($housekeeping or 0) gte 250 or ($science or 0) gte 260>><<link "刷蜜汁烤鹅 (0:07)">><<pass 7>><<replace "#fest-michaelmas-2">>
 <<if ($housekeeping or 0) gte 250 or ($science or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>你握住长柄羊毛刷蘸满金黄的苹果麦芽蜜汁，顺着转动的铁叉在烤鹅表皮均匀刷出三层薄蜜。<span class="green">出炉的秋鹅表皮酥脆流油，满院食客闻香欢呼。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
@@ -429,14 +429,14 @@
 	<br>
 	<<link [[收妥行囊回木牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">刷蜜汁烤鹅 (0:07)（能力不足）</span><</if>>
 </div>
 
 :: MP Festival Michaelmas 3 [nobr]
 <<set $outside to 1>><<set $location to "pub">><<effects>><<mpAmbient>>
 院子中央抬上了今年头一桶秋收新麦芽酒，酒馆老板举着木槌，请你帮忙稳住龙头木塞免得泡沫喷洒。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <br><br>
 <div id="fest-michaelmas-3">
 <<tendingicon>><<link "敲入桶龙头 (0:07)">><<pass 7>><<replace "#fest-michaelmas-3">>
@@ -444,11 +444,11 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	琥珀色的新麦酒带着绵密白沫注满木杯，老板豪爽地先赏了你一份开桶彩头。<span class="green">头桶新麦酒滴酒未洒地顺利开封。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[分切秋分圆饼 (0:04)|MP Festival Michaelmas 4]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[分切秋分圆饼 (0:04)|MP Festival Michaelmas 4]]>><<pass 4>><</link>>
 <<else>>
 	桶内气压太足，麦酒泡沫喷了你满袖口，空气里全是酒花香。<span class="red">喷涌的麦酒泡沫打湿了衣袖。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[垫上干布重起卡扣 (0:04)|MP Festival Michaelmas 3]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[垫上干布重起卡扣 (0:04)|MP Festival Michaelmas 3]]>><<pass 4>><</link>>
 	<br>
 	<<link [[收妥行囊回木牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
@@ -473,27 +473,27 @@
 <<set $outside to 1>><<set $location to "pub">><<effects>><<mpAmbient>>
 长木桌上端出了镶着蜜饯与干果的巨型秋分黑麦圆饼，按习俗要一刀不偏地切成均等的十二份分给街坊。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <br><br>
 <div id="fest-michaelmas-4">
-<<tendingicon>><<link "目测圆心切份 (0:07)">><<pass 7>><<replace "#fest-michaelmas-4">>
+<<tendingicon>><<if ($maths or 0) gte 260 or ($science or 0) gte 260>><<link "目测圆心切份 (0:07)">><<pass 7>><<replace "#fest-michaelmas-4">>
 <<if ($maths or 0) gte 250 or ($science or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	分到幸运银豆的孩子欢呼雀跃，整桌街坊纷纷向你敬酒致意。<span class="green">你的巧妙分饼让全席宾主尽欢。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[收餐盘领酬劳 (0:04)|MP Festival Michaelmas 5]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[收餐盘领酬劳 (0:04)|MP Festival Michaelmas 5]]>><<pass 4>><</link>>
 <<else>>
 	蜜饯粘住了刀刃，切到最后两块时饼皮碎了一角。<span class="red">蜜饯粘刀导致饼边略微散碎。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[擦净指腹重按簧片 (0:04)|MP Festival Michaelmas 4]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[擦净指腹重按簧片 (0:04)|MP Festival Michaelmas 4]]>><<pass 4>><</link>>
 	<br>
 	<<link [[拍净衣袖回木牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">目测圆心切份 (0:07)（能力不足）</span><</if>>
 <br>
-<<link "悄悄分银豆 (0:07)">><<pass 7>><<replace "#fest-michaelmas-4">>
+<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link "悄悄分银豆 (0:07)">><<pass 7>><<replace "#fest-michaelmas-4">>
 <<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>>
-	<<set $mpFestScore to ($mpFestScore or 0) + 1>>	你借着刀刃触感探出圆饼里的幸运银豆，不动声色地将那块饼递给孤儿院最小的孩子。<span class="green">孩子捧着银豆惊喜瞪圆了眼睛，罗宾朝你温柔一笑。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
+	<<set $mpFestScore to ($mpFestScore or 0) + 1>>	你借着刀刃触感探出圆饼里的幸运银豆，不动声色地将那块饼递给孤儿院最小的孩子。<span class="green">孩子捧着银豆惊喜瞪圆了眼睛，<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>朝你温柔一笑。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[收餐盘领酬劳 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <<else>>
@@ -503,7 +503,7 @@
 	<br>
 	<<link [[顺着街巷回木牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">悄悄分银豆 (0:07)（能力不足）</span><</if>>
 </div>
 
 :: MP Festival Michaelmas 5 [nobr]
@@ -513,9 +513,9 @@
 	<span class="teal">烘焙集几道工序都出了岔子，厨娘只盛给你一小碗热苹果汤。</span>
 <<elseif window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_michaelmas_reward")>>
 	<<if ($mpFestScore or 0) gte 4>>
-		<<money 650>><span class="gold">你圆满完成了烘焙集四道工序，收下 £6.50 全勤红封。</span>
+		<<money 650>><span class="gold">你圆满完成了烘焙集四道工序，收下 <span class="gold">£6.50</span> 全勤红封。</span>
 	<<else>>
-		<<money 350>><span class="gold">你帮衬了烘焙集部分工序，收下 £3.50 帮工红封。</span>
+		<<money 350>><span class="gold">你帮衬了烘焙集部分工序，收下 <span class="gold">£3.50</span> 帮工红封。</span>
 	<</if>>
 <<else>>
 	烘焙集红封已经拆过，只剩淡淡的纸香。
@@ -528,7 +528,7 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpFestScore to 0>>
 十二月初的宅邸街飘着细碎雪花，家家户户门廊下挂起了冷杉松枝。孤儿院外廊前，大家正忙着把羊毛长袜挂上木栏。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <br><br>
 <div id="fest-warmboot-1">
 <<tendingicon>><<link "红绒绳扎暖袜 (0:07)">><<pass 7>><<replace "#fest-warmboot-1">>
@@ -536,11 +536,11 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	翠绿松枝配着红白羊毛袜把长廊装点得暖意融融，路过邻居笑着塞给你一把太妃糖。<span class="green">外廊挂满了充满节日气息的松枝暖袜。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[分装胡桃蜜橘 (0:08)|MP Festival Warmboot 2]]>><<pass 8>><</link>>
+	<<getouticon>><<link [[分装胡桃蜜橘 (0:08)|MP Festival Warmboot 2]]>><<pass 8>><</link>>
 <<else>>
 	冷杉针叶扎了一下你冻红的指尖，木梯上还落下一捧积雪。<span class="red">松针扎手且积雪落进了衣领。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[借着侧光重对刻痕 (0:04)|MP Festival Warmboot 1]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[借着侧光重对刻痕 (0:04)|MP Festival Warmboot 1]]>><<pass 4>><</link>>
 	<br>
 	<<link [[整好衣领回木牌前 (0:03)|MP Town Festivals 4 Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -565,23 +565,23 @@
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
 孤儿院大厅壁炉旁摆着两只大柳条筐，里面装满烤香的山胡桃、红蜜橘与姜饼人，正要按份装进孩子们的暖靴袋。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <br><br>
 <div id="fest-warmboot-2">
-<<tendingicon>><<link "心算均分果袋 (0:07)">><<pass 7>><<replace "#fest-warmboot-2">>
+<<tendingicon>><<if ($maths or 0) gte 260 or ($english or 0) gte 260>><<link "心算均分果袋 (0:07)">><<pass 7>><<replace "#fest-warmboot-2">>
 <<if ($maths or 0) gte 240 or ($english or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	每一只羊毛靴袋都装得鼓鼓囊囊，空气里飘满甜香。<span class="green">所有礼物袋都分装得饱满匀称。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[修补过冬皮靴 (0:04)|MP Festival Warmboot 3]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[修补过冬皮靴 (0:04)|MP Festival Warmboot 3]]>><<pass 4>><</link>>
 <<else>>
 	山胡桃硬壳裂缝夹了一下你的手指，疼得你甩了甩手。<span class="red">胡桃壳夹痛了你的手指尖。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[理顺纹理重压边缘 (0:04)|MP Festival Warmboot 2]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[理顺纹理重压边缘 (0:04)|MP Festival Warmboot 2]]>><<pass 4>><</link>>
 	<br>
 	<<link [[转身步回木牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">心算均分果袋 (0:07)（能力不足）</span><</if>>
 <br>
 <<link "换上糖霜姜饼 (0:07)">><<pass 7>><<replace "#fest-warmboot-2">>
 <<if ($housekeeping or 0) gte 250 or ($tending or 0) gte 250>>
@@ -602,23 +602,23 @@
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
 走廊角落的木桌前，老鞋匠正义务帮街坊与孩子们给冬靴钉防滑掌、抹蜂蜡防水油，忙得头都抬不起来。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <br><br>
 <div id="fest-warmboot-3">
-<<tendingicon>><<link "熬蜡涂抹靴缝 (0:07)">><<pass 7>><<replace "#fest-warmboot-3">>
+<<tendingicon>><<if ($science or 0) gte 260 or ($housekeeping or 0) gte 250>><<link "熬蜡涂抹靴缝 (0:07)">><<pass 7>><<replace "#fest-warmboot-3">>
 <<if ($science or 0) gte 240 or ($housekeeping or 0) gte 250>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	一双双旧皮靴被修补得结实防寒，老鞋匠也顺手替你的鞋底加了一层厚牛皮掌。<span class="green">你帮老鞋匠修好了整排过冬皮靴。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[煮姜汁热奶 (0:04)|MP Festival Warmboot 4]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[煮姜汁热奶 (0:04)|MP Festival Warmboot 4]]>><<pass 4>><</link>>
 <<else>>
 	融化的热蜂蜡滴在手背上，鞋钉也敲歪了一根。<span class="red">热蜡滴手，修补慢了半拍。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[握稳工具重调位置 (0:04)|MP Festival Warmboot 3]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[握稳工具重调位置 (0:04)|MP Festival Warmboot 3]]>><<pass 4>><</link>>
 	<br>
 	<<link [[缓步走回木牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">熬蜡涂抹靴缝 (0:07)（能力不足）</span><</if>>
 <br>
 <<link "钉牢靴底铁掌 (0:07)">><<pass 7>><<replace "#fest-warmboot-3">>
 <<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>>
@@ -639,7 +639,7 @@
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
 窗外风雪渐紧，厨房大铜锅里的姜汁肉桂热牛奶正冒着白气，需要有人盯着火候并不停撇去奶皮。
 <br><br>
-<<getouticon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
+<<walkicon>><<link [[返回水牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <br><br>
 <div id="fest-warmboot-4">
 <<tendingicon>><<link "木勺搅锅防糊 (0:07)">><<pass 7>><<replace "#fest-warmboot-4">>
@@ -647,17 +647,17 @@
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>
 	甜暖微辛的热牛奶分到每个人手里，喝上一口浑身寒气尽消。<span class="green">香浓的姜汁热奶温暖了整座院落。</span><<stress -3>><<lstress>>
 	<br><br>
-	<<walkicon>><<link [[回壁炉领红封 (0:04)|MP Festival Warmboot 5]]>><<pass 4>><</link>>
+	<<getouticon>><<link [[回壁炉领红封 (0:04)|MP Festival Warmboot 5]]>><<pass 4>><</link>>
 <<else>>
 	牛奶沸腾差点漫出锅沿，你急忙端锅时被蒸汽烫红了手腕。<span class="red">蒸汽烫红手腕，幸好及时压住了火。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
-	<<link [[垫上干布重起卡扣 (0:04)|MP Festival Warmboot 4]]>><<pass 4>><</link>>
+	<<socialiseicon>><<link [[垫上干布重起卡扣 (0:04)|MP Festival Warmboot 4]]>><<pass 4>><</link>>
 	<br>
 	<<link [[暂退一步 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<link "熬驱寒汤 (0:07)">><<pass 7>><<replace "#fest-warmboot-4">>
+<<if ($housekeeping or 0) gte 250 or ($science or 0) gte 260>><<link "熬驱寒汤 (0:07)">><<pass 7>><<replace "#fest-warmboot-4">>
 <<if ($housekeeping or 0) gte 250 or ($science or 0) gte 240>>
 	<<set $mpFestScore to ($mpFestScore or 0) + 1>>你将老姜切成薄如蝉翼的均匀姜片，配着整根锡兰肉桂投入大铜锅热牛奶中慢火熬出辛香。<span class="green">甜暖驱寒的姜汁热奶分到每个人手里，喝上一口浑身暖透。</span><<tiredness -1>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
@@ -669,7 +669,7 @@
 	<br>
 	<<link [[收妥行囊回木牌前 (0:08)|MP Town Festivals 4 Hub]]>><<pass 8>><</link>>
 <</if>>
-<</replace>><</link>>
+<</replace>><</link>><<else>><span class="disabled">熬驱寒汤 (0:07)（能力不足）</span><</if>>
 </div>
 
 :: MP Festival Warmboot 5 [nobr]
@@ -679,9 +679,9 @@
 	<span class="teal">暖靴集几道工序都出了岔子，老染匠只塞给你一碗姜汤驱寒。</span>
 <<elseif window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_warmboot_reward")>>
 	<<if ($mpFestScore or 0) gte 4>>
-		<<money 650>><span class="gold">你圆满完成了暖靴集四道工序，收下 £6.50 全勤红封。</span>
+		<<money 650>><span class="gold">你圆满完成了暖靴集四道工序，收下 <span class="gold">£6.50</span> 全勤红封。</span>
 	<<else>>
-		<<money 350>><span class="gold">你帮衬了暖靴集部分工序，收下 £3.50 帮工红封。</span>
+		<<money 350>><span class="gold">你帮衬了暖靴集部分工序，收下 <span class="gold">£3.50</span> 帮工红封。</span>
 	<</if>>
 <<else>>
 	暖靴集红封已经拆过，只剩淡淡的纸香。

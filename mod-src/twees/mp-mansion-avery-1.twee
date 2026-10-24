@@ -17,6 +17,7 @@
 	"MP Mansion Auction GuestList",
 	"MP Mansion Glasshouse Cufflink"
 ]>>
+<<if Time.dayState is "dusk" or Time.dayState is "night">>
 <<set _pool to _mansionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
 <<if _pool.length is 0>>
 	<<set _pool to _mansionScenes>>
@@ -25,6 +26,13 @@
 <<set _pick to _pool.random()>>
 <<set $mpSeenScenes[_pick] to 1>>
 <<include _pick>>
+<<else>>
+宅邸的铁门半掩，仆役正擦洗白天留下的车辙。宴席与酒会要等天色暗下来才开场。
+<br><br>
+<<getouticon>><<link [[离开 (0:05)|Danube Street]]>><<set $outside to 1>><<pass 5>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<socialiseicon>><span class="disabled">走近宅邸圈层 (0:05)（要等傍晚开宴）</span>
+<</if>>
 
 :: MP Mansion Avery CarInvite [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
@@ -36,7 +44,7 @@
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="mansion-carinvite-choices">
-<<link "坐进副驾 (0:08)">><<pass 8>><<replace "#mansion-carinvite-choices">>
+<<socialiseicon>><<link "坐进副驾 (0:08)">><<pass 8>><<replace "#mansion-carinvite-choices">>
 <<if ($english or 0) gte 240 or ($seductionskill or 0) gte 240 or ($willpower or 0) gte 400>>
 <span class="green">你稳稳坐进真皮座椅，将烫金席位卡上的议员座次核对得一清二楚。</span><<stress -4>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
 <<else>>
@@ -68,7 +76,7 @@
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="mansion-gowncheck-choices">
-<<link "换上衬领 (0:10)">><<pass 10>><<replace "#mansion-gowncheck-choices">>
+<<tendingicon>><<link "换上衬领 (0:10)">><<pass 10>><<replace "#mansion-gowncheck-choices">>
 <<if ($danceskill or 0) gte 240 or ($beauty or 0) gte 3200 or ($housekeeping or 0) gte 240>>
 <span class="green">你利落地换上挺括丝绸衬领，对着铜镜把胸针调整得端庄得体。</span><<stress -4>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
 <<else>>
@@ -78,7 +86,7 @@
 <br>
 <<investigateicon>><<link "谈置装补贴 (0:06)">><<pass 6>><<replace "#mansion-gowncheck-choices">>
 <<if ($willpower or 0) gte 500 or ($seductionskill or 0) gte 320>>
-你直视镜中艾弗里的眼睛，平静提出陪席应有置装补贴。<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_avery_gown_fee")>><<money 1200>><span class="gold">你收起镜台上的 £12 补贴。</span><</if>><<willpower 2>><<stress -3>><<gwillpower>><<lstress>>
+你直视镜中艾弗里的眼睛，平静提出陪席应有置装补贴。<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_avery_gown_fee")>><<money 1200>><span class="gold">你收起镜台上的 <span class="gold">£12</span> 补贴。</span><</if>><<willpower 2>><<stress -3>><<gwillpower>><<lstress>>
 <<else>>
 <span class="red">你刚开口就被艾弗里冰冷的眼神逼退半步。</span><<stress 6>><<trauma 1>><<gstress>><<gtrauma>>
 <</if>>
@@ -96,7 +104,7 @@
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="mansion-champagne-choices">
-<<if $NPCNameList and $NPCNameList.includes("Avery")>><<link "举杯致意 (0:09)">><<pass 9>><<replace "#mansion-champagne-choices">>
+<<if $NPCNameList and $NPCNameList.includes("Avery")>><<socialiseicon>><<link "举杯致意 (0:09)">><<pass 9>><<replace "#mansion-champagne-choices">>
 <<if ($english or 0) gte 250 or ($danceskill or 0) gte 250 or ($seductionskill or 0) gte 260>>
 <span class="green">你自然挽住艾弗里小臂微笑颔首，巧妙避开了关于孤儿院的试探。</span><<stress -5>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
 <<else>>
@@ -125,9 +133,9 @@
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="mansion-quinn-choices">
-<<link "帮奎因醒酒 (0:07)">><<pass 7>><<replace "#mansion-quinn-choices">>
+<<tendingicon>><<link "帮奎因醒酒 (0:07)">><<pass 7>><<replace "#mansion-quinn-choices">>
 <<if ($english or 0) gte 250 or ($housekeeping or 0) gte 250 or ($willpower or 0) gte 440>>
-<span class="green">你稳重地将红酒注入醒酒器，垂眸表示自己只看酒标不识账目。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_quinn_wine_hush")>><<money 1000>><span class="gold">你收下桌角 £10 封口钱。</span><</if>><<stress -2>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Quinn")>><<npcincr Quinn love 1>><<glove>><</if>>
+<span class="green">你稳重地将红酒注入醒酒器，垂眸表示自己只看酒标不识账目。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_quinn_wine_hush")>><<money 1000>><span class="gold">你收下桌角 <span class="gold">£10</span> 封口钱。</span><</if>><<stress -2>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Quinn")>><<npcincr Quinn love 1>><<glove>><</if>>
 <<else>>
 <span class="red">起塞器带落半块碎木屑掉进酒液，引得奎因冷哼。</span><<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
@@ -186,12 +194,12 @@
 	<<if _sk gte 800>><<set _reward to 1500>><<elseif _sk gte 400>><<set _reward to 1200>><<else>><<set _reward to 1000>><</if>>
 	<span class="green">请柬无声滑进丝绸衬里，保镖的火柴甚至还没划亮。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_briar_distribute_reward")>>
-		<<money _reward>><span class="gold">你摸出布莱尔预留的赏金袋，约有 £<<print Math.floor(_reward / 100)>>。</span>
+		<<money _reward>><span class="gold">你摸出布莱尔预留的赏金袋，约有 <span class="gold">£<<print Math.floor(_reward / 100)>></span>。</span>
 	<</if>>
 	<<stress -3>><<lstress>>
 	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
 	<br><br>
-	<<link [[退出 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
+	<<tendingicon>><<link [[退出 (0:03)|($mpBriarExit or "Danube Street")]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
 	<span class="red">指节不慎撞响铜衣架，保镖猛地回头，你只得把请柬缩回袖口。</span><<stress 6>><<pain 2>><<gstress>><<gpain>>
 	<br><br>
@@ -205,7 +213,7 @@
 <<if ($danceskill or 0) gte 280 or ($athletics or 0) gte 280>>
 	<span class="green">你借着挑拣披肩的动作侧身旋步，将请柬分批塞入内袋。</span>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_briar_distribute_reward_keepsake")>>
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="gold">你收下了末张信封里的 £11 信物铜章。</span>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><span class="gold">你收下了末张信封里的 <span class="gold">£11</span> 信物铜章。</span>
 	<</if>>
 	<<stress -2>><<lstress>>
 	<br><br>
@@ -285,7 +293,7 @@
 	<<set _reward to 1200>><<set _crest to 0>><</if>>
 <<if _sk gte 350>>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_briar_deal_reward")>>
-		他从礼盒底层数出几张钞票推过来，约莫 £<<print Math.floor(_reward / 100)>>。
+		他从礼盒底层数出几张钞票推过来，约莫 <span class="gold">£<<print Math.floor(_reward / 100)>></span>。
 		<<money _reward>>
 	<<else>>
 		他点了点头，认可了你先前的开价。
@@ -309,14 +317,14 @@
 <div id="mansion-silvertray-choices">
 <<walkicon>><<link "送鱼子酱 (0:12)">><<pass 12>><<replace "#mansion-silvertray-choices">>
 <<if ($danceskill or 0) gte 250 or ($athletics or 0) gte 250>>
-<span class="green">你踩着舞曲节拍避开舞伴，将鱼子酱稳稳呈上三号主桌。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_servant_tray_full")>><<money 1500>><span class="gold">你领到 £15 特勤工钱。</span><</if>><<stress -3>><<lstress>>
+<span class="green">你踩着舞曲节拍避开舞伴，将鱼子酱稳稳呈上三号主桌。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_servant_tray_full")>><<money 1500>><span class="gold">你领到 <span class="gold">£15</span> 特勤工钱。</span><</if>><<stress -3>><<lstress>>
 <<else>>
 <span class="red">微醺宾客撞在你手肘上，柠檬角与银匙散落在地毯上。</span><<stress 6>><<tiredness 3>><<gstress>><<gtiredness>>
 <</if>>
 <</replace>><</link>>
 <br>
 <<tendingicon>><<link "擦银酒具 (0:15)">><<pass 15>><<replace "#mansion-silvertray-choices">>
-<span class="green">你守在长桌旁用鹿皮布将三十只纯银高脚杯擦得透亮。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_servant_tray_safe")>><<money 900>><span class="gold">领班发给你 £9 工钱。</span><</if>><<tiredness 3>><<stress -1>><<gtiredness>><<lstress>>
+<span class="green">你守在长桌旁用鹿皮布将三十只纯银高脚杯擦得透亮。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_servant_tray_safe")>><<money 900>><span class="gold">领班发给你 <span class="gold">£9</span> 工钱。</span><</if>><<tiredness 3>><<stress -1>><<gtiredness>><<lstress>>
 <</replace>><</link>>
 </div>
 
@@ -334,13 +342,13 @@
 <<if $skulduggerysuccess is 1>>
 <span class="green">你趁保安回亭登记，用细铁丝拨开侧门铜锁钻入冬青回廊。</span><<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["glasshouse_orchid"] to 1>><<skulduggery 3>><<stress -2>><<lstress>>
 <br><br>
-<<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<<tendingicon>><<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <<else>>
 <span class="red">锁簧发涩，岗亭窗户突然推开，强光手电直照向你。</span><<pain 4>><<stress 5>><<gpain>><<gstress>>
 <</if>>
 <</replace>><</link>>
 <br>
-<<link "问招工时辰 (0:04)">><<pass 4>><<replace "#mansion-guardrain-choices">>
+<<socialiseicon>><<link "问招工时辰 (0:04)">><<pass 4>><<replace "#mansion-guardrain-choices">>
 <<if ($english or 0) gte 230 or ($seductionskill or 0) gte 230>>
 <span class="green">你大方询问温室采买花肥的钟点，保安告知了白日交接时间。</span><<stress -2>><<lstress>>
 <<else>>
@@ -364,7 +372,7 @@
 <div id="mansion-scullery-choices">
 <<tendingicon>><<link "擦净骨瓷盘 (0:25)">><<set $daily.mpMansionScullery to 1>><<pass 25>><<replace "#mansion-scullery-choices">>
 <<if ($housekeeping or 0) gte 240 or ($willpower or 0) gte 420>>
-<span class="green">你将描金骨瓷盘逐一过温水抹干码入木柜，盘底金徽擦得锃亮。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_scullery_shift_pay")>><<money 1100>><span class="gold">你领到 £11 帮工钱。</span><</if>><<stress -4>><<tiredness 3>><<lstress>><<gtiredness>>
+<span class="green">你将描金骨瓷盘逐一过温水抹干码入木柜，盘底金徽擦得锃亮。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_scullery_shift_pay")>><<money 1100>><span class="gold">你领到 <span class="gold">£11</span> 帮工钱。</span><</if>><<stress -4>><<tiredness 3>><<lstress>><<gtiredness>>
 <<else>>
 <span class="red">凝固黄油难洗，盘沿留着水渍被责令返工重擦。</span><<stress 4>><<tiredness 4>><<gstress>><<gtiredness>>
 <</if>>
@@ -394,7 +402,7 @@
 <div id="mansion-colddraft-choices">
 <<runicon>><<link "扣死天窗插销 (0:08)">><<pass 8>><<replace "#mansion-colddraft-choices">>
 <<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 280>>
-<span class="green">你蹬上铸铁旋梯顶端拽回窗框，将黄铜插销死死扣入卡槽。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_conservatory_latch_pay")>><<money 1000>><span class="gold">老花匠塞给你 £10 劳务费。</span><</if>><<physique 2>><<stress -4>><<lstress>>
+<span class="green">你蹬上铸铁旋梯顶端拽回窗框，将黄铜插销死死扣入卡槽。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_conservatory_latch_pay")>><<money 1000>><span class="gold">老花匠塞给你 <span class="gold">£10</span> 劳务费。</span><</if>><<physique 2>><<stress -4>><<lstress>>
 <<else>>
 <span class="red">高处冷风吹得铁梯摇晃，你冻僵的手指没能勾住拉杆。</span><<stress 5>><<pain 2>><<tiredness 2>><<gstress>><<gpain>>
 <</if>>
@@ -460,7 +468,7 @@
 <<sneakicon>><<link "裁下兑换联 (0:04)">><<pass 4>><<replace "#mansion-guestlist-choices">>
 <<set $skulduggerydifficulty to 340>><<skulduggerycheck "silent">>
 <<if $skulduggerysuccess is 1>>
-<span class="green">你用餐刀沿齿孔无声裁下末页筹码兑换副联。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_auction_voucher_reward")>><<money 1600>><span class="gold">你兑出 £16 不记名筹码。</span><</if>><<skulduggery 2>><<stress -2>><<lstress>>
+<span class="green">你用餐刀沿齿孔无声裁下末页筹码兑换副联。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_auction_voucher_reward")>><<money 1600>><span class="gold">你兑出 <span class="gold">£16</span> 不记名筹码。</span><</if>><<skulduggery 2>><<stress -2>><<lstress>>
 <<else>>
 <span class="red">撕纸声惊动执事，你躲避时撞上藤椅扶手，空手退入暗影。</span><<pain 3>><<stress 5>><<gpain>><<gstress>>
 <</if>>

@@ -3,24 +3,30 @@
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 0 }>><</if>>
-<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _open to (Time.hour gte 8 and Time.hour lt 21)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<if _open>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
 <<if $mpNpcs.sera.firstMeet>>柜台后的人摘下单眼放大镜，在围裙上擦了擦手：「修表，还是带了旧物？……叫我塞拉就行。」<<set $mpNpcs.sera.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>煤油灯暖光映着<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>的侧脸。听见门铃响，她放下镊子翻过木牌，握住你微凉的指尖贴在颊边：「我听着钟声，就知你该来了。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>推开高街钟表铺的玻璃门，<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>摘下放大镜，将柜上一杯热红茶推到你手边：「外面风大，先暖暖手。」<<else>>钟表铺里浮着机油与旧纸气息。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>戴着单眼放大镜夹着细齿轮，抬眼看向你：「要修表，还是带了旧物？」<</if>>
 <<if Weather.precipitation is "rain">>窗外雨水顺着玻璃滑落，店内座钟齐声滴答。<<else>>斜阳穿过橱窗，在黄铜钟摆上投下金光。<</if>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[离开 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">离开 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[聊钟表旧闻 (0:06)|MP NPC Sera Chat]]>><<pass 6>><<stress -4>><</link>>
+<<socialiseicon>><<link [[聊钟表旧闻 (0:06)|MP NPC Sera Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[给她看古物 (0:08)|MP NPC Sera Service]]>><<pass 8>><</link>>
 <br>
 <<tendingicon>><<link [[分拣机芯齿轮 (0:16)|MP NPC Sera Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_sera)>>
-	<<investigateicon>><<link [[问起停摆怀表 (0:20)|MP NPC Sera Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_sera to 1>><<pass 20>><</link>>
+	<<link [[问起停摆怀表 (0:20)|MP NPC Sera Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_sera to 1>><<pass 20>><</link>>
 	<br>
+<</if>>
+<<else>>
+<span class="disabled">钟表铺已经落锁，玻璃窗里只亮着一盏值夜的煤油灯。柜台后没有回应，看来得等营业时间（8:00–21:00）再来。</span>
+<br><br>
+<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 
 :: MP NPC Sera Chat [nobr]
@@ -32,7 +38,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[回塞拉身边 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回塞拉身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[灯下握她手腕 (0:04)|MP NPC Sera Flirt]]>><<pass 4>><<arousal 300>><</link>>
+<<loveicon>><<link [[灯下握她手腕 (0:04)|MP NPC Sera Flirt]]>><<pass 4>><<arousal 300>><</link>>
 <br>
 <<if ((_npc.love or 0) gte 15 or (_npc.lust or 0) gte 12) and (!$daily or !$daily.mpNpcIntimate_sera)>>
 	<<mphearticon>><<link [[随她上阁楼 (0:25)|MP NPC Sera Intimate]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcIntimate_sera to 1>><<pass 25>><<arousal 1200>><<stress -10>><</link>>
@@ -71,12 +77,12 @@
 	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>><<money 1200>><</if>>
 <</if>>
 <<if _helpPaid>>
-	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你按齿数分拣黄铜齿轮，还找出一枚卡在暗槽的银壳怀表。<span class="green"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>把 £12 修表分红塞进你手心。</span><<stress -3>><<else>>微小齿轮看得你眼酸，漏排了两组垫片。<span class="teal"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>替你收尾，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
+	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你按齿数分拣黄铜齿轮，还找出一枚卡在暗槽的银壳怀表。<span class="green"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>把 <span class="gold">£12</span> 修表分红塞进你手心。</span><<stress -3>><<else>>微小齿轮看得你眼酸，漏排了两组垫片。<span class="teal"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>替你收尾，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
 <<else>>你又陪<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>理了一匣零散垫片。<span class="teal">木匣整整齐齐，她给你添了半杯热红茶。</span><</if>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[回塞拉身边 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回塞拉身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[校齐游丝 (0:06)|MP NPC Sera Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
+<<tendingicon>><<link [[校齐游丝 (0:06)|MP NPC Sera Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
 
 :: MP NPC Sera Flirt [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -87,7 +93,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[回塞拉身边 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回塞拉身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[低声交谈 (0:04)|MP NPC Sera Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
+<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<socialiseicon>><<link [[低声交谈 (0:04)|MP NPC Sera Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
 
 :: MP NPC Sera Intimate [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -112,7 +118,7 @@
 	<<if ($skulduggery or 0) gte 250 or ($science or 0) gte 240 or (_npc.trust or 0) gte 8>>
 		<<investigateicon>><<link [[挑开锈锁舌 (0:08)|MP NPC Sera Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<link [[挑开锈锁舌 (0:08)|MP NPC Sera Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+		<<walkicon>><<link [[挑开锈锁舌 (0:08)|MP NPC Sera Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
 	<br>
 	<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250 or (_npc.trust or 0) gte 10>>
@@ -129,12 +135,12 @@
 	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>将 £15 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>没有补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>将 <span class="gold">£15</span> 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>没有补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[收好东西回去 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好东西回去 (0:03)（尚未结识）</span><</if>>
 	<br>
-	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Sera Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[与塞拉核对去向 (0:04)|MP NPC Sera Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">翻看后续卷宗 (0:03)（尚未结识）</span><</if>><</if>>
+	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Sera Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[与塞拉核对去向 (0:04)|MP NPC Sera Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">与塞拉核对去向 (0:04)（尚未结识）</span><</if>><</if>>
 <</if>>
 
 :: MP NPC Sera Quest Late [nobr]
@@ -148,18 +154,18 @@
 	<<if ($maths or 0) gte 260 or ($science or 0) gte 250>>
 		<<investigateicon>><<link [[测算朔望齿距 (0:08)|MP NPC Sera Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<link [[测算朔望齿距 (0:08)|MP NPC Sera Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+		<<walkicon>><<link [[测算朔望齿距 (0:08)|MP NPC Sera Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
 	<br>
 	<<if ($history or 0) gte 250 or ($english or 0) gte 250 or (_npc.love or 0) gte 10>>
-		<<link [[翻查修表底簿 (0:08)|MP NPC Sera Quest 6 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
+		<<keepsakeicon>><<link [[翻查修表底簿 (0:08)|MP NPC Sera Quest 6 Pass]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<<else>>
 		<<link [[翻查修表底簿 (0:08)|MP NPC Sera Quest 6 Fail]]>><<set $mpNpcQuestAct to 2>><<pass 8>><</link>>
 	<</if>>
 <<elseif _stg is 8>>
 	高街钟塔顶层的配重副轴正在高速空转，必须在午夜前将鎏金核心嵌入主擒纵轮。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>握紧制动杆，喊你看准缺口推入核心，或拽住副轴配重铁索减速。
 	<br><br>
-	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<else>><span class="disabled">先退回塞拉身旁 (0:03)（尚未结识）</span><</if>>
+	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[先退回塞拉身旁 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>><<else>><span class="disabled">先退回塞拉身旁 (0:03)（尚未结识）</span><</if>>
 	<br>
 	<<if ($skulduggery or 0) gte 270 or ($science or 0) gte 260>>
 		<<link [[推入鎏金核心 (0:10)|MP NPC Sera Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
@@ -180,7 +186,7 @@
 	<<else>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>收好旧物，替你倒了一杯热茶。<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_" + _npc.stage + "_keepsake")>>
-		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>把 £15 分红塞进你掌心。</span>
+		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>把 <span class="gold">£15</span> 分红塞进你掌心。</span>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[收好旧物回去 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好旧物回去 (0:03)（尚未结识）</span><</if>>
@@ -198,13 +204,13 @@
 	你双手扣住通风活页的生铁栓，憋足力气硬生生将锈死的合页扳开一道容人钻入的缝隙。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>探身取出井底的断齿冠轮，赞许地拍了拍你的手背。<span class="green">你借侧壁活页打开了通路。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_3")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>将初探所得的 £15 酬劳塞进你掌心。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>将初探所得的 <span class="gold">£15</span> 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[回落脚处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Sera Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Sera Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Sera Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -218,7 +224,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[退回安全处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Sera Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Sera Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Sera Quest 6 Pass [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -230,13 +236,13 @@
 	你从旧货铺底层的修表台账里翻出二十年前的进货单，精准查到了那枚三十六齿蓝钢游丝轮的编号与买主。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>惊喜地向你点头。<span class="green">你从旧台账查明了零件去向。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_6")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>取出一封 £15 的中期分红信封递给你。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>取出一封 <span class="gold">£15</span> 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[回落脚处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Sera Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Sera Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Sera Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -250,7 +256,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[退回安全处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Sera Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Sera Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Sera Quest 9 Pass [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -262,13 +268,13 @@
 	你双手缠住麻布猛拽配重铁索，硬生生将狂转的副轴拖慢半拍，<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>趁机将鎏金核心推入卡槽。她转过身替你擦去额角热汗。<span class="green">你凭臂力稳住配重索助她合龙。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_sera_9")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>与你击掌庆贺，将 £15 钟表行会厚酬放进你掌心。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>与你击掌庆贺，将 <span class="gold">£15</span> 钟表行会厚酬放进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[回落脚处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Sera Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Sera Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Sera Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -282,7 +288,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[退回安全处 (0:04)|MP NPC Sera Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Sera Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Sera Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Sera Street Encounter [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -303,16 +309,17 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 0 }>><</if>>
-<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _open to (Time.hour gte 17 or Time.hour lt 7)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Docks">><</if>>
+<<if _open>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
 <<if $mpNpcs.vesper.firstMeet>>栈桥边的人收起怀表，上下打量你一眼：「夜里在码头乱走，胆子不小。叫我维斯。」<<set $mpNpcs.vesper.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>防风提灯在海雾里摇晃。<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>见你走来，把防水风衣披在你肩头，带着烟草味的手掌按了按你的后颈：「海风冷，跟紧我。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>集装箱阴影里亮起一点火星。<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>冲你招手，递来半壶温热的生姜朗姆茶：「今晚潮水稳，过来歇会儿。」<<else>>旧港栈桥尽头弥漫着咸水与焦油味。披黑风衣的<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>倚着系船柱核对舱单，抬眼打量你：「带了暗市货包，还是来打听水路？」<</if>>
 <<if Weather.precipitation is "rain">>冷雨砸在集装箱铁皮上，港湾水波翻涌。<<else>>远处雾角灯塔的光束扫过黑沉沉的海面。<</if>>
 <br><br>
 <<getouticon>><<link [[离开栈桥 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<link [[聊水路行情 (0:06)|MP NPC Vesper Chat]]>><<pass 6>><<stress -4>><</link>>
+<<socialiseicon>><<link [[聊水路行情 (0:06)|MP NPC Vesper Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[出手暗市货包 (0:08)|MP NPC Vesper Service]]>><<pass 8>><</link>>
 <br>
@@ -321,6 +328,11 @@
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_vesper)>>
 	<<link [[追问沉船航标 (0:20)|MP NPC Vesper Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_vesper to 1>><<pass 20>><</link>>
 	<br>
+<</if>>
+<<else>>
+<span class="disabled">栈桥上空无一人，只有系船柱上的铁链在风里轻响。维斯的船已经出港，夜航时段（17:00–次日 6:00）才会回港。</span>
+<br><br>
+<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 
 :: MP NPC Vesper Chat [nobr]
@@ -332,7 +344,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[回维斯身边 (0:02)|MP NPC Vesper Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回维斯身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[点烟凑近领口 (0:04)|MP NPC Vesper Flirt]]>><<pass 4>><<arousal 300>><</link>>
+<<loveicon>><<link [[点烟凑近领口 (0:04)|MP NPC Vesper Flirt]]>><<pass 4>><<arousal 300>><</link>>
 <br>
 <<if ((_npc.love or 0) gte 15 or (_npc.lust or 0) gte 12) and (!$daily or !$daily.mpNpcIntimate_vesper)>>
 	<<mphearticon>><<link [[随他进底舱 (0:25)|MP NPC Vesper Intimate]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcIntimate_vesper to 1>><<pass 25>><<arousal 1200>><<stress -10>><</link>>
@@ -371,12 +383,12 @@
 	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>><<money 1200>><</if>>
 <</if>>
 <<if _helpPaid>>
-	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你帮<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>把六只防水木箱挪进暗格，还及时打手势避开巡夜哨船。<span class="green"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>分了你 £12 压舱红封。</span><<stress -3>><<else>>木箱边角湿滑，你搬运时磕响了铁锚链。<span class="teal"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>按住链条替你解围，仍分了你 £8 辛苦钱。</span><<stress 2>><</if>>
+	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你帮<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>把六只防水木箱挪进暗格，还及时打手势避开巡夜哨船。<span class="green"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>分了你 <span class="gold">£12</span> 压舱红封。</span><<stress -3>><<else>>木箱边角湿滑，你搬运时磕响了铁锚链。<span class="teal"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>按住链条替你解围，只让你把湿透的袖口拧干，没有补贴。</span><<stress 2>><</if>>
 <<else>>你帮<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>把防雨帆布重新扎紧。<span class="teal">他递给你一块风干牛肉干。</span><</if>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[回维斯身边 (0:02)|MP NPC Vesper Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回维斯身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[盯航道灯号 (0:06)|MP NPC Vesper Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
+<<investigateicon>><<link [[盯航道灯号 (0:06)|MP NPC Vesper Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
 
 :: MP NPC Vesper Flirt [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -387,7 +399,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[回维斯身边 (0:02)|MP NPC Vesper Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回维斯身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[低声交谈 (0:04)|MP NPC Vesper Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
+<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<socialiseicon>><<link [[低声交谈 (0:04)|MP NPC Vesper Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
 
 :: MP NPC Vesper Intimate [nobr]
 <<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -412,7 +424,7 @@
 	<<if ($swimmingskill or 0) gte 250 or ($athletics or 0) gte 250>>
 		<<swimicon>><<link [[潜入浅浪撬锚链 (0:09)|MP NPC Vesper Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<link [[潜入浅浪撬锚链 (0:09)|MP NPC Vesper Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+		<<walkicon>><<link [[潜入浅浪撬锚链 (0:09)|MP NPC Vesper Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
 	<br>
 	<<if ($physique or 10000) gte 11600 or ($skulduggery or 0) gte 250 or (_npc.trust or 0) gte 10>>
@@ -429,12 +441,12 @@
 	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>将 £15 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>没有补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>将 <span class="gold">£15</span> 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>没有补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[收好东西回去 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好东西回去 (0:03)（尚未结识）</span><</if>>
 	<br>
-	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Vesper Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">翻看后续卷宗 (0:03)（尚未结识）</span><</if>><</if>>
+	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Vesper Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">核对下一步去向 (0:04)（尚未结识）</span><</if>><</if>>
 <</if>>
 
 :: MP NPC Vesper Quest Late [nobr]
@@ -448,7 +460,7 @@
 	<<if ($skulduggery or 0) gte 270 or ($science or 0) gte 250>>
 		<<sneakicon>><<link [[挑开内壁铅封 (0:08)|MP NPC Vesper Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<link [[挑开内壁铅封 (0:08)|MP NPC Vesper Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+		<<walkicon>><<link [[挑开内壁铅封 (0:08)|MP NPC Vesper Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
 	<br>
 	<<if ($willpower or 0) gte 440 or ($tending or 0) gte 250 or (_npc.love or 0) gte 10>>
@@ -459,7 +471,7 @@
 <<elseif _stg is 8>>
 	风暴夜的断桅沉船滩外，海关巡逻艇封死了主航道。<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>掌稳双桅船舵轮，让你潜游去东侧暗礁点亮诱饵浮灯，或升起副帆贴着盲区强行冲关。
 	<br><br>
-	<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<else>><span class="disabled">先退回维斯身旁 (0:03)（尚未结识）</span><</if>>
+	<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[先退回维斯身旁 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>><<else>><span class="disabled">先退回维斯身旁 (0:03)（尚未结识）</span><</if>>
 	<br>
 	<<if ($swimmingskill or 0) gte 280 or ($skulduggery or 0) gte 280>>
 		<<link [[潜游挂诱饵灯 (0:10)|MP NPC Vesper Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
@@ -480,7 +492,7 @@
 	<<else>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>收妥账册，递给你一杯温热朗姆酒。<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_" + _npc.stage + "_keepsake")>>
-		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>把 £15 分红塞进你掌心。</span>
+		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>把 <span class="gold">£15</span> 分红塞进你掌心。</span>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[收好旧物回去 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好旧物回去 (0:03)（尚未结识）</span><</if>>
@@ -498,13 +510,13 @@
 	你将麻缆缠在礁石铁桩上死死绞紧，借着涌浪浮力将沉重锚链吊起半尺，<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>探身抽出铜账管后冲你竖起拇指。<span class="green">你借滑轮巧劲吊起了铁锚链。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_3")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>将初探所得的 £15 酬劳塞进你掌心。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>将初探所得的 <span class="gold">£15</span> 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[回落脚处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Vesper Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -518,7 +530,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[退回安全处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Vesper Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Vesper Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Vesper Quest 6 Pass [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -530,13 +542,13 @@
 	你滴入温热白蜡将导流槽严密包裹，哪怕玻璃泡微裂也无法渗入内层，<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>顺利旋开底盖取出了海难底单。<span class="green">你用白蜡封死导槽保住了底单。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_6")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>取出一封 £15 的中期分红信封递给你。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>取出一封 <span class="gold">£15</span> 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[回落脚处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Vesper Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -550,7 +562,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[退回安全处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Vesper Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Vesper Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Vesper Quest 9 Pass [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -562,13 +574,13 @@
 	你与<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>合力拉满斜帆，双桅船借着狂风贴着黑色崖影疾掠而过，在探照灯扫来的前一秒冲入沉船湾捞起主金库。<span class="green">你们凭娴熟控帆穿过封锁线。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_vesper_9")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>与你击掌庆贺，将 £15 远航压舱红利塞进你衣袋。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>与你击掌庆贺，将 <span class="gold">£15</span> 远航压舱红利塞进你衣袋。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[回落脚处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Vesper Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Vesper Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -582,7 +594,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<link [[退回安全处 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Vesper Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Vesper Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Vesper Street Encounter [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -603,24 +615,30 @@
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 0 }>><</if>>
-<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _open to (Time.hour gte 7 and Time.hour lt 20)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "School Library">><</if>>
+<<if _open>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
 <<if $mpNpcs.noel.firstMeet>>抱着标本册的学生合上本子：「你也对这些干花感兴趣？我叫诺艾尔，在学园帮忙整理标本。」<<set $mpNpcs.noel.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>标本室飘着甘菊与干薰衣草的清香。<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>一见你便放下鹅毛笔，捧起温在石棉网上的花草茶塞进你手心：「快坐下歇歇。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>阳光透过花房玻璃洒在木桌上。<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>笑着替你拂去肩头灰尘：「今天新烘了柠檬马鞭草，正好给你留了一杯。」<<else>>学校标本室里排满浸液瓶与植物压片。温和的<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>正给草药贴标签，抬头微微笑道：「来查植物图谱，还是想讨杯安神茶？」<</if>>
 <<if Weather.precipitation is "rain">>雨点轻敲玻璃花房顶棚，室内药草香愈发温润。<<else>>暖阳照亮叶脉标本，空气里浮着淡淡蜂蜜味。<</if>>
 <br><br>
 <<getouticon>><<link [[离开标本室 (0:02)|_exitPas]]>><<if _exitPas is "Park">><<set $outside to 1>><<set $location to "park">><<else>><<set $outside to 0>><<set $location to "school">><</if>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<link [[聊草木图谱 (0:06)|MP NPC Noel Chat]]>><<pass 6>><<stress -4>><</link>>
+<<socialiseicon>><<link [[聊草木图谱 (0:06)|MP NPC Noel Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[请她配草药茶 (0:08)|MP NPC Noel Service]]>><<pass 8>><</link>>
 <br>
 <<tendingicon>><<link [[压制干花贴签 (0:16)|MP NPC Noel Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_noel)>>
-	<<investigateicon>><<link [[打听夜光兰 (0:20)|MP NPC Noel Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_noel to 1>><<pass 20>><</link>>
+	<<link [[打听夜光兰 (0:20)|MP NPC Noel Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_noel to 1>><<pass 20>><</link>>
 	<br>
+<</if>>
+<<else>>
+<span class="disabled">标本室的门已经上锁，走廊里只剩清扫的脚步声。诺艾尔随下课的学生离开了，学园开放时段（7:00–20:00）才在。</span>
+<br><br>
+<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 
 :: MP NPC Noel Chat [nobr]
@@ -632,7 +650,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:02)|MP NPC Noel Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[擦去鼻尖花粉 (0:04)|MP NPC Noel Flirt]]>><<pass 4>><<arousal 300>><</link>>
+<<tendingicon>><<link [[擦去鼻尖花粉 (0:04)|MP NPC Noel Flirt]]>><<pass 4>><<arousal 300>><</link>>
 <br>
 <<if ((_npc.love or 0) gte 15 or (_npc.lust or 0) gte 12) and (!$daily or !$daily.mpNpcIntimate_noel)>>
 	<<mphearticon>><<link [[随她进暖阁 (0:25)|MP NPC Noel Intimate]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcIntimate_noel to 1>><<pass 25>><<arousal 1200>><<stress -10>><</link>>
@@ -669,12 +687,12 @@
 	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>><<money 1200>><</if>>
 <</if>>
 <<if _helpPaid>>
-	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你把三十份蕨类标本压平贴签，未损一片叶尖。<span class="green"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>将 £12 教研助学金分给了你。</span><<stress -3>><<else>>你不慎碰翻墨水瓶，染黑了两张标签纸。<span class="teal"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>温柔地替你擦净，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
+	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你把三十份蕨类标本压平贴签，未损一片叶尖。<span class="green"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>将 <span class="gold">£12</span> 教研助学金分给了你。</span><<stress -3>><<else>>你不慎碰翻墨水瓶，染黑了两张标签纸。<span class="teal"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>温柔地替你擦净，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
 <<else>>你帮<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>把晒干的洋甘菊收进密封玻璃罐。<span class="teal">指尖留下一缕淡淡花香。</span><</if>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:02)|MP NPC Noel Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[分离兰花气根 (0:06)|MP NPC Noel Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
+<<tendingicon>><<link [[分离兰花气根 (0:06)|MP NPC Noel Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
 
 :: MP NPC Noel Flirt [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -685,7 +703,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:02)|MP NPC Noel Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[低声交谈 (0:04)|MP NPC Noel Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
+<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<socialiseicon>><<link [[低声交谈 (0:04)|MP NPC Noel Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
 
 :: MP NPC Noel Intimate [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -710,7 +728,7 @@
 	<<if ($tending or 0) gte 250 or ($skulduggery or 0) gte 240>>
 		<<tendingicon>><<link [[夹除毒刺 (0:08)|MP NPC Noel Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<link [[夹除毒刺 (0:08)|MP NPC Noel Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+		<<walkicon>><<link [[夹除毒刺 (0:08)|MP NPC Noel Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
 	<br>
 	<<if ($science or 0) gte 250 or ($housekeeping or 0) gte 250 or (_npc.trust or 0) gte 10>>
@@ -727,12 +745,12 @@
 	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>将 £15 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>没有补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>将 <span class="gold">£15</span> 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>没有补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[收好东西回去 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好东西回去 (0:03)（尚未结识）</span><</if>>
 	<br>
-	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Noel Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Noel Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">翻看后续卷宗 (0:03)（尚未结识）</span><</if>><</if>>
+	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Noel Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Noel Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">核对下一步去向 (0:04)（尚未结识）</span><</if>><</if>>
 <</if>>
 
 :: MP NPC Noel Quest Late [nobr]
@@ -746,7 +764,7 @@
 	<<if ($tending or 0) gte 270 or ($science or 0) gte 260>>
 		<<tendingicon>><<link [[刮取石缝白苔 (0:09)|MP NPC Noel Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<link [[刮取石缝白苔 (0:09)|MP NPC Noel Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+		<<walkicon>><<link [[刮取石缝白苔 (0:09)|MP NPC Noel Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
 	<br>
 	<<if ($athletics or 0) gte 260 or ($willpower or 0) gte 440 or (_npc.love or 0) gte 10>>
@@ -757,7 +775,7 @@
 <<elseif _stg is 8>>
 	寒潮夜里温室主蒸汽管压力骤降，正在开花的双生银脉兰随时会冻伤。<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>守着温床，让你去扳开副炉分流铜阀，或用双层棉毡搭起保温内棚。
 	<br><br>
-	<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<else>><span class="disabled">先退回诺艾尔身旁 (0:03)（尚未结识）</span><</if>>
+	<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[先退回诺艾尔身旁 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">先退回诺艾尔身旁 (0:03)（尚未结识）</span><</if>>
 	<br>
 	<<if ($physique or 10000) gte 11600 or ($science or 0) gte 270>>
 		<<link [[扳开副炉分阀 (0:10)|MP NPC Noel Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
@@ -778,7 +796,7 @@
 	<<else>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>收好标本册，为你斟了一杯花茶。<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_" + _npc.stage + "_keepsake")>>
-		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>把 £15 分红塞进你掌心。</span>
+		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>把 <span class="gold">£15</span> 分红塞进你掌心。</span>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[收好旧物回去 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好旧物回去 (0:03)（尚未结识）</span><</if>>
@@ -796,13 +814,13 @@
 	你按比例兑好温热薄荷碱水，块茎入水片刻后外层毒膜便自行脱落。<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>捧起发亮的芽球向你露出明媚笑意。<span class="green">你用碱水温和卸去了外层毒膜。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_3")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>将初探所得的 £15 酬劳塞进你掌心。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>将初探所得的 <span class="gold">£15</span> 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回落脚处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Noel Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Noel Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Noel Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -816,7 +834,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[退回安全处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Noel Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Noel Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Noel Quest 6 Pass [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -828,13 +846,13 @@
 	你踩稳暗河边的青苔石阶，用小锤沿页岩层理轻轻一敲，连着薄石片将整簇白苔原封不动地收入暗盒。<span class="green">你连石带苔完整取下了标本。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_6")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>取出一封 £15 的中期分红信封递给你。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>取出一封 <span class="gold">£15</span> 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回落脚处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Noel Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Noel Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Noel Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -848,7 +866,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[退回安全处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Noel Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Noel Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Noel Quest 9 Pass [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -860,13 +878,13 @@
 	你麻利地支起竹架罩上双层棉毡，在四角放好温水铜钵，将花床温度稳稳锁在二十度，银脉兰安然盛放。<span class="green">你搭起保温内棚护住了双生花。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_noel_9")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>与你击掌庆贺，将 £15 本草研究津贴交给你保管。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>与你击掌庆贺，将 <span class="gold">£15</span> 本草研究津贴交给你保管。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回落脚处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Noel Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Noel Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Noel Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -880,7 +898,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[退回安全处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Noel Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Noel Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Noel Street Encounter [nobr]
 <<set $outside to 1>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -901,24 +919,30 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 0 }>><</if>>
-<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _npc.hasMet to 1>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _open to (Time.hour gte 16 or Time.hour lt 7)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Domus Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Domus Street">><</if>>
+<<if _open>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
 <<if $mpNpcs.lin.firstMeet>>路灯下的人活动了一下缠着绷带的手腕：「这个点还在外面？我叫林恩，这条街夜里归我看着。」<<set $mpNpcs.lin.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>街角路灯下，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>正缠着手腕护具。一见到你，他冷峻的眉眼瞬间柔和，顺手把热乎的烤红薯塞进你怀里：「夜里凉，吃完我送你。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>宅邸街岗棚旁，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>冲你点点头，指了指长椅上的保温壶：「刚巡完前半夜，过来喝口热姜汤。」<<else>>夜雾笼罩着宅邸街与孤儿院外墙。扎高马尾的<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>手按短棍立在灯影下，目光锐利地看向你：「这么晚还在街上，要学防身，还是有事找我？」<</if>>
 <<if Weather.precipitation is "rain">>雨水顺着岗棚铁檐淌下，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>的皮靴纤尘不染。<<else>>夜风掠过青石板路，远处传来孤儿院的熄灯铃。<</if>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">离开 (0:08)（尚未结识）</span><</if>>
 <br>
-<<link [[聊夜巡见闻 (0:06)|MP NPC Lin Chat]]>><<pass 6>><<stress -4>><</link>>
+<<socialiseicon>><<link [[聊夜巡见闻 (0:06)|MP NPC Lin Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[请教格斗步法 (0:08)|MP NPC Lin Service]]>><<pass 8>><</link>>
 <br>
 <<tendingicon>><<link [[巡查孤儿院外巷 (0:16)|MP NPC Lin Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_lin)>>
-	<<investigateicon>><<link [[追查地下铁笼 (0:20)|MP NPC Lin Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_lin to 1>><<pass 20>><</link>>
+	<<link [[追查地下铁笼 (0:20)|MP NPC Lin Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_lin to 1>><<pass 20>><</link>>
 	<br>
+<</if>>
+<<else>>
+<span class="disabled">街角路灯下没有林恩的身影，岗棚的门也锁着。他还在别处巡逻，守夜时段（16:00–次日 7:00）才会回到这条街。</span>
+<br><br>
+<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
 
 :: MP NPC Lin Chat [nobr]
@@ -930,7 +954,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:02)|MP NPC Lin Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回林恩身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[系紧护腕皮扣 (0:04)|MP NPC Lin Flirt]]>><<pass 4>><<arousal 300>><</link>>
+<<tendingicon>><<link [[系紧护腕皮扣 (0:04)|MP NPC Lin Flirt]]>><<pass 4>><<arousal 300>><</link>>
 <br>
 <<if ((_npc.love or 0) gte 15 or (_npc.lust or 0) gte 12) and (!$daily or !$daily.mpNpcIntimate_lin)>>
 	<<mphearticon>><<link [[随他回值班室 (0:25)|MP NPC Lin Intimate]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcIntimate_lin to 1>><<pass 25>><<arousal 1200>><<stress -10>><</link>>
@@ -967,12 +991,12 @@
 	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>><<money 1200>><</if>>
 <</if>>
 <<if _helpPaid>>
-	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你与<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>巡过三处暗巷，惊走两名撬锁混混并拾获巡防赏格。<span class="green"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>将 £12 联防津贴分给了你。</span><<stress -3>><<else>>你在青石台阶上踩滑崴了脚，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>背着你走回岗棚。<span class="teal">他替你揉开脚踝，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
+	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你与<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>巡过三处暗巷，惊走两名撬锁混混并拾获巡防赏格。<span class="green"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>将 <span class="gold">£12</span> 联防津贴分给了你。</span><<stress -3>><<else>>你在青石台阶上踩滑崴了脚，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>背着你走回岗棚。<span class="teal">他替你揉开脚踝，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
 <<else>>你陪<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>检查了孤儿院后门的铜锁。<span class="teal">夜路安静，他塞给你一颗薄荷糖。</span><</if>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:02)|MP NPC Lin Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回林恩身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[提灯排查暗哨 (0:06)|MP NPC Lin Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
+<<investigateicon>><<link [[提灯排查暗哨 (0:06)|MP NPC Lin Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
 
 :: MP NPC Lin Flirt [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -983,7 +1007,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:02)|MP NPC Lin Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回林恩身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[低声交谈 (0:04)|MP NPC Lin Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
+<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<socialiseicon>><<link [[低声交谈 (0:04)|MP NPC Lin Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
 
 :: MP NPC Lin Intimate [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1008,7 +1032,7 @@
 	<<if ($skulduggery or 0) gte 260 or ($science or 0) gte 240>>
 		<<sneakicon>><<link [[顶开双簧窗扣 (0:08)|MP NPC Lin Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<link [[顶开双簧窗扣 (0:08)|MP NPC Lin Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+		<<walkicon>><<link [[顶开双簧窗扣 (0:08)|MP NPC Lin Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
 	<br>
 	<<if ($athletics or 0) gte 260 or ($physique or 10000) gte 11600 or (_npc.trust or 0) gte 10>>
@@ -1025,12 +1049,12 @@
 	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>将 £15 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>没有补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>将 <span class="gold">£15</span> 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>没有补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[收好东西回去 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好东西回去 (0:03)（尚未结识）</span><</if>>
 	<br>
-	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Lin Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Lin Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">翻看后续卷宗 (0:03)（尚未结识）</span><</if>><</if>>
+	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Lin Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Lin Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">核对下一步去向 (0:04)（尚未结识）</span><</if>><</if>>
 <</if>>
 
 :: MP NPC Lin Quest Late [nobr]
@@ -1044,7 +1068,7 @@
 	<<if ($skulduggery or 0) gte 270 or ($willpower or 0) gte 450>>
 		<<sneakicon>><<link [[拨开棘轮止回爪 (0:09)|MP NPC Lin Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<link [[拨开棘轮止回爪 (0:09)|MP NPC Lin Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+		<<walkicon>><<link [[拨开棘轮止回爪 (0:09)|MP NPC Lin Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
 	<br>
 	<<if ($physique or 10000) gte 11800 or ($athletics or 0) gte 270 or (_npc.love or 0) gte 10>>
@@ -1055,7 +1079,7 @@
 <<elseif _stg is 8>>
 	地下赌庄今晚要把总账转移去码头，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>拉下工业巷总蒸汽阀制造白雾。他让你趁浓雾贴身截走账房怀里的皮包，或推倒货架封死护卫退路。
 	<br><br>
-	<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<else>><span class="disabled">先退回林恩身旁 (0:03)（尚未结识）</span><</if>>
+	<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[先退回林恩身旁 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">先退回林恩身旁 (0:03)（尚未结识）</span><</if>>
 	<br>
 	<<if ($skulduggery or 0) gte 280 or ($danceskill or 0) gte 260>>
 		<<link [[顺走总账皮包 (0:10)|MP NPC Lin Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
@@ -1076,7 +1100,7 @@
 	<<else>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>擦净护腕，递给你一瓶温热的跌打药酒。<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_" + _npc.stage + "_keepsake")>>
-		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>把 £15 分红塞进你掌心。</span>
+		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>把 <span class="gold">£15</span> 分红塞进你掌心。</span>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[收好旧物回去 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好旧物回去 (0:03)（尚未结识）</span><</if>>
@@ -1094,13 +1118,13 @@
 	你借着雨水管攀上平顶，推开通气天窗轻巧落地，从桌上拓下假拳分红底单后原路翻出。<span class="green">你从屋顶气窗顺利取得了底单。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_3")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>将初探所得的 £15 酬劳塞进你掌心。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>将初探所得的 <span class="gold">£15</span> 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回落脚处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Lin Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Lin Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Lin Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1114,7 +1138,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[退回安全处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Lin Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Lin Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Lin Quest 6 Pass [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1126,13 +1150,13 @@
 	你与<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>一上一下握紧铁棍同时发力，生锈的门轴铁销被硬生生连根拔起，整扇铁笼门被直接卸下。<span class="green">你们凭爆发力卸下笼门救出人质。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_6")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>取出一封 £15 的中期分红信封递给你。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>取出一封 <span class="gold">£15</span> 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回落脚处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Lin Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Lin Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Lin Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1146,7 +1170,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[退回安全处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Lin Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Lin Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Lin Quest 9 Pass [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1158,13 +1182,13 @@
 	你合身撞倒巷侧满载木箱的铁货架，将四名护卫严严实实堵在死胡同里，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>趁机一把夺下总账皮包。<span class="green">你推倒货架断后助<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>夺下总账。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_lin_9")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>与你击掌庆贺，将 £15 巡防特等酬金推到你手边。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>与你击掌庆贺，将 <span class="gold">£15</span> 巡防特等酬金推到你手边。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回落脚处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Lin Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Lin Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Lin Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1178,7 +1202,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[退回安全处 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Lin Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Lin Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Lin Street Encounter [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1208,14 +1232,14 @@
 <br><br>
 <<getouticon>><<link [[离开画室 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<link [[聊画作光影 (0:06)|MP NPC Monet Chat]]>><<pass 6>><<stress -4>><</link>>
+<<socialiseicon>><<link [[聊画作光影 (0:06)|MP NPC Monet Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[请她补衣物 (0:08)|MP NPC Monet Service]]>><<pass 8>><</link>>
 <br>
 <<tendingicon>><<link [[绷紧亚麻画布 (0:16)|MP NPC Monet Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_monet)>>
-	<<investigateicon>><<link [[问起蒙尘署名画 (0:20)|MP NPC Monet Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_monet to 1>><<pass 20>><</link>>
+	<<link [[问起蒙尘署名画 (0:20)|MP NPC Monet Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_monet to 1>><<pass 20>><</link>>
 	<br>
 <</if>>
 
@@ -1228,7 +1252,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:02)|MP NPC Monet Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回莫奈身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[替她挽起长发 (0:04)|MP NPC Monet Flirt]]>><<pass 4>><<arousal 300>><</link>>
+<<investigateicon>><<link [[替她挽起长发 (0:04)|MP NPC Monet Flirt]]>><<pass 4>><<arousal 300>><</link>>
 <br>
 <<if ((_npc.love or 0) gte 15 or (_npc.lust or 0) gte 12) and (!$daily or !$daily.mpNpcIntimate_monet)>>
 	<<mphearticon>><<link [[随她内室写生 (0:25)|MP NPC Monet Intimate]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcIntimate_monet to 1>><<pass 25>><<arousal 1200>><<stress -10>><</link>>
@@ -1265,12 +1289,12 @@
 	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>><<money 1200>><</if>>
 <</if>>
 <<if _helpPaid>>
-	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你帮<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>绷紧六幅亚麻画框并研磨好青金石颜料。<span class="green"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>从画金匣里取出 £12 塞进你手心。</span><<stress -3>><<else>>松节油倒多了些，弄脏了一角衬布。<span class="teal"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>笑着替你擦净手指，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
+	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你帮<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>绷紧六幅亚麻画框并研磨好青金石颜料。<span class="green"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>从画金匣里取出 <span class="gold">£12</span> 塞进你手心。</span><<stress -3>><<else>>松节油倒多了些，弄脏了一角衬布。<span class="teal"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>笑着替你擦净手指，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
 <<else>>你帮<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>把洗净的画笔按号数排在笔架上。<span class="teal">画室整洁有序，她赏了你一颗酒心巧克力。</span><</if>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:02)|MP NPC Monet Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回莫奈身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[研磨矿物颜料 (0:06)|MP NPC Monet Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
+<<tendingicon>><<link [[研磨矿物颜料 (0:06)|MP NPC Monet Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
 
 :: MP NPC Monet Flirt [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -1281,7 +1305,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:02)|MP NPC Monet Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回莫奈身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[低声交谈 (0:04)|MP NPC Monet Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
+<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<socialiseicon>><<link [[低声交谈 (0:04)|MP NPC Monet Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
 
 :: MP NPC Monet Intimate [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -1306,7 +1330,7 @@
 	<<if ($skulduggery or 0) gte 260 or ($tending or 0) gte 250>>
 		<<sneakicon>><<link [[软蜡拓印模 (0:08)|MP NPC Monet Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
-		<<link [[软蜡拓印模 (0:08)|MP NPC Monet Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+		<<walkicon>><<link [[软蜡拓印模 (0:08)|MP NPC Monet Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
 	<br>
 	<<if ($english or 0) gte 260 or ($history or 0) gte 250 or (_npc.trust or 0) gte 10>>
@@ -1323,12 +1347,12 @@
 	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>将 £15 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>没有补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>将 <span class="gold">£15</span> 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>没有补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[收好东西回去 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好东西回去 (0:03)（尚未结识）</span><</if>>
 	<br>
-	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Monet Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Monet Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">翻看后续卷宗 (0:03)（尚未结识）</span><</if>><</if>>
+	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Monet Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Monet Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">核对下一步去向 (0:04)（尚未结识）</span><</if>><</if>>
 <</if>>
 
 :: MP NPC Monet Quest Late [nobr]
@@ -1342,7 +1366,7 @@
 	<<if ($tending or 0) gte 260 or ($danceskill or 0) gte 250>>
 		<<tendingicon>><<link [[控温烘绢 (0:09)|MP NPC Monet Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<link [[控温烘绢 (0:09)|MP NPC Monet Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+		<<walkicon>><<link [[控温烘绢 (0:09)|MP NPC Monet Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
 	<br>
 	<<if ($housekeeping or 0) gte 260 or ($willpower or 0) gte 440 or (_npc.love or 0) gte 10>>
@@ -1353,7 +1377,7 @@
 <<elseif _stg is 8>>
 	天鹅绒拍卖厅后台，真迹画框四角挂着敏感的警报铜铃。<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>在展厅举牌吸引视线，让你用丝绵塞住铜铃摘下画芯，或旋松画架背板从后方抽画。
 	<br><br>
-	<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<else>><span class="disabled">先退回莫奈身旁 (0:03)（尚未结识）</span><</if>>
+	<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[先退回莫奈身旁 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">先退回莫奈身旁 (0:03)（尚未结识）</span><</if>>
 	<br>
 	<<if ($skulduggery or 0) gte 280 or ($danceskill or 0) gte 270>>
 		<<link [[取下真迹 (0:10)|MP NPC Monet Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
@@ -1374,7 +1398,7 @@
 	<<else>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>收起画笔，替你理好微乱的衣领。<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_" + _npc.stage + "_keepsake")>>
-		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>把 £15 分红塞进你掌心。</span>
+		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>把 <span class="gold">£15</span> 分红塞进你掌心。</span>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[收好旧物回去 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好旧物回去 (0:03)（尚未结识）</span><</if>>
@@ -1392,13 +1416,13 @@
 	你借着落地窗透进的斜阳，用极细炭笔将桌角火漆信封上的双天鹅暗纹分毫不差地摹在描图纸上。<span class="green">你精准临摹出了印鉴防伪花押。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_3")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>将初探所得的 £15 酬劳塞进你掌心。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>将初探所得的 <span class="gold">£15</span> 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回落脚处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Monet Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Monet Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Monet Quest 3 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -1412,7 +1436,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[退回安全处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Monet Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Monet Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Monet Quest 6 Pass [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -1424,13 +1448,13 @@
 	你执起宽排羊毛刷沾取浓茶，力道均匀地刷过整幅画背，干透后的包浆与真迹一般无二，<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>欣喜地抱住你。<span class="green">你用茶染技法完美复刻了古画包浆。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_6")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>取出一封 £15 的中期分红信封递给你。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>取出一封 <span class="gold">£15</span> 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回落脚处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Monet Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Monet Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Monet Quest 6 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -1444,7 +1468,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[退回安全处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Monet Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Monet Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Monet Quest 9 Pass [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -1456,13 +1480,13 @@
 	你完全不碰外框铜铃，用薄银币旋松背板四颗暗螺丝，从后方将真迹平整抽出并塞入假画，不留一丝痕迹。<span class="green">你从背板夹层巧妙取回了真迹。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_monet_9")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>与你击掌庆贺，将 £15 画廊珍藏分红封进你手包。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>与你击掌庆贺，将 <span class="gold">£15</span> 画廊珍藏分红封进你手包。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回落脚处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Monet Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Monet Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Monet Quest 9 Fail [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -1476,7 +1500,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[退回安全处 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Monet Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Monet Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Monet Street Encounter [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1506,14 +1530,14 @@
 <br><br>
 <<getouticon>><<link [[离开林间 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<link [[聊山林旧事 (0:06)|MP NPC Ash Chat]]>><<pass 6>><<stress -4>><</link>>
+<<socialiseicon>><<link [[聊山林旧事 (0:06)|MP NPC Ash Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[认林间兽径 (0:08)|MP NPC Ash Service]]>><<pass 8>><</link>>
 <br>
 <<tendingicon>><<link [[劈柴晾草药 (0:16)|MP NPC Ash Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_ash)>>
-	<<investigateicon>><<link [[探寻断碑铭文 (0:20)|MP NPC Ash Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_ash to 1>><<pass 20>><</link>>
+	<<link [[探寻断碑铭文 (0:20)|MP NPC Ash Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_ash to 1>><<pass 20>><</link>>
 	<br>
 <</if>>
 
@@ -1526,7 +1550,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[回阿什身边 (0:02)|MP NPC Ash Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回阿什身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[依偎他肩头 (0:04)|MP NPC Ash Flirt]]>><<pass 4>><<arousal 300>><</link>>
+<<loveicon>><<link [[依偎他肩头 (0:04)|MP NPC Ash Flirt]]>><<pass 4>><<arousal 300>><</link>>
 <br>
 <<if ((_npc.love or 0) gte 15 or (_npc.lust or 0) gte 12) and (!$daily or !$daily.mpNpcIntimate_ash)>>
 	<<mphearticon>><<link [[随他进树屋 (0:25)|MP NPC Ash Intimate]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcIntimate_ash to 1>><<pass 25>><<arousal 1200>><<stress -10>><</link>>
@@ -1563,12 +1587,12 @@
 	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>><<money 1200>><</if>>
 <</if>>
 <<if _helpPaid>>
-	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你帮<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>劈好整垛松木，还把采回的药根按干湿分装入篓。<span class="green"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>将 £12 巡林补贴塞进你口袋。</span><<stress -3>><<else>>湿柴滑手磕破了指节，<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>接过斧头让你歇着。<span class="teal">他替你包扎手指，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
+	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240 or ($athletics or 0) gte 240>>你帮<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>劈好整垛松木，还把采回的药根按干湿分装入篓。<span class="green"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>将 <span class="gold">£12</span> 巡林补贴塞进你口袋。</span><<stress -3>><<else>>湿柴滑手磕破了指节，<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>接过斧头让你歇着。<span class="teal">他替你包扎手指，只替你收拾好工具，没有补贴。</span><<stress 2>><</if>>
 <<else>>你帮<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>往篝火里添了把干松球。<span class="teal">松香四溢，他递给你一颗烤栗子。</span><</if>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[回阿什身边 (0:02)|MP NPC Ash Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回阿什身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<link [[翻转烘烤药根 (0:06)|MP NPC Ash Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
+<<investigateicon>><<link [[翻转烘烤药根 (0:06)|MP NPC Ash Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
 
 :: MP NPC Ash Flirt [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -1579,7 +1603,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[回阿什身边 (0:02)|MP NPC Ash Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回阿什身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[低声交谈 (0:04)|MP NPC Ash Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
+<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<socialiseicon>><<link [[低声交谈 (0:04)|MP NPC Ash Chat]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">低声交谈 (0:04)（尚未结识）</span><</if>>
 
 :: MP NPC Ash Intimate [nobr]
 <<set $outside to 0>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -1604,7 +1628,7 @@
 	<<if ($swimmingskill or 0) gte 260 or ($athletics or 0) gte 250>>
 		<<swimicon>><<link [[潜入潭底摸取 (0:09)|MP NPC Ash Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<link [[潜入潭底摸取 (0:09)|MP NPC Ash Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+		<<walkicon>><<link [[潜入潭底摸取 (0:09)|MP NPC Ash Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
 	<br>
 	<<if ($tending or 0) gte 250 or ($willpower or 0) gte 440 or (_npc.trust or 0) gte 10>>
@@ -1621,12 +1645,12 @@
 	<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_" + _npc.stage)>>
-		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>将 £15 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>没有补贴。</span><</if>>
+		<<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250 or ($science or 0) gte 250>><<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>将 <span class="gold">£15</span> 补贴塞进你掌心。</span><<else>><<stress 2>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>没有补贴。</span><</if>>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[收好东西回去 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好东西回去 (0:03)（尚未结识）</span><</if>>
 	<br>
-	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Ash Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Ash Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">翻看后续卷宗 (0:03)（尚未结识）</span><</if>><</if>>
+	<<if _npc.stage gte 5>><<link [[翻看后续卷宗 (0:03)|MP NPC Ash Quest Late]]>><<pass 3>><</link>><<else>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[核对下一步去向 (0:04)|MP NPC Ash Hub]]>><<pass 4>><<stress -2>><</link>><<else>><span class="disabled">核对下一步去向 (0:04)（尚未结识）</span><</if>><</if>>
 <</if>>
 
 :: MP NPC Ash Quest Late [nobr]
@@ -1640,7 +1664,7 @@
 	<<if ($science or 0) gte 250 or ($history or 0) gte 250>>
 		<<investigateicon>><<link [[掏通排风孔 (0:09)|MP NPC Ash Quest 6 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<link [[掏通排风孔 (0:09)|MP NPC Ash Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+		<<walkicon>><<link [[掏通排风孔 (0:09)|MP NPC Ash Quest 6 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
 	<br>
 	<<if ($athletics or 0) gte 260 or ($physique or 10000) gte 11600 or (_npc.love or 0) gte 10>>
@@ -1651,7 +1675,7 @@
 <<elseif _stg is 8>>
 	血月升起前，一群受惊的林间野猪冲向古祭坛石环。<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>拉满猎弓守住正面，让你挥动松明火把封住西侧缺口，或吹响守林人骨哨引开头猪。
 	<br><br>
-	<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<else>><span class="disabled">先退回阿什身旁 (0:03)（尚未结识）</span><</if>>
+	<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[先退回阿什身旁 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>><<else>><span class="disabled">先退回阿什身旁 (0:03)（尚未结识）</span><</if>>
 	<br>
 	<<if ($physique or 10000) gte 11800 or ($willpower or 0) gte 460>>
 		<<link [[封堵西侧缺口 (0:10)|MP NPC Ash Quest 9 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 10>><</link>>
@@ -1672,7 +1696,7 @@
 	<<else>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>添上松柴，递给你一碗驱寒热汤。<</if>>
 	<br><br>
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_" + _npc.stage + "_keepsake")>>
-		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>把 £15 分红塞进你掌心。</span>
+		<<money 1500>><<stress -4>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>把 <span class="gold">£15</span> 分红塞进你掌心。</span>
 	<<else>><<stress -2>><</if>>
 	<br><br>
 	<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[收好旧物回去 (0:03)|MP NPC Ash Hub]]>><<pass 3>><</link>><<else>><span class="disabled">收好旧物回去 (0:03)（尚未结识）</span><</if>>
@@ -1690,13 +1714,13 @@
 	你趴在岸边岩石上，借着防风灯光用长竿铁钩精准勾住圣徽挂环，稳稳将其挑出水面收入掌心。<span class="green">你用长竿巧劲勾出了潭底圣徽。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_3")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>将初探所得的 £15 酬劳塞进你掌心。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>将初探所得的 <span class="gold">£15</span> 酬劳塞进你掌心。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[回落脚处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Ash Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Ash Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Ash Quest 3 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -1710,7 +1734,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[退回安全处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Ash Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Ash Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Ash Quest 6 Pass [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -1722,13 +1746,13 @@
 	你踩着盘结的粗壮树根爬上穹顶，用肩膀顶开覆满落叶的换气石板，清冷山风倾泻而下扫清了地穴。<span class="green">你顶开穹顶石板引来了林间清风。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_6")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>取出一封 £15 的中期分红信封递给你。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>取出一封 <span class="gold">£15</span> 的中期分红信封递给你。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[回落脚处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Ash Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Ash Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Ash Quest 6 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -1742,7 +1766,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[退回安全处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Ash Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Ash Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Ash Quest 9 Pass [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -1754,13 +1778,13 @@
 	你翻身跃上风化石柱，吹出悠长尖锐的头狼威慑哨音，受惊的野猪群顿时阵脚大乱，纷纷折向山谷奔逃。<span class="green">你用驱兽骨哨完美引开了野猪群。</span>
 <</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("npc_quest_ash_9")>>
-	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>与你击掌庆贺，将 £15 秘境考据重酬放入你怀中。</span>
+	<<money 1500>><span class="gold"><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>与你击掌庆贺，将 <span class="gold">£15</span> 秘境考据重酬放入你怀中。</span>
 <</if>>
 <<stress -5>><<lstress>>
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[回落脚处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>><<else>><span class="disabled">回落脚处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[收拢旧物证 (0:03)|MP NPC Ash Hub]]>><<pass 3>><<stress -2>><</link>>
+<<investigateicon>><<link [[收拢旧物证 (0:03)|MP NPC Ash Hub]]>><<pass 3>><<stress -2>><</link>>
 
 :: MP NPC Ash Quest 9 Fail [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
@@ -1774,7 +1798,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>><<link [[退回安全处 (0:04)|MP NPC Ash Hub]]>><<pass 4>><</link>><<else>><span class="disabled">退回安全处 (0:04)（尚未结识）</span><</if>>
 <br>
-<<link [[包扎擦伤 (0:05)|MP NPC Ash Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
+<<tendingicon>><<link [[包扎擦伤 (0:05)|MP NPC Ash Hub]]>><<pass 5>><<pain -1>><<stress -1>><</link>>
 
 :: MP NPC Ash Street Encounter [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>

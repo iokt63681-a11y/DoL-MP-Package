@@ -4462,22 +4462,22 @@
       }
       if (rItem.check && !rItem.check(v)) continue;
       {
-        var rRow = el("div", { style: "margin:4px 0;" });
-        rRow.appendChild(el("span", { text: rItem.hint + " " }));
         (function (regEntry) {
           var rLink = el("a", {
-            class: "link-internal",
+            class: "link-internal macro-link",
+            role: "link",
+            tabindex: "0",
             onclick: function (ev) {
               ev.preventDefault();
               v.mpReturnPassage = pas;
               enginePlay(regEntry.passage);
             }
           });
-          rLink.appendChild(dolIconImg(regEntry.icon));
           rLink.appendChild(document.createTextNode(regEntry.linkText));
-          rRow.appendChild(rLink);
+          regionBox.appendChild(dolIconImg(regEntry.icon));
+          regionBox.appendChild(rLink);
+          regionBox.appendChild(document.createElement("br"));
         })(rItem);
-        regionBox.appendChild(rRow);
         break;
       }
     }
@@ -4581,8 +4581,6 @@
     }
 
     if (regionBox.childNodes.length) {
-      var regionHead = el("div", { class: "mp-inline-header", text: "新地点" });
-      regionBox.insertBefore(regionHead, regionBox.firstChild);
       var pasTop = host.querySelector(".passage") || host;
       var _targetNode = null;
       try {
@@ -4590,14 +4588,14 @@
         var _tn;
         while ((_tn = _walk.nextNode())) {
           var _tt = (_tn.nodeValue || "").trim();
-          if (/^(快捷小路|Alternate routes|Shortcuts)$/.test(_tt)) {
+          if (/^(可访问地点|Places of interest|Places|其他区域)$/.test(_tt)) {
             _targetNode = _tn;
             break;
           }
         }
       } catch (e) {}
       if (_targetNode && _targetNode.parentNode) {
-        _targetNode.parentNode.insertBefore(regionBox, _targetNode);
+        _targetNode.parentNode.insertBefore(regionBox, _targetNode.nextSibling);
       } else {
         var _anchors = pasTop.querySelectorAll("a.link-internal,button.link-internal");
         var _anchor = _anchors.length ? _anchors[_anchors.length - 1] : null;
