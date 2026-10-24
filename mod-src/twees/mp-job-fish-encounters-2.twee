@@ -1,0 +1,107 @@
+:: MP Job Fish Encounter 2 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if Time.dayState is "night">><<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>><</if>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobFishEncounter to 1>>
+<<if Time.dayState is "night">>夜市第二轮的单子已经压在后厨案板上，酒馆却派人来催那筐去刺银鳕，说炸鱼排的油锅等不到下一趟船。<<else>>日头还没偏西，酒馆后厨就派人来催晚市的去刺银鳕，说招牌炸鱼排今晚订满了桌。<</if>>可冰棚里只剩半筐碎冰，边角已经在滴水。老鱼贩把最后一块存冰拖到秤旁，冰厂的罗婶叉着腰站在磅秤边，说今天往酒馆送冰的车已经排到街口，插不进队。
+<br><br>
+<div id="mp-job-fish-enc2">
+<<mpfishicon>><<if ($athletics or 0) gte 220>><<link "凿冰分鳕 (0:06)">><<pass 6>><<if Time.dayState is "night">><<mpalert 5>><</if>><<replace "#mp-job-fish-enc2">>
+<<if ($athletics or 0) gte 240 or random(1, 3) gte 2>>
+	你把整块存冰拖到筐边，顺着冰裂纹下凿，碎冰溅在木板上像铺了一层白砂。银鳕一层鱼一层冰码进酒馆送来的木筐，筐沿最后压上湿麻布。老鱼贩拎起筐掂了掂，按加急的份量给你结了赏钱。<span class="green">酒馆晚市的第一筐银鳕赶在化冰前送出了鱼档。</span><<if Time.dayState is "night">><<mpalertgain "凿冰声在夜里传得很远">><</if>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 700>><</if>>
+	<<athletics 1>><<stress -2>><<lstress>>
+<<else>>
+	冰裂纹比你想的深，凿到第三下整块冰顺着斜坡滑进排水沟，溅起的水打湿了半筐鱼。老鱼贩只得把化得最快的几条挑出来另放。<span class="red">酒馆的筐没装满，你蹲在冰水里重新码了一遍。</span><<stress 3>><<tiredness 2>><<gstress>><<gtiredness>><<if Time.dayState is "night">><<mpalert 5>><<mpalertgain "碎冰声惊动了巡夜人">><</if>>
+<</if>>
+<br><br>
+<<link [[返回鱼档摊位 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+<br>
+<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
+<</replace>><</link>><<else>><<link [[凿冰分鳕 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "凿冰分鳕">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpcalculateicon>><<if ($mpJobPubKitchenCount or 0) gte 6>>
+	<<if ($maths or 0) gte 220>><<link "调酒馆碎冰 (0:05)">><<pass 5>><<replace "#mp-job-fish-enc2">>
+	<<if ($maths or 0) gte 240 or random(1, 3) gte 2>>
+		你翻出后厨昨日送来的空冰篓，里面还垫着半筐没化透的碎冰。你按订单把分量重算了一遍：银鳕要厚冰，鱼柳只需薄铺，省下的冰再拿湿草隔住。匀出来的碎冰补进鱼档，银鳕重新码稳，采买厨师验过鱼鳃，按加急价结了账。<span class="green">两边都没断冰，晚市订单保住了。</span>
+		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 900>><</if>>
+		<<mathsskill 1 "no_star">><<stress -1>><<lstress>>
+	<<else>>
+		你算错了化冰的损耗，银鳕下层铺得太薄。送到后厨时已有两条软了鳃，采买厨师把整筐退了回来，老鱼贩皱着眉把剩下的鱼重新过秤。<span class="red">这趟没挣到加急钱，还得把退货的鱼摊回冰上。</span><<stress 2>><<tiredness 2>><<gstress>><<gtiredness>>
+	<</if>>
+	<br><br>
+	<<link [[返回鱼档摊位 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+	<br>
+	<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
+	<</replace>><</link>><<else>><<link [[调酒馆碎冰 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "调酒馆碎冰">><<set $mpInsuffReq to "算术等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
+<<else>>
+	<span class="disabled">调酒馆碎冰 (0:05)（尚未打通酒馆供货）</span>
+<</if>>
+<br>
+<<mpbargainicon>><<if ($money or 0) gte 300>><<link "买冰救急 (0:04)">><<pass 4>><<replace "#mp-job-fish-enc2">>
+你把三枚银币拍在罗婶的磅秤上，买下她车底最后半块没化的存冰。罗婶瞟了一眼鱼筐，没再多要价，还让伙计把冰敲成小块。银鳕重新裹上厚冰，酒馆后厨按加急价收了货，扣掉冰钱还余下几枚。<span class="green">你自掏腰包补上了这一筐的冰。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 800>><</if>>
+<<money -300>><<stress -1>><<lstress>>
+<br><br>
+<<link [[返回鱼档摊位 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+<br>
+<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
+<</replace>><</link>><<else>><span class="disabled">买冰救急 (0:04)（钱不够）</span><</if>>
+<br>
+<<mpcleanicon>><<link "湿草垫筐 (0:05)">><<pass 5>><<replace "#mp-job-fish-enc2">>
+你从棚后抱来一捆旧湿草，裹住鱼筐四周，又用麻布盖严。冰还是化了小半，但银鳕没直接见风，至少撑到酒馆的车来。罗婶说这办法笨是笨，救急够用。<span class="teal">这趟只算搭了把手，没拿到赏钱。</span><<stress -1>><<lstress>>
+<br><br>
+<<link [[返回鱼档摊位 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+<br>
+<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
+<</replace>><</link>>
+<br>
+<<link [[返回鱼档 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+</div>
+
+:: MP Job Fish Encounter 3 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if Time.dayState is "night">><<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>><</if>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobFishEncounter to 1>>
+收网时，网眼里卡着一只灰背海鸟，一只翅膀被细麻线缠了两圈，正一声声低叫。老鱼贩蹲下去看了一眼，说这线是外海拖网剪下来的旧料，结头打得很死。栈桥栏杆边，一个背着皮包的游客正举着黄铜望远镜往这边看，还朝你喊，问是不是要救它。
+<br><br>
+<div id="mp-job-fish-enc3">
+<<mpfirstaidicon>><<if ($tending or 0) gte 220>><<link "解网救鸟 (0:07)">><<pass 7>><<if Time.dayState is "night">><<mpalert 4>><</if>><<replace "#mp-job-fish-enc3">>
+<<if ($tending or 0) gte 240 or random(1, 3) gte 2>>
+	你让老鱼贩用旧帆布兜住鸟身，自己顺着线头一圈圈往外抽。麻线勒进翅根的地方已经磨破皮，你用清水冲掉血沫，把粘住的羽毛一根根理开，最后剪断脚环上打死的结。海鸟在你掌心挣了挣，扑棱着飞上栈桥高处的缆绳。游客把几枚银币压在栏杆上，说这故事值一趟船钱。<span class="green">海鸟没折翼，还回头叫了一声才飞远。</span><<if Time.dayState is "night">><<mpalertgain "海鸟的叫声引来了巡夜人">><</if>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 500>><</if>>
+	<<tending 1>><<stress -2>><<lstress>>
+<<else>>
+	你刚挑开第二圈线，海鸟猛地一口啄在你虎口上，翅膀带起的水花泼了你满脸。它挣脱半截线飞进栈桥外的风里，脚上还拖着一段断网。老鱼贩把剩下的线团收走，让你先去洗伤口。<span class="red">救到一半的鸟带着伤飞走了。</span><<pain 1>><<stress 3>><<tiredness 1>><<gstress>><<if Time.dayState is "night">><<mpalert 6>><<mpalertgain "鸟叫和水声引来了巡夜人">><</if>>
+<</if>>
+<br><br>
+<<link [[返回鱼档摊位 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+<br>
+<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
+<</replace>><</link>><<else>><<link [[解网救鸟 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "解网救鸟">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<br>
+<<socialiseicon>><<if ($seductionskill or 0) gte 220 or ($skulduggery or 0) gte 220>><<link "支开游客 (0:05)">><<pass 5>><<if Time.dayState is "night">><<mpalert 5>><</if>><<replace "#mp-job-fish-enc3">>
+<<if ($seductionskill or 0) gte 240 or ($skulduggery or 0) gte 240 or random(1, 3) gte 2>>
+	你走到游客面前，把话题引到别处，说栈桥这侧水浅，落潮时容易踩滑，请他退到棚下的干木板上去看。游客信了，还掏钱买了条小银鱼，说要带回去给旅店老板看。你转身回来时，老鱼贩已经把线抽松，海鸟自个儿挣脱飞走了。<span class="green">游客被支开，鸟也没再受惊。</span><<if Time.dayState is "night">><<mpalertgain "游客的话声顺着水面飘远">><</if>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 300>><</if>>
+	<<seductionskill 1>><<stress -1>><<lstress>>
+<<else>>
+	你话说到一半，游客反而举起望远镜凑近，问是不是该喊港务来救。他一嗓子把港务巡工引了过来，老鱼贩只得把鸟连网一起盖进空筐。<span class="red">栈桥上多了几双盯着你的眼睛。</span><<stress 2>><<tiredness 1>><<gstress>><<if Time.dayState is "night">><<mpalert 6>><<mpalertgain "游客的喊声引来了港务巡工">><</if>>
+<</if>>
+<br><br>
+<<link [[返回鱼档摊位 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+<br>
+<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
+<</replace>><</link>><<else>><<link [[支开游客 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "支开游客">><<set $mpInsuffReq to "魅力等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
+<br>
+<<mpfishicon>><<if ($mpJobTrawlerCount or 0) gte 6>><<link "借拖网刀 (0:04)">><<pass 4>><<replace "#mp-job-fish-enc3">>
+你认出缠住鸟翅的线是外海拖网剪下来的旧料，结头用的是渔船上那种双套结。你从老鱼贩的棚里取来割网刀，把刀背垫进羽毛和线之间，只挑断绳结，没碰着皮肉。海鸟抖了抖翅膀，自己跳上筐沿。老鱼贩说这网还能补，把省下的网料钱折给你。<span class="green">缠网割开了，鸟和网都保住了。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_fish_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 600>><</if>>
+<<skulduggery 1>><<tiredness 1>><<stress -1>><<gtiredness>><<lstress>>
+<br><br>
+<<link [[返回鱼档摊位 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+<br>
+<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
+<</replace>><</link>><<else>><span class="disabled">借拖网刀 (0:04)（尚未熟悉拖网网料）</span><</if>>
+<br>
+<<link [[返回鱼档 (0:02)|MP Job Fish]]>><<pass 2>><</link>>
+</div>
