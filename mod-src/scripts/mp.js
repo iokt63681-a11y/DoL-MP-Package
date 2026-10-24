@@ -4337,6 +4337,7 @@
   var LIVELIHOOD_HOOKS = [
     {
       locs: ["Ocean Breeze"],
+      hours: [7, 21],
       check: function (v) { return true; },
       hint: "海风咖啡馆后门的排班表还留着空位，门缝里飘出烤面包和咖啡的香气。",
       icon: "img/misc/icon/shop.png",
@@ -4353,6 +4354,7 @@
     },
     {
       locs: ["Spa"],
+      hours: [8, 22],
       check: function (v) { return true; },
       hint: "温泉桑拿的前台把一块写着「招临时帮工」的木牌摆到了门口。",
       icon: "img/misc/icon/temple.png",
@@ -4361,6 +4363,7 @@
     },
     {
       locs: ["Farmland"],
+      hours: [6, 20],
       check: function (v) { return true; },
       hint: "农场谷仓门口的活计牌还挂着，远处传来拖拉机的闷响。",
       icon: "img/misc/icon/forest.png",
@@ -4369,7 +4372,8 @@
     },
     {
       locs: ["High Street"],
-      check: function (v) { return getHourNow() >= 8 && getHourNow() < 21; },
+      hours: [8, 21],
+      check: function (v) { return true; },
       hint: "钟表铺的招工牌翻到了正面，橱窗里的座钟正指到整点。",
       icon: "img/misc/icon/shop.png",
       linkText: "去钟表铺上工 (0:05)",
@@ -4377,11 +4381,66 @@
     },
     {
       locs: ["Orphanage"],
+      hours: [6, 22],
       check: function (v) { return true; },
       hint: "浆洗房的管事站在走廊里点人手，门后传来熨斗压过布面的声响。",
       icon: "img/misc/icon/socialise.png",
       linkText: "去浆洗房上工 (0:05)",
       passage: "MP Job Laundry"
+    },
+    {
+      locs: ["Harvest Street"],
+      hours: [6, 19],
+      check: function (v) { return true; },
+      hint: "街角石炉面包房的木窗飘出焦香麦气，门边挂着早班招工牌。",
+      icon: "img/misc/icon/shop.png",
+      linkText: "去面包房上工 (0:05)",
+      passage: "MP Job Bakery"
+    },
+    {
+      locs: ["High Street"],
+      hours: [8, 20],
+      check: function (v) { return true; },
+      hint: "高街裁缝铺的橱窗旁立着改衣帮工木牌，里头传来踏板缝纫机的轻响。",
+      icon: "img/misc/icon/shop.png",
+      linkText: "去裁缝铺上工 (0:05)",
+      passage: "MP Job Tailor"
+    },
+    {
+      locs: ["Connudatus Street"],
+      hours: [7, 21],
+      check: function (v) { return true; },
+      hint: "街口邮政代办亭挂出了急件派送木牌，老邮差正在分拣牛皮纸信袋。",
+      icon: "img/misc/icon/Town_hall.png",
+      linkText: "去代办亭跑腿 (0:05)",
+      passage: "MP Job Courier"
+    },
+    {
+      locs: ["Pub"],
+      hours: [10, 23],
+      check: function (v) { return true; },
+      hint: "酒馆后厨的摆门后飘出烤肋排与麦酒的香气，厨娘正招手找帮工。",
+      icon: "img/misc/icon/pub.png",
+      linkText: "去酒馆后厨帮工 (0:05)",
+      passage: "MP Job PubKitchen"
+    },
+    {
+      locs: ["Farmland"],
+      hours: [6, 20],
+      check: function (v) { return true; },
+      hint: "河湾马厩的木栏边停着装满谷袋的四轮板车，车夫老伯正在刷马蹄。",
+      icon: "img/misc/icon/forest.png",
+      linkText: "去马厩帮工 (0:05)",
+      passage: "MP Job Stable"
+    },
+    {
+      locs: ["Docks"],
+      hours: [6, 21],
+      check: function (v) { return true; },
+      hint: "三号防波堤下的单桅拖网渔船冒着白烟，老船老大正在甲板边点水手。",
+      icon: "img/misc/icon/beach.png",
+      linkText: "去拖网渔船上工 (0:05)",
+      passage: "MP Job Trawler"
     }
   ];
 
@@ -4717,7 +4776,7 @@
 
     for (var li = 0; li < LIVELIHOOD_HOOKS.length; li++) {
       var lhk = LIVELIHOOD_HOOKS[li];
-      if (lhk.locs.indexOf(pas) >= 0 && (!lhk.check || lhk.check(v))) {
+      if (lhk.locs.indexOf(pas) >= 0 && (!lhk.hours || isNpcInScheduleHour(lhk)) && (!lhk.check || lhk.check(v))) {
         hasAny = true;
         var lhRow = el("div", { style: "margin:4px 0;" });
         lhRow.appendChild(el("span", { text: lhk.hint + " " }));
@@ -4727,6 +4786,15 @@
             onclick: function (ev) {
               ev.preventDefault();
               v.mpReturnPassage = pas;
+              if (jobItem.hours && !isNpcInScheduleHour(jobItem)) {
+                v.mpNotNowRet = pas;
+                v.mpNotNowLabel = String(jobItem.linkText || "去上工").replace(/\s*\(\d+:\d+\)\s*$/, "");
+                v.mpNotNowReq = jobItem.hours[0] + ":00–" + jobItem.hours[1] + ":00";
+                passTimeMinutes(2);
+                enginePlay("MP NotNow");
+                return;
+              }
+              passTimeMinutes(5);
               enginePlay(jobItem.passage);
             }
           });
@@ -4735,7 +4803,6 @@
           lhRow.appendChild(lhLink);
         })(lhk);
         container.appendChild(lhRow);
-        break;
       }
     }
 
