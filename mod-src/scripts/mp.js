@@ -3924,7 +3924,7 @@
     },
     {
       locs: ["High Street", "Shopping Centre"],
-      check: function (v) { return (getHourNow() >= 9 && getHourNow() < 21) && (Number(v.mpQuestClocktower) || 0) < 7 && (!v.daily || !v.daily.mpQuestClocktower); },
+      check: function (v) { return (getHourNow() >= 8 && getHourNow() < 21) && (Number(v.mpQuestClocktower) || 0) < 7 && (!v.daily || !v.daily.mpQuestClocktower); },
       hint: "钟表旧货铺的玻璃橱窗后亮着一盏昏黄的煤油灯，柜台后摆放着放大镜与天平。",
       icon: "img/misc/icon/shop.png",
       linkText: "推门走进钟表旧货铺 (0:08)",
