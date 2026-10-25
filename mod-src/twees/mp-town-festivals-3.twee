@@ -2,30 +2,33 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpFestival3Clues to ($mpFestival3Clues or {})>>
 <<set _m to Time.date.month>><<set _d to Time.date.day>>
-高街布告栏侧下方的木槽里挂着四枚记载半日节令的黄铜小牌：二月二日的烛光暖窖日、五月一日的五月花柱集、八月一日的初穗尝新会，以及十一月二十二日的封港修船日。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>替你指了指牌背上的集合地点，说这些半天就散的街坊节令最能看出镇上的老习俗。
-<<if not ((_m is 1 and _d gte 30) or (_m is 2 and _d lte 5) or (_m is 4 and _d gte 27) or (_m is 5 and _d lte 4) or (_m is 7 and _d gte 28) or (_m is 8 and _d lte 4) or (_m is 11 and _d gte 19 and _d lte 25))>>
-	铜牌背面还没有新的集合记号，最近的一场半日节令要再等些日子。
-<</if>>
+高街布告栏侧下方的木槽里挂着四枚记载半日节令的黄铜小牌：二月二日的烛光暖窖日、五月一日的五月花柱集、八月一日的初穗尝新会，以及十一月二十二日的封港修船日。
 <br><br>
-<<getouticon>><<link [[返回水牌 (0:02)|MP Micro Festivals Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回节令水牌 (0:02)|MP Micro Festivals Hub]]>><<pass 2>><</link>>
 <br>
-<<walkicon>><<link [[看下排半日铜牌 (0:02)|MP Town Festivals 4 Hub]]>><<pass 2>><</link>>
+<<mpreadicon>><<link [[看下排半日铜牌 (0:02)|MP Town Festivals 4 Hub]]>><<pass 2>><</link>>
 <br>
 <<if (_m is 1 and _d gte 30) or (_m is 2 and _d lte 5)>>
-	<<templeicon>><<link [[查地窖余蜡 (0:08)|MP Festival Candle 1]]>><<pass 8>><</link>>
-	<br>
-<</if>>
-<<if (_m is 4 and _d gte 27) or (_m is 5 and _d lte 4)>>
+	<<mpritualicon>><<link [[查地窖余蜡 (0:08)|MP Festival Candle 1]]>><<pass 8>><</link>>
+<<elseif (_m is 4 and _d gte 27) or (_m is 5 and _d lte 4)>>
 	<<parkicon>><<link [[看花环彩带 (0:08)|MP Festival Maypole 1]]>><<pass 8>><</link>>
-	<br>
+<<else>>
+	<<link [[看夏秋半日铜牌 (0:02)|MP Town Festivals 3 Hub B]]>><<pass 2>><</link>>
 <</if>>
+
+:: MP Town Festivals 3 Hub B [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _m to Time.date.month>><<set _d to Time.date.day>>
+木槽后半格挂着八月初穗尝新会与十一月封港修船日的两枚黄铜小牌。
+<br><br>
+<<getouticon>><<link [[返回前格铜牌 (0:02)|MP Town Festivals 3 Hub]]>><<pass 2>><</link>>
+<br>
 <<if (_m is 7 and _d gte 28) or (_m is 8 and _d lte 4)>>
-	<<if Time.dayState is "dawn">><<link [[看头茬麦穗 (0:12)|MP Festival Firstsheaf 1]]>><<pass 12>><</link>><<else>><span class="disabled">看头茬麦穗 (0:12)（只有清晨）</span><</if>>
+	<<mpfarmicon>><<if Time.dayState is "dawn">><<link [[看头茬麦穗 (0:12)|MP Festival Firstsheaf 1]]>><<pass 12>><</link>><<else>><span class="disabled">看头茬麦穗 (0:12)（只有清晨）</span><</if>>
 	<br>
 <</if>>
 <<if _m is 11 and _d gte 19 and _d lte 25>>
-	<<link [[查旧港船底 (0:08)|MP Festival Careen 1]]>><<pass 8>><</link>>
-	<br>
+	<<mprepairicon>><<link [[查旧港船底 (0:08)|MP Festival Careen 1]]>><<pass 8>><</link>>
 <</if>>
 
 /* ==================== 1. 烛光暖窖日 (2月2日 · Candle · 5段) ==================== */
@@ -45,7 +48,7 @@
 <<templeicon>><<if ($science or 0) gte 260 or ($skulduggery or 0) gte 250>><<link [[裁齐烛芯线 (0:07)|MP Festival Candle 2]]>>
 	<<if ($science or 0) gte 240 or ($skulduggery or 0) gte 240>><<set $mpFestival3Clues["candle_wax"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["candle_wax"] to 0>><<stress 3>><</if>>
 	<<pass 7>>
-<</link>><<else>><<link [[裁齐烛芯线 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "裁齐烛芯线">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<mpritualicon>><</link>><<else>><<link [[裁齐烛芯线 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "裁齐烛芯线">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
 
 :: MP Festival Candle 2 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
@@ -74,7 +77,7 @@
 <<mpcookicon>><<if ($tending or 0) gte 250 or ($science or 0) gte 260>><<link [[隔盆搅化冻蜜 (0:08)|MP Festival Candle 4]]>>
 	<<if ($tending or 0) gte 250 or ($science or 0) gte 240>><<set $mpFestival3Clues["candle_cake"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["candle_cake"] to 0>><<stress 3>><<tiredness 1>><</if>>
 	<<pass 8>>
-<</link>><<else>><<link [[隔盆搅化冻蜜 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "隔盆搅化冻蜜">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 科学等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<mpfarmicon>><</link>><<else>><<link [[隔盆搅化冻蜜 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "隔盆搅化冻蜜">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 科学等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
 <br>
 <<investigateicon>><<link [[挪蜜罐回暖 (0:08)|MP Festival Candle 4]]>>
 	<<if ($housekeeping or 0) gte 250>><<set $mpFestival3Clues["candle_cake"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["candle_cake"] to 0>><<stress 3>><</if>>
@@ -133,7 +136,7 @@
 <<investigateicon>><<if ($tending or 0) gte 250 or ($skulduggery or 0) gte 250>><<link [[竹竿挑顺缎带 (0:07)|MP Festival Maypole 2]]>>
 	<<if ($tending or 0) gte 240 or ($skulduggery or 0) gte 240>><<set $mpFestival3Clues["maypole_ribbon"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["maypole_ribbon"] to 0>><<stress 3>><</if>>
 	<<pass 7>>
-<</link>><<else>><<link [[竹竿挑顺缎带 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "竹竿挑顺缎带">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<parkicon>><</link>><<else>><<link [[竹竿挑顺缎带 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "竹竿挑顺缎带">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
 
 :: MP Festival Maypole 2 [nobr]
 <<set $outside to 1>><<set $location to "park">><<effects>><<mpAmbient>>
@@ -150,7 +153,7 @@
 <<investigateicon>><<if ($english or 0) gte 260 or ($willpower or 0) gte 430>><<link [[拍手鼓稳节拍 (0:08)|MP Festival Maypole 3]]>>
 	<<if ($english or 0) gte 240 or ($willpower or 0) gte 430>><<set $mpFestival3Clues["maypole_dance"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["maypole_dance"] to 0>><<stress 3>><</if>>
 	<<pass 8>>
-<</link>><<else>><<link [[拍手鼓稳节拍 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拍手鼓稳节拍">><<set $mpInsuffReq to "英语等级：<span class='purple'>D</span> 或 意志等级：<span class='blue'>C</span>">><<pass 8>><</link>><</if>>
+<<socialiseicon "dance">><</link>><<else>><<link [[拍手鼓稳节拍 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拍手鼓稳节拍">><<set $mpInsuffReq to "英语等级：<span class='purple'>D</span> 或 意志等级：<span class='blue'>C</span>">><<pass 8>><</link>><</if>>
 
 :: MP Festival Maypole 3 [nobr]
 <<set $outside to 1>><<set $location to "garden">><<effects>><<mpAmbient>>
@@ -162,7 +165,7 @@
 <<mpherbicon>><<if ($tending or 0) gte 250 or ($science or 0) gte 260>><<link [[薄荷叶引野蜂 (0:08)|MP Festival Maypole 4]]>>
 	<<if ($tending or 0) gte 250 or ($science or 0) gte 240>><<set $mpFestival3Clues["maypole_wreath"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["maypole_wreath"] to 0>><<stress 3>><<pain 1>><</if>>
 	<<pass 8>>
-<</link>><<else>><<link [[薄荷叶引野蜂 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "薄荷叶引野蜂">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 科学等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<parkicon>><</link>><<else>><<link [[薄荷叶引野蜂 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "薄荷叶引野蜂">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 科学等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
 <br>
 <<mpcarryicon>><<link [[端糖水碟到树荫 (0:08)|MP Festival Maypole 4]]>>
 	<<if ($housekeeping or 0) gte 240>><<set $mpFestival3Clues["maypole_wreath"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["maypole_wreath"] to 0>><<stress 3>><</if>>
@@ -216,7 +219,7 @@
 <<mprepairicon>><<if ($tending or 0) gte 250 or ($science or 0) gte 260>><<link [[给石磨轴抹油 (0:07)|MP Festival Firstsheaf 2]]>>
 	<<if ($tending or 0) gte 240 or ($science or 0) gte 240>><<set $mpFestival3Clues["sheaf_mill"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["sheaf_mill"] to 0>><<stress 3>><<tiredness 1>><</if>>
 	<<pass 7>>
-<</link>><<else>><<link [[给石磨轴抹油 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "给石磨轴抹油">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 科学等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<mpfarmicon>><</link>><<else>><<link [[给石磨轴抹油 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "给石磨轴抹油">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 科学等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
 <br>
 <<mpcarryicon>><<if $NPCNameList and $NPCNameList.includes("Alex")>><<link [[合力抬磨盘 (0:07)|MP Festival Firstsheaf 2]]>>
 	<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>><<set $mpFestival3Clues["sheaf_mill"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["sheaf_mill"] to 0>><<stress 3>><<pain 1>><</if>>
@@ -233,7 +236,7 @@
 <<mpanimalicon>><<if ($tending or 0) gte 250 or ($skulduggery or 0) gte 250>><<link [[撒谷壳引斑鸠 (0:12)|MP Festival Firstsheaf 3]]>>
 	<<if ($tending or 0) gte 250 or ($skulduggery or 0) gte 240>><<set $mpFestival3Clues["sheaf_birds"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["sheaf_birds"] to 0>><<stress 3>><</if>>
 	<<pass 12>>
-<</link>><<else>><<link [[撒谷壳引斑鸠 (0:12)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撒谷壳引斑鸠">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 12>><</link>><</if>>
+<<mpcookicon>><</link>><<else>><<link [[撒谷壳引斑鸠 (0:12)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撒谷壳引斑鸠">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 12>><</link>><</if>>
 <br>
 <<investigateicon>><<link [[摇绳护竹匾 (0:12)|MP Festival Firstsheaf 3]]>>
 	<<if ($athletics or 0) gte 250 or ($housekeeping or 0) gte 240>><<set $mpFestival3Clues["sheaf_birds"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["sheaf_birds"] to 0>><<stress 3>><<tiredness 1>><</if>>
@@ -309,7 +312,7 @@
 <<investigateicon>><<if ($skulduggery or 0) gte 250 or ($tending or 0) gte 250>><<link [[钢丝刷清桨槽 (0:07)|MP Festival Careen 2]]>>
 	<<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>><<set $mpFestival3Clues["careen_scrape"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["careen_scrape"] to 0>><<stress 3>><<tiredness 1>><</if>>
 	<<pass 7>>
-<</link>><<else>><<link [[钢丝刷清桨槽 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "钢丝刷清桨槽">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 照料等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<gardenicon "water">><</link>><<else>><<link [[钢丝刷清桨槽 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "钢丝刷清桨槽">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 照料等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
 
 :: MP Festival Careen 2 [nobr]
 <<set $outside to 1>><<set $location to "mer">><<effects>><<mpAmbient>>
@@ -321,7 +324,7 @@
 <<mpsewicon>><<if ($skulduggery or 0) gte 250 or ($housekeeping or 0) gte 250>><<link [[捻油麻入船缝 (0:07)|MP Festival Careen 3]]>>
 	<<if ($skulduggery or 0) gte 250 or ($housekeeping or 0) gte 250>><<set $mpFestival3Clues["careen_pitch"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["careen_pitch"] to 0>><<stress 3>><<pain 1>><</if>>
 	<<pass 7>>
-<</link>><<else>><<link [[捻油麻入船缝 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "捻油麻入船缝">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 家政等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<mpcookicon>><</link>><<else>><<link [[捻油麻入船缝 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "捻油麻入船缝">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 家政等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
 <br>
 <<mpherbicon>><<link [[看火刷匀松脂 (0:07)|MP Festival Careen 3]]>>
 	<<if ($science or 0) gte 240 or ($tending or 0) gte 250>><<set $mpFestival3Clues["careen_pitch"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["careen_pitch"] to 0>><<stress 3>><</if>>
@@ -343,7 +346,7 @@
 <<investigateicon>><<if ($skulduggery or 0) gte 250 or ($danceskill or 0) gte 250>><<link [[钩缆绳抄旗角 (0:06)|MP Festival Careen 4]]>>
 	<<if ($skulduggery or 0) gte 250 or ($danceskill or 0) gte 240>><<set $mpFestival3Clues["careen_flag"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["careen_flag"] to 0>><<stress 3>><</if>>
 	<<pass 6>>
-<</link>><<else>><<link [[钩缆绳抄旗角 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "钩缆绳抄旗角">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 舞蹈等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<mprowicon>><</link>><<else>><<link [[钩缆绳抄旗角 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "钩缆绳抄旗角">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 舞蹈等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
 
 :: MP Festival Careen 4 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>

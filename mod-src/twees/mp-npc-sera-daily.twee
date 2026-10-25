@@ -1,0 +1,606 @@
+:: MP NPC Sera Daily Hub [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+早上七点五十八分，高街的石板缝里还蓄着夜里的潮气。塞拉把最后一块擦净的门板靠回门框，先低头看腕上的基准表，再抬眼去对街角钟楼的指针，确认两边只差一秒半，才把铜钥匙插进锁孔。门铃响过第二声，她才回头：「你比昨天早到四十六秒。茶刚焖好，坐吧。」
+<br><br>
+铺子里三十六座钟各走各的拍子，落到她耳里却像一支排好的曲子。她把一只待修的银壳表夹上夹具，指腹在表冠上停了一停：「摆轮快了七秒，不是坏了，是主人太急。人一急，表就替他赶路。」说完她看了看你，又补一句：「你今天走得也急，鞋跟落地比平时重。」
+<br><br>
+她说话总带着刻度。煎茶要三分十二秒，擦一遍柜台要一刻钟，等一段游丝回弹，大约是眨两次眼的工夫。你若问她今天心情如何，她会先看表，再答：「比昨天慢半拍，误差还在能修的范围内。」她不说好，也不说不好，只把那些说不出口的部分折算成秒，记在一本没有封皮的薄册子里。
+<br><br>
+【节律】<<print (_sera.cadence or 0)>>/100 —— 她愿意把多少个安静的分钟交给你
+<br>
+<<if (_sera.cadence or 0) lt 35>>
+【校对时段】她把你当一位准时上门的客人：报价、取件、道别，每句话都量得刚好。茶是温的，椅子却仍隔着一张柜台。你走后她会把杯沿擦净，在簿子上记下你到店的时刻，误差精确到半分钟。
+<<elseif (_sera.cadence or 0) lt 70>>
+【共饮时段】修表台内侧多了一只杯子，位置刚好能看见齿轮咬合。她不再逐项报时，只在茶凉之前把杯子往你手边推半寸。话不必多，钟摆替你们数着停顿；你偶尔说错一句，她也只当是走时里允许的抖动。
+<<else>>
+【停秒时段】她偶尔会让手上的活停两秒，只为听你把一句话说完。那两秒没有记进任何账本，她也从不催。你若迟到，她只说「误差可修」，然后把门留一条缝，让灯一直亮到你进门。
+<</if>>
+<br><br>
+柜台上那口天文母钟走到整分，铜锤轻轻一颤。今天的活计分作两叠：上午到午后的一叠压在左手边，傍晚到夜里的一叠压在右手边。纸条边缘裁得齐整，每张都标了起止时刻。你可以挑一叠翻开，也可以先出门走走，看看她在高街上的另一副样子。
+<br><br>
+<<getouticon>><<link [[翻上午那叠 (0:02)|MP NPC Sera Daily A]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<link [[翻傍晚那叠 (0:02)|MP NPC Sera Daily B]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[去高街转转 (0:03)|MP NPC Sera Street Hub]]>><<pass 3>><</link>>
+<br>
+<<link [[问当季光景 (0:03)|MP NPC Sera Season]]>><<pass 3>><</link>>
+<br>
+<<socialiseicon>><<link [[替她掸柜台 (0:04)|MP NPC Sera Daily A]]>><<pass 4>>
+	<<if ($housekeeping or 0) gte 200>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+		<<stress -1>>
+	<<else>>
+		<<tiredness 1>><<stress 1>>
+	<</if>>
+<</link>>
+<br>
+<<link [[回钟表铺里 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>>
+<br><<link [[一起出门 (0:03)|MP NPC Sera Date Hub]]>><<pass 3>><</link>>
+
+:: MP NPC Sera Daily A [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+午后三点，是一天里光线最稳的时候。西晒还没爬上柜台，东边的窗又已经退凉，塞拉说这个时辰看游丝最不吃亏。她把三张裁好的纸条用铜夹夹在台灯边，纸上各写着一个去处，字小得像刻上去的。
+<br><br>
+第一张写着楼梯与发条。天没亮透时，她要把三十六座钟一座一座上满弦，梯凳挪七次，钥匙转到底再回半圈，多一分少一分都会让簧片记仇。纸条背面画了一道歪线，标着某座钟今天快了四十秒。她上弦时不许人碰柜台，说震动会顺着木纹传到摆锤上。三十六座钟的圈数都记在她脑子里，从不多转；她说发条和人的耐性一样，拧过了头，看着还有余地，其实已经伤了里子。
+<br><br>
+第二张写着茶与一位老太太。三点整焖茶，三分十二秒后滤出；老太太会来取一只修了半个月的怀表，那是她丈夫留下的，表盖内侧磨得发亮。塞拉提前把表针拨到老太太进门的时刻，说这样交到手里才不显得空。老太太每次来都坐同一把椅子，椅子腿下垫着一枚旧铜板，是塞拉怕她起身时晃。
+<br><br>
+第三张写着西窗与雨。天气预报说傍晚有雨，西窗的木框去年就松了，雨水会顺着墙缝滴到最下面那排钟盒上。她已经把干布叠好，压在柜台底下，却还没想好先搬哪一只。最下面那排钟盒里有一只她自己的旅行表，表壳上有一道旧划痕，她总是最后一个搬它。
+<br><br>
+她写完最后一张，抬眼看你，又低头核了一次表：「白天这叠有三件事。你挑一件，剩下的我按原定时刻做，不会乱。」她说「不会乱」时，指尖在桌沿轻轻敲了三下，像是替那句话上了三道保险。她把铜夹往灯下推了推，让三张纸都照到光。窗外有辆送货的板车经过，木轮碾过石板，她下意识抬头看钟，确认那声音没有打乱任何一只摆。
+<br><br>
+三张纸的边角都留着一点空白，是她随时补记的地方。上午若哪座钟走偏，她会把偏差写在对应纸条的背面；若客人提前来取，她就把取件时刻划掉，改写在下一行。簿子从不涂改，只往上叠，像年轮。
+<br><br>
+<<getouticon>><<link [[去看第一张 (0:02)|MP NPC Sera Daily 1]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<link [[去看第二张 (0:02)|MP NPC Sera Daily 2]]>><<pass 2>><</link>>
+<br>
+<<mpdrinkicon>><<link [[去看第三张 (0:02)|MP NPC Sera Daily 3]]>><<pass 2>><</link>>
+<br>
+<<mpcleanicon>><<link [[替她理纸条 (0:04)|MP NPC Sera Daily Hub]]>><<pass 4>>
+	<<if ($housekeeping or 0) gte 200>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+		<<stress -1>>
+	<<else>>
+		<<tiredness 1>>
+	<</if>>
+<</link>>
+<br>
+<<link [[回日常簿 (0:02)|MP NPC Sera Daily Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Sera Daily B [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+傍晚六点，高街的煤气灯一盏接一盏亮起来。塞拉把卷帘门拉下一半，留出能弯腰进出的高度，让店里的暖气和街上的凉风在半空碰头。她换了一双软底鞋，把右手那叠纸条摊开，纸角被白天的指温熨得微卷。
+<br><br>
+第四张写着散步。从铺门口到喷泉是六百四十步，她每天走一趟，用步数校自己的节拍；若哪天数出六百三十八或六百四十二，她第二天就会把步子放慢或放快一点。纸条下角补了一句：今晚风大，可能会多三步。她数步子时不看路，只看前面的灯；走到第几盏灯该数到几，她心里有数。
+<br><br>
+第五张写着一只铜鸟。客人送来一架旧八音盒，盒盖上立着一只啄羽的铜鸟，发条还能转，曲子却断在第三个音。塞拉把鸟腹下的暗扣拆开过两次，又原样装回去，说零件没坏，是某个齿轮记错了拍子。那支曲子是一首摇篮曲。客人说母亲临终前总听，塞拉没多问，只把曲名写在工作单背面。
+<br><br>
+第六张写着阁楼与镇钟。十点以后，高街静下来，镇钟的报时会传得很远。她会把天窗推开一条缝，坐在楼梯口听完整整十二下，再回身继续手里的活。纸条上没写要做什么，只画了一个朝上的箭头。阁楼的第七级楼梯会响，她每次都跨过去，说那声音比钟声尖。
+<br><br>
+她把三张纸按顺序理好，忽然抬头看你：「傍晚这三件都不赶。你要跟哪一件，我把它挪到你合适的时候；不跟的，我照旧做。」说「照旧」之前，她看了一眼表，像在确认这两个字有没有超时。
+<br><br>
+她把卷帘门又拉低一寸，街上的风从缝里钻进来，吹动纸条。她伸手压住，指尖在纸上停了一会儿，才把三张纸叠齐，放回围裙口袋。口袋里有钥匙、镊子和一小截粉笔，走起来轻轻相碰。她把卷帘门拉到一半，钥匙在掌心转了半圈，才跟你往街口走。路灯把她的影子投在橱窗上，和里面那些停摆的钟叠在一起。
+<br><br>
+<<getouticon>><<link [[去看第四张 (0:02)|MP NPC Sera Daily 4]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[去看第五张 (0:02)|MP NPC Sera Daily 5]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<link [[去看第六张 (0:02)|MP NPC Sera Daily 6]]>><<pass 2>><</link>>
+<br>
+<<socialiseicon>><<link [[帮她收台 (0:04)|MP NPC Sera Daily Hub]]>><<pass 4>>
+	<<if ($housekeeping or 0) gte 200>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+		<<stress -1>>
+	<<else>>
+		<<tiredness 1>><<stress 1>>
+	<</if>>
+<</link>>
+<br>
+<<link [[回日常簿 (0:02)|MP NPC Sera Daily Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Sera Daily 1 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<if !$daily>><<set $daily to {}>><</if>>
+清晨六点四十，天光只够照出窗棂的影子。塞拉已经搬来梯凳，围裙口袋里插着三把不同长度的上弦钥匙。三十六座钟沿着墙排开，从落地大钟到掌心大的旅行表，每一座都要上满，再把钥匙回退半圈，让发条留一点余地。她今天比平时早起了十二分钟。夜里她梦见一座钟停了，醒来先去看表，发现只是梦，才回来烧水。
+<br><br>
+「最上面那座快四十秒。」她仰头指了指，声音压得很低，像怕惊动钟摆，「不是齿轮的事。昨天有人擦柜台，碰歪了它的底座，摆锤蹭到了壳壁。」她先看表，再伸手扶住梯凳：「你扶稳，我上去。四分钟足够。」
+<br><br>
+梯凳的第三级有些晃，榫头在承重时发出细小的咯吱声。她踩上去，膝弯绷直，指尖够到钟顶的铜帽。晨光从她肩头斜过去，把浮尘照成一条一条的细线。你能闻到旧木、机油，还有她袖口沾着的一点茶香。
+<br><br>
+「上弦的时候别说话。」她头也不回，「我得数圈。数错了，明天这座钟就会替我把错说出来。」她数得很轻，嘴唇几乎不动，每数到八就停半拍，再继续。她数圈的时候，手指在钥匙上轻轻点，像在替每一圈打拍子。你扶住梯凳，能感觉到她每一次使劲时传下来的细微震动。
+<br><br>
+上到最后一座时，她忽然问：「你昨天几点睡的？」没等你答，她又补了一句，「我不是查你。只是你若睡得太晚，等会儿递钥匙会慢半秒。」说完她把钥匙递下来，等你接稳，才松手。
+<br><br>
+上完弦，她把梯凳折好靠墙，逐座听了一遍。有的钟声脆，有的钟声闷，她不用看就知道哪座该在明天早上再校一次。走到你身边时，她停了一下，把钥匙串递给你看：三把钥匙长度不同，最短的那把只开最上面那座钟。她说上弦是一天里最像祈祷的时候，手上做着事，心里什么都不用想。她说完，把最短的那把钥匙单独挂回墙上，位置比另外两把高半寸。铜钥匙在墙上轻轻晃了一下。
+<br><br>
+<<getouticon>><<link [[返回午后簿 (0:02)|MP NPC Sera Daily A]]>><<pass 2>><</link>>
+<br>
+<<mprepairicon>><<link [[扶稳梯凳 (0:05)|MP NPC Sera Daily A]]>><<pass 5>>
+	<<if !$daily.mpNpcDailySera1>>
+		<<set $daily.mpNpcDailySera1 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<stress -2>>
+	<<else>>
+		<<stress -1>>
+	<</if>>
+	<<tiredness 1>>
+<</link>>
+<br>
+<<mpclockworkicon>><<link [[替她上弦 (0:07)|MP NPC Sera Daily A]]>><<pass 7>>
+	<<if !$daily.mpNpcDailySera1>>
+		<<set $daily.mpNpcDailySera1 to 1>>
+		<<if ($housekeeping or 0) gte 220 or ($tending or 0) gte 220>>
+			<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+			<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+			<<stress -3>>
+		<<else>>
+			<<tiredness 2>><<stress 3>>
+		<</if>>
+	<<else>>
+		<<stress -2>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Daily 2 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<if !$daily>><<set $daily to {}>><</if>>
+三点差两分，塞拉把一只细颈沙漏翻过来。白沙落完是三分十二秒，茶正好焖到不涩。她不用钟，也不用怀表，只用这只沙漏，说茶比齿轮娇气，秒针太硬，会把茶叶吓着。沙漏是她父亲留下的，玻璃颈上有一道细细的裂纹，用铜丝箍着。她每次翻过来都用指腹托住底部，像托一只受伤的鸟。
+<br><br>
+骨瓷杯推到你面前时，杯柄朝着你的右手。她自己也倒了一杯，却不急着喝，先看窗外。街对面有个老妇人正慢慢过马路，手里攥着一只旧怀表，走几步就低头看一眼。
+<br><br>
+「她每天这个点来。」塞拉说，「表是她丈夫留下的，走快了两分钟。她不肯调，说快一点，人就还没走远。」她停了停，把杯沿转正，「我上个月替她洗过油，没动游丝。有些误差不是拿来修的。」
+<br><br>
+门铃响，老妇人进来，把怀表放在绒布上，先道谢，再问能不能再快一点。塞拉低头看表，又看老妇人的手背，最后说：「再快一分，会赶在钟前面。您确定？」老妇人点头。她把表盖合上，动作很轻，像替谁掖好被角。老妇人走到门口又回头，问表快一点会不会不好。塞拉说，表是给人用的，人觉得好，就是准。老妇人笑了，把表揣进怀里，走得很慢。
+<br><br>
+送走客人，店里只剩沙漏里最后一点白沙。塞拉把空杯收走，忽然说：「我父亲走的那天，铺子里的钟全停在同一刻。后来我一座一座调回来，只有那只银壳表没动。」她说完就看表，像在确认这句话有没有让时间偏掉。
+<br><br>
+窗外的云压得很低，光却还亮着。她把沙漏重新翻正，白沙从细颈里缓缓落下，发出几乎听不见的沙沙声。她没再开口，只把椅子往你这边挪了半寸，让出能看见街景的角度。她没有再提父亲，只把沙漏里剩下的白沙倒进掌心，又让它落回去。窗外那个老妇人的背影已经走到街尾，步子比来时稳。她把杯子收进柜里，杯底在木板上轻轻一响。
+<br><br>
+<<getouticon>><<link [[返回午后簿 (0:02)|MP NPC Sera Daily A]]>><<pass 2>><</link>>
+<br>
+<<mpdrinkicon>><<link [[安静陪坐 (0:05)|MP NPC Sera Daily A]]>><<pass 5>>
+	<<if !$daily.mpNpcDailySera2>>
+		<<set $daily.mpNpcDailySera2 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<stress -2>>
+	<<else>>
+		<<stress -1>>
+	<</if>>
+	<<tiredness 1>>
+<</link>>
+<br>
+<<socialiseicon>><<link [[问起她父亲 (0:07)|MP NPC Sera Daily A]]>><<pass 7>>
+	<<if !$daily.mpNpcDailySera2>>
+		<<set $daily.mpNpcDailySera2 to 1>>
+		<<if ($willpower or 0) gte 220>>
+			<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+			<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>>
+			<<stress -3>>
+		<<else>>
+			<<stress 3>><<tiredness 1>>
+		<</if>>
+	<<else>>
+		<<stress -2>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Daily 3 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<if !$daily>><<set $daily to {}>><</if>>
+雨来得比预报早一刻。塞拉刚把西窗的插销推上，第一道水痕就顺着玻璃爬下来，在木框底角聚成一滴，稳稳落进最下面那排钟盒的缝隙里。
+<br><br>
+「先搬右边。」她没回头，已经把围裙下摆掖进腰带，双手托起一只胡桃木钟盒。盒里是一对婚礼座钟，铜鎏金的顶饰碰不得水。她走得很快，鞋底在潮砖上打滑，每一步都踩得很实。她一边搬，一边把钟盒按大小排好，先搬重的，再搬轻的；每搬一只，就在盒角贴一小片纸，记下原来的位置。这样雨停之后，她能一只不差地放回去。
+<br><br>
+雨水开始沿着墙缝往下渗，在石灰墙上画出一条深色的线。塞拉把钟盒一只只挪到里侧高架，挪到第七只时停下来，抬头看那条水线：「再漏下去，墙里的木梁会先软。梁一软，整面柜子都得拆。」她看表，「现在补还来得及，天黑了就看不见瓦缝。」
+<br><br>
+你接过她手里的钟盒，木头比看上去沉，底部还压着一层防潮的旧报纸。她腾出手，从柜台下抽出油布和一小罐沥青，又回头确认每一只钟盒的门都扣紧了，才往后面的窄梯走。
+<br><br>
+「屋顶我去。」她在梯口停了一下，把腕表摘下来放在柜台上，表盘朝上，「你留在下面，听见我敲三下就递油布。别上来，瓦是湿的，两个人站不住。」说完她提起工具箱，鞋跟磕在木梯上，一声一声往上走。过了一会儿，屋顶传来第一声敲击，三下，短而急。你把油布递上去，听见她在上面挪动瓦片，雨水顺着屋檐哗哗往下淌，像有人把一条河挂在了窗外。
+<br><br>
+雨声渐渐盖住了店里的钟摆。最下面那排钟盒已经安全，墙上那条水线却还在慢慢往下爬，像一根没有刻度的秒针。你想起她说过，屋顶的瓦缝比机芯难伺候，机芯错了还能拆，瓦错一块，整面墙都要跟着受潮。你站在梯口，能听见屋顶传来瓦片被推开的轻响。过了很久，她下来时袖口全湿，头发贴在额角。先看表，再看墙上的水线，最后才接过你递的干布。
+<br><br>
+<<getouticon>><<link [[返回午后簿 (0:02)|MP NPC Sera Daily A]]>><<pass 2>><</link>>
+<br>
+<<mpcleanicon>><<link [[搬开钟盒 (0:06)|MP NPC Sera Daily A]]>><<pass 6>>
+	<<if !$daily.mpNpcDailySera3>>
+		<<set $daily.mpNpcDailySera3 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<stress -2>>
+	<<else>>
+		<<stress -1>>
+	<</if>>
+	<<tiredness 2>>
+<</link>>
+<br>
+<<mprepairicon>><<link [[上屋顶补漏 (0:08)|MP NPC Sera Daily A]]>><<pass 8>>
+	<<if !$daily.mpNpcDailySera3>>
+		<<set $daily.mpNpcDailySera3 to 1>>
+		<<if ($athletics or 0) gte 220>>
+			<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+			<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+			<<stress -3>>
+		<<else>>
+			<<pain 3>><<stress 4>><<tiredness 2>>
+		<</if>>
+	<<else>>
+		<<stress -2>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Daily 4 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<if !$daily>><<set $daily to {}>><</if>>
+七点整，塞拉把店门锁好，钥匙在指间转了一圈才收进围裙。她走路有个习惯：从铺门口到喷泉，六百四十步；数错了，第二天就调整步幅。她说这不是怪癖，是让身体记住一段路的长度，哪天眼睛看不见了，脚还认得。她数步子的声音很轻，只在唇齿间滚一下。你试着跟她数，数到两百就乱了；她没笑，只把自己的节奏放慢半拍，让你重新跟上。
+<br><br>
+高街的煤气灯刚点着，灯罩里还有一圈没散尽的黑烟。她走在你左侧半步，不快不慢，鞋跟落地的声音和你的脚步偶尔叠在一起。走到第三盏灯下，她忽然说：「你今天步子比平时长了两指。是赶时间，还是心情好？」
+<br><br>
+你没有立刻回答。她也不催，只把目光移回前面的石板路，嘴里无声地数着。路过喷泉边的长椅时，她伸手把椅面上的叶子扫开，没有坐下，动作像在清理一张工作台。数到一百时，她轻声报数，像在替这段路记账；数到三百，她拐过药铺的转角，脚步自动放缓，等你跟上。
+<br><br>
+喷泉边的铜像在灯下泛着青光。她站定，先看表，再看你：「六百三十九步。比你平常少一步。」她把这句话说得很认真，仿佛那一步是今天唯一的差错，「不过，跟你一起走的时候，我常常数不准。」她说这条街她走了十年，闭着眼也知道哪块石板会翘。可今晚她走得很慢，像在重新认路。远处钟楼敲了七点半，她抬头听，没有掏表。等余音落尽才说：「今晚的钟声比平时软，可能是风从河上过来。」
+<br><br>
+风从街尾吹过来，带着面包房剩下的暖香。她把手插进围裙口袋，没有急着回去，目光落在喷泉的水面上。水声很轻，和她店里的钟摆不是一种节拍，却让人愿意多站一会儿。她把围裙口袋里的钥匙摸出来，在掌心掂了掂，又收回去。回去的路上，她没再报步数。她走在右侧，替你挡着街上的风。你没有问那一步差在哪里。
+<br><br>
+<<getouticon>><<link [[返回傍晚簿 (0:02)|MP NPC Sera Daily B]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[陪她走完 (0:05)|MP NPC Sera Daily B]]>><<pass 5>>
+	<<if !$daily.mpNpcDailySera4>>
+		<<set $daily.mpNpcDailySera4 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<stress -2>>
+	<<else>>
+		<<stress -1>>
+	<</if>>
+	<<tiredness 1>>
+<</link>>
+<br>
+<<investigateicon>><<link [[拉她绕路 (0:06)|MP NPC Sera Daily B]]>><<pass 6>>
+	<<if !$daily.mpNpcDailySera4>>
+		<<set $daily.mpNpcDailySera4 to 1>>
+		<<if (_sera.love or 0) gte 8 or ($seductionskill or 0) gte 220>>
+			<<set _sera.love to Math.min(100, (_sera.love or 0) + 2)>>
+			<<stress -2>>
+		<<else>>
+			<<stress 2>><<tiredness 1>>
+		<</if>>
+	<<else>>
+		<<stress -1>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Daily 5 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<if !$daily>><<set $daily to {}>><</if>>
+八点过后，店里只剩修表台上的一盏灯。塞拉把那只八音盒摆在灯下，铜鸟的翅膀张开一半，喙里还衔着一根细得像发丝的簧片。她拧了半圈发条，曲子走到第三个音就断了，像有人在中途按住了琴弦。
+<br><br>
+「不是簧片。」她摘下放大镜，揉了揉鼻梁，「是凸轮轴上的销子磨圆了。它每转一圈，就该拨一次音梳；现在拨到一半就滑过去，所以第三个音总是空着。」她说这不算坏，只是那口气没接上。她看你一眼，「你要不要试试？手要稳，比绣花还稳。」她把八音盒的底盖翻开给你看，里面刻着一行小字，是制作者的名字和年份。她说做这行的人，喜欢把名字藏在别人看不见的地方，像把一句话说给时间听。
+<br><br>
+她把铜鸟转过来，让你看腹下的暗扣。鸟腹里排列着十二枚细齿，最靠里的那一枚边缘发亮，像被摸过很多次。她用镊子尖点了点：「就是它。别硬掰，先让音梳退半格，销子才过得去。」你伸手试了一下，销子比想象中滑。她立刻把手垫在鸟腹下面，怕你失手磕到音梳。
+<br><br>
+灯芯忽然爆了一下，铜鸟的影子在桌上晃。塞拉伸手护住鸟翅，等光稳了才松开。她没说话，只把镊子递给你，自己退开半步，让你站在灯下最亮的位置。
+<br><br>
+「修好了也别急着上发条。」她补了一句，「先让它空转一圈，听听有没有杂音。铜的东西记性好，你对它粗鲁一次，它会在曲子里记很久。」说完她低头看表，把这一段时间记进那本薄册子。
+<br><br>
+修好之后，铜鸟唱完了整支曲子。她没有拍手，只把耳朵贴近盒盖，听完最后一个音，才把发条松开。她说这支曲子她小时候听过，调子一样，只是那时的八音盒是木头的，声音更闷。说完她把铜鸟转回原位，让翅膀朝着窗。灯下的铜鸟重新亮起来，翅尖映着一点暖光。她把工具一件件收回袋里，动作比平时慢。她把灯芯捻低一点，店里暗下来，铜鸟的轮廓还亮着。
+<br><br>
+<<getouticon>><<link [[返回傍晚簿 (0:02)|MP NPC Sera Daily B]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<link [[递过铜镊 (0:04)|MP NPC Sera Daily B]]>><<pass 4>>
+	<<if !$daily.mpNpcDailySera5>>
+		<<set $daily.mpNpcDailySera5 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<stress -2>>
+	<<else>>
+		<<stress -1>>
+	<</if>>
+<</link>>
+<br>
+<<mpcalculateicon>><<link [[伸手碰齿轮 (0:06)|MP NPC Sera Daily B]]>><<pass 6>>
+	<<if !$daily.mpNpcDailySera5>>
+		<<set $daily.mpNpcDailySera5 to 1>>
+		<<if ($skulduggery or 0) gte 200 or ($science or 0) gte 200>>
+			<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+			<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>>
+			<<stress -3>>
+		<<else>>
+			<<pain 2>><<stress 3>>
+		<</if>>
+	<<else>>
+		<<stress -1>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Daily 6 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<if !$daily>><<set $daily to {}>><</if>>
+十点过后，高街的灯渐次熄了。塞拉把阁楼天窗推开一条缝，夜风带着河水的凉意钻进来，吹得桌上的图纸边角轻轻翻卷。镇钟还有两分钟报时，她已经坐在楼梯口，膝盖上搭着一条旧毯子。阁楼的第七级楼梯会响，她上楼时总跨过去。今晚她没跨，踩上去，咯吱一声，在钟声之间显得很轻。
+<br><br>
+「今天快了九秒。」她没看你，盯着窗外的钟楼，「不是钟快，是我。下午你推门进来的时候，我抬头看了一眼，手上的游丝就多绕了半圈。」她顿了顿，「我很少出错。出错的时候，通常是因为在等什么。」
+<br><br>
+钟声响起来，一下，两下，铜的余音在屋梁间来回撞。她跟着数，数到第十二下时，声音轻得几乎听不见。数完她才转头：「你今晚要是不来，我也会坐在这里听完。只是九秒的误差，明天得花一个上午调回来。」她把表摘下来，放在膝盖上，表盖朝下。这个动作你见过很多次；每次她准备说真心话，都会先把时间扣住。
+<br><br>
+阁楼里没有点大灯，只有修表台上的一盏小灯，光晕刚好罩住她的膝头。她把毯子往你那边分了一半，动作很自然，像分一杯茶。楼下传来某座钟的整点报时，比镇钟慢了半拍，她没有下去调。她说，有些误差可以留到明天。明天她还会开店，还会上弦，还会在三点差两分翻沙漏。
+<br><br>
+「明天开始，」她看着窗外，声音很轻，「你进门的时候，我先不看表。就一次。看看我会不会算错。」说完她自己先笑了一下，笑意很浅，却让那盏小灯显得亮了一些。
+<br><br>
+你们并肩坐着，谁也没有再说话。窗外的钟楼暗下去，阁楼里只剩灯芯偶尔的噼啪声。她把毯子往上拉了拉，盖住你的手背。夜深了，楼下的钟声停了。她起身去关窗，经过修表台时顺手把一只走偏的摆轮拨正，动作很轻，没有回头。灯影里，她的侧脸比白天柔和，像一只终于走准的钟。你听见她轻轻呼出一口气。
+<br><br>
+<<getouticon>><<link [[返回傍晚簿 (0:02)|MP NPC Sera Daily B]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<link [[陪她听钟 (0:05)|MP NPC Sera Daily B]]>><<pass 5>>
+	<<if !$daily.mpNpcDailySera6>>
+		<<set $daily.mpNpcDailySera6 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<stress -3>>
+	<<else>>
+		<<stress -2>>
+	<</if>>
+<</link>>
+<br>
+<<socialiseicon>><<link [[说出心里话 (0:07)|MP NPC Sera Daily B]]>><<pass 7>>
+	<<if !$daily.mpNpcDailySera6>>
+		<<set $daily.mpNpcDailySera6 to 1>>
+		<<if ($willpower or 0) gte 220 or (_sera.trust or 0) gte 12>>
+			<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>>
+			<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+			<<stress -3>>
+		<<else>>
+			<<stress 3>><<tiredness 1>>
+		<</if>>
+	<<else>>
+		<<stress -2>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Street Hub [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+四点四十分，塞拉提着一只扁平的牛皮表匣出门送修好的表。表匣用细皮带扣在腕上，她走一段就抬手看一眼，不是看时间，是看匣子有没有歪。高街的风把她的围裙带吹到身后，她也不理。她走路时表匣贴着身体，像抱着一只不能颠的鸟。有人从旁边挤过去，她会先护住匣子，再抬眼看人，顺序从不乱。
+<br><br>
+「顺路有三处。」她在街角停下，先看表，再看你，「旧货摊今天收摊晚，钟塔的午钟慢了四十秒，背巷那边有人在卸货，路窄。」她把三条路说得很平，像在报三只表的故障，「都不远。挑一条，剩下的改天。」
+<br><br>
+旧货摊的帆布棚下挂着十几只闹钟，摊主正跟一个孩子争一只坏掉的玩具表。钟塔的台阶潮湿，铜钟的余音从高处落下来，震得人胸口发闷。背巷的墙根堆着木箱，巡夜人的灯在巷口来回扫着，警戒地照过每一个转角。旧货摊那边传来一阵哄笑，钟塔的钟正好敲了四点三刻，巷口的灯晃了晃。三条路都在等她，她却先看你的鞋，像在判断你能走多远。风把帆布棚吹得又响了一声。
+<br><br>
+她把手里的表匣换到左手，右手空出来，习惯性地在围裙上蹭了蹭。这是她要动手之前的动作，你见过很多次。街上的行人从你们身边绕过，有人回头看这只牛皮匣子，她就微微侧身，把匣子挡在里侧。表匣上有一道浅浅的划痕，是去年冬天送表时在钟塔台阶上磕的。她没补漆，说留着提醒自己，路滑的时候别走快。
+<br><br>
+「你决定。」她说，「我跟着。反正表送到之前，时间都算我的。」说完她低头看表，又补了一句，「不过这只表约的是五点一刻，误差最好别超过三分钟。」
+<br><br>
+她说送完表还有二十分钟空档，够做一件事，不够做两件。她不喜欢赶，赶路会让手抖；手一抖，表就遭殃。街角的面包房飘出焦糖味，她嗅了一下，说这个味道让她想起小时候等父亲下班的傍晚。
+<br><br>
+<<getouticon>><<link [[去旧货摊 (0:03)|MP NPC Sera Street 1]]>><<pass 3>><</link>>
+<br>
+<<walkicon>><<link [[去钟塔下 (0:03)|MP NPC Sera Street 2]]>><<pass 3>><</link>>
+<br>
+<<investigateicon>><<link [[走背巷子 (0:03)|MP NPC Sera Street 3]]>><<pass 3>><</link>>
+<br>
+<<link [[陪她先送表 (0:04)|MP NPC Sera Daily Hub]]>><<pass 4>>
+	<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+	<<stress -1>>
+<</link>>
+<br>
+<<link [[回日常簿 (0:02)|MP NPC Sera Daily Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Sera Street 1 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+旧货摊的帆布被风吹得啪啪响。摊主把一只黄铜闹钟举得高高的，说机芯是外地来的好货；孩子攥着另一只玩具表，表带断了，表盘上画着一只褪色的兔子。塞拉蹲下去，先看孩子的表，再看摊主的钟。她蹲着的时候，围裙下摆拖在地上，沾了灰也不管。孩子凑得很近，鼻尖几乎碰到表盘，她就侧过身子，让光落在机芯上。
+<br><br>
+「玩具表不卖。」摊主说。塞拉没接话，从围裙里摸出小镊子，把表背的三颗螺丝一一拧开。机芯里没有坏，只有一根游丝被压弯了，像被谁用指甲掐过。她把游丝挑回原弧度，吹掉灰尘，合上盖子，递给孩子的母亲：「四分钟。不要钱。」
+<br><br>
+围观的人多起来，摊主脸色不好看，说她把摊子堵了。塞拉站起来，先看表，才说：「您的钟也快了六分钟。要调，我顺手；不调，我不碰。」她语气很平，手却已经把镊子收回袋里。摊主还在说那只闹钟的来历，她听完才开口，指出钟背后的厂标和年份对不上。摊主愣了一下，围观的人笑出声。
+<br><br>
+孩子把玩具表贴在耳边，听见里面重新响起的滴答声，眼睛一下子亮了。他母亲连着道谢，塞拉只点点头。她转身时，围裙口袋里的表匣轻轻撞在摊角上，她立刻停步，低头检查匣扣。孩子的母亲要给她钱，她摆手，说这只表不值一个工钱，倒是孩子喜欢，就别让它在抽屉里躺着。
+<br><br>
+「便宜的表也认真走。」她走出几步才说，像在解释刚才为什么蹲那么久，「时间不挑机芯。走不准，对谁都不公平。」风把她的头发吹到脸侧，她抬手别到耳后，腕上的基准表在灯下闪了一下。她把镊子擦净收好，指尖在围裙上蹭了两下。她摸了摸孩子的头，嘱咐他别再把表带绕在手指上。摊主最后没再说话，把那只快了的闹钟往柜台里侧挪了挪。她把表匣重新扣好，才往街口走。孩子还在身后喊了一声谢谢。街上的人各自散开。
+<br><br>
+<<getouticon>><<link [[回高街口 (0:02)|MP NPC Sera Street Hub]]>><<pass 2>><</link>>
+<br>
+<<socialiseicon>><<link [[帮她扶摊 (0:05)|MP NPC Sera Street Hub]]>><<pass 5>>
+	<<if ($housekeeping or 0) gte 200 or ($athletics or 0) gte 200>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+		<<stress -2>>
+	<<else>>
+		<<tiredness 2>><<stress 2>>
+	<</if>>
+<</link>>
+<br>
+<<mpbargainicon>><<link [[替她挡人 (0:06)|MP NPC Sera Street Hub]]>><<pass 6>>
+	<<if ($willpower or 0) gte 220 or ($english or 0) gte 220>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+		<<stress -2>>
+	<<else>>
+		<<stress 3>><<tiredness 1>>
+	<</if>>
+<</link>>
+<br>
+<<mpclockworkicon>><<link [[蹲下看机芯 (0:06)|MP NPC Sera Street Hub]]>><<pass 6>>
+	<<if ($science or 0) gte 200 or ($maths or 0) gte 200>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+		<<stress -2>>
+	<<else>>
+		<<pain 1>><<stress 2>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Street 2 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+钟塔的午钟慢了四十秒。塞拉站在塔下的石阶上，仰头听最后一声余音散尽，才把表匣换到左手：「不是钟锤的事。擒纵叉的宝石轴承缺油，天热的时候尤其明显。上去一趟，二十分钟能看完。」塔门一推开，里面的空气有股旧木头和铜锈的味道。她每上几级就停一下，听钟摆的声音有没有变，像医生听胸口。
+<br><br>
+石阶窄得只容一人，扶手被摸得发亮。爬到一半，风从垛口灌进来，吹得她围裙贴在腿上。她停了一步，回头看你的鞋：「台阶上有青苔。你要跟，就踩我踩过的砖，别抄近路。」
+<br><br>
+塔顶的钟室比下面冷，铜钟悬在木梁之间，钟面上积着一层细灰。她说这座钟比她年纪还大，父亲年轻时也上来修过。她没多说，只把手掌贴在钟壳上，等那一点震动传过来。塞拉把表匣放在干燥的窗台上，先看表，再伸手摸了摸擒纵叉的轴心。她的指尖沾上一点发黑的油泥：「看见了？干了。再拖半个月，钟会慢到一分钟。」
+<br><br>
+她从工具箱里取出一只小油壶，壶嘴细得像针。上油之前，她让你把手电举到轴心侧面，自己侧着头看反光。「油要刚好填满轴窝，多一滴会吸灰，少一滴会干磨。」她说着，手腕稳得几乎不动。她上油的手很慢，慢到你能看清每一滴油落在轴窝里的样子。她说急不得，油要自己渗进去，人替它着急也没用。
+<br><br>
+钟室外的街上传来叫卖声，和这里的安静隔着一层厚厚的石墙。她上完油，没有立刻走，站在钟边听了一会儿，才说：「再等两分钟，让它走顺。要是还慢，就得换轴心，那是另一笔账。」钟摆的声音果然清了些。她没有立刻收工具，又在旁边守了两分钟，才在本子上写下日期和油量。下楼时她走在前面，每到转角就回头看一眼，确认你跟上了。她把表匣换到外侧，怕碰着墙。钟塔的影子落在街上，比刚才短了一截。她把围裙上的灰拍了拍。
+<br><br>
+<<getouticon>><<link [[回钟塔下 (0:02)|MP NPC Sera Street Hub]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<link [[递上工具 (0:06)|MP NPC Sera Street Hub]]>><<pass 6>>
+	<<if ($housekeeping or 0) gte 200 or ($tending or 0) gte 200>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+		<<stress -2>>
+	<<else>>
+		<<tiredness 1>><<stress 1>>
+	<</if>>
+<</link>>
+<br>
+<<walkicon>><<link [[跟着上塔 (0:08)|MP NPC Sera Street Hub]]>><<pass 8>>
+	<<if ($athletics or 0) gte 220>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<stress -3>>
+	<<else>>
+		<<pain 3>><<stress 3>><<tiredness 2>>
+	<</if>>
+<</link>>
+<br>
+<<socialiseicon>><<link [[劝她报修 (0:05)|MP NPC Sera Street Hub]]>><<pass 5>>
+	<<if ($willpower or 0) gte 220 or ($english or 0) gte 220>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+		<<stress -1>>
+	<<else>>
+		<<stress 2>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Street 3 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+背巷的路窄，墙根堆着卸了一半的木箱。塞拉走在前面，表匣扣在腕上。一个瘦小的男孩从箱影里窜出来，手指勾住皮带就往外扯。皮带扣是旧的，被扯开时发出一声脆响，表匣脱手，在砖地上滑出半步。
+<br><br>
+塞拉没有追。她先低头看表，确认腕上的基准表还在，才去看那只滑出去的表匣。匣盖磕开一条缝，里面是客人刚取走的银壳表。男孩已经跑到巷口，回头看了一眼，脚却没停。巷子里的光线暗得很快，木箱的影子叠在一起，分不清哪一块是路。塞拉退到墙边，给你让出追出去的位置。
+<br><br>
+巷口的巡夜人提着灯，灯光扫过来，警戒地停在男孩的影子上。塞拉把手按在你小臂上：「别跑。巷子尽头是死路，他比我们熟。」她说完才发觉自己的手在抖，又补一句，「误差两秒。我没事。」
+<br><br>
+她蹲下去捡表匣，先检查表壳有没有磕痕，再打开盖子看表针。银壳表的秒针还在走，玻璃也没有裂。她松了一口气，那口气很轻，却让她肩膀塌下来一点，像一座钟终于走过了最紧的那一格。巡夜人吹了一声短哨，男孩在巷口停住，手里还攥着皮带。灯光照过去，他的鞋尖磨破了，脚趾露在外面。
+<br><br>
+男孩被巡夜人拦在巷口，低着头，脚尖蹭着地上的砖缝。塞拉站起来，没有过去，只远远看着。她说：「让他把皮带还回来就行。表没丢，不必把人逼到死角。」说完她看表，像在给这件事计时。她没有追究，只让巡夜人记下东西已归还，然后打开表匣又检查了一遍，确认银壳表的摆轮还在走，才把匣扣按紧。
+<br><br>
+回去的路上，她一直没说话。走到灯下才开口，说那只表是客人父亲留下的，丢了比赔钱麻烦。她的声音已经稳了，手却还攥着表匣的皮带。巷口的灯把两个人的影子拉长，交叠在湿砖上。她走得很慢，像在把刚才那两秒一点点补回来。她没有回头。夜风把巷口的灯吹得轻轻摇。
+<br><br>
+<<getouticon>><<link [[回背巷口 (0:02)|MP NPC Sera Street Hub]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[追进巷子 (0:07)|MP NPC Sera Street Hub]]>><<pass 7>>
+	<<if ($athletics or 0) gte 220>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+		<<stress -2>>
+	<<else>>
+		<<pain 2>><<stress 3>>
+	<</if>>
+<</link>>
+<br>
+<<socialiseicon>><<link [[护她在身后 (0:05)|MP NPC Sera Street Hub]]>><<pass 5>>
+	<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>>
+	<<stress -1>>
+	<<tiredness 1>>
+<</link>>
+<br>
+<<investigateicon>><<link [[喊巡夜人 (0:04)|MP NPC Sera Street Hub]]>><<pass 4>>
+	<<if ($willpower or 0) gte 200>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+		<<stress -1>>
+	<<else>>
+		<<stress 2>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Season [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpNpcs.sera.axis is undefined>><<set $mpNpcs.sera.axis to ($mpNpcs.sera.cadence or 0)>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<if !$daily>><<set $daily to {}>><</if>>
+一年四季，高街钟表铺的门槛都被同一块黄铜条磨得发亮。塞拉说，季节对钟表不是天气，是误差：潮气、热胀、干燥、寒缩，每一种都会在机芯里留下几秒的脾气。她按季做保养，像按季换衣裳。
+<br><br>
+<<if Time.season is "spring">>
+春天先从石板缝里冒上来。店里的每只钟盒都多了一小包生石灰，塞拉每天午后开窗一刻钟，再关严，说春风带着水，吹久了游丝会生一层看不见的锈。镇钟一天快三秒，她不急着调，只在本子上记下潮气退去的日子。窗台上的水仙开了，她把花盆挪到离钟最远的角落，怕花粉落进机芯。
+<<elseif Time.season is "summer">>
+夏天把高街烤得发白，黄铜摸上去烫手。座钟的补偿摆轮得往里收半格，不然金属一胀，一天就慢四秒。塞拉把工作台挪到背阴的里侧，给你倒冰过的红茶，杯壁的水珠落在图纸上，她赶紧用袖口吸掉，嘴里念着「这张图不能潮」。傍晚她仍要出去走那六百四十步，只是走得比春天慢。
+<<elseif Time.season is "autumn">>
+秋天天高风干，是一年里最适合拆洗机芯的时候。塞拉把积了一夏的钟盒搬到窗下通风，红宝石轴承一只只点上新油，油量比春天少半滴。她说秋天的误差最小，人说的话也最容易听清。街上的落叶被风卷到橱窗前，她隔窗看一会儿，又把注意力收回镊子尖上。
+<<else>>
+冬天从玻璃角上往里爬，店里烧着一只小铁炉。塞拉用绒布条塞住门缝，怕冷风让发条变脆；镇钟的铜锤在低温里声音发闷，她会提前半小时上去，用手心把锤头捂热。她自己的指尖也凉，替你递镊子时总要先在围裙上搓一搓，说这样才不会把温度带进机芯。
+<</if>>
+<br><br>
+今天的保养照例从最里面那排开始。她先把当季要用的工具摊在绒布上，再低头看表，把开始和结束的时刻写在纸条背面。纸条压在台灯下，像一份只有两个人看得懂的约定。
+<br><br>
+「季节会变，走时也会变。」她把镊子递给你，声音比平时软一点，「人不必分秒不差。只要还愿意回来调，就不算坏。」说完她让开半步，把灯下最亮的位置留给你。
+<br><br>
+<<getouticon>><<link [[回日常簿 (0:02)|MP NPC Sera Daily Hub]]>><<pass 2>><</link>>
+<br>
+<<mprepairicon>><<link [[陪她做保养 (0:08)|MP NPC Sera Daily Hub]]>><<pass 8>>
+	<<if ($housekeeping or 0) gte 200 or ($science or 0) gte 200 or ($tending or 0) gte 200>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+		<<stress -2>>
+	<<else>>
+		<<tiredness 2>><<stress 2>>
+	<</if>>
+<</link>>
+<br>
+<<mpdrinkicon>><<link [[在炉边等她 (0:05)|MP NPC Sera Daily Hub]]>><<pass 5>>
+	<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 1)>>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>>
+	<<stress -2>>
+	<<tiredness -1>>
+<</link>>

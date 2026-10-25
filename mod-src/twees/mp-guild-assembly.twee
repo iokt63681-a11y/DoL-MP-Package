@@ -1,0 +1,199 @@
+:: Widgets MP Guild Assembly [widget nobr]
+<<widget "mpGuildInit">>
+<<if !$mpGuildStanding>><<set $mpGuildStanding to {}>><</if>>
+<<for _jKey range ["bakery", "cafe", "fish", "spa", "farm", "clock", "laundry", "tailor", "courier", "pubkitchen", "stable", "trawler", "docks", "crafts", "service", "underground"]>>
+	<<if $mpGuildStanding[_jKey] is undefined>><<set $mpGuildStanding[_jKey] to 0>><</if>>
+<</for>>
+<<if $mpGuildStanding.wageMod is undefined>><<set $mpGuildStanding.wageMod to 100>><</if>>
+<<if $mpGuildStanding.curfewMod is undefined>><<set $mpGuildStanding.curfewMod to 0>><</if>>
+<<if $mpGuildStanding.tollMod is undefined>><<set $mpGuildStanding.tollMod to 0>><</if>>
+<<if !$mpGuildStanding.policy>><<set $mpGuildStanding.policy to "none">><</if>>
+<</widget>>
+<<widget "mpGuildAdd">>
+<<mpGuildInit>>
+<<set _jKey to (_args[0] or "bakery")>>
+<<set _amt to (_args[1] or 5)>>
+<<set $mpGuildStanding[_jKey] to Math.min(100, Math.max(0, ($mpGuildStanding[_jKey] or 0) + _amt))>>
+<<set $mpGuildStanding.docks to Math.min(100, Math.round((($mpGuildStanding.fish or 0) + ($mpGuildStanding.trawler or 0) + ($mpGuildStanding.pubkitchen or 0)) / 3))>>
+<<set $mpGuildStanding.crafts to Math.min(100, Math.round((($mpGuildStanding.bakery or 0) + ($mpGuildStanding.clock or 0) + ($mpGuildStanding.tailor or 0)) / 3))>>
+<<set $mpGuildStanding.service to Math.min(100, Math.round((($mpGuildStanding.cafe or 0) + ($mpGuildStanding.spa or 0) + ($mpGuildStanding.laundry or 0)) / 3))>>
+<<set $mpGuildStanding.underground to Math.min(100, Math.round((($mpGuildStanding.courier or 0) + ($mpGuildStanding.farm or 0) + ($mpGuildStanding.stable or 0)) / 3))>>
+<</widget>>
+<<widget "mpGuildVote">>
+<<mpGuildInit>>
+<<set _bill to (_args[0] or "wage")>>
+<<set _stance to (_args[1] or "pass")>>
+<<if _bill is "wage">><<set $mpGuildStanding.wageMod to (_stance is "pass" ? 115 : 95)>><</if>>
+<<if _bill is "curfew">><<set $mpGuildStanding.curfewMod to (_stance is "relax" ? 2 : -1)>><</if>>
+<<if _bill is "toll">><<set $mpGuildStanding.tollMod to (_stance is "cut" ? -8 : 10)>><</if>>
+<</widget>>
+<<widget "mpGuildPolicy">>
+<<mpGuildInit>>
+<<set _pol to (_args[0] or "charter")>>
+<<set $mpGuildStanding.policy to _pol>>
+<</widget>>
+
+:: MP Guild Assembly Hub [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpGuildInit>>
+十二行会联席厅设在旧海关钟楼的三层，长窗正对着灰雾未散的海面。厅里没有主位，十二张窄桌围成一圈，桌角各钉一枚铜牌：面包、咖啡、鱼档、浴场、农庄、钟表、洗衣、裁缝、信差、酒馆后厨、马厩、拖网船。四面的高背廊台分属海港、百工、侍奉与暗流四帮，廊柱上依次挂着船锚、铁锤、酒盏与车轮的旧旗，旗面被煤烟熏得发硬，边角用麻线草草缝过。
+<br><br>
+联席不设常任主席，只有一本摊在中央的厚账册。每一页记一条零工的出勤与声望，翻过三页归到一个帮口，四个帮口再在议案上互相别苗头。执事把蘸水笔搁在账脊上，声音不高：「十二席都在等一个数。数够了，议案才有人附议；数不够，说破嘴也只是空响。」他抬眼看你，又把账册往你面前推了半寸。
+<br>
+【联席账册】工钱倍率：<<print $mpGuildStanding.wageMod>>% ｜ 百钱物价：<<mpWorldPrice 100>> ｜ 营业窗：<<mpWorldScheduleOpen 8 21>> ｜ 宵禁修正：<<print $mpGuildStanding.curfewMod>> ｜ 港税修正：<<print $mpGuildStanding.tollMod>>
+<br>
+【十二席声望】面包 <<print $mpGuildStanding.bakery>> ｜ 咖啡 <<print $mpGuildStanding.cafe>> ｜ 鱼档 <<print $mpGuildStanding.fish>> ｜ 浴场 <<print $mpGuildStanding.spa>> ｜ 农庄 <<print $mpGuildStanding.farm>> ｜ 钟表 <<print $mpGuildStanding.clock>> ｜ 洗衣 <<print $mpGuildStanding.laundry>> ｜ 裁缝 <<print $mpGuildStanding.tailor>> ｜ 信差 <<print $mpGuildStanding.courier>> ｜ 后厨 <<print $mpGuildStanding.pubkitchen>> ｜ 马厩 <<print $mpGuildStanding.stable>> ｜ 拖网 <<print $mpGuildStanding.trawler>>
+<br>
+【四帮均势】海港 <<print $mpGuildStanding.docks>> ｜ 百工 <<print $mpGuildStanding.crafts>> ｜ 侍奉 <<print $mpGuildStanding.service>> ｜ 暗流 <<print $mpGuildStanding.underground>>
+<br>
+【当下世相】宪章走向：<<if $mpGuildStanding.policy is "charter">>百工自治宪章<<elseif $mpGuildStanding.policy is "freeport">>自由港商贸同盟<<elseif $mpGuildStanding.policy is "shadow">>灰市影子议会<<else>>尚未落定<</if>> ｜ 码头夜闸：<<if $mpGuildStanding.tollMod gte 10>>重税查验<<elseif $mpGuildStanding.curfewMod gte 2 or $mpGuildStanding.tollMod lte -8>>放行<<else>>按时关闭<</if>>
+<br><br>
+海港帮盯着潮汐与泊位，百工帮盯着工钱与本地货，侍奉帮盯着夜里的灯与客，暗流帮盯着宵禁与暗巷。工钱案上，百工与侍奉同阵，海港与暗流同阵；宵禁案上，侍奉与暗流要宽，百工与海港要严；港税案上，海港与侍奉要减，百工与暗流要加。四帮没有永久的盟友，只有下一本账。
+<br><br>
+厅外的雾贴着窗玻璃往上爬，楼下传来卸货与收摊的动静，像是全城都在等这本账翻页。你把账册翻到今日这一页，纸角还留着上一任执事的铅笔痕：一行是工钱，一行是钟点，一行是闸口。三行字都很短，落在全城却很长。
+<br><br>
+账册的规矩很直：十二席的声望先垫成帮口的均势，帮口过了六席，才有人替议案附议；工钱倍率写在右页，物价与营业窗写在左页，港税那一栏又同时牵着闸口与铺面。你先看数，再决定替哪边说话。执事把笔递过来，笔尖还沾着上一页的墨。
+<br><br>
+神殿的晨钟、孤儿院的送饭车、节日前后的采买，还有阿什的巡林、莫奈的画室、诺艾尔的药圃、维斯的夜航，最后都会化成这十二席上的一笔出勤。雾潮涨一寸，码头的班次就少一班；节庆前多卖一车货，面包房与后厨的席位就厚一分。四帮的账从来不是关起门来算的。
+<br><br>
+<<getouticon>><<link [[返回高街布告 (0:02)|MP Town Side Stories Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<link [[查看四大派系 (0:04)|MP Guild Bloc Overview]]>><<pass 4>><</link>><br>
+<<mpcalculateicon>><<link [[表决工钱议案 (0:08)|MP Guild Bill Wage]]>><<pass 8>><</link>><br>
+<<mpclockworkicon>><<link [[表决宵禁议案 (0:08)|MP Guild Bill Curfew]]>><<pass 8>><</link>><br>
+<<link [[表决港税议案 (0:08)|MP Guild Bill Toll]]>><<pass 8>><</link>>
+<br><<link [[更多事务 (0:03)|MP Guild Assembly More Hub]]>><<pass 3>><</link>>
+
+:: MP Guild Bloc Overview [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpGuildInit>>
+四座廊台围出天井，四面旧旗从梁上垂下来：船锚、铁锤、酒盏、车轮。旗面被多年的煤烟熏得发硬，边角用麻线草草缝过。执事说，四帮的席位不是封的，是十二张窄桌上的出勤一票一票垫起来的；哪一帮的账先见底，哪一帮的旗就先卷起来。
+<br><br>
+海港帮守鱼档、拖网船与酒馆后厨。鱼档的声望来自早潮卸货、补网与分拣；拖网船来自随船夜航、理绳与分舱；酒馆后厨来自夜班备料、送酒与收盘。三处都认一个理：船不等潮，人不等钟。他们要在港税案上把闸口费压下去，好让货船多跑一趟。
+<br><br>
+百工帮守面包房、钟表铺与裁缝铺。面包房的声望来自凌晨和面与看炉火；钟表铺来自擦机芯、递镊子与校摆轮；裁缝铺来自锁边、熨烫与跑布料。三处认的是手上准头与交期。他们要在工钱案上把倍率抬起来，在宵禁案上把收摊钟点提前，好让铺子少遭夜里的手脚。
+<br><br>
+侍奉帮守咖啡馆、浴场与洗衣房。咖啡馆的声望来自端盘、记单与续杯；浴场来自烧水、换巾与理柜；洗衣房来自分拣、漂洗与送还。三处靠的是客人愿不愿意再来。他们要在宵禁案上把灯留到更晚，在港税案上把日用货的价压住。
+<br><br>
+暗流帮守信差、农庄与马厩。信差的声望来自送急件、记门牌与跑暗巷；农庄来自凌晨挤奶、运菜与修篱；马厩来自刷马、添草与备车。三处认的是不声张、不误点。他们要在宵禁案上把夜路放开，却又在港税案上主张加征——闸口查得越紧，绕路的价就越好谈。
+<br>
+【四帮席位】海港 <<print $mpGuildStanding.docks>> ｜ 百工 <<print $mpGuildStanding.crafts>> ｜ 侍奉 <<print $mpGuildStanding.service>> ｜ 暗流 <<print $mpGuildStanding.underground>>
+<br>
+【十二席】面包 <<print $mpGuildStanding.bakery>> ｜ 咖啡 <<print $mpGuildStanding.cafe>> ｜ 鱼档 <<print $mpGuildStanding.fish>> ｜ 浴场 <<print $mpGuildStanding.spa>> ｜ 农庄 <<print $mpGuildStanding.farm>> ｜ 钟表 <<print $mpGuildStanding.clock>> ｜ 洗衣 <<print $mpGuildStanding.laundry>> ｜ 裁缝 <<print $mpGuildStanding.tailor>> ｜ 信差 <<print $mpGuildStanding.courier>> ｜ 后厨 <<print $mpGuildStanding.pubkitchen>> ｜ 马厩 <<print $mpGuildStanding.stable>> ｜ 拖网 <<print $mpGuildStanding.trawler>>
+<br>
+【议案风向】工钱案：<<if $mpGuildStanding.crafts gte 6>>百工可附议<<else>>百工席位不足<</if>> ｜ 宵禁案：<<if $mpGuildStanding.service gte 6>>侍奉可附议<<else>>侍奉席位不足<</if>> ｜ 港税案：<<if $mpGuildStanding.docks gte 6>>海港可附议<<else>>海港席位不足<</if>>
+<br><br>
+四帮的账并不各算各的。走访一处，别处的伙计也会听见风声；替一帮拉高席位，另一帮就会在下一项议案上把票扣回来。执事用笔杆点了点天井：「你今日多走一家，明日就少听一句闲话。可四本账从来不会同时好看。」你沿着廊台走一圈，十二家铺子的门帘此起彼伏，面包房的炉火、鱼档的冰水、咖啡馆的铜壶、马厩的干草味混在一处。每到一家，掌柜先看你手上的茧，再看你报出的帮口；肯让你进门，才算把这一票的底子垫上。
+<br><br>
+<<getouticon>><<link [[返回行会总枢 (0:02)|MP Guild Assembly Hub]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[走访各店拉票 (0:12)|MP Guild Assembly Hub]]>><<pass 12>><<mpGuildAdd "bakery" 9>><<mpGuildAdd "cafe" 9>><<mpGuildAdd "fish" 9>><<mpGuildAdd "spa" 9>><<mpGuildAdd "farm" 9>><<mpGuildAdd "clock" 9>><<mpGuildAdd "laundry" 9>><<mpGuildAdd "tailor" 9>><<mpGuildAdd "courier" 9>><<mpGuildAdd "pubkitchen" 9>><<mpGuildAdd "stable" 9>><<mpGuildAdd "trawler" 9>><</link>><br>
+<<shopicon>><<link [[签署百工宪章 (0:15)|MP Guild Ending Charter]]>><<pass 15>><</link>><br>
+<<docksicon>><<link [[缔结自由港盟 (0:15)|MP Guild Ending FreePort]]>><<pass 15>><</link>><br>
+<<link [[成立影子议会 (0:15)|MP Guild Ending Shadow]]>><<pass 15>><</link>>
+
+:: MP Guild Bill Wage [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpGuildInit>>
+工钱案摊在联席长桌正中。账册左页列着十二行零工，右页是一排相同的数字，顶上写着当日的倍率。执事用尺子压住纸边，指节在「一百」上敲了两下：「一百钱的班次，乘这个数，就是实发。倍率一动，十二行一起动，谁也别想只涨自己那一行。」
+<br><br>
+百工帮与侍奉帮坐在靠炉的一侧。面包师把袖口的面粉抖在鞋边，说炉子一夜不能停，工钱再不抬，学徒就要去码头扛包；浴场的管事附和，说夜班烧水的人比白天难留。海港帮与暗流帮坐在靠门的一侧。鱼档老板把湿手在围裙上擦了两下，说货价没涨，工钱先涨，船就不肯靠；信差头目只笑，说工钱抬了，跑腿的价也得跟着抬，最后仍是主顾吃亏。
+<br><br>
+两本案卷摆在面前。上调案把倍率刻到一百一十五，条件是百工的席位够厚，或账房里的算术能压住反对的声音；维持案名义上不动招牌，实际把班次补贴折没，落到工钱簿上只剩九成五。执事把两枚铜筹码推过来，一枚刻着加，一枚刻着减：「别听他们说维持，你先看折后的数。」
+<br>
+【工钱簿】现行倍率：<<print $mpGuildStanding.wageMod>>% ｜ 百工席位：<<print $mpGuildStanding.crafts>> ｜ 账房算术：<<print ($maths or 0)>> ｜ 行会信誉：<<print ($mpStanding and ($mpStanding.guilds or 0))>>
+<br><br>
+若上调案过，十二行的班次实发一起变厚，东家会缩班、压料、把慢活推给临时工；百工与侍奉的席位见涨，海港与暗流则把这一笔记在账上。若维持案过，工钱簿上的数变薄，海港与暗流松一口气，百工与侍奉会把怨气带到下一项议案。无论哪边过，输的一方都不会当场翻桌，只会在别处找回场子。执事补了一句：账册只认结果，不认谁喊得响。
+<br><br>
+以鱼档一班的百钱工钱为例，倍率抬到一百一十五便实发一百一十五，折到九十五便只剩九十五；拖网、后厨、面包、钟表十二行都照此乘算。东家不会从自己口袋里补，只会从班次、料钱与临时工身上找回来。你把算盘拨了一遍，珠子撞出的声音在长桌上格外清楚。
+<br><br>
+<<getouticon>><<link [[返回行会总枢 (0:02)|MP Guild Assembly Hub]]>><<pass 2>><</link>><br>
+<<mpcalculateicon>><<if $mpGuildStanding.crafts gte 6 or ($maths or 0) gte 220>><<link [[表决上调工钱 (0:12)|MP Guild Assembly Hub]]>><<pass 12>><<mpGuildVote "wage" "pass">><<mpGuildAdd "bakery" 9>><<mpGuildAdd "cafe" 6>><<mpGuildAdd "fish" -9>><<mpGuildAdd "courier" -6>><<stress -2>><</link>><<else>><<link [[游说加薪被驳 (0:12)|MP Guild Assembly Hub]]>><<pass 12>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<socialiseicon>><<link [[附议维持原薪 (0:10)|MP Guild Assembly Hub]]>><<pass 10>><<mpGuildVote "wage" "hold">><<mpGuildAdd "fish" 9>><<mpGuildAdd "courier" 6>><<mpGuildAdd "bakery" -9>><<mpGuildAdd "cafe" -6>><<mpStandingAdd "guilds" 4>><</link>>
+
+:: MP Guild Bill Curfew [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpGuildInit>>
+宵禁案挂在钟楼下的布告板上。板上钉着全城铺面的收摊钟点，最外一圈是酒馆、浴场与洗衣房，往里是面包房、裁缝铺与钟表铺，最里是码头闸口与马厩。执事把怀表放在板沿，表盖映着窗外的灰光：「钟点不是写给巡夜人看的，是写给客人看的。灯留到几点，生意就做到几点；闸口几点落锁，夜里的货就几点断。」
+<br><br>
+侍奉帮要把窗口往后推两个钟点。浴场管事说，客人下了晚班才来，水刚烧热就赶人，第二天就不来了；咖啡馆掌柜说，夜里多一盏灯，就多一桌不肯走的人。暗流帮站在他们一边，信差与马厩要的是夜路。百工帮与海港帮要收紧。面包师说，夜里的手最脏，炉门被撬过一次；鱼档老板说，闸口早关，明早的货才不会在巷子里少一筐。
+<br><br>
+放宽案要侍奉的席位够厚，或账房里的语文能把巡夜的排班说服；收紧案只要有人附议夜巡，就能把钟点往前拨。执事把钟摆拨了一下，铜锤在壳里闷闷地响：「宽两个钟点，全城多烧一夜灯油；紧一个钟点，巡夜的棍子就多一轮。你替哪边说话，另一边的账上都记着。」
+<br>
+【作息簿】现行窗口：<<mpWorldScheduleOpen 8 21>> ｜ 宵禁修正：<<print $mpGuildStanding.curfewMod>> ｜ 侍奉席位：<<print $mpGuildStanding.service>> ｜ 账房语文：<<print ($english or 0)>>
+<br><br>
+放宽后，营业窗延到二十三点，夜班零工与码头夜闸都多一段缝；侍奉与暗流的席位见涨，百工与海港会嫌灯多手杂。收紧后，营业窗收在二十点，夜里的街面归巡夜人，百工会觉得铺子安稳，侍奉与暗流则要另找门路。钟点一改，次日所有铺面的班表都要重排，连夜班货船也得跟着改靠泊的时辰。
+<br><br>
+巡夜的排班也跟着改：放宽后，钟楼要多点一轮灯，码头闸口留一名更夫；收紧后，第二轮的巡哨并到天黑前，夜里的巷口只留一盏灯。无论宽紧，第二天的班表都要重新抄一遍，迟到的伙计自己认罚。执事把怀表合上，表盖咔的一声，像是替这条街定了更。
+<br><br>
+<<getouticon>><<link [[返回行会总枢 (0:02)|MP Guild Assembly Hub]]>><<pass 2>><</link>><br>
+<<mpclockworkicon>><<if $mpGuildStanding.service gte 6 or ($english or 0) gte 220>><<link [[表决放宽夜禁 (0:12)|MP Guild Assembly Hub]]>><<pass 12>><<mpGuildVote "curfew" "relax">><<mpGuildAdd "spa" 9>><<mpGuildAdd "courier" 9>><<mpGuildAdd "bakery" -6>><<mpGuildAdd "pubkitchen" -6>><<stress -2>><</link>><<else>><<link [[请求宽限被拒 (0:12)|MP Guild Assembly Hub]]>><<pass 12>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<sneakicon>><<link [[附议收紧夜巡 (0:10)|MP Guild Assembly Hub]]>><<pass 10>><<mpGuildVote "curfew" "tight">><<mpGuildAdd "clock" 9>><<mpGuildAdd "fish" 6>><<mpGuildAdd "spa" -9>><<mpGuildAdd "courier" -9>><<mpFameAdd "combat" 3>><</link>>
+
+:: MP Guild Bill Toll [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpGuildInit>>
+港税案摆在闸口的值房里。墙上挂着一块木牌，写着每担货的过闸费；牌下压着全城商铺的价目抄件。税吏把铜秤砣挪了个位置，秤杆晃了两下才平：「闸口收一文，铺面就加一文。你在这边减，那边就有人问货从哪里来；你在这边加，绕路的船就多一条。」
+<br><br>
+海港帮要减。拖网船的船主说，闸费压下去，外海的货才肯进港，鱼档与后厨才有活；侍奉帮也愿意减，日用的盐、油、布便宜下来，客人手里才留得住钱。百工帮要加。裁缝与钟表匠说，外来的成衣与机芯便宜一分，本地的手艺就少一分活路。暗流帮也要加，信差头目说得直白：闸口查得越紧，帮人绕路的价就越好谈。
+<br><br>
+减税案要海港的席位够厚，或账房里的诡术能把税吏的账做平；加征案只要有人附议护港，就能把闸费抬上去。执事把两块价牌并排摆好，一块写九十二，一块写一百一十：「码头闸口的过闸费跟着走。你替全城省钱，还是替本地货挡一道？两边都有人说自己是为了这条街。」
+<br>
+【闸口账】百钱物价：<<mpWorldPrice 100>> ｜ 港税修正：<<print $mpGuildStanding.tollMod>> ｜ 每担过闸费：<<print Math.max(0, 12 + $mpGuildStanding.tollMod)>> 文 ｜ 海港席位：<<print $mpGuildStanding.docks>> ｜ 账房诡术：<<print ($skulduggery or 0)>>
+<br>
+【码头通行】<<if $mpGuildStanding.tollMod gte 10>>重税查验，每一担都要开箱<<elseif $mpGuildStanding.curfewMod gte 2 or $mpGuildStanding.tollMod lte -8>>夜闸放行，货车可连夜进港<<else>>按宵禁钟点落锁<</if>>
+<br><br>
+减税后，商店价目普遍回落，码头夜闸也松，海港与侍奉的席位见涨，百工与暗流会记恨；加征后，价目上抬，护港的银子有了来路，百工与暗流的席位见涨，海港与侍奉则要面对更贵的日用品。过闸费的数会直接写在闸口木牌上，谁也赖不掉。执事最后说，税案没有干净的赢家，只有谁先把账算到别人头上。
+<br><br>
+闸口的税吏按担记账，鱼档的冰、后厨的酒、裁缝的布、钟表的机芯都走同一本册。减税省下的钱不会自动落到伙计手里，加征多收的钱也未必真去修堤；执事只保证一件事：木牌上的数会和账册对得上。税吏把秤砣收进匣子，抬眼看你，等一个准话。
+<br><br>
+<<getouticon>><<link [[返回行会总枢 (0:02)|MP Guild Assembly Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<if $mpGuildStanding.docks gte 6 or ($skulduggery or 0) gte 220>><<link [[表决减免港税 (0:12)|MP Guild Assembly Hub]]>><<pass 12>><<mpGuildVote "toll" "cut">><<mpGuildAdd "trawler" 9>><<mpGuildAdd "cafe" 6>><<mpGuildAdd "tailor" -9>><<mpGuildAdd "stable" -6>><<stress -2>><</link>><<else>><<link [[减税动议未过 (0:12)|MP Guild Assembly Hub]]>><<pass 12>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<mpcalculateicon>><<link [[附议加征护港 (0:10)|MP Guild Assembly Hub]]>><<pass 10>><<mpGuildVote "toll" "raise">><<mpGuildAdd "tailor" 9>><<mpGuildAdd "courier" 9>><<mpGuildAdd "trawler" -6>><<mpGuildAdd "laundry" -6>><<mpStandingAdd "docks" 4>><</link>>
+
+:: MP Guild Ending Charter [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpGuildInit>>
+<<mpGuildPolicy "charter">><<mpStandingAdd "guilds" 10>>
+签署仪式在联席厅举行。十二张窄桌被并成一张长案，宪章的羊皮纸铺在正中，四帮的印泥各占一角。执事念到「工钱不得私降、班次须入册、闸口收支按月张榜」时，百工帮的席位先站起来，侍奉帮跟着起立，海港与暗流慢了一拍，到底也把印按了下去。炉里的火没有添柴，厅里却比平日暖。
+<br><br>
+宪章把工钱、钟点与闸口三本账钉在一处。<<if $mpGuildStanding.wageMod gte 115>>现行的一百一十五倍率被写死，东家再想用缩班抵账，得先过行会的听证；十二行的学徒头一回知道自己的班次值多少。<<elseif $mpGuildStanding.wageMod lte 95>>宪章虽在低倍率上落笔，却附了一条复查条款：下一季由十二席重算，东家不得再私扣班次补贴，低薪的铺子要逐户说明。<<else>>现行倍率原样封存，十二席每季复核一次，涨跌都要留下记录，谁也不许在账外另开小账。<</if>>
+<br><br>
+宵禁按现行修正落定：<<print $mpGuildStanding.curfewMod>>。夜巡的班表从巡夜人手里抄进联席册，铺面收摊的钟点由十二席按季议定；港税修正停在 <<print $mpGuildStanding.tollMod>>，闸口木牌每月重写，收支贴在布告板背面。百工帮坐上首席，侍奉帮拿到常设席位，海港与暗流在门外各留一名听差。城里的价牌不再一天三变，夜里的灯照旧亮，只是换班的人得在册上留名。
+<br><br>
+宪章没有让四帮和睦，只把他们的争执搬进了有记录的议事厅。百工护住了本地货与工钱，侍奉换来了长夜班的名分，海港的泊位要按新册排队，暗流的夜路被灯照短了一截。全城物价当前折算为 <<mpWorldPrice 100>>，营业窗为 <<mpWorldScheduleOpen 8 21>>。宪章本身不开关暗市；暗市若另有来路，仍照旧开。你走出钟楼时，天井里的四面旧旗被风翻了个面，船锚与铁锤压在一起，酒盏与车轮在另一侧。
+<br><br>
+宪章的附页还留了三行空白：一行给下一季的工钱复核，一行给宵禁的季节调整，一行给闸口的修堤专款。十二席每季填一次，填完当众念一遍。谁想改，得先说服另外三帮；谁想赖，账册上留着他的印。执事把羊皮纸卷起，蜡封按在接缝处，印纹正是那枚齿轮与麦穗交缠的旧徽。
+<br>
+【世界状态】宪章：<<print $mpGuildStanding.policy>> ｜ 工钱：<<print $mpGuildStanding.wageMod>>% ｜ 宵禁：<<print $mpGuildStanding.curfewMod>> ｜ 港税：<<print $mpGuildStanding.tollMod>> ｜ 物价：<<mpWorldPrice 100>> ｜ 暗市：<<mpWorldMarketOpen>> ｜ 行会信誉：<<print ($mpStanding and ($mpStanding.guilds or 0))>>
+<br><br>
+<<getouticon>><<link [[返回行会总枢 (0:04)|MP Guild Assembly Hub]]>><<pass 4>><<stress -5>><</link>><br>
+<<shopicon>><<link [[返回派系总览 (0:04)|MP Guild Bloc Overview]]>><<pass 4>><</link>>
+
+:: MP Guild Ending FreePort [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpGuildInit>>
+<<mpGuildPolicy "freeport">><<mpStandingAdd "docks" 10>>
+签署在港务所前的石阶上。海港帮把一面褪色的船旗铺在栏杆上，百工与侍奉的席位只来了两名代表，暗流帮的人站在人群外，既不按印，也不走开。执事把盟约念得很快：闸口另议、外船可泊、夜货可卸，条件是港区自己出人修堤、自己担风险。石阶下的水拍着系缆桩，一下比一下近。
+<br><br>
+盟约一落印，码头的规矩就换了。闸口的木牌仍按现行税则挂着，外海的船另按泊位与吃水谈泊费；鱼档、拖网船与后厨先忙起来，卸货的号子从清晨一直拖到灯亮。百工的铺子却高兴不起来：外来的成衣、机芯与面粉顺着新开的航线涌进来，价牌一天改两回，裁缝与钟表匠只能把工钱压回学徒身上。侍奉帮的咖啡馆和浴场倒是坐满了外乡口音，洗衣房的单子堆到门口。
+<br><br>
+工钱倍率停在 <<print $mpGuildStanding.wageMod>>%，宵禁修正停在 <<print $mpGuildStanding.curfewMod>>，港税修正为 <<print $mpGuildStanding.tollMod>>。这几项没有因为盟约自动变好，只是从此由港务所与四帮的联席共管。全城物价折算为 <<mpWorldPrice 100>>，营业窗为 <<mpWorldScheduleOpen 8 21>>，灰雾暗市：<<mpWorldMarketOpen>>。暗流帮把绕路的生意改成明面上的搬运，信差与马厩的价目头一回写进了闸口的木牌。
+<br><br>
+自由港不是把闸口拆了，而是把闸口的钥匙交给付得起泊位费的人。海港帮的旗升到港务所屋顶，百工帮的席位退到廊台阴影里，侍奉帮靠着夜里的灯守住客源，暗流帮在明暗之间来回递话。有人说这条街终于喘上气，也有人在涨价的盐袋前骂了一句。你站在石阶上，看见第一艘挂外旗的船慢慢靠岸，缆绳砸在水面，溅起一层白沫。
+<br><br>
+港务所的新册子按泊位、吨位与货类分栏，外船的旗号要登记，夜货要报关。海港帮收泊位费，侍奉帮收灯油与热水钱，百工帮守着自己那几样手艺，暗流帮替人跑腿填表。盟约给了所有人一条活路，也把所有人的价码摆到明面上。执事把印章挂回腰间，说下一班外船三天后到，账要提前算好。
+<br>
+【世界状态】宪章：<<print $mpGuildStanding.policy>> ｜ 工钱：<<print $mpGuildStanding.wageMod>>% ｜ 宵禁：<<print $mpGuildStanding.curfewMod>> ｜ 港税：<<print $mpGuildStanding.tollMod>> ｜ 物价：<<mpWorldPrice 100>> ｜ 暗市：<<mpWorldMarketOpen>>
+<br><br>
+<<getouticon>><<link [[返回行会总枢 (0:04)|MP Guild Assembly Hub]]>><<pass 4>><<stress -5>><</link>><br>
+<<docksicon>><<link [[返回派系总览 (0:04)|MP Guild Bloc Overview]]>><<pass 4>><</link>>
+
+:: MP Guild Ending Shadow [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpGuildInit>>
+<<mpGuildPolicy "shadow">><<mpStandingAdd "underworld" 10>>
+真正的议场不在三层，而在钟楼地下的旧煤窖。十二张窄桌换成四张拼起的门板，灯罩压得很低，只照见账册与手。暗流帮坐在背光的一侧，海港与百工的席位空着，侍奉帮来了一个收账的管事。执事没有念宪章，只把三样东西摆在桌上：夜路的钥匙、闸口的账、十二家铺子的欠条。
+<br><br>
+影子议会的规矩很短：夜里的路归暗流的人引，铺子按门面交一份照看费，闸口的过闸费照收，只是收钱的人换了。宵禁钟点写在纸面上，执行却要问煤窖里排的班；港口与百工的货车想连夜走，得先让信差在马厩后门点过数。暗流帮不挂旗，也不坐首席，四张门板哪一张空着，哪一张就是主位。
+<br><br>
+工钱倍率仍是 <<print $mpGuildStanding.wageMod>>%，宵禁修正仍是 <<print $mpGuildStanding.curfewMod>>，港税修正仍是 <<print $mpGuildStanding.tollMod>>——数字没有改，改的是写字的人。全城物价折算为 <<mpWorldPrice 100>>，营业窗为 <<mpWorldScheduleOpen 8 21>>，灰雾暗市：<<mpWorldMarketOpen>>。百工的铺子每月多一笔说不清的照看费，海港的泊位要按煤窖的名单排，侍奉帮的灯照旧亮，只是灯油钱得先交给收账的管事。
+<br><br>
+影子议会没有旗，只有一本从不示人的账。白天街上一切照旧，价牌、钟声、巡夜的脚步都还在；入夜后，灯影里的路换了一套走法，谁在册上，谁不在册上，只有煤窖里的人知道。闸口的木牌照旧挂在外头，每担货的过闸费却先经煤窖过一遍手；夜里的码头不点官灯，靠船头自己挂的一盏小灯认路。你从钟楼侧门出来，三层联席厅的窗还亮着，照出一排空椅子。风把港口的雾推上街，暗巷尽头有人划亮一根火柴，又很快掐灭。
+<br><br>
+煤窖的规矩靠人情与欠条维持：谁家铺子交不出照看费，先记在账上，月底用工抵；谁把夜路的事说出去，第二天门口就会多一道粉笔痕。暗流帮不养打手，只养记性，谁欠过什么，煤窖里的人比铺子掌柜更清楚。你踩着湿石阶往上走，身后的门板合拢，灯从缝里漏出一线，随即灭了。
+<br>
+【世界状态】宪章：<<print $mpGuildStanding.policy>> ｜ 工钱：<<print $mpGuildStanding.wageMod>>% ｜ 宵禁：<<print $mpGuildStanding.curfewMod>> ｜ 港税：<<print $mpGuildStanding.tollMod>> ｜ 物价：<<mpWorldPrice 100>> ｜ 暗市：<<mpWorldMarketOpen>>
+<br><br>
+<<getouticon>><<link [[返回行会总枢 (0:04)|MP Guild Assembly Hub]]>><<pass 4>><<stress -5>><</link>><br>
+<<sneakicon>><<link [[返回派系总览 (0:04)|MP Guild Bloc Overview]]>><<pass 4>><</link>>

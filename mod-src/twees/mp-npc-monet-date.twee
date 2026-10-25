@@ -1,0 +1,453 @@
+:: MP NPC Monet Date Hub [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>><<set _npc.hasMet to 1>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set _love to (_npc.love or 0)>><<set _trust to (_npc.trust or 0)>>
+<<set _dated to (($daily.mpNpcDateMonet1 or 0) or ($daily.mpNpcDateMonet2 or 0) or ($daily.mpNpcDateMonet3 or 0) or ($daily.mpNpcDateMonetSeason or 0))>>
+天窗漏下来的光是杏仁白，薄得能看见尘埃在里头打旋。莫奈把三样东西并排放在矮桌上：一小卷亚麻布、一枚黄铜画框角、一只盛着清水的玻璃盘。三样东西之间留着相等的空隙，像她已经替这一天排好了构图。
+<br><br>
+「你来得正好。」她没抬头，先用指腹抹过桌沿的一道灰，「再晚半个钟头，这点白就要往蜜色里走。白一走，能做的事就少一件。」
+<br><br>
+她终于看你，眼睛里映着窗框切下的一小块天。「我本来只想画一张，后来发现一张装不下。露台的风、画廊夜里的灯、暗房里那盏红灯泡，是三种完全不同的光。光不一样，人站进去的样子也不一样。」
+<br><br>
+<<if _love gte 60 or _trust gte 60>>
+【画中之人】你已经不在画布边上了。你站的地方，是她每次起稿先留出来的那块。别人问起为什么这里空着，她只说等光；其实是在等你。画到一半，她会退开两步，让你看看整幅构图里自己站在哪儿。
+<<elseif _love gte 30 or _trust gte 30>>
+【画布边缘】你在边上。边上的线最难画，因为随时会走出去。她给你的线画得很软，软到你想回来的时候，不会割到手。有时候她忽然停笔，看你一眼，再把那一眼收进画里。
+<<else>>
+【素描本的空位】素描本里有一页只勾了轮廓，没有上色。她说空着不是忘了，是还没等到合适的光；光不齐的时候把人钉进画里，是对人不客气。那一页的纸角被她反复摩挲过，已经起了毛。
+<</if>>
+<br><br>
+<<if _dated>>
+今天已经有过一段约会。她把用过的东西放回原位，动作很慢，抽屉合上时发出一声很轻的闷响。「用过一次的光不会原样回来，」她说，「可别的地方还有光。你挑没去过的那一处，剩下的留给明天。」
+<<else>>
+今天的光还空着。她用笔杆依次点过三样东西，笔尖在桌面上敲出三下很轻的声响。「露台的风短，画廊的灯长，暗房的红最不讲道理。你挑一个，剩下的我留到明天。明天的手未必还是这只手。」
+<</if>>
+<br><br>
+【今日】：露台 <<if $daily.mpNpcDateMonet1>>已去<<else>>空着<</if>> ｜ 画廊 <<if $daily.mpNpcDateMonet2>>已去<<else>>空着<</if>> ｜ 暗房 <<if $daily.mpNpcDateMonet3>>已去<<else>>空着<</if>> ｜ 换季 <<if $daily.mpNpcDateMonetSeason>>已走<<else>>空着<</if>>
+<br><br>
+<<mpmapicon>><<if $daily.mpNpcDateMonet1>><span class="disabled">露台写生 (0:02)（今日已去）</span><<else>><<link [[露台写生 (0:02)|MP NPC Monet Date 1]]>><<pass 2>><</link>><</if>><br>
+<<mpwatchicon>><<if $daily.mpNpcDateMonet2>><span class="disabled">画廊夜游 (0:02)（今日已去）</span><<else>><<link [[画廊夜游 (0:02)|MP NPC Monet Date 2]]>><<pass 2>><</link>><</if>><br>
+<<windowicon>><<if $daily.mpNpcDateMonet3>><span class="disabled">暗房冲洗 (0:02)（今日已去）</span><<else>><<link [[暗房冲洗 (0:02)|MP NPC Monet Date 3]]>><<pass 2>><</link>><</if>><br>
+<<walkicon>><<if $daily.mpNpcDateMonetSeason>><span class="disabled">换季同游 (0:02)（今日已走）</span><<else>><<link [[换季同游 (0:02)|MP NPC Monet Date Season]]>><<pass 2>><</link>><</if>>
+<br><br>
+她把亚麻布往前推了推，布面还带着浆过的硬，边沿有一道没剪齐的线头。「挑一样。挑剩下的我不补，光不等人。」窗外的街声隔着玻璃传进来，闷闷的，像有人在很远的地方翻动一张大纸。
+<br><br>
+<<link [[回到画室 (0:02)|MP NPC Monet Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Monet Date 1 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set _dated to ($daily.mpNpcDateMonet1 or 0)>>
+<<if _dated>>
+露台的邀约已经错过了今天的那层光。莫奈把画板靠在门边，没有打开的意思。「今天的光用过了，」她说，「别急。露台不会跑，光会跑，可它明天还会回来。」她抬手替你理了理被风吹乱的领口，动作很轻。
+<br><br>
+<<getouticon>><<link [[回到画室 (0:02)|MP NPC Monet Date Hub]]>><<pass 2>><</link>>
+<<else>>
+露台的邀约来得没有预兆。莫奈把最后一支赭红颜料管塞进围裙口袋，又抽出来，换了一支更旧的，管口已经被挤得变了形。
+<br><br>
+「今天只剩最后一层光，」她说，「我想画那块栏杆投在墙上的影子。墙是灰的，影子是暖的，中间只隔一刻钟。人站进去，影子才有地方落。」
+<br><br>
+窗外的云被夕阳泡成一种旧铜色，边沿泛着淡紫，像有人在铜上擦了一笔。她把画板夹在腋下，站在门口等你，鞋尖不耐烦地敲着地板。「你不用摆姿势。你站在左边的空处，把右边留给光。构图里总得有一个人先站定，别的东西才知道往哪儿靠。」
+<br><br>
+她顿了顿，又用那种谈颜料的语气补了一句：「光不是照在人身上，是从人身上退开。退到哪儿，哪儿就是画的边。」
+<br><br>
+她锁门的时候，钥匙在锁孔里转了两圈才到位。楼下有人推开窗，喊了一嗓子什么，声音被风扯散。她抬头看了看天，说：「云走得快，光也走得快。我们得比云快一点。」
+<br><br>
+画板夹在她腋下，边角磨得发白。你注意到画板背面贴着一张旧车票，日期已经看不清了。她顺着你的目光看了一眼，没解释，只把画板换到另一只手。
+<br><br>
+楼梯间的灯坏了，她走在前面，画板的一角偶尔碰到墙，发出轻轻的磕碰声。她没回头，只说：「跟紧。露台的门锁有点脾气，得趁它还认人的时候进去。」
+<br><br>
+你想起她刚才换掉的那支颜料。旧管里的赭红更沉，像被太阳晒过很多年。她宁愿用旧的，也不肯让影子少一层暖。这个念头让你在楼梯拐角处多看了她一眼。
+<br><br>
+现在走，能赶上最后那层暖；先问清楚，她会把原因说给你听，只是光会再退一寸。她把门推开一条缝，风先挤了进来，带着河水的凉。
+<br><br>
+<<walkicon>><<link [[现在就跟她走 (0:12)|MP NPC Monet Date 1 Choice]]>><<pass 12>><</link>><br>
+<<investigateicon>><<link [[先问清画什么 (0:16)|MP NPC Monet Date 1 Choice]]>><<pass 16>><</link>>
+<</if>>
+
+:: MP NPC Monet Date 1 Choice [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+露台比她说的窄。栏杆外是别人家的天井，晾衣绳上挂着几件被风鼓起的衬衫，袖子一甩一甩，像在跟谁招手。风从河那边来，带着一点潮湿的铁味。
+<br><br>
+莫奈把画架支在迎风的一面，画布被风顶得轻轻鼓动。她没去压，只说：「风也是构图的一部分。压得太死，画就板了。」
+<br><br>
+她蹲下去调颜料，围裙的带子在背后松了一截。你看见她手边的白瓷盘里，赭红和一点灰蓝已经混到一半，边缘泛出一圈很薄的暖。
+<br><br>
+「接下来三件事，」她头也不抬，「要么花钱买点暖和，要么替我抵住风，要么坐到左边去。三件都占时间，你选一件。」
+<br><br>
+毛毯是楼下看门老妇的，一条三英镑；画架腿在风里打滑，得有人用肩膀抵住；至于模特，坐下去容易，坐住难——她画得慢，慢到你会听见自己的心跳。她把笔在指间转了半圈，等你的手落到某一件上。
+<br><br>
+露台的地砖缺了一角，露出下面灰色的水泥。她搬来一块旧砖垫在画架腿下，砖面上有一道很深的划痕。「这块砖跟我搬了三次家，」她说，「沉是沉，可它站得比人稳。」
+<br><br>
+楼下传来锅铲碰铁锅的声音，接着是孩子的笑。她侧耳听了一会儿，说：「这条街的声音也有颜色。中午是白的，傍晚是橙的，夜里发蓝。画的时候不能只画看见的，还得留一点地方给听见的。」
+<br><br>
+她把一支画笔叼在嘴里，腾出手来把围裙的带子重新系紧。系完她看了你一眼，眼神在三个选择之间来回了一次，像在替你先排一遍构图。
+<br><br>
+楼下天井里有人收衣服，竹竿抽回来的时候带起一阵风，晾衣绳上的衬衫齐齐摆了一下。她等的就是这一下，笔尖悬在盘子上方，没有落。
+<br><br>
+她终于把笔从嘴里拿下来，笔杆上留下一小圈牙印。她看了一眼，没擦，像那也是一道该留在画里的痕迹。
+<br><br>
+<<shopicon>><<if ($money or 0) gte 300>><<link [[租一条毛毯 (0:10)|MP NPC Monet Date 1 Result]]>><<set $mpNpcs.monet.datePick to "blanket">><<money -300>><<pass 10>><</link>><<else>><span class="disabled">租一条毛毯 (0:10)（钱不够）</span><</if>><br>
+<<mpcarryicon>><<link [[替她按住画架 (0:15)|MP NPC Monet Date 1 Result]]>><<set $mpNpcs.monet.datePick to "easel">><<tiredness 1>><<pass 15>><</link>><br>
+<<mpwatchicon>><<link [[坐定当模特 (0:18)|MP NPC Monet Date 1 Result]]>><<set $mpNpcs.monet.datePick to "pose">><<tiredness 1>><<pass 18>><</link>>
+<br><br>
+风又推了一回画架，画布鼓起来，又慢慢落回去。她伸手扶了一下画框上沿，指尖沾着的赭红在木边上留下一点印子，像替这个下午先签了个名。
+
+:: MP NPC Monet Date 1 Result [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set _act to ($mpNpcs.monet.datePick or "blanket")>><<set $mpNpcs.monet.datePick to "">>
+<<set _ok to false>><<set _mid to false>>
+<<if _act is "blanket">>
+	<<if (_npc.love or 0) gte 12 or ($tending or 0) gte 250>><<set _ok to true>><<else>><<set _mid to true>><</if>>
+<<elseif _act is "easel">>
+	<<if ($athletics or 0) gte 250>><<set _ok to true>><<elseif (_npc.love or 0) gte 15>><<set _mid to true>><</if>>
+<<else>>
+	<<if ($willpower or 0) gte 260>><<set _ok to true>><<elseif (_npc.trust or 0) gte 15>><<set _mid to true>><</if>>
+<</if>>
+<<set $daily.mpNpcDateMonet1 to 1>>
+光在栏杆上又滑下去一指。天井里的衬衫被风灌满，又瘪下去，像一排没人收的帆。
+<br><br>
+<<if _ok>>
+	<<if _act is "blanket">>
+		毛毯披上肩的那一刻，她没道谢，只把下巴往领口里缩了缩。风还在，但不再从骨缝里过。她重新调那盘赭红，颜色比刚才稳，笔落下去的时候，栏杆的影子正好停在墙的中段。她画得很快，快到你来不及看清每一笔。收笔时，她把画转过来给你看：墙是灰的，影子是暖的，你站在左边，像一截被光留下来的东西。「这条边是你替我买的，」她说，声音很轻，「我记着。」
+	<<elseif _act is "easel">>
+		你肩膀抵住画架腿，风一阵一阵推过来，鞋跟在石板上蹭出细响。她调色，你数风。数到第十七阵的时候，她忽然说「别动」，笔尖落下去，把最后一道暖线接上了。画完她退开两步，让你看整幅构图：「这条线是你按住的。没有它，影子会散。」她的手指在画框边上停了一下，没有收回去。
+	<<else>>
+		你坐定，背对栏杆。她让你把下巴抬半寸，又让你放下；「多了，」她说，「我要的不是好看，是你在等光的样子。」你尽量不动，连呼吸都放轻。她画得比平时慢，慢到夕阳从栏杆上整块滑走。最后一笔落下时，她抬头看你，眼睛里的红比画布上的还深：「你今天像一截没有走的光。」
+	<</if>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -5>>
+<<elseif _mid>>
+	<<if _act is "blanket">>
+		毛毯刚披上就被风掀掉一角，她伸手去抓，调色盘差点翻。影子在墙上晃了晃，她只好等它稳。最后画出来的暖线比预想的浅，像隔着一层雾。「勉强够一张，」她把画夹收起来，「风替我改了一笔，改得不坏。」
+	<<elseif _act is "easel">>
+		风赢了一阵。画架往侧边一歪，你及时扶住，笔尖却在布上拖出一道不该有的弧。她盯着那道弧看了几秒，没擦，反倒在旁边添了两笔，让它变成晾衣绳的影子。「风留下的证据，」她说，「留着吧。画不需要每一笔都听话。」
+	<<else>>
+		你动了一下。很轻，轻到自己都没察觉。她的笔停在半空，看了你一会儿，把刚画好的下颌线擦掉重来。光已经退到栏杆下沿，来不及再改第二次。「下次坐得住，比好看有用。」她把画板合上，语气不重，却让你耳根发热。
+	<</if>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>>
+<<else>>
+	<<if _act is "blanket">>
+		毛毯还没派上用场，云就从河那边压过来，把最后一点暖光整个吞掉。她站在画架前等了一会儿，等到墙上的影子彻底消失，才把笔放下。「光走了，」她说，「不怪毯子。」你们收拾东西下楼，楼梯间很暗，她走在前面，画板碰到墙的声音比来时响。
+	<<elseif _act is "easel">>
+		一阵横风把画架掀翻，画布正面磕在石板上，颜料溅了你一手。你伸手去抓，只抓到一把湿凉。她蹲下去看那幅画，看了很久，说：「底子还在，颜色可以重铺。」她的声音很平，你却看见她指尖在抖。风还在吹，露台上已经没有可等的暖了。
+	<<else>>
+		你没能坐住。腿麻了，换了个姿势，画架跟着晃。她放下笔，没有责怪，只把画布从架上取下来，卷好。「今天的光不配合，」她说，「不怪你。」下楼的路上，她一直走在前面，画板夹在腋下，像夹着一件没能送出去的东西。
+	<</if>>
+	<<stress 6>><<tiredness 2>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[回到画室 (0:02)|MP NPC Monet Date Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Monet Date 2 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set _dated to ($daily.mpNpcDateMonet2 or 0)>>
+<<if _dated>>
+画廊的灯还亮着，二楼的窗里透出一小片暖黄。莫奈站在台阶下看了一眼，没有上去。「今天的光已经有主了，」她说，「画还在，跑不了。改天再来，灯会换个角度照它。」她把请柬折好收进口袋，纸角在指间压得很平。
+<br><br>
+<<getouticon>><<link [[回到画室 (0:02)|MP NPC Monet Date Hub]]>><<pass 2>><</link>>
+<<else>>
+高街的煤气灯今天点得早。灯罩里那团光是橘黄的，边缘却泛着一层很薄的绿，像颜料没调匀。莫奈站在画廊的台阶下，手里捏着一张对折过很多次的请柬，纸角已经软了。
+<br><br>
+「白天看那幅画，它是群青，」她说，「夜里再看，会往紫里走。我想知道它到底肯不肯在灯下说实话。」
+<br><br>
+画廊的墙是深红的，画挂得很疏。人走进去，会先被墙吃掉一半，再被画吐出来。她把请柬递给你一半，又收回去：「你陪我走这一趟，站在我右边。右边空着，构图会稳。左边留给那些来看画的人，他们总得有个地方站。」
+<br><br>
+风从街口拐过来，把她的披肩吹开一角。她没去拢，只看着画廊二楼的窗：「灯亮着，说明画还在。画在，就还有得看。」
+<br><br>
+她今天穿了一件深绿的外套，站在暗处会变成褐，站在灯下又会发亮。她自己显然知道，所以才挑了这条街最暗的一段站着，让灯只照到半张脸。
+<br><br>
+画廊门口站着一个穿制服的门房，帽檐压得很低，手里的黄铜门杖一下一下点着台阶。他看了你们一眼，又移开，像在数街上的灯。莫奈没有理他，只把请柬上的折痕又压平了一次。
+<br><br>
+街对面有一家钟表铺，橱窗里摆着十几只停在不同时辰的旧钟。她看了一眼，说：「停住的钟也有它的光，只是不走了。画下来，别人会以为它还在走。」
+<br><br>
+她把请柬翻到背面，上面用铅笔写着一行小字，已经被擦得只剩几个笔画。她没有让你看清，只把纸折回去，说：「今晚要看的不是这行字，是那幅画。」
+<br><br>
+正门要门票，两张六英镑；后巷的侧门常年不锁，但被人撞见就不好看；橱窗前面不要钱，只是隔着一层玻璃，颜色会少一层。她把三种走法说得很平常，像在报三种颜料的价钱。
+<br><br>
+她说这些的时候语气很平，不值当为哪一种多停一会儿。可说完之后，她的眼睛还是往画廊二楼的窗上飘了一次，很快，像怕被谁看见。
+<br><br>
+<<walkicon>><<link [[陪她走正门 (0:20)|MP NPC Monet Date 2 Choice]]>><<pass 20>><</link>><br>
+<<investigateicon>><<link [[先问清缘由 (0:24)|MP NPC Monet Date 2 Choice]]>><<pass 24>><</link>>
+<</if>>
+
+:: MP NPC Monet Date 2 Choice [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+画廊门厅的灯把台阶照成一种发白的黄。售票处的小窗只开了一半，里面的人正撑着下巴打瞌睡，手边的登记簿翻在某一页，久久没有动。
+<br><br>
+侧面的巷子黑得很整，像画布上故意留的一块空。巷口堆着几只空木箱，箱板上还沾着干掉的颜料，分不清是画廊的，还是这条街本身的。
+<br><br>
+莫奈站在台阶和巷子之间，先看灯，再看墙，最后看你。「门票是明码标价的，」她说，「后门是留给不怕脏的人的。橱窗最便宜，可玻璃会把画的颜色吃掉一层。你想让我看见哪一种？」
+<br><br>
+她把请柬在指间转了半圈，纸边擦过掌心，发出很轻的沙沙声。门厅里的钟敲了一下，声音被厚地毯吃掉大半，听上去像从水底传来的。
+<br><br>
+台阶是白色大理石的，边角被鞋底磨得发圆。门厅里面铺着厚地毯，脚步声一进去就没了，像被墙吞了下去。售票处的窗口上方挂着一块木牌，字是手写的，漆掉了一半，只认得出「夜间」两个字。
+<br><br>
+门厅里飘出一股上光蜡的味道，混着旧木头和地毯的潮气。莫奈吸了吸鼻子，说这味道像「一层薄薄的黄」，盖在别的东西上面，不仔细看还以为那就是本色。
+<br><br>
+她把披肩的一角掖进腰带，动作很利落。巷口的风把她额前的碎发吹起来，她没有去按，只眯了眯眼，像在估量一幅画该留多少边。
+<br><br>
+巷子里有一股湿纸板和旧木头的味道，混着隔壁餐馆倒出来的泔水气。莫奈往巷口走了两步，又退回来，鞋尖在台阶边缘点了点，像在试一块画布该从哪儿下笔。
+<br><br>
+门票钱要从你的口袋里出；后门要绕到巷子深处，脚下是湿的；橱窗前面可以站很久，只是夜风冷，站久了膝盖会僵。她没有催，只把披肩拢紧了一点，等你先动。
+<br><br>
+<<shopicon>><<if ($money or 0) gte 600>><<link [[买两张门票 (0:12)|MP NPC Monet Date 2 Result]]>><<set $mpNpcs.monet.datePick to "ticket">><<money -600>><<pass 12>><</link>><<else>><span class="disabled">买两张门票 (0:12)（钱不够）</span><</if>><br>
+<<mpsneakicon>><<link [[从后门溜进去 (0:18)|MP NPC Monet Date 2 Result]]>><<set $mpNpcs.monet.datePick to "backdoor">><<tiredness 1>><<pass 18>><</link>><br>
+<<windowicon>><<link [[隔着橱窗看 (0:10)|MP NPC Monet Date 2 Result]]>><<set $mpNpcs.monet.datePick to "window">><<pass 10>><</link>>
+<br><br>
+巷子深处传来一声铁门碰响，又静下去。莫奈侧耳听了一会儿，嘴角动了一下：「听见没有？那扇门在提醒我们，它今天还没关严。」
+
+:: MP NPC Monet Date 2 Result [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set _act to ($mpNpcs.monet.datePick or "ticket")>><<set $mpNpcs.monet.datePick to "">>
+<<set _ok to false>><<set _mid to false>>
+<<if _act is "ticket">>
+	<<if ($english or 0) gte 250 or (_npc.love or 0) gte 12>><<set _ok to true>><<else>><<set _mid to true>><</if>>
+<<elseif _act is "backdoor">>
+	<<if ($skulduggery or 0) gte 260>><<set _ok to true>><<elseif (_npc.trust or 0) gte 15>><<set _mid to true>><</if>>
+<<else>>
+	<<if ($willpower or 0) gte 280 or (_npc.love or 0) gte 20>><<set _ok to true>><<elseif (_npc.trust or 0) gte 10>><<set _mid to true>><</if>>
+<</if>>
+<<set $daily.mpNpcDateMonet2 to 1>>
+门厅的钟敲了九下，声音被地毯吸去一半。画廊里的灯比街上稳，落在画上，颜色像被谁轻轻按住。
+<br><br>
+<<if _ok>>
+	<<if _act is "ticket">>
+		你们从正门进去。门厅的人抬眼看了看请柬，没多问。那幅画挂在最里面的一面深红墙上，画框是旧的，金漆掉了几处。她站在画前，先不看画，先看灯，看了很久才说：「你看，蓝在灯下没有变紫，是旁边的红在推它。」她伸手在空气里比了个框，把画和你一起框进去。「这个位置，比白天多一层谎。谎得挺诚实。」
+	<<elseif _act is "backdoor">>
+		巷子比看上去深。你摸到侧门的锁，锁舌松得很，像早就等着谁来。门后是一条堆画框的走廊，松节油的味道比外面重。你们从帘子后面绕进大厅，正赶上守卫转身。她拉起你的手，脚步很轻，直到站在画前才松开。红灯下的群青果然往紫里走，她看了很久，说：「它没说实话，但它没打算骗我。」
+	<<else>>
+		你们站在橱窗外。玻璃把街灯和画叠在一起，先是什么也看不清。你耐着性子等，等到一辆马车过去，玻璃上的反光散开，画才从里面浮出来。她抬起手，隔着玻璃沿着画的边缘描了一遍，指尖离画只有一寸。「颜色少了一层，」她说，「骨架还在。骨架在，就不算白来。」
+	<</if>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -5>>
+<<elseif _mid>>
+	<<if _act is "ticket">>
+		你们进了门厅，那面墙却拉起了绳子，说是今晚要换灯。你们只能从绳外看，画的下半截被一张告示挡住。她踮了踮脚，又放下，笑了一下：「也好。看不全的时候，人会自己替它补。补出来的那部分，往往比画本身更像自己。」
+	<<elseif _act is "backdoor">>
+		走廊尽头有人咳嗽了一声。你们贴进帘子后面，等脚步声过去。画只看了半幅，灯就被守卫调暗了。她贴着你的耳朵说：「别出声。暗下来的颜色，比亮着的颜色更记仇。」等你们退出来，她手心还是热的。
+	<<else>>
+		一辆货车停在橱窗前，车帘挡住了大半。等车开走，画廊的灯已经熄了一排。她看着暗下去的画，说：「光下班了。画还在，只是不肯见客。」她没有失望，只把披肩往上拉了拉。
+	<</if>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>>
+<<else>>
+	<<if _act is "ticket">>
+		你们走到售票处，小窗已经关了。里面的人隔着玻璃摆手，说今晚的场次满了。莫奈把请柬收回去，折得很整齐。「票卖完了，」她说，「画不会跑。跑的是灯。」你们在门厅站了一会儿，暖气管里的水声一阵一阵，像谁在很远的地方叹气。
+	<<elseif _act is "backdoor">>
+		你刚把侧门推开，守卫就从走廊那头转了出来。手电的光扫过你们的脸，他一把抓住你的胳膊，把你们往门外送。莫奈没有争辩，只在你被推得踉跄时伸手扶了一下。巷子里很黑，她低头看你擦破的手背，说：「后门也有后门的规矩。今天是我们没守。」
+	<<else>>
+		雨来得没有预兆。先是几滴，接着连成一片，玻璃很快糊了，画在里面化成一团深色。她站在雨里看了一会儿，头发湿了，贴在脸侧。「玻璃一糊，颜色就归天了。」她把请柬顶在头上，拉你往屋檐下走，鞋底踩得水响。
+	<</if>>
+	<<stress 6>><<tiredness 2>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[回到画室 (0:02)|MP NPC Monet Date Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Monet Date 3 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set _dated to ($daily.mpNpcDateMonet3 or 0)>>
+<<if _dated>>
+暗房的门缝里没有光。莫奈把钥匙在指间转了一圈，没有插进锁孔。「今天不洗了，」她说，「药水累了一天，也得歇。底片放在暗处不会坏，坏的是人急着看。」她把钥匙收回围裙口袋，转身往画室走。
+<br><br>
+<<getouticon>><<link [[回到画室 (0:02)|MP NPC Monet Date Hub]]>><<pass 2>><</link>>
+<<else>>
+暗房在阁楼尽头，原先是个堆旧画框的壁橱。莫奈把门推开一条缝，红光从里面漏出来，落在楼梯扶手上，像一道没干的血线。
+<br><br>
+「进来之前先把眼睛闭一下，」她说，「红灯不是给你看的，是给药水看的。人在这里要学会不看。」
+<br><br>
+屋里比她描述的还窄。三只白瓷盘并排放在长桌上，液面平得像三小块黑玻璃。头顶的灯泡裹着一层红纸，光落下来，把她的白衬衫染成褐红，把她的眼睛压成两点更深的红。
+<br><br>
+「今天洗露台那几张，」她从晾片绳上取下一张底片，对着红灯照了照，「显影盘在左，停影在中间，定影在右。你站中间，手别抖——中间的位置最窄，也最要紧。」
+<br><br>
+药水的味道从门缝里挤出来，酸里带一点甜，像放久了的橘子。她侧身让开，等你先进，自己跟在后面，顺手把门带严。门一关，外面的街声就断了，只剩定时器很细的齿轮声。
+<br><br>
+暗房的门框上钉着一块旧毛毡，边角已经磨秃，开关门时几乎没有声音。她跟进来后把红灯的角度调低了一点，光才从头顶挪到桌面，不再直照眼睛。
+<br><br>
+长桌下面堆着几只木箱，箱里是裁好的相纸，边缘用铅笔画了细细的线。她抽出一张，对着红灯照了照，纸面泛出一种很浅的粉，像还没熟透的果子。
+<br><br>
+晾片绳横在头顶，上面夹着七八张底片，夹子是不锈钢的，在红光下泛着一点冷。她伸手拨开一张，底片轻轻晃，影子在墙上也跟着晃，像水里的草。
+<br><br>
+桌上还有一只旧怀表，表盖开着，指针停在某一刻。她没有去上弦，说暗房里不需要准时的表，只需要准时的眼。
+<br><br>
+墙上挂着几排已经干透的底片，在红光下像一排薄薄的黑叶子。她抬手拨开其中一张，让你看上面模糊的轮廓：「这是上个月的海。洗坏了，可海还在。底片比人经得住错。」
+<br><br>
+<<windowicon>><<link [[跟她进暗房 (0:18)|MP NPC Monet Date 3 Choice]]>><<pass 18>><</link>><br>
+<<investigateicon>><<link [[先问清步骤 (0:22)|MP NPC Monet Date 3 Choice]]>><<pass 22>><</link>>
+<</if>>
+
+:: MP NPC Monet Date 3 Choice [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+暗房里没有椅子。你站着，莫奈也站着。定时器放在两只盘子之间，指针走到一半，发出很细的齿轮声。
+<br><br>
+「三件事，」她说，「换一罐新显影粉，钱从你口袋出；或者摸黑把底片递给我，灯一关，什么也看不见；再不然，你守门边看表，时间到了提醒我。三件都占时间，也都不能出错。」
+<br><br>
+显影粉要按比例兑，水温高一点，画面就急；底片在暗处只有指尖知道厚薄；计时看着最轻，可早一秒晚一秒，整张片子就废了。她把三只盘子的位置重新摆了一遍，白瓷在红桌上碰出三声轻响。
+<br><br>
+三只白瓷盘边上各放着一把木夹，夹口包着胶皮，怕刮伤相纸。定时器是黄铜的，表盘上的刻度磨得发亮，指针走到某一格时会轻轻顿一下，像在犹豫。
+<br><br>
+她把显影粉的纸包拆开，粉末落在盘边，像一小撮灰雪。她没有马上倒进去，先用指尖捻了捻，确认没有结块，才把纸包递给你。
+<br><br>
+定时器的玻璃面有一道裂纹，从中心一直延伸到边缘。她说那是有一年冬天冻裂的，裂纹不影响走时，只是看时间的时候要多看一眼。
+<br><br>
+她把粉末分成三份，每一份都用指尖抹平。动作慢，却一点也不犹豫。「分量差一点，画面就会替你说话，」她说，「我不喜欢替我说的话。」
+<br><br>
+「你选，」她说，「选好了就别改。药水不等人，光也不等。」
+<br><br>
+她把手腕内侧的旧药水痕给你看：「这是去年冬天留下的。药水沾上皮肤，洗不掉，得等它自己褪。有些颜色也是这样，进去了就不肯走。」
+<br><br>
+屋顶上有猫走过，瓦片轻轻响了一声。她没抬头，只说：「别管它。暗房里最怕的不是声音，是有人突然开灯。」她把袖子挽到肘上，红灯把她的影子投在墙上，拉得很长，一直伸到晾片绳下面。
+<br><br>
+墙角有一只铁皮桶，里面泡着用过的相纸，水面浮着一层银灰色的膜。她把桶往桌下推了推，说：「别踢到它。里面都是洗坏的，可洗坏的也有分量。」
+<br><br>
+<<mpcalculateicon>><<if ($money or 0) gte 200>><<link [[调一盆药水 (0:15)|MP NPC Monet Date 3 Result]]>><<set $mpNpcs.monet.datePick to "chemistry">><<money -200>><<pass 15>><</link>><<else>><span class="disabled">调一盆药水 (0:15)（钱不够）</span><</if>><br>
+<<mpsneakicon>><<link [[摸黑递底片 (0:12)|MP NPC Monet Date 3 Result]]>><<set $mpNpcs.monet.datePick to "negative">><<tiredness 1>><<pass 12>><</link>><br>
+<<mpwatchicon>><<link [[守门边计时 (0:10)|MP NPC Monet Date 3 Result]]>><<set $mpNpcs.monet.datePick to "timer">><<pass 10>><</link>>
+<br><br>
+定时器的指针又走了一格。她把第一张底片夹在指间，举到红灯前，等你的手先动。
+
+:: MP NPC Monet Date 3 Result [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set _act to ($mpNpcs.monet.datePick or "chemistry")>><<set $mpNpcs.monet.datePick to "">>
+<<set _ok to false>><<set _mid to false>>
+<<if _act is "chemistry">>
+	<<if ($science or 0) gte 250 or ($maths or 0) gte 250>><<set _ok to true>><<elseif (_npc.love or 0) gte 15>><<set _mid to true>><</if>>
+<<elseif _act is "negative">>
+	<<if ($willpower or 0) gte 260 or ($skulduggery or 0) gte 250>><<set _ok to true>><<elseif (_npc.trust or 0) gte 15>><<set _mid to true>><</if>>
+<<else>>
+	<<if (_npc.trust or 0) gte 20>><<set _ok to true>><<elseif (_npc.trust or 0) gte 8>><<set _mid to true>><</if>>
+<</if>>
+<<set $daily.mpNpcDateMonet3 to 1>>
+红灯把一切压成同一种颜色。白瓷盘不再是白的，药水也不再是清的，只有慢慢浮出来的影，一层一层，像从水底往上走。
+<br><br>
+<<if _ok>>
+	<<if _act is "chemistry">>
+		你按她说的比例兑好药水，先试了温度，再把底片滑进去。她站在旁边看，没有说话。影先是从边角出来，接着是栏杆，最后是你站过的那个位置。她俯身看了一会儿，忽然说：「你把水温压住了。压住水温的人，才压得住时间。」她用夹子把相纸提起来，水珠顺着边角往下滴，在盘里敲出很轻的响。
+	<<elseif _act is "negative">>
+		灯一关，屋里黑得没有边。你凭着记忆把底片递过去，指尖先碰到她的手指，才碰到纸边。她没有缩手，只把底片接稳。红灯再亮起来时，影已经浮出一半。她低头看盘里的画，声音比平时低：「你的手很稳。稳的人，暗处也看得见东西。」
+	<<else>>
+		你守在门边数秒。数到该翻的时候，她正好停手；数到该停的时候，她把相纸提起来，一秒不差。画面干净得像刚下过雨。她把相纸挂到绳上，回头看你：「时间也是颜色的一部分。你替我把它看住了。」
+	<</if>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -5>>
+<<elseif _mid>>
+	<<if _act is "chemistry">>
+		药水比该有的温度高了一点。影出得太快，颗粒粗了，边角有一点发灰。她看了一眼，没有倒掉，只把相纸多漂了一遍。「粗有粗的诚实，」她说，「细的地方会骗人，粗的地方不会。」画面上的栏杆有点毛，可你站过的那块空处还在。
+	<<elseif _act is "negative">>
+		你在暗处摸错了方向，底片从指间滑下去。你及时用指背托住，边角还是添了一道细痕。红灯亮起来时，她先把底片举到灯前看了看，才说：「划痕也是底片的一部分。人身上有疤，画上也该有。」她没有让你赔，只把底片重新夹好。
+	<<else>>
+		你数慢了半拍。相纸在药水里多待了一会儿，画面暗了一层。她提起来看了看，没有皱眉：「暗一点也好。暗处才看得出谁站得住。」她把相纸挂到绳上，旁边那张浅一点的，正好衬出这张的沉。
+	<</if>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>>
+<<else>>
+	<<if _act is "chemistry">>
+		药水太热。影一下子涌出来，还没等她伸手，整张相纸就黑成了一片。她把相纸从盘里提起来，看了一眼，丢进废纸篓。「急不得，」她说，「颜色一急，就只肯给你一个结果，不肯给你过程。」她重新量了一遍粉，没让你再碰。
+	<<elseif _act is "negative">>
+		底片从你指间滑脱，落在桌角，发出一声很脆的裂响。红灯还亮着，屋里静得能听见药水在盘里轻轻晃。她弯腰把碎片捡起来，看了很久，说：「这张洗不成了。碎片留着吧，拼一拼，还能看见一半的露台。」她的声音很平，你却觉得那声裂响一直留在耳朵里。
+	<<else>>
+		你数错了。等你想起来，相纸已经在药水里泡过了头，画面糊成一团，像被雨淋过的窗。她伸手把相纸捞出来，看了一眼，说：「重洗一张就是了。底片还在，光就还在。」她把废片扔进纸篓，重新夹好底片，没有再看你。
+	<</if>>
+	<<stress 6>><<tiredness 2>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[回到画室 (0:02)|MP NPC Monet Date Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Monet Date Season [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0 }>><</if>>
+<<set $mpNpcs.monet to ($mpNpcs.monet or {})>><<set _npc to $mpNpcs.monet>>
+<<if !$daily>><<set $daily to {}>><</if>>
+老帽店的屋顶是莫奈固定写生的地方。春天她画檐下的新芽，夏天画午后缩短的影子，秋天画落进天窗的干叶，冬天画玻璃上的霜。同一块屋角，四张画，四种光。
+<br><br>
+「换季的时候，屋子要重新排一遍光，」她说，「人也一样。同一个地方，站在不同的光里，就不是同一个人。你别急着说自己没变，先看看光把你照成什么样。」
+<br><br>
+<<if Time.season is "spring">>
+【春】雨下得很细，屋顶的油毡泛着一层湿亮的绿。檐角的新芽是黄绿的，嫩得几乎透明，风一吹就抖。她把画板支在檐下，让雨落在画板外侧，不落到纸上。「春天的颜色不能画干，」她说，「一干就死。得留一点湿，让颜色自己长。」
+<<elseif Time.season is "summer">>
+【夏】白光硬得能敲响。屋顶的油毡被晒软，踩上去有一点黏。她把画板挪到烟囱的阴影里，自己却站在太阳底下，说要看影子怎么缩。「夏天画影子比画东西有用，」她说，「东西都在发白，只有影子还肯说实话。」
+<<elseif Time.season is "autumn">>
+【秋】光是蜂蜜色的，斜斜地铺满屋顶，尘埃在里面浮着，像被谁撒了一把金粉。干叶从街口卷上来，贴在画板边上。她不抖掉，只用笔杆把叶子拨到构图的一角。「秋天最容易想起没画完的东西，」她说，「所以秋天要画得慢一点。」
+<<elseif Time.season is "winter">>
+【冬】天亮得晚，黑得早，屋顶上结着一层薄霜。她戴着一副剪掉指尖的旧手套，手指冻得发红，笔却握得很稳。「冬天的光短，」她说，「短有短的好处。来不及犹豫，落笔就是落笔。」
+<<else>>
+【无季】光停在一种说不清的颜色里。她把画板支起来，又放下，最后什么也没说，只把围巾往上拉了拉。
+<</if>>
+<br><br>
+她把折叠木架递给你，自己拎起颜料箱。箱扣没扣严，走一步响一下，像在替这段路打拍子。「帮我把画板支起来，」她说，「支稳了，剩下的交给光。」
+<br><br>
+<div id="monet-date-season">
+<<mpmapicon>><<link "支起画板等光 (0:06)">><<pass 6>><<replace "#monet-date-season">>
+画板支稳了。风从檐角绕过来，把纸角掀起又放下。她蹲在画板前调色，头也不回地说：「接下来两件事，你挑一件。扶住画板，或者陪我等到光斜。」
+<br><br>
+<div id="monet-date-approaches">
+<<mpcarryicon>><<link "替她扶稳画板 (0:12)">><<pass 12>><<replace "#monet-date-approaches">>
+<<if !($daily.mpNpcDateMonetSeason or 0)>>
+	<<set $daily.mpNpcDateMonetSeason to 1>>
+	<<if ($athletics or 0) gte 250 or ($housekeeping or 0) gte 250>>
+		你用手掌压住画板侧边，风每推一次，你就加一分力。她调色，落笔，笔尖在纸上走得很稳。画到一半，她忽然停下来，把笔递给你，让你在角落添一道影。你添歪了，她没改，只说：「歪的那道归你。以后我看这张画，会记得是谁扶的板。」
+		<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -4>>
+	<<else>>
+		风比你想的野。画板一歪，纸角折出一道白痕。她伸手接住，没让画掉下去，只是看着那道折痕说：「折过的地方，颜料会积得深一点。深也好，深的地方像有话说。」
+		<<stress 3>><<tiredness 1>>
+	<</if>>
+<<else>>
+	你伸手扶住画板，风却已经小了。她看了看天，把笔收起来：「这一阵光过了。扶得再稳，也扶不回刚才那一层。」她把画纸卷好，动作不急。
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpwatchicon>><<link "陪她等到光斜 (0:10)">><<pass 10>><<replace "#monet-date-approaches">>
+<<if !($daily.mpNpcDateMonetSeason or 0)>>
+	<<set $daily.mpNpcDateMonetSeason to 1>>
+	<<if ($willpower or 0) gte 260>>
+		你陪她等到光斜。两个人都不说话，屋顶上只有风和远处车轮的声音。光从檐角一寸寸挪到画板中央，她这才动笔，画得很快，像早就把这一刻在脑子里排过很多遍。收笔时她说：「等光的人，光会记得。」
+		<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -4>>
+	<<else>>
+		等到一半，云从河那边上来，把光整块收走。她握着笔站了一会儿，把画板合上。「今天等不到了，」她说，「等不到就等不到，光不欠谁。」你看见她把没画完的纸仔细卷好，像收起一件还没用完的东西。
+		<<stress 3>><<tiredness 1>>
+	<</if>>
+<<else>>
+	你陪她站了一会儿，光却始终没有回来。她把画板收起来，说：「今天的光用过了。同一块光不能用两回。」她没有再看天，只把颜料箱的扣子扣严。
+<</if>>
+<</replace>><</link>>
+</div>
+<</replace>><</link>>
+</div>
+<br><br>
+她把颜料箱拎起来，箱底在瓦片上磕了一下，发出空空的响。「画不完也没关系，」她说，「光明天还会来，人未必。所以今天站过的地方，得记住。」
+<br><br>
+<<getouticon>><<link [[回到画室 (0:02)|MP NPC Monet Date Hub]]>><<pass 2>><</link>>

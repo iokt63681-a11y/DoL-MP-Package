@@ -1,0 +1,555 @@
+:: MP Fog Tide Hub [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if $mpFogTide is undefined>><<set $mpFogTide to 2>><</if>>
+<<if $mpFogLastTickDay is undefined>><<set $mpFogLastTickDay to Time.days>><</if>>
+<<if (Time.days - $mpFogLastTickDay) gte 6>>
+	<<set _ticks to Math.floor((Time.days - $mpFogLastTickDay) / 6)>>
+	<<set $mpFogTide to Math.clamp(($mpFogTide or 0) + _ticks, 0, 7)>>
+	<<set $mpFogLastTickDay to Time.days>>
+<</if>>
+<<set $mpFogStage to ($mpFogStage or 0)>>
+<<set $mpFogPressure to ($mpFogPressure or 0)>>
+<<set $mpLanternOil to ($mpLanternOil or 1)>>
+<<set $mpTideChart to ($mpTideChart or 0)>>
+<<set _baseOil to (300 + ($mpFogTide or 0) * 150 + ($mpFogPressure or 0) * 50)>>
+<<set _oilPrice to Math.round(_baseOil * ($mpWorldPriceMod or 100) / 100)>>
+<<set _curfewHour to ($mpWorldScheduleShortened ? 18 : 21)>>
+<<set _nextTick to Math.max(1, 6 - ((Time.days - ($mpFogLastTickDay or Time.days)) % 6))>>
+<<set _exitPas to ($mpReturnPassage or "High Street")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+高街与旧港交界的石砌拱门下立着一根铸铁水尺，铜牌上镌刻着历年海雾漫过堤岸的刻度。咸腥而阴冷的雾气正顺着排水暗渠的铁格栅往上翻涌，在煤气路灯周围晕开一圈圈惨白的光晕。守夜人留下的粉笔字迹在潮湿的砖墙上洇开，记录着近期雾潮向内城推进的势头，路过的商贩与水手无不加快脚步，连沿街杂货铺的木板门都比往常更早挂上了防潮铁链。
+<br><br>
+你走近铸铁水尺，借着防风灯的微光端详刻度盘上的水银浮标与旁侧悬挂的铜牌记录：
+<br>
+【雾潮水尺读数】：<<if $mpFogTide gte 7>><span class="red">满潮临渊（雾锁全城，必须在防波堤做出最终决断）</span><<elseif $mpFogTide gte 5>><span class="pink">浓障封街（码头能见度骤降，沿街商铺提前打烊，林间小径封闭）</span><<elseif $mpFogTide gte 3>><span class="purple">栈桥漫雾（灰雾漫过外栈桥，夜间巡逻警戒上升，灯油价格上浮）</span><<elseif $mpFogTide gte 1>><span class="blue">微澜初起（晨昏薄雾萦绕港湾，潮汐周期每六日推进一格）</span><<else>><span class="green">海晏风清（海面能见度极佳，商路与林道畅通无阻）</span><</if>>（当前潮位刻度：<<print $mpFogTide>>，距下一次自然涨潮还有 <<print _nextTick>> 天）
+<br>
+【调查进展与随身物资】：<<if $mpFogStage gte 3>><span class="teal">已查明雾角主塔折射镜与暗流脉络</span><<elseif $mpFogStage is 2>><span class="lblue">已摸清林间雾障与街巷封锁规律</span><<elseif $mpFogStage is 1>><span class="blue">已完成外礁水尺与凝露初探</span><<else>><span class="purple">尚未开展系统勘查</span><</if>> ｜ 防风鲸油：<<print $mpLanternOil>> 罐（当前市价 £<<print (_oilPrice / 100).toFixed(2)>>）｜ 潮汐表：<<print $mpTideChart>> 份
+<br>
+【反噬压力累积】：<<if $mpFogPressure gte 4>><span class="red">极高（灯油紧缺、港务戒备森严、神殿恩典透支、行会物价飞涨）</span><<elseif $mpFogPressure gte 2>><span class="purple">显著（强压潮位已引起灯油商与港务哨兵警觉）</span><<elseif $mpFogPressure is 1>><span class="blue">轻微（周边物价与警戒出现小幅波动）</span><<else>><span class="green">平稳（尚未触发反噬）</span><</if>>
+<br>
+【封港·撤离·议价后的世界差异】：<<if ($mpWorldPriceMod or 100) gt 100>><span class="gold">铁链封港生效（外海航线断绝，全城燃料与进口补给按 <<print $mpWorldPriceMod>>% 结算，夜间治安稳固）</span><<elseif $mpWorldScheduleShortened>><span class="teal">钟声撤离生效（低洼街区与港区提前至 <<print _curfewHour>>:00 收班歇业，内城互助配给站常驻开放）</span><<elseif $mpWorldFogMarketOpen>><span class="purple">与潮议价生效（三号防波堤灰雾暗市常年开埠，暗货交割与秘境采购全天开放）</span><<else>><span class="blue">雾潮终局尚未敲定（物价、营业时辰与暗市摊位维持常态）</span><</if>>
+<br><br>
+你在湿冷的石阶旁拢了拢衣领。主水尺旁设有通往雾潮调查分枢、信标燃灯台、铅锤测潮台以及余波集市哨站的四条通道；若想深入勘查外礁、疏导反噬压力或直面满潮决断，可步入雾潮调查分枢统筹安排。
+<br><br>
+<<getouticon>><<link [[返回高街布告 (0:03)|MP Town Side Stories Hub]]>><<pass 3>><</link>>
+<br>
+<<investigateicon>><<link [[进入雾潮调查 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>>
+<br>
+<<caveicon "torch">><<link [[信标燃灯压潮 (0:12)|MP Fog Tide Lever Beacon]]>><<pass 12>><</link>>
+<br>
+<<mpclockworkicon>><<link [[铅锤测算暗涌 (0:14)|MP Fog Tide Lever Sounding]]>><<pass 14>><</link>>
+<br>
+<<link [[走访余波集市 (0:12)|MP Fog Tide Aftermath Market]]>><<pass 12>><</link>>
+
+:: MP Fog Tide Survey Hub [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $mpFogStage to ($mpFogStage or 0)>>
+<<set $mpFogPressure to ($mpFogPressure or 0)>>
+<<set _curfewHour to ($mpWorldScheduleShortened ? 18 : 21)>>
+你步入高街水尺拱门内侧的「雾潮调查分枢」。这间由旧港务观测室改建的石屋四壁挂满了历年海雾漫灌图、地下暗渠走向图以及防波堤折射镜的机械剖面图。桌案中央摆着一盏长明鲸油灯，旁边压着守林人阿什、修表师塞拉、守夜人林恩与夜航船长维斯各自送来的勘查简报。
+<br><br>
+你翻开桌上的观测总册，核对当前三阶段调查与四方反噬的具体态势：
+<br>
+【三阶勘查进度】：<<if $mpFogStage gte 3>><span class="teal">第三阶已完成（防波堤雾角主塔折射镜已检修完毕，随时可应对满潮决断）</span><<elseif $mpFogStage is 2>><span class="lblue">第二阶已完成（森林石桥雾障与低洼街巷封锁线已摸清，亟待登塔检修主折射镜）</span><<elseif $mpFogStage is 1>><span class="blue">第一阶已完成（外栈桥青铜水尺与暗礁凝露已取样，下一步需排查林道与街巷）</span><<else>><span class="purple">尚未启动（需先前往外礁水尺采集凝露与基准刻度）</span><</if>>
+<br>
+【世界状态联动】：<<if $mpWorldScheduleShortened>>由于低洼街区已执行钟声撤离，外街铺面每晚 <<print _curfewHour>>:00 便提前落锁，夜间巡视封锁街巷时可额外领受行会互助津贴；<<elseif $mpWorldFogMarketOpen>>由于防波堤灰雾暗市已开埠，暗渠水路常年有走私快艇接应，疏导反噬压力时可获维斯暗桩协助；<<elseif ($mpWorldPriceMod or 100) gt 100>>由于铁链封港已生效，港务与神殿联合接管防波堤，反噬压力更易平息但燃料成本高企；<<else>>目前终局未定，每一次强行压低潮位都会累积反噬压力，需及时周旋疏导。<</if>>
+<br><br>
+石屋窗外的海雾正顺着风向缓缓流转。你可以从这里出发，按部就班地推进外礁水尺、林间雾障与防波堤主镜的三阶勘查；也可以前往街巷巡视浓雾对商铺的冲击、出面平抑四方反噬压力，或是在七级满潮临渊时奔赴防波堤做出最终决断。
+<br><br>
+灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
+<br><br>
+<<getouticon>><<link [[返回雾潮总枢 (0:03)|MP Fog Tide Hub]]>><<pass 3>><</link>>
+<br>
+<<investigateicon>><<link [[推进外礁勘查 (0:15)|MP Fog Tide Stage 1]]>><<pass 15>><<tiredness 2>><</link>>
+<br>
+<<mpwatchicon>><<link [[巡视封锁街巷 (0:15)|MP Fog Tide Impact Patrol]]>><<pass 15>><</link>>
+<br>
+<<shopicon>><<link [[疏导反噬压力 (0:15)|MP Fog Tide Pressure Relief]]>><<pass 15>><</link>>
+<br>
+<<link [[直面满潮决断 (0:15)|MP Fog Tide Crisis 7]]>><<pass 15>><</link>>
+
+:: MP Fog Tide Stage 1 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+你提着防风提灯顺着湿滑的青石台阶走下外栈桥。退潮后的礁石群半浸在乳白色的浓雾里，几根早年港务局埋设的青铜水尺被牡蛎壳与墨绿海带裹得严严实实。海浪拍击防波堤的闷响在雾气中显得格外迟钝，原本应该在栈桥尾端装卸鱼篓的几名晚班脚夫早已不见踪影，只留下一只装满半凝结鲸油的铁皮漏斗和两册被盐水泡胀的观测底簿。
+<br><br>
+蹲在第三根系船石柱旁，你用随身小刀刮去青铜水尺表面的盐垢。水尺背面刻着一排细密的引流槽，槽底残留着带有微弱磷光的灰白色凝露——这并非普通的晨间海雾，而是从外海断桅沉船带与海底冷泉翻涌上来的深层寒潮。每当潮位刻度抬升，这股寒潮便会顺着市政排水渠倒灌进高街与森林边缘，不仅让沿街铺面的铜锁生锈卡死，更会让夜里独行的路人陷入方向迷失。
+<br><br>
+就在你准备拓下水尺底部的基准刻度时，一阵急促的冷浪漫过鞋面，礁石缝隙里卡着的一只密封铜管随着暗流晃动起来。若能算准潮水回落的间隙将铜管与底簿一并取出，不仅能摸清雾潮初起阶段的推进规律，还能整理出一份精准的潮汐表；但若是动作迟缓或强行涉水，冰冷刺骨的海水与湿滑的暗礁随时可能让你滑倒受伤。
+<br><br>
+栈桥下方的暗流每一次涌动，都会在生满绿锈的桩基上留下一道泛着盐花的湿痕。远处的防波堤哨亭里无人值守，只有一盏快要熬干灯油的马灯在铁钩上孤零零地晃荡，将你俯身勘查的身影拉得很长。你将记录本平摊在干燥的缆桩顶面，用炭笔把水位抬升的时辰、凝露的气味以及暗礁间水流的回旋方向逐一记下，心知这只是整场雾潮漫向内城的第一道征兆。
+<br><br>
+<<getouticon>><<link [[返回调查分枢 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>>
+<br>
+<<mpcalculateicon>><<link [[测绘水尺潮表 (0:18)|MP Fog Tide Stage 2]]>><<pass 18>>
+	<<if ($maths or 0) gte 200 or ($science or 0) gte 200>>
+		<<set $mpFogStage to Math.max($mpFogStage or 0, 1)>>
+		<<set $mpTideChart to ($mpTideChart or 0) + 1>>
+		<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
+		<<stress -3>><<tiredness 2>>
+	<<else>>
+		<<set $mpFogStage to Math.max($mpFogStage or 0, 1)>>
+		<<stress 5>><<pain 3>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<sneakicon>><<link [[打捞暗礁铜管 (0:16)|MP Fog Tide Lever Sounding]]>><<pass 16>>
+	<<if ($skulduggery or 0) gte 220 or ($swimmingskill or 0) gte 220>>
+		<<set $mpFogStage to Math.max($mpFogStage or 0, 1)>>
+		<<set $mpTideChart to ($mpTideChart or 0) + 1>>
+		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_stage1_chart_tube_v39")>>
+			<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+		<</if>>
+		<<stress -2>><<tiredness 2>>
+	<<else>>
+		<<set $mpFogStage to Math.max($mpFogStage or 0, 1)>>
+		<<mpalert 6>><<pain 4>><<stress 6>>
+	<</if>>
+<</link>>
+<br>
+<<walkicon>><<link [[收拢残油赴塔 (0:14)|MP Fog Tide Lever Beacon]]>><<pass 14>><<set $mpFogStage to Math.max($mpFogStage or 0, 1)>><<set $mpLanternOil to ($mpLanternOil or 0) + 1>><<tiredness 2>><</link>>
+
+:: MP Fog Tide Stage 2 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.ash>><<set $mpNpcs.ash to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+离开海边栈桥后，你沿着灰雾蔓延的轨迹一路追查到狼街与森林交界的石拱桥。这里的雾气比港区更加浓稠，连十步之外的冷杉树冠都化作了模糊的黑影。原本通往深林采集区的两条岔路已被守林人拉起了编满干枯槲寄生的警戒麻绳，绳结上挂着两盏火苗微弱的黄铜风灯。披着灰绿斗篷的阿什正蹲在桥头石碑旁添补松脂，而高街钟表铺的塞拉也拎着一只密封气压匣站在廊檐下，眉头紧锁地核对着怀表秒针。
+<br><br>
+「北坡的冷泉眼昨晚开始往外冒白瘴，气压计的指针比平时慢了整整四格。」塞拉指了指气压匣内侧凝结的盐霜，声音轻得像怕惊动雾里的东西，「只要海面潮位再往上涨，高街的裁缝铺和杂货行就得提前两个时辰落锁，连送奶马车都不敢在清晨进巷子。」阿什没有多话，只是用骨刀柄敲了敲石碑底部一道不断渗出寒气的地缝：「雾是从地下暗河和旧港防波堤两头顶上来的。不把林道上的引路灯网接通，夜里进林子的人一个也走不出来。」
+<br><br>
+你低头查看两人摊在青石板上的手绘路线图。要想打通第二阶段的观测网，要么协助阿什冒着寒雾把三盏备用风灯挂上北坡古树，强行撑开林间视野；要么协助塞拉在石桥暗渠口校准气压与水尺的联动误差，为后续在防波堤顶层合龙主折射镜提供精确参数。
+<br><br>
+冷杉林间飘落的松针沾满了冰凉的雾水，踩在脚下几乎听不见声响。石拱桥下方的排水暗渠正源源不断地往外冒着白气，将桥栏上的青苔浸得滑腻无比。无论是守林人阿什手里的松脂火把，还是修表师塞拉怀中滴答作响的精密怀表，都在这片步步紧逼的浓雾中成了维系城镇秩序的微弱支点，等待着你去将分散在林道与街巷之间的防线串联起来。
+<br><br>
+<<getouticon>><<link [[返回调查分枢 (0:06)|MP Fog Tide Survey Hub]]>><<pass 6>><</link>>
+<br>
+<<caveicon "torch">><<link [[随阿什挂风灯 (0:20)|MP Fog Tide Stage 3]]>><<pass 20>>
+	<<if ($athletics or 0) gte 240 or ($tending or 0) gte 240>>
+		<<set $mpFogStage to Math.max($mpFogStage or 0, 2)>>
+		<<set $mpNpcs.ash.trust to Math.min(100, ($mpNpcs.ash.trust or 0) + 2)>>
+		<<mplight 15>><<stress -4>><<tiredness 3>>
+	<<else>>
+		<<set $mpFogStage to Math.max($mpFogStage or 0, 2)>>
+		<<mplight -10>><<pain 4>><<stress 6>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<mpclockworkicon>><<link [[帮塞拉校气压 (0:18)|MP Fog Tide Stage 3]]>><<pass 18>>
+	<<if ($science or 0) gte 240 or ($maths or 0) gte 240>>
+		<<set $mpFogStage to Math.max($mpFogStage or 0, 2)>>
+		<<set $mpNpcs.sera.trust to Math.min(100, ($mpNpcs.sera.trust or 0) + 2)>>
+		<<set $mpTideChart to ($mpTideChart or 0) + 1>>
+		<<stress -4>><<tiredness 2>>
+	<<else>>
+		<<set $mpFogStage to Math.max($mpFogStage or 0, 2)>>
+		<<stress 6>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<walkicon>><<link [[安抚歇业商贩 (0:15)|MP Fog Tide Impact Patrol]]>><<pass 15>><<set $mpFogStage to Math.max($mpFogStage or 0, 2)>><<stress -2>><</link>>
+
+:: MP Fog Tide Stage 3 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+你踩着防波堤尽头陡峭的铸铁旋梯一路攀上雾角副塔的顶层平台。狂暴的海风裹挟着咸涩的浓雾扑面而来，脚下百尺深处的暗礁间翻滚着铅灰色的浪沫。平台正中央立着一座一人多高的八角黄铜折射灯笼，三面厚重的水晶菲涅尔透镜已有两面被盐霜与焦油糊死，底座的配重发条也卡在了死角里。夜航船长维斯正按着被风吹得猎猎作响的黑风衣站在护栏边，手里攥着一把加长铜扳手。
+<br><br>
+「港务局那帮老爷只顾着在议事厅吵架，根本没人敢在涨潮夜爬上这鬼地方。」维斯吐掉嘴里的烟蒂，抬手指了指外海那道如同高墙般缓缓压向港湾的乳白雾线，「看见那道主雾墙了吗？等水尺漫到最高格，整个旧港、高街和森林都会被扣进锅底。你手里要是有塞拉校过的潮汐表和足够的鲸油，我们现在就能把主折射镜转回外航道，至少在满潮拍岸前争出喘息的余地。」
+<br><br>
+铜灯笼内部的齿轮在寒风中发出干涩的呻吟。此时无论是顶着强风扳正沉重的配重主轴，还是点燃高纯度鲸油烘化镜面盐霜，都需要极大魄力。一旦主折射镜重新运转，不仅第三阶段勘查彻底合龙，你也获得了在满潮时刻决定整座小镇命运的资格。
+<br><br>
+高耸入云的雾角副塔在海风中微微震颤，脚下的铸铁格栅地板透出下方百尺深渊的寒意。四周的海面已经被翻滚的灰白雾墙分割成无数碎片，唯有塔顶这座巨大的八角黄铜折射镜仍保留着劈开迷障的可能。你握紧手中沾满机油与盐霜的工具，听着耳畔呼啸的风声与齿轮咬合的闷响，清楚自己每一次扳动主轴都在为身后的整座港湾争取生机。
+<br><br>
+<<getouticon>><<link [[返回调查分枢 (0:06)|MP Fog Tide Survey Hub]]>><<pass 6>><</link>>
+<br>
+<<mprepairicon>><<link [[扳正折射主镜 (0:22)|MP Fog Tide Crisis 7]]>><<pass 22>>
+	<<if ($physique or 0) gte 9000 or ($willpower or 0) gte 450>>
+		<<set $mpFogStage to 3>>
+		<<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 1)>>
+		<<set $mpNpcs.vesper.trust to Math.min(100, ($mpNpcs.vesper.trust or 0) + 3)>>
+		<<mplight 20>>
+		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_stage3_prism_master_v39")>>
+			<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+		<</if>>
+		<<stress -5>><<tiredness 3>>
+	<<else>>
+		<<set $mpFogStage to 3>>
+		<<pain 5>><<stress 7>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<caveicon "torch">><<link [[转赴信标燃灯 (0:14)|MP Fog Tide Lever Beacon]]>><<pass 14>><<set $mpFogStage to 3>><<mplight 10>><</link>>
+<br>
+<<mpclockworkicon>><<link [[复核暗涌周期 (0:14)|MP Fog Tide Lever Sounding]]>><<pass 14>><<set $mpFogStage to 3>><</link>>
+
+:: MP Fog Tide Lever Beacon [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set _baseOil to (300 + ($mpFogTide or 0) * 150 + ($mpFogPressure or 0) * 50)>>
+<<set _oilPrice to Math.round(_baseOil * ($mpWorldPriceMod or 100) / 100)>>
+<<if $mpWorldFogMarketOpen>><<set _oilPrice to Math.max(200, _oilPrice - 120)>><</if>>
+防波堤与森林石径交汇的高地上立着三座铸铁信标炉，炉膛内铺着浸透松脂的耐火石棉网，粗大的黄铜导油管直通下方的储油铜缸。每当海雾向内城漫漶，唯有将高纯度防风鲸油注入铜缸并引燃信标，炙热的金色光柱才能穿透数里浓雾，驱散盘踞在街巷与栈桥上的寒潮，将雾潮刻度强行压退一格。
+<br><br>
+然而强行燃灯并非毫无代价。随着全城对防风鲸油的需求激增，高街与码头的油商早已坐地起价：
+<<if ($mpWorldPriceMod or 100) gt 100>>
+	由于铁链封港断绝了外海捕鲸船航线，城内燃料按封港物价指数（<<print $mpWorldPriceMod>>%）严格配给，单罐鲸油市价已涨至 £<<print (_oilPrice / 100).toFixed(2)>>；
+<<elseif $mpWorldFogMarketOpen>>
+	得益于防波堤灰雾暗市开埠，走私快艇源源不断运来免税海船鲸油，单罐市价回落至 £<<print (_oilPrice / 100).toFixed(2)>>；
+<<elseif $mpWorldScheduleShortened>>
+	受钟声撤离影响，油铺傍晚提前打烊，日间当班油价维持在 £<<print (_oilPrice / 100).toFixed(2)>>；
+<<else>>
+	目前单罐鲸油的当期市价已攀升至 £<<print (_oilPrice / 100).toFixed(2)>>。
+<</if>>
+你目前随身携带着 <<print ($mpLanternOil or 0)>> 罐防风鲸油，当前雾潮刻度为 <<print ($mpFogTide or 0)>>，反噬压力为 <<print ($mpFogPressure or 0)>>。
+<br><br>
+守在信标炉旁的老看火人搓着冻红的双手望向你，铜漏斗已经在注油口架好。你可以直接倾倒随身储备的防风鲸油点亮主信标，也可以掏出金镑向油商购油燃灯（若现金不足则由老看火人记下劳务折抵）；若你手头拮据，还可以去清理信标炉底部的焦油残渣，收集凝结的余油备作后用。
+<br><br>
+你走上信标台外侧的石砌观潮阶，只见下方港湾的雾气正顺着防波堤缺口一寸寸往内城漫溢。铸铁炉壁上留着历任守塔人用白垩画下的风向记号，旁边的木棚里堆着几只空了一半的粗陶油瓮与浸透松节油的麻绳引信。唯有算准风势将鲸油充分雾化引燃，金色火光才能在海面与街巷之间筑起一道温暖的屏障。
+<br><br>
+<<getouticon>><<link [[返回雾潮总枢 (0:04)|MP Fog Tide Hub]]>><<pass 4>><</link>>
+<br>
+<<caveicon "torch">><<link [[倾倒随身鲸油 (0:15)|MP Fog Tide Pressure Relief]]>><<pass 15>>
+	<<if ($mpLanternOil or 0) gte 1>>
+		<<set $mpLanternOil to ($mpLanternOil or 1) - 1>>
+		<<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 1)>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+		<<mplight 20>><<stress -4>><<tiredness 2>>
+	<<else>>
+		<<tiredness 4>><<stress 4>><<pain 2>>
+	<</if>>
+<</link>>
+<br>
+<<shopicon>><<link [[市价购油燃灯 (0:16)|MP Fog Tide Pressure Relief]]>><<pass 16>>
+	<<if ($money or 0) gte _oilPrice>>
+		<<set $money to ($money or 0) - _oilPrice>>
+		<<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 1)>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+		<<mplight 15>><<stress -3>><<tiredness 2>>
+	<<else>>
+		<<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 1)>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 2>>
+		<<tiredness 5>><<stress 5>><<pain 3>>
+	<</if>>
+<</link>>
+<br>
+<<mprepairicon>><<link [[刮除焦油提炼 (0:20)|MP Fog Tide Hub]]>><<pass 20>>
+	<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
+	<<tiredness 4>><<stress 3>><<pain 2>>
+<</link>>
+
+:: MP Fog Tide Lever Sounding [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set _isWindow to (Time.hour is 6 or Time.hour is 12 or Time.hour is 18 or (Time.hour gte 5 and Time.hour lte 7) or (Time.hour gte 17 and Time.hour lte 19))>>
+栈桥北侧的测潮伸出平台上架设着一台带刻度的黄铜绞车，绞车钢丝绳末端拴着一枚十二磅重的空心测深铅锤。不同于靠蛮力驱散雾气的信标炉，测潮讲究顺应海底暗渠的涨落节律：只有在破晓、正午或暮色交接的整点潮汐窗口，对照手绘潮汐表将铅锤精准送入海沟回流眼，扳动水下分流闸板，才能将涌向内城的灰雾悄无声息地导回外海。
+<br><br>
+你低头核对手中的器物：当前持有手绘潮汐表 <<print ($mpTideChart or 0)>> 份，现在时刻为 <<print String(Time.hour).padStart(2, "0")>>:<<print String(Time.minute).padStart(2, "0")>>（<<if _isWindow>><span class="teal">正处于潮汐平流窗口</span><<else>><span class="purple">非平流整点窗口，暗流湍急</span><</if>>）。塞拉曾提醒过你，若在非窗口时段或没有潮汐表参照的情况下贸然下放铅锤，不仅难以校准水下闸板，湍急的回流还会顺着排水道反扑上岸，令雾潮刻度不降反升，并惊动码头上的巡逻哨兵。
+<br><br>
+海风吹得黄铜绞车的棘轮咔哒直响。你可以趁潮水换向时消耗一份潮汐表精准下锤引流，也可以凭算术与科学功底强行测算水下暗流；若是手头缺少潮汐表，还可以先在观测棚内誊抄老领航员留下的旧海图补齐备件。
+<br><br>
+观测平台下方的海蚀暗槽里不断传来闷雷般的回水声，每一道浪头撞击在石壁刻度线上都会激起细碎的荧光泡沫。平台角落的木箱里整齐码放着早年水文官留下的铜制分规、浸蜡麻线与备用的水银比重计。只有当你在潮水换向的短暂间隙将空心铅锤精准沉入海沟回流眼，才能借着海底暗潮本身的推力拨转水下分流闸板，将盘踞在栈桥与森林外围的浓瘴悄然引回深海。
+<br><br>
+灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
+<br><br>
+<<getouticon>><<link [[返回雾潮总枢 (0:04)|MP Fog Tide Hub]]>><<pass 4>><</link>>
+<br>
+<<mpclockworkicon>><<link [[按潮汐表下锤 (0:16)|MP Fog Tide Pressure Relief]]>><<pass 16>>
+	<<if ($mpTideChart or 0) gte 1 and (_isWindow or ($science or 0) gte 220 or ($maths or 0) gte 220)>>
+		<<set $mpTideChart to ($mpTideChart or 1) - 1>>
+		<<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 1)>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+		<<mpalert 5>><<stress -4>><<tiredness 2>>
+	<<else>>
+		<<if ($mpTideChart or 0) gte 1>><<set $mpTideChart to ($mpTideChart or 1) - 1>><</if>>
+		<<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>>
+		<<mpalert 8>><<pain 3>><<stress 6>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<mpcalculateicon>><<link [[听音测算暗流 (0:18)|MP Fog Tide Pressure Relief]]>><<pass 18>>
+	<<if ($maths or 0) gte 280 and ($science or 0) gte 260>>
+		<<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 1)>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+		<<mpalert 6>><<stress -3>><<tiredness 3>>
+	<<else>>
+		<<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>>
+		<<mpalert 10>><<pain 4>><<stress 7>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<mpreadicon>><<link [[誊抄旧水尺表 (0:20)|MP Fog Tide Hub]]>><<pass 20>>
+	<<set $mpTideChart to ($mpTideChart or 0) + 1>>
+	<<tiredness 3>><<stress 2>>
+<</link>>
+
+:: MP Fog Tide Pressure Relief [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _subsidyCost to Math.round(400 * ($mpWorldPriceMod or 100) / 100)>>
+每一次用信标火光或水闸铅锤强行压退雾潮，被阻截的寒潮与物资消耗都会在镇子的另一头激起连锁反噬。此刻高街与码头的交界处人声嘈杂：灯油铺掌柜正因为鲸油断货而与马车夫争吵，港务巡逻队加派了双岗在栈桥口盘查过往行囊，狼街神殿的执事也在抱怨长明灯香油消耗过快。当前累积的反噬压力为 <<print ($mpFogPressure or 0)>>。
+<br><br>
+你站在街心石柱旁审视着四方的紧绷局势：
+<<if ($mpWorldPriceMod or 100) gt 100>>
+	在铁链封港后的高物价格局下，平抑油商与神殿香油缺口的补贴费用已按 <<print $mpWorldPriceMod>>% 调整为 £<<print (_subsidyCost / 100).toFixed(2)>>；
+<<elseif $mpWorldScheduleShortened>>
+	在钟声撤离后的短工时格局下，内城互助车队傍晚提前收班，疏通排水渠与搬运备用油桶更为紧迫；
+<<elseif $mpWorldFogMarketOpen>>
+	在灰雾暗市开埠的格局下，维斯的夜航暗桩随时可在栈桥外围配合引开巡哨；
+<<else>>
+	若放任反噬压力居高不下，不仅后续购买灯油与补给的开销会成倍增加，在码头与街巷活动时的初始警戒值也会节节攀升。
+<</if>>
+<br><br>
+你可以掏出 £<<print (_subsidyCost / 100).toFixed(2)>> 补贴商队运费、替油商从黑铁调车场搬运备用煤油桶来平抑物价；也可以趁着夜色在栈桥外围吹响引开巡哨的暗哨，帮维斯的人马把堆积在暗渠口的货箱疏散干净，从而把紧绷的警戒与反噬压力彻底降下来。
+<br><br>
+高街钟楼下的布告牌前围满了打听燃料与船期的街坊，油铺伙计正满头大汗地向排队的马车夫解释鲸油限购的缘由，而几名佩戴港务袖章的巡检员则在街角支起了临时路障，逐一核验进出港区的货箱封条。唯有拿出真金白银或实打实的力气活去疏通关节，才能让紧绷的四方势力重归平稳。
+<br><br>
+灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
+<br><br>
+<<getouticon>><<link [[返回调查分枢 (0:04)|MP Fog Tide Survey Hub]]>><<pass 4>><</link>>
+<br>
+<<shopicon>><<link [[垫资补贴油商 (0:15)|MP Fog Tide Hub]]>><<pass 15>>
+	<<if ($money or 0) gte _subsidyCost>>
+		<<set $money to ($money or 0) - _subsidyCost>>
+		<<set $mpFogPressure to Math.max(0, ($mpFogPressure or 0) - 2)>>
+		<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 3)>>
+		<<mpalert -8>><<stress -4>>
+	<<else>>
+		<<set $mpFogPressure to Math.max(0, ($mpFogPressure or 0) - 1)>>
+		<<tiredness 4>><<stress 4>>
+	<</if>>
+<</link>>
+<br>
+<<mpcarryicon>><<link [[扛运调车油桶 (0:22)|MP Fog Tide Hub]]>><<pass 22>>
+	<<if ($physique or 0) gte 8500 or ($athletics or 0) gte 230>>
+		<<set $mpFogPressure to Math.max(0, ($mpFogPressure or 0) - 2)>>
+		<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
+		<<mpalert -6>><<tiredness 4>><<stress -2>>
+	<<else>>
+		<<set $mpFogPressure to Math.max(0, ($mpFogPressure or 0) - 1)>>
+		<<pain 4>><<tiredness 5>><<stress 5>>
+	<</if>>
+<</link>>
+<br>
+<<sneakicon>><<link [[引开港务暗哨 (0:18)|MP Fog Tide Impact Patrol]]>><<pass 18>>
+	<<if ($skulduggery or 0) gte 240 or $mpWorldFogMarketOpen>>
+		<<set $mpFogPressure to Math.max(0, ($mpFogPressure or 0) - 2)>>
+		<<mpalert -10>><<stress -3>><<tiredness 2>>
+	<<else>>
+		<<mpalert 8>><<stress 6>><<tiredness 3>>
+	<</if>>
+<</link>>
+
+:: MP Fog Tide Impact Patrol [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _closeHour to ($mpWorldScheduleShortened ? 17 : 21)>>
+<<set _isAfterClose to (Time.hour gte _closeHour or Time.hour lt 7)>>
+灰白色的雾流像融化的铅水一般漫过商业街与森林边缘的鹅卵石路。由于当前雾潮刻度达到 <<print ($mpFogTide or 0)>>，加之<<if $mpWorldScheduleShortened>>钟声撤离后全镇低洼商铺已将打烊时辰提前至每日 <<print _closeHour>>:00（当前<<if _isAfterClose>>已进入撤离宵禁时段，街面铺门紧锁<<else>>尚在日间互助营业窗口<</if>>）<<else>>沿街铺面以 <<print _closeHour>>:00 为常规收摊界限<</if>>，平时叫卖热松饼与针线杂货的伙计们正忙着往门槛缝隙里塞防潮麻布袋。街角岗棚下，扎着高马尾的守夜人林恩正拿着记事板清点晚归的孤儿院学徒，神情比平日严肃得多。
+<br><br>
+「雾气里混了海底沼气，钟楼的报时声传不出两条街。」林恩见到你走近，抬手把一面备用铜锣递到你手里，「刚才有两辆从河湾农场送麦粉过来的板车在森林石桥口迷了方向，高街裁缝铺也有一名送货学徒没按点回孤儿院。你是打算跟我去街口维持秩序，还是去林道边把迷路的板车引出来？」
+<br><br>
+浓雾中不时传来马匹不安的响鼻与木轮碾过碎石的声响。协助林恩安抚商铺并找回迷途学徒，不仅能获得林恩的敬重与店家凑出的谢礼（若处于撤离后的提前打烊时段，行会互助站还会额外拨付津贴），还能顺带收集散落的防风物资；但若在浓雾中判断失误，你同样会被困在湿冷的死巷里消耗大量体力。
+<br><br>
+沿着被浓雾笼罩的排水明渠往里走，道路两侧的煤气路灯在湿冷空气中只剩下豆粒大小的昏黄光斑。守夜人吹响的巡街竹哨声在雾墙之间来回折射，唯有熟悉街巷肌理与林道走向的人，才能在这片白茫茫的迷障中替滞留的商贩与孤儿院学徒劈开一条安全的归途。
+<br><br>
+灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
+<br><br>
+<<getouticon>><<link [[返回调查分枢 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>>
+<br>
+<<mpwatchicon>><<link [[随林恩引板车 (0:20)|MP Fog Tide Hub]]>><<pass 20>>
+	<<if ($athletics or 0) gte 220 or ($willpower or 0) gte 400 or $mpWorldScheduleShortened>>
+		<<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 2)>>
+		<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
+		<<if $mpWorldScheduleShortened and _isAfterClose>>
+			<<money 300>><<mpalert -6>>
+		<</if>>
+		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_patrol_lin_rescue_v39")>>
+			<<money 500>>
+		<</if>>
+		<<stress -4>><<tiredness 3>>
+	<<else>>
+		<<pain 3>><<stress 6>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<caveicon "torch">><<link [[举火把清林障 (0:18)|MP Fog Tide Stage 2]]>><<pass 18>>
+	<<if ($tending or 0) gte 220 or ($physique or 0) gte 8000>>
+		<<set $mpTideChart to ($mpTideChart or 0) + 1>>
+		<<mplight 12>><<stress -3>><<tiredness 3>>
+	<<else>>
+		<<mplight -8>><<pain 4>><<stress 5>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<walkicon>><<link [[打探余波集市 (0:14)|MP Fog Tide Aftermath Market]]>><<pass 14>><<tiredness 1>><</link>>
+
+:: MP Fog Tide Crisis 7 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+防波堤外侧的警报铜钟在浓得化不开的灰雾中连续敲响了七下。海水夹杂着乳白色的寒瘴漫过外栈桥最顶层石阶，铸铁水尺上的浮标已经顶死在最高刻度。港务局执事、神殿净火修士、十二行会代表以及夜航船长维斯齐聚在雾角主塔下方的分流闸口前，火把的光芒在狂风中剧烈摇晃，照出一张张或紧绷或精于算计的脸庞。
+<br><br>
+「不能再犹豫了！」神殿修士高举纯银圣徽，声音嘶哑地喝道，「必须立刻拉起防波堤的三道生铁锁链彻底封港，并点燃全部净火池！哪怕断绝外海商路、让全城物价上涨，也绝不能放任灰雾漫进内城！」行会代表却连连摇头，主张敲响撤离钟声，将低洼街区的铺面与居民有序迁往高地，缩短每日营业时辰以保全元气。
+<br><br>
+而在人群外围的阴影里，维斯朝你递来一个意味深长的眼神：「封港会把所有穷苦船工活活饿死，撤离则会让半条街烂在泥水里。只要你肯帮我稳住水下分流闸，我们完全可以与这股雾潮议价——留出一条受控的灰雾航道，在旧港外围开辟雾中暗市。」三方目光同时落在了掌握水尺与折射镜核心参数的你身上，你的决断将永久改写这座城镇的格局。
+<br><br>
+狂风卷起的海浪一次次拍打在防波堤最高处的铜环上，飞溅的咸水将火把浇得滋滋作响。站在分流闸左侧的神殿修士们已经抬出了装满净火石脂的铜釜，准备随时封闭内港水道；站在右侧的行会账房与马车夫们则牵着驮满账册的挽马，焦急地等待着撤离钟声；而船坞暗渠方向，几艘涂着黑漆的快艇正随着暗流起伏。三股截然不同的力量在此交汇，每一次呼吸都能感受到满潮前夕山雨欲来的压迫感。
+<br><br>
+<<getouticon>><<link [[返回调查分枢 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>>
+<br>
+<<caveicon "torch">><<link [[拉起铁链封港 (0:25)|MP Fog Tide Ending Lockdown]]>><<pass 25>>
+	<<set $mpWorldFogOutcome to "lockdown">>
+	<<set $mpWorldPriceMod to 135>>
+	<<set $mpWorldScheduleShortened to 0>>
+	<<set $mpWorldFogMarketOpen to 0>>
+	<<set $mpFogTide to 1>>
+	<<set $mpFogPressure to 0>>
+	<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 8)>>
+	<<mpalertclear>>
+<</link>>
+<br>
+<<walkicon>><<link [[敲钟组织撤离 (0:25)|MP Fog Tide Ending Evacuate]]>><<pass 25>>
+	<<set $mpWorldFogOutcome to "evacuate">>
+	<<set $mpWorldScheduleShortened to 1>>
+	<<set $mpWorldPriceMod to 100>>
+	<<set $mpWorldFogMarketOpen to 0>>
+	<<set $mpFogTide to 2>>
+	<<set $mpFogPressure to 0>>
+	<<stress -6>>
+<</link>>
+<br>
+<<sneakicon>><<link [[调控水闸议价 (0:25)|MP Fog Tide Ending Bargain]]>><<pass 25>>
+	<<set $mpWorldFogOutcome to "bargain">>
+	<<set $mpWorldFogMarketOpen to 1>>
+	<<set $mpWorldPriceMod to 100>>
+	<<set $mpWorldScheduleShortened to 0>>
+	<<set $mpFogTide to 4>>
+	<<set $mpFogPressure to 1>>
+<</link>>
+
+:: MP Fog Tide Ending Lockdown [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+随着你扳下防波堤主绞盘的制动铁栓，三条碗口粗的生铁拦海链在震耳欲聋的金属轰鸣声中横贯整座港湾入口，将外海翻涌的灰雾巨浪死死挡在防波堤之外。神殿修士们齐声吟唱着古礼拜词，将整桶整桶的高纯度鲸油倾入沿岸的十二座青铜净火池。冲天而起的金色火墙照亮了半边夜空，盘踞在栈桥与高街排水渠里的乳白寒瘴在炙热气流烘烤下迅速消散。
+<br><br>
+当黎明的第一缕阳光重新刺破云层照在青石板路上时，持续多日的浓雾危机终于宣告解除。然而铁链封港的不可逆后果也随之浮现：所有外海商船与夜间驳船一律不得进出内港，城内杂货、船材与防风鲸油的日常售价自此永久上浮三成半（`$mpWorldPriceMod` 设为 135%）；但与此同时，港务巡逻队与神殿守卫彻底接管了防波堤，夜间街巷与码头的治安大幅改善，再无迷途野兽或暗潮怪影敢靠近内城半步。
+<br><br>
+神殿执事郑重地向你颔首致意，将一枚镌刻着净火纹章的纯银纪念章与教会补贴交到你手中；不远处的维斯则无奈地摇了摇头，收起航海图退入了暗巷深处。
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_tide_ending_lockdown_v39")>>
+	<<money 1500>>
+	<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+<</if>>
+<<stress -10>><<trauma -6>>
+<br><br>
+从防波堤顶端俯瞰下去，三道横跨海湾的生铁巨链在净火映照下宛如赤红的铁墙，将外海翻腾的灰雾彻底隔绝在港湾之外。栈桥上的积水被烘得干干净净，穿行在梅尔街与高街之间的商贩虽然对飞涨的鲸油与进口船材价格颇有微词，却也不得不承认夜间再无怪影与劫匪滋扰。神殿与港务局联合签发的戒严告示贴满了每一处街角，整座城镇在铁腕封锁下展现出一种昂贵却井然有序的安宁。
+<br><br>
+灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
+<br><br>
+<<getouticon>><<link [[返回雾潮总枢 (0:05)|MP Fog Tide Hub]]>><<pass 5>><</link>>
+<br>
+<<shopicon>><<link [[查看配给哨站 (0:12)|MP Fog Tide Aftermath Market]]>><<pass 12>><</link>>
+<br>
+<<docksicon>><<link [[转赴码头深区 (0:10)|MP Deep Locations Directory]]>><<pass 10>><</link>>
+
+:: MP Fog Tide Ending Evacuate [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+你接过行会执事递来的黄铜信号槌，登上海岸钟楼用力敲响了三长两短的避险钟声。低沉而急促的钟鸣穿透层层叠叠的灰雾传遍全镇，早有准备的守夜人林恩与马厩车夫们立刻赶着敞篷大马车驶入梅尔街、康努达图斯街等低洼街区，协助沿街商铺掌柜将珍贵布匹、面粉与药材装车转移，并护送孤儿院的年幼院童退往地势高耸的宅邸街与神殿回廊。
+<br><br>
+在随后的几个昼夜里，失去了人气与炉火扰动的低洼外港任由灰雾自由漫过又自然退去，没有造成任何人员伤亡。但这场大规模内迁也永久改变了城镇的日常作息（`$mpWorldScheduleShortened` 已生效）：从今往后，临海与低洼街区的商铺及港区白班每逢傍晚便会提前歇业落锁，镇民与NPC的外出日程普遍缩短，入夜后的外街显得格外空旷冷清；作为补偿，行会与神殿在孤儿院及高街设立了常驻的互助配给站，日间向留守者提供平价热食与防寒草药。
+<br><br>
+林恩与行会代表在钟楼石阶前向你郑重道谢，将一份装有行会互助金的皮囊与备用防风灯油塞进你怀中。
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_tide_ending_evacuate_v39")>>
+	<<money 1200>>
+	<<set $mpLanternOil to ($mpLanternOil or 0) + 2>>
+<</if>>
+<<stress -12>><<trauma -6>>
+<br><br>
+随着低洼街区的铺面陆续迁往内城高地，昔日喧嚣的临海长街在暮色中显得格外静谧，唯有海水漫过空旷石阶的哗啦声在雾中回荡。而在地势高耸的宅邸街与神殿外院，新搭起的防风油布棚连成一片，烘烤黑麦面包的麦香与熬煮甘菊草药的苦香交织在一起。虽然商铺缩短了每日开门迎客的时辰，但街坊邻里之间久违的互助温情却在寒雾中悄然生根。
+<br><br>
+灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
+<br><br>
+<<getouticon>><<link [[返回雾潮总枢 (0:05)|MP Fog Tide Hub]]>><<pass 5>><</link>>
+<br>
+<<shopicon>><<link [[领取互助配给 (0:12)|MP Fog Tide Aftermath Market]]>><<pass 12>><</link>>
+<br>
+<<docksicon>><<link [[巡视退潮栈桥 (0:10)|MP Deep Locations Directory]]>><<pass 10>><</link>>
+
+:: MP Fog Tide Ending Bargain [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+你没有理会神殿修士封港的呵斥，而是按照塞拉测算的潮汐谐振刻度，与维斯一左一右扳动了水下分流闸的半开齿轮。防波堤下方的三道暗渠同时激起巨大的漩涡，原本即将漫上高街的失控浓雾像是被无形的河床束缚住了一般，沿着外栈桥与海蚀回音廊之间形成了一条常年不散却边界分明的“灰雾航道”。
+<br><br>
+这一大胆的举动彻底改写了旧港的生存法则（`$mpWorldFogMarketOpen` 已生效）。浓雾既未吞没内城，也没有完全消散，而是成为了天然的隐蔽屏障：每当暮色降临，悬挂着牛角风灯的走私快艇、深林采药人与异域货商便会借着灰雾掩护在三号防波堤下聚拢，形成了一座不受港务税吏与贝利眼线管辖的“雾中暗市”。虽然夜间外港的诡秘奇遇与警戒风险随之升高，但无论是可重复出手封存暗货、搜集海外古物，还是在码头深区承接高薪夜航，都迎来了前所未有的丰厚回报。
+<br><br>
+维斯站在雾气缭绕的船头向你抛来一枚刻着双锚纹章的黄铜通行币，眼底满是赞许。
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_tide_ending_bargain_v39")>>
+	<<money 1800>>
+	<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+<</if>>
+<<set $mpNpcs.vesper.trust to Math.min(100, ($mpNpcs.vesper.trust or 0) + 5)>>
+<<stress -8>>
+<br><br>
+防波堤下方的三道分流暗渠在半开状态下发出低沉而富有韵律的轰鸣，乳白色的海雾顺着人为约束的水道蜿蜒流转，在三号栈桥外侧织出一道天然的隐形帷幕。白昼里，内城商铺与高街钟楼依旧沐浴在清朗天光之下；而一旦夜幕低垂，提着绿漆牛角灯的夜航船与神秘货商便会从雾道深处鱼贯而出，在跳板与暗桩之间展开一桩桩不入官册的隐秘交易。
+<br><br>
+灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
+<br><br>
+<<getouticon>><<link [[返回雾潮总枢 (0:05)|MP Fog Tide Hub]]>><<pass 5>><</link>>
+<br>
+<<keepsakeicon>><<link [[步入雾中暗市 (0:12)|MP Fog Tide Aftermath Market]]>><<pass 12>><</link>>
+<br>
+<<docksicon>><<link [[调度夜航船坞 (0:10)|MP Deep Locations Directory]]>><<pass 10>><</link>>
+
+:: MP Fog Tide Aftermath Market [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set _supplyCost to Math.round(350 * ($mpWorldPriceMod or 100) / 100)>>
+<<if $mpWorldScheduleShortened and Time.hour gte 7 and Time.hour lt 18>>
+	<<set _supplyCost to Math.max(200, _supplyCost - 100)>>
+<</if>>
+<<set _dayStallOpen to ($mpWorldScheduleShortened ? (Time.hour gte 7 and Time.hour lt 18) : (Time.hour gte 6 and Time.hour lt 22))>>
+你穿过石拱廊来到防波堤内侧的集散空地。经历过雾潮的洗礼后，这片昔日普通的卸货坪已完全随你的抉断演变成了截然不同的世界格局：
+<br><br>
+<<if ($mpWorldPriceMod or 100) gt 100 or $mpWorldFogOutcome is "lockdown">>
+	【封港配给哨（物价指数 <<print ($mpWorldPriceMod or 135)>>%）】：生铁拦海链在港湾口拉出森严的封锁线，港务哨兵与神殿净火执事在岗亭前按册核查。由于外海航线断绝，这里的防风鲸油与热食补给包按封港高价 £<<print (_supplyCost / 100).toFixed(2)>> 结算，但每次采购均可获神殿净火祝圣，额外降低街头警戒。
+<<elseif $mpWorldScheduleShortened or $mpWorldFogOutcome is "evacuate">>
+	【内迁互助帐篷（营业窗口 07:00–18:00）】：周边低洼铺面早已提前落锁，行会与孤儿院联合搭起了互助帐篷。<<if _dayStallOpen>>当前正值日间互助开放时段，补给包享受行会补贴价 £<<print (_supplyCost / 100).toFixed(2)>>；<<else>>当前已过 18:00 撤离宵禁钟点，常规商摊已收摊歇业，仅留守夜火盆供留守者分拣物资换油。<</if>>
+<<elseif $mpWorldFogMarketOpen or $mpWorldFogOutcome is "bargain">>
+	【防波堤雾中暗市（全天常驻开埠）】：乳白色的受控雾带笼罩着三号栈桥，十余盏绿漆牛角暗灯照亮了隐秘摊位。由于暗市已彻底打通，你随时可在此高价出手封存暗货（每份 £14.00），或用现钱直接向远洋水手重复淘换未鉴定古物与走私货包！
+<<else>>
+	【临时栈桥货棚（终局未定）】：目前雾潮尚未迎来最终定局，栈桥边的临时货棚里聚满了忧心忡忡的船工与小贩，常规防风鲸油与热食补给售价为 £<<print (_supplyCost / 100).toFixed(2)>>。
+<</if>>
+<br><br>
+防波堤内侧的青石坪上，海风裹挟着炭火、咸鱼与防水桐油的气息在各个棚屋之间回荡。来来往往的水手、账房与披着厚斗篷的买主们踩着湿滑的石板路，低声交换着关于潮位、物价与夜间航道的最新风声。每一座货棚檐下悬挂的铜铃都在风中轻轻摇晃，时刻验证着封港、撤离或议价对这座海岸城镇的深远影响。
+<br><br>
+灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
+<br><br>
+<<getouticon>><<link [[返回雾潮总枢 (0:04)|MP Fog Tide Hub]]>><<pass 4>><</link>>
+<br>
+<<keepsakeicon>><<link [[暗市交割暗货 (0:15)|MP Fog Tide Hub]]>><<pass 15>>
+	<<if $mpWorldFogMarketOpen and ($mpContrabandSealed or 0) gte 1>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 1) - 1>>
+		<<money 1400>><<mpalert 4>><<stress -4>>
+	<<elseif $mpWorldFogMarketOpen and ($money or 0) gte 600>>
+		<<set $money to ($money or 0) - 600>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+		<<mpalert 5>><<stress -3>>
+	<<else>>
+		<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
+		<<tiredness 3>><<stress 2>>
+	<</if>>
+<</link>>
+<br>
+<<shopicon>><<link [[采购鲸油补给 (0:15)|MP Fog Tide Hub]]>><<pass 15>>
+	<<if ($money or 0) gte _supplyCost and _dayStallOpen>>
+		<<set $money to ($money or 0) - _supplyCost>>
+		<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
+		<<if ($mpWorldPriceMod or 100) gt 100>><<mpalert -6>><</if>>
+		<<stress -6>><<tiredness -3>>
+	<<else>>
+		<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
+		<<tiredness 3>><<stress 2>>
+	<</if>>
+<</link>>
+<br>
+<<mpreadicon>><<link [[核对海图换表 (0:16)|MP Fog Tide Lever Sounding]]>><<pass 16>>
+	<<set $mpTideChart to ($mpTideChart or 0) + 1>>
+	<<tiredness 2>><<stress -2>>
+<</link>>
+<br>
+<<link [[直抵码头深区 (0:08)|MP Deep Locations Directory]]>><<pass 8>><</link>>

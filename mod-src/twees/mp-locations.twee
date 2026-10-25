@@ -77,7 +77,7 @@
 	<<unset $mpForceCombatEnd>>
 	<span id="next"><<walkicon>><<link [[继续|MP Native Combat Finish]]>><<set $eventskip to 1>><</link>></span><<nexttext>>
 <<else>>
-	<span id="next"><<link [[继续|MP Native Combat]]>><</link>></span><<nexttext>>
+	<<mprepairicon>><span id="next"><<link [[继续|MP Native Combat]]>><</link>></span><<nexttext>>
 <</if>>
 
 :: MP Native Combat Finish [nobr]
@@ -195,9 +195,23 @@
 	你走到<<print ($mpInteractTargetName or "同伴")>>附近。<<He>>转头打量了你一眼，目光带着几分初识的审视与拘谨，礼貌地朝你点头。
 <</if>>
 <br><br>
-<<getouticon>><<link [[离开|_exitPas]]>><<set $eventskip to 1>><<endevent>><</link>>
+<<getouticon>><<link [[离开此地 (0:01)|_exitPas]]>><<pass 1>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<walkicon>><<link [[一起出门 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<run window.dolmp && window.dolmp.sendMeetFromInteract && window.dolmp.sendMeetFromInteract()>><</link>>
+<br>
+<<mpfirstaidicon>><<link [[日常温存 (0:01)|MP Player Interact Daily]]>><<pass 1>><</link>>
+<br>
+<<loveicon>><<link [[照料邀约 (0:01)|MP Player Interact Dates]]>><<pass 1>><</link>>
+<br>
+<<link [[耳语抚触 (0:01)|MP Player Interact Intimate]]>><<pass 1>><</link>>
+
+:: MP Player Interact Daily [nobr]
+<<effects>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>><<generateNPC 1 "a" _mpOppPronoun _mpOppGender>><<person1>><</if>>
+你与<<print ($mpInteractTargetName or "同伴")>>并肩坐下，享受片刻安宁的闲暇。
+<br><br>
+<<getouticon>><<link [[返回同伴身边 (0:01)|MP Player Interact]]>><<pass 1>><</link>>
 <br>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("chat")>>
 	<<socialiseicon>><<link [[促膝交谈 (0:08)|MP Player Interact Chat]]>><<pass 8>><<stress -6>><<trauma -3>><</link>><<lstress>><<ltrauma>><<glove>>
@@ -207,9 +221,13 @@
 	<<bedicon>><<link [[依偎休息 (0:20)|MP Player Interact Rest]]>><<pass 20>><<tiredness -4>><<stress -6>><</link>><<ltiredness>><<lstress>><<glove>>
 	<br>
 <</if>>
-<<link [[照料邀约 (0:01)|MP Player Interact Dates]]>><<pass 1>><</link>>
-<br>
-<<link [[耳语抚触 (0:01)|MP Player Interact Intimate]]>><<pass 1>><</link>>
+<<if !window.dolmp || window.dolmp.canDoDailyInteract("snack")>>
+	<<foodicon>><<link [[分享饮品 (0:12)|MP Player Interact Snack]]>><<pass 12>><<stress -8>><<tiredness -3>><</link>><<lstress>><<ltiredness>><<glove>>
+	<br>
+<</if>>
+<<if !window.dolmp || window.dolmp.canDoDailyInteract("care")>>
+	<<link [[替<<him>>整装 (0:04)|MP Player Interact Care]]>><<pass 4>><<pain -8>><<stress -5>><</link>><<lpain>><<lstress>><<glove>>
+<</if>>
 
 :: MP Player Interact Dates [nobr]
 <<effects>>
@@ -229,30 +247,38 @@
 	<br>只要待在彼此身边，镇上的风雨便显得不再那么难熬。
 <</if>>
 <br><br>
-<<getouticon>><<link [[返回同伴 (0:01)|MP Player Interact]]>><<pass 1>><</link>>
+<<getouticon>><<link [[返回同伴身边 (0:01)|MP Player Interact]]>><<pass 1>><</link>>
 <br>
-<<if !window.dolmp || window.dolmp.canDoDailyInteract("snack")>>
-	<<foodicon>><<link [[分享饮品 (0:12)|MP Player Interact Snack]]>><<pass 12>><<stress -8>><<tiredness -3>><</link>><<lstress>><<ltiredness>><<glove>>
-	<br>
-<</if>>
-<<if !window.dolmp || window.dolmp.canDoDailyInteract("care")>>
-	<<link [[替<<him>>整装 (0:04)|MP Player Interact Care]]>><<pass 4>><<pain -8>><<stress -5>><</link>><<lpain>><<lstress>><<glove>>
-	<br>
-<</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("jealous_ask")>>
-	<<link [[追问<<his>>行踪 (0:04)|MP Player Interact JealousAsk]]>><<pass 4>><<arousal 400>><</link>><<garousal>>
+	<<mpeavesdropicon>><<link [[追问<<his>>行踪 (0:04)|MP Player Interact JealousAsk]]>><<pass 4>><<arousal 400>><</link>><<garousal>>
 	<br>
 <</if>>
 <<if _mpRelJealousy gte 10 and (!window.dolmp || window.dolmp.canDoDailyInteract("jealous_calm"))>>
-	<<link [[安抚<<his>>情绪 (0:07)|MP Player Interact JealousCalm]]>><<pass 7>><<stress -6>><<trauma -2>><</link>><<lstress>><<ltrauma>><<glove>>
+	<<mphearticon>><<link [[安抚<<his>>情绪 (0:07)|MP Player Interact JealousCalm]]>><<pass 7>><<stress -6>><<trauma -2>><</link>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
+<<mpswimicon>><<link [[心意与同游 (0:01)|MP Player Interact Dates Outing]]>><<pass 1>><</link>>
+<br>
+<<link [[晚间与私语 (0:01)|MP Player Interact Dates Night]]>><<pass 1>><</link>>
+
+:: MP Player Interact Dates Outing [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas is "Orphanage Intro" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Orphanage">>
+<</if>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>><<generateNPC 1 "a" _mpOppPronoun _mpOppGender>><<person1>><</if>>
+你牵起<<print ($mpInteractTargetName or "同伴")>>的手，倾诉心意或是相约漫步。
+<br><br>
+<<getouticon>><<link [[返回照料邀约 (0:01)|MP Player Interact Dates]]>><<pass 1>><</link>>
+<br>
 <<if $harpy gte 6 and (!window.dolmp || window.dolmp.canDoDailyInteract("sing"))>>
-	<<link [[展喉轻唱 (0:06)|MP Player Interact Sing]]>><<pass 6>><<tiredness 2>><<stress -8>><<trauma -4>><</link>><<harpy>><<gtiredness>><<lstress>><<ltrauma>><<glove>>
+	<<socialiseicon>><<link [[展喉轻唱 (0:06)|MP Player Interact Sing]]>><<pass 6>><<tiredness 2>><<stress -8>><<trauma -4>><</link>><<harpy>><<gtiredness>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
 <<if ($wolfgirl gte 6 or $cat gte 6 or $fox gte 6 or $cow gte 6) and (!window.dolmp || window.dolmp.canDoDailyInteract("nuzzle"))>>
-	<<link [[蹭<<him>>耳朵 (0:03)|MP Player Interact Nuzzle]]>><<pass 3>><<stress -6>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
+	<<mpanimalicon>><<link [[蹭<<him>>耳朵 (0:03)|MP Player Interact Nuzzle]]>><<pass 3>><<stress -6>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
 	<br>
 <</if>>
 <<if (_mpRelStage is "stranger" or _mpRelStage is "friend" or _mpRelStage is "crush") and _mpRelLove gte 25>>
@@ -260,34 +286,61 @@
 	<br>
 <</if>>
 <<if _mpRelStage is "lover" and _mpRelLove gte 60>>
-	<<gifticon>><<link [[替<<him>>戴挂坠 (0:16)|MP Romance Vow]]>><<pass 16>><<stress -18>><<trauma -12>><</link>><<lstress>><<ltrauma>><<glove>>
-	<br>
+	<<link [[替<<him>>戴挂坠 (0:16)|MP Romance Vow]]>><<pass 16>><<stress -18>><<trauma -12>><</link>><<lstress>><<ltrauma>><<glove>>
 <</if>>
+
+:: MP Player Interact Dates Night [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas is "Orphanage Intro" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Orphanage">>
+<</if>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>><<generateNPC 1 "a" _mpOppPronoun _mpOppGender>><<person1>><</if>>
+你望向窗外的天色，盘算着与<<print ($mpInteractTargetName or "同伴")>>外出约会或独处。
+<br><br>
+<<getouticon>><<link [[返回照料邀约 (0:01)|MP Player Interact Dates]]>><<pass 1>><</link>>
+<br>
 <<if _mpRelLove gte 15 or _mpRelStage is "lover" or _mpRelStage is "soulmate">>
 	<<if ($location is "beach" or $location is "sea" or _exitPas is "Beach" or _exitPas is "Starfish Street") and (!$daily or !$daily.mpDateBeach)>>
-		<<link [[漫步海滩 (0:35)|MP Date Beach]]>><<set $daily.mpDateBeach to 1>><<pass 35>><<stress -12>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
+		<<beachicon>><<link [[漫步海滩 (0:35)|MP Date Beach]]>><<set $daily.mpDateBeach to 1>><<pass 35>><<stress -12>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
 		<br>
 	<</if>>
 	<<if ($location is "park" or $location is "town" or _exitPas is "Park") and (!$daily or !$daily.mpDatePark)>>
-		<<link [[共度时光 (0:30)|MP Date Park]]>><<set $daily.mpDatePark to 1>><<pass 30>><<stress -12>><<trauma -5>><</link>><<lstress>><<ltrauma>><<glove>>
+		<<parkicon>><<link [[共度时光 (0:30)|MP Date Park]]>><<set $daily.mpDatePark to 1>><<pass 30>><<stress -12>><<trauma -5>><</link>><<lstress>><<ltrauma>><<glove>>
 		<br>
 	<</if>>
+<</if>>
+<<mpdrinkicon>><<link [[晚间与独处 (0:01)|MP Player Interact Dates Late]]>><<pass 1>><</link>>
+
+:: MP Player Interact Dates Late [nobr]
+<<effects>>
+<<set _exitPas to ($mpReturnPassage or "Orphanage")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas is "Orphanage Intro" or _exitPas.startsWith("MP ")>>
+	<<set _exitPas to "Orphanage">>
+<</if>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>><<generateNPC 1 "a" _mpOppPronoun _mpOppGender>><<person1>><</if>>
+夜色渐深，你与<<print ($mpInteractTargetName or "同伴")>>挨在一起低语。
+<br><br>
+<<getouticon>><<link [[返回同伴邀约 (0:01)|MP Player Interact Dates Night]]>><<pass 1>><</link>>
+<br>
+<<if _mpRelLove gte 15 or _mpRelStage is "lover" or _mpRelStage is "soulmate">>
 	<<if (Time.hour gte 17 or Time.dayState is "dusk" or Time.dayState is "night") and (!$daily or !$daily.mpDateDinner)>>
-		<<link [[共进晚餐 (0:50)|MP Date Dinner]]>><<set $daily.mpDateDinner to 1>><<pass 50>><<stress -15>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
+		<<mpdrinkicon>><<link [[共进晚餐 (0:50)|MP Date Dinner]]>><<set $daily.mpDateDinner to 1>><<pass 50>><<stress -15>><<trauma -6>><</link>><<lstress>><<ltrauma>><<glove>>
 		<br>
 	<</if>>
 	<<if ($location is "home" or _exitPas is "Orphanage" or _exitPas is "Bedroom" or Time.dayState is "night") and (!$daily or !$daily.mpLoverSleepover)>>
-		<<link [[相拥同眠 (0:40)|MP Lover Sleepover]]>><<set $daily.mpLoverSleepover to 1>><<pass 40>><<tiredness -12>><<stress -15>><<trauma -8>><</link>><<ltiredness>><<lstress>><<ltrauma>><<glove>>
+		<<bedicon>><<link [[相拥同眠 (0:40)|MP Lover Sleepover]]>><<set $daily.mpLoverSleepover to 1>><<pass 40>><<tiredness -12>><<stress -15>><<trauma -8>><</link>><<ltiredness>><<lstress>><<ltrauma>><<glove>>
 		<br>
 	<</if>>
 <</if>>
 <<if _mpRelJealousy gte 20 and (!$daily or !$daily.mpJealousyScene)>>
-	<<link [[堵住<<him>>逼问 (0:08)|MP Lover Jealousy Scene]]>><<set $daily.mpJealousyScene to 1>><<pass 8>><</link>><<garousal>>
+	<<fisticon>><<link [[堵住<<him>>逼问 (0:08)|MP Lover Jealousy Scene]]>><<set $daily.mpJealousyScene to 1>><<pass 8>><</link>><<garousal>>
 	<br>
 <</if>>
 <<if ($location is "temple" or _exitPas is "Temple" or _exitPas is "Wolf Street" or _mpRelCorruption gte 20) and (!$daily or !$daily.mpCorruptScene)>>
 	<<link [[走进隔间 (0:14)|MP Lover Corrupt Scene]]>><<set $daily.mpCorruptScene to 1>><<pass 14>><</link>>
-	<br>
 <</if>>
 
 :: MP Player Interact Intimate [nobr]
@@ -320,34 +373,54 @@
 	<br>
 <</if>>
 <<if ($demon gte 6 or $angel gte 6 or $fallenangel gte 2) and (!window.dolmp || window.dolmp.canDoDailyInteract("wing_tease"))>>
-	<<investigateicon>><<link [[轻拢<<him>> (0:04)|MP Player Interact WingTease]]>><<pass 4>><<stress -6>><<arousal 1000>><</link>><<lstress>><<glove>><<garousal>>
+	<<mphearticon>><<link [[轻拢<<him>> (0:04)|MP Player Interact WingTease]]>><<pass 4>><<stress -6>><<arousal 1000>><</link>><<lstress>><<glove>><<garousal>>
 	<br>
 <</if>>
+<<link [[贴近温存 (0:01)|MP Player Interact Intimate Deep]]>><<pass 1>><</link>>
+
+:: MP Player Interact Intimate Deep [nobr]
+<<effects>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>><<generateNPC 1 "a" _mpOppPronoun _mpOppGender>><<person1>><</if>>
+四周的光影半掩着你们的身影，彼此的呼吸愈发灼热。
+<br><br>
+<<getouticon>><<link [[返回耳语抚触 (0:01)|MP Player Interact Intimate]]>><<pass 1>><</link>>
+<br>
 <<if (hasSexStat("promiscuity", 2) or $promiscuity gte 15 or _mpRelLove gte 18) and (!window.dolmp || window.dolmp.canDoDailyInteract("bath"))>>
-	<<link [[共浴擦身 (0:25)|MP Player Interact Bath]]>><<pass 25>><<stress -10>><<tiredness -6>><<arousal 1200>><</link>><<promiscuous2>><<lstress>><<ltiredness>><<glove>><<garousal>>
+	<<bathroomicon>><<link [[共浴擦身 (0:25)|MP Player Interact Bath]]>><<pass 25>><<stress -10>><<tiredness -6>><<arousal 1200>><</link>><<promiscuous2>><<lstress>><<ltiredness>><<glove>><<garousal>>
 	<br>
 <</if>>
 <<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelStage is "lover" or _mpRelStage is "soulmate") and (!window.dolmp || window.dolmp.canDoDailyInteract("whisper_lewd"))>>
-	<<link [[贴耳低语 (0:06)|MP Player Interact WhisperLewd]]>><<pass 6>><<arousal 1400>><<stress -4>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
+	<<mpeavesdropicon>><<link [[贴耳低语 (0:06)|MP Player Interact WhisperLewd]]>><<pass 6>><<arousal 1400>><<stress -4>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
 	<br>
 <</if>>
 <<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelStage is "lover" or _mpRelStage is "soulmate") and (!window.dolmp || window.dolmp.canDoDailyInteract("expose_tease"))>>
-	<<link [[掀衣诱惑<<him>> (0:02)|MP Player Interact ExposeTease]]>><<pass 2>><<arousal 1300>><</link>><<exhibitionist2>><<ggarousal>>
+	<<wardrobeicon>><<link [[掀衣诱惑<<him>> (0:02)|MP Player Interact ExposeTease]]>><<pass 2>><<arousal 1300>><</link>><<exhibitionist2>><<ggarousal>>
 	<br>
 <</if>>
+<<link [[隐秘欢愉 (0:01)|MP Player Interact Intimate Secret]]>><<pass 1>><</link>>
+
+:: MP Player Interact Intimate Secret [nobr]
+<<effects>>
+<<run window.dolmp && window.dolmp.prepareInteractVars && window.dolmp.prepareInteractVars()>>
+<<if !$pronoun>><<generateNPC 1 "a" _mpOppPronoun _mpOppGender>><<person1>><</if>>
+你在背光处揽住<<print ($mpInteractTargetName or "同伴")>>，指尖压住衣扣边缘。
+<br><br>
+<<getouticon>><<link [[返回贴近温存 (0:01)|MP Player Interact Intimate Deep]]>><<pass 1>><</link>>
+<br>
 <<if (hasSexStat("promiscuity", 3) or $promiscuity gte 35 or _mpRelCorruption gte 20) and (!window.dolmp || window.dolmp.canDoDailyInteract("sex_toys"))>>
-	<<link [[取出道具 (0:14)|MP Player Interact Toys]]>><<pass 14>><<arousal 1800>><<stress -6>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
+	<<sextoysicon>><<link [[取出道具 (0:14)|MP Player Interact Toys]]>><<pass 14>><<arousal 1800>><<stress -6>><</link>><<promiscuous3>><<lstress>><<ggarousal>>
 	<br>
 <</if>>
 <<if (hasSexStat("promiscuity", 4) or $promiscuity gte 55 or _mpRelCorruption gte 30) and (!window.dolmp || window.dolmp.canDoDailyInteract("sub"))>>
-	<<link [[俯身凑近 (0:12)|MP Player Interact Sub]]>><<pass 12>><<arousal 2000>><<stress -6>><</link>><<promiscuous4>><<lstress>><<ggarousal>>
+	<<brothelicon>><<link [[俯身凑近 (0:12)|MP Player Interact Sub]]>><<pass 12>><<arousal 2000>><<stress -6>><</link>><<promiscuous4>><<lstress>><<ggarousal>>
 	<br>
 <</if>>
 <<if ($cow gte 4 or $lactating is 1 or $demon gte 4 or hasSexStat("promiscuity", 4) or $promiscuity gte 55) and (!window.dolmp || window.dolmp.canDoDailyInteract("lactate"))>>
-	<<link [[喂哺<<him>> (0:09)|MP Player Interact Lactate]]>><<pass 9>><<arousal 1800>><<stress -8>><<trauma -4>><</link>><<promiscuous4>><<lstress>><<ltrauma>><<glove>><<ggarousal>>
+	<<mpdrinkicon>><<link [[喂哺<<him>> (0:09)|MP Player Interact Lactate]]>><<pass 9>><<arousal 1800>><<stress -8>><<trauma -4>><</link>><<promiscuous4>><<lstress>><<ltrauma>><<glove>><<ggarousal>>
 	<br>
 <</if>>
-<<link [[拥抱爱抚|MP Player Interact Consensual]]>><</link>><<promiscuous1>><<glove>><<garousal>>
+<<link [[拥抱爱抚 (0:05)|MP Player Interact Consensual]]>><<pass 5>><</link>><<promiscuous1>><<glove>><<garousal>>
 
 :: MP Player Interact Chat [nobr]
 <<effects>>
@@ -532,7 +605,7 @@
 <</if>>
 随着你指腹的深入摩挲，<<He>>浑身猛地一颤，死死咬住手背才没叫出声来，双腿发软地靠在你怀里，贴身内衣已被分泌出的体液彻底浸透，连耳根都烧得通红。
 <br><br>
-<<socialiseicon>><<link [[整理衣角|MP Player Interact]]>><</link>>
+<<mptailoricon>><<link [[整理衣角|MP Player Interact]]>><</link>>
 <br>
 <<brothelicon>><<link [[拉<<him>>进暗处|MP Player Interact Consensual]]>><</link>><<promiscuous3>>
 
@@ -591,7 +664,7 @@
 你双手扶住<<print ($mpInteractTargetName or "同伴")>>颤抖的大腿根，将头埋得更深，舌尖连续不断地刮擦吮吸着最敏感的部位。伴随着一声压在喉咙里的低吼，<<he>>的腰肢猛地向上挺起，滚烫浓稠的体液尽数射在你的舌尖与口腔深处。你顺从地将其咽下，抬起湿漉漉的眼眸望向<<him>>。
 <<run window.dolmp && window.dolmp.notifyInteractEffect && window.dolmp.notifyInteractEffect("sub_climax", 5, -10, -4, 0, 2500, "用口舌侍奉令你攀上绝顶高潮，并咽下了全部体液", { love: 1, lust: 2, corruption: 1, trust: 1 })>>
 <br><br>
-<<socialiseicon>><<link [[替<<him>>穿衣|MP Player Interact]]>><</link>>
+<<mptailoricon>><<link [[替<<him>>穿衣|MP Player Interact]]>><</link>>
 
 :: MP Player Interact Lactate [nobr]
 <<effects>>
@@ -602,7 +675,7 @@
 <br><br>
 <<mpcarryicon>><<link [[抱紧<<him>>深入|MP Player Interact Consensual]]>><</link>><<promiscuous4>>
 <br>
-<<socialiseicon>><<link [[整理衣襟|MP Player Interact]]>><</link>>
+<<mptailoricon>><<link [[整理衣襟|MP Player Interact]]>><</link>>
 
 :: MP Player Interact Sing [nobr]
 <<effects>>
@@ -757,7 +830,7 @@
 <<person1>>
 你与<<print ($mpInteractTargetName or "恋人")>>来到公园深处静谧的郁金香花圃与树桩旁。阳光透过婆娑的树叶洒下斑驳的光影，<<he>>正坐在树桩旁拿着铅笔在速写本上认真地画着什么，一见到你便耳根通红地想要合上本子。
 <br><br>
-<<socialiseicon>><<link [[看<<his>>速写本 (0:08)|MP Date Park Sketch]]>><<pass 8>><<stress -8>><</link>><<lstress>><<glove>>
+<<mpmapicon>><<link [[看<<his>>速写本 (0:08)|MP Date Park Sketch]]>><<pass 8>><<stress -8>><</link>><<lstress>><<glove>>
 <br>
 <<foodicon>><<link [[喂<<him>>草莓 (0:06)|MP Date Park Feed]]>><<pass 6>><<stress -10>><<trauma -4>><<arousal 500>><</link>><<lstress>><<ltrauma>><<glove>>
 <br>
@@ -883,7 +956,7 @@
 <br><br>
 <<loveicon>><<link [[环<<his>>颈低语 (0:04)|MP Lover Jealousy Soothe]]>><<pass 4>><<stress -6>><<sub 1>><</link>><<lstress>><<glove>>
 <br>
-<<investigateicon>><<link [[让<<him>>咬下印记 (0:06)|MP Lover Jealousy Kiss]]>><<pass 6>><<arousal 1500>><<pain 4>><</link>><<promiscuous2>><<gpain>><<ggarousal>>
+<<crimeicon "mark">><<link [[让<<him>>咬下印记 (0:06)|MP Lover Jealousy Kiss]]>><<pass 6>><<arousal 1500>><<pain 4>><</link>><<promiscuous2>><<gpain>><<ggarousal>>
 <br>
 <<mpcarryicon>><<link [[抬膝顶<<him>> (0:03)|MP Lover Jealousy Brat]]>><<pass 3>><<def 1>><<arousal 1400>><</link>><<ggarousal>>
 
@@ -938,9 +1011,9 @@
 <<person1>>
 你与<<print ($mpInteractTargetName or "恋人")>>并肩跪坐在幽静的烛火与丝绒帷幕之后，空气中弥漫着淡淡的熏香。<<He>>双手交握在胸前，清澈的眼眸望向你，脸颊带着一抹红晕。
 <br><br>
-<<symbol "purity">><<walkicon>><<link [[握<<his>>手祈祷 (0:12)|MP Lover Corrupt Pray]]>><<pass 12>><<stress -12>><<trauma -10>><<purity 5>><</link>><<lstress>><<ltrauma>><<glove>>
+<<symbol "purity">><<mpritualicon>><<link [[握<<his>>手祈祷 (0:12)|MP Lover Corrupt Pray]]>><<pass 12>><<stress -12>><<trauma -10>><<purity 5>><</link>><<lstress>><<ltrauma>><<glove>>
 <br>
-<<symbol "corruption">><<link [[拉<<him>>进隔间 (0:18)|MP Lover Corrupt Tempt]]>><<pass 18>><<arousal 2000>><<purity -5>><</link>><<promiscuous3>><<ggarousal>>
+<<mpfarmicon>><<symbol "corruption">><<link [[拉<<him>>进隔间 (0:18)|MP Lover Corrupt Tempt]]>><<pass 18>><<arousal 2000>><<purity -5>><</link>><<promiscuous3>><<ggarousal>>
 
 :: MP Lover Corrupt Pray [nobr]
 <<set $outside to 0>><<set $location to "temple">>

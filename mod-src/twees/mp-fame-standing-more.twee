@@ -1,0 +1,161 @@
+/* MP Fame Standing More — 名声与信誉增量内容
+   8 页：More Hub / Extra 1-6 / Extra Outcome。
+   只读写已有变量 $mpFame 六栏与 $mpStanding 四栏，
+   结局写入已有的 $mpFame.outcome；不新增顶层变量，不改 boot。 */
+
+:: MP Fame Standing More Hub [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
+布告墙背后还有一间更小的屋子，门楣上钉着「勘误」两个字，漆掉得只剩笔画。屋里没有窗，靠一盏罩着铁网的油灯照亮；四面墙钉满窄木架，架上按六类名声排着待核的纸卷，每一卷用不同颜色的麻绳系住：青绳是善名，铁灰绳是武名，褐绳是商誉，黑绳是暗名，红绳是魅名，焦边的那一卷是恶名。四只包铜木匣靠墙码着，匣盖分别刻着船锚、铁锤、烛台和一把没有钥匙孔的锁。海风从门缝钻进来，把灯焰吹得偏向一侧，纸卷的影子在墙上挤成一排。
+<br><br>
+管勘误的老书记官说话很慢。他说名声册记的是别人怎么叫你，信誉簿记的是谁肯替你开门，两本账平时各走各的，只有出了岔子才会一起翻到他这张桌上。桌上摊着六件事，每一件都已有人经手，只差最后一个人把名字写进对应的栏里。写对了，价钱、门禁与街面的称呼都会跟着松动；写歪了，纸页不会骂人，只会把该你受的那一份疲惫留下来。他把铜铃往桌角挪了挪，说今日不催，但收卷的日子已经近了。
+<br><br>
+【案头现状】善名 <<print $mpFame.kind>>｜武名 <<print $mpFame.combat>>｜商誉 <<print $mpFame.trade>>｜暗名 <<print $mpFame.underworld>>｜魅名 <<print $mpFame.charm>>｜恶名 <<print $mpFame.infamy>>。四方信誉：码头 <<print $mpStanding.docks>>｜行会 <<print $mpStanding.guilds>>｜神殿 <<print $mpStanding.temple>>｜地下 <<print $mpStanding.underworld>>。今日百钱折算 <<mpWorldPrice 100>>，作息窗 <<mpWorldScheduleOpen 8 21>>。
+<br><br>
+【街面称呼】<<if $mpFame.kind gte 20>>有人叫你「善人」；<</if>><<if $mpFame.combat gte 20>>水手叫你「硬手」；<</if>><<if $mpFame.trade gte 20>>老主顾叫你「信户」；<</if>><<if $mpFame.underworld gte 20>>灰雾里的人叫你「熟客」；<</if>><<if $mpFame.charm gte 20>>酒馆常客叫你「座上宾」；<</if>><<if $mpFame.infamy gte 20>>巡夜的册子上记着「祸头」；<</if>><<if $mpFame.kind lt 20 and $mpFame.combat lt 20 and $mpFame.trade lt 20 and $mpFame.underworld lt 20 and $mpFame.charm lt 20 and $mpFame.infamy lt 20>>六栏都还薄，街面上没有叫得响的名号。<</if>>
+<br><br>
+六件事各占一角。堤岸那边，一个卖鱼的女人被三个收路钱的堵在车旁，围观的人越多，谁先退一步就越难收场；行会的急单压在账房柜台上，麻袋过秤时秤杆翘得蹊跷；神殿要为贫民区的灯油写一份认捐册，执事不肯经手铜板；水闸边的蜡封密信换了三次接头时辰，像是在等一个不该来的人；灯柱下新贴的小报把你的旧事编成了顺口溜，念的人比买的人多；联席开票前，四派的记名册都缺一个肯在街口站着说话的人。老书记官把六卷纸往你面前推了推，又拨高灯芯，让铁网后的火苗把纸卷边缘照得发亮。
+<br><br>
+<<getouticon>><<link [[返回名声总枢 (0:02)|MP Fame Standing Hub]]>><<pass 2>><</link>><br>
+<<docksicon>><<link [[街头立威 (0:03)|MP Fame Standing Extra 1]]>><<pass 3>><</link>><br>
+<<shopicon>><<link [[商会委托 (0:03)|MP Fame Standing Extra 2]]>><<pass 3>><</link>><br>
+<<templeicon>><<link [[神殿香火 (0:03)|MP Fame Standing Extra 3]]>><<pass 3>><</link>><br>
+<<link [[地下密信 (0:03)|MP Fame Standing Extra 4]]>><<pass 3>><</link>><br>
+<<link [[名声反噬 (0:03)|MP Fame Standing Extra 5]]>><<pass 3>><</link>><br>
+<<link [[派系拉票 (0:03)|MP Fame Standing Extra 6]]>><<pass 3>><</link>><br>
+<<link [[季度收卷 (0:03)|MP Fame Standing Extra Outcome]]>><<pass 3>><</link>>
+
+:: MP Fame Standing Extra 1 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpFameInit>>
+早潮刚退，堤岸的石阶还湿着。卖鱼的女人把车停在缆桩旁，木轮陷进一道浅沟，车上两筐银鲱盖着湿麻布，鱼尾从布边露出来，在风里一下一下地拍。三个收路钱的站在车前，其中一个用靴尖踢了踢车轮，说这条道今天归他们管，过一辆车要交一份「潮钱」。围观的人不少，挑担的、补网的、等潮的，都站在十几步外看着，没有人往前走。女人把手按在车把上，指节发白，却没有松手。
+<br><br>
+调度员在远处的高台上看见了这边，没下来，只把粉笔记在舱单背面。他后来说得很明白：堤岸上谁先退，往后谁就得多交一份；可要是你把人打了，港务处也不会替你写保书，账要自己平。老水手长蹲在系缆桩上补网，头也不抬，只把一根断了的梭子递给你，意思是他不拦，也不帮。海鸥在栈桥尽头叫了两声，又落回雾里。
+<br><br>
+女人车上的账本夹在鱼筐底下，纸页被鱼血浸出深色边。她说这车鱼是凌晨从外港驳船上接的，本钱还没还，若今日交不出潮钱，明日就不必再来。三个收路钱的听不见这些话，或者装作听不见；他们只把这条道分成三份，一份给港务处的熟人，一份留给自己的靴子，最后一份才轮到推车的人。高台上的粉笔记下日头的位置，也记下谁先动手。
+<br><br>
+【堤岸账面】武名 <<print $mpFame.combat>>（<<mpFameTier "combat">>）｜恶名 <<print $mpFame.infamy>>（<<mpFameTier "infamy">>）｜码头信誉 <<print $mpStanding.docks>>｜商誉 <<print $mpFame.trade>>。<<if $mpFame.combat gte 20>>水手们已经在背后叫你「硬手」了；<<else>>水手们还没给你起外号；<</if>><<if $mpStanding.docks gte 15>>安全屋的看守肯把后门的钥匙给你。<<else>>安全屋的后门还不对你开。<</if>>
+<br><br>
+鱼车旁的水洼里浮着一层碎鳞，日头一照，像撒了一把钝刀片。三个收路钱的并不急，他们知道围观的人越多，女人越难自己下台；也知道堤岸上的规矩从来不是写在纸上的，谁把腰弯下去，谁就得一直弯着。你可以挡在车前，让他们先记住你的脸；也可以退到人群里，把领头的那个认清楚，改日再算；若不想见血，钱袋里那点铜板也能替人买一个台阶。三条路都要付东西，只是付的不一样。女人终于看了你一眼，目光从你的手移到你的脸上，又低下去。
+<br><br>
+<<getouticon>><<link [[返回勘误房 (0:02)|MP Fame Standing More Hub]]>><<pass 2>><</link>><br>
+<<docksicon>><<if ($athletics or 0) gte 240 or ($mpFame.combat or 0) gte 15>><<link [[挡在鱼车前面 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<mpFameAdd "combat" 7>><<mpFameAdd "infamy" 4>><<mpFameAdd "kind" -1>><<mpStandingAdd "docks" 4>><<mpStandingAdd "underworld" 1>><<mpStandingAdd "guilds" -1>><<stress -1>><<tiredness 2>><</link>><<else>><<link [[挡在鱼车前面 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<stress 5>><<tiredness 2>><<pain 2>><<mpStandingAdd "docks" -1>><</link>><</if>><br>
+<<sneakicon>><<if ($skulduggery or 0) gte 220 or ($mpFame.underworld or 0) gte 15>><<link [[记下领头面孔 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<mpFameAdd "combat" 1>><<mpFameAdd "infamy" 2>><<mpStandingAdd "docks" 5>><<mpStandingAdd "underworld" 2>><<mpStandingAdd "guilds" -1>><<stress -1>><<tiredness 1>><</link>><<else>><<link [[记下领头面孔 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><<mpStandingAdd "docks" -2>><</link>><</if>><br>
+<<mpbargainicon>><<if ($money or 0) gte 120>><<link [[掏钱替人平事 (0:08)|MP Fame Standing More Hub]]>><<pass 8>><<set $money to (($money or 0) - 120)>><<mpFameAdd "kind" 3>><<mpFameAdd "charm" 1>><<mpFameAdd "infamy" -1>><<mpStandingAdd "docks" 2>><<stress 1>><</link>><<else>><span class="disabled">掏钱替人平事 (0:08)（钱不够）</span><</if>>
+
+:: MP Fame Standing Extra 2 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
+十二行会的过道里一股干面粉味。账房把一张用红绳捆着的急单推过柜台：三十袋黑麦粉要在雾头漫上高街之前分到六个摊子，少一袋，夜市开张时就有摊主空着案板。柜台后头的年轻账房说秤昨夜才校过，可你把一袋粉提起来时，手腕先觉出了轻重——袋口的麻绳扎得紧，袋底却软得不对劲，像是被人从中间匀走了一部分。
+<br><br>
+旧账房坐在窗下的高凳上，假装在打算盘。他的算珠拨得很慢，偶尔停一停，像在等谁先开口。窗台上摆着一只铜砝码，砝码底部磨出一圈亮痕，明显比秤盘上的那一只要厚。六个摊子的名字写在单子背面：两个在鱼市口，两个在学校墙外，还有两个要沿石阶推到坡上的旧宅区。雾一涨，石阶就打滑，推车的人得在车轮下垫麻布。
+<br><br>
+六个摊子里有一个是寡妇开的，案板只有半张，靠夜市卖薄饼养活两个孩子；另一家的妻子病着，炉子已经两天没生火。旧账房终于开口，说秤是行会的秤，不是他的秤；说完又把算珠拨回去，像把一句话重新咽下。年轻账房低头把单子抚平，红绳的结却越拉越紧。窗外有推车碾过石阶，麻袋在车板上滑了一下，又被人用力扶正。
+<br><br>
+【行会账面】商誉 <<print $mpFame.trade>>（<<mpFameTier "trade">>）｜善名 <<print $mpFame.kind>>（<<mpFameTier "kind">>）｜行会信誉 <<print $mpStanding.guilds>>｜今日百钱折算 <<mpWorldPrice 100>>｜家政手艺 <<print ($housekeeping or 0)>>。<<if $mpStanding.guilds gte 25>>联席上的账房已经肯听你把话说完；<<elseif $mpStanding.guilds gte 15>>账房肯坐下来同你谈契约；<<else>>账房只把你当成临时的跑腿。<</if>>
+<br><br>
+单子上的价钱按百钱折算写死，粉价涨一分，六个摊子的炉子就少烧一轮。你可以闷头把缺的斤两从别的袋里匀出来，先让摊子开张；也可以把秤和砝码一并摆到过道中央，让等货的掌柜们都看见；若两样都嫌慢，自己垫一笔钱把差额买齐，账房那边会记你一份人情，也会记你一个好欺负。年轻账房把笔搁下，等你伸手去解那根红绳；旧账房的算盘忽然停了一拍，又慢慢响起来。
+<br><br>
+<<getouticon>><<link [[返回勘误房 (0:02)|MP Fame Standing More Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<if ($housekeeping or 0) gte 220 or ($mpFame.trade or 0) gte 15>><<link [[按单点货交付 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<mpFameAdd "trade" 6>><<mpFameAdd "kind" 2>><<mpStandingAdd "guilds" 7>><<mpStandingAdd "docks" -2>><<stress -2>><</link>><<else>><<link [[按单点货交付 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<stress 4>><<tiredness 3>><<mpStandingAdd "guilds" -2>><</link>><</if>><br>
+<<socialiseicon>><<if ($mpFame.kind or 0) gte 20 or ($mpFame.charm or 0) gte 15>><<link [[当众揭穿短秤 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<mpFameAdd "kind" 5>><<mpFameAdd "trade" 3>><<mpFameAdd "charm" 2>><<mpStandingAdd "guilds" -3>><<mpStandingAdd "docks" 2>><<stress 1>><<tiredness 1>><</link>><<else>><<link [[当众揭穿短秤 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><<mpStandingAdd "guilds" -3>><</link>><</if>><br>
+<<mpbargainicon>><<if ($money or 0) gte 200>><<link [[垫钱补足斤两 (0:08)|MP Fame Standing More Hub]]>><<pass 8>><<set $money to (($money or 0) - 200)>><<mpFameAdd "kind" 4>><<mpFameAdd "trade" 4>><<mpFameAdd "charm" 1>><<mpStandingAdd "guilds" 3>><<stress 1>><</link>><<else>><span class="disabled">垫钱补足斤两 (0:08)（钱不够）</span><</if>>
+
+:: MP Fame Standing Extra 3 [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpFameInit>>
+神殿侧廊的窗子只开半扇，晨祷散后的乳香还悬在梁下。执事把一只空铜箱放在长椅上，箱盖里侧贴着一张认捐册：贫民区的街灯要在入夜前添满，油钱由信众凑，账目当日就贴到门口。他说殿里不缺人念经，缺的是肯一户一户去敲门的人；又补了一句，铜板不经他的手，捐的人自己把数目写在册上，写完把箱盖扣好。
+<br><br>
+长椅另一头坐着几个等告解的香客，鞋底沾着泥。一个老妇把布包打开，里面是几枚磨得发亮的铜子，她数了两遍，又放回去一枚。侧廊尽头，管油灯的修士正在往铁壶里灌油，壶嘴缺了一角，油线细得像一根发抖的线。窗外的天光落在石板地上，把铜箱的影子拉得很长。
+<br><br>
+贫民区的街灯一共十七盏，灯柱比人高不了多少，铁罩上全是烟熏的痕。执事说灯油不能省，省下来的钱最后都变成夜里的跌伤和失窃；可认捐册上的名字也不能硬填，填得太满，下一次就没人肯开门。窗外的风把册页吹起一角，露出背面一行褪色的旧账，数目小得几乎看不清。侧廊的钟敲了一下，声音在石壁之间滚了半圈才停；管油灯的修士放下铁壶，说入夜前若还差三罐，他只能先关掉最远的那两盏。
+<br><br>
+【神殿账面】神殿信誉 <<print $mpStanding.temple>>｜魅名 <<print $mpFame.charm>>（<<mpFameTier "charm">>）｜善名 <<print $mpFame.kind>>（<<mpFameTier "kind">>）｜恩典 <<print ($mpGrace or 0)>>｜意志 <<print ($willpower or 0)>>。今日一罐灯油随百钱折算浮动，物价牌上写着 <<mpWorldPrice 100>>；<<if $mpStanding.temple gte 20>>香客私下叫你「执香人」，执事肯让你碰圣物锦盒；<<elseif $mpStanding.temple gte 15>>执事肯让你在香案边多留半刻；<<else>>你在殿里还只是个生面孔。<</if>>
+<br><br>
+油灯照的是夜路，也照人心。你若挨家挨户去说，得先听完各家的难处，再把自己的来意说得不像讨债；你若懒得开口，钱袋里也拿得出几罐油的钱，只是那笔钱不会替你换来半句好话；若两样都不想做，还可以留下来守夜，把长明灯一盏盏添满，再把散在阶前的香脚扫净。执事把铜箱的钥匙放在册子旁，没有催，只把窗子又推开了一寸，让风把香灰吹成一条细线。
+<br><br>
+<<getouticon>><<link [[返回勘误房 (0:02)|MP Fame Standing More Hub]]>><<pass 2>><</link>><br>
+<<templeicon>><<if ($mpFame.charm or 0) gte 15 or ($mpStanding.temple or 0) gte 15>><<link [[逐户募集香油 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<mpStandingAdd "temple" 7>><<mpFameAdd "kind" 4>><<mpFameAdd "charm" 3>><<mpStandingAdd "underworld" -2>><<stress -1>><<tiredness 2>><</link>><<else>><<link [[逐户募集香油 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<stress 4>><<tiredness 3>><<mpStandingAdd "temple" -2>><</link>><</if>><br>
+<<mpbargainicon>><<if ($money or 0) gte 180>><<link [[自购香油入殿 (0:08)|MP Fame Standing More Hub]]>><<pass 8>><<set $money to (($money or 0) - 180)>><<mpStandingAdd "temple" 5>><<mpFameAdd "kind" 3>><<mpFameAdd "charm" 1>><<mpStandingAdd "underworld" -1>><<stress -1>><</link>><<else>><span class="disabled">自购香油入殿 (0:08)（钱不够）</span><</if>><br>
+<<walkicon>><<if ($willpower or 0) gte 380 or ($mpStanding.temple or 0) gte 20>><<link [[守夜搬灯添香 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<mpStandingAdd "temple" 5>><<mpFameAdd "kind" 2>><<mpFameAdd "charm" 2>><<stress -1>><<tiredness 2>><<pain 1>><</link>><<else>><<link [[守夜搬灯添香 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<stress 5>><<tiredness 3>><<pain 2>><</link>><</if>>
+
+:: MP Fame Standing Extra 4 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
+水闸边的暗巷在雾里只剩一条灰线。墙根的记认昨夜被人补过，新炭压着旧炭，边缘还没被雨水泡开。接头的人换了三次时辰，最后一次只留下半片鱼鳞和一句「潮落再敲」。你把蜡封举到灯下，封口的纹样不是印章，而是几道交叉的刻痕，像鱼骨，也像某种只有收信人才认得的算账方式。
+<br><br>
+门板后头没有灯。你按规矩在第三块砖上敲了两下，停一息，再敲一下；门里没有回应，只有水从闸缝里滴下来的声音。巷口多了两道影子，站得很稳，不像路过的醉汉。
+<br><br>
+信里若是货单，抄下来能换行会账房一顿好茶；若是名单，抄下来就是几条人命的价钱；若只写着一句「潮落再敲」，那这封蜡封本身就是个饵。两道影子脚边的水洼里映着巷口那盏没点的灯，他们不靠近，也不走开。门后忽然传来一声极轻的铁器碰撞，像有人把刀放回桌上，又像只是把茶碗推远了一寸。你数了数蜡封上交叉的刻痕，一共七道，其中一道比其余的都新，边缘还沾着细碎的蜡屑。
+<br><br>
+你可以把信按原样压在砖下，头也不回地走；也可以找个背风的墙窝把封口挑开，把里面的名字抄下来，再照旧封好；若觉得这趟线已经脏了，干脆把信烧掉，让两边都收不到回音。
+<br><br>
+【地下账面】地下信誉 <<print $mpStanding.underworld>>｜暗名 <<print $mpFame.underworld>>（<<mpFameTier "underworld">>）｜恶名 <<print $mpFame.infamy>>（<<mpFameTier "infamy">>）｜神殿信誉 <<print $mpStanding.temple>>｜暗市 <<mpWorldMarketOpen>>｜诡术 <<print ($skulduggery or 0)>>。<<if $mpStanding.underworld gte 30>>暗市那扇铁闸一见你靠近就自己落闩，摊主叫你「灰雾熟客」；<<elseif $mpStanding.underworld gte 25>>暗市联络肯为你开门；<<elseif $mpStanding.underworld gte 15>>接头人肯把密信递到你手里；<<else>>灰雾里的人还不肯把信交给你。<</if>>
+<br><br>
+蜡封的边缘已经发脆，指尖一用力就会掉下一小片。巷子里的水汽把纸面洇得发软，信封上的字却没有晕开，说明用的是隔水的墨。两道影子还在原地，其中一人把重心换了一只脚，靴底在湿石上蹭出很轻的一声。你忽然想起老水手长说过的话：灰雾里最贵的不是货，是知道谁在等货。信在你手里，路也还在你脚下。
+<br><br>
+<<getouticon>><<link [[返回勘误房 (0:02)|MP Fame Standing More Hub]]>><<pass 2>><</link>><br>
+<<sneakicon>><<if ($skulduggery or 0) gte 240 or ($mpFame.underworld or 0) gte 15>><<link [[依暗号递密信 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<mpFameAdd "underworld" 6>><<mpFameAdd "infamy" 3>><<mpStandingAdd "underworld" 7>><<mpStandingAdd "temple" -2>><<stress -2>><</link>><<else>><<link [[依暗号递密信 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<stress 5>><<tiredness 2>><<pain 1>><<mpStandingAdd "underworld" -2>><</link>><</if>><br>
+<<investigateicon>><<if ($skulduggery or 0) gte 260 or ($mpFame.trade or 0) gte 20>><<link [[拆封抄录再送 (0:14)|MP Fame Standing More Hub]]>><<pass 14>><<mpFameAdd "underworld" 3>><<mpFameAdd "infamy" 2>><<mpStandingAdd "underworld" 3>><<mpStandingAdd "guilds" 4>><<mpStandingAdd "temple" -1>><<stress 2>><<tiredness 1>><</link>><<else>><<link [[拆封抄录再送 (0:14)|MP Fame Standing More Hub]]>><<pass 14>><<stress 5>><<tiredness 2>><<mpStandingAdd "underworld" -3>><<mpStandingAdd "guilds" -1>><</link>><</if>><br>
+<<if ($mpFame.kind or 0) gte 20 or ($mpStanding.temple or 0) gte 20>><<link [[烧信断这趟线 (0:08)|MP Fame Standing More Hub]]>><<pass 8>><<mpFameAdd "kind" 4>><<mpFameAdd "underworld" -2>><<mpStandingAdd "temple" 5>><<mpStandingAdd "underworld" -4>><<stress 1>><<tiredness 1>><</link>><<else>><<link [[烧信断这趟线 (0:08)|MP Fame Standing More Hub]]>><<pass 8>><<stress 4>><<tiredness 2>><<mpStandingAdd "underworld" -2>><</link>><</if>>
+
+:: MP Fame Standing Extra 5 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
+灯柱下新贴了一张小报，纸边还没干透，墨味混着鱼腥。上面没有署名，只画着一个人形的轮廓，旁边用押韵的句子写着「替人作保、半夜数钱、白天装善」。路过的人念一遍，笑一声，又低头走开；也有人念完回头看你，像在核对画里那张没有五官的脸。小报贴得很低，弯腰才能读全，显然是给赶早市的人看的。
+<br><br>
+纸上的句子编得不算高明，却足够让赶早市的人记住几个词。到午后，鱼市口会有人学着念，学校墙外会有学生把它改成顺口溜，神殿的杂役推水车经过时也会停下来看一眼。灯柱旁的石缝里塞着半截旧纸，边缘已经发黄，显然这不是第一回。卖早点的推车从灯柱旁经过，车轮压过纸边，留下一道湿印。
+<br><br>
+纸背的浆糊结出一层薄壳，指甲一刮就起白屑；这纸是从行会账房流出来的边角料，背面还印着半张货单。印铺的学徒蹲在灯柱后头刷浆糊，见你来了，手一抖，刷子上的浆水滴在鞋面上。他说纸是昨夜里送来的，钱已经付过，送纸的人戴着兜帽，只留了一句「贴三天」。灯柱另一侧，巡夜人的提灯还没点，铁钩上挂着一盏空灯罩；再远一点，一个收夜香的推车人正沿着墙根走，木轮碾过石板，声音一下一下。
+<br><br>
+【风评账面】恶名 <<print $mpFame.infamy>>（<<mpFameTier "infamy">>）｜善名 <<print $mpFame.kind>>（<<mpFameTier "kind">>）｜魅名 <<print $mpFame.charm>>（<<mpFameTier "charm">>）｜行会信誉 <<print $mpStanding.guilds>>｜神殿信誉 <<print $mpStanding.temple>>。<<if $mpFame.infamy gte 30>>巡夜的灯笼已经会在你身上多停一停；<<elseif $mpFame.infamy gte 20>>册子上给你记着「祸头」；<<else>>恶名还没到让巡夜人记住的程度。<</if>><<if $mpFame.charm gte 20>>酒馆常客仍叫你「座上宾」。<</if>>
+<br><br>
+小报最麻烦的地方不是它写了什么，而是它写得半真半假，让人有得可传。你可以站到灯柱下，把纸上的句子一句句拆开，让围观的人自己判断；也可以去印铺找管事的，把三天改成半天，代价是钱袋要薄一层——商誉厚的人，印铺收得会少些；若你本来就靠恶名吃饭，这张小报反倒是块现成的招牌，只要让它再狠一点，街面上就会有人主动替你补全剩下的故事。
+<br><br>
+<<getouticon>><<link [[返回勘误房 (0:02)|MP Fame Standing More Hub]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<if ($mpFame.charm or 0) gte 20 or ($mpFame.kind or 0) gte 20>><<link [[当街对质流言 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<mpFameAdd "charm" 3>><<mpFameAdd "kind" 2>><<mpFameAdd "infamy" -2>><<mpStandingAdd "guilds" 1>><<mpStandingAdd "temple" 1>><<stress 2>><<tiredness 2>><</link>><<else>><<link [[当街对质流言 (0:12)|MP Fame Standing More Hub]]>><<pass 12>><<stress 5>><<tiredness 2>><<mpFameAdd "charm" -2>><<mpStandingAdd "guilds" -1>><</link>><</if>><br>
+<<mpbargainicon>><<if ($money or 0) gte (($mpFame.trade or 0) gte 20 ? 140 : 180)>><<link [[找印铺压消息 (0:08)|MP Fame Standing More Hub]]>><<pass 8>><<set $money to (($money or 0) - (($mpFame.trade or 0) gte 20 ? 140 : 180))>><<mpFameAdd "trade" 1>><<mpFameAdd "charm" 2>><<mpFameAdd "infamy" -1>><<mpStandingAdd "guilds" 2>><<mpStandingAdd "underworld" -1>><<stress 1>><</link>><<else>><span class="disabled">找印铺压消息 (0:08)（钱不够）</span><</if>><br>
+<<sneakicon>><<if ($mpFame.infamy or 0) gte 20 or ($mpFame.underworld or 0) gte 20>><<link [[借谣言立招牌 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<mpFameAdd "infamy" 5>><<mpFameAdd "combat" 2>><<mpFameAdd "underworld" 2>><<mpFameAdd "kind" -3>><<mpStandingAdd "underworld" 3>><<mpStandingAdd "temple" -2>><<stress -1>><<tiredness 1>><</link>><<else>><<link [[借谣言立招牌 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><<mpStandingAdd "underworld" -1>><</link>><</if>>
+
+:: MP Fame Standing Extra 6 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
+联席开票前的下午，行会厅外的长廊比平时挤。四张长桌并排摆着，桌后各坐一名记名员，桌上压着不同颜色的票册：码头的是盐霜色的粗纸，行会的是贴了货签的厚册，神殿的是熏过香的薄页，地下那一张则用炭布包着，只露出一个投口的缝。廊柱上贴着今日的议题：港税、宵禁、香油价，还有一条关于暗市闸门的附议。
+<br><br>
+管票册的老书记员把一支秃笔塞给你，说四派都缺一个肯在街口站着说话的人，票不记名，话却记在人身上。你替谁站，谁的名册就多一页；可站在这一边，另一边就会把你的名字往后挪。四张票册的纸色深浅不一，边角都被翻得起了毛，投口的木塞上各系一根短绳，绳结的打法对应各派的记名规矩。廊柱上的议题纸被风掀起一角，露出底下上一季的旧票根。四张桌子都空着一角，像四扇等人推开的门。
+<br><br>
+码头要泊位先排，因为外海的驳船已经在雾里等了两天；行会要税轻价稳，因为面粉和灯油都压在仓里；神殿要灯火不灭，因为贫民区的街灯已经缺了三夜；地下要闸门别落，因为暗市的货一旦被截，整条线都得换人。四张桌子后面的人都在看你，像看一枚还没投进箱里的票。老书记员把秃笔递过来，笔杆上有一圈被手汗磨亮的旧痕，笔尖却新削过，蘸墨就能写。
+<br><br>
+【票册现状】码头 <<print $mpStanding.docks>>｜行会 <<print $mpStanding.guilds>>｜神殿 <<print $mpStanding.temple>>｜地下 <<print $mpStanding.underworld>>。<<if $mpStanding.guilds gte 25>>行会账房肯听你谈平抑物价；<<elseif $mpStanding.guilds gte 15>>账房肯把契约摊开；<<else>>行会的门只开一条缝。<</if>><<if $mpStanding.docks gte 15>>港区安全屋的后门对你开着；<<else>>港区的后门还锁着；<</if>><<if $mpStanding.underworld gte 25>>暗市联络肯为你开门；<<else>>暗市的门还没有钥匙。<</if>>
+<br><br>
+街口已经聚了两拨人。码头的水手蹲在系缆石上，手里转着绳头；行会的伙计抱着账册，站得笔直；神殿的香客低声念着经，眼睛却一直看着票册；地下的几个影子靠在巷口，不走近，也不走远。老书记员说，票投出去就不能改，但话可以补；补得好，落选的那一边也会记住你替他们说过什么。风从长廊穿过，把四张票册的纸角一齐掀起来。
+<br><br>
+<<getouticon>><<link [[返回勘误房 (0:02)|MP Fame Standing More Hub]]>><<pass 2>><</link>><br>
+<<docksicon>><<if ($mpStanding.docks or 0) gte 15 or ($mpFame.combat or 0) gte 15>><<link [[替码头拉票 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<mpStandingAdd "docks" 6>><<mpStandingAdd "guilds" -2>><<mpStandingAdd "temple" -1>><<mpStandingAdd "underworld" 1>><<mpFameAdd "combat" 1>><<stress 1>><</link>><<else>><<link [[替码头拉票 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><<mpStandingAdd "docks" -2>><</link>><</if>><br>
+<<shopicon>><<if ($mpStanding.guilds or 0) gte 15 or ($housekeeping or 0) gte 220>><<link [[替行会拉票 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<mpStandingAdd "guilds" 6>><<mpStandingAdd "docks" -2>><<mpStandingAdd "temple" -1>><<mpFameAdd "trade" 2>><<stress 1>><</link>><<else>><<link [[替行会拉票 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<stress 3>><<tiredness 2>><<mpStandingAdd "guilds" -2>><</link>><</if>><br>
+<<templeicon>><<if ($mpStanding.temple or 0) gte 15 or ($mpFame.charm or 0) gte 15>><<link [[替神殿拉票 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<mpStandingAdd "temple" 6>><<mpStandingAdd "underworld" -2>><<mpStandingAdd "guilds" -1>><<mpFameAdd "kind" 2>><<stress 1>><</link>><<else>><<link [[替神殿拉票 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<stress 3>><<tiredness 2>><<mpStandingAdd "temple" -2>><</link>><</if>>
+
+:: MP Fame Standing Extra Outcome [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
+<<set _good to (($mpFame.kind or 0) + ($mpFame.trade or 0) + ($mpFame.charm or 0))>>
+<<set _bad to (($mpFame.infamy or 0) + ($mpFame.combat or 0) + ($mpFame.underworld or 0))>>
+收卷日没有钟声，只有翻纸的声音。勘误房的长桌被擦得发亮，六卷纸按次序排开，四只包铜木匣的盖子全部掀着，里面是四方的印泥：码头是盐白，行会是赭红，神殿是乳香黄，地下是炭黑。老书记官戴上一副薄铜边眼镜，把名声册翻到最后一页，又用指腹把纸角压平。窗外的天光已经偏西，铁网后的灯焰被照得几乎透明。
+<br><br>
+【收卷账面】善名 <<print $mpFame.kind>>｜武名 <<print $mpFame.combat>>｜商誉 <<print $mpFame.trade>>｜暗名 <<print $mpFame.underworld>>｜魅名 <<print $mpFame.charm>>｜恶名 <<print $mpFame.infamy>>。义名一路合计 <<print _good>>，凶名一路合计 <<print _bad>>。当前定性：<<if $mpFame.outcome is "paragon">>义名典范<<elseif $mpFame.outcome is "infamous">>凶名立威<<else>>尚未落印<</if>>。四方信誉：码头 <<print $mpStanding.docks>>｜行会 <<print $mpStanding.guilds>>｜神殿 <<print $mpStanding.temple>>｜地下 <<print $mpStanding.underworld>>。
+<br><br>
+老书记官先把话说在前头：收卷不是评功过，是把这一季的名字定下来。定成义名，往后行会与神殿的门会先为你开，码头那边则会多看你两眼，怕你把他们的私活都揽走；定成凶名，暗巷与暗市会认你，神殿的门槛却要抬高，巡夜的灯也会在你身上多停一停。若两边都攒下了一些，册子会被压上两枚印，最后留在最上面的那一个，才是街面真正叫出口的称呼。
+<br><br>
+<<if _good gte 100 and _good gte _bad>>
+【义名一路】你把六卷纸按善名、商誉、魅名的次序排开，缺角的地方用另两栏的旧账补上。老书记官看了一会儿，把盐白与乳香黄两盒印泥同时挪到面前，说义名不靠一栏独厚，靠的是三栏互相作保。他让你自己把印按下去，铜印落纸时发出一声闷响，像一扇门在很远的地方合上。
+<br><br>
+<<socialiseicon>><<link [[义名收官 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<mpFameAdd "kind" 6>><<mpFameAdd "charm" 3>><<mpFameAdd "infamy" -3>><<mpStandingAdd "temple" 4>><<mpStandingAdd "guilds" 2>><<mpStandingAdd "docks" -1>><<set $mpFame.outcome to "paragon">><<stress -3>><</link>><br>
+<</if>>
+<<if _bad gte 100 and _bad gt _good>>
+【凶名一路】你把武名、暗名与恶名的纸卷叠在一起，最上面那一张的边角已经烧焦。老书记官没有皱眉，只把炭黑印泥推过来，又用铜尺把纸压平。他说凶名也是名，只是往后替你开门的人不同：暗市的闸门会认得你，神殿的执事会装作没看见你。铜印落下去，纸面腾起一小点灰。
+<br><br>
+<<sneakicon>><<link [[凶名收官 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<mpFameAdd "combat" 5>><<mpFameAdd "infamy" 5>><<mpFameAdd "underworld" 3>><<mpFameAdd "kind" -4>><<mpStandingAdd "underworld" 4>><<mpStandingAdd "temple" -3>><<set $mpFame.outcome to "infamous">><<stress -1>><<tiredness 1>><</link>><br>
+<</if>>
+<<if _good gte 60 and _bad gte 60 and _good lt 100 and _bad lt 100>>
+【两路并压】两摞纸都不够厚，却都不肯让开。老书记官把四盒印泥全打开，让你自己挑；你挑了两盒，他也不拦，只在册子边上添了一行小字，写明这一页是两个人写的。铜印落下时，两枚印有一半叠在一起，边缘糊成一团，像街面上同时叫出的两个外号。
+<br><br>
+<<investigateicon>><<link [[双面收官 (0:10)|MP Fame Standing More Hub]]>><<pass 10>><<set $mpFame.outcome to ((($mpFame.kind or 0) + ($mpFame.trade or 0) + ($mpFame.charm or 0)) gte (($mpFame.infamy or 0) + ($mpFame.combat or 0) + ($mpFame.underworld or 0)) ? "paragon" : "infamous")>><<mpFameAdd "kind" 3>><<mpFameAdd "combat" 3>><<mpFameAdd "charm" 2>><<mpFameAdd "infamy" 2>><<mpStandingAdd "docks" 2>><<mpStandingAdd "guilds" -1>><<mpStandingAdd "temple" 2>><<mpStandingAdd "underworld" -1>><<stress 1>><<tiredness 2>><</link>><br>
+<</if>>
+<<if not (_good gte 100 and _good gte _bad) and not (_bad gte 100 and _bad gt _good) and not (_good gte 60 and _bad gte 60 and _good lt 100 and _bad lt 100)>>
+【收不了卷】老书记官把六卷纸重新系好，麻绳在纸卷上绕了三圈，打了个不紧不慢的结。他说这一季的名字还太薄，硬要落印，只会盖出一个连自己都不认的称呼。他把铜印收回匣里，让你把桌上的灰擦干净，等下一季再来。灯焰晃了一下，纸卷的影子又回到墙上。
+<br><br>
+<<getouticon>><<link [[返回勘误房 (0:06)|MP Fame Standing More Hub]]>><<pass 6>><<stress -1>><</link>><br>
+<</if>>
+<<link [[返回名声总枢 (0:04)|MP Fame Standing Hub]]>><<pass 4>><</link>>

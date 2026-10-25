@@ -1,0 +1,169 @@
+/* MP Case Board More — 线索板增量内容
+   8 页：More Hub / Extra 1-6 / Extra Outcome。
+   只读写已有变量 $mpCaseBoard 的 clues / hypotheses / accused / resolved / outcome，
+   以及 $mpNpcs.lin.trust、$mpFame、$mpStanding 等既有状态；不新增顶层变量，不改 boot。 */
+
+:: MP Case Board More Hub [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpCaseBoardInit>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+软木板旁多出一只窄木匣，匣盖朝上，里面摊着六张没钉进主板的散签。签纸是从旧档库裁下来的边角，颜色深浅不一，边上留着裁纸刀的毛口。林恩说主板只容得下六枚铜钉，可案子在外面还会长枝，这六张散签就是那些长出来的枝：一张记着谁改了口，一张记着哪件物证差点烧掉，一张画着一盏不该出现的灯，还有三张分别写着并线、复核与补救。木匣盖内侧有一行铅笔字，笔迹被手汗磨得发淡：证词会反口，物证会烂，假线会自己发光；落笔之前，先把这三样都看一遍。
+<br><br>
+【散签读数】靛蓝夹 <<print $mpCaseBoard.LinColdCase.clues>>/6，读法甲：<<if $mpCaseBoard.LinColdCase.hypotheses is "insideJob">>按内部灭口读<<elseif $mpCaseBoard.LinColdCase.hypotheses is "smugglerRing">>按水路私枭读<<else>>还没写定<</if>>；灰白夹 <<print $mpCaseBoard.TempleSchism.clues>>/6，读法甲：<<if $mpCaseBoard.TempleSchism.hypotheses is "ledgerLeak">>按告解簿外泄读<<elseif $mpCaseBoard.TempleSchism.hypotheses is "relicSealing">>按古礼封存读<<else>>还没写定<</if>>；盐花夹 <<print $mpCaseBoard.FogTide.clues>>/6，读法甲：<<if $mpCaseBoard.FogTide.hypotheses is "sluiceSabotage">>按水闸人为读<<elseif $mpCaseBoard.FogTide.hypotheses is "naturalTide">>按自然潮汐读<<else>>还没写定<</if>>。三只夹子共 <<print ($mpCaseBoard.LinColdCase.clues + $mpCaseBoard.TempleSchism.clues + $mpCaseBoard.FogTide.clues)>> 条，林恩的信任 <<print ($mpNpcs.lin.trust or 0)>>；板子最后怎么落：<<if $mpCaseBoard.outcome is "truth">>公开铁证<<elseif $mpCaseBoard.outcome is "leverage">>封存作筹<<else>>仍未写定<</if>>。
+<br><br>
+散签上的活和主板的六格不一样。六格钉满以后，再查到的多半只是把旧钉压紧、把折角抚平，未必还能添新钉；可证词一翻、物证一毁，原本钉住的线也会松半圈。每张散签都标着它要吃多少时辰，也标着它可能动到哪只夹子：有的只添线索，有的会把假说翻到另一边，有的要拿林恩的信任去换，还有的会直接碰到“结案”那一栏。做砸了不会从你钱袋里掏走一个铜子，只会留下倦意、心气，或者一条被水泡烂的线。
+<br><br>
+木匣底下压着一张档库的催还单，日期空着，只等最后一个人落笔。窗外的巡夜哨刚换过班，岗棚里能听见短棍靠在桌腿上的轻响。林恩没有催你，只把红蓝铅笔横在匣盖上，笔尖朝着那六张散签。你伸手把最上面那张翻过来，纸背写着四个小字：先看，再钉。
+<br><br>
+六张散签的页脚各盖着半个档库编号，拼起来正好是旧案、神殿与潮源三只夹子的索书号。林恩说这不是巧合，是有人当年就把三宗案子当成一册来编；后来案子散了，编号却还认得彼此。你把散签按编号排回匣里，木匣腾出一指宽的缝，像还留着第七张的位置。远处档库执事在街口又咳了一声，声音被雾压得很低。
+<br><br>
+<<investigateicon>><<link [[证人翻供复盘 (0:10)|MP Case Board Extra 1]]>><<pass 10>><</link>><br>
+<<templeicon>><<link [[物证损毁抢救 (0:10)|MP Case Board Extra 2]]>><<pass 10>><</link>><br>
+<<mpclockworkicon>><<link [[假线索溯源 (0:10)|MP Case Board Extra 3]]>><<pass 10>><</link>><br>
+<<socialiseicon>><<link [[三案并线比对 (0:12)|MP Case Board Extra 4]]>><<pass 12>><</link>><br>
+<<link [[指认前夜核验 (0:12)|MP Case Board Extra 5]]>><<pass 12>><</link>><br>
+<<link [[错认之后补救 (0:12)|MP Case Board Extra 6]]>><<pass 12>><</link>><br>
+<<link [[整理卷宗收束 (0:06)|MP Case Board Extra Outcome]]>><<pass 6>><</link>><br>
+<<link [[返回线索总板 (0:02)|MP Case Board Hub]]>><<pass 2>><</link>>
+
+:: MP Case Board Extra 1 [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpCaseBoardInit>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+旧港板棚的檐角滴着隔夜的雨。那个在堤岸敲了二十来年梆子的更夫坐在盐袋上，膝头摊着一张新写的口供，说那夜听见的宽轮车其实是一辆送奶车，自己当时灌了半壶麦酒，记岔了时辰。他说得很慢，每说一句就抬眼看你一下，像在等你替他松口。可你手边那份旧岗簿记得清清楚楚：他当夜签的是三更那一班，送奶车要到五更才进巷；新口供的纸角还留着另一个人的指印，墨色比他的签名新，指纹却被人用袖口蹭花过。
+<br><br>
+【靛蓝夹】钉了 <<print $mpCaseBoard.LinColdCase.clues>>/6 枚 ｜ 读法：<<if $mpCaseBoard.LinColdCase.hypotheses is "insideJob">>按内部灭口读<<elseif $mpCaseBoard.LinColdCase.hypotheses is "smugglerRing">>按水路私枭读<<else>>还没写定<</if>> ｜ 林恩的信任 <<print ($mpNpcs.lin.trust or 0)>>。<<if $mpWorldLinGym>>市政厅早已替旧案走过翻案的程序，更夫这次改口更像有人事后塞钱，而不是他自己怕了。<<elseif $mpWorldLinCaptain>>卷宗被锁进市政厅的铁柜里，更夫说话时总往岗棚方向瞟，像在确认谁在听。<<else>>那场雨夜至今没有定论，这一纸翻供能松动旧线，也能把整只夹子拖回原点。<</if>>
+<br><br>
+翻供本身不添新证据，它只会让已经钉住的那枚钉松半圈。旧岗簿、送奶车的班次和新口供的纸角能拼出一条时间线：三更时巷里只有巡夜人和那辆宽轮车，送奶车根本还没出坊。只要把这三样并排摊开，就能看出更夫是被谁按着手改的口。另一条路是夜里独自去找他，不带书记员，也不让林恩知道；他怕的若不是巡警队，就可能是外港私货行。还有一条最慢的路：把新口供压在旧口供底下，不钉也不扔，等他自己回心转意，林恩会记住你没有逼一个老人当场改第二次口。
+<br><br>
+棚外的雨脚斜着扫进来，盐袋上洇出深色水痕。更夫把双手夹在膝间，指节发白。你翻到旧岗簿那一页，纸面有三更时留下的潮印，签名旁还按着一个褪色的指模；新口供的纸却干得发脆，像在灯下烘过。
+<br><br>
+更夫忽然问，能不能不要把这张新口供给林恩看。他说林恩当年替他挡过一次醉汉的拳头，他不想让那只手再替他压纸。你听见棚外的雨声密了一阵，旧岗簿的纸角被风掀起来，又落回去；更夫低头去捡，膝盖上的盐粒簌簌掉了一地。
+<br><br>
+<<getouticon>><<link [[返回散签木匣 (0:02)|MP Case Board More Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if $mpCaseBoard.LinColdCase.clues gte 3 or ($mpNpcs.lin.trust or 0) gte 8>><<link [[对照旧岗簿 (0:12)|MP Case Board More Hub]]>><<pass 12>><<mpCaseAddClue "LinColdCase" 1>><<set $mpCaseBoard.LinColdCase.hypotheses to "insideJob">><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 1)>><<stress -2>><</link>><<else>><<link [[对照旧岗簿 (0:12)|MP Case Board More Hub]]>><<pass 12>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<sneakicon>><<if ($skulduggery or 0) gte 200 or ($mpNpcs.lin.trust or 0) gte 12>><<link [[夜访翻供者 (0:12)|MP Case Board More Hub]]>><<pass 12>><<mpCaseAddClue "LinColdCase" 1>><<set $mpCaseBoard.LinColdCase.hypotheses to "smugglerRing">><<set $mpNpcs.lin.trust to Math.max(0, ($mpNpcs.lin.trust or 0) - 1)>><<stress 2>><</link>><<else>><<link [[夜访翻供者 (0:12)|MP Case Board More Hub]]>><<pass 12>><<stress 4>><<tiredness 2>><<set $mpNpcs.lin.trust to Math.max(0, ($mpNpcs.lin.trust or 0) - 1)>><</link>><</if>><br>
+<<socialiseicon>><<link [[暂押其证词 (0:08)|MP Case Board More Hub]]>><<pass 8>><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 1)>><<stress 2>><<tiredness 1>><</link>>
+
+:: MP Case Board Extra 2 [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpCaseBoardInit>>
+旧谱室后头的储藏间起了烟。不是明火，是一只翻倒的炭盆引燃了油布，火舌贴着墙根往木架底下钻。架上摆着两只铁皮匣：一只装着告解踏板下起出的碳纸，另一只塞着香油账的散页。管谱的老修士拎着水桶从回廊那头赶来，脚步在石板上打滑；更远的地方，主教站在门边，没有进来，只把手里的念珠收进袖中。
+<br><br>
+【灰白夹】钉了 <<print $mpCaseBoard.TempleSchism.clues>>/6 枚 ｜ 读法：<<if $mpCaseBoard.TempleSchism.hypotheses is "ledgerLeak">>按告解簿外泄读<<elseif $mpCaseBoard.TempleSchism.hypotheses is "relicSealing">>按古礼封存读<<else>>还没写定<</if>> ｜ 殿内局面：<<if $mpTempleOrder is "orthodox">>净火正统那一派掌着调子<<elseif $mpTempleOrder is "reform">>慈悲革新那一派开了声<<elseif $mpTempleOrder is "concord">>两边暂且调和<<else>>两派各持一词<</if>>。<<if $mpWorldTempleOutcome is "orthodox">>钟塔的旧调早被收进石匣，这场火若烧掉碳纸，旧礼那边正好少一页把柄。<<elseif $mpWorldTempleOutcome is "reformed">>新调在弥撒里唱过几回，火起得这样巧，倒像有人不想让旧账跟着新钟声一起见光。<<else>>两派仍各执一端，这一把火不管烧掉哪只匣子，都会有人说是对方动的手。<</if>>
+<br><br>
+铁皮匣的搭扣被烤得发烫，碳纸最怕潮，也最怕卷边；香油账的散页则被油布压着，火要是再舔过去，缺的那几罐就永远对不上号。抢碳纸要穿过半间冒烟的屋子，脚下全是碎瓦和滑腻的油；抄账页可以退到回廊上，把还能读的字一行行誊下来，只是烟熏得眼睛发酸；若两样都不碰，调头去翻执事抽屉里的香油底账，倒是能绕开火场，却等于当着守门修士的面承认你不信那两本明账。
+<br><br>
+火苗忽然矮了一截，像是被屋顶漏下的湿气压住。老修士把水桶搁在门槛外，没有往里泼，只说了一句：先救能救的，别让烟把人呛倒。你听见铁皮匣里传出纸页卷曲的细响，像有人在里面轻轻掰手指。
+<br><br>
+铁皮匣旁还压着一只铜锁，钥匙挂在老修士腰上，他却没有解。他说锁是防潮的，不是防人的；真有人想烧，锁再厚也拦不住。你看见锁孔边缘有一道新划痕，细得像用发针捅过。回廊尽头那扇换了新铜芯的门半掩着，门后没有灯，只飘出一股和储藏间一样的焦油味。
+<br><br>
+<<getouticon>><<link [[返回散签木匣 (0:02)|MP Case Board More Hub]]>><<pass 2>><</link>><br>
+<<templeicon>><<if ($athletics or 0) gte 220 or ($willpower or 0) gte 360>><<link [[抢出碳纸 (0:12)|MP Case Board More Hub]]>><<pass 12>><<mpCaseAddClue "TempleSchism" 1>><<set $mpCaseBoard.TempleSchism.hypotheses to "ledgerLeak">><<tiredness 2>><<pain 1>><</link>><<else>><<link [[抢出碳纸 (0:12)|MP Case Board More Hub]]>><<pass 12>><<set $mpCaseBoard.TempleSchism.clues to Math.max(0, $mpCaseBoard.TempleSchism.clues - 1)>><<stress 4>><<pain 2>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($english or 0) gte 220 or ($tending or 0) gte 220>><<link [[抄录残页 (0:12)|MP Case Board More Hub]]>><<pass 12>><<mpCaseAddClue "TempleSchism" 1>><<set $mpCaseBoard.TempleSchism.hypotheses to "relicSealing">><<tiredness 2>><<stress 2>><</link>><<else>><<link [[抄录残页 (0:12)|MP Case Board More Hub]]>><<pass 12>><<stress 4>><<tiredness 2>><<mpStandingAdd "temple" -1>><</link>><</if>><br>
+<<sneakicon>><<link [[改查香油账 (0:10)|MP Case Board More Hub]]>><<pass 10>><<mpCaseAddClue "TempleSchism" 1>><<set $mpCaseBoard.TempleSchism.hypotheses to "ledgerLeak">><<mpStandingAdd "temple" -1>><<tiredness 1>><<stress 1>><</link>>
+
+:: MP Case Board Extra 3 [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpCaseBoardInit>>
+三号栈桥外沿又亮起了那盏绿漆牛角灯。雾不厚，水尺也不算高，灯却偏偏在一个没有船期的夜里晃了三下，然后沉进雾里。你蹲到桩后不久，一个卖潮汐图的年轻水手凑过来，从怀里抽出一页旧纸，说这是从港务废纸堆里捡的，上面的墨迹能证明分流闸那一夜根本没动过，雾是自然漫上来的。纸确实旧，边角发脆，可字迹浮在纸面上，墨色新得发亮，像刚写上去不久。
+<br><br>
+【盐花夹】钉了 <<print $mpCaseBoard.FogTide.clues>>/6 枚 ｜ 读法：<<if $mpCaseBoard.FogTide.hypotheses is "sluiceSabotage">>按水闸人为读<<elseif $mpCaseBoard.FogTide.hypotheses is "naturalTide">>按自然潮汐读<<else>>还没写定<</if>> ｜ 水尺 <<print ($mpFogTide or 0)>>/7 ｜ 港务那边：<<if $mpWorldFogOutcome is "lockdown">>封港还没解，栈桥只剩联合哨<<elseif $mpWorldFogOutcome is "evacuate">>低洼街区撤空，铺面上了锁<<elseif $mpWorldFogOutcome is "bargain">>灰雾航道开埠，牛角灯连成线<<else>>两派仍各说各话<</if>>。这盏灯和这页纸同时出现，太像有人替港务局把“自然潮汐”四个字先写好了。
+<br><br>
+假线索最麻烦的地方不在于它假，而在于它假得刚好能替某一方卸责。纸上的潮位与港务夜班簿差了两刻，灯出现的时辰又正好是闸口哨兵换班的那一段；若把这两样钉进卷宗，潮源案会立刻倒向自然潮汐，水闸人为那条线就得从头再拉。可要是蹲到灯主，或者把纸龄与墨龄验出来，这页假纸反而能变成一根反钉，把写纸的人钉在板上。也可以顺水推舟，把假线正式入卷，换港务执事一句好话和一间干燥的棚子；真相会远一步，往后在码头走动却会顺很多。
+<br><br>
+雾从桩脚往上爬，灯焰在雾里散成一团绿晕。水手把纸往你手边又递了递，指尖沾着灯油；你闻到他袖口有股新墨味，和纸上的味道一样。栈桥另一头，巡夜的哨兵正背对这边，肩膀一起一伏，像在打盹。
+<br><br>
+水手说这页纸是“从废纸堆里捡的”，可他连废纸堆在第几根桩后都说得含糊；你问他那晚谁在闸口当值，他低头去卷纸角，卷了三下也没卷齐。栈桥下传来铁链碰桩的闷响，雾里那盏绿灯又亮了一次，这次只亮了一瞬，像是有人在试灯芯。
+<br><br>
+<<getouticon>><<link [[返回散签木匣 (0:02)|MP Case Board More Hub]]>><<pass 2>><</link>><br>
+<<mpclockworkicon>><<if ($athletics or 0) gte 220 or ($willpower or 0) gte 360>><<link [[蹲守假灯 (0:14)|MP Case Board More Hub]]>><<pass 14>><<mpCaseAddClue "FogTide" 1>><<set $mpCaseBoard.FogTide.hypotheses to "sluiceSabotage">><<tiredness 2>><<stress -2>><</link>><<else>><<link [[蹲守假灯 (0:14)|MP Case Board More Hub]]>><<pass 14>><<stress 4>><<tiredness 3>><<pain 1>><</link>><</if>><br>
+<<investigateicon>><<if ($science or 0) gte 220 or ($english or 0) gte 220>><<link [[验纸龄墨迹 (0:10)|MP Case Board More Hub]]>><<pass 10>><<mpCaseAddClue "FogTide" 1>><<set $mpCaseBoard.FogTide.hypotheses to "sluiceSabotage">><<stress -1>><</link>><<else>><<link [[验纸龄墨迹 (0:10)|MP Case Board More Hub]]>><<pass 10>><<stress 3>><<tiredness 2>><<mpStandingAdd "docks" -1>><</link>><</if>><br>
+<<docksicon>><<link [[将假线入卷 (0:08)|MP Case Board More Hub]]>><<pass 8>><<set $mpCaseBoard.FogTide.hypotheses to "naturalTide">><<mpStandingAdd "docks" 3>><<stress -1>><</link>>
+
+:: MP Case Board Extra 4 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpCaseBoardInit>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _total to ($mpCaseBoard.LinColdCase.clues + $mpCaseBoard.TempleSchism.clues + $mpCaseBoard.FogTide.clues)>>
+三只卷宗夹被并排摊在长桌上，旧案的靛蓝、神殿的灰白、潮源的盐花，被一根红麻线松松地串在一起。线是林恩系的，没有打结，只绕了三圈。他说并线不是把三宗案子揉成一宗，而是找那根共同的东西：每一处动手的人都恰好知道哪个岗位什么时候空着。旧案的巡夜路线、神殿的夜守名单、港务的换班簿，缺的都不是力气，是时辰。
+<br><br>
+你把三只夹子的第一格并排抽出来：旧案是断口的铜哨，神殿是踏板下的碳纸，潮源是水尺背槽的凝露。三样东西放在一起，能看出同一双手的习惯——不留整张纸，只留能被人一眼读成意外的碎片；不碰值守的人，只碰他们换班的空隙。林恩用短棍点了点桌面，说这就是并线要抓的东西：不是三张脸，是同一种省事的办法。红麻线不够长，接到潮源夹时只剩一个指节；他从抽屉里又取了一截，没有打结，只把两股并在一起搓了搓。
+<br><br>
+【并线读数】靛蓝夹 <<print $mpCaseBoard.LinColdCase.clues>>/6 ｜ 灰白夹 <<print $mpCaseBoard.TempleSchism.clues>>/6 ｜ 盐花夹 <<print $mpCaseBoard.FogTide.clues>>/6 ｜ 三只夹子合计 <<print _total>> 条 ｜ 林恩的信任 <<print ($mpNpcs.lin.trust or 0)>>。三只夹子的读法分别是：<<if $mpCaseBoard.LinColdCase.hypotheses is "insideJob">>按内部灭口读<<elseif $mpCaseBoard.LinColdCase.hypotheses is "smugglerRing">>按水路私枭读<<else>>还没写定<</if>>；<<if $mpCaseBoard.TempleSchism.hypotheses is "ledgerLeak">>按告解簿外泄读<<elseif $mpCaseBoard.TempleSchism.hypotheses is "relicSealing">>按古礼封存读<<else>>还没写定<</if>>；<<if $mpCaseBoard.FogTide.hypotheses is "sluiceSabotage">>按水闸人为读<<elseif $mpCaseBoard.FogTide.hypotheses is "naturalTide">>按自然潮汐读<<else>>还没写定<</if>>。
+<br><br>
+并线要够本钱。三只夹子都至少有两枚可靠的钉，合计九条以上，才撑得住一根从头拉到尾的线；这时把三案的空白处互相补一补，通常每只夹子都能再紧一格。若只有旧案与神殿够厚，那就先并这两案，潮源留到下一回；硬把三条线一起拉，也能补上钉子，可你会把还没验过的猜测说成定论，林恩会当场把信任收回去一截。木板不会因为你着急就少一枚钉孔，线拉断了，重新接起来更费时辰。
+<br><br>
+红麻线在灯下绷得发直。你伸手拨了一下，三只夹子跟着轻轻一动，像三扇没关严的门同时晃了晃。林恩没有按住它们，只把短棍横在桌沿，等你决定这根线该拉多长。
+<br><br>
+<<getouticon>><<link [[返回散签木匣 (0:02)|MP Case Board More Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _total gte 9 and $mpCaseBoard.LinColdCase.clues gte 2 and $mpCaseBoard.TempleSchism.clues gte 2 and $mpCaseBoard.FogTide.clues gte 2>><<link [[三案并线 (0:16)|MP Case Board More Hub]]>><<pass 16>><<mpCaseAddClue "LinColdCase" 1>><<mpCaseAddClue "TempleSchism" 1>><<mpCaseAddClue "FogTide" 1>><<set $mpCaseBoard.LinColdCase.hypotheses to "insideJob">><<set $mpCaseBoard.TempleSchism.hypotheses to "ledgerLeak">><<set $mpCaseBoard.FogTide.hypotheses to "sluiceSabotage">><<tiredness 3>><<stress 2>><</link>><<else>><<link [[三案并线 (0:16)|MP Case Board More Hub]]>><<pass 16>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<if $mpCaseBoard.LinColdCase.clues gte 3 and $mpCaseBoard.TempleSchism.clues gte 3>><<link [[只并两案 (0:12)|MP Case Board More Hub]]>><<pass 12>><<mpCaseAddClue "LinColdCase" 1>><<mpCaseAddClue "TempleSchism" 1>><<set $mpCaseBoard.LinColdCase.hypotheses to "insideJob">><<set $mpCaseBoard.TempleSchism.hypotheses to "ledgerLeak">><<tiredness 2>><<stress 1>><</link>><<else>><<link [[只并两案 (0:12)|MP Case Board More Hub]]>><<pass 12>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<sneakicon>><<link [[强并三案 (0:14)|MP Case Board More Hub]]>><<pass 14>><<mpCaseAddClue "LinColdCase" 1>><<mpCaseAddClue "TempleSchism" 1>><<mpCaseAddClue "FogTide" 1>><<set $mpNpcs.lin.trust to Math.max(0, ($mpNpcs.lin.trust or 0) - 2)>><<stress 5>><<tiredness 3>><</link>>
+
+:: MP Case Board Extra 5 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpCaseBoardInit>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _total to ($mpCaseBoard.LinColdCase.clues + $mpCaseBoard.TempleSchism.clues + $mpCaseBoard.FogTide.clues)>>
+<<set _low to "LinColdCase">><<set _lowN to $mpCaseBoard.LinColdCase.clues>>
+<<if $mpCaseBoard.TempleSchism.clues lt _lowN>><<set _low to "TempleSchism">><<set _lowN to $mpCaseBoard.TempleSchism.clues>><</if>>
+<<if $mpCaseBoard.FogTide.clues lt _lowN>><<set _low to "FogTide">><<set _lowN to $mpCaseBoard.FogTide.clues>><</if>>
+指认前夜，岗棚里间只点了一盏灯。三只卷宗夹重新摊开，铜哨、旧岗簿、碳纸拓片与半张潮汐图各归各位，麻线从桌角牵到灯座，像一张还没收口的网。林恩把短棍靠在椅背，没有坐下；他说这一夜不看故事讲得圆不圆，只看最薄的那一处能不能承住名字。指认一栏此刻<<if $mpCaseBoard.LinColdCase.accused is "trueCulprit">>已经落过“铁证成立”，你要做的是复核，而不是再赌一次<<elseif $mpCaseBoard.LinColdCase.accused is "wrongTarget">>留着被驳回的折痕，先补缺口，别急着第二次落笔<<else>>还空着，空着比写错好，可也不能一直空着<</if>>。
+<br><br>
+【核验读数】靛蓝夹 <<print $mpCaseBoard.LinColdCase.clues>>/6 ｜ 灰白夹 <<print $mpCaseBoard.TempleSchism.clues>>/6 ｜ 盐花夹 <<print $mpCaseBoard.FogTide.clues>>/6 ｜ 三只夹子共 <<print _total>> 条 ｜ 当前最薄：<<if _low is "LinColdCase">>旧案<<elseif _low is "TempleSchism">>神殿<<else>>潮源<</if>>（<<print _lowN>>/6）｜ 林恩的信任 <<print ($mpNpcs.lin.trust or 0)>> ｜ 板子最后怎么落：<<if $mpCaseBoard.outcome is "truth">>公开铁证<<elseif $mpCaseBoard.outcome is "leverage">>封存作筹<<else>>仍未写定<</if>>。
+<br><br>
+最后核验不是再把三宗案子讲一遍，而是承认哪一处最经不起问。合计十二条以上，才有余力重走三处现场，把最薄的那只夹子补上一格；旧案自己若有四枚钉，也可以只对着铜哨与底单再对一遍，把哨口的劈痕和车辙的深浅重新量过。若两样都做不到，最稳当的做法是暂缓落笔：把铜哨收回匣里，等下一回潮气退了再开板。暂缓不会让板上多出一枚钉，却能让林恩知道你没有把猜测当成铁证。
+<br><br>
+灯芯爆了一下，铜哨在桌面上滚了半圈，哨口朝着旧案夹。岗棚外静得只剩檐下铜铃偶尔碰出一声轻响。林恩把红蓝铅笔放下，笔尖没有指向任何一只夹子。
+<br><br>
+铜哨的劈痕在灯下泛白，你把它翻到第三面，才看见哨口内侧还有一道细得几乎摸不出的磨痕。旧岗簿的车辙拓片压在底下，深浅与哨口的高度对不上；若只凭记忆，这一处很容易被讲圆。林恩把两张纸往你面前推了推，没有解释，只让你自己看。岗棚外的更鼓敲过三下，声音闷在雾里；你忽然想起散签背后那句“先看，再钉”，笔尖在指认页上方停住，没有落下去。
+<br><br>
+<<getouticon>><<link [[返回散签木匣 (0:02)|MP Case Board More Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _total gte 12>><<link [[重走三现场 (0:20)|MP Case Board More Hub]]>><<pass 20>><<if _low is "LinColdCase">><<mpCaseAddClue "LinColdCase" 1>><<elseif _low is "TempleSchism">><<mpCaseAddClue "TempleSchism" 1>><<else>><<mpCaseAddClue "FogTide" 1>><</if>><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 1)>><<tiredness 3>><<stress 2>><</link>><<else>><<link [[重走三现场 (0:20)|MP Case Board More Hub]]>><<pass 20>><<stress 5>><<tiredness 2>><<set $mpNpcs.lin.trust to Math.max(0, ($mpNpcs.lin.trust or 0) - 2)>><</link>><</if>><br>
+<<socialiseicon>><<if $mpCaseBoard.LinColdCase.clues gte 4>><<link [[对照铜哨底单 (0:14)|MP Case Board More Hub]]>><<pass 14>><<mpCaseAddClue "LinColdCase" 1>><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 1)>><<stress 1>><<tiredness 1>><</link>><<else>><<link [[对照铜哨底单 (0:14)|MP Case Board More Hub]]>><<pass 14>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<sneakicon>><<link [[暂缓落笔 (0:06)|MP Case Board More Hub]]>><<pass 6>><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 1)>><<stress -2>><<tiredness 1>><</link>>
+
+:: MP Case Board Extra 6 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpCaseBoardInit>><<mpFameInit>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if $mpCaseBoard.LinColdCase.accused is "wrongTarget">>
+旧案卷宗被退了回来，夹脊上多出两道压平的折痕，红铅笔在指认页划了一道不轻不重的斜线。林恩没有把它锁回铁柜，只放在桌角，像放一件还没想好怎么处置的旧衣。纸页里夹着一张退卷笺，上面写着“存疑备查”，落款处空着。你伸手去翻，林恩没有拦，只把短棍横在桌沿，示意你先把纸页理齐。
+<br><br>
+<<else>>
+旧案卷宗还摊在桌上，夹脊平整，指认页上没有退回的斜线。林恩说，卷宗没被驳回不代表补救的路就用不上；真到落错笔的那一夜，先找谁、走哪条暗线、什么时候认错，都得提前想清楚。他把一张空白退卷笺压在铜哨底下，让你先把顺序记下来。
+<br><br>
+<</if>>
+【补救读数】靛蓝夹 <<print $mpCaseBoard.LinColdCase.clues>>/6 ｜ 读法：<<if $mpCaseBoard.LinColdCase.hypotheses is "insideJob">>按内部灭口读<<elseif $mpCaseBoard.LinColdCase.hypotheses is "smugglerRing">>按水路私枭读<<else>>还没写定<</if>> ｜ 指认一栏：<<if $mpCaseBoard.LinColdCase.accused is "wrongTarget">>先前被驳回<<elseif $mpCaseBoard.LinColdCase.accused is "trueCulprit">>铁证已立<<else>>还空着<</if>> ｜ 林恩的信任 <<print ($mpNpcs.lin.trust or 0)>> ｜ 板子最后怎么落：<<if $mpCaseBoard.outcome is "truth">>公开铁证<<elseif $mpCaseBoard.outcome is "leverage">>封存作筹<<else>>仍未写定<</if>>。错认的代价已经落在信任上；补救不是把折痕抹平，而是让林恩看见你肯从哪一步重新走。
+<br><br>
+登门还残卷最慢，也最直：把退卷笺、旧口供和你能补上的那一格一并带回去，不辩解，只请他重新把纸页摊开；信任若还剩一点底子，他会收下，指认一栏也能重新空出来。暗线买副本要碰灰雾地下的人，他们手里常有被抽走的抄本，代价是把你在暗账上的位置往下压一压；副本到手，旧案的线能续上一截，但官面上的退卷笺不会因此消失。最后一条是认下误判、从头重查：不添新钉，只把指认一栏清回空白，把该赔的心气赔进去，等下一次六枚钉齐了再落笔。
+<br><br>
+窗外的天快亮了。退卷笺的纸边在灯下卷起来，像一片干透的叶。林恩把铜哨推到桌沿，哨口没有朝你，也没有朝卷宗；那意思很清楚：这一回由你先说怎么做，他再决定信不信。
+<br><br>
+<<getouticon>><<link [[返回散签木匣 (0:02)|MP Case Board More Hub]]>><<pass 2>><</link>><br>
+<<if $mpCaseBoard.LinColdCase.accused is "wrongTarget">><<socialiseicon>><<if ($mpNpcs.lin.trust or 0) gte 5>><<link [[登门还残卷 (0:12)|MP Case Board More Hub]]>><<pass 12>><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 2)>><<mpCaseAddClue "LinColdCase" 1>><<set $mpCaseBoard.LinColdCase.accused to "none">><<stress 2>><<tiredness 1>><</link>><<else>><<link [[登门还残卷 (0:12)|MP Case Board More Hub]]>><<pass 12>><<set $mpNpcs.lin.trust to Math.max(0, ($mpNpcs.lin.trust or 0) - 1)>><<stress 4>><<tiredness 2>><</link>><</if>><br><<else>><span class="disabled">登门还残卷 (0:12)（卷宗未被驳回）</span><br><</if>>
+<<sneakicon>><<if ($mpStanding.underworld or 0) gte 10 or ($mpFame.underworld or 0) gte 10>><<link [[暗线买副本 (0:12)|MP Case Board More Hub]]>><<pass 12>><<mpCaseAddClue "LinColdCase" 1>><<set $mpCaseBoard.LinColdCase.hypotheses to "insideJob">><<mpStandingAdd "underworld" -3>><<stress 1>><<tiredness 1>><</link>><<else>><<link [[暗线买副本 (0:12)|MP Case Board More Hub]]>><<pass 12>><<stress 3>><<tiredness 1>><<set $mpNpcs.lin.trust to Math.max(0, ($mpNpcs.lin.trust or 0) - 1)>><</link>><</if>><br>
+<<investigateicon>><<link [[认下误判重查 (0:08)|MP Case Board More Hub]]>><<pass 8>><<if $mpCaseBoard.LinColdCase.accused is "wrongTarget">><<set $mpCaseBoard.LinColdCase.accused to "none">><</if>><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 1)>><<stress 4>><<tiredness 1>><</link>>
+
+:: MP Case Board Extra Outcome [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpCaseBoardInit>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _total to ($mpCaseBoard.LinColdCase.clues + $mpCaseBoard.TempleSchism.clues + $mpCaseBoard.FogTide.clues)>>
+档库执事在门外咳了一声，又把脚步挪远了些，像是故意给屋里留最后一段安静。软木板上的三只夹子已经理齐，麻线收成一束，铜钉盒盖着，只剩六张散签压在木匣底下。林恩站在桌侧，短棍没有拿出来；他知道这一回不是再查一格，而是决定这只板子以什么名义离开岗棚。
+<br><br>
+【收束读数】靛蓝夹 <<print $mpCaseBoard.LinColdCase.clues>>/6 ｜ 灰白夹 <<print $mpCaseBoard.TempleSchism.clues>>/6 ｜ 盐花夹 <<print $mpCaseBoard.FogTide.clues>>/6 ｜ 三夹共 <<print _total>> 条 ｜ 旧案指认：<<if $mpCaseBoard.LinColdCase.accused is "trueCulprit">>铁证已立<<elseif $mpCaseBoard.LinColdCase.accused is "wrongTarget">>曾被驳回<<else>>还空着<</if>> ｜ 已合上的夹子 <<print ($mpCaseBoard.LinColdCase.resolved + $mpCaseBoard.TempleSchism.resolved + $mpCaseBoard.FogTide.resolved)>>/3 ｜ 林恩的信任 <<print ($mpNpcs.lin.trust or 0)>> ｜ 板子最后怎么落：<<if $mpCaseBoard.outcome is "truth">>公开铁证<<elseif $mpCaseBoard.outcome is "leverage">>封存作筹<<else>>仍未写定<</if>>。
+<br><br>
+合卷公开归档不是把三只夹子往镇公所一送了事。旧案得先有“铁证成立”的指认，三案又各自钉满六枚，听证人才能在同一个上午把巡夜、告解与港务的空档对上；只要缺一处，公开的告示就会被人撕下一角。封存卷宗作筹走的是另一条路：板子上的东西够多时，神殿与潮源可以一并合上，旧案则仍按指认那一栏算；东西不够，就只能把现有的纸页压进暗格，换一句“以后再说”。两条路都会让卷宗离开岗棚，区别是它被人传阅，还是被人忌惮。
+<br><br>
+若两条都不合意，还可以把整卷退回档库。退卷不是认输，是把定局一栏重新空着，把误判过的指认清回空白，等下一回有人肯把六枚钉重新钉满。档库执事不会问理由，只会在木框背面再添一道催还日期；林恩会把铜哨收回匣里，不催你，也不替你落笔。
+<br><br>
+窗纸已经透出灰白。三只夹子的绳头都朝同一个方向，像三根手指并在一起。你把红蓝铅笔搁回木匣，听见铜钉在盒里轻轻碰了一声。门外传来送奶车的木轮声，天快亮了。
+<br><br>
+林恩把铜哨放在卷宗脊上，哨口朝向桌面。他说卷宗离开岗棚之后，这三宗案子就不再由他一个人守；镇公所的告示、暗巷的价码、档库的催还单，都会替它说话。你能决定的只是它先落到哪一张桌上。档库执事在门外又挪了一步，靴底蹭着青石，声音很轻，却让屋里的三只夹子显得更沉。
+<br><br>
+<<getouticon>><<link [[返回散签木匣 (0:02)|MP Case Board More Hub]]>><<pass 2>><</link>><br>
+<<if $mpCaseBoard.outcome is "" and $mpCaseBoard.LinColdCase.accused is "trueCulprit" and $mpCaseBoard.LinColdCase.clues gte 6 and $mpCaseBoard.TempleSchism.clues gte 6 and $mpCaseBoard.FogTide.clues gte 6>><<socialiseicon>><<link [[合卷公开归档 (0:20)|MP Case Board Hub]]>><<pass 20>><<mpCaseResolve "LinColdCase">><<mpCaseResolve "TempleSchism">><<mpCaseResolve "FogTide">><<set $mpCaseBoard.outcome to "truth">><<mpFameAdd "kind" 8>><<mpStandingAdd "temple" 3>><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 2)>><<stress -4>><</link>><br><</if>>
+<<if $mpCaseBoard.outcome is "">><<sneakicon>><<link [[封存卷宗作筹 (0:16)|MP Case Board Hub]]>><<pass 16>><<if ($mpCaseBoard.LinColdCase.clues + $mpCaseBoard.TempleSchism.clues + $mpCaseBoard.FogTide.clues) gte 9>><<mpCaseResolve "TempleSchism">><<mpCaseResolve "FogTide">><<set $mpCaseBoard.outcome to "leverage">><<mpStandingAdd "underworld" 6>><<mpFameAdd "underworld" 2>><<else>><<set $mpCaseBoard.outcome to "leverage">><<mpStandingAdd "underworld" 2>><</if>><<stress -2>><</link>><br><</if>>
+<<if $mpCaseBoard.outcome is "">><<investigateicon>><<link [[整卷退回档库 (0:08)|MP Case Board More Hub]]>><<pass 8>><<if $mpCaseBoard.LinColdCase.accused is "wrongTarget">><<set $mpCaseBoard.LinColdCase.accused to "none">><<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 1)>><</if>><<set $mpCaseBoard.outcome to "">><<stress -1>><</link>><br><</if>>
+<<if $mpCaseBoard.outcome is "truth" or $mpCaseBoard.outcome is "leverage">>卷宗定局已落，只余核对副本。<br><</if>>
+<<link [[返回线索总板 (0:02)|MP Case Board Hub]]>><<pass 2>><</link>>

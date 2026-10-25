@@ -1,0 +1,270 @@
+:: Widgets MP NPC Vesper [widget nobr]
+<<widget "mpInitNpcVesper">>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1, axis: 0, axisLabel: "契约", manifests: 0, shipTier: 0, voyageLane: "none" }>><</if>>
+<<if $mpNpcs.vesper.axis is undefined>><<set $mpNpcs.vesper.axis to 0>><</if>>
+<<if !$mpNpcs.vesper.axisLabel>><<set $mpNpcs.vesper.axisLabel to "契约">><</if>>
+<<if $mpNpcs.vesper.manifests is undefined>><<set $mpNpcs.vesper.manifests to 0>><</if>>
+<<if $mpNpcs.vesper.shipTier is undefined>><<set $mpNpcs.vesper.shipTier to 0>><</if>>
+<<if !$mpNpcs.vesper.voyageLane>><<set $mpNpcs.vesper.voyageLane to "none">><</if>>
+<</widget>>
+
+:: MP NPC Vesper Deep Hub [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+旧港三号栈桥的尽头，船屋半沉在湿滑的石阶下面。维斯没有先看你，而是俯身从栈桥缝里抽出那根磨得发亮的黄铜水尺，就着风灯读了一遍刻度，才把目光挪到你脸上：「潮水退了七分，正适合把船底的事摊开说。」舱里混着桐油、咸腥和湿缆绳的气味，木板墙上钉着一张被海风啃白边的潮汐图，图角压着一枚断了齿的船钟齿轮；长桌上摊着暗港舱单、三副深浅不同的吃水标记，还有一盏罩着铁纱的夜航灯。这里没有一件摆设，连钉子的锈色都记着每一趟夜航。
+<br><br>
+在这个码头，维斯信的从来不是嘴，是潮水和交货。夜班船工肯不肯把货交到你手上，全写在契约这份看不见的账本里；舱单是实打实的凭据，座船改造则是能不能把货囫囵带回来的底气。潮水给脸，契约才给路。
+<br>
+【<<print _npc.axisLabel>>轴（Tide）】：<<print _npc.axis>>/100 ｜ 暗港舱单：<<print _npc.manifests>> 份 ｜ 座船：<<if _npc.shipTier gte 3>>破雾铜首<<elseif _npc.shipTier gte 2>>双层暗舱<<elseif _npc.shipTier gte 1>>静音木桨<<else>>尚未改造<</if>>
+<br>
+【末班夜航】：<<if (_npc.stage or 0) gte 5>>航向已定，只等下一次涨潮<<elseif (_npc.stage or 0) gte 4>>封存货柜已经清点完毕<<elseif (_npc.stage or 0) gte 3>>灰雾快艇已经被拦下<<elseif (_npc.stage or 0) gte 2>>三号旧仓的挂锁已经打开<<elseif (_npc.stage or 0) gte 1>>失踪船钟的铭文已经辨认出来<<else>>船钟还沉在淤泥里，什么都还没开始<</if>>
+<br>
+【码头风向】：<<if $mpWorldVesperEnding is "freeport">>自由航线已经挂牌，夜班船开始按新规矩报关，那本旧契约簿被锁进了港务处的铁柜。<<elseif $mpWorldVesperEnding is "shadowfleet">>暗影船队的名号已经立起来，栈桥尽头多了不点灯的泊位，巡夜船开始绕开这片水域。<<else>>旧债主还在等最后一票的交货日，码头上谁都不肯先把话说透。<</if>><<if $mpWorldDocksOutcome>> 码头那边的终局也已经落定，水面下的规矩跟着改了一遍。<</if>>
+<br><br>
+维斯做夜航有个怪规矩：舱单要抄两份，一份随货走，一份压在船钟底下。随货走的那份交给接货人，压在钟下的那份留给自己——不是防别人，是防自己记错。码头上的事，记错一笔，就可能有人回不了岸。三样货里他最不愿碰的是人：药可以等，私货可以沉，人一旦上了船，交货就成了把命送到别人手里。所以接人的单子，他总要多问一句：到了岸，谁来接？
+<br><br>
+维斯用指节敲了敲桌上的三枚铜坠，它们分别压着三条航线；又朝舱尾那扇低矮的木门抬了抬下巴，门后是沉在吃水线以下的底舱，只有契约够厚的人才进得去。你可以先核对这段关系在潮水里到了哪一档，再决定今晚的活计：是替码头跑一趟夜航委托，把舱单攒厚；还是把舱单投进船台，让座船多一层暗舱、多一副铜首；也可以直接追问那桩拖了许久的末班夜航——失踪的船钟、三号旧仓、灰雾快艇和封存货柜，都还等着一个交代。
+<br><br>
+「急着走的人我见得多，能把货交回来的人少。」维斯把水尺搁回钉子上，「你要留下，就先学会等潮。」
+<br><br>
+<<getouticon>><<link [[返回维斯身边 (0:02)|MP NPC Vesper Hub]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[核对关系阶位 (0:06)|MP NPC Vesper Tier Action]]>><<pass 6>><</link>><br>
+<<investigateicon>><<link [[调度夜航委托 (0:10)|MP NPC Vesper Loop]]>><<pass 10>><</link>><br>
+<<shopicon>><<link [[查看船只改造 (0:08)|MP NPC Vesper Subsys]]>><<pass 8>><</link>><br>
+<<link [[追查末班夜航 (0:12)|MP NPC Vesper Deep Quest 1]]>><<pass 12>><</link>>
+
+:: MP NPC Vesper Tier Action [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+维斯把风灯挂回舱钉，顺手将一截浸过焦油的缆绳在掌心绕了两圈，才开口：「先别急着说话，听一耳朵水声。今晚的浪是往里推的，推得慢，说明底下有东西在等。」说完这句，才抬眼看你。你和这位夜航船长之间到了哪一层，不靠嘴上认，得看潮水肯把船送到哪一段。
+<br><br>
+<<if _npc.axis gte 60 and (_npc.love or 0) gte 20>>
+【深层·共掌一舵】：维斯从贴身内袋里摸出底舱那把磨得温热的铜钥匙，放进你掌心，又把夜航灯的调光铜环拨到最暗的一格：「雾最厚的时候，别看灯，看水。船头往哪偏，浪会先告诉你。」他让你握住舵柄，自己退后半步，只在你手腕偏得太多时用指节轻轻敲一下。靠岸后，维斯没有立刻收舵，而是望着你被咸风吹乱的头发，低声道：「最后一票，我想让你在船上。不是当货，是当能一起交货的人。」
+<<elseif _npc.axis gte 35 or (_npc.trust or 0) gte 12>>
+【知己·同看海图】：维斯掀开潮汐图下面压着的一本旧账，纸页被水汽泡得发皱，上面一串串数字不是货价，是欠债的期限。他指给你看：「这条是贝利的印子钱，这条是船坞的修理费。夜航跑得再稳，也总有还不清的一笔。」说完把一支油性铅笔递给你，让你在图上自己画一条备选退路。你画的线歪了，维斯没笑，只用拇指把线尾抹平：「能想到退路，才算真上了船。」
+<<elseif _npc.axis gte 15 or (_npc.trust or 0) gte 5>>
+【熟识·同船试水】：维斯把跳板的活扣解开，示意你踩上小艇的舷边：「今晚不跑远，就贴着栈桥试一圈。你负责看水，我负责看灯。」小艇离岸时，他往你手里塞了一只掉了漆的搪瓷杯，里面是加了海藻的姜茶，辣得舌根发麻。划到防波堤内侧，维斯忽然停桨，让你听远处雾号的长短：「记住这个调子，起雾的时候它比罗盘可靠。」
+<<else>>
+【初识·只递缆绳】：维斯站在石阶上，把一盘缆绳递到你怀里，没有让你上船的意思：「先学系桩。绳子先过桩，再过手，别让浪替你拿主意。」他蹲下来示范了一个双套结，动作快得几乎看不清，随后把绳尾交给你重做。你系错了两次，他也不恼，只把绳结拆开，让你再来一遍。潮水拍着石阶，维斯始终和你隔着一步的距离，像在掂量一件还没验过成色的货。
+<</if>>
+<br><br>
+<<if $mpWorldVesperEnding is "freeport">>自由航线挂牌之后，维斯在舱里添了一盏常亮的白灯，说话也比从前松快些，只是每次提到港务处，仍会下意识看一眼水尺。<<elseif $mpWorldVesperEnding is "shadowfleet">>暗影船队立起来之后，船屋外多了两道不点灯的哨影，维斯待你依旧，却总把舱门留一条缝，听着栈桥上的脚步。<<else>>旧债主的人偶尔会在栈桥口晃，维斯不说，只把夜航灯罩得更严实些。<</if>>
+<br><br>
+你可以就着这盏灯和维斯说几句闲话，帮他把缆绳盘好、报一遍今夜的吃水；若你们之间的契约已经够厚，也可以把话往深处递一递，问他那本旧账究竟欠了谁。关系不到火候就硬揭底，维斯只会把舱门合上，让你在冷风里站到自己想明白。
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[日常寒暄交流 (0:08)|MP NPC Vesper Deep Hub]]>><<pass 8>><<set _npc.axis to Math.min(100, _npc.axis + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 15 or (_npc.trust or 0) gte 5>><<link [[知己深度交心 (0:12)|MP NPC Vesper Deep Hub]]>><<pass 12>><<set _npc.axis to Math.min(100, _npc.axis + 6)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<stress -4>><</link>><<else>><<link [[冒昧打探底细 (0:12)|MP NPC Vesper Deep Hub]]>><<pass 12>><<set _npc.axis to Math.max(0, _npc.axis - 2)>><<stress 3>><</link>><</if>>
+
+:: MP NPC Vesper Loop [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+维斯把三枚铜坠一字排开，压在潮汐图的三条细线上，又推开窗板看了一眼雾潮水尺，尺上的读数停在 <<print ($mpFogTide or 0)>>：「雾从东南来，水又涨了两指，今晚三条路都不算白跑。」他没有先问你想赚多少，只问：「你手里这批货，怕不怕湿，怕不怕亮，怕不怕人看见？」暗港舱单已经攒了 <<print _npc.manifests>> 份，上回走的是<<if _npc.voyageLane is "reef">>近岸暗礁线<<elseif _npc.voyageLane is "fog">>灰雾航道<<elseif _npc.voyageLane is "lightship">>外海灯船线<<else>>还没定下的水路<</if>>。不同的货配不同的水，配错了，潮水会替你记账。
+<br><br>
+【近岸暗礁线】：贴着礁脊内侧走，退潮时能借浅水把吃水压到最低。这条线多送药，箱子上裹着油布，最怕的是搁浅和磕碰。走这趟靠的是手上的活计和码头上的老脸，礁缝里容不得半点犹豫。
+<br>
+【灰雾航道】：整条水路都埋在雾里，不点灯，只靠记忆里的浮标和船底的触感。私货多从这条线进出，值钱，也最招人眼。雾里最怕撞上浮木或者迎面来的巡夜船，胆气和手上功夫缺一样都不行。
+<br>
+【外海灯船线】：把小艇放到外海，接应那艘不靠岸的灯船，货里常夹着要送走的人。路程最远，回头浪最大，得算准潮汐窗口，还要有压得住场子的定力。人上了船，就不能再当成货。
+<br><br>
+雾潮水尺是维斯自己钉的：一根铜尺，底下压着几道旧刻痕，记的是这些年哪一夜雾最厚、哪一夜水最浅。水尺涨得快，近岸的礁脊就淹得深，暗礁线能走；水尺退得慢，雾里的暗流就乱，得靠灯船在外海多等半个时辰。维斯从不把这些写在纸上，全记在脑子里，像记一笔笔还没交出去的货。
+<br><br>
+「三条线，我都能交货。」维斯用指节依次敲过三枚铜坠，「但交货不是把东西扔上岸就算完。你得让它原样到、按时到、到该到的人手里。少一样，契约就得往下掉一格。」他说这话时眼睛看着水尺，不看人。
+<br><br>
+你可以选一条今晚就走。选定之后，维斯会带你上船，成不成要看你在水面上的本事；就算失手，也不过是白熬一夜、多灌几口咸风，不会有谁从你口袋里掏钱。
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<link [[夜航近岸暗礁 (0:15)|MP NPC Vesper Loop Resolve]]>><<pass 15>><<set _npc.voyageLane to "reef">><</link>><br>
+<<shopicon>><<link [[穿越灰雾航道 (0:15)|MP NPC Vesper Loop Resolve]]>><<pass 15>><<set _npc.voyageLane to "fog">><</link>><br>
+<<socialiseicon>><<link [[接应外海灯船 (0:15)|MP NPC Vesper Loop Resolve]]>><<pass 15>><<set _npc.voyageLane to "lightship">><</link>>
+
+:: MP NPC Vesper Loop Resolve [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+<<if _npc.voyageLane is "reef">>
+小艇贴着礁脊滑出去，桨叶几乎不敢吃满水。维斯蹲在船头，一只手垂在舷外，靠指尖感觉水流的走向；你按他教的法子数着浪与浪之间的间隙，在第三道回流最弱的时候把船头别进礁缝。药箱用油布裹了三层，压在舱底最稳的位置。回程时天边已经泛白，礁石像一排湿漉漉的牙齿，你们从齿缝里钻了回来。
+<<elseif _npc.voyageLane is "fog">>
+雾把灯和岸一起吞了。维斯让你灭了灯，只留船底一盏蒙布的弱光，靠数浮标的间隔辨方向。私货箱压得船身很沉，每一次转向都要提前半拍。中途有引擎声从雾里擦过去，维斯抬手让你停桨，两个人贴着舱板一动不动，直到那声音远得只剩水响，才重新把桨探下去。
+<<else>
+外海的风比港内硬得多，小艇被浪托起来又摔下去。灯船没有下锚，只在潮汐窗口里漂着等；你们靠上去的时候，船上伸下来几只手，先把裹着毯子的人接过去，再传药箱。维斯一直站在船尾压着重量，等最后一个人过了舷，才低声说：「货齐了，人齐了，这才叫交货。」
+<</if>>
+<br><br>
+整趟水路，维斯很少伸手替你。他只在船头压着重量，偶尔用桨背敲一下船舷，提醒你水流变了。他说这叫「让手自己学会交货」——别人替你把稳的舵，下次起雾你照样会偏。等船头终于抵上栈桥，他才把湿透的缆绳抛上来，示意你先系桩，自己蹲下去检查货箱的封漆。你掌心的水泡和袖口的盐渍，都是这一趟的凭据；维斯看了一眼，没有夸，只把一只干手套扔给你。
+<br><br>
+靠岸之后才是真正的结算。维斯把舱单摊在船板上，就着残灯一行行核对：货有没有受潮，封漆有没有磕坏，数目对不对得上，接货的人有没有在约定的时候出现。核对完，他把舱单边角压平，才把笔递给你，让你自己的手在最后一行落下记号。他把这一夜的得失说得很平：「水面上的事，成了是潮水给面子，不成是自己手潮。都别往脸上贴，也别往心里去。」
+<br><br>
+你若能把这趟活收拾利落，舱单上会多出两行实打实的记录，码头上的夜班船工也会多认你一分；若是手忙脚乱、货没交明白，维斯不会骂你，只会把湿透的缆绳递过来让你一起盘，这一夜的疲惫和心火都得自己咽下去。无论成不成，都不会有谁从你身上拿钱。
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if ($skulduggery or 0) gte 240 or ($willpower or 0) gte 400 or _npc.axis gte 25>><<link [[稳妥收拢成果 (0:10)|MP NPC Vesper Deep Hub]]>><<pass 10>><<set _npc.manifests += 2>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><<stress -2>><</link>><<else>><<link [[勉强收拾残局 (0:10)|MP NPC Vesper Deep Hub]]>><<pass 10>><<set _npc.axis to Math.max(0, _npc.axis - 1)>><<tiredness 3>><<stress 4>><</link>><</if>><br>
+<<shopicon>><<link [[转去子系统页 (0:04)|MP NPC Vesper Subsys]]>><<pass 4>><</link>>
+
+:: MP NPC Vesper Subsys [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+退潮后的船台露在栈桥背面，座船被缆绳吊在半空，船底还挂着没刮净的藤壶。维斯把一盏风灯挂在船肋上，灯光从木缝里漏出来，照见舱里新刨的木屑和旧盐渍。座船眼下是<<if _npc.shipTier gte 3>>破雾铜首：船头包着一层锤打过的铜皮，接缝里嵌着防水麻丝，雾再厚也能把水面切开一道白痕<<elseif _npc.shipTier gte 2>>双层暗舱：底板下面又藏了一层浅舱，通气孔做得极细，从外面看只是一排旧钉眼<<elseif _npc.shipTier gte 1>>静音木桨：桨身裹了浸油的毡布，落水时几乎听不见响，适合贴着巡夜船的影子走<<else>>尚未改造：还是那副旧木桨和敞开的货舱，跑一趟近岸都得看老天脸色<</if>>。舱单还剩 <<print _npc.manifests>> 份。
+<br><br>
+【静音木桨】是第一层底气。维斯会让你把毡布一层层缠紧，再用麻绳勒出均匀的箍，最后把桨放进水缸里试声。缠得太松会吸水变沉，缠得太紧又划不动，只有恰到好处，桨叶入水才像刀切进油里。
+<br>
+【双层暗舱】是第二层底气。多出来的浅舱能藏货，也能藏人，但压载必须重新算过。维斯会让你蹲在舱底，一格一格地挪压舱石，直到船身吃水线停在漆好的记号上；差半寸，遇上侧浪就会翻。
+<br>
+【破雾铜首】是最后一层底气。铜皮要顺着船头的弧度一锤一锤地敲，接缝用烧热的松脂封死。维斯不让你碰锤子，只让你扶着铜皮，听他落锤的节奏：「别跟铜较劲，让它自己服帖。」
+<br><br>
+船台只在退潮的几个时辰里能用，涨潮前必须把座船重新吊回水面，否则船肋会被潮气吃出暗裂。维斯把这段时间算得很死，刨木、上油、缠麻丝，每一步都卡着水尺的刻度。你若要搭手，他从不客气，递过来的不是刨子就是浸了松脂的麻团。
+<br><br>
+「船是交货的本钱。」维斯用指腹抹过船肋上的水痕，「舱单攒着不花，就只是几张纸；投进船台，才变成能把货运回来的力气。两份额度换一层改造，急不得，也省不得。」他说完看了看你，又补一句：「当然，舱单不够还想硬上，我也不拦。船台不会骗人，缺料就是缺料。」
+<br><br>
+你可以留在这里看维斯施工，也可以去夜航委托里再攒几份舱单；若手上已经攒够，就把它们投进船台，让这条船多一分在雾里活着回来的把握。
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<if _npc.shipTier lt 3 and _npc.manifests gte 2>><<link [[投入资源扩建 (0:15)|MP NPC Vesper Subsys Upgrade]]>><<pass 15>><<set _npc.manifests -= 2>><<set _npc.shipTier += 1>><<set _npc.axis to Math.min(100, _npc.axis + 8)>><</link>><<else>><<link [[资源不足强修 (0:15)|MP NPC Vesper Subsys Upgrade]]>><<pass 15>><<tiredness 2>><<stress 3>><</link>><</if>><br>
+<<investigateicon>><<link [[去筹集新资源 (0:04)|MP NPC Vesper Loop]]>><<pass 4>><</link>>
+
+:: MP NPC Vesper Subsys Upgrade [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+船台上的活计告一段落，刨花被海风吹得贴着石阶打旋。维斯蹲在船底，用一块旧布擦手上的木屑和松脂，擦到一半停下来，抬手敲了敲新换的船肋，听那一声闷响够不够实。座船眼下是<<if _npc.shipTier gte 3>>破雾铜首，船头的铜皮在灯下泛着一层暗红，雾夜里能替整条船挡下最硬的风<<elseif _npc.shipTier gte 2>>双层暗舱，舱底那层浅舱已经封好，通气孔细得连灯光都漏不出去<<elseif _npc.shipTier gte 1>>静音木桨，桨身的毡布缠得匀净，入水时只剩一圈很轻的涟漪<<else>>尚未改造，船肋还是旧的，缝隙里塞着发黑的麻絮，风一紧就能听见木头呻吟<</if>>。舱单还剩 <<print _npc.manifests>> 份，维斯把它们收进一只铁皮匣，扣好搭扣。
+<br><br>
+<<if _npc.shipTier gte 1>>
+「船现在能给你遮点风了。」维斯掀开舱口，底舱里挂着一张旧吊床，角落里焊着一只小铁炉，炉膛里还留着上次夜航的炭灰。他让你先下去，自己在舱口坐了一会儿，听船壳外面的水声：「累了就躺一会儿。潮水还在走，船就倒不了。」吊床随着水波轻轻晃，桐油和炭火的气味混在一起，比岸上的任何一张床都稳。
+<<else>>
+维斯没有掀舱口，只把一块油布铺在船台边，让你靠着船肋歇脚。旧船的舱底还漏风，躺下去能感觉到潮气从木缝里往上钻，吊床也没有，只能蜷在油布上听维斯有一搭没一搭地说水路。歇是歇了，骨头里的乏却没真散开。
+<</if>>
+<br><br>
+船壳在水里轻轻响，是木板重新吃水的声音。维斯说，新换的肋板要让它自己胀紧，头一夜不能装重货，只能空着舱让潮水把它养服帖。他把铁皮匣锁好，又弯腰把船台边散落的木楔一根根收进工具箱，动作慢而稳，像在给一件还没交货的东西封口。潮水在船壳外一寸寸涨，船台上的灯影也跟着晃。
+<br><br>
+「改造这事，急不来。」维斯把铁皮匣放进舱柜，回身看你，「今天多一层舱，明天多一副铜首，都是为了让货和人能完整回来。你要歇，就在船上歇；船比岸上诚实，晃不晃、漏不漏，一躺就知道。」
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<link [[返回子系统页 (0:02)|MP NPC Vesper Subsys]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[利用设施休整 (0:10)|MP NPC Vesper Deep Hub]]>><<pass 10>><<if _npc.shipTier gte 1>><<stress -4>><<tiredness -2>><<else>><<stress 1>><</if>><</link>>
+
+:: MP NPC Vesper Deep Quest 1 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+维斯把一只从淤泥里捞上来的船钟搁在桌上。钟体只有巴掌大，铜面结着一层青绿的锈，钟舌早就断了，内壁却刻着一圈细密的铭文，被盐垢糊得只剩几个笔画。船屋外正落着退潮后的细雨，水尺上的刻度一寸寸往下退，像有人在替这口钟数着没回来的年头。
+<br><br>
+「这钟是从沉船的桅座上摘下来的。」维斯用指甲刮了刮钟口的锈，「那趟夜航没回来，人也没回来。债主说船沉了，我不信。锅底一样的雾里，船可以偏，钟不该哑。」他把一盏灯推到你面前，灯芯捻得很低，只够照亮钟内壁那一圈字：「你替我看看，这上面写的是船号，还是接货人的名字。看明白了，我才知道下一趟该往哪片水去。」
+<br><br>
+维斯说，那趟船出海前，钟是响过的。三短一长，是夜航船离港的规矩，意思是货已齐、人已齐、回来再响一次。后来钟没再响，码头上的老人就都说船让雾吞了。维斯不信雾能吞船，只信有人先动了手。他说这话时，指节一直压在钟口那道断舌的茬上，像按住一句没说完的口供。
+<br><br>
+若你手上有在码头上磨出来的眼力，或者座船已经改出能靠得近的吃水，又或者心里那口气压得够稳，就能借着灯光一点点辨认铭文。铭文很浅，盐垢又硬，得用针尖挑、用指腹摸，急不得；认对了，维斯会把船钟重新挂回舱梁，让你听见它哑着嗓子也能响一声。若手一抖、心一浮，锈层被刮花，字就彻底糊了，维斯不会说什么，只会把钟收回去，让你在雨里站到潮水再退一寸。
+<br><br>
+若你不想跟锈较劲，也可以陪维斯比对那本泡皱的潮汐日志。哪一天涨潮、哪一夜有雾、哪一趟船该在什么时候过礁，日志上都留着维斯自己画的记号。一页页对下来费的是时辰和脚力，却稳当，不会把仅存的字迹弄坏。
+<br><br>
+「交货讲究个准。」维斯把日志翻到折角那页，「钟也是。它替那条船记着最后一刻，咱们得替它把话听完。」
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 10 or _npc.shipTier gte 1 or ($willpower or 0) gte 360>><<link [[辨认船钟铭文 (0:15)|MP NPC Vesper Deep Quest 2]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 1)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[辨认船钟铭文 (0:15)|MP NPC Vesper Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<link [[比对潮汐日志 (0:15)|MP NPC Vesper Deep Quest 2]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 1)>><<tiredness 2>><</link>>
+
+:: MP NPC Vesper Deep Quest 2 [nobr]
+<<set $outside to 1>><<set $location to "docks">>><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+三号旧仓在退潮时才会从水里露出来。维斯把船停在仓墙外侧，用竹篙探了探水深，才让你踩着湿滑的石阶下去。仓门半掩，门缝里涌出一股陈年盐卤和烂木头的味道，水没到小腿，每走一步都能感觉到底下的淤泥在吸靴子。门上挂着一把老式铜锁，锁孔周围糊着一圈暗红色的封漆，漆面上压着一个看不清的记号。
+<br><br>
+「这仓是替人存过货的。」维斯举着灯，光在水面上晃出一圈碎金，「后来货主没了，仓就封了。我要找的不是货，是当年那张接货单——谁把船钟运上船，谁就该知道船为什么没回来。」他打了个手势，让你自己决定怎么开这道门。
+<br><br>
+仓里最深处的水已经发黑，灯照下去像照进一口井。维斯说，旧仓的货架是按潮位分层的：最上一层放过药，中间放过成箱的私货，最下面那层，只有人待过。你顺着他的灯光看过去，最下层果然空着，只剩几道被绳子勒出的印子。
+<br><br>
+若你手上有码头上学来的开锁本事，或者座船改出了能贴岸的浅吃水，又或者心里的准星够稳，就能把锁挑开。铜锁锈得厉害，锁舌咬得很死，得先用灯油润，再用细铁片一点点试；封漆一破，门后那股更浓的咸腥就扑出来，仓里堆着泡烂的木箱和散了架的货架，最里面有一张被水泡胀的油纸。若手劲使错，铁片断在锁孔里，锁就彻底废了，维斯只能带你原路退回去，水冷得让人打颤。
+<br><br>
+若不想碰锁，也可以就着灯光把封漆上的记号拓下来。维斯会从怀里摸出一小截炭条和一张薄纸，让你把纸按在漆面上，用炭条侧锋轻轻擦。拓印费时，手要稳，气要匀，但不会惊动锁芯，也不会把最后一点线索毁掉。拓完的纸上浮出一个像锚又像数字的暗记，维斯盯着看了很久，才把它折好收进内袋。
+<br><br>
+「有些门不用撬。」维斯把灯举高了些，「你得先弄明白门上写的是什么。交货之前，先认人。」
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 20 or _npc.shipTier gte 1 or ($willpower or 0) gte 360>><<link [[挑开旧仓挂锁 (0:15)|MP NPC Vesper Deep Quest 3]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 2)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[挑开旧仓挂锁 (0:15)|MP NPC Vesper Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<link [[拓印暗号封漆 (0:15)|MP NPC Vesper Deep Quest 3]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 2)>><<tiredness 2>><</link>>
+
+:: MP NPC Vesper Deep Quest 3 [nobr]
+<<set $outside to 1>><<set $location to "docks">>><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+雾在半夜漫过防波堤，把旧港的灯一盏盏吞掉。维斯把座船停在灰雾航道的岔口，熄了灯，只让船随着暗流轻轻打横。远处传来一阵很轻的引擎声，忽近忽远，像有人拿指节敲着水面。「就是它。」维斯把一捆盘好的铁钩递给你，「那艘快艇每回都在这个时辰穿雾，船上装的是不打算报关的东西。拦下它，问问是谁在替旧债主跑腿。」
+<br><br>
+维斯认得这条快艇。前几夜它都贴着这条岔口进出，船尾压得很低，说明货不轻；船上不点灯，也不回应灯语，只靠对水道的熟。维斯跟过它两回，每回都在岔口被甩掉——雾里的暗流替它挡了追路。今晚他提前把座船横在岔口，就是为了这一钩。铁钩的绳结他重新打过三遍，每一遍都拉紧了试，才递到你手里。
+<br><br>
+引擎声越来越近，雾里先浮出一个模糊的船影，接着是快艇掀起的白浪。维斯稳住船身，让你站到舷边。铁钩得在两条船擦身的那一瞬抛出去，早了钩空，晚了就被浪推开；钩住之后还要立刻收绳，把对方的船舷拉近，才有说话的机会。若你手上有码头练出来的准头，或者座船的吃水够浅能贴上去，又或者心里的定力够沉，这一钩就能搭实。若抛偏了，铁钩落水，绳索在掌心勒出一道火辣辣的印子，快艇转眼就钻进雾里，只剩维斯在船尾慢慢把湿绳收回来。
+<br><br>
+也可以不打这一钩。维斯教你用信号灯语，把灯罩开合成长短不一的几段，一遍遍朝雾里打过去：停船、受检、报上船号。灯语逼停慢，得等，得重复，手举久了肩膀会酸，但对方若只是跑私货的寻常船家，看见行内的灯语多半会减速。等快艇真的靠过来，维斯才把灯压到最低，问出那句早就备好的话。
+<br><br>
+「水面上动手，讲究先礼后兵。」维斯把灯罩合上，「能好好交货，就别把货弄湿。可要是对方先不讲规矩，你也得有一手能让他停下来的本事。」
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 30 or _npc.shipTier gte 1 or ($willpower or 0) gte 360>><<link [[抛出铁钩搭舷 (0:15)|MP NPC Vesper Deep Quest 4]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 3)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[抛出铁钩搭舷 (0:15)|MP NPC Vesper Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<link [[信号灯语逼停 (0:15)|MP NPC Vesper Deep Quest 4]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 3)>><<tiredness 2>><</link>>
+
+:: MP NPC Vesper Deep Quest 4 [nobr]
+<<set $outside to 1>><<set $location to "docks">>><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+拦下的快艇把你们领到旧港最里侧的一排封存货柜前。库门是铁皮的，门缝里塞着防潮的麻布，地上散着碎木屑和几段剪断的铅封。维斯从快艇上搜出一串钥匙，试到第三把才把库门打开。库里码着十几只木箱，箱角都压着铅封，封面上用黑漆写着编号，其中一只的编号和船钟内壁那圈铭文对得上。
+<br><br>
+「找到了。」维斯把灯搁在箱盖上，光晕里浮着细小的尘，「这只箱子该在那条沉船上。它现在好端端待在岸上，说明有人先把货卸了，再让船沉。船不是跑丢的，是被做掉的。」他没有立刻开箱，而是先蹲下来看铅封的压纹，像在确认一件旧事的落款。
+<br><br>
+维斯把灯往箱堆深处挪了挪，先数了一遍箱子，又数了一遍名册上的编号，发现少了一只。少的那只不在库里，也不在快艇上，像是被人提前提走了。维斯用指节敲了敲箱盖：「账上少一笔，水里就多一条命。今晚得把这只箱子弄明白。」
+<br><br>
+若你有码头上的手艺，或者座船已经能把你稳稳送到这里，又或者心里的定力足够撑住这一夜，就能把铅封撬开。铅封硬，箱钉又深，得先用凿子对准压纹的缺口，再用锤子轻轻震；撬得太急，箱盖会裂，里头的东西一旦见风受潮就废了。开对了，箱里是一叠用油布包着的接货单，最上面一张写着船号、时辰和接货人的暗记，和你们一路追来的线索严丝合缝。若手一滑，凿子偏了，铅封纹丝不动，箱角却崩掉一块，维斯只能把灯压低，带你从库房后门退出去。
+<br><br>
+也可以不碰箱子，先去核对那本夹在货架缝里的走私名册。名册被潮气浸得发胀，字迹晕开，得一页页摊平、一行行比对：哪个船号在沉船前一夜被划掉，哪个名字出现了两次，哪一笔货的数目对不上。核对不伤箱，也不惊动外头的人，只是费眼费神，看到最后眼前发花。
+<br><br>
+「交货的人最怕账不清。」维斯用指腹压住被风吹起的册页，「账清了，才知道该找谁把这笔旧账收回来。」
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 40 or _npc.shipTier gte 1 or ($willpower or 0) gte 360>><<link [[撬开铅封木箱 (0:15)|MP NPC Vesper Deep Quest 5]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 4)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[撬开铅封木箱 (0:15)|MP NPC Vesper Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<link [[核对走私名册 (0:15)|MP NPC Vesper Deep Quest 5]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 4)>><<tiredness 2>><</link>>
+
+:: MP NPC Vesper Deep Quest 5 [nobr]
+<<set $outside to 1>><<set $location to "docks">>><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>>
+所有的线索最后都收在船屋这张长桌上：断齿的船钟、泡胀的接货单、拓下来的暗记、名册上被划掉又补上的船号。维斯把它们一件件摆齐，摆到最后一页时，手停在半空。窗外潮水正在转，水尺的影子一点点往上涨，像有人在门外催。
+<br><br>
+【末班底账】：契约 <<print _npc.axis>>/100 ｜ 船台：<<if _npc.shipTier gte 3>>破雾铜首<<elseif _npc.shipTier gte 2>>双层暗舱<<elseif _npc.shipTier gte 1>>静音木桨<<else>>旧船未改<</if>> ｜ 进度：<<if (_npc.stage or 0) gte 4>>封存货柜已清点<<elseif (_npc.stage or 0) gte 3>>灰雾快艇已拦下<<elseif (_npc.stage or 0) gte 2>>三号旧仓已打开<<elseif (_npc.stage or 0) gte 1>>船钟铭文已辨认<<else>>尚未启程<</if>> ｜ 已定航向：<<if $mpWorldVesperEnding is "freeport">>自由航线<<elseif $mpWorldVesperEnding is "shadowfleet">>暗影船队<<else>>未定<</if>>
+<br><br>
+「旧债主给了我最后一票。」维斯没有看你，只看着桌上的纸，「跑完，债清，我这条船就能洗白，挂上港务处的牌子。可这票货里夹着不该夹的东西，跑完它，码头是稳了，规矩也就烂在根上了。」他终于抬眼：「还有一条路。把船凿沉在湾口，让这票货沉下去，谁也拿不到。旧债主不会放过我，我从此进不了这个港，但我还能在别的海上跑，也还能……跟你一起跑。」
+<br><br>
+他把一只手按在船钟上，钟舌虽断，钟壁却在潮声里轻轻共振：「一条是把货交出去，换一个干干净净的岸；一条是把货沉掉，换一条不那么干净、但还能自己选的水路。两条都得有人认账，没有第三条。」
+<br><br>
+若你选开辟自由航线，维斯会按最后一票的约定把货交到接货人手里，还清欠债，拿着港务处的委任状走进晨光；旧港的夜班船从此按新规矩报关，码头稳当，暗处的抽成也从此有了名目。
+<br><br>
+若你选接管暗影船队，维斯会在涨潮前把旧船凿沉在湾口，看着它带着那批货沉进暗流；随后他接下散伙船队剩下的船和人，挂起不点灯的帆，从此被旧债主追着跑，却也从此能堂堂正正把后背交给你。码头会乱上一阵，水面下会冒出新的走私线。
+<br><br>
+船钟在桌上轻轻震着，像还有话没说完。维斯把两条路摊得很平：自由航线能让码头安稳，却要把那些不干净的手一起洗白；暗影船队能保住这条船和船上的人，却要让旧港乱上一阵。他说，选哪条都不算错，错的是选了又反悔——海上不认回头货。
+<br><br>
+「我不催你。」维斯把灯芯挑亮了一点，「交货之前，先想清楚这货要交给谁。交给我，还是交给这片水，你说了算。」
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:02)|MP NPC Vesper Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<link [[开辟自由航线 (0:20)|MP NPC Vesper Ending A]]>><<pass 20>><<set _npc.stage to 5>><<set $mpWorldVesperEnding to "freeport">><<set _npc.axis to Math.min(100, _npc.axis + 10)>><</link>><br>
+<<socialiseicon>><<link [[接管暗影船队 (0:20)|MP NPC Vesper Ending B]]>><<pass 20>><<set _npc.stage to 5>><<set $mpWorldVesperEnding to "shadowfleet">><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 5)>><</link>>
+
+:: MP NPC Vesper Ending A [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>><<set $mpWorldVesperEnding to "freeport">><<set _npc.stage to 5>>
+最后一票在涨潮前交了出去。药箱、私货、还有两个不该出现在舱单上的人，都在约定的时辰到了该到的手里。维斯站在栈桥尽头，看着接货的马车一辆辆走远，才把最后一页舱单撕下来，折好，放进贴身内袋。天亮时，港务处的铜牌挂上了船屋的门框，旧债主的印子钱一笔勾销，维斯换了一身深蓝的制服，袖口还留着洗不掉的桐油印。
+<br><br>
+自由航线挂牌之后，夜班船不再需要摸黑绕礁。报关的窗口开到后半夜，货单上盖着清清楚楚的章，码头的秩序比从前稳当得多；可维斯心里明白，那些盖章的手并不比从前干净，只是把抽成从暗处挪到了明处。他没有点破，只在每次巡完栈桥之后，回到船屋把那根黄铜水尺重新校一遍。
+<br><br>
+「岸是稳了。」维斯把水尺挂回钉子上，转身看你，「可我心里那本账没合。以前我说交货，是交到接货人手里；往后我说交货，是交到你手里。」他顿了顿，从抽屉里摸出那把底舱的旧铜钥匙，放在你掌心：「港务处的规矩管得住船，管不住我。你什么时候想走，我就什么时候开船。」
+<br><br>
+夜里第一趟挂牌的夜航，维斯坚持自己掌舵。船从三号栈桥出发，沿着新划定的航道走，灯一盏盏亮着，礁脊在灯下看得清清楚楚。你站在他身侧，替他报水尺的刻度；他听完，只点了点头，把舵交给你半寸。那一刻你忽然明白，他洗白的从来不是这条船，是终于能把后背交给别人的那种踏实。岸上的规矩会变，潮水不会。他说这话时，海风把他制服的衣角吹得猎猎作响。
+<br><br>
+旧港的雾还是照旧在半夜漫上来，只是雾里多了一盏按规矩点亮的白灯。维斯站在灯下，制服外套的扣子没系最上面那颗，露出里面那件洗得发白的旧衬衫，像随时准备把制服脱下来，重新做回那个只认潮水的夜航船长。你走过去，他没有敬礼，只把水尺往你这边偏了偏，让你看清今天的潮位。
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:04)|MP NPC Vesper Deep Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<socialiseicon>><<link [[返回维斯身边 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>>
+
+:: MP NPC Vesper Ending B [nobr]
+<<set $outside to 1>><<set $location to "docks">>><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set _npc to $mpNpcs.vesper>><<set $mpWorldVesperEnding to "shadowfleet">><<set _npc.stage to 5>>
+涨潮前最黑的那一刻，维斯把旧船撑到湾口，亲手凿穿了船底的木板。海水从裂缝里涌进来，船身一寸寸往下沉，那批不该见光的货跟着沉进暗流，连一个铅封都没留下。维斯站在小艇上，看着桅杆最后没入水面，才把凿子丢进海里，像丢掉一件用了太久的旧工具。
+<br><br>
+天亮之后，旧港的栈桥口贴出了追缉的告示，维斯的船屋被查封，旧债主的人沿着海岸线一路打听。可也是从那一夜起，散伙的暗影船队认下了新的名号：不点灯的快船、不走栈桥的泊位、只在雾里交货的规矩。码头失了序，水面上却多出一条谁也说不清算不算活路的新走私线。
+<br><br>
+维斯不能再用真名进港，却能在任何一片没有灯的水域靠岸。他把小艇停在湾外的礁石后面，等你踩着湿滑的石缝下来，才低声笑了一下：「岸上的交货到此为止。往后的货，我交给你；往后的路，你指给我。」他伸手替你拢了拢被海风吹乱的衣领，掌心还带着凿船时磨出的热。
+<br><br>
+头一趟不点灯的货是在后半夜交的。接货的小船从礁石后面划出来，没有灯语，只靠三下桨声对暗号。维斯把货一件件递过去，最后递出去的是自己的旧罗盘——他说，认路的东西留在岸上，往后靠你指。对方接了货，也接了那片水域的新规矩。回程时雾散了半刻，能看见旧港的灯在很远的地方亮着，像一串不属于他们的星。维斯没有回头，只把船头往更黑的水里压了压。桨声很轻，轻得像怕惊醒谁。
+<br><br>
+又一个无灯的夜里，雾从外海一层层推过来，把旧港的灯全吞了。维斯解开缆绳，让小艇顺着暗流滑出去，船头没有灯，只有水声替他们认路。身后是被追缉的岸，身前是没人画过航线图的海；他站在船尾掌舵，回头看你一眼，像是终于把最后一票交到了该交的人手里。你没有问他后不后悔，他也没有说；有些话在海上不必说满，留半句给下一趟潮。
+<br><br>
+<<getouticon>><<link [[返回契约深枢 (0:04)|MP NPC Vesper Deep Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<socialiseicon>><<link [[返回维斯身边 (0:04)|MP NPC Vesper Hub]]>><<pass 4>><</link>>

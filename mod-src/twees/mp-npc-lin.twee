@@ -1,0 +1,541 @@
+:: MP NPC Lin Deep Hub [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _lin to $mpNpcs.lin>>
+<<if _lin.trustManor is undefined>><<set _lin.trustManor to 20>><</if>>
+<<if _lin.trustDomus is undefined>><<set _lin.trustDomus to 20>><</if>>
+<<if _lin.trustHigh is undefined>><<set _lin.trustHigh to 15>><</if>>
+<<if _lin.watch is undefined>><<set _lin.watch to Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3)>><</if>>
+<<if _lin.law is undefined>><<set _lin.law to 0>><</if>>
+<<if _lin.caseStage is undefined>><<set _lin.caseStage to 0>><</if>>
+<<if _lin.clues is undefined>><<set _lin.clues to 0>><</if>>
+<<if $mpAlert is undefined>><<mpalertinit "town">><</if>>
+宅邸街与多姆斯街交界处的铸铁街灯下，立着一座刷着深青防雨漆的守夜人木岗棚。棚内墙面上挂着一张用红蓝图钉标记的「三街区夜巡值班图」，桌角摆着一只铁皮保温壶、两副缠腕皮带以及一本封皮磨损的巡防案件簿。扎着高马尾的林恩正站在灯影边缘检查短棍卡扣，听见你的脚步声，他先看了一眼怀表时辰，才抬眼向你颔首致意。
+<br><br>
+你走近岗棚木案，对照巡防铜牌查看当前的街区信赖与值班态势：
+<br>
+【街区信赖总轴（Watch）】：<<print _lin.watch>>/100 ｜ 分街区信赖：宅邸街 <<print _lin.trustManor>> · 多姆斯街 <<print _lin.trustDomus>> · 高街 <<print _lin.trustHigh>> ｜ 当前街头警戒：<<mpalerttext>>
+<br>
+【可见行为分层】：<<if _lin.watch gte 90>><span class="gold">生死托付（林恩愿让你替他独挡一面值守夜班，并向你彻底敞开三年前旧搭档霍克坠亡案的尘封铁柜）</span><<elseif _lin.watch gte 70>><span class="teal">倾囊授艺（林恩在巡夜间隙亲授你贴身反关节防身术，解锁实战武力震慑加成与近身拆招）</span><<elseif _lin.watch gte 30>><span class="lblue">姜汤留温（岗棚长椅上总为你留着一壶驱寒热姜汤，林恩开始向你透露各条暗巷的避险捷径）</span><<else>><span class="blue">公事公办（林恩只与你核对巡逻时刻、门锁状况与宵禁路线，言辞简短克制）</span><</if>>
+<br>
+【处事倾向与各方反应】：<<if _lin.law gte 20>>法理严明（倾向按章执法，惠特尼团伙收敛但怀恨，贝利收债马车被迫绕行，地下声望偏低）<<elseif _lin.law lte -20>>人情练达（倾向暗中周旋，孤儿与贫苦街坊暗中相助，可借人情网缓冲贝利与惠特尼施压）<<else>>法情兼顾（在巡防铁律与街坊生计之间保持审慎平衡）<</if>>
+<br>
+【旧案终局与世界状态】：<<if $mpWorldLinGym>><span class="gold">已翻案·夜间武馆开张（林恩已脱下守夜制服创办夜间武馆，可作为同行同伴随你巡街并肩作战，亲密天台夜话常驻开放）</span><<elseif $mpWorldLinCaptain>><span class="purple">已压案·升任巡警队长（林恩统辖全城夜巡哨卡，夜间警戒大幅压低且巡防津贴上浮，但因铁律束缚已永久关闭私下亲密选项）</span><<else>>三年前旧搭档霍克暗渠坠亡旧案尚未定局（当前调查阶段：<<print _lin.caseStage>>/5，已掌握线索：<<print _lin.clues>>/6）<</if>>
+<br><br>
+夜风拂过岗棚檐角的铜铃，发出清脆的轻响。你可以从这里翻阅每晚轮转的夜巡案件板、体验当前信赖分层下的专属互动、追查三年前的旧搭档悬案，或是前往街头处理惠特尼与贝利人马的交锋。
+<br><br>
+<<getouticon>><<link [[返回林恩身边 (0:02)|MP NPC Lin Hub]]>><<pass 2>><</link>>
+<br>
+<<mpwatchicon>><<link [[查看夜巡案板 (0:06)|MP NPC Lin Patrol Board]]>><<pass 6>><</link>>
+<br>
+<<tendingicon>><<link [[开展分层互动 (0:12)|MP NPC Lin Tier Action]]>><<pass 12>><</link>>
+<br>
+<<investigateicon>><<link [[追查旧案卷宗 (0:10)|MP NPC Lin Clue Board]]>><<pass 10>><</link>>
+<br>
+<<link [[处置街头交锋 (0:12)|MP NPC Lin Street Event]]>><<pass 12>><</link>>
+
+:: MP NPC Lin Tier Action [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+你停留在守夜人岗棚的防风灯下。随着你与林恩在宅邸街、多姆斯街与高街并肩值守的次数增多，这位平时总是先报时间地点、极少用形容词修饰话语的守夜人，对待你的态度呈现出截然不同的深浅层次：
+<br><br>
+<<if (_lin.watch or 0) lt 30>>
+	【第一层·只谈巡逻（信赖未满三十）】：林恩将记事板平举在胸前，指尖点过宅邸街与多姆斯街的排水暗巷：「二十二点整，孤儿院后门铜锁已核验；二十三点一刻，高街裁缝铺侧巷有醉汉滞留。夜里独行务必走有煤气灯的主道，不要在没有门牌的死巷逗留。」他语气平稳严谨，虽不失礼貌，却始终与你保持着一步以上的公务距离。
+<<elseif (_lin.watch or 0) lt 70>>
+	【第二层·留热姜汤（信赖三十至六十九）】：林恩见你从湿冷的夜雾里走来，默不作声地拧开长椅上的铁皮保温壶，倒出一碗冒着辛辣热气的红糖姜汤递到你手里：「前半夜风硬，喝完再走。多姆斯街三号院墙根那道窄门我留了活扣，要是夜里遇上缠人的混混，推那扇门能直接穿回宅邸街岗棚。」温热的姜汤顺着喉咙滑下，驱散了你满身的寒意。
+<<elseif (_lin.watch or 0) lt 90>>
+	【第三层·亲授防身（信赖七十至八十九）】：林恩摘下右手皮护腕，示意你站到岗棚后侧的青石空地上：「光靠跑躲不开所有麻烦。把手腕给我——记住，被人从背后扣住肩膀时，重心下沉半寸、肘尖向后寸劲顶肋，顺势反拧对方拇指关节。」他手把手带着你拆解了三套近身擒拿与短棍格挡步法，你实战中的防身本能大幅提升（已解锁案件武力加成）。
+<<else>>
+	【第四层·托付旧案（信赖九十以上）】：林恩凝视着你良久，从贴身内袋里摸出一把磨得发亮的黄铜小钥匙，把自己的值班铜哨与岗棚钥匙一并放进你掌心：「今晚后半夜，替我守一次宅邸街岗棚。铁皮柜最底层的暗格里放着我以前搭档霍克留下的东西……整个镇子只有你，我敢把后背和这桩旧案一起交出去。」
+<</if>>
+<br><br>
+<<if $mpWorldLinGym>>
+	由于你们已经携手翻案并创办了「夜间武馆」，岗棚后方的旧车库如今灯火通明，木人桩与沙袋整齐排开，林恩随时准备以同行搭档的身份陪你夜巡或温存夜话。
+<<elseif $mpWorldLinCaptain>>
+	由于林恩已在压案后升任全城夜巡总队长，两名佩剑副手正守在岗棚外听候调遣。林恩肩头的队长银章在冷光下熠熠生辉，虽然他依旧会护你周全，但往日私下里的亲昵温存已随铁律永远封存。
+<</if>>
+<br><br>
+你可以根据当前的街区信赖层级，与林恩核对路线、共饮姜汤、演练防身术，或是在信赖深厚时替他值班开启旧案调查。
+<br><br>
+<<getouticon>><<link [[返回守夜总枢 (0:03)|MP NPC Lin Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpwatchicon>><<link [[核对巡逻门锁 (0:12)|MP NPC Lin Patrol Board]]>><<pass 12>>
+	<<set _lin.trustDomus to Math.min(100, (_lin.trustDomus or 0) + 3)>>
+	<<set _lin.watch to Math.min(100, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+	<<mpalert -4>><<stress -2>><<tiredness 1>>
+<</link>>
+<br>
+<<tendingicon>><<link [[共饮岗棚姜汤 (0:14)|MP NPC Lin Deep Hub]]>><<pass 14>>
+	<<if (_lin.watch or 0) gte 30>>
+		<<set _lin.love to Math.min(100, (_lin.love or 0) + 2)>>
+		<<set _lin.trustManor to Math.min(100, (_lin.trustManor or 0) + 4)>>
+		<<set _lin.watch to Math.min(100, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+		<<stress -6>><<tiredness -3>>
+	<<else>>
+		<<set _lin.trustManor to Math.min(100, (_lin.trustManor or 0) + 3)>>
+		<<set _lin.watch to Math.min(100, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+		<<stress -2>><<tiredness 1>>
+	<</if>>
+<</link>>
+<br>
+<<investigateicon>><<link [[演练反制防身 (0:18)|MP NPC Lin Patrol Board]]>><<pass 18>>
+	<<if (_lin.watch or 0) gte 70 or $mpWorldLinGym>>
+		<<set $mpLinCombatTaught to 1>>
+		<<physique 4>><<athletics 3>><<stress -4>><<tiredness 2>>
+		<<set _lin.trustHigh to Math.min(100, (_lin.trustHigh or 0) + 4)>>
+		<<set _lin.watch to Math.min(100, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+	<<else>>
+		<<physique 2>><<athletics 1>><<tiredness 3>><<pain 1>>
+		<<set _lin.trustHigh to Math.min(100, (_lin.trustHigh or 0) + 3)>>
+		<<set _lin.watch to Math.min(100, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+	<</if>>
+<</link>>
+<br>
+<<link [[替他值守夜班 (0:20)|MP NPC Lin Case Step 1]]>><<pass 20>>
+	<<if $mpWorldLinCaptain>>
+		<<mpalert -8>><<stress -2>>
+	<<elseif $mpWorldLinGym>>
+		<<set _lin.love to Math.min(100, (_lin.love or 0) + 3)>><<stress -6>>
+	<</if>>
+	<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 1)>>
+<</link>>
+
+:: MP NPC Lin Patrol Board [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set _cardRoll to ((Time.days + Time.hour) % 6) + 1>>
+岗棚内侧的软木板上钉着今晚刚刚汇总的「三街区夜巡案件板」。每当夜幕降临，宅邸街、多姆斯街与高街都会浮现出形形色色的夜间警情：从趁雾摸包的小偷扒手、砸碎酒瓶闹事的街头醉汉、深夜传出哭喊的邻里家暴，到高街商铺失窃、旧港交界处来历不明的可疑货箱，乃至与三年前霍克旧案息息相关的暗渠可疑踪迹。
+<br><br>
+林恩用红蓝铅笔在三片街区图上圈出重点巡查点，沉声向你交代今晚的盘查规则：
+<br>
+【一·宅邸街区（当前信赖 <<print _lin.trustManor>>/100）】：靠近孤儿院与旧车库，常有惠特尼手下的不良少年或趁夜翻墙的小偷出没。高信赖可开启院墙活扣捷径并降低孤儿院外围警戒。
+<br>
+【二·多姆斯街区（当前信赖 <<print _lin.trustDomus>>/100）】：平民住宅最密集的街巷，夜间多发醉汉滋事、家庭纠纷与门锁失窃。街坊人情网浓厚，妥善调停可获居民暗中回馈。
+<br>
+【三·高街商道（当前信赖 <<print _lin.trustHigh>>/100）】：商铺、钟表铺与暗渠交汇要冲，常有可疑走私货箱、商铺撬锁案以及旧案线索浮现，也是贝利收债马车与巡警队高频巡视的地段。
+<br><br>
+「每桩案子摆在面前，无非三条路。」林恩手指划过记事板上的案件卡，「按规矩『执法』能立住法理、稳步涨街区信赖，但会得罪地下暗桩；讲『人情』放一马能换来当事人的后续回报，但法理威信会掉；直接动『武力』震慑最快，可一旦失手不仅自己挂彩，还会丢了街坊信赖、惊动全街警戒。」
+<br><br>
+你可以选择今晚要重点巡查的街区并抽取案件卡（上篇涵盖小偷、醉汉、家暴；下篇涵盖失窃、可疑货箱、旧案线索），也可直接前往街头应对惠特尼与贝利人马。
+<br><br>
+夜风卷着细碎的雾珠掠过宅邸街与多姆斯街交错的屋檐，远处的煤气路灯在湿漉漉的青石板上投下长长的斜影。林恩腰间的黄铜巡哨与短棍皮套随着步伐发出极轻的摩擦声，在这片看似沉睡的街巷背后，每一扇紧闭的木窗与每一条幽暗的排水巷都藏着唯有守夜人才懂的冷暖与分量。
+<br><br>
+<<getouticon>><<link [[返回守夜总枢 (0:03)|MP NPC Lin Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpwatchicon>><<link [[巡查宅邸街区 (0:15)|MP NPC Lin Case Group A]]>><<pass 15>>
+	<<set $mpLinPatrolDistrict to "manor">>
+	<<set $mpLinCaseCard to ((_cardRoll % 3) + 1)>>
+<</link>>
+<br>
+<<tendingicon>><<link [[巡查多姆斯街 (0:15)|MP NPC Lin Case Group A]]>><<pass 15>>
+	<<set $mpLinPatrolDistrict to "domus">>
+	<<set $mpLinCaseCard to (((_cardRoll + 1) % 3) + 1)>>
+<</link>>
+<br>
+<<investigateicon>><<link [[巡查高街商道 (0:15)|MP NPC Lin Case Group B]]>><<pass 15>>
+	<<set $mpLinPatrolDistrict to "high">>
+	<<set $mpLinCaseCard to ((_cardRoll % 3) + 4)>>
+<</link>>
+<br>
+<<link [[摸排后巷暗箱 (0:15)|MP NPC Lin Case Group B]]>><<pass 15>>
+	<<set $mpLinPatrolDistrict to "domus">>
+	<<set $mpLinCaseCard to 6>>
+<</link>>
+
+:: MP NPC Lin Case Group A [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set _card to ($mpLinCaseCard or 1)>>
+<<if _card gt 3>><<set _card to 1>><</if>>
+你与林恩并肩走在<<if $mpLinPatrolDistrict is "manor">>宅邸街雾气弥漫的石板路上<<else>>多姆斯街灯影斑驳的联排屋檐下<</if>>。靴底踩过潮湿的落叶，前方的拐角处忽然传来了异样的动静——你们今晚抽中的是第 <<print _card>> 号街区治安案件卡：
+<br><br>
+<<if _card is 1>>
+	【案件卡一·暗巷扒手（小偷）】：一名身材瘦削、袖口别着惠特尼帮派旧徽记的半大少年刚刚在街角撞倒了晚归的面包房女工，手里正攥着抢来的零钱袋往排水暗巷里钻。林恩一个箭步拦住去路，那少年被逼到墙角，眼神里既有惊恐又有几分孤注一掷的凶狠，嘴里嚷着这钱是凑给贝利交本周印子钱的。
+<<elseif _card is 2>>
+	【案件卡二·闹事醉汉（醉汉）】：两名满身劣质麦酒味的外港水手正拎着半截空酒瓶，在多姆斯街三号院门前借酒撒疯，不仅踢翻了住户晾在门廊下的木盆，还大声叫骂着要砸开寡妇裁缝的木窗。林恩按住短棍上前喝止，满脸通红的醉汉却依仗着身大力沉，挥舞着酒瓶朝你们逼近。
+<<else>>
+	【案件卡三·深夜哭喊（家暴）】：联排砖房二楼的木百叶窗后传出瓷器摔碎的脆响与妇人压抑的哭喊声。一名因为在黑铁调车场丢了差事而暴怒的男人正举着皮带在屋里发泄怒火，门外围了几名敢怒不敢言的邻居。林恩眉头紧锁地叩响房门，屋里的人却隔着门板凶狠地叫嚣着“家务事轮不到守夜人多管闲事”。
+<</if>>
+<br><br>
+林恩侧过身看向你，将处置的裁决权交到你手中：
+<br>
+若选择【按章铁面执法】，将当事人依律拷回岗棚记档移交，能提升法理（`+law`）与街区信赖，但会令你在地下街巷的声望下降；若选择【顾全街坊人情】，替困难者垫付或私下调停劝诫，能大幅增加人情（`-law`）与街区信赖，并在结算时收获街坊的额外回馈；若选择【果断武力震慑】，凭借体魄或林恩亲授的防身术当场制服闹事者，成功可大涨威慑与津贴，但一旦失手便会受伤并拉高警戒。
+<br><br>
+<<getouticon>><<link [[返回夜巡案板 (0:03)|MP NPC Lin Patrol Board]]>><<pass 3>><</link>>
+<br>
+<<mpwatchicon>><<link [[按章铁面执法 (0:18)|MP NPC Lin Patrol Resolve]]>><<pass 18>>
+	<<set $mpLinApproach to "law">>
+	<<set $mpLinResolveOk to 1>>
+<</link>>
+<br>
+<<tendingicon>><<link [[顾全街坊人情 (0:18)|MP NPC Lin Patrol Resolve]]>><<pass 18>>
+	<<set $mpLinApproach to "mercy">>
+	<<set $mpLinResolveOk to 1>>
+<</link>>
+<br>
+<<investigateicon>><<link [[果断武力震慑 (0:18)|MP NPC Lin Patrol Resolve]]>><<pass 18>>
+	<<set $mpLinApproach to "force">>
+	<<if ($physique or 0) gte 8500 or ($athletics or 0) gte 230 or $mpLinCombatTaught or $mpWorldLinGym>>
+		<<set $mpLinResolveOk to 1>>
+	<<else>>
+		<<set $mpLinResolveOk to 0>>
+	<</if>>
+<</link>>
+<br>
+<<link [[转巡高街暗案 (0:12)|MP NPC Lin Case Group B]]>><<pass 12>>
+	<<set $mpLinPatrolDistrict to "high">>
+	<<set $mpLinCaseCard to 4>>
+<</link>>
+
+:: MP NPC Lin Case Group B [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set _card to ($mpLinCaseCard or 4)>>
+<<if _card lt 4>><<set _card to 4>><</if>>
+夜雾渐深，你与林恩穿过高街商铺后方的石砌拱廊与排水暗渠交界处。这里的灯火比居民区更加幽暗，空气里混杂着库房桐油与阴沟潮气的味道——你们今晚撞见的是第 <<print _card>> 号深层治安案件卡：
+<br><br>
+<<if _card is 4>>
+	【案件卡四·商铺撬锁（失窃）】：高街钟表铺与古董杂货行相连的后巷木门被人用细钢钎别开了半寸，一名戴着黑布面巾的惯犯正蹲在窗台下往麻袋里塞黄铜烛台与未鉴定的旧港铜器。听到林恩的皮靴声，盗贼猛地从腰间摸出一把磨尖的撬锁铁尺，试图从堆满木箱的窄巷强行突围。
+<<elseif _card is 5>>
+	【案件卡五·无标暗箱（可疑货箱）】：多姆斯街通往旧港码头的地下雨水栅栏旁，停着一辆没有挂号牌的手推板车，上面用油布盖着三只印着黑市火漆的可疑货箱。两名替贝利外围账房跑腿的搬运工正神色慌张地往暗渠里卸货，箱缝里隐约露出封存暗货与违禁药剂的包装角。
+<<else>>
+	【案件卡六·暗渠旧痕（旧案线索）】：巡至三年前老守夜人霍克坠亡的多姆斯街排洪渠口时，你们赫然发现一名穿着市政厅夜班制服的蒙面人正提着铁桶，试图用强酸抹掉铸铁栏杆底座当年残留的油锯切痕！林恩瞳孔骤缩，手背青筋暴起——这正是揭开当年“意外坠亡”假象的关键人证与物证。
+<</if>>
+<br><br>
+林恩压低声音与你交换眼神，等待你的决断：
+<br>
+若采取【依律扣押查办】，按守夜人条例封存赃物并立卷上报，可提升法理（`+law`）与高街信赖，但会削减地下声望并引起黑市戒备；若采取【私下调停周旋】，用人情筹码换取对方吐露幕后指使并留下古物或暗货回馈，可增长人情（`-law`）与旧案线索；若采取【强行夺械制服】，正面出手夺下器械并擒获嫌犯，成功可获丰厚赏格与线索，失手则会负伤并掉信赖、涨警戒。
+<br><br>
+<<getouticon>><<link [[返回夜巡案板 (0:03)|MP NPC Lin Patrol Board]]>><<pass 3>><</link>>
+<br>
+<<mpwatchicon>><<link [[依律扣押查办 (0:18)|MP NPC Lin Patrol Resolve]]>><<pass 18>>
+	<<set $mpLinApproach to "law">>
+	<<set $mpLinResolveOk to 1>>
+<</link>>
+<br>
+<<tendingicon>><<link [[私下调停周旋 (0:18)|MP NPC Lin Patrol Resolve]]>><<pass 18>>
+	<<set $mpLinApproach to "mercy">>
+	<<set $mpLinResolveOk to 1>>
+<</link>>
+<br>
+<<investigateicon>><<link [[强行夺械制服 (0:18)|MP NPC Lin Patrol Resolve]]>><<pass 18>>
+	<<set $mpLinApproach to "force">>
+	<<if ($physique or 0) gte 9000 or ($athletics or 0) gte 250 or ($skulduggery or 0) gte 250 or $mpLinCombatTaught or $mpWorldLinGym>>
+		<<set $mpLinResolveOk to 1>>
+	<<else>>
+		<<set $mpLinResolveOk to 0>>
+	<</if>>
+<</link>>
+<br>
+<<link [[直入旧案线索 (0:12)|MP NPC Lin Clue Board]]>><<pass 12>>
+	<<set _lin.clues to Math.min(6, (_lin.clues or 0) + 1)>>
+<</link>>
+
+:: MP NPC Lin Patrol Resolve [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set _dist to ($mpLinPatrolDistrict or "domus")>>
+<<set _WorldBonus to (($mpWorldLinGym or $mpWorldLinCaptain) ? 250 : 0)>>
+夜巷里的骚动渐渐平息下来，煤气路灯在青石板上投下安静的暖光。你与林恩站在街角整理记录簿，复盘今晚这起夜巡案件的处置结果：
+<br><br>
+<<if $mpLinApproach is "law">>
+	<<set _lin.law to Math.clamp((_lin.law or 0) + 8, -100, 100)>>
+	<<set $mpUndergroundRep to Math.max(-100, ($mpUndergroundRep or 0) - 4)>>
+	<<if _dist is "manor">><<set _lin.trustManor to Math.min(100, (_lin.trustManor or 0) + 5)>><<elseif _dist is "high">><<set _lin.trustHigh to Math.min(100, (_lin.trustHigh or 0) + 5)>><<else>><<set _lin.trustDomus to Math.min(100, (_lin.trustDomus or 0) + 5)>><</if>>
+	<<set _lin.watch to Math.min(100, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+	<<set _pay to (450 + _WorldBonus)>><<money _pay>>
+	<<mpalert -6>><<stress -3>>
+	<span class="teal">【执法严明·法理上升】</span>你们严格按照守夜人章程完成了现场取证与移交。街坊商铺对夜巡哨卡的公信力愈发信服，分街区信赖与总信赖稳步上升，你也领到了 £<<print (_pay / 100).toFixed(2)>> 的巡防津贴；与此同时，你在地下黑市眼线中的声望有所回落，惠特尼与贝利的外围人马对岗棚愈发忌惮。
+<<elseif $mpLinApproach is "mercy">>
+	<<set _lin.law to Math.clamp((_lin.law or 0) - 8, -100, 100)>>
+	<<set $mpUndergroundRep to Math.min(100, ($mpUndergroundRep or 0) + 4)>>
+	<<if _dist is "manor">><<set _lin.trustManor to Math.min(100, (_lin.trustManor or 0) + 6)>><<elseif _dist is "high">><<set _lin.trustHigh to Math.min(100, (_lin.trustHigh or 0) + 6)>><<else>><<set _lin.trustDomus to Math.min(100, (_lin.trustDomus or 0) + 6)>><</if>>
+	<<set _lin.watch to Math.min(100, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+	<<set _lin.clues to Math.min(6, (_lin.clues or 0) + 1)>>
+	<<set _pay to (380 + _WorldBonus)>><<money _pay>>
+	<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
+	<<mpalert -4>><<stress -5>>
+	<span class="green">【人情调停·街坊回报】</span>你与林恩没有生搬硬套条文，而是替走投无路的当事人留了一条生路。感激涕零的街坊不仅塞给你 £<<print (_pay / 100).toFixed(2)>> 谢礼与一罐备用防风鲸油，还悄悄向你们提供了一条关于三年前旧案与贝利马车动向的隐秘线索！
+<<else>>
+	<<if ($mpLinResolveOk or 0) is 1>>
+		<<if _dist is "manor">><<set _lin.trustManor to Math.min(100, (_lin.trustManor or 0) + 7)>><<elseif _dist is "high">><<set _lin.trustHigh to Math.min(100, (_lin.trustHigh or 0) + 7)>><<else>><<set _lin.trustDomus to Math.min(100, (_lin.trustDomus or 0) + 7)>><</if>>
+		<<set _lin.watch to Math.min(100, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+		<<set _lin.clues to Math.min(6, (_lin.clues or 0) + 1)>>
+		<<set _pay to (600 + _WorldBonus)>><<money _pay>>
+		<<mpalert -10>><<physique 3>><<stress -4>>
+		<span class="gold">【雷霆震慑·大获全胜】</span>你与林恩配合默契，干净利落地运用反关节技将闹事者当场按倒在地！周围窥探的宵小之徒吓得作鸟兽散，夜间警戒大幅下降，街区信赖与你的实战体魄同步提升，并获得了 £<<print (_pay / 100).toFixed(2)>> 的高额缉捕赏格。
+	<<else>>
+		<<if _dist is "manor">><<set _lin.trustManor to Math.max(0, (_lin.trustManor or 0) - 4)>><<elseif _dist is "high">><<set _lin.trustHigh to Math.max(0, (_lin.trustHigh or 0) - 4)>><<else>><<set _lin.trustDomus to Math.max(0, (_lin.trustDomus or 0) - 4)>><</if>>
+		<<set _lin.watch to Math.max(0, Math.round((_lin.trustManor + _lin.trustDomus + _lin.trustHigh) / 3))>>
+		<<mpalert 10>><<pain 5>><<stress 6>><<tiredness 3>>
+		<span class="red">【武力受挫·挂彩失手】</span>你在湿滑的石板上出招慢了半拍，被对方挥舞的铁器擦伤了手臂（未获得分毫赏金，但绝不倒扣存款）。虽然林恩及时横棍替你架开了后续攻击，但这场混乱还是引来了巡警哨音，令街区信赖受损且夜间警戒上升。
+	<</if>>
+<</if>>
+<br><br>
+<<if $mpWorldLinGym>>
+	【翻案世界状态加成】：身着夜间武馆劲装的林恩以同行伙伴身份替你包扎护腕，武馆学徒们也在沿街暗哨接应，额外为你分担了夜巡疲劳。
+<<elseif $mpWorldLinCaptain>>
+	【压案世界状态加成】：林恩以夜巡总队长权限在卷宗上盖下豁免印章，哨卡卫兵立刻封锁外围巷口，为你额外拨付了队长督办津贴。
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回守夜总枢 (0:03)|MP NPC Lin Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpwatchicon>><<link [[继续巡查案板 (0:10)|MP NPC Lin Patrol Board]]>><<pass 10>><</link>>
+<br>
+<<investigateicon>><<link [[梳理旧案线索 (0:12)|MP NPC Lin Clue Board]]>><<pass 12>><</link>>
+<br>
+<<walkicon>><<link [[应对街头交锋 (0:12)|MP NPC Lin Street Event]]>><<pass 12>><</link>>
+
+:: MP NPC Lin Street Event [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+你与林恩巡至宅邸街与高街交界的丁字路口时，浓雾两侧同时传来了不怀好意的动静：左侧孤儿院后墙根下，惠特尼正带着两名染发跟班把一名抱着用旧布包裹的修表零件的孤儿逼在死角；而在右侧通往多姆斯街的拱门下，贝利手下的两名黑衣账房正赶着一辆遮篷马车停在宵禁栏杆前，试图趁夜运走一批未入册的货箱。
+<br><br>
+由于你此前在夜巡案件板中积累的街区信赖（<<print (_lin.watch or 0)>>/100）与法理/人情倾向（`law`: <<print (_lin.law or 0)>>），现场局势展现出鲜明的跨系统联动：
+<br>
+<<if $mpWorldLinCaptain>>
+	【队长威权压制（`$mpWorldLinCaptain` 已生效）】：看清林恩肩头的夜巡总队长银章后，惠特尼的跟班脸色骤变，连狠话都没敢多留便灰溜溜地退入后巷；贝利的账房也不得不主动熄灭马车大灯，乖乖交出夜间过境罚金。
+<<elseif $mpWorldLinGym>>
+	【武馆同行联防（`$mpWorldLinGym` 已生效）】：三名身穿夜间武馆练功服的青年闻声从街角包抄过来，与你和林恩形成合围之势。惠特尼咬牙切齿地瞪了你们一眼，而贝利的打手衡量了一番拳脚斤两，主动让出了半条车道。
+<<elseif (_lin.law or 0) gte 20>>
+	【高法理震慑】：你与林恩平日铁面执法的名声在外，林恩只敲了敲腰间的制式铜哨，贝利的马车夫便心虚地勒住缰绳出示通行牌，不敢强闯岗卡。
+<<elseif (_lin.law or 0) lte -20>>
+	【高人情呼应】：两侧二楼的居民窗扇接连推开，几名曾受过你们人情关照的街坊主动提着风灯探头作证，帮受欺负的孤儿打开了侧院木门。
+<<else>>
+	【常规对峙】：惠特尼与贝利的人马各自试探着守夜人的底线，全看你与林恩如何出手化解。
+<</if>>
+<br><br>
+你可以选择亮出巡防铁牌按律驱离并收取罚没金，也可以借人情暗道护送孤儿脱身，或是与林恩并肩上前用武力与气势震慑宵小。
+<br><br>
+夜风卷着细碎的雾珠掠过宅邸街与多姆斯街交错的屋檐，远处的煤气路灯在湿漉漉的青石板上投下长长的斜影。林恩腰间的黄铜巡哨与短棍皮套随着步伐发出极轻的摩擦声，在这片看似沉睡的街巷背后，每一扇紧闭的木窗与每一条幽暗的排水巷都藏着唯有守夜人才懂的冷暖与分量。
+<br><br>
+<<getouticon>><<link [[返回守夜总枢 (0:03)|MP NPC Lin Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpwatchicon>><<link [[按律驱离盘查 (0:15)|MP NPC Lin Patrol Resolve]]>><<pass 15>>
+	<<set $mpLinApproach to "law">><<set $mpLinResolveOk to 1>>
+<</link>>
+<br>
+<<tendingicon>><<link [[护送孤儿走巷 (0:15)|MP NPC Lin Patrol Resolve]]>><<pass 15>>
+	<<set $mpLinApproach to "mercy">><<set $mpLinResolveOk to 1>>
+<</link>>
+<br>
+<<investigateicon>><<link [[并肩震慑强敌 (0:16)|MP NPC Lin Patrol Resolve]]>><<pass 16>>
+	<<set $mpLinApproach to "force">>
+	<<if ($physique or 0) gte 8500 or (_lin.watch or 0) gte 60 or $mpWorldLinGym or $mpWorldLinCaptain>>
+		<<set $mpLinResolveOk to 1>>
+	<<else>>
+		<<set $mpLinResolveOk to 0>>
+	<</if>>
+<</link>>
+
+:: MP NPC Lin Case Step 1 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 1)>>
+子夜时分，宅邸街岗棚外下起了淅淅沥沥的冷雨。你握着林恩托付给你的那把磨得发亮的黄铜小钥匙，蹲在岗棚最里侧的旧铁皮柜前，轻轻旋开了尘封三年的底层暗格锁芯。一股混合着陈年雨水、火药与干枯薄荷的气息扑面而来——里面整齐码放着林恩昔日搭档、老守夜人霍克殉职当晚留下的遗物。
+<br><br>
+你借着煤油灯的光亮将遗物逐一取出摆在木桌上。最上方是一枚被鈍器从正面生生劈裂的黄铜巡防哨（【线索一·断裂的黄铜巡哨】），断口处残留着黑铁护手刀特有的棱角压痕，这直接戳破了当年警局报告里所谓“酒后脚滑、头部撞石意外身亡”的谎言。压在铜哨下方的，则是半页由学园植物学徒诺艾尔协助从医院旧档库里拓印出来的胃检残页（【线索二·滴酒未沾的胃检残页】）——上面清楚记载着霍克死前胃内只有红糖姜汤，根本滴酒未沾！
+<br><br>
+就在你把两份物证收入证物袋时，林恩推开岗棚木门走了进来。雨水顺着他冷峻的下颌滑落，他看着桌上那枚劈裂的铜哨，指节攥得发白：「三年前我还是个刚穿制服的新人，巡警队长只用一纸意外裁定就把案子压死了。现在有了诺艾尔复原的胃检单和这枚铜哨，我们可以直接去多姆斯街暗渠口勘验第一现场。」
+<br><br>
+岗棚铁皮屋顶被夜雨敲得啪啪作响，煤油灯火苗在穿堂风里微微摇晃。你将两件沉甸甸的物证贴身收好，又仔细检查了铁皮柜底板下残留的封条印记与霍克生前用红铅笔写下的巡逻备忘。每一处细节都指向那个雨夜绝非寻常，你也深知自己已经与林恩一同踏入了这座城镇最隐秘的黑幕边缘，再也没有退缩的余地。
+<br><br>
+<<getouticon>><<link [[返回旧案线索 (0:04)|MP NPC Lin Clue Board]]>><<pass 4>><</link>>
+<br>
+<<investigateicon>><<link [[查验劈裂铜哨 (0:16)|MP NPC Lin Case Step 2]]>><<pass 16>>
+	<<set _lin.clues to Math.max(_lin.clues or 0, 2)>>
+	<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 2)>>
+	<<stress -3>><<tiredness 2>>
+<</link>>
+<br>
+<<tendingicon>><<link [[核对医院胃检 (0:16)|MP NPC Lin Case Step 2]]>><<pass 16>>
+	<<set _lin.clues to Math.max(_lin.clues or 0, 2)>>
+	<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 2)>>
+	<<set _lin.trust to Math.min(100, (_lin.trust or 0) + 2)>>
+	<<stress -4>><<tiredness 2>>
+<</link>>
+
+:: MP NPC Lin Case Step 2 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 2)>>
+撑着黑油布伞穿过湿滑的多姆斯街后巷，你与林恩来到连接内城与旧港码头的排洪暗渠石桥。桥下湍急的暗河水拍打着生铁水栅，三年前霍克正是从这段高逾两丈的石桥护栏坠入暗渠的。林恩举起防风提灯照向护栏根部，你则俯身用放大镜与小刀刮去铸铁立柱底部的青苔与铁锈。
+<br><br>
+在铁锈掩盖的立柱内侧，一道平滑得反常的半月形切口赫然显露出来（【线索三·暗渠铁栏的锯切痕迹】）——有人在案发前就用涂了消音牛油的钢丝锯将铸铁护栏锯断了三分之二，只等霍克巡逻经过并与之搏斗时，将其连人带栏杆一齐推下暗渠！不仅如此，你们还在桥头废弃排水槽的硬化泥层下，拓印出了一对极深的宽幅铁包木车轮印（【线索四·宅邸街深夜马车辙】），车辙旁散落着半枚只有市政厅夜巡队与贝利外围货运马车才准佩戴的双锚通行铅封。
+<br><br>
+「原来霍克前辈当晚撞破的不是普通毛贼。」林恩摸着那道冰冷的锯痕，声音低沉如铁，「能在宵禁时段把重载马车开进多姆斯街暗渠口，还能提前锯断市政护栏的人，背后必定既有巡警队高层的内应，又有黑市账房的资金流转。」
+<br><br>
+暗渠下方的回水声在夜色里显得格外森冷，潮湿的石壁上还留着当年霍克坠落时手指抓挠青苔留下的深深划痕。林恩蹲在桥栏缺口旁沉默地系紧了手腕上的旧护带，眼神冷得像寒冬里的铁块。为了拿到压死幕后真凶的最后两块拼图，你们必须趁着后半夜换岗的间隙赶往市政厅侧翼的旧档库房与汇兑所，截获当年那笔用来封口与买凶的黑账汇票。
+<br><br>
+夜风卷着细碎的雾珠掠过宅邸街与多姆斯街交错的屋檐，远处的煤气路灯在湿漉漉的青石板上投下长长的斜影。林恩腰间的黄铜巡哨与短棍皮套随着步伐发出极轻的摩擦声，在这片看似沉睡的街巷背后，每一扇紧闭的木窗与每一条幽暗的排水巷都藏着唯有守夜人才懂的冷暖与分量。
+<br><br>
+<<getouticon>><<link [[返回旧案线索 (0:04)|MP NPC Lin Clue Board]]>><<pass 4>><</link>>
+<br>
+<<investigateicon>><<link [[拓印铁栏锯痕 (0:18)|MP NPC Lin Case Step 3]]>><<pass 18>>
+	<<set _lin.clues to Math.max(_lin.clues or 0, 4)>>
+	<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 3)>>
+	<<stress -3>><<tiredness 2>>
+<</link>>
+<br>
+<<mpwatchicon>><<link [[追查深夜车辙 (0:18)|MP NPC Lin Case Step 3]]>><<pass 18>>
+	<<set _lin.clues to Math.max(_lin.clues or 0, 4)>>
+	<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 3)>>
+	<<mpalert -5>><<stress -3>><<tiredness 2>>
+<</link>>
+
+:: MP NPC Lin Case Step 3 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 3)>>
+借着夜航船长维斯与钟表师塞拉提供的旧城档案钥匙，你与林恩在凌晨两点潜入了高街市政厅侧翼的旧档库房。成排的胡桃木档案架在手电微光下投出长长的阴影，空气里弥漫着樟脑丸与发霉羊皮纸的气味。林恩守在走廊拐角替你警戒，你则迅速翻开三年前冬月的抚恤金与私人汇兑底册。
+<br><br>
+在夹杂着大量日常开支的流水账页间，你很快锁定了一张盖着旧港私货行暗戳的不记名票根（【线索五·巡警队长的匿名汇票】）：就在霍克坠亡次日，现任夜巡总队长罗伯特的私人钱庄账户上，突然多出了一笔高达三百金镑的“仓储咨询费”！紧接着，你在被罗伯特扣押的证物袋夹层里，摸到了霍克用暗语写在烟盒锡纸背面的绝笔记录（【线索六·霍克的值班暗记】）——上面明确写着罗伯特队长每周三深夜放行外围马车，利用孤儿院后巷暗渠走私违禁药剂与苦力！
+<br><br>
+至此，三年前旧案的全部六条铁证已尽数汇集到你们手中。走廊外传来了换岗巡警的脚步声，你迅速将票根与锡纸暗记贴身收妥，与林恩一道从侧窗悄然退回岗棚，准备在调查线索板上完成最终的真凶指认。
+<br><br>
+你在岗棚灯下将最后两份铁证平摊在木案上，林恩站在你身侧用红绳将一张张泛黄的票据与勘验拓片逐一钉上软木调查板。窗外的寒雾依旧笼罩着宅邸街与多姆斯街的屋檐，但岗棚里的煤油灯却照得每一行字迹都纤毫毕现。六条原本散落在医院、暗渠与旧档库里的线索终于在此刻首尾相连，化作了刺向腐败高层的利刃。
+<br><br>
+夜风卷着细碎的雾珠掠过宅邸街与多姆斯街交错的屋檐，远处的煤气路灯在湿漉漉的青石板上投下长长的斜影。林恩腰间的黄铜巡哨与短棍皮套随着步伐发出极轻的摩擦声，在这片看似沉睡的街巷背后，每一扇紧闭的木窗与每一条幽暗的排水巷都藏着唯有守夜人才懂的冷暖与分量。
+<br><br>
+<<getouticon>><<link [[返回守夜总枢 (0:04)|MP NPC Lin Deep Hub]]>><<pass 4>><</link>>
+<br>
+<<investigateicon>><<link [[截获匿名汇票 (0:18)|MP NPC Lin Clue Board]]>><<pass 18>>
+	<<set _lin.clues to 6>>
+	<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 4)>>
+	<<stress -4>><<tiredness 2>>
+<</link>>
+<br>
+<<mpwatchicon>><<link [[破译锡纸暗记 (0:18)|MP NPC Lin Clue Board]]>><<pass 18>>
+	<<set _lin.clues to 6>>
+	<<set _lin.caseStage to Math.max(_lin.caseStage or 0, 4)>>
+	<<set _lin.watch to Math.min(100, (_lin.watch or 0) + 5)>>
+	<<stress -4>><<tiredness 2>>
+<</link>>
+
+:: MP NPC Lin Clue Board [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+岗棚内侧的软木调查板上，用红线将三年前「老守夜人霍克暗渠坠亡案」的六条核心物证与人证串联成一张严密的证据网（当前已集齐线索：<<print (_lin.clues or 0)>>/6，调查阶段：<<print (_lin.caseStage or 0)>>/5）：
+<br><br>
+【线索一·断裂的黄铜巡哨】：哨管正面留有黑铁护手刀劈砍凹痕，证明死前曾发生近身搏斗；
+<br>
+【线索二·滴酒未沾的胃检残页】：诺艾尔协助复原的医院底档证实霍克当晚只喝过红糖姜汤，“醉酒失足”纯属捏造；
+<br>
+【线索三·暗渠铁栏的锯切痕迹】：多姆斯街石桥护栏底部有事先用消音油锯割断三分之二的切口；
+<br>
+【线索四·宅邸街深夜马车辙】：案发现场遗留重载马车辙与双锚通行铅封，非普通毛贼所能调动；
+<br>
+【线索五·巡警队长的匿名汇票】：案发次日夜巡总队长罗伯特账户收到三百镑私货行封口汇款；
+<br>
+【线索六·霍克的值班暗记】：锡纸暗记揭露罗伯特队长勾结外围账房，利用宵禁漏洞经暗渠偷运违禁物资。
+<br><br>
+林恩手按桌沿，目光灼灼地望向你：「所有碎片都摆在桌面上了。在去旧车库跟罗伯特当面对质前，我们必须把整桩案子的逻辑链彻底咬死——你认为哪一个假设才是三年前那个雨夜的真正全貌？」
+<br><br>
+调查板下方列出了三条截然不同的推理假设，每一条假设都对应着不同的调查走向与证据权重。林恩将霍克生前配戴的那枚半截铜哨放在软木板正下方的托架上，手指轻轻点过那张盖有私货行暗戳的三百镑汇票与双锚车辙拓片。若尚未集齐线索，可先前往岗棚或暗渠补齐勘查；若已看清真相，请直接指认核心假设并奔赴终局对决。
+<br><br>
+夜风卷着细碎的雾珠掠过宅邸街与多姆斯街交错的屋檐，远处的煤气路灯在湿漉漉的青石板上投下长长的斜影。林恩腰间的黄铜巡哨与短棍皮套随着步伐发出极轻的摩擦声，在这片看似沉睡的街巷背后，每一扇紧闭的木窗与每一条幽暗的排水巷都藏着唯有守夜人才懂的冷暖与分量。
+<br><br>
+<<getouticon>><<link [[返回守夜总枢 (0:03)|MP NPC Lin Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpwatchicon>><<link [[补查岗棚遗物 (0:14)|MP NPC Lin Case Step 1]]>><<pass 14>><</link>>
+<br>
+<<tendingicon>><<link [[假设醉汉误伤 (0:12)|MP NPC Lin Case Step 2]]>><<pass 12>>
+	<<stress 4>><<tiredness 2>>
+<</link>>
+<br>
+<<investigateicon>><<link [[假设水路私枭 (0:15)|MP NPC Lin Case Finale]]>><<pass 15>>
+	<<set _lin.clues to 6>><<set _lin.caseStage to 5>><<stress 2>>
+<</link>>
+<br>
+<<link [[指认队长灭口 (0:16)|MP NPC Lin Case Finale]]>><<pass 16>>
+	<<set _lin.clues to 6>><<set _lin.caseStage to 5>>
+	<<set _lin.watch to Math.min(100, (_lin.watch or 0) + 6)>>
+	<<stress -6>>
+<</link>>
+
+:: MP NPC Lin Case Finale [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+冬夜的暴雨砸在宅邸街废弃修车库的波纹铁皮顶上，发出震耳欲聋的轰鸣。夜巡总队长罗伯特带着两名心腹站在生锈的升降机旁，原本威严的脸上此刻满是阴鸷。当你与林恩将劈裂铜哨、胃检原件、三百镑匿名汇票以及霍克的锡纸暗记一字排开摊在引擎盖上时，罗伯特身后的两名副手不约而同地后退了半步。
+<br><br>
+「好，好得很……我原以为霍克带进棺材里的秘密，没人能再翻出来。」罗伯特咬着牙冷笑一声，从怀里掏出自己的总队长银章与一份盖着市政厅钢印的任命书拍在桌上，「但你们想清楚了！要是把这桩丑闻捅上报纸【彻底翻案】，整个守夜人制度都会颜面扫地，林恩你也别想再穿这身制服；可要是你们肯把卷宗压下来【内部压案】，我现在就引咎辞职，保举林恩直接接任全城夜巡总队长，从此宅邸街、多姆斯街和高街的铁律全由林恩一人说了算！」
+<br><br>
+车库里的空气紧绷到了极点。林恩握紧手中的短棍，转头看向一路陪他走到这里的你：「霍克前辈教过我，守夜人守的是街坊的平安，不是身上的皮。你是希望我脱下这身制服、替前辈讨回清白并开一间教大家自保的夜间武馆，还是希望我接下队长印章、留在体制里用铁腕护住这三条街？」
+<br><br>
+车库铁门外的暴雨声与远处的更夫梆子声交织在一起，昏黄的防风灯光在积满油污的水泥地面上拉出摇晃的长影。罗伯特死死盯着你们手里的铁证袋，而林恩则挺直脊梁站在你身旁，手掌稳稳按在短棍柄端，无论你指向哪一条道路，他都准备与你一同承担随之而来的全部后果。你的抉择将永久决定林恩的命运轨迹，并写入不可逆的世界状态。
+<br><br>
+<<getouticon>><<link [[暂缓返回线索 (0:04)|MP NPC Lin Clue Board]]>><<pass 4>><</link>>
+<br>
+<<investigateicon>><<link [[公开铁证翻案 (0:25)|MP NPC Lin Ending Gym]]>><<pass 25>>
+	<<set $mpWorldLinGym to 1>>
+	<<set $mpWorldLinCaptain to 0>>
+	<<set $mpLinCompanion to 1>>
+	<<set $mpLinIntimateLocked to 0>>
+	<<set _lin.watch to 100>>
+	<<set _lin.love to Math.min(100, (_lin.love or 0) + 10)>>
+	<<set _lin.trust to 100>>
+<</link>>
+<br>
+<<mpwatchicon>><<link [[封存卷宗压案 (0:25)|MP NPC Lin Ending Captain]]>><<pass 25>>
+	<<set $mpWorldLinCaptain to 1>>
+	<<set $mpWorldLinGym to 0>>
+	<<set $mpLinCompanion to 0>>
+	<<set $mpLinIntimateLocked to 1>>
+	<<set _lin.watch to 100>>
+	<<set _lin.law to Math.min(100, (_lin.law or 0) + 30)>>
+	<<mpalertclear>>
+<</link>>
+
+:: MP NPC Lin Ending Gym [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set $mpWorldLinGym to 1>><<set $mpWorldLinCaptain to 0>>
+随着六项铁证在市政厅听证会上公之于众，三年前老守夜人霍克遇害的真相终于大白于天下。腐败的总队长罗伯特被当场剥夺警衔收押入狱，霍克的墓碑前重新摆满了多姆斯街与宅邸街居民自发献上的白花。而在听证会结束的当天傍晚，林恩便将叠得整整齐齐的守夜人制服与铜扣放在了岗棚桌上，换上了一身利落的深青色短打劲装。
+<br><br>
+在你的协助与街坊们的众筹支持下，宅邸街旧修车库被改造成了灯火通明的「林氏夜间武馆」（世界状态 `$mpWorldLinGym = 1` 已永久生效）。从今往后，孤儿院的少年与夜班女工每晚都能来此免费习练防身步法；而卸下体制束缚的林恩，眼神比以往任何时候都更加明亮坦荡——他不仅正式成为可与你并肩同行的夜间搭档，为你在所有街区夜巡中提供高额体魄与赏金加成，更在武馆二楼天台为你留了一间随时可以依偎夜话的私人静室。
+<br><br>
+林恩站在新挂起的武馆木匾下，伸手将你揽入怀中，温热的呼吸拂过你的耳畔：「从今往后，我不再受任何巡警条例束缚，我只守着这条街和你。」
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("lin_ending_gym_v40")>>
+	<<money 1800>>
+	<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+<</if>>
+<<physique 6>><<athletics 4>><<stress -12>><<trauma -6>>
+<br><br>
+武馆外院的火盆噼啪作响，练拳少年们整齐有力的喝声驱散了冬夜的寒意。墙边原本堆放废旧轮胎的角落如今摆满了擦拭干净的木人桩、沙袋与装满热姜汤的大铁桶，连多姆斯街的面包房掌柜都特意送来了两笼刚出锅的肉饼道贺。在这座由你们亲手建起的避风港里，你可以随时与林恩在武馆二楼天台独处温存，或带他一同巡视三街区。
+<br><br>
+夜风卷着细碎的雾珠掠过宅邸街与多姆斯街交错的屋檐，远处的煤气路灯在湿漉漉的青石板上投下长长的斜影。林恩腰间的黄铜巡哨与短棍皮套随着步伐发出极轻的摩擦声，在这片看似沉睡的街巷背后，每一扇紧闭的木窗与每一条幽暗的排水巷都藏着唯有守夜人才懂的冷暖与分量。
+<br><br>
+<<getouticon>><<link [[返回守夜总枢 (0:04)|MP NPC Lin Deep Hub]]>><<pass 4>><</link>>
+<br>
+<<tendingicon>><<link [[天台并肩夜话 (0:20)|MP NPC Lin Deep Hub]]>><<pass 20>>
+	<<set _lin.love to Math.min(100, (_lin.love or 0) + 4)>>
+	<<stress -8>><<arousal 400>>
+<</link>>
+<br>
+<<mpwatchicon>><<link [[携林恩同行巡 (0:15)|MP NPC Lin Patrol Board]]>><<pass 15>><<mpalert -8>><</link>>
+
+:: MP NPC Lin Ending Captain [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _lin to $mpNpcs.lin>>
+<<set $mpWorldLinCaptain to 1>><<set $mpWorldLinGym to 0>>
+你与林恩最终选择了用那叠铁证在市政厅密室里换取一场无声的权力交接。罗伯特当天夜里便以“旧疾复发”为由交出全部职权黯然离镇，涉案的黑市暗渠被浇筑生铁彻底封死，而林恩则破格披上了镶着银边的全城夜巡总队长大衣（世界状态 `$mpWorldLinCaptain = 1` 已永久生效）。
+<br><br>
+升任总队长后的林恩兑现了他的诺言：宅邸街、多姆斯街与高街的岗哨密度翻了一倍，夜间警戒被永久压制在最低水平，无论是惠特尼的跟班还是贝利的收债人，只要看到守夜人总队的银徽便不得不退避三舍，你每次参与夜巡案件板都能额外领受队长督办津贴。然而代价也同样冷酷而不可逆——为了堵住市政厅政敌的悠悠众口、维持总队长的绝对公正，林恩不得不将所有私人情感深埋心底，往日岗棚里牵手依偎、回值班室耳鬓厮磨的亲密选项自此永久关闭。
+<br><br>
+寒风中，身穿笔挺总队长制服的林恩站在岗棚台阶下，隔着一步之遥向你行了一个标准而克制的抚胸礼，将一袋沉甸甸的特别巡防津贴放在桌角：「谢谢你帮我守住了这片街区……往后夜深风大，请务必早些回家，我会在暗处护你平安。」
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("lin_ending_captain_v40")>>
+	<<money 2000>>
+	<<set $mpLanternOil to ($mpLanternOil or 0) + 2>>
+<</if>>
+<<mpalertclear>><<stress -8>>
+<br><br>
+街角新换上的高亮煤气灯将整条宅邸街与多姆斯街照得如同白昼，一队队佩带银徽的值夜哨兵踩着整齐划一的步伐穿行在巷口，秩序井然却也多了一分难以逾越的清冷。林恩独自立在总队岗亭的阴影里目送你远去，修长的手指在制服口袋里悄悄摩挲着那枚旧铜哨，将所有的牵挂都化作了守望整座长街的无声铁律。
+<br><br>
+夜风卷着细碎的雾珠掠过宅邸街与多姆斯街交错的屋檐，远处的煤气路灯在湿漉漉的青石板上投下长长的斜影。林恩腰间的黄铜巡哨与短棍皮套随着步伐发出极轻的摩擦声，在这片看似沉睡的街巷背后，每一扇紧闭的木窗与每一条幽暗的排水巷都藏着唯有守夜人才懂的冷暖与分量。
+<br><br>
+<<getouticon>><<link [[返回守夜总枢 (0:04)|MP NPC Lin Deep Hub]]>><<pass 4>><</link>>
+<br>
+<<mpwatchicon>><<link [[领取总队津贴 (0:15)|MP NPC Lin Patrol Board]]>><<pass 15>><<money 300>><<mpalert -10>><</link>>
+<br>
+<<investigateicon>><<link [[巡视肃清长街 (0:15)|MP NPC Lin Street Event]]>><<pass 15>><<mpalert -8>><</link>>

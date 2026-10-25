@@ -1,0 +1,157 @@
+/* MP Ledger Debt More —— 周债账本补充页
+   8 页：More Hub / Extra 1-6 / Extra Outcome。
+   仅调用既有变量 $mpLedger、$money、$mpAlert、$mpBaileyBiweeklyNextDay、
+   $mpWorldOrphanageOutcome 与 $mpSafehouses.orphanage，不新增顶层变量。 */
+
+:: MP Ledger Debt More Hub [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+<<set _nextIn to ($mpBaileyBiweeklyNextDay ? $mpBaileyBiweeklyNextDay - ((window.Time && Time.days) or 0) : -1)>>
+账本主册后头还夹着一叠没有编号的补充页。纸色深浅不一：有账房记账用的薄笺，有从旧册上撕下的粗纸，也有一角带着火漆残印的硬卡。罗宾把它们按日子摊在煤油灯下，一张压着一张，像在摆一副不肯服输的牌。最上面是催收单，边角用铅笔记着提前上门的时辰；第二张是贝利核账留下的回执，空白处画了几道红杠；第三张是保护名单的复核单，三个名字被框进同一只方框，方框外还留着擦过的痕迹。
+<br><br>
+再往下是一张描了一半的收据，火漆只拓出半个印；一封字迹发抖的旧信，信纸折过很多次，折痕已经发亮；最后是一片沾着煤渣的散页，边缘参差，像是被人从整本册子里硬扯下来的。罗宾说这几张纸都不是他收的，有的是打手丢在门口，有的是账房夹在柴捆里送进来，还有一张是他半夜在煤房捡到的。他把最旧的那张单独放在一边，说这张纸比院里大半孩子的年纪都大。
+<br><br>
+补充页不记柴米，只记这本账怎样被人推动：谁在什么时候来收，谁在纸上添了一笔，哪个名字被人悄悄挪出抵债栏，又是谁想趁夜把整本拿走。贝利从不亲自撕页，他让打手、账房和旧债主轮番上门，每一趟都在纸面留下痕迹。院子里的孩子看不懂这些弯弯绕，只知道灯亮得越晚，第二天锅里的粥就越稀。
+<br><br>
+【补充账页】：第 <<print $mpLedger.week>> 周｜账面原额 <<print $mpLedger.amount>> 钱｜逾期 <<print $mpLedger.overdue>> 笔｜保护 <<print _protCnt>>/3｜已缴 <<print $mpLedger.paid>> 次｜终局 <<print ($mpLedger.outcome or "未定")>><<if _nextIn gt 0>>｜翻账倒计时 <<print _nextIn>> 天<<elseif _nextIn is 0>>｜今天正是翻账日<<elseif $mpBaileyBiweeklyNextDay>>｜翻账日已过去 <<print (0 - _nextIn)>> 天<<else>>｜翻账日还没定<</if>>
+<br><br>
+六张纸对应六件绕不开的事。它们不会自己找上门，可你若不先动，等贝利把页角折起来，能选的往往只剩交钱或挨打两样。罗宾把一截炭条搁在纸堆旁，说他替你守着门，外头一有脚步声就敲两下煤管。楼上的孩子已经睡下，走廊尽头偶尔传来翻身时床板的轻响。
+<br><br>
+<<getouticon>><<link [[返回账本总枢 (0:02)|MP Ledger Hub]]>><<pass 2>><</link>><br>
+<<fisticon>><<link [[拦下周债催收 (0:10)|MP Ledger Debt Extra 1]]>><<pass 10>><</link>><br>
+<<investigateicon>><<link [[陪贝利核账 (0:12)|MP Ledger Debt Extra 2]]>><<pass 12>><</link>><br>
+<<socialiseicon>><<link [[守住保护名单 (0:12)|MP Ledger Debt Extra 3]]>><<pass 12>><</link>><br>
+<<link [[拓印假凭条 (0:10)|MP Ledger Debt Extra 4]]>><<pass 10>><</link>><br>
+<<link [[应付旧债主 (0:12)|MP Ledger Debt Extra 5]]>><<pass 12>><</link>><br>
+<<link [[追查失窃账 (0:12)|MP Ledger Debt Extra 6]]>><<pass 12>><</link>><br>
+<<link [[月末封账 (0:08)|MP Ledger Debt Extra Outcome]]>><<pass 8>><</link>>
+
+:: MP Ledger Debt Extra 1 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+<<set _due to ($mpLedger.amount or 1500)>>
+天刚擦黑，门厅的铜环就被人拍响了。来的是贝利手下两个常跑孤儿院这条线的打手，一个拎着账袋，一个把手插在口袋里，靴底在门槛上蹭了半天也不肯进来。他们说这周的催收单提前了，理由说得很含糊：院长室换了新规矩，逾期的人要先把屋里的东西搬走一半，再谈数目。罗宾把孩子们往楼上赶，自己站在楼梯口没动。
+<br><br>
+账袋摊在门厅的矮桌上，里头是一张抄得极工整的清单，末尾空着签名那一栏。打手不看你，只看账页，像在等你先开口。他们其实并不清楚这周该收多少，只认逾期那一栏有几道红杠；红杠越多，回去交差时拿的赏钱越厚。廊下的灯被风吹得晃，最小的那个孩子趴在楼梯扶手上往下看，被罗宾轻轻按回阴影里。门厅的挂钟敲了七下，打手把靴尖在地上碾了碾。他们说这趟只是先来看看，真正搬东西的人明天才到；可谁都知道，明天来的人不会先敲门。
+<br><br>
+【催收单】：本周应缴 <<print _due>> 钱（按今日行价 <<mpWorldPrice _due>>）｜逾期 <<print $mpLedger.overdue>> 笔｜已缴 <<print $mpLedger.paid>> 次｜手头现钱 <<print ($money or 0)>>
+<br><br>
+打手把清单往你面前推了推，说给一刻钟，钱也好，凭条也好，总得拿一样出来；若两样都没有，他们就把厨房那口铁锅和楼上两条毯子带走。罗宾听着，手一直按在楼梯扶手上。他没有催你，也没有替你做主，只把灯芯拨亮了一点，让门厅不至于太暗。你把清单从头看到尾，发现这周的数目比上回多了两行小字，墨色比正文新，像是刚刚添上去的。打手见你看得仔细，伸手把纸往回抽了抽。
+<br><br>
+【应对法】：<<if ($money or 0) gte 500>>钱袋够厚，可以当场把这周的短款补齐。<<elseif ($skulduggery or 0) gte 230>>现钱不够，但你手上有拓来的火漆和旧票，也许能糊弄过去。<<else>>钱和假票都指望不上，只能拿力气换他们松口。<</if>>
+<br><br>
+<<getouticon>><<link [[返回补充账页 (0:02)|MP Ledger Debt More Hub]]>><<pass 2>><</link>><br>
+<<mpcalculateicon>><<if ($money or 0) gte 500>><<link [[当面补足短款 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<money -500>><<set $mpLedger.paid to (($mpLedger.paid or 0) + 1)>><<set $mpLedger.overdue to 0>><<set $mpAlert to Math.max(0, ($mpAlert or 0) - 2)>><<stress -2>><</link>><<else>><span class="disabled">当面补足短款 (0:12)（钱不够）</span><</if>><br>
+<<investigateicon>><<link [[塞一张假凭条 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<if ($skulduggery or 0) gte 230>><<set $mpLedger.paid to (($mpLedger.paid or 0) + 1)>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 4)>><<mpalertgain "打手记住了你的脸">><<stress 1>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 3)>><<mpalertgain "打手起了疑心">><<stress 5>><<tiredness 2>><</if>><</link>><br>
+<<walkicon>><<link [[替打手搬货 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<if ($athletics or 0) gte 220>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 1)>><<mpalertgain "码头上有人看见你">><<tiredness 3>><<pain 3>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<tiredness 4>><<pain 6>><<stress 3>><</if>><</link>>
+
+:: MP Ledger Debt Extra 2 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+贝利来得比账上写的日子早了一天。他没有敲正门，从后院那扇只供送货人走的侧门进来，外套上还带着街上的雾气。院长室的灯亮起来时，罗宾正在厨房刷锅，听见楼上的椅子挪动声，手里的铁勺停了很久。孩子们被叫到走廊尽头站成一排，谁也不许说话。有人开始打哈欠，被旁边的年长孩子轻轻碰了一下。贝利像是没听见，只把主账翻到保护栏那一页，指腹顺着墨线慢慢往下滑。他说这一页的名字比上回多了，却没有多出对应的签押。院长的笑僵在脸上，手里的茶壶停在半空，半天没往下放。
+<br><br>
+核账的规矩是先看总页，再看保护栏，最后才翻逾期。贝利把三样东西并排摆在桌上：主账、他随身的私册，以及一叠不知从哪儿收来的旧收据。他不问锅里煮了什么，只问哪一笔对不上。院长站在旁边赔着笑，时不时替他添茶；茶凉了也不敢换。窗外有邻家的孩子在巷子里追跑，声音传到楼上时，贝利抬眼看了看门，又低下头去。
+<br><br>
+【核账面】：已缴 <<print $mpLedger.paid>> 次｜逾期 <<print $mpLedger.overdue>> 笔｜保护 <<print _protCnt>>/3｜账面原额 <<print $mpLedger.amount>> 钱｜街头警戒 <<print ($mpAlert or 0)>>
+<br><br>
+贝利翻页很慢，指尖在纸面上停一停，像在等谁先沉不住气。他说这季的账比上季难对，有些页角的数目被水汽泡花了，有些收据的边切得太齐，不像账房的手艺。院长连声应着，说回头重抄一遍。贝利没有接话，只把私册往主账旁边挪了挪，让两本册子的边对齐。罗宾趁着添茶的工夫退到门边，朝你递了个眼色。他身后的后窗开着一道缝，风把窗帘吹得鼓起又落下。楼道里没有别人，贝利的两个随从都守在前门，一个在数台阶，一个在抽烟。
+<br><br>
+【核账空隙】：<<if ($maths or 0) gte 220 or ($housekeeping or 0) gte 220>>账页上的进出项你已默算过，红杠对不上多半是重复记了一笔。<<else>>数目太乱，你一时找不到能当面驳回去的地方。<</if>><<if ($skulduggery or 0) gte 230 or ($mpSafehouses and $mpSafehouses.orphanage and $mpSafehouses.orphanage.tier gte 1)>>后窗的插销是松的，名单可以暂避一避。<<else>>后窗外面堆着杂物，想动名单不容易。<</if>>
+<br><br>
+<<getouticon>><<link [[返回补充账页 (0:02)|MP Ledger Debt More Hub]]>><<pass 2>><</link>><br>
+<<mpcalculateicon>><<link [[抹平逾期栏 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<if ($maths or 0) gte 220 or ($housekeeping or 0) gte 220>><<set $mpLedger.overdue to 0>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpAlert to Math.max(0, ($mpAlert or 0) - 2)>><<stress -2>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<stress 4>><<tiredness 2>><</if>><</link>><br>
+<<sneakicon>><<link [[藏起保护名单 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<if ($skulduggery or 0) gte 230 or ($mpSafehouses and $mpSafehouses.orphanage and $mpSafehouses.orphanage.tier gte 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 4)>><<mpalertgain "后窗的插销动了">><<set $mpLedger.amount to Math.max(1500, ($mpLedger.amount or 1500) - 350)>><<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 4)>><</if>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 7>><<stress 1>><<else>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 6)>><<mpalertgain "贝利的人看见后窗开着">><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<stress 5>><<tiredness 2>><</if>><</link>><br>
+<<fisticon>><<link [[当面认下连坐 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<if ($willpower or 0) gte 300>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 10>><<pain 4>><<stress 2>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<pain 7>><<stress 5>><</if>><</link>>
+
+:: MP Ledger Debt Extra 3 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+<<set _slot to ($mpLedger.protected[0] is 0 ? 0 : ($mpLedger.protected[1] is 0 ? 1 : ($mpLedger.protected[2] is 0 ? 2 : -1)))>>
+保护名单的复核单是账房书记送来的，夹在一捆旧契里，纸角还带着新裁的毛边。单子上把三个名字框在一处，旁边写着「手续不全，复核后划回抵债栏」。书记放下纸就走，连茶都没喝，只留一句：天亮前把签押补齐，否则名单按原样送回去。罗宾把复核单翻来覆去看了两遍，说这上头缺的不是钱，是一个肯在纸面上担名的人。孩子们并不知道那张纸意味着什么，最小的那个还在问，明天能不能照常去院子里晒被子；罗宾说能，声音很轻。你把复核单折起来，又展开，纸上的名字被灯照得发亮，像随时会被人擦掉。
+<br><br>
+单子背面还列着一行「待定」：账面上仍有孩子被记作可抵债，若天亮前不把栏位补齐，书记就按这一行带人走。若三个栏位都已占满，他就改口要每一格补一份保人签押，少一份便划掉一个名字。炉子上的水壶叫起来，罗宾起身去提，回来时手里多了一截炭条，在单子边缘轻轻画了个圈。
+<br><br>
+保护栏每添一个名字，周债就多三百五十钱；可若不添，孩子明天就得跟着账房的人走。这是这本账最不讲理的地方：护得越多，欠得越多。罗宾说，贝利就是吃准了这一点，才把名单和账额拴在同一根绳上。他又说，若真到了天亮还补不齐，他宁可自己去账房顶那一格，也不愿看孩子被带走。你把这句记在心里，没有立刻答应。楼上的孩子已经睡下，他把复核单压在灯座底下，压得很平；后门的插销没有动，钥匙搁在桌角。窗外的风把晾衣绳吹得轻响，像谁在远处敲门。窗纸被灯映得发黄，谁也没有先去睡。
+<br><br>
+【复核单】：保护 <<print _protCnt>>/3｜待补栏位 <<if _slot is 0>>皮普<<elseif _slot is 1>>克拉拉<<elseif _slot is 2>>托比<<else>>无空位<</if>>｜账面原额 <<print $mpLedger.amount>> 钱｜孤儿院风险 <<print (($mpSafehouses and $mpSafehouses.orphanage and $mpSafehouses.orphanage.risk) or 20)>>
+<br><br>
+<<getouticon>><<link [[返回补充账页 (0:02)|MP Ledger Debt More Hub]]>><<pass 2>><</link>><br>
+<<mpbargainicon>><<if ($money or 0) gte 220>><<link [[补齐保人签押 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<money -220>><<set _s to ($mpLedger.protected[0] is 0 ? 0 : ($mpLedger.protected[1] is 0 ? 1 : ($mpLedger.protected[2] is 0 ? 2 : -1)))>><<if _s gte 0>><<set $mpLedger.protected[_s] to 1>><<set _pc to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>><<set $mpLedger.amount to Math.min(3000, 1500 + _pc * 350)>><<else>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><</if>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 2)>><<mpalertgain "代书先生多问了两句">><<tiredness 2>><<stress -1>><</link>><<else>><span class="disabled">补齐保人签押 (0:14)（钱不够）</span><</if>><br>
+<<sneakicon>><<link [[连夜送孩子出城 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<if ($skulduggery or 0) gte 240 or ($mpSafehouses and $mpSafehouses.orphanage and $mpSafehouses.orphanage.tier gte 1)>><<set _s to ($mpLedger.protected[0] is 0 ? 0 : ($mpLedger.protected[1] is 0 ? 1 : ($mpLedger.protected[2] is 0 ? 2 : -1)))>><<if _s gte 0>><<set $mpLedger.protected[_s] to 1>><<set _pc to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>><<set $mpLedger.amount to Math.min(3000, 1500 + _pc * 350)>><<else>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><</if>><<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 4)>><</if>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 3)>><<mpalertgain "夜路上有人提灯">><<tiredness 3>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<stress 5>><<tiredness 3>><<pain 2>><</if>><</link>><br>
+<<walkicon>><<link [[硬拖复核过期 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 4)>><<mpalertgain "账房书记来了两趟">><<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.min(100, ($mpSafehouses.orphanage.risk or 20) + 2)>><</if>><<tiredness 3>><<stress 3>><</link>>
+
+:: MP Ledger Debt Extra 4 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+<<set _due to ($mpLedger.amount or 1500)>>
+伪造凭条这活，最要紧的不是字，是纸和火漆。账房这季换了新收据，纸里掺了细麻，对着灯能看到一道浅纹；火漆也换了模子，印面比旧的多一圈细齿。你手里只有上回从贝利抽屉里拓下来的旧印，还有半瓶从灯罩上刮下的烟灰。罗宾把能找来的旧票据都铺在桌上，纸边压着四枚铜板，怕风一吹就散。你先把旧票摊平，用指腹把折痕一点点压下去。纸太干，稍一用力就会裂；罗宾从厨房端来一小碗温水，让你用布角蘸着润一润。火漆的旧印在灯下泛着暗红，边缘有一处缺口，正好是上次拓印时留下的。
+<br><br>
+账房先生收据时从来只数张数，不核编号；真正难缠的是那个抄账的书记，他记得每一张纸的边角，也记得谁上次来交过什么。你要么把纸做得连边角都对得上，要么干脆绕开纸面，用别的法子把这周的数目填平。灯下的纸堆里，有一张旧票的编号正好被墨点盖住，罗宾说这算是运气。
+<br><br>
+【假票台】：本周应缴 <<print _due>> 钱（按今日行价 <<mpWorldPrice _due>>）｜已缴 <<print $mpLedger.paid>> 次｜逾期 <<print $mpLedger.overdue>> 笔｜账面原额 <<print $mpLedger.amount>> 钱｜手头现钱 <<print ($money or 0)>>
+<br><br>
+描暗纹要屏住气，手一抖就会在纸面留下毛边；火漆更要一次压成，重来一遍纹路就糊了。罗宾替你扶着灯，把窗缝堵上，免得风把火苗吹歪。他说从前院里有位老账房，专替人补票据，补得再好也从不自己用，因为一旦被认出来，补过的那张纸会比空白的更容易招人查。
+<br><br>
+【手上本钱】：<<if ($skulduggery or 0) gte 240 or ($science or 0) gte 240>>你对纸纹和火漆的脾气摸得够熟，能试一张以假乱真的票。<<else>>手艺还差一截，描出来的纹路多半经不起对光。<</if>><<if ($money or 0) gte 280>>钱袋也够买通那个抄账的书记。<<else>>买通书记的价码还不够。<</if>><<if ($tending or 0) gte 230 or ($athletics or 0) gte 230>>实在不成，还能拿实物折抵。<<else>>实物折抵也缺门路。<</if>>
+<br><br>
+描到一半，楼梯上传来脚步声，两人都停了手。脚步声在二楼拐角停了一停，又折回去。罗宾把纸翻面扣在桌上，等声音彻底没了才重新掀开。纸上的暗纹只描了半条，灯芯却已经烧短了一截。窗外传来更夫敲梆子的声音，提醒人夜已经深了。
+<br><br>
+<<getouticon>><<link [[返回补充账页 (0:02)|MP Ledger Debt More Hub]]>><<pass 2>><</link>><br>
+<<mpcalculateicon>><<link [[照旧票描暗纹 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<if ($skulduggery or 0) gte 240 or ($science or 0) gte 240>><<set $mpLedger.paid to (($mpLedger.paid or 0) + 1)>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 4)>><<mpalertgain "账房多留了一张底样">><<stress 2>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 5)>><<mpalertgain "假票被记了号">><<stress 5>><<pain 2>><</if>><</link>><br>
+<<mpbargainicon>><<if ($money or 0) gte 280>><<link [[买通抄账书记 (0:10)|MP Ledger Debt More Hub]]>><<pass 10>><<money -280>><<set $mpLedger.paid to (($mpLedger.paid or 0) + 1)>><<set $mpLedger.overdue to 0>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 2)>><<mpalertgain "书记收钱时看了你一眼">><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 7>><</link>><<else>><span class="disabled">买通抄账书记 (0:10)（钱不够）</span><</if>><br>
+<<walkicon>><<link [[拿实物折抵 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<if ($tending or 0) gte 230 or ($athletics or 0) gte 230>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 1)>><<mpalertgain "送货的人多问了一句">><<tiredness 3>><<pain 2>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<tiredness 4>><<stress 3>><</if>><</link>>
+
+:: MP Ledger Debt Extra 5 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+旧债主是在午后进来的，穿一件洗得发白的呢外套，袖口磨出了毛边。他没有去院长室，先在门厅站了一会儿，像是在数墙上的旧钉子。等罗宾问他找谁，他才从内袋里抽出一张对折过很多次的借据，纸面已经黄得发脆，边角一碰就掉渣。门厅的光从高窗斜进来，照在借据上，纸纤维一根根立着。罗宾说这栋房子换过三任院长，旧账像潮水退后的淤泥，一层压着一层，谁也不知道底下还埋着多少张这样的纸。债主听了，只把帽子在膝盖上转了半圈。
+<br><br>
+借据上的数目不大，落款却是孤儿院很多年前的名字。贝利接手这栋房子时，把旧账一并折价买下，可这张借据从没被注销。债主说他不要利息，只要本金；若院里拿不出，他就去街口把这张纸念给过路的人听。罗宾把借据接过去看了很久，说这纸上的手印不像假的，连印泥渗进纸纤维的样子都对得上。
+<br><br>
+【旧借据】：本金 <<print Math.max(150, Math.round(($mpLedger.amount or 1500) / 10))>> 钱｜账面原额 <<print $mpLedger.amount>> 钱｜逾期 <<print $mpLedger.overdue>> 笔｜保护 <<print _protCnt>>/3｜手头现钱 <<print ($money or 0)>>
+<br><br>
+债主坐在门厅的长凳上，帽子搁在膝盖上，并不催。他说自己年轻时也替这栋房子送过煤，后来账转了几道手，连他自己都说不清该找谁。若不是前些日子有人在酒馆里提起孤儿院的名字，他几乎要把这张纸忘了。罗宾给他倒了半杯温水，他道了谢，一口没喝。你把借据翻到背面，那里还有一行更淡的字，写着「若院中无人承继，此据作废」。字迹被水浸过，只能认出大半。债主说那是当年立据的人写的，后来那人走了，这行字也就没人再提。
+<br><br>
+【债主来意】：<<if ($maths or 0) gte 240>>借据上的编号和旧账册对得上，里头也许有能抵的注销印。<<else>>编号抄得潦草，你一时看不出破绽。<</if>><<if ($athletics or 0) gte 230 or ($tending or 0) gte 230>>若肯出力气，也能用工钱把这笔旧账慢慢磨掉。<<else>>做工抵账这条路，你的身子未必撑得住。<</if>>
+<br><br>
+<<getouticon>><<link [[返回补充账页 (0:02)|MP Ledger Debt More Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<link [[翻旧账对质 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<if ($maths or 0) gte 240>><<set $mpLedger.amount to Math.max(1500, ($mpLedger.amount or 1500) - 200)>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 1)>><<mpalertgain "债主在门口多站了一会儿">><<stress -2>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<stress 4>><<tiredness 2>><</if>><</link>><br>
+<<walkicon>><<link [[做工抵旧债 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<if ($athletics or 0) gte 230 or ($tending or 0) gte 230>><<set $mpLedger.amount to Math.max(1500, ($mpLedger.amount or 1500) - 150)>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 1)>><<mpalertgain "债主记住了你的名字">><<tiredness 4>><<pain 3>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<tiredness 4>><<pain 5>><<stress 3>><</if>><</link>><br>
+<<fisticon>><<link [[让黑手套打发 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<set $mpLedger.amount to Math.min(3000, ($mpLedger.amount or 1500) + 150)>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 4)>><<mpalertgain "黑手套在门口露了面">><<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.min(100, ($mpSafehouses.orphanage.risk or 20) + 4)>><</if>><<stress 2>><</link>>
+
+:: MP Ledger Debt Extra 6 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+煤房的暗门是被人从外头撬开的，锁舌断成两截，落在煤渣里。你下去时，铁匣还开着，主账却不见了，只剩下几张从中间扯下来的散页。散页上有半个脚印，鞋底钉着码头才用的铁钉；旁边还压着一张炭笔写的条子，字歪歪扭扭：「账我先替你收着。」罗宾举着灯在煤堆间照了一圈，说偷账的人没有翻别的东西，连那只装零钱的木匣都没碰。铁匣底下垫着的一层油布被掀开了，露出木板上几道新划的记号，像是有人蹲在这里数过什么。罗宾说昨晚他巡楼时还没听见动静，撬门的人手脚很快，或许早就算好了换班的时候。煤堆边缘有一小片被压实的痕迹，通往后面那条窄道。
+<br><br>
+他要的只是纸。主账一丢，保护栏和逾期栏都没有凭据，贝利来核账时尽可自己重写一遍；可若你现在就去追，煤渣上的脚印还没干，顺着走也许能赶在他把纸送出去之前。罗宾说煤房后墙还有一条运煤的窄道，平日用木板挡着，撬门的人若是从那儿进来的，木板该有新的刮痕。
+<br><br>
+【失窃现场】：主账 下落不明｜残页 尚可辨认｜逾期 <<print $mpLedger.overdue>> 笔｜保护 <<print _protCnt>>/3｜贝利下次核账 <<if $mpBaileyBiweeklyNextDay>>第 <<print $mpBaileyBiweeklyNextDay>> 日<<else>>尚未排定<</if>>
+<br><br>
+散页上的字迹你认得，是账房书记的手笔，可条子上的炭笔字却不是他的。罗宾把条子凑到灯前，说这字写得急，最后一笔拖得很长，像是边写边听外头的动静。楼上传来孩子们起床的响动，有人喊着要水喝，有人拖着鞋走过走廊。你把散页按页码排了排，中间缺了不止一页，缺的正好是保护栏和逾期栏。若找不回来，这两栏就得凭记忆重写；而贝利手里的那一份，可以写成任何样子。
+<br><br>
+【追查门路】：<<if ($athletics or 0) gte 230 or ($skulduggery or 0) gte 240>>脚印和刮痕都还清楚，赶在潮水涨满前能追上。<<else>>线索太散，硬追容易在白雾里走岔。<</if>><<if ($housekeeping or 0) gte 230 or ($maths or 0) gte 220>>就算追不回，你也能凭记忆重抄一份能用的副本。<<else>>重抄的活太细，你怕抄漏了关键的数目。<</if>>
+<br><br>
+<<getouticon>><<link [[返回补充账页 (0:02)|MP Ledger Debt More Hub]]>><<pass 2>><</link>><br>
+<<walkicon>><<link [[顺煤渣追查 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<if ($athletics or 0) gte 230 or ($skulduggery or 0) gte 240>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 7>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 2)>><<mpalertgain "巷口有人替你望风">><<tiredness 3>><<pain 2>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 2)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 3)>><<mpalertgain "追到码头就断了线">><<stress 6>><<pain 3>><</if>><</link>><br>
+<<mpcalculateicon>><<link [[重抄一份副本 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<if ($housekeeping or 0) gte 230 or ($maths or 0) gte 220>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 7>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 2)>><<mpalertgain "夜里多亮了一盏灯">><<tiredness 4>><<stress 2>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<stress 5>><<tiredness 3>><</if>><</link>><br>
+<<sneakicon>><<link [[放假账引错路 (0:12)|MP Ledger Debt More Hub]]>><<pass 12>><<if ($skulduggery or 0) gte 250 or ($willpower or 0) gte 320>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 5)>><<mpalertgain "假账在暗渠里传开">><<stress 2>><<else>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 2)>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 6)>><<mpalertgain "贝利的人先一步识破">><<stress 5>><</if>><</link>>
+
+:: MP Ledger Debt Extra Outcome [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+月末最后一夜，你把补充页一张张收拢，按日期排好，再合回主账。煤油灯的芯剪短了，火苗贴着纸边，照出许多重叠的笔迹：催收单上的勾、核账回执上的红杠、复核单上的框、假票上没描完的暗纹、旧借据的折痕，还有失窃那晚留下的炭笔字。它们本来各说各话，如今都钉在同一本账上。罗宾把最后一盏灯留在桌上，自己坐到楼梯口。他说这个月院里少了一个孩子，又多了两笔说不清的账；可锅还开着，床还够睡，明天一早仍要有人去挑水。你听他数完，才发现他把每一件小事都记得比账页清楚。
+<br><br>
+【月末账】：第 <<print $mpLedger.week>> 周｜账面原额 <<print $mpLedger.amount>> 钱｜逾期 <<print $mpLedger.overdue>> 笔｜保护 <<print _protCnt>>/3｜已缴 <<print $mpLedger.paid>> 次｜路线 <<print $mpLedger.route>>｜终局 <<print ($mpLedger.outcome or "未定")>>｜手头现钱 <<print ($money or 0)>>
+<br><br>
+<<if $mpLedger.overdue gte 3>>逾期的红杠已经连成一片，打手这两晚干脆在巷口轮班，连打盹都不避人。院里的人天一黑就关窗，孩子们被叮嘱不许单独下楼。<<elseif $mpLedger.overdue gt 0>>账页上散着几道红杠，不算致命，却足够让贝利在下一次核账时先翻到那一页。<<else>>册面清清爽爽，一道多余的印记也没有，贝利一时挑不出毛病。<</if>><<if _protCnt is 3>>三格全占满了，连坐账顶到最高，黑手套自然也来得最勤。<<elseif _protCnt gt 0>>栏里已经有人站住了脚，周债跟着加码，余下的还在观望。<<else>>保护栏一格未动，周债压在起始档，孩子们全当这账与自己无关。<</if>>
+<br><br>
+该收束了。贝利下一次翻账不会等你把纸理齐；你能做的，是趁这页还没被他折起来，先替这个月定一个说法。罗宾把三枚不同的印章摆在桌上，一枚是街坊联名的，一枚是院长室的旧印，一枚只在夜里用过。他没问你要选哪一枚，只把灯往桌心推了推。
+<br><br>
+窗外的巷子静下来，远处偶尔有车轮碾过石板。这个月无论怎样收尾，明天都还会有人来敲门，账页也还会重新写满。区别只在于，到时候翻开它的，是你还是贝利。罗宾把三枚印章又往你面前推了推，没有再说话。
+<br><br>
+<<getouticon>><<link [[返回补充账页 (0:02)|MP Ledger Debt More Hub]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[铺开账目结清 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<if ($money or 0) gte 450>><<money -450>><<set $mpLedger.paid to (($mpLedger.paid or 0) + 1)>><<set $mpLedger.overdue to 0>><<stress -4>><<else>><<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>><<stress 5>><<tiredness 3>><</if>><<set _was to ($mpLedger.outcome is "clear")>><<set $mpLedger.outcome to "clear">><<if !_was>><<if !$mpWorldOrphanageOutcome>><<set $mpWorldOrphanageOutcome to "mutualaid">><</if>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 28>><<set $mpAlert to Math.max(0, ($mpAlert or 0) - 6)>><<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 6)>><</if>><</if>><</link>><br>
+<<if _protCnt gte 2 or $mpLedger.overdue gte 2>><<investigateicon>><<link [[守住院长账房 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<set _was to ($mpLedger.outcome is "seize")>><<set $mpLedger.outcome to "seize">><<if !_was>><<if !$mpWorldOrphanageOutcome>><<set $mpWorldOrphanageOutcome to "sheltered">><</if>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 21>><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 4)>><<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 4)>><</if>><</if>><<stress 2>><<pain 2>><</link>><br><<else>><span class="disabled">守住院长账房 (0:14)（名单与逾期都不够）</span><br><</if>>
+<<if $mpLedger.route is "escape" or ($mpSafehouses and $mpSafehouses.orphanage and $mpSafehouses.orphanage.tier gte 1)>><<walkicon>><<link [[拆账分散名单 (0:14)|MP Ledger Debt More Hub]]>><<pass 14>><<set _was to ($mpLedger.outcome is "escape")>><<set $mpLedger.outcome to "escape">><<if !_was>><<if !$mpWorldOrphanageOutcome>><<set $mpWorldOrphanageOutcome to "sheltered">><</if>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 35>><<set $mpAlert to Math.max(0, ($mpAlert or 0) - 5)>><<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 10)>><</if>><</if>><<tiredness 4>><</link>><br><<else>><span class="disabled">拆账分散名单 (0:14)（尚无转移路线）</span><br><</if>>
+<<link [[返回账本总枢 (0:04)|MP Ledger Hub]]>><<pass 4>><<stress -2>><</link>>

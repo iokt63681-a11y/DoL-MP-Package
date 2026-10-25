@@ -1,89 +1,475 @@
+/* ==================== 钟表铺插曲 1–5 与 浆洗房插曲 1–5 ==================== */
+
 :: MP Job Clock Encounter [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $daily to ($daily or {})>><<set $daily.mpJobClockEncounter to 1>>
-老火车站的副站长把一块银壳铁路怀表搁在绒布正中，说它每到整点报时前总会慢上三刻，已经误了两班车的交接。柜台另一头，古董商订的那只镂空机芯怀表还摊在放大镜下，等着换零件。你刚把镊子伸进去，最薄的那枚擒纵齿轮就在指间崩掉了一角。
+老火车站的副站长康纳把一块银壳铁路怀表搁在绒布正中，说它每到整点报时前总会慢上三刻，已经误了两班车的交接。柜台另一头，古董商格里芬订的那只镂空机芯怀表还摊在放大镜下，最薄的那枚擒纵齿轮刚在镊子尖上崩掉了一角。
 <br><br>
 <div id="mp-job-clock-enc">
-<<mpclockworkicon>><<if ($maths or 0) gte 220>><<link "校正整点误差 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc">>
-<<if ($maths or 0) gte 240 or random(1, 3) gte 2>>
-	你把时轮与分轮的间隙一格一格调回原位，又照着站台的班次表把报时提前了半分钟。副站长对着怀表和月台的铜钟核了两遍，临走前往绒布边压了一枚银币。<span class="green">铁路怀表的整点报时重新对上了。</span>
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 560>><</if>>
-	<<mathsskill 1 "no_star">><<stress -2>><<lstress>>
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<if ($maths or 0) gte 250>><<link "重算齿距校时 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc">>
+<<if ($maths or 0) gte 270 or random(1, 3) gte 2>>
+	你测出时轮与分轮的啮合间隙偏大了半丝，一格格将快慢针拨回基准，又对照月台时刻表把报时簧提前了半分钟。副站长康纳对着怀表和铜钟核了两遍，临走前往绒布边压了一笔加急赏钱。<span class="green">铁路怀表的整点报时分秒不差。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 780>><</if>>
+	<<mathsskill 1 "no_star">><<stress -2>><<lstress>><<set $mpJobReg_Clock_1 to ($mpJobReg_Clock_1 or 0) + 1>>
 <<else>>
 	指腹一滑，游丝被带偏了半圈，怀表索性停在了七点一刻。副站长皱着眉把表收回衣袋，说改日再来。<span class="red">你只能先把镊子上的表油擦干净。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[重算齿距校时 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "重算齿距校时">><<set $mpInsuffReq to "算术等级：<span class='purple'>D+</span>">><<pass 6>><</link>><</if>>
 <br>
-<<link [[返回高街 (0:08)|High Street]]>><<pass 8>><</link>>
-<</replace>><</link>><<else>><<link [[校正整点误差 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "校正整点误差">><<set $mpInsuffReq to "数学等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mprepairicon>><<if ($science or 0) gte 220>><<link "换上备用齿轮 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc">>
-<<if ($science or 0) gte 240 or random(1, 3) gte 2>>
-	你从料盒里挑出一枚齿距相合的旧轮，用油石把轴颈磨到刚好卡进夹板，擒纵叉重新咬住了轮齿。古董商戴上单眼放大镜看了半晌，把这只表的修价当场结给铺子。<span class="green">镂空机芯重新走起来了。</span>
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 520>><</if>>
-	<<scienceskill 1 "no_star">><<stress -2>><<lstress>>
+<<mprepairicon>><<if ($science or 0) gte 220>><<link "油石磨配旧轮 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc">>
+<<if ($science or 0) gte 250 or random(1, 3) gte 2>>
+	你从旧料盒里挑出一枚模数相合的黄铜轮，用细油石把轴颈磨到刚好卡进红宝石轴承，擒纵叉重新稳稳咬住轮齿。古董商格里芬戴上单眼放大镜看了半晌，当场结清了精修赏金。<span class="green">镂空机芯重新欢快地走起来了。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 580>><</if>>
+	<<scienceskill 1 "no_star">><<stress -2>><<lstress>><<set $mpJobReg_Clock_2 to ($mpJobReg_Clock_2 or 0) + 1>>
 <<else>>
-	备用轮厚了半分，硬压下去时连轴尖也折在夹板里。碎件落进绒布缝，你只能把它扫进废料盒。<span class="red">古董商沉着脸说改天再来看。</span><<stress 2>><<tiredness 2>><<gstress>>
+	备用轮厚了半分，硬压下去时连轴尖也折在夹板里。碎件落进绒布缝，你只能把它扫进废料盒。<span class="red">格里芬沉着脸说改天再来看。</span><<stress 2>><<tiredness 2>><<gstress>>
 <</if>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[油石磨配旧轮 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "油石磨配旧轮">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
 <br>
-<<link [[返回高街 (0:08)|High Street]]>><<pass 8>><</link>>
-<</replace>><</link>><<else>><<link [[换上备用齿轮 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "换上备用齿轮">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mpcarryicon>><<link "登记两桩送修 (0:05)">><<pass 5>><<replace "#mp-job-clock-enc">>
-你把两块表的主顾、毛病和取件的日子一笔笔记进委托簿，又把崩下来的碎齿扫进废料盒，台面擦了两遍。<span class="teal">两边都算有了交代，只是活计要等旁人接手。</span><<stress -1>><<lstress>>
+<<runicon>><<if ($mpJobCourierCount or 0) gte 6>><<link "调跑腿急件轮 (0:05)">><<pass 5>><<replace "#mp-job-clock-enc">>
+你记得街巷跑腿行今早刚有一批外埠钟表配件寄存在代办亭，当即穿巷跑了个来回，取回原厂封装的瑞士擒纵轮与游丝。两只怀表在半刻钟内双双修妥，康纳与格里芬都对你的门路赞不绝口。<span class="green">跑腿行的急件渠道立了大功。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 660>><</if>>
+<<stress -2>><<lstress>><<set $mpJobReg_Clock_1 to ($mpJobReg_Clock_1 or 0) + 1>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">调跑腿急件轮 (0:05)（跑腿行还没这份交情）</span><</if>>
 <br>
-<<link [[返回高街 (0:08)|High Street]]>><<pass 8>><</link>>
-<</replace>><</link>>
-<br>
+<<link "登记两桩送修 (0:05)">><<pass 5>><<replace "#mp-job-clock-enc">>
+你把两块表的主顾、毛病和取件日子一笔笔记进委托簿，又把崩下来的碎齿扫进废料盒，台面擦了两遍。<span class="teal">两边都开了修单，活计留待塞拉接手。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 300>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
 <<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
 </div>
+
+:: MP Job Clock Encounter 2 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobClockEncounter to 1>>
+古董商格里芬捧来一只镀金三问报时怀表，说是下午拍卖会的压轴拍品，可推下报时滑杆时，表壳里只发出沉闷的咔哒声——两条盘形音簧被陈年干涸的鲸油粘在了夹板上。常来校节拍器的老琴师阿诺德恰巧坐在柜台边，正竖着耳朵听音。
+<br><br>
+<div id="mp-job-clock-enc2">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+<br>
+<<mprepairicon>><<if ($science or 0) gte 260>><<link "精馏煤油洗簧 (0:07)">><<pass 7>><<replace "#mp-job-clock-enc2">>
+<<if ($science or 0) gte 280 or random(1, 3) gte 2>>
+	你用细毛笔蘸取精馏白煤油，顺着音簧根部一毫毫化开陈年胶脂，再用麂皮吸净残油。推下报时滑杆的瞬间，高低双音清越如教堂银钟，阿诺德抚掌称绝，格里芬当场拍下九枚银币。<span class="green">百年三问怀表重现清越报时音。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 920>><</if>>
+	<<scienceskill 1 "no_star">><<stress -2>><<lstress>><<set $mpJobReg_Clock_2 to ($mpJobReg_Clock_2 or 0) + 1>><<set $mpJobReg_Clock_3 to ($mpJobReg_Clock_3 or 0) + 1>>
+<<else>>
+	煤油蘸多了半滴，顺着夹板渗进发条盒，报时音虽响了却带着杂音，只得拆开重洗。<span class="red">你在放大镜下盯得眼眶发酸。</span><<stress 3>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[精馏煤油洗簧 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "精馏煤油洗簧">><<set $mpInsuffReq to "科学等级：<span class='purple'>D+</span>">><<pass 7>><</link>><</if>>
+<br>
+<<sneakicon>><<if ($skulduggery or 0) gte 230>><<link "薄刃挑除干脂 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc2">>
+<<if ($skulduggery or 0) gte 260 or random(1, 3) gte 2>>
+	你屏住呼吸，用柳叶薄刃伸进不足一毫的音簧缝隙，一下下刮去硬结的油痂，连半道划痕都没留。小音锤落下的叮当声清脆悦耳，格里芬满意地结了账。<span class="green">刀尖上的巧劲救活了哑音簧。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 620>><</if>>
+	<<skulduggery 1>><<stress -2>><<lstress>><<set $mpJobReg_Clock_2 to ($mpJobReg_Clock_2 or 0) + 1>>
+<<else>>
+	刀尖碰响了高音簧，震松了固定螺钉，格里芬吓得连忙按住表盒。<span class="red">这桩细活只得交由塞拉亲自收尾。</span><<stress 3>><<tiredness 1>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[薄刃挑除干脂 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "薄刃挑除干脂">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpeavesdropicon>><<link "请老琴师听音 (0:05)">><<pass 5>><<replace "#mp-job-clock-enc2">>
+你请老琴师阿诺德取出随身的A调钢音叉，他敲响音叉贴近表壳，一听便指出是低音锤回弹弹簧紧了半圈。你照他指点松开半格螺丝，报时声顿时清亮起来，两人笑着分了格里芬留下的茶钱。<span class="teal">借老琴师的耳朵顺当解了难题。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 460>><</if>>
+<<stress -2>><<lstress>><<set $mpJobReg_Clock_3 to ($mpJobReg_Clock_3 or 0) + 1>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Clock Encounter 3 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobClockEncounter to 1>>
+老琴师阿诺德抱着一只紫檀木棱锥节拍器急匆匆迈进门槛，说学院下午有琴童考级，节拍器的主发条却在刚才上弦时脱了挂钩，铅摆歪在一边一动不动。
+<br><br>
+<div id="mp-job-clock-enc3">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<if ($maths or 0) gte 240 or ($athletics or 0) gte 230>><<link "钳稳发条重挂 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc3">>
+<<if ($maths or 0) gte 270 or ($athletics or 0) gte 260 or random(1, 3) gte 2>>
+	你戴上鹿皮指套，用反扣铜钳稳稳夹住崩散的蓝钢发条外圈，顺着卷曲力道盘回发条盒内，将尾孔精准挂回棘轮小钩，又校平了每分钟六十拍的刻度游标。阿诺德听着清脆均匀的哒哒声眉开眼笑，留下丰厚修金。<span class="green">紫檀节拍器重归精准。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 680>><</if>>
+	<<mathsskill 1 "no_star">><<stress -2>><<lstress>><<set $mpJobReg_Clock_3 to ($mpJobReg_Clock_3 or 0) + 1>>
+<<else>>
+	蓝钢发条弹力奇大，从钳口滑脱时在木盒内壁刮出一声脆响，震麻了你的指尖。<span class="red">你只得请塞拉用夹具重盘。</span><<pain 2>><<stress 3>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[钳稳发条重挂 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "钳稳发条重挂">><<set $mpInsuffReq to "算术等级：<span class='purple'>D</span> 或 运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mprepairicon>><<if ($science or 0) gte 210>><<link "换装座钟副簧 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc3">>
+<<if ($science or 0) gte 240 or random(1, 3) gte 2>>
+	你看出原装发条尾孔已经磨裂，便从旧座钟料匣里挑了一条同宽度的黄铜副簧，用冲子打出新挂孔换上。节拍摆杆左右摇动分毫不差，阿诺德欣然付了零件与手工费。<span class="green">换上新簧的节拍器比从前更耐用。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 520>><</if>>
+	<<scienceskill 1 "no_star">><<stress -1>><<lstress>><<set $mpJobReg_Clock_3 to ($mpJobReg_Clock_3 or 0) + 1>>
+<<else>>
+	冲孔偏了半毫，装上去后摆杆一边快一边慢，你只好拆下来重新打磨。<span class="red">满手铜屑，险些误了考级时辰。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[换装座钟副簧 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "换装座钟副簧">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<walkicon>><<link "先借铺内摆钟 (0:04)">><<pass 4>><<replace "#mp-job-clock-enc3">>
+你把柜台边那只已经校准的小型铜摆钟先借给阿诺德带去考场应急，将他的紫檀节拍器留在工作台慢慢细修。老琴师连声道谢，留下一笔押金与租金。<span class="teal">急事缓办，两边都没耽搁。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 310>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Clock Encounter 4 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobClockEncounter to 1>>
+旧港拖网渔船的小水手喘着粗气跑进铺子，递上一只被海浪灌入咸水的船用黄铜罗盘——玻璃罩边缘裂了一道缝，顶尖轴承结了一圈青绿铜锈，磁针卡在西北角一动不动，而独眼船长傍晚就要随潮出船。
+<br><br>
+<div id="mp-job-clock-enc4">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<if ($science or 0) gte 270>><<link "除锈充磁校针 (0:07)">><<pass 7>><<replace "#mp-job-clock-enc4">>
+<<if ($science or 0) gte 290 or random(1, 3) gte 2>>
+	你拆下表圈，用稀醋酸拭去玛瑙轴碗里的盐碱铜绿，再取铺子里的马蹄磁石顺着磁针南北极反复单向抚磁十二次。磁针重回灵动，指向正北分毫不偏，小水手欢天喜地地数出船长备好的加急修金。<span class="green">船用罗盘赶在晚潮前恢复了精准指向。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 890>><</if>>
+	<<scienceskill 1 "no_star">><<stress -2>><<lstress>>
+<<else>>
+	抚磁时手势倒了方向，磁针磁性反而减弱，在刻度盘上晃个不停，只得重头充磁。<span class="red">你在工作台前忙得头昏脑涨。</span><<stress 3>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[除锈充磁校针 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "除锈充磁校针">><<set $mpInsuffReq to "科学等级：<span class='purple'>D+</span>">><<pass 7>><</link>><</if>>
+<br>
+<<mprepairicon>><<if ($mpJobTrawlerCount or 0) gte 6 or ($tending or 0) gte 230>><<link "蜂蜡封圈防潮 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc4">>
+<<if ($mpJobTrawlerCount or 0) gte 6 or ($tending or 0) gte 260 or random(1, 3) gte 2>>
+	你熟知海上风浪的厉害，刮净轴尖铜锈后，用热蜂蜡混松香把罗盘玻璃圈口封得滴水不漏，又在底座常平环滴足防盐钟表油。小水手竖起大拇指，把船队特批的保养费全给了你。<span class="green">经你密封的罗盘再也不怕甲板浪花。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 660>><</if>>
+	<<tending 1>><<stress -2>><<lstress>>
+<<else>>
+	热蜂蜡涂得太厚，溢进刻度盘遮住了东向度数，你只好拿小刀一点点刮干净。<span class="red">耽搁了不少工夫。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[蜂蜡封圈防潮 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "蜂蜡封圈防潮">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span>（或熟知渔船海况）">><<pass 6>><</link>><</if>>
+<br>
+<<mpbargainicon>><<if ($money or 0) gte 250>><<link "垫资换厚琉璃 (0:05)">><<pass 5>><<money -250>><<replace "#mp-job-clock-enc4">>
+你从零件柜取出专供航海钟的加厚水晶表蒙换下裂玻璃，并细心擦干内盘水汽。小水手见罗盘焕然一新，立即补齐表蒙钱并多付了赏金。<span class="green">加厚表蒙让老罗盘重获新生。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 720>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">垫资换厚琉璃 (0:05)（£2.50，钱不够）</span><</if>>
+<br>
+<<link "酒精灯烘水汽 (0:04)">><<pass 4>><<replace "#mp-job-clock-enc4">>
+你点起小酒精灯把罗盘底盘烘得温热干爽，轻轻弹动底座让磁针脱开锈点。虽然玻璃罩裂缝还在，但今晚出海指向已够用了。<span class="teal">赶在开船前做好了应急处置。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 330>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Clock Encounter 5 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobClockEncounter to 1>>
+高街窗外接连驶过两列满载货物的有轨电车，震得铺面地板微微发颤。镇店的那座胡桃木落地大摆钟水平脚螺丝松了半圈，钟身微斜，长摆锤擦着木箱内壁发出刺耳的刮擦声，过路行人都停在橱窗外指指点点。
+<br><br>
+<div id="mp-job-clock-enc5">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+<br>
+<<mpcalculateicon>><<if ($maths or 0) gte 230>><<link "铅锤校准水平 (0:06)">><<pass 6>><<replace "#mp-job-clock-enc5">>
+<<if ($maths or 0) gte 260 or random(1, 3) gte 2>>
+	你挂起细铜铅垂线，对照底板中心十字刻度，用扳手把右前角的黄铜调平螺母旋高两圈半。长摆锤重回正中，滴答声清亮浑厚，正好与市政厅钟声同时敲响整点。副站长康纳路过窗前朝你竖起大拇指，塞拉也给你多记了一笔奖金。<span class="green">镇店大摆钟恢复了庄重沉稳的报时。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 600>><</if>>
+	<<mathsskill 1 "no_star">><<stress -2>><<lstress>><<set $mpJobReg_Clock_1 to ($mpJobReg_Clock_1 or 0) + 1>>
+<<else>>
+	螺母旋过了头，摆钟反而朝左侧偏斜，摆锤走三下就停，你只得趴在地板上重调。<span class="red">膝盖压得生疼，总算没坏了招牌。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[铅锤校准水平 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "铅锤校准水平">><<set $mpInsuffReq to "算术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mprepairicon>><<if ($housekeeping or 0) gte 210>><<link "底座垫入软木 (0:05)">><<pass 5>><<replace "#mp-job-clock-enc5">>
+<<if ($housekeeping or 0) gte 240 or random(1, 3) gte 2>>
+	你裁下四片厚实的红酒塞软木垫进大摆钟四角铜脚下，既垫平了倾斜度，又滤去了街面电车驶过的震动。塞拉听着平稳下来的擒纵声，满意地点了点头。<span class="green">软木减震垫彻底根治了电车震动。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 480>><</if>>
+	<<housekeeping 1>><<stress -2>><<lstress>>
+<<else>>
+	软木片厚薄不一，垫进去后钟柜还是有些晃晃悠悠。<span class="red">你用小刀修了三回才算垫稳。</span><<stress 2>><<tiredness 1>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[底座垫入软木 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "底座垫入软木">><<set $mpInsuffReq to "家政等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
+<br>
+<<mpwatchicon>><<link "暂摘重锤停摆 (0:04)">><<pass 4>><<replace "#mp-job-clock-enc5">>
+你先打开钟柜玻璃门，稳稳托住并摘下两只黄铜重锤，免得摆杆继续刮伤胡桃木内壁，等打烊后再和塞拉一起调底座。<span class="teal">及时护住了钟壳漆面。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_clock_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 280>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Clock]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+/* ==================== 孤儿院浆洗房当班插曲 1–5 ==================== */
 
 :: MP Job Laundry Encounter [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
 <<set $daily to ($daily or {})>><<set $daily.mpJobLaundryEncounter to 1>>
-管事把一件神殿送洗的白法衣摊在案上，前襟洇开一大片靛蓝，像是跟深色衣物混包时染上的。她翻过送洗簿，又点出少了一条绣着名字的床单。<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>抱着刚收下来的湿布站在门口，不敢出声。
+神殿执事西蒙站在交接案前，管事把一件送洗的白亚麻法衣摊开，前襟洇开一大片靛蓝，是跟深色工装混包时染上的。管事翻过送洗簿，又点出少了一条账房先生彭斯绣着名字的床单。<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>抱着刚收下来的湿布站在门口，大气不敢出。
 <br><br>
 <div id="mp-job-laundry-enc">
-<<mpcleanicon>><<if ($housekeeping or 0) gte 220>><<link "重洗染色法衣 (0:06)">><<pass 6>><<replace "#mp-job-laundry-enc">>
-<<if ($housekeeping or 0) gte 240 or random(1, 3) gte 2>>
-	你用温皂水兑了一点草酸，把染蓝的前襟反复浸洗，又用清水过了三遍。靛色褪成一层浅影，管事对着光看了半晌，把这一件的工钱记在你名下。<span class="green">法衣赶在晚祷前重新浆好了。</span>
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 480>><</if>>
-	<<housekeeping 1>><<stress -2>><<lstress>>
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+<br>
+<<mpcleanicon>><<if ($housekeeping or 0) gte 230>><<link "草酸温水退染 (0:06)">><<pass 6>><<replace "#mp-job-laundry-enc">>
+<<if ($housekeeping or 0) gte 250 or random(1, 3) gte 2>>
+	你用温皂水兑入少许草酸与柠檬汁，把染蓝的前襟单独浸搓，又用井水过了三遍。靛色褪得干干净净，西蒙执事对着窗光验看半晌，满意地把加急洗护费记在你名下。<span class="green">神殿白法衣赶在晚祷前重新浆烫如新。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 560>><</if>>
+	<<housekeeping 1>><<stress -2>><<lstress>><<set $mpJobReg_Laundry_2 to ($mpJobReg_Laundry_2 or 0) + 1>>
 <<else>>
-	草酸兑得太浓，袖口被蚀出一圈毛边，靛蓝反倒渗得更深。管事把法衣从盆里提起来，说这桩活计只能另请人修补。<span class="red">你把手在围裙上擦了两遍。</span><<stress 3>><<tiredness 1>><<gstress>>
+	草酸兑得太浓，袖口被蚀出一圈毛边，靛蓝反倒渗得更深。管事把法衣从盆里提起来，说这桩活计只能另想办法。<span class="red">你把手在围裙上擦了两遍。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[草酸温水退染 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "草酸温水退染">><<set $mpInsuffReq to "家政等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
 <br>
-<<link [[返回孤儿院 (0:08)|Orphanage]]>><<pass 8>><</link>>
-<</replace>><</link>><<else>><<link [[重洗染色法衣 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "重洗染色法衣">><<set $mpInsuffReq to "家政等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mpreadicon>><<if ($english or 0) gte 220>><<link "核对绣名簿 (0:06)">><<pass 6>><<replace "#mp-job-laundry-enc">>
+<<mpreadicon>><<if ($english or 0) gte 210>><<link "核对绣名底簿 (0:06)">><<pass 6>><<replace "#mp-job-laundry-enc">>
 <<if ($english or 0) gte 240 or random(1, 3) gte 2>>
-	你把送洗簿上的编号与床单角上的花体绣名逐一对照，查出那条床单被隔壁街的洗衣妇错领走了。管事按着地址把布取了回来，顺手把对账的赏钱塞给你。<span class="green">少掉的那一条又回到了架子上。</span>
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 440>><</if>>
-	<<englishskill 1 "no_star">><<stress -2>><<lstress>>
+	你把送洗簿上的编号与床单角上的花体绣名逐一对照，查出彭斯先生那条床单被塞进了三楼烘衣篓底层。你当场抱出床单烫平奉还，管事顺手把对账赏钱塞给你。<span class="green">少掉的那一条床单分毫不差地找了回来。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 480>><</if>>
+	<<englishskill 1 "no_star">><<stress -2>><<lstress>><<set $mpJobReg_Laundry_1 to ($mpJobReg_Laundry_1 or 0) + 1>>
 <<else>>
 	绣字被水汽泡得发虚，你认错了一个字母，白跑了一趟隔壁街，回来时盆里的水已经凉了。<span class="red">管事没说什么，只把簿子合上。</span><<stress 2>><<tiredness 2>><<gstress>>
 <</if>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[核对绣名底簿 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "核对绣名底簿">><<set $mpInsuffReq to "英语等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
 <br>
-<<link [[返回孤儿院 (0:08)|Orphanage]]>><<pass 8>><</link>>
-<</replace>><</link>><<else>><<link [[核对绣名簿 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "核对绣名簿">><<set $mpInsuffReq to "英语等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mptailoricon>><<link "先把法衣晾起 (0:05)">><<pass 5>><<replace "#mp-job-laundry-enc">>
-你把染了色的法衣单独挂到通风的竹竿上，又给送洗簿压了一块干布。架子上的布一件件归了位，少掉的那条床单和这件法衣都还悬着。<span class="teal">至少眼下没有再添新的错处。</span><<stress -1>><<lstress>>
+<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link "与罗宾分头查 (0:05)">><<pass 5>><<replace "#mp-job-laundry-enc">>
+你向罗宾使了个眼色，让他去后院晾衣架核对床单角标，自己留下来用热牛乳替西蒙执事的法衣吸除浮色。两人一里一外配合默契，法衣与床单同时归位，罗宾冲你露出一抹安心的笑。<span class="green">两桩差错都被你们联手化解了。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 520>><</if>>
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<stress -2>><<lstress>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">与罗宾分头查 (0:05)（尚未结识）</span><</if>>
 <br>
-<<link [[返回孤儿院 (0:08)|Orphanage]]>><<pass 8>><</link>>
-<</replace>><</link>>
-<br>
+<<link "先把法衣晾起 (0:05)">><<pass 5>><<replace "#mp-job-laundry-enc">>
+你把染了色的法衣单独挂到通风的竹竿上防色斑扩散，又给送洗簿压了一块干布。<span class="teal">至少眼下没有再添新的错处。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 280>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
 <<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Laundry Encounter 2 [nobr]
+<<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobLaundryEncounter to 1>>
+旧书商莫里斯夹着一包油布赶进装订室，里面是两册刚从旧宅收来的百年地方志。书脊麻线早已朽断，更糟的是昨夜受了潮，书页间的陈年动物胶发黏，稍一硬翻就会扯破脆薄的书页。
+<br><br>
+<div id="mp-job-laundry-enc2">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+<br>
+<<mpreadicon>><<if ($english or 0) gte 250 or ($history or 0) gte 240>><<link "宣纸吸潮揭页 (0:07)">><<pass 7>><<replace "#mp-job-laundry-enc2">>
+<<if ($english or 0) gte 270 or ($history or 0) gte 260 or random(1, 3) gte 2>>
+	你借着浆洗房温润的蒸汽，用薄竹起子顺着页码顺序一页页揭开粘连的书叶，每两页之间夹入干爽的白棉纸吸潮，再按古籍蝴蝶装针眼重新穿线。莫里斯捧着复原如初的地方志连声赞叹，数出优厚的修书酬金。<span class="green">百年地方志无一页受损，装订得严丝合缝。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 760>><</if>>
+	<<historyskill 1>><<stress -2>><<lstress>><<set $mpJobReg_Laundry_3 to ($mpJobReg_Laundry_3 or 0) + 1>>
+<<else>>
+	中间有两页附表粘得太死，你揭到一半撕裂了页脚，莫里斯心疼得直嘬牙花子。<span class="red">你只得用米糊小心翼翼地补齐裂口。</span><<stress 3>><<tiredness 1>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[宣纸吸潮揭页 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "宣纸吸潮揭页">><<set $mpInsuffReq to "英语等级：<span class='purple'>D+</span> 或 历史等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<br>
+<<mpsewicon>><<if ($mpJobTailorCount or 0) gte 6>><<link "裁缝蜡线锁脊 (0:05)">><<pass 5>><<replace "#mp-job-laundry-enc2">>
+你取出高街裁缝铺赠送的蜂蜡亚麻线与包书细麻布，替散架的地方志重做了双层防潮硬壳书脊。莫里斯试着翻合几次，见书脊柔韧挺括，比原装还要结实，当场多加了一笔手工钱。<span class="green">裁缝铺的上等蜡线让古书焕然一新。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 680>><</if>>
+<<stress -2>><<lstress>><<set $mpJobReg_Laundry_3 to ($mpJobReg_Laundry_3 or 0) + 1>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">裁缝蜡线锁脊 (0:05)（裁缝铺还没这份交情）</span><</if>>
+<br>
+<<mpcleanicon>><<link "暖石台旁阴干 (0:05)">><<pass 5>><<replace "#mp-job-laundry-enc2">>
+你没敢强行揭开粘页，而是把两册书立成扇形摆在暖石台通风处，等潮气慢慢散尽再交由莫里斯自己分理。<span class="teal">稳妥护住了书页，拿到了基础看护钱。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 310>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Laundry Encounter 3 [nobr]
+<<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobLaundryEncounter to 1>>
+常客老账房彭斯先生明天一早要去市政厅核对年度税表，特地上门来取他那件浆硬领白衬衫。可新来的院童刚才试温时把炭火熨斗放偏了一寸，领尖正面留下了一道淡淡的浅黄焦印。
+<br><br>
+<div id="mp-job-laundry-enc3">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+<br>
+<<mpcleanicon>><<if ($science or 0) gte 230 or ($housekeeping or 0) gte 250>><<link "白醋轻刷退黄 (0:06)">><<pass 6>><<replace "#mp-job-laundry-enc3">>
+<<if ($science or 0) gte 250 or ($housekeeping or 0) gte 270 or random(1, 3) gte 2>>
+	你见焦痕只浮在淀粉浆层表面，并未伤及亚麻底纱，立即用白醋混细盐轻轻刷去焦浆，重新刷上新调的米浆熨得雪白笔挺。彭斯先生对着亮光看了看，称赞这领子比新买时还精神，爽快地给了赏钱。<span class="green">焦黄印子被彻底褪去，硬领雪白挺括。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 620>><</if>>
+	<<housekeeping 1>><<stress -2>><<lstress>><<set $mpJobReg_Laundry_1 to ($mpJobReg_Laundry_1 or 0) + 1>>
+<<else>>
+	刷得太使劲，领尖的麻纱起了毛球，彭斯先生皱了皱眉，只付了一半浆洗费。<span class="red">你在熨衣台前忙出了一身汗。</span><<stress 3>><<tiredness 1>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[白醋轻刷退黄 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "白醋轻刷退黄">><<set $mpInsuffReq to "科学等级：<span class='purple'>D</span> 或 家政等级：<span class='purple'>D+</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mptailoricon>><<if ($skulduggery or 0) gte 220>><<link "拆领翻面重缝 (0:06)">><<pass 6>><<replace "#mp-job-laundry-enc3">>
+<<if ($skulduggery or 0) gte 250 or random(1, 3) gte 2>>
+	你手脚麻利地挑开领座暗线，将双层对称的硬领正反调转过来，把那点浅黄藏进贴脖子的内侧，再用细密平针缝合熨平。彭斯先生拿在手里左看右看没挑出半点毛病，连声道谢离去。<span class="green">翻面重缝让白衬衫滴水不漏。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 520>><</if>>
+	<<skulduggery 1>><<stress -2>><<lstress>><<set $mpJobReg_Laundry_1 to ($mpJobReg_Laundry_1 or 0) + 1>>
+<<else>>
+	拆线时扯断了一根领角线，重缝后领口略微歪斜，彭斯先生叹了口气先拿去应急。<span class="red">这单没能拿到额外赏钱。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[拆领翻面重缝 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拆领翻面重缝">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<socialiseicon>><<link "实言相告配领结 (0:04)">><<pass 4>><<replace "#mp-job-laundry-enc3">>
+你主动向彭斯先生指明领尖的浅印，又从熨好的备品里挑了一条深灰丝绒领结替他比在领口，刚好遮住那抹微黄。老账房见你诚实周到，非但没怪罪，还留下了零钱。<span class="teal">坦诚周到的处置赢得了老主顾谅解。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 300>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Laundry Encounter 4 [nobr]
+<<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobLaundryEncounter to 1>>
+温泉桑拿房送来三十条加急清洗的厚绒浴巾，上面吸饱了按摩用的甜橙精油与矿盐脂膏。用寻常温皂水搓了一遍，毛圈里还是滑腻腻的，午后两点桑拿房的车就要来拉货。
+<br><br>
+<div id="mp-job-laundry-enc4">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+<br>
+<<mpcleanicon>><<if ($housekeeping or 0) gte 250>><<link "热草木灰去脂 (0:07)">><<pass 7>><<replace "#mp-job-laundry-enc4">>
+<<if ($housekeeping or 0) gte 270 or random(1, 3) gte 2>>
+	你往大铜锅里滤入澄净的草木灰碱水，将三十条浴巾分批煮沸一刻钟，彻底乳化毛圈深处的精油，最后过一遍柠檬清水恢复蓬松。烘出来的浴巾松软清香，桑拿房来人一摸便赞不绝口，当场加付了包月红利。<span class="green">三十条精油浴巾洗得蓬松干爽。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 780>><</if>>
+	<<housekeeping 1>><<stress -2>><<lstress>>
+<<else>>
+	碱水比例重了些，洗出来的浴巾虽然没了油气，手感却有些发硬，管事让你加柔顺皂水再过一遍。<span class="red">两只手被热水泡得通红。</span><<stress 3>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[热草木灰去脂 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "热草木灰去脂">><<set $mpInsuffReq to "家政等级：<span class='purple'>D+</span>">><<pass 7>><</link>><</if>>
+<br>
+<<mpcarryicon>><<if ($physique or 0) gte 7200 or ($athletics or 0) gte 230>><<link "木槌捣洗快绞 (0:06)">><<pass 6>><<replace "#mp-job-laundry-enc4">>
+<<if ($physique or 0) gte 7800 or ($athletics or 0) gte 260 or random(1, 3) gte 2>>
+	你挽高袖口，抡起硬木捣衣杵在石槽里重重捶打百余下，把毛圈里的油脂硬生生挤入滚水，再用双辊绞干机一把摇干送进烘房。赶在货车停稳前，三十条浴巾已整整齐齐打好了捆。<span class="green">凭着一股猛劲按时交出了急活。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 560>><</if>>
+	<<athletics 1>><<stress -1>><<lstress>>
+<<else>>
+	湿透的三十条厚浴巾沉得像铅块，摇绞干机时你肩膀一酸脱了手，还得重摇一遍。<span class="red">累得气喘吁吁，险些误了钟点。</span><<stress 2>><<tiredness 3>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[木槌捣洗快绞 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "木槌捣洗快绞">><<set $mpInsuffReq to "体魄：7200 或 运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpswimicon>><<if ($mpJobSpaLevel or 0) gte 2>><<link "先调桑拿备巾 (0:04)">><<pass 4>><<replace "#mp-job-laundry-enc4">>
+你熟知桑拿房二楼储物柜里还有两捆上周存下的干浴巾，便写了一张调拨条交由车夫先带回去顶用，把这批重油浴巾留在缸里慢浸精洗。两边都没断货，管事夸你懂得变通。<span class="green">熟知两店库存让你从容化解了催单。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 640>><</if>>
+<<stress -2>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">先调桑拿备巾 (0:04)（桑拿房还没这份交情）</span><</if>>
+<br>
+<<link "先烘轻污半批 (0:04)">><<pass 4>><<replace "#mp-job-laundry-enc4">>
+你把油污较轻的十五条面巾先挑出来洗净烘干交车，余下十五条重油浴巾说明情况延到傍晚再送。<span class="teal">先交半批稳住了前厅用度。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 300>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Laundry Encounter 5 [nobr]
+<<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobLaundryEncounter to 1>>
+后院忽然刮起一阵穿堂旋风，撑起主晾衣绳的那根老竹竿咔嚓一声从中折断。整排刚浆洗雪白的神殿桌布与孤儿院床单眼看就要坠进院角的泥水坑里，神殿执事西蒙正站在廊下往这边看。
+<br><br>
+<div id="mp-job-laundry-enc5">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+<br>
+<<runicon>><<if ($athletics or 0) gte 240>><<link "飞身托住竹竿 (0:06)">><<pass 6>><<replace "#mp-job-laundry-enc5">>
+<<if ($athletics or 0) gte 270 or random(1, 3) gte 2>>
+	你一个箭步冲进院中，在床单擦到泥地前一把抄住折断的竹竿上半截高高举起，又用脚尖勾过备用的木叉顶住绳心。满绳白布纤尘未染，西蒙执事抚胸赞叹，当场多赏了你一份护布钱。<span class="green">一排雪白床单与桌布半点泥星都没沾上。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 660>><</if>>
+	<<athletics 1>><<stress -2>><<lstress>><<set $mpJobReg_Laundry_2 to ($mpJobReg_Laundry_2 or 0) + 1>>
+<<else>>
+	院地青苔湿滑，你扑过去时慢了半步，最边上两条床单还是拖进了泥水，只得端回木盆重洗。<span class="red">裤脚溅满泥点，又多干了一刻钟活。</span><<stress 3>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[飞身托住竹竿 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "飞身托住竹竿">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mprepairicon>><<if ($tending or 0) gte 220>><<link "斜拉副绳系柱 (0:05)">><<pass 5>><<replace "#mp-job-laundry-enc5">>
+<<if ($tending or 0) gte 250 or random(1, 3) gte 2>>
+	你一把拽住廊柱上的副牵引绳，趁主绳下坠之势绕柱三圈打了个死扣。整排床单悬停在离地一尺的半空，你和院童们从容不迫地把布匹全收进藤篮。<span class="green">巧用廊柱副绳稳稳拉住了整排织物。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 500>><</if>>
+	<<tending 1>><<stress -2>><<lstress>>
+<<else>>
+	麻绳勒得掌心生疼，绳结滑了一下，床单底角蹭上了灰，还得用湿帕子逐条擦拭。<span class="red">手心火辣辣地发烫。</span><<pain 1>><<stress 2>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[斜拉副绳系柱 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "斜拉副绳系柱">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
+<br>
+<<mpcarryicon>><<link "抱藤篮抢收桌布 (0:04)">><<pass 4>><<replace "#mp-job-laundry-enc5">>
+你端起大藤篮冲向靠近神殿桌布的那半边，先把西蒙执事急着要的四幅祭台白布抢收进篮里，剩下的孤儿院床单再和院童一起择洗。<span class="teal">保住了最要紧的外客织物。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_laundry_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 300>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Laundry]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
 </div>

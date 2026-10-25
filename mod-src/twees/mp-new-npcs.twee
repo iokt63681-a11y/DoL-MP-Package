@@ -5,28 +5,28 @@
 <<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.sera to ($mpNpcs.sera or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.sera>><<set _open to (Time.hour gte 8 and Time.hour lt 21)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "High Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
+<<getouticon>><<link [[离开钟表铺 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
 <<if _open>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
 <<if $mpNpcs.sera.firstMeet>>柜台后的人摘下单眼放大镜，在围裙上擦了擦手：「修表，还是带了旧物？……叫我塞拉就行。」<<set $mpNpcs.sera.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>煤油灯暖光映着<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>的侧脸。听见门铃响，她放下镊子翻过木牌，握住你微凉的指尖贴在颊边：「我听着钟声，就知你该来了。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>推开高街钟表铺的玻璃门，<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>摘下放大镜，将柜上一杯热红茶推到你手边：「外面风大，先暖暖手。」<<else>>钟表铺里浮着机油与旧纸气息。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>戴着单眼放大镜夹着细齿轮，抬眼看向你：「要修表，还是带了旧物？」<</if>>
 <<if Weather.precipitation is "rain">>窗外雨水顺着玻璃滑落，店内座钟齐声滴答。<<else>>斜阳穿过橱窗，在黄铜钟摆上投下金光。<</if>>
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[离开 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">离开 (0:02)（尚未结识）</span><</if>>
-<br>
 <<mpclockworkicon>><<link [[聊钟表旧闻 (0:06)|MP NPC Sera Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[给她看古物 (0:08)|MP NPC Sera Service]]>><<pass 8>><</link>>
 <br>
 <<mpcalculateicon>><<link [[分拣机芯齿轮 (0:16)|MP NPC Sera Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
+<<link [[查看钟表修缮簿 (0:05)|MP NPC Sera Deep Hub]]>><<pass 5>><</link>><br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_sera)>>
 	<<link [[问起停摆怀表 (0:20)|MP NPC Sera Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_sera to 1>><<pass 20>><</link>>
 	<br>
 <</if>>
 <<else>>
 钟表铺已经落锁，玻璃窗里只亮着一盏值夜的煤油灯。柜台后没有回应，看来得等营业时间（8:00–21:00）再来。
-<br><br>
-<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
+<br><<link [[更多往来 (0:03)|MP NPC Sera Extra Hub]]>><<pass 3>><</link>>
 
 :: MP NPC Sera Chat [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -311,28 +311,28 @@
 <<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.vesper>><<set _open to (Time.hour gte 17 or Time.hour lt 6)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Docks")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Docks">><</if>>
+<<getouticon>><<link [[离开栈桥 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
 <<if _open>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
 <<if $mpNpcs.vesper.firstMeet>>栈桥边的人收起怀表，上下打量你一眼：「夜里在码头乱走，胆子不小。叫我维斯。」<<set $mpNpcs.vesper.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>防风提灯在海雾里摇晃。<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>见你走来，把防水风衣披在你肩头，带着烟草味的手掌按了按你的后颈：「海风冷，跟紧我。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>集装箱阴影里亮起一点火星。<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>冲你招手，递来半壶温热的生姜朗姆茶：「今晚潮水稳，过来歇会儿。」<<else>>旧港栈桥尽头弥漫着咸水与焦油味。披黑风衣的<<if $mpNpcs and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>>维斯<<else>>夜航船长<</if>>倚着系船柱核对舱单，抬眼打量你：「带了暗市货包，还是来打听水路？」<</if>>
 <<if Weather.precipitation is "rain">>冷雨砸在集装箱铁皮上，港湾水波翻涌。<<else>>远处雾角灯塔的光束扫过黑沉沉的海面。<</if>>
 <br><br>
-<<getouticon>><<link [[离开栈桥 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-<br>
 <<socialiseicon>><<link [[聊水路行情 (0:06)|MP NPC Vesper Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[出手暗市货包 (0:08)|MP NPC Vesper Service]]>><<pass 8>><</link>>
 <br>
 <<mpcalculateicon>><<link [[看风清点木箱 (0:16)|MP NPC Vesper Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
+<<link [[查看夜航契约簿 (0:05)|MP NPC Vesper Deep Hub]]>><<pass 5>><</link>><br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_vesper)>>
 	<<link [[追问沉船航标 (0:20)|MP NPC Vesper Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_vesper to 1>><<pass 20>><</link>>
 	<br>
 <</if>>
 <<else>>
 栈桥上空无一人，只有系船柱上的铁链在风里轻响。维斯的船已经出港，夜航时段（17:00–次日 6:00）才会回港。
-<br><br>
-<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
+<br><<link [[更多往来 (0:03)|MP NPC Vesper Extra Hub]]>><<pass 3>><</link>>
 
 :: MP NPC Vesper Chat [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -423,7 +423,7 @@
 	<<if ($swimmingskill or 0) gte 250 or ($athletics or 0) gte 250>>
 		<<mplockpickicon>><<link [[潜入浅浪撬锚链 (0:09)|MP NPC Vesper Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<<else>>
-		<<investigateicon>><<link [[潜入浅浪撬锚链 (0:09)|MP NPC Vesper Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
+		<<mprowicon>><<link [[潜入浅浪撬锚链 (0:09)|MP NPC Vesper Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 9>><</link>>
 	<</if>>
 	<br>
 	<<if ($physique or 10000) gte 11600 or ($skulduggery or 0) gte 250 or (_npc.trust or 0) gte 10>>
@@ -617,28 +617,28 @@
 <<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.noel to ($mpNpcs.noel or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.noel>><<set _open to (Time.hour gte 7 and Time.hour lt 20)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "School Library")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "School Library">><</if>>
+<<getouticon>><<link [[离开标本室 (0:02)|_exitPas]]>><<if _exitPas is "Park">><<set $outside to 1>><<set $location to "park">><<else>><<set $outside to 0>><<set $location to "school">><</if>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
 <<if _open>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
 <<if $mpNpcs.noel.firstMeet>>抱着标本册的学生合上本子：「你也对这些干花感兴趣？我叫诺艾尔，在学园帮忙整理标本。」<<set $mpNpcs.noel.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>标本室飘着甘菊与干薰衣草的清香。<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>一见你便放下鹅毛笔，捧起温在石棉网上的花草茶塞进你手心：「快坐下歇歇。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>阳光透过花房玻璃洒在木桌上。<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>笑着替你拂去肩头灰尘：「今天新烘了柠檬马鞭草，正好给你留了一杯。」<<else>>学校标本室里排满浸液瓶与植物压片。温和的<<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>>诺艾尔<<else>>标本学徒<</if>>正给草药贴标签，抬头微微笑道：「来查植物图谱，还是想讨杯安神茶？」<</if>>
 <<if Weather.precipitation is "rain">>雨点轻敲玻璃花房顶棚，室内药草香愈发温润。<<else>>暖阳照亮叶脉标本，空气里浮着淡淡蜂蜜味。<</if>>
 <br><br>
-<<getouticon>><<link [[离开标本室 (0:02)|_exitPas]]>><<if _exitPas is "Park">><<set $outside to 1>><<set $location to "park">><<else>><<set $outside to 0>><<set $location to "school">><</if>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-<br>
 <<socialiseicon>><<link [[聊草木图谱 (0:06)|MP NPC Noel Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<mpherbicon>><<link [[请她配草药茶 (0:08)|MP NPC Noel Service]]>><<pass 8>><</link>>
 <br>
 <<tendingicon>><<link [[压制干花贴签 (0:16)|MP NPC Noel Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
+<<link [[查看共生标本簿 (0:05)|MP NPC Noel Deep Hub]]>><<pass 5>><</link>><br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_noel)>>
 	<<link [[打听夜光兰 (0:20)|MP NPC Noel Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_noel to 1>><<pass 20>><</link>>
 	<br>
 <</if>>
 <<else>>
 标本室的门已经上锁，走廊里只剩清扫的脚步声。诺艾尔随下课的学生离开了，学园开放时段（7:00–20:00）才在。
-<br><br>
-<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
+<br><<link [[更多往来 (0:03)|MP NPC Noel Extra Hub]]>><<pass 3>><</link>>
 
 :: MP NPC Noel Chat [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -649,14 +649,14 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:02)|MP NPC Noel Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<investigateicon>><<link [[擦去鼻尖花粉 (0:04)|MP NPC Noel Flirt]]>><<pass 4>><<arousal 300>><</link>>
+<<mpherbicon>><<link [[擦去鼻尖花粉 (0:04)|MP NPC Noel Flirt]]>><<pass 4>><<arousal 300>><</link>>
 <br>
 <<if ((_npc.love or 0) gte 15 or (_npc.lust or 0) gte 12) and (!$daily or !$daily.mpNpcIntimate_noel)>>
 	<<mphearticon>><<link [[随她进暖阁 (0:25)|MP NPC Noel Intimate]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcIntimate_noel to 1>><<pass 25>><<arousal 1200>><<stress -10>><</link>>
 	<br>
 <</if>>
 <<if (_npc.love or 0) gte 8 or (_npc.trust or 0) gte 8>>
-	<<walkicon>><<link [[修剪药草垄 (0:08)|MP Extra Daily Noel 1]]>><<pass 8>><</link>>
+	<<mpfarmicon>><<link [[修剪药草垄 (0:08)|MP Extra Daily Noel 1]]>><<pass 8>><</link>>
 <</if>>
 <<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[清晨去药草垄 (0:08)|MP RelDay Noel 1]]>><<pass 8>><</link>><</if>>
 
@@ -921,28 +921,29 @@
 <<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.lin to ($mpNpcs.lin or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.lin>><<set _open to (Time.hour gte 16 or Time.hour lt 7)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Domus Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Domus Street">><</if>>
+<<getouticon>><<link [[离开值夜点 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
 <<if _open>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
 <<if $mpNpcs.lin.firstMeet>>路灯下的人活动了一下缠着绷带的手腕：「这个点还在外面？我叫林恩，这条街夜里归我看着。」<<set $mpNpcs.lin.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>街角路灯下，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>正缠着手腕护具。一见到你，他冷峻的眉眼瞬间柔和，顺手把热乎的烤红薯塞进你怀里：「夜里凉，吃完我送你。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>宅邸街岗棚旁，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>冲你点点头，指了指长椅上的保温壶：「刚巡完前半夜，过来喝口热姜汤。」<<else>>夜雾笼罩着宅邸街与孤儿院外墙。扎高马尾的<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>手按短棍立在灯影下，目光锐利地看向你：「这么晚还在街上，要学防身，还是有事找我？」<</if>>
 <<if Weather.precipitation is "rain">>雨水顺着岗棚铁檐淌下，<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>的皮靴纤尘不染。<<else>>夜风掠过青石板路，远处传来孤儿院的熄灯铃。<</if>>
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">离开 (0:08)（尚未结识）</span><</if>>
-<br>
 <<mpwatchicon>><<link [[聊夜巡见闻 (0:06)|MP NPC Lin Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[请教格斗步法 (0:08)|MP NPC Lin Service]]>><<pass 8>><</link>>
 <br>
 <<tendingicon>><<link [[巡查孤儿院外巷 (0:16)|MP NPC Lin Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
+<<link [[查看夜巡值班簿 (0:05)|MP NPC Lin Deep Hub]]>><<pass 5>><</link>><br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_lin)>>
 	<<link [[追查地下铁笼 (0:20)|MP NPC Lin Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_lin to 1>><<pass 20>><</link>>
 	<br>
 <</if>>
 <<else>>
 街角路灯下没有林恩的身影，岗棚的门也锁着。他还在别处巡逻，守夜时段（16:00–次日 7:00）才会回到这条街。
-<br><br>
-<<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
+<br><<link [[查看探案线索板 (0:04)|MP Case Board Hub]]>><<pass 4>><</link>>
+<br><<link [[更多往来 (0:03)|MP NPC Lin Extra Hub]]>><<pass 3>><</link>>
 
 :: MP NPC Lin Chat [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -995,7 +996,7 @@
 <br><br>
 <<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:02)|MP NPC Lin Hub]]>><<pass 2>><</link>><<else>><span class="disabled">回林恩身边 (0:02)（尚未结识）</span><</if>>
 <br>
-<<investigateicon>><<link [[提灯排查暗哨 (0:06)|MP NPC Lin Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
+<<mpwatchicon>><<link [[提灯排查暗哨 (0:06)|MP NPC Lin Hub]]>><<pass 6>><<if ($willpower or 0) gte 420>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<tiredness 1>><</if>><</link>>
 
 :: MP NPC Lin Flirt [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -1029,7 +1030,7 @@
 	<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
 	<br>
 	<<if ($skulduggery or 0) gte 260 or ($science or 0) gte 240>>
-		<<sneakicon>><<link [[顶开双簧窗扣 (0:08)|MP NPC Lin Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+		<<windowicon>><<link [[顶开双簧窗扣 (0:08)|MP NPC Lin Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
 		<<investigateicon>><<link [[顶开双簧窗扣 (0:08)|MP NPC Lin Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
@@ -1225,28 +1226,28 @@
 <<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.monet>><<set _open to (Time.hour gte 10 and Time.hour lt 23)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Connudatus Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Connudatus Street">><</if>>
+<<getouticon>><<link [[离开画室 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
 <<if _open>>
 <<endevent>><<generateNPC 1 "a" "f" "f">><<person1>>
 <<if $mpNpcs.monet.firstMeet>>廊檐下的人把素描本翻过来给你看：「刚才画的就是这一角的人影。叫我莫奈。」<<set $mpNpcs.monet.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>画室里浮着松节油与白麝香的气息。<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>放下调色刀，笑着揽过你的肩膀，用温热软布替你擦净衣角：「我的缪斯来了，快坐。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>天鹅绒帷幔半掩着露台。<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>朝你举了举手里的骨瓷咖啡杯：「刚调好一幅海雾蓝，正缺你帮我参详。」<<else>>康努达图斯街阁楼画室挂满油画与丝绸披肩。<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>夹着画笔打量你的身形轮廓：「来修补衣物，还是愿意做会儿模特？」<</if>>
 <<if Weather.precipitation is "rain">>雨丝斜织在落地窗外，画布上的色彩愈发深邃。<<else>>夕照透过彩色玻璃，在波斯地毯上洒满暖金斑驳。<</if>>
 <br><br>
-<<getouticon>><<link [[离开画室 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
-<br>
 <<link [[聊画作光影 (0:06)|MP NPC Monet Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[请她补衣物 (0:08)|MP NPC Monet Service]]>><<pass 8>><</link>>
 <br>
 <<mptailoricon>><<link [[绷紧亚麻画布 (0:16)|MP NPC Monet Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
+<<link [[查看画室缪斯簿 (0:05)|MP NPC Monet Deep Hub]]>><<pass 5>><</link>><br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_monet)>>
 	<<investigateicon>><<link [[问起蒙尘署名画 (0:20)|MP NPC Monet Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_monet to 1>><<pass 20>><</link>>
 	<br>
 <</if>>
 <<else>>
 画室的木门已经从里面锁上，窗内的画架蒙着防尘布。画室开放时段（10:00–23:00）才会回来。
-<br><br>
-<<link [[离开画室 (0:04)|_exitPas]]>><<set $outside to 1>><<set $location to "town">><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
+<br><<link [[更多往来 (0:03)|MP NPC Monet Extra Hub]]>><<pass 3>><</link>>
 
 :: MP NPC Monet Chat [nobr]
 <<set $outside to 0>><<set $location to "cafe">><<effects>><<mpAmbient>>
@@ -1264,7 +1265,7 @@
 	<br>
 <</if>>
 <<if (_npc.love or 0) gte 8 or (_npc.trust or 0) gte 8>>
-	<<walkicon>><<link [[去露台速写 (0:08)|MP Extra Daily Monet 1]]>><<pass 8>><</link>>
+	<<mpmapicon>><<link [[去露台速写 (0:08)|MP Extra Daily Monet 1]]>><<pass 8>><</link>>
 <</if>>
 <<if (_npc.love or 0) gte 12 or (_npc.trust or 0) gte 12>><br><<link [[午后绷画布 (0:08)|MP RelDay Monet 1]]>><<pass 8>><</link>><</if>>
 
@@ -1333,7 +1334,7 @@
 	<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
 	<br>
 	<<if ($skulduggery or 0) gte 260 or ($tending or 0) gte 250>>
-		<<sneakicon>><<link [[软蜡拓印模 (0:08)|MP NPC Monet Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
+		<<mptranslateicon>><<link [[软蜡拓印模 (0:08)|MP NPC Monet Quest 3 Pass]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<<else>>
 		<<walkicon>><<link [[软蜡拓印模 (0:08)|MP NPC Monet Quest 3 Fail]]>><<set $mpNpcQuestAct to 1>><<pass 8>><</link>>
 	<</if>>
@@ -1529,28 +1530,28 @@
 <<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.ash to ($mpNpcs.ash or { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0 })>><<set _npc to $mpNpcs.ash>><<set _open to (Time.hour gte 6 and Time.hour lt 23)>><<if _open>><<set _npc.hasMet to 1>><</if>>
 <<set _exitPas to ($mpReturnPassage or "Forest")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Forest">><</if>>
+<<getouticon>><<link [[离开林间 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
+<br><br>
 <<if _open>>
 <<endevent>><<generateNPC 1 "a" "m" "m">><<person1>>
 <<if $mpNpcs.ash.firstMeet>>提灯的人解开猎犬腿上的荆棘，抬头看你：「一个人走这条石径？我叫阿什，顺路的话可以跟一段。」<<set $mpNpcs.ash.firstMeet to 0>><<elseif (_npc.love or 0) gte 18>>篝火噼啪作响。<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>一听见你踩碎落叶的脚步，便起身将烘暖的鹿皮斗篷裹在你身上，粗糙指腹擦过你的脸颊：「林子雾重，过来坐。」<<elseif (_npc.love or 0) gte 6 or (_npc.trust or 0) gte 6>>古石径旁的木桩上放着一罐热姜汤。<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>收起猎弓朝你招手：「刚巡完北坡，给你留了热的。」<<else>>深林雾气在冷杉间流转。披着灰绿斗篷的<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>正蹲在溪边磨骨刀，抬头静静看向你：「迷路了，还是想找向导？」<</if>>
 <<if Weather.precipitation is "rain">>林雨打在冷杉枝叶上，<<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什<<else>>守灯人<</if>>搭起的油布棚下干爽温暖。<<else>>松脂清香混着泥土气息，林冠间漏下斑驳天光。<</if>>
 <br><br>
-<<getouticon>><<link [[离开林间 (0:02)|_exitPas]]>><<set $outside to 1>><<set $location to "forest">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
-<br>
 <<link [[聊山林旧事 (0:06)|MP NPC Ash Chat]]>><<pass 6>><<stress -4>><</link>>
 <br>
 <<shopicon>><<link [[认林间兽径 (0:08)|MP NPC Ash Service]]>><<pass 8>><</link>>
 <br>
 <<mpherbicon>><<link [[劈柴晾草药 (0:16)|MP NPC Ash Help]]>><<pass 16>><<tiredness 2>><<stress -3>><</link>>
 <br>
+<<link [[查看巡林火种簿 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>><br>
 <<if (_npc.stage or 0) lt 10 and (!$daily or !$daily.mpNpcQuest_ash)>>
 	<<mptranslateicon>><<link [[探寻断碑铭文 (0:20)|MP NPC Ash Quest]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpNpcQuest_ash to 1>><<pass 20>><</link>>
 	<br>
 <</if>>
 <<else>>
 石径旁只剩风穿过冷杉的声响。阿什带着猎犬进了更深的林子，清晨到深夜（6:00–23:00）才在。
-<br><br>
-<<link [[离开林间 (0:04)|_exitPas]]>><<set $outside to 1>><<set $location to "forest">><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
 <</if>>
+<br><<link [[更多往来 (0:03)|MP NPC Ash Extra Hub]]>><<pass 3>><</link>>
 
 :: MP NPC Ash Chat [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>

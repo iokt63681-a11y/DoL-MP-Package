@@ -1,0 +1,326 @@
+/* ============================================================================
+   MP Loc Orphanage Festival —— 孤儿院四季节日线（Wave E）
+
+   页面（10）：Hub / Spring + Spring Result / Summer + Summer Result /
+              Autumn + Autumn Result / Winter + Winter Result / Finale
+
+   状态约定：
+   - 地点进度沿用 $mpLocProgress_Orphanage、$mpLocEvents_Orphanage（只读写，不改名）。
+   - 四季完成标记为顶层 $mpFestOrphanage<Season>，存的是「完成当年的年份 + 1」，
+     用 (Time.date.year or 0) + 1 写入；页面里以 Time.date.year + 1 比对，
+     同一年内重复进入即视为已结算，跨年后自动重新开放（不新增其它顶层变量）。
+   - 每次选择的分支与成败记在 $mpFest 子键：
+     orphanage<Season>Way（scrub/lime/bailey 等）、orphanage<Season>Ok（1/0）、
+     orphanageAutumnStash（1）等；$mpFest 统一用 ($mpFest or {}) 初始化。
+   - 终局沿用已有 $mpWorldOrphanageOutcome，写 "mutualaid" / "sheltered"，
+     由 MP Loc Orphanage Hub 与 MP Loc Orphanage Deep 的状态栏读取。
+   - 失败分支只扣 stress / tiredness / pain，不发钱、不扣存款、不动进度。
+   ============================================================================ */
+
+:: MP Loc Orphanage Festival Hub [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>><<set $mpFestOrphanageSpring to ($mpFestOrphanageSpring or 0)>><<set $mpFestOrphanageSummer to ($mpFestOrphanageSummer or 0)>><<set $mpFestOrphanageAutumn to ($mpFestOrphanageAutumn or 0)>><<set $mpFestOrphanageWinter to ($mpFestOrphanageWinter or 0)>>
+值日板钉在门厅的门后，木板被几十年的潮气拱得发弯。四列粉笔字从上到下排开：春扫、消暑、秋藏、暖冬；每列底下一枚铁钉，钉上系着的布条颜色各不相同。罗宾说这规矩是院里自己定的：哪一季的活计收尾，就往钉子上挂一截布；过了年再把布条全部取下重挂。贝利从不看板子，他只数储藏间的罐子和煤房的筐，所以板上的勾画得再整齐，也抵不过少掉的半袋土豆。
+<br><br>
+今年的布条还空着。门厅的石灰皮翘起来，后窗的插销松了，煤房门口堆着没劈完的碎木。孩子们在楼梯口探头探脑，等你开口。罗宾把一截新染的蓝布放在钉子上方，没有系，只是那么放着，像给这一天留了个位置。
+<br><br>
+<<if Time.season is "spring">>春雨刚歇，墙根的潮气还没退，<b>春扫</b>两个字被水汽洇得发毛。院墙的白皮一片片鼓起，脚一碰就落，门厅的地上已经积了一小堆灰白的碎屑。
+<<elseif Time.season is "summer">>阁楼晒了一整天，木板烫手。<b>消暑</b>是眼下最要紧的事：厨房的麦粥放不住，午后就有酸味，孩子们宁可睡在门厅的石板上，也不肯上楼。
+<<elseif Time.season is "autumn">>后院菜畦的叶子开始发黄，<b>秋藏</b>的时节到了。土豆该起，白菜要腌，地窖口的风带着土腥味，贝利每天下去数一遍坛子。
+<<else>>窗玻璃内侧结了冰花，煤房的门一开就灌进一股白气。<b>暖冬</b>的活计最硬：贝利把煤筐的数目写在小纸片上，谁多拿一铲，他都记得。<</if>>
+<br><br>
+值日板旁边的墙上还留着往年挂布磨出的浅痕，四道，颜色深浅不一。最旧的那道几乎被石灰盖住了，只有凑近才看得见。你用指甲刮了刮，石灰下面露出一点褪色的红，不知是哪一年留下的，也不知道那一年最后有没有把四季都熬完。
+<br><br>
+四季的活计都摆在明面上，没有一件是轻松的。春扫要人、要石灰；消暑要水、要清凉的夜；秋藏要手脚快，赶在霜前把东西收进窖；暖冬要煤、要堵得住风的窗。每做完一季，罗宾就在钉子上挂布；四截布都挂齐了，这栋房子才算又熬过一年。
+<br><br>
+你站在门厅中央，听见楼上有孩子翻身，厨房传来锅盖轻碰的声响。这栋房子从不缺活，缺的是愿意在活计开始前先站出来的人。
+<br><br>
+【院舍节气】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 本季：<<if Time.season is "spring">>春<<elseif Time.season is "summer">>夏<<elseif Time.season is "autumn">>秋<<else>>冬<</if>> ｜ 四季布条 <<print (($mpFestOrphanageSpring or 0) gte 1 ? 1 : 0) + (($mpFestOrphanageSummer or 0) gte 1 ? 1 : 0) + (($mpFestOrphanageAutumn or 0) gte 1 ? 1 : 0) + (($mpFestOrphanageWinter or 0) gte 1 ? 1 : 0)>>/4
+<br><br>
+<<if Time.season is "spring">>
+	<<if $mpFestOrphanageSpring isnot ((Time.date.year or 0) + 1)>><<link [[春季大扫除 (0:10)|MP Loc Orphanage Festival Spring]]>><<pass 10>><</link>><<else>><span class="disabled">春季大扫除 (0:10)（今年已收尾）</span><</if>>
+<<elseif Time.season is "summer">>
+	<<if $mpFestOrphanageSummer isnot ((Time.date.year or 0) + 1)>><<link [[夏季消暑 (0:10)|MP Loc Orphanage Festival Summer]]>><<pass 10>><</link>><<else>><span class="disabled">夏季消暑 (0:10)（今年已收尾）</span><</if>>
+<<elseif Time.season is "autumn">>
+	<<if $mpFestOrphanageAutumn isnot ((Time.date.year or 0) + 1)>><<link [[秋季收藏 (0:10)|MP Loc Orphanage Festival Autumn]]>><<pass 10>><</link>><<else>><span class="disabled">秋季收藏 (0:10)（今年已收尾）</span><</if>>
+<<else>>
+	<<if $mpFestOrphanageWinter isnot ((Time.date.year or 0) + 1)>><<link [[冬季供暖 (0:10)|MP Loc Orphanage Festival Winter]]>><<pass 10>><</link>><<else>><span class="disabled">冬季供暖 (0:10)（今年已收尾）</span><</if>>
+<</if>>
+<br>
+<<if ($mpFestOrphanageSpring or 0) gte 1 and ($mpFestOrphanageSummer or 0) gte 1 and ($mpFestOrphanageAutumn or 0) gte 1 and ($mpFestOrphanageWinter or 0) gte 1>>
+<<mphearticon>><<link [[结算院舍四季 (0:20)|MP Loc Orphanage Festival Finale]]>><<pass 20>><</link>>
+<<else>>
+<span class="disabled">结算院舍四季 (0:20)（四季尚未走完）</span>
+<</if>>
+<br>
+<<getouticon>><<link [[返回孤儿院总枢 (0:02)|MP Loc Orphanage Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Orphanage Festival Spring [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>>
+开春后第一场连阴雨刚停，院墙根就鼓起一层白毛。潮气顺着砖缝往上爬，把门厅的石灰皮顶得一片片翘起来，脚一碰便簌簌落进鞋窝。贝利把季度查验的日子提前了，说巡查的人只看门面：墙面要白，台阶要净，至于后院那堆烂木板，用旧床单一盖就算收拾过了。罗宾把值日板上春扫那一列的钉子擦亮，回头看你——这活计总得有人领头。
+<br><br>
+孩子们被叫到门厅列队。最小的几个还穿着过冬的厚袜，站在湿地上直跺脚；大一点的已经挽起袖子，等你分派。工具只有两把秃了毛的刷子、半桶发灰的石灰水和一只豁口的木盆。后院墙角的青苔要刮，窗台的泥要抠，堆在楼梯下的旧箱子要挪开，每一样都不难，凑在一起就成了一整天的工夫。
+<br><br>
+你可以先带人从门厅开始刷，把最显眼的那面墙交给孩子们；也可以先去集市换些新石灰和硬毛刷，省下返工的力气；若不想把时间耗在墙面上，还能去院长室门口等贝利，请他松松口，把楼梯下那堆杂物挪走。三条路都要出人出力，区别只在先花力气还是先花钱。
+<br><br>
+罗宾从厨房端来一盆温水，水里泡着几块旧抹布。他说昨晚已经试过一遍，墙皮一沾水就掉，得等半干的时候再刷第二遍。孩子们围过来，有人把抹布拧成条，有人蹲下去捡墙角的碎石。院里那棵老树的枝丫刚抽芽，风一过，细碎的花瓣落在湿台阶上，很快被踩成淡粉的泥。
+<br><br>
+你把手按在翘起的墙皮上，指腹能感觉到里面松软的灰。这面墙每年春天都要补一次，补了又裂，裂了又补，像这栋房子身上一道总也长不好的旧伤。贝利不肯出钱换砖，只说糊一层新的就看不出来了。你抬头看了看门厅那盏煤油灯，灯罩上的黑烟又厚了一层，光透下来，照得墙上的裂口格外清楚。
+<br><br>
+厨房那边飘来肥皂水的味道，混着石灰的碱气，闻久了有些发闷。你把袖子挽到手肘，试了试刷柄的松紧，觉得还能再撑一天。孩子们已经分好工，有人提水，有人递抹布，最小的那个抱着一只空盆，认真得像在守一件差事。
+<br><br>
+<<mpcleanicon>><<if ($housekeeping or 0) gte 240 or ($athletics or 0) gte 240>><<link [[领孩子刷门厅 (0:12)|MP Loc Orphanage Festival Spring Result]]>><<pass 12>><<set $mpFest["orphanageSpringWay"] to "scrub">><<set $mpFest["orphanageSpringOk"] to 1>><<stress -2>><</link>><<else>><<link [[领孩子刷门厅 (0:12)|MP Loc Orphanage Festival Spring Result]]>><<pass 12>><<set $mpFest["orphanageSpringWay"] to "scrub">><<set $mpFest["orphanageSpringOk"] to 0>><<tiredness 3>><</link>><</if>><br>
+<<mpbargainicon>><<if ($money or 0) gte 300>><<link [[去集市换石灰 (0:08)|MP Loc Orphanage Festival Spring Result]]>><<pass 8>><<money -300>><<set $mpFest["orphanageSpringWay"] to "lime">><<set $mpFest["orphanageSpringOk"] to 1>><</link>><<else>><span class="disabled">去集市换石灰 (0:08)（钱不够）</span><</if>><br>
+<<socialiseicon>><<if ($willpower or 0) gte 300>><<link [[找贝利挪杂物 (0:10)|MP Loc Orphanage Festival Spring Result]]>><<pass 10>><<set $mpFest["orphanageSpringWay"] to "bailey">><<set $mpFest["orphanageSpringOk"] to 1>><<stress 1>><</link>><<else>><<link [[找贝利挪杂物 (0:10)|MP Loc Orphanage Festival Spring Result]]>><<pass 10>><<set $mpFest["orphanageSpringWay"] to "bailey">><<set $mpFest["orphanageSpringOk"] to 0>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Orphanage Festival Spring Result [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>>
+<<set $mpFestOrphanageSpring to ($mpFestOrphanageSpring or 0)>><<set _first to ($mpFestOrphanageSpring isnot ((Time.date.year or 0) + 1))>><<set $mpFestOrphanageSpring to ((Time.date.year or 0) + 1)>>
+日头偏西时，门厅的活计收了尾。木盆里的水浑得发黑，刷毛黏成一撮，孩子们的手背上全是干裂的白灰。罗宾把窗户全部推开，让穿堂风把潮气带走；风一过，墙面上未干的水光便一寸寸暗下去，像退潮。楼梯下的杂物被挪到后院，露出地板上几道被压了多年的深痕。贝利从院长室出来倒水，路过门厅时脚步慢了半拍，眼睛在墙面上扫了一圈，什么也没说。
+<br><br>
+<<if ($mpFest["orphanageSpringWay"] or "") is "scrub">>
+	<<if ($mpFest["orphanageSpringOk"] or 0) gte 1>>
+	刷得匀净的墙面在灯下泛着柔和的白。几个孩子抢着把掌印按在墙角，被罗宾一个个拎开。他把蓝布条系上铁钉，布条垂下来，正好遮住一道旧裂口。「这样好看。」他说。你手上的碱味洗了两遍还没散，可心里松了一块。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><</if>>
+	<<else>>
+	石灰水调稀了，干透后墙面上浮着灰白的花斑，越擦越花。罗宾试着补了一遍，裂缝却顺着水痕爬得更长。贝利在门口站住，鼻子里哼了一声，说巡查那天再这样，就扣下个月的菜钱。孩子们不敢出声，你把刷子泡回桶里，觉得肩膀沉得抬不起来。<<stress 3>><<tiredness 2>>
+	<</if>>
+<<elseif ($mpFest["orphanageSpringWay"] or "") is "lime">>
+	新换的石灰细得像面粉，调开后白得发亮，刷上墙几乎不用返工。孩子们被那股呛味逼到院子里，隔着窗看你在梯子上来回。罗宾把最后一点石灰刮进桶里，说这下贝利找不出话讲了。墙白得有些刺眼，门厅反而比从前显得窄了。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><</if>>
+<<elseif ($mpFest["orphanageSpringWay"] or "") is "bailey">>
+	<<if ($mpFest["orphanageSpringOk"] or 0) gte 1>>
+	贝利最终让开半步：楼梯下的箱子他不再管，条件是往后清点杂物的差事归你。他说这话时把钥匙收回腰上，像收走一件本就不打算给人的东西。箱子搬开后，地板上的深痕露出来，孩子们蹲下去摸了摸，说像一条干掉的河。你把蓝布条系上钉子，心里明白这算欠下了一笔。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -2>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love 1>><</if>><</if>>
+	<<else>>
+	贝利听你说完，手指在桌面上敲了两下，说楼梯下的东西谁也不许动，墙面上那点灰叫你自己想办法。门在你身后合上，声音不重，却把话堵死了。你在走廊里站了一会儿，听见里面翻动纸页的响动重新响起来。<<stress 3>><<tiredness 1>>
+	<</if>>
+<<else>>
+	你没有动手，只在门厅里转了一圈。墙皮照样翘着，水盆里的抹布结了硬壳。罗宾把蓝布条收回抽屉，说等你有空再说。楼上的孩子跑过走廊，脚步声把一阵灰震下来，落在你的肩上。<<stress 1>>
+<</if>>
+<br><br>
+不管这一天收得怎样，值日板上春扫那一格总算有了交代。罗宾把钉子上的灰吹干净，说下一季的活计还早，先把眼前的日子过完。
+<br><br>
+【院舍节气】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 春扫已结算
+<br><br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>><br>
+<<if ($mpFestOrphanageSpring or 0) gte 1 and ($mpFestOrphanageSummer or 0) gte 1 and ($mpFestOrphanageAutumn or 0) gte 1 and ($mpFestOrphanageWinter or 0) gte 1>><<mphearticon>><<link [[前往四季结算 (0:08)|MP Loc Orphanage Festival Finale]]>><<pass 8>><</link>><<else>><span class="disabled">前往四季结算 (0:08)（四季尚未走完）</span><</if>>
+
+:: MP Loc Orphanage Festival Summer [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>>
+暑气从屋面压下来，阁楼的木板被晒得发烫，踩上去像踩在温过的砖上。入夜后热气仍散不掉，孩子们抱着薄毯往楼下挪，在门厅的石板上排成一排，谁翻身都会碰到别人。厨房更麻烦：早上熬的麦粥放到午后就开始泛酸，锅沿浮起一层细泡；水缸里的水也是温的，喝下去并不解渴。
+<br><br>
+罗宾把库房的窗子支起来，说后院有穿堂风，要是把几张床板抬下去，夜里总比楼上好睡。鱼铺的伙计愿意把卖剩的碎冰便宜出手，用旧棉被裹着，能撑到后半夜。再不然，就守着阁楼那扇通风窗，可窗闩的钥匙在贝利腰上，得等他睡熟。
+<br><br>
+贝利对暑热的态度很干脆：热不死人，就不必花钱。他把冰块称作娇气东西，把孩子们夜里下楼称作没规矩。可你也看见他午后独自坐在院长室里，把湿毛巾搭在额头上，半天没动。
+<br><br>
+院子里那棵老树的影子缩成小小一团，地面裂开细纹。孩子们把脚泡在洗衣盆里，谁也不想先起来。你把湿布搭在脖子上，站在楼梯口盘算：是先搬床板，还是先去换冰，还是冒险去够那把钥匙。
+<br><br>
+罗宾从井里提上来一桶水，桶壁外立刻凝出一层水珠。他把水分进几只豁口碗，孩子们一拥而上，喝完又把碗递回来，眼巴巴地看着桶底。罗宾没再舀，只说剩下的要留给夜里发烧的那个。你忽然想起，往年的夏天也是这样熬过来的：没有冰，就多开一扇窗；没有窗，就守着门口坐到天亮。
+<br><br>
+墙角的水缸已经见了底，缸底沉着细细的泥沙。你卷起袖子把它们舀出去，心里清楚，今天无论选哪一样，都不可能让整个院子凉下来，至多是让最难熬的那几个人好过一点。
+<br><br>
+罗宾把阁楼的窗子全部推开，又搬来一只空木箱垫在窗下，说夜里至少有风能进来。你抬头看那扇小小的天窗，玻璃上积着灰，光透下来是浑的。孩子们把草席铺在门厅最凉的那块石板上，谁先躺下谁就占了好位置，剩下的只好挤在两边。
+<br><br>
+<<mpcarryicon>><<if ($athletics or 0) gte 240>><<link [[把床板抬到后院 (0:12)|MP Loc Orphanage Festival Summer Result]]>><<pass 12>><<set $mpFest["orphanageSummerWay"] to "boards">><<set $mpFest["orphanageSummerOk"] to 1>><<tiredness 2>><</link>><<else>><<link [[把床板抬到后院 (0:12)|MP Loc Orphanage Festival Summer Result]]>><<pass 12>><<set $mpFest["orphanageSummerWay"] to "boards">><<set $mpFest["orphanageSummerOk"] to 0>><<tiredness 3>><<pain 1>><</link>><</if>><br>
+<<mpcookicon>><<if ($money or 0) gte 200>><<link [[去鱼铺换碎冰 (0:08)|MP Loc Orphanage Festival Summer Result]]>><<pass 8>><<money -200>><<set $mpFest["orphanageSummerWay"] to "ice">><<set $mpFest["orphanageSummerOk"] to 1>><</link>><<else>><span class="disabled">去鱼铺换碎冰 (0:08)（钱不够）</span><</if>><br>
+<<mpwatchicon>><<if ($willpower or 0) gte 300>><<link [[夜里守通风窗 (0:10)|MP Loc Orphanage Festival Summer Result]]>><<pass 10>><<set $mpFest["orphanageSummerWay"] to "window">><<set $mpFest["orphanageSummerOk"] to 1>><<tiredness 2>><</link>><<else>><<link [[夜里守通风窗 (0:10)|MP Loc Orphanage Festival Summer Result]]>><<pass 10>><<set $mpFest["orphanageSummerWay"] to "window">><<set $mpFest["orphanageSummerOk"] to 0>><<tiredness 4>><</link>><</if>><br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Orphanage Festival Summer Result [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>>
+<<set $mpFestOrphanageSummer to ($mpFestOrphanageSummer or 0)>><<set _first to ($mpFestOrphanageSummer isnot ((Time.date.year or 0) + 1))>><<set $mpFestOrphanageSummer to ((Time.date.year or 0) + 1)>>
+天完全黑下来之后，院子里的热气才慢慢往上浮。门厅的灯没点，月光从门口斜铺进来，照见孩子们横七竖八睡下的样子。有人把胳膊枕在脑后，有人抱着膝盖蜷成一团，最小的那个睡在墙边，身上盖着一件大人的旧外套。罗宾蹲在他旁边，把外套的下摆掖了掖，才直起身。
+<br><br>
+<<if ($mpFest["orphanageSummerWay"] or "") is "boards">>
+	<<if ($mpFest["orphanageSummerOk"] or 0) gte 1>>
+	几块床板在后院拼成一排，离地半尺，底下垫着砖。穿堂风从墙根溜过去，孩子们躺下没多久就安静了，只剩偶尔的翻身声。罗宾把一盏小灯挂在树杈上，说夜里有人害怕就看得见光。你躺在外侧，脊背贴着尚有余温的木板，听见屋里屋外的呼吸渐渐合上。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><</if>>
+	<<else>>
+	床板比看上去沉，抬过门槛时一角磕在石头上。你脚下一滑，板子歪下去，压住了一个孩子的脚背，惊叫声把整个后院都吵醒了。贝利推开窗问出了什么事，罗宾抢着说是他手滑。孩子的脚背肿起一块，你只能把床板又抬回楼上，白忙了半宿。<<stress 3>><<pain 1>><<tiredness 2>>
+	<</if>>
+<<elseif ($mpFest["orphanageSummerWay"] or "") is "ice">>
+	碎冰里头还混着鱼鳞，你和罗宾蹲在厨房挑了半天，才用旧棉被裹好放进木盆。冰化得很慢，盆里的水一直凉到后半夜。孩子们排队拿湿布敷额头，有人把脚伸进盆边沾了沾，被罗宾轻轻拍开。麦粥换成了凉的，兑上一点醋，酸味压住了馊气，谁也没闹肚子。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -2>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><</if>>
+<<elseif ($mpFest["orphanageSummerWay"] or "") is "window">>
+	<<if ($mpFest["orphanageSummerOk"] or 0) gte 1>>
+	你在贝利的鼾声里摸到那串钥匙，指尖一枚枚认过去，终于挑出最细的那把。通风窗推开时只响了一声，夜风立刻灌进阁楼，把闷了一整天的热气顶了出去。孩子们一开始没察觉，后来有人翻了个身，把毯子往下拉了拉。你把钥匙放回原处，回到阁楼门口坐了一夜，天亮前才合眼。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -1>><<tiredness 2>><</if>>
+	<<else>>
+	钥匙串在腰侧的钩子上碰出轻响，贝利忽然翻了个身。你把手缩回来，屏着气等了很久，直到鼾声重新响起，才敢再动。可窗闩已经卡死，掰不动，你蹲在阁楼口出了一身汗，最后只能空手下来。天亮时孩子们抱怨夜里还是闷，你没接话。<<stress 2>><<tiredness 3>>
+	<</if>>
+<<else>>
+	你没有选任何一件事，只是在门厅坐到后半夜。石板地渐渐被身体焐热，又渐渐变凉。楼上有人咳嗽，厨房传来水缸轻轻一响，大概是老鼠。天亮时你站起来，发现自己一夜没睡，身上却还是黏的。<<stress 2>><<tiredness 2>>
+<</if>>
+<br><br>
+第二天清早，日头还没爬上屋脊，院子里已经有了凉意。罗宾把值日板上消暑那一格的灰吹掉，说最难的两周还在后头，但至少昨晚熬过去了。
+<br><br>
+【院舍节气】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 消暑已结算
+<br><br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>><br>
+<<if ($mpFestOrphanageSpring or 0) gte 1 and ($mpFestOrphanageSummer or 0) gte 1 and ($mpFestOrphanageAutumn or 0) gte 1 and ($mpFestOrphanageWinter or 0) gte 1>><<mphearticon>><<link [[前往四季结算 (0:08)|MP Loc Orphanage Festival Finale]]>><<pass 8>><</link>><<else>><span class="disabled">前往四季结算 (0:08)（四季尚未走完）</span><</if>>
+
+:: MP Loc Orphanage Festival Autumn [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>>
+秋风一起，后院菜畦的叶子就黄了。土豆秧倒伏在地，土面裂开细缝，底下露着淡黄的皮；白菜棵棵包心，外层的叶子却被虫啃出许多洞。贝利说今年的收成要分成三份：一份抵租，一份留着过冬，剩下的才轮到孩子们吃。他嘴上说得公道，秤却总是往自己那边偏。
+<br><br>
+地窖口在厨房后面，木门一开，一股混着土腥和霉味的风涌上来。去年的坛子还码在墙角，坛口的泥封裂了缝，腌菜早就酸败。罗宾蹲下去闻了闻，皱着眉说今年得赶在霜降前把新菜腌进去，不然冬天只能啃干土豆。
+<br><br>
+孩子们被分成两拨：一拨下地起土豆，一拨在厨房洗菜晾叶。工具只有两把豁口的锄头和一只漏底的竹筐。盐要另外买，坛子要刷，地窖的梯子还缺一级。贝利站在后门口看了一会儿，丢下一句「别把菜根踩烂」，就回屋去了。
+<br><br>
+你蹲在地头，把一株土豆秧连根拔起，泥土从指缝里漏下去，底下滚出五六个大小不一的块茎。最小的那个孩子蹲在旁边，把沾泥的土豆在衣襟上蹭了蹭，问能不能留一个晚上烤着吃。你没有立刻回答。
+<br><br>
+罗宾说地窖最里面还有一只空坛，往年是留给生病的孩子存菜的。他压低声音，说贝利不知道那只坛子的存在；要是今年收成好，也许能偷偷装满。你看了一眼后门口，贝利已经不在了，只有门帘还在轻轻晃。
+<br><br>
+风把晾在绳上的菜叶吹得翻卷，叶背的纹路在阳光下看得清清楚楚。你把手上的泥搓掉，站起来活动了一下发酸的腰。不管怎么分，今天都得先让地里的东西进了窖。
+<br><br>
+天色一点点暗下去，后院的影子拉长，盖住了半个菜畦。你把最后一筐土豆拖到屋檐下，手心被筐沿勒出一道红痕。罗宾蹲在旁边挑拣，把磕破的块茎单独放一堆，说这些得先吃，放不住。厨房的烟囱冒出淡淡的青烟，锅里的水已经烧开了。
+<br><br>
+<<mpfarmicon>><<if ($athletics or 0) gte 250 or ($tending or 0) gte 250>><<link [[下地起土豆 (0:12)|MP Loc Orphanage Festival Autumn Result]]>><<pass 12>><<set $mpFest["orphanageAutumnWay"] to "dig">><<set $mpFest["orphanageAutumnOk"] to 1>><<tiredness 2>><</link>><<else>><<link [[下地起土豆 (0:12)|MP Loc Orphanage Festival Autumn Result]]>><<pass 12>><<set $mpFest["orphanageAutumnWay"] to "dig">><<set $mpFest["orphanageAutumnOk"] to 0>><<tiredness 3>><<pain 1>><</link>><</if>><br>
+<<mpcookicon>><<if ($money or 0) gte 200>><<link [[买盐腌白菜 (0:10)|MP Loc Orphanage Festival Autumn Result]]>><<pass 10>><<money -200>><<set $mpFest["orphanageAutumnWay"] to "salt">><<set $mpFest["orphanageAutumnOk"] to 1>><<tiredness 1>><</link>><<else>><span class="disabled">买盐腌白菜 (0:10)（钱不够）</span><</if>><br>
+<<mpsneakicon>><<if ($skulduggery or 0) gte 240>><<link [[私藏一坛口粮 (0:10)|MP Loc Orphanage Festival Autumn Result]]>><<pass 10>><<set $mpFest["orphanageAutumnWay"] to "stash">><<set $mpFest["orphanageAutumnOk"] to 1>><<set $mpFest["orphanageAutumnStash"] to 1>><<stress 1>><</link>><<else>><<link [[私藏一坛口粮 (0:10)|MP Loc Orphanage Festival Autumn Result]]>><<pass 10>><<set $mpFest["orphanageAutumnWay"] to "stash">><<set $mpFest["orphanageAutumnOk"] to 0>><<stress 4>><<tiredness 1>><</link>><</if>><br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Orphanage Festival Autumn Result [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>>
+<<set $mpFestOrphanageAutumn to ($mpFestOrphanageAutumn or 0)>><<set _first to ($mpFestOrphanageAutumn isnot ((Time.date.year or 0) + 1))>><<set $mpFestOrphanageAutumn to ((Time.date.year or 0) + 1)>>
+傍晚时，厨房的灶上烧起一大锅水，洗干净的菜叶在案板上堆成小山。贝利把秤搬到后院，一只只筐子挨个过秤，数目记在随身的小本上。孩子们围在旁边看，谁也不敢出声。罗宾站在你身侧，手在围裙上擦来擦去，眼睛盯着秤杆起落。
+<br><br>
+<<if ($mpFest["orphanageAutumnWay"] or "") is "dig">>
+	<<if ($mpFest["orphanageAutumnOk"] or 0) gte 1>>
+	锄头落下去，土块翻开，底下的土豆一串串滚出来，比预想的多。你们赶在天黑前起了三筐，小的拣出来单放，大的装筐过秤。贝利称完，脸色比平时缓和，难得没有把最满的那筐划到自己名下。孩子们把沾泥的手在裤子上擦净，抱着分到的一小堆土豆往后院跑。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><</if>>
+	<<else>>
+	锄头碰到石头，震得虎口发麻，一株土豆被从中间劈开。你换了个方向再挖，土里的块茎却越挖越小，有几颗已经烂了心。贝利过来看了一眼，把筐子往自己脚边挪，说今年就这点收成，冬天都省着吃。你蹲在地里，指甲缝里全是黑泥，腰酸得直不起来。<<stress 3>><<tiredness 2>>
+	<</if>>
+<<elseif ($mpFest["orphanageAutumnWay"] or "") is "salt">>
+	盐粒倒进木盆，和切开的菜叶一层层码进坛子，压上洗净的石头。罗宾照着旧法子把坛口封好，泥封抹得平平整整。厨房里弥漫着辛辣的咸味，孩子们被呛得直打喷嚏，却都愿意留下来帮忙搬坛子。地窖的梯子补上了缺的那一级，坛子一格格码进去，看着就让人安心。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -2>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><</if>>
+<<elseif ($mpFest["orphanageAutumnWay"] or "") is "stash">>
+	<<if ($mpFest["orphanageAutumnOk"] or 0) gte 1>>
+	你把最里面那只坛子刷净，装满挑好的菜叶，封口时特意抹得和旁边的旧坛一样旧。罗宾在旁边望风，听见楼上有脚步声就轻轻敲一下墙。坛子推进煤堆后面的阴影里，从窖口看过去什么也瞧不出来。上来之后，你们谁都没提这件事，只是在厨房多喝了一碗热水。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -1>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 2>><</if>><</if>>
+	<<else>>
+	坛子刚搬进地窖，梯子就晃了一下，坛底磕在砖上，裂了一道细纹。贝利被响声引来，站在窖口往下看，你只好说是旧坛子自己倒了。他没再追问，只让你把碎片扫干净。罗宾把没裂的那半坛菜叶重新装好，动作很慢，一句话也没说。<<stress 4>><<tiredness 1>>
+	<</if>>
+<<else>>
+	你站在后院看了一会儿，终究没有下地。筐子空着，菜叶在绳上被风吹干，卷成硬邦邦的一团。罗宾自己带孩子们起了半筐土豆，谁也没抱怨，只是晚饭时锅里的粥比平时稀。<<stress 1>>
+<</if>>
+<br><br>
+夜里下了一场薄霜，后院的白菜叶上结了一层细白。罗宾把值日板上秋藏那一格的布条系好，说这个冬天总算有了点底。
+<br><br>
+【院舍节气】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 秋藏已结算
+<br><br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>><br>
+<<if ($mpFestOrphanageSpring or 0) gte 1 and ($mpFestOrphanageSummer or 0) gte 1 and ($mpFestOrphanageAutumn or 0) gte 1 and ($mpFestOrphanageWinter or 0) gte 1>><<mphearticon>><<link [[前往四季结算 (0:08)|MP Loc Orphanage Festival Finale]]>><<pass 8>><</link>><<else>><span class="disabled">前往四季结算 (0:08)（四季尚未走完）</span><</if>>
+
+:: MP Loc Orphanage Festival Winter [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>>
+第一场霜落在屋顶，瓦片一夜之间白了。井台结了薄冰，孩子们提着水桶走过院子，鞋底在石板上直打滑。煤房的钥匙照旧挂在贝利腰上，每天傍晚他开一次门，按人头数出几筐碎煤；数目写在纸片上，谁想多要一铲，得先说清楚用途。
+<br><br>
+阁楼的窗缝灌风，夜里能听见窗框轻轻作响。浴室的水管冻裂了一小截，水顺着墙根渗到楼下，在厨房地上积成一小片。罗宾用旧布把裂缝缠了几层，说撑不了几天；要彻底堵住，得换一截管子，或者至少把窗缝和门底都塞严。
+<br><br>
+最麻烦的是煤。按现在的烧法，煤房里的存货撑不到化冻。贝利嘴上说会再进一批，可你看见他账本上的数目一天天往下改。孩子们把所有能穿的衣服都套在身上，睡觉时两三个人挤一张床，把被子叠成厚厚一层。
+<br><br>
+罗宾把一只旧铁盆搬到门厅，里面烧着几块碎煤，火苗矮得几乎看不见。孩子们围着盆坐成一圈，把手伸到火上方烘着，谁的手背冻裂了，就往上抹一点猪油。他说去年冬天也是这样过来的，只是去年贝利还肯多给一筐。
+<br><br>
+你数了数堆在墙角的煤块，又看了看窗框上那道能塞进手指的缝。今天能做的无非三件：把煤搬上楼、把风堵在窗外、或者去院长室同贝利把话讲明白。三件事都费力气，区别在于先暖哪一处。
+<br><br>
+你站在煤房门口，指尖碰到铁锁，冷得缩回来。楼上的孩子正在咳嗽，一声接一声，像小锤敲在木板上。门厅的灯芯该剪了，火光一跳一跳，把人的影子拉得忽长忽短。你把冻僵的手在袖口里搓了搓，听见楼上又是一阵咳嗽，这回比刚才近了些。
+<br><br>
+罗宾把手放在铁盆上方烘了烘，又缩回去，说煤不能一次烧完，后半夜更冷。孩子们懂事地轮流让出位置，让最小的两个坐在最里面。你看着盆里那点暗红的火，想起煤房里还有半筐碎煤，是贝利上次清点时漏下的，他一直没提。
+<br><br>
+<<mpcarryicon>><<if ($athletics or 0) gte 260>><<link [[搬煤到楼上 (0:12)|MP Loc Orphanage Festival Winter Result]]>><<pass 12>><<set $mpFest["orphanageWinterWay"] to "coal">><<set $mpFest["orphanageWinterOk"] to 1>><<tiredness 3>><</link>><<else>><<link [[搬煤到楼上 (0:12)|MP Loc Orphanage Festival Winter Result]]>><<pass 12>><<set $mpFest["orphanageWinterWay"] to "coal">><<set $mpFest["orphanageWinterOk"] to 0>><<tiredness 4>><<pain 1>><</link>><</if>><br>
+<<mprepairicon>><<if ($money or 0) gte 100>><<link [[封窗缝和门底 (0:10)|MP Loc Orphanage Festival Winter Result]]>><<pass 10>><<money -100>><<set $mpFest["orphanageWinterWay"] to "seal">><<set $mpFest["orphanageWinterOk"] to 1>><<tiredness 1>><</link>><<else>><span class="disabled">封窗缝和门底 (0:10)（钱不够）</span><</if>><br>
+<<socialiseicon>><<if ($willpower or 0) gte 320>><<link [[找贝利谈煤额 (0:10)|MP Loc Orphanage Festival Winter Result]]>><<pass 10>><<set $mpFest["orphanageWinterWay"] to "bailey">><<set $mpFest["orphanageWinterOk"] to 1>><<stress 2>><</link>><<else>><<link [[找贝利谈煤额 (0:10)|MP Loc Orphanage Festival Winter Result]]>><<pass 10>><<set $mpFest["orphanageWinterWay"] to "bailey">><<set $mpFest["orphanageWinterOk"] to 0>><<stress 4>><<tiredness 1>><</link>><</if>><br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Orphanage Festival Winter Result [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>>
+<<set $mpFestOrphanageWinter to ($mpFestOrphanageWinter or 0)>><<set _first to ($mpFestOrphanageWinter isnot ((Time.date.year or 0) + 1))>><<set $mpFestOrphanageWinter to ((Time.date.year or 0) + 1)>>
+入夜后，风从屋脊上刮过去，瓦片发出细碎的响。门厅的空气里有一股煤烟和湿布混在一起的味道，楼上的咳嗽声断断续续，始终没有完全停下来。罗宾把铁盆里的火拨了拨，又从自己床上抽出一条毯子，搭在最小的那个孩子身上。他做这些时没有出声，像是怕惊动什么。
+<br><br>
+<<if ($mpFest["orphanageWinterWay"] or "") is "coal">>
+	<<if ($mpFest["orphanageWinterOk"] or 0) gte 1>>
+	你把碎煤一筐筐搬上阁楼，肩膀被扁担压出两道红印。楼上的炉子重新烧起来，铁皮慢慢透出暗红，屋子里的寒气一点点退到墙角。孩子们把手伸到炉边，谁也不敢靠得太近。罗宾把水壶放上去，说今晚总算有热水喝了。你靠在门框上喘气，背上的汗凉下来，却不觉得冷。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><</if>>
+	<<else>>
+	煤筐在楼梯拐角翻了，碎煤顺着台阶滚下去，扬起一片黑灰。你蹲下去捡，手背被一块尖煤划开，血珠渗出来，很快被煤粉糊住。楼上的炉子只暖了半个时辰就灭了，孩子们缩回被子里。贝利第二天清点时发现少了两筐，把账记在你头上，什么也没多说。<<stress 3>><<pain 1>><<tiredness 2>>
+	<</if>>
+<<elseif ($mpFest["orphanageWinterWay"] or "") is "seal">>
+	旧毡子剪成条，蘸上浆糊，一条条塞进窗缝和门底。你跪在门边，手指被浆糊粘得发僵，膝盖也硌得生疼。塞完之后，屋里的风确实小了，灯焰不再乱晃，连楼上的咳嗽声都显得闷了些。罗宾把剩下的毡条收进柜子，说明年还能再用。玻璃上的冰花化了一半，又慢慢结回去。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><</if>>
+<<elseif ($mpFest["orphanageWinterWay"] or "") is "bailey">>
+	<<if ($mpFest["orphanageWinterOk"] or 0) gte 1>>
+	贝利听你把话讲完，没有立刻回绝。他翻出账本，把煤价和人数念了一遍，最后答应每天多给半筐，条件是开春后你得替他把后院的墙补完。你答应了。走出院长室时，罗宾正在楼梯口等，见你点头，才松了一口气。那一晚炉子烧到很晚，孩子们第一次没有挤成一团睡。<<if _first>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -2>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love 1>><</if>><</if>>
+	<<else>>
+	贝利把账本合上，说煤就这么多，谁冷谁自己想办法。你还想再讲，他已经低头去看下一张纸，手指压在纸页上，像压住一件已经定下的事。门厅的炉子仍旧只烧几块碎煤，孩子们轮流把手伸过去烘。罗宾没有问你谈得怎样，只看了一眼你的脸色，就把水壶挪开了。<<stress 3>><<tiredness 1>>
+	<</if>>
+<<else>>
+	你在门厅站了很久，最终什么也没做。风从窗缝里钻进来，把灯焰吹得贴向一边。孩子们自己往炉子里添了几块碎煤，火苗亮了一下，又矮下去。你回到床上，听见楼上有人翻来覆去，很久才安静。<<stress 2>>
+<</if>>
+<br><br>
+后半夜风停了。罗宾把值日板上最后一格的灰擦净，却没有立刻挂布。他回头看你，说四截布条总算都有了着落，接下来的事，得由你来拿主意。
+<br><br>
+【院舍节气】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 暖冬已结算
+<br><br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>><br>
+<<if ($mpFestOrphanageSpring or 0) gte 1 and ($mpFestOrphanageSummer or 0) gte 1 and ($mpFestOrphanageAutumn or 0) gte 1 and ($mpFestOrphanageWinter or 0) gte 1>><<mphearticon>><<link [[前往四季结算 (0:08)|MP Loc Orphanage Festival Finale]]>><<pass 8>><</link>><<else>><span class="disabled">前往四季结算 (0:08)（四季尚未走完）</span><</if>>
+
+:: MP Loc Orphanage Festival Finale [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
+<<set $mpFest to ($mpFest or {})>><<set $mpFestOrphanageSpring to ($mpFestOrphanageSpring or 0)>><<set $mpFestOrphanageSummer to ($mpFestOrphanageSummer or 0)>><<set $mpFestOrphanageAutumn to ($mpFestOrphanageAutumn or 0)>><<set $mpFestOrphanageWinter to ($mpFestOrphanageWinter or 0)>>
+<<set _score to 0>><<if ($mpFest["orphanageSpringOk"] or 0) gte 1>><<set _score += 1>><</if>><<if ($mpFest["orphanageSummerOk"] or 0) gte 1>><<set _score += 1>><</if>><<if ($mpFest["orphanageAutumnOk"] or 0) gte 1>><<set _score += 1>><</if>><<if ($mpFest["orphanageWinterOk"] or 0) gte 1>><<set _score += 1>><</if>>
+<<if ($mpFestOrphanageSpring or 0) gte 1 and ($mpFestOrphanageSummer or 0) gte 1 and ($mpFestOrphanageAutumn or 0) gte 1 and ($mpFestOrphanageWinter or 0) gte 1>>
+冬至过后，值日板上四枚铁钉都挂上了布条：褪色的蓝、洗白的红、染坏的黄，还有一截从旧衬裙上撕下来的灰。布条在门厅的穿堂风里轻轻碰着，声音很小。罗宾站在板子前数了两遍，回头冲你点头。贝利从院长室出来，看见那块板，停了一下，什么也没说，又回去了。
+<br><br>
+这一年里，院子的墙重新刷过，后院的床板搬上搬下，地窖多了几只封好的坛子，煤房的锁也换过一次。孩子们记住了哪一扇窗漏风、哪一块地板会响，也记住了遇事该找谁。你把四季的账在心里过了一遍：有些事办得漂亮，有些只是勉强应付过去，还有些是靠别人搭手才收的尾。
+<br><br>
+门外传来街上收摊的响动，车轮碾过湿石板，声音一直传到门厅。你想起春天墙皮落在鞋窝里的碎屑，想起夏天夜里石板上的凉意，想起秋天沾满泥的土豆和冬天窗缝里钻进来的风。四件事都不算大，却把这栋房子撑过了一整年。
+<br><br>
+现在轮到你来定这栋房子往后怎么走。罗宾把最后一截空布条放在你手里，说挂上去就算数。孩子们围在楼梯口，没有起哄，只是安静地看着你。贝利办公室的门虚掩着，灯还亮着。走廊尽头的浴室还滴着水，厨房的灶上温着一锅稀粥，楼上有孩子在梦里翻了个身。这些声音合在一起，就是你要做决定的东西。
+<br><br>
+【四季结算】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 四季收尾成色 <<print _score>>/4 ｜ 现有终局：<<print ($mpWorldOrphanageOutcome or "未定")>>
+<br><br>
+<div id="orphanage-festival-finale">
+<<if _score gte 3>>
+<<mphearticon>><<link "办一场全院宴 (0:20)">><<pass 20>><<if !$mpWorldOrphanageOutcome>><<set $mpWorldOrphanageOutcome to "mutualaid">><</if>><<set $mpLocProgress_Orphanage to 5>><<replace "#orphanage-festival-finale">>
+你把四截布条解下来，系成一条长绳，从门厅拉到后院。桌子拼起来，粥换成稠的，地窖里的坛子全搬上桌。孩子们在院子里吃到热腾腾的一顿，贝利站在门廊下看了一会儿，最终也端了一只碗。<<if $mpFest["orphanageAutumnStash"]>>那坛藏在煤堆后的菜也搬了上来，没人问它的来路。<</if>>
+<br><br>
+宴散之后，院子没有立刻冷下来。有人排了轮值表，有人把工具写上名字挂在墙上。互助的规矩慢慢立起来：多余的菜能换来修补的工夫，谁病了，自有人顶替。这栋房子仍旧破旧，却不再只靠一个人的脸色运转。
+<br><br>
+【世界回响】：孤儿院自此走上「互助工坊」这条路。活计由轮值表分派，收入按出力记在墙上，贝利再想用一笔欠款决定谁走谁留，就没那么容易了。
+<br><br>
+【后续读取点】：孤儿院总枢的门厅铭牌会显示这一结局；孤儿院深层的态势栏同样读取它。
+<</replace>><</link>>
+<<else>>
+<span class="disabled">办一场全院宴 (0:20)（四季收成不够，撑不起这场宴）</span>
+<</if>>
+<br>
+<<sheltericon>><<link "熄灭门厅灯 (0:20)">><<pass 20>><<if !$mpWorldOrphanageOutcome>><<set $mpWorldOrphanageOutcome to "sheltered">><</if>><<set $mpLocProgress_Orphanage to 5>><<replace "#orphanage-festival-finale">>
+你把四截布条收进抽屉，只留门厅一盏灯。孩子们照旧睡下，煤房的门锁好，窗缝塞严。你没有声张，也没有把这一年的账摊开来讲；有些改变，写在纸上反而招眼。
+<br><br>
+第二天清晨，罗宾发现门后的钥匙串多了一把，是煤房的。他看了你一眼，没问。窗外落着细雪，屋里没有风。至少这个冬天，名单上的人一个都不会少。
+<br><br>
+【世界回响】：孤儿院自此落定「静谧庇护」。门窗换过锁，名单抄了副本，风雪被挡在屋外；院里的人照旧低调过日子，不再把底牌摊给任何人看。
+<br><br>
+【后续读取点】：孤儿院总枢的门厅铭牌会显示这一结局；孤儿院深层的态势栏同样读取它。
+<</replace>><</link>>
+</div>
+<br>
+<<getouticon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>>
+<<else>>
+四枚铁钉上还差着布条，值日板的边角被风掀起，啪嗒啪嗒地拍着墙。罗宾把板子按回钉子上，说四季没走完，眼下还算不上收尾。你看着那几格空白，知道该先去做哪一季的活计。
+<br><br>
+【四季结算】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 四季未齐，暂不能定局 ｜ 现有终局：<<print ($mpWorldOrphanageOutcome or "未定")>>
+<br><br>
+<<mpwatchicon>><<link [[返回节庆门厅 (0:02)|MP Loc Orphanage Festival Hub]]>><<pass 2>><</link>>
+<</if>>

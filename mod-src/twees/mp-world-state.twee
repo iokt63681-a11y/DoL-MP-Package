@@ -1,0 +1,99 @@
+:: Widgets MP World State [widget nobr]
+<<widget "mpWorldStateInit">>
+<<set $mpWorldPriceMod to ($mpWorldPriceMod or 100)>>
+<<set $mpWorldScheduleShortened to ($mpWorldScheduleShortened or 0)>>
+<<set $mpWorldFogMarketOpen to ($mpWorldFogMarketOpen or 0)>>
+<</widget>>
+<<widget "mpWorldPrice">>
+<<mpWorldStateInit>>
+<<set _base to (_args[0] or 100)>>
+<<set _gToll to ($mpGuildStanding and $mpGuildStanding.tollMod ? $mpGuildStanding.tollMod : 0)>>
+<<set _fMod to (($mpFogTide or 0) * 2)>>
+<<set _tMod to ($mpTempleOrder is "reform" ? -5 : ($mpTempleOrder is "orthodox" ? 5 : 0))>>
+<<set _sMod to ($mpSeasonHooks and $mpSeasonHooks.priceMod ? $mpSeasonHooks.priceMod : 0)>>
+<<set _pct to Math.max(50, ($mpWorldPriceMod or 100) + _gToll + _fMod + _tMod + _sMod)>>
+<<set _mpPrice to Math.round(_base * _pct / 100)>><<print _mpPrice>>
+<</widget>>
+<<widget "mpWorldScheduleOpen">>
+<<mpWorldStateInit>>
+<<set _openH to (_args[0] or 8)>>
+<<set _closeBase to (_args[1] or 21)>>
+<<set _gCurf to ($mpGuildStanding and $mpGuildStanding.curfewMod ? $mpGuildStanding.curfewMod : 0)>>
+<<set _sSch to ($mpSeasonHooks and $mpSeasonHooks.scheduleMod ? $mpSeasonHooks.scheduleMod : 0)>>
+<<set _shortH to ($mpWorldScheduleShortened ? 2 : 0)>>
+<<set _closeH to Math.min(24, Math.max(16, _closeBase - _shortH + _gCurf + _sSch))>>
+<<set _mpScheduleIsOpen to (Time.hour gte _openH and Time.hour lt _closeH ? 1 : 0)>><<print _openH>>:00-<<print _closeH>>:00
+<</widget>>
+<<widget "mpWorldMarketOpen">>
+<<mpWorldStateInit>>
+<<set _ledOpen to ($mpLedger and ($mpLedger.outcome is "escape" or $mpLedger.outcome is "seize") ? 1 : 0)>>
+<<set _gOpen to ($mpGuildStanding and ($mpGuildStanding.policy is "freeport" or $mpGuildStanding.policy is "shadow") ? 1 : 0)>>
+<<set _stOpen to ($mpStanding and ($mpStanding.underworld or 0) gte 30 ? 1 : 0)>>
+<<set _mpMarketIsOpen to ($mpWorldFogMarketOpen or _ledOpen or _gOpen or _stOpen ? 1 : 0)>><<if _mpMarketIsOpen>>开市<<else>>休市<</if>>
+<</widget>>
+
+:: MP World State Hub [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpWorldStateInit>>
+高街与钟楼之间的旧布告楼里，三本厚册并排摊在长桌上，是全城唯一同时折算物价、营业时辰与暗市开埠的账房。行会送来的通行税批注压在左边，神殿按古礼或革新路线签下的价目加签夹在中间，季节钩子递来的霜期顺延与潮汐备注压在右边。无论码头工头结算当日工钱、孤儿院核算周债、神殿采买香油，还是安全屋拨付维护费，都得先到这块黑板前过一遍算盘；绕过这里自行报价的铺子，第二天就会被同行和巡夜人同时找上门。
+<br><br>
+今天的读数已经誊好：物价基准指数 <b><<print ($mpWorldPriceMod or 100)>></b>，百钱实付 <b><<mpWorldPrice 100>></b>；标准营业窗 <b><<mpWorldScheduleOpen 8 21>></b>，钟声撤离标记为 <b><<print ($mpWorldScheduleShortened or 0)>></b>，行会宵禁修正 <b><<print ($mpGuildStanding and $mpGuildStanding.curfewMod ? $mpGuildStanding.curfewMod : 0)>></b>；灰雾暗市当前 <b><<mpWorldMarketOpen>></b>，地下信誉 <b><<print ($mpStanding and $mpStanding.underworld ? $mpStanding.underworld : 0)>></b>。神殿路线写作 <<print ($mpTempleOrder is "orthodox" ? "守旧古礼" : ($mpTempleOrder is "reform" ? "济世革新" : ($mpTempleOrder is "concord" ? "钟律调和" : "尚未定调")))>>，季节价签修正 <<print ($mpSeasonHooks and $mpSeasonHooks.priceMod ? $mpSeasonHooks.priceMod : 0)>> 个点，作息顺延 <<print ($mpSeasonHooks and $mpSeasonHooks.scheduleMod ? $mpSeasonHooks.scheduleMod : 0)>> 小时，雾潮水尺停在 <<print ($mpFogTide or 0)>>。红笔在旁边注明：任何一项变动都要在同一天同步给码头调度亭、高街铺主会和孤儿院账房，迟报一日就会有人按旧价收货、按旧时辰关门。
+<br><br>
+物价、作息、暗市三条线各自只有两种落定。物价可落进薄利平价档，也可停在封港后的高税档；作息可恢复长昼窗，也可维持钟声撤离的紧缩窗；暗市可开埠迎客，也可维持全城闭市。数字一旦改动，码头木料、孤儿院账本、神殿香油、高街铺租与暗渠摊位会同时改口。林恩清点晚归学徒、塞拉校准钟摆、维斯安排夜航时，都会先来问这里的读数；阿什、莫奈与诺艾尔经手的货单也照同一套折算。
+<br><br>
+柜台上还压着一张旧告示：凡在此登记过的营生，收价、开门与夜行都只认当日的三行读数；擅自改价的摊主会被记上一笔，情节重者由行会暂时收走摊位牌照。第一次踏进这里时，账房会替你把三枚基数钉死：物价从百点起算，撤离标记归零，暗市按闭市登记，之后全城的账目才有共同的起算线。
+<br><br>
+<<getouticon>><<link [[返回高街布告 (0:02)|MP Town Side Stories Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<link [[核查全域物价 (0:04)|MP World Price]]>><<pass 4>><</link>><br>
+<<mpclockworkicon>><<link [[核查全城作息 (0:04)|MP World Schedule]]>><<pass 4>><</link>><br>
+<<sneakicon>><<link [[核查暗市开埠 (0:04)|MP World Market]]>><<pass 4>><</link>>
+<br><<link [[更多事务 (0:03)|MP World State More Hub]]>><<pass 3>><</link>>
+
+:: MP World Price [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpWorldStateInit>>
+物价核算台设在总枢东侧窗下，四张批条用铜夹压成一叠：最上面是行会本月核定的通行税，下面压着神殿按路线签发的加签，再往下是雾潮观测所送来的潮位单和季节钩子递来的价签。核算员不问你要买什么，只把这几张纸并进同一道算式，再把结果抄进屋檐下的价目牌。
+<br><br>
+当前基准指数 <b><<print ($mpWorldPriceMod or 100)>></b>；行会通行税修正 <b><<print ($mpGuildStanding and $mpGuildStanding.tollMod ? $mpGuildStanding.tollMod : 0)>></b> 个点；雾潮每漫上一格，沿街进货价再抬 <b><<print (($mpFogTide or 0) * 2)>></b> 个点；神殿若走守旧古礼，净盐与香油整体加签五个点，若走济世革新则减五个点，眼下登记的是 <b><<print ($mpTempleOrder is "orthodox" ? "守旧古礼" : ($mpTempleOrder is "reform" ? "济世革新" : ($mpTempleOrder is "concord" ? "钟律调和" : "尚未定调")))>></b>；季节钩子的价签另计 <b><<print ($mpSeasonHooks and $mpSeasonHooks.priceMod ? $mpSeasonHooks.priceMod : 0)>></b> 个点。并进算式后，百钱货物实付 <b><<mpWorldPrice 100>></b>。
+<br><br>
+<<if $mpWorldDocksOutcome>>码头的终局公约已登记在底价册附注里，船材与进口杂货按「<<print ($mpWorldDocksOutcome is "charter" ? "自由船工公约" : "暗潮船东联保")>>」一档备案，逐笔折算仍走上面的算式。<<else>>码头尚未落定终局，船材只能按临时价核算。<</if>><<if $mpWorldHighStreetOutcome>>高街的铺租终局也登记在附注里，沿街店面不再另收旺季附加。<<else>>高街终局未定，铺租仍随季度浮动。<</if>>
+<br><br>
+算盘上最灵敏的一格是基准指数本身。行会信誉够厚、算术够稳时，你可以带着账册去和理事逐条对账，把基准压低五个点，最低只到八十五点；这一趟只耗心神，不花现钱，谈成后紧绷的肩颈反倒松下来。筹码不足却硬要压价，理事只会把批条原样推回，指数纹丝不动，你却白落一身 stress 与疲惫。
+<br><br>
+物价最终只落两种局面。<<if ($mpWorldPriceMod or 100) lte 90>>眼下指数已经压进薄利档，全城过的是平价日子，码头木料、孤儿院周债与神殿香油都轻一截，铺主肯多做晚市，孤儿院也敢多添一锅热汤。<<else>>眼下指数仍悬在高位，雾潮与封港把高税档钉得很死，进货、维护与赎账样样吃紧，连神殿采买净盐都要反复核价。<</if>>另一种局面随时可能翻上来：行会若加征通行税，或雾潮继续上涨，高税档就会重新压城；而每次对账谈成，指数又能向薄利档回落五个点，最低抵住八十五点。无论翻到哪一边，结果都写回物价基准，其他账房只认这个数。行会物价折算、安全屋维护和账本周债都走同一道算式，没人能另开一张价目表。
+<br><br>
+<<getouticon>><<link [[返回状态总枢 (0:02)|MP World State Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<if ($maths or 0) gte 220 or ($mpStanding and ($mpStanding.guilds or 0) gte 25)>><<link [[平抑行会物价 (0:10)|MP World State Hub]]>><<pass 10>><<set $mpWorldPriceMod to Math.max(85, ($mpWorldPriceMod or 100) - 5)>><<stress -2>><</link>><<else>><<link [[强行平抑物价 (0:10)|MP World State Hub]]>><<pass 10>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<investigateicon>><<link [[转去行会议案 (0:04)|MP Guild Assembly Hub]]>><<pass 4>><</link>>
+
+:: MP World Schedule [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpWorldStateInit>>
+作息核算台靠着钟楼一侧的窄窗，桌上只有一只沙漏、一册行会宵禁议案抄本和一张钟表铺送来的校时单。全城的铺门几点开、夜班几点散、暗巷几点落锁，都由这里把几道修正叠进同一个窗口，再抄给码头、高街与孤儿院。
+<br><br>
+当前白昼营业窗 <b><<mpWorldScheduleOpen 8 21>></b>。钟声撤离标记为 <b><<print ($mpWorldScheduleShortened or 0)>></b>，一旦立起，收摊时辰整体提前两小时；行会宵禁修正 <b><<print ($mpGuildStanding and $mpGuildStanding.curfewMod ? $mpGuildStanding.curfewMod : 0)>></b> 小时，节庆顺延再添 <b><<print ($mpSeasonHooks and $mpSeasonHooks.scheduleMod ? $mpSeasonHooks.scheduleMod : 0)>></b> 小时，窗口最早不早于十六点、最晚不晚于二十四点。沙漏旁贴着一行小字：这几格只认算出来的时辰，不认谁家铺子自己挂的招牌。
+<br><br>
+<<if $mpWorldSeraEnding or $mpWorldSeraSecondFloor or $mpWorldSeraDeparted>>钟表铺的校准单已经并档，塞拉留下的走时记录与塔顶铜钟对得上，报时误差不再吃掉营业时间。<<else>>钟表铺的校准单还没归档，铜钟偶尔快慢不一，账房只能按保守值记账。<</if>>科学底子够硬，或已经解开塞拉那组机芯，便能把钟摆重新咬合；这一趟同样只费精神，不花现钱，校完还能缓一口气。
+<br><br>
+若底子不足却贸然去扳钟摆，齿轮只会空转，窗口原地不动，你反倒被震得 stress 上涌、疲惫加深，守钟人还得把你请出塔楼。
+<br><br>
+作息最后也只有两种落定。<<if $mpWorldScheduleShortened>>撤离令仍挂着，紧缩窗已经钉死：夜巡提前、暗巷生意缩水、晚归的人更容易撞上盘查，孤儿院的孩子得赶在天黑前回院。<<else>>撤离令已经撤下，长昼窗恢复：码头日班能做完两趟货，高街店铺肯多做一轮晚市，孤儿院也不必摸黑清点人数。<</if>>另一种落定只隔着一道批文——钟摆校回正点，紧缩窗就退回长昼窗；撤离令重新立起，长昼窗又会整体缩短两小时。两种结果都落在撤离标记上，第二天全城的门轴都按它转，行会的宵禁议案和节庆顺延也只能在它之上再加减。
+<br><br>
+<<getouticon>><<link [[返回状态总枢 (0:02)|MP World State Hub]]>><<pass 2>><</link>><br>
+<<mpclockworkicon>><<if ($science or 0) gte 220 or ($mpSeraPuzzleOk or 0) gte 1>><<link [[校准钟塔报时 (0:10)|MP World State Hub]]>><<pass 10>><<set $mpWorldScheduleShortened to 0>><<stress -2>><</link>><<else>><<link [[贸然扳动钟摆 (0:10)|MP World State Hub]]>><<pass 10>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<walkicon>><<link [[查看季节钩子 (0:04)|MP Season Hooks Hub]]>><<pass 4>><</link>>
+
+:: MP World Market [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpWorldStateInit>>
+暗市核算台藏在布告楼最里侧，柜面只留一盏蒙布灯。这里不管白天的正经买卖，只判定入夜后灰雾里那几条暗渠能不能摆摊、账本上的货能不能过户、行会的自由港或影子议会批文算不算数。
+<br><br>
+当前判词是 <b><<mpWorldMarketOpen>></b>。灰雾暗市标记 <b><<print ($mpWorldFogMarketOpen or 0)>></b>；账本终局 <b><<print ($mpLedger and $mpLedger.outcome is "seize" ? "反制夺账" : ($mpLedger and $mpLedger.outcome is "escape" ? "暗影转移" : ($mpLedger and $mpLedger.outcome is "clear" ? "阳光清偿" : "尚未结清")))>></b>，若已走到转移或反制夺账，暗渠便自动有门；行会政策 <b><<print ($mpGuildStanding and $mpGuildStanding.policy is "freeport" ? "自由港盟" : ($mpGuildStanding and $mpGuildStanding.policy is "shadow" ? "影子议会" : ($mpGuildStanding and $mpGuildStanding.policy is "charter" ? "百工宪章" : "尚无成议")))>></b>，自由港与影子议会都肯为夜市背书；地下信誉 <b><<print ($mpStanding and $mpStanding.underworld ? $mpStanding.underworld : 0)>></b>，过三十点便有暗桩主动递灯。
+<br><br>
+<<if $mpWorldVesperEnding or $mpWorldFogOutcome>>维斯留下的夜航线已经并网，雾潮通道与暗渠水闸能互相接应，开埠不必再另找船。<<else>>夜航线还没接上，开埠只能靠岸上的暗桩，遇上巡夜要绕远路。<</if>>
+<br><br>
+诡术够利落、或地下信誉已经站稳时，你可以顺着灯语去接头，把灰雾暗市正式接通，往后暗货、私盐与夜航座位都算有门路；这一趟只费心神，不花现钱，谈成后反而松一口气。若既无手艺又无熟人，摸黑乱找只会惊动巡夜，暗桩四散，你落下一身 stress 与疲惫，市场仍然闭着。
+<br><br>
+账本走阳光清偿时，暗渠不会因为还清周债就自动放行；行会若只通过百工宪章，夜市也拿不到批文。这两条路都得回头补地下信誉，或等维斯把夜航接上。反过来，一旦开埠，暗货价比白天铺面低一截，巡夜人的目光也会跟得更紧，摊位牌照随时可能被收走。
+<br><br>
+暗市最后只落两种局面。开埠之后，摊位整夜亮着蒙布灯，账本的货能过户、行会的批文能兑现、维斯的小艇有地方靠；维持闭市，灰雾里只剩巡夜的脚步声，暗货转手要另找门路，账本上的路子也跟着变窄。判词写回暗市标记，全城的夜行者都按它决定出不出门，连码头夜航进出与雾潮期的暗渠通行也会跟着改。若有人想绕开这道判词私开摊位，巡夜人与暗桩都会先问一句：账房今天盖的究竟是开市还是休市。
+<br><br>
+<<getouticon>><<link [[返回状态总枢 (0:02)|MP World State Hub]]>><<pass 2>><</link>><br>
+<<sneakicon>><<if ($skulduggery or 0) gte 240 or ($mpStanding and ($mpStanding.underworld or 0) gte 25)>><<link [[接通暗市联络 (0:10)|MP World State Hub]]>><<pass 10>><<set $mpWorldFogMarketOpen to 1>><<stress -2>><</link>><<else>><<link [[摸黑寻找暗桩 (0:10)|MP World State Hub]]>><<pass 10>><<stress 4>><<tiredness 1>><</link>><</if>><br>
+<<investigateicon>><<link [[转去名声信誉 (0:04)|MP Fame Standing Hub]]>><<pass 4>><</link>>

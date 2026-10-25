@@ -1,0 +1,465 @@
+/* MP Loc HighStreet Festival — 高街四季节庆线
+   节日标记：$mpFestHighStreetSpring / Summer / Autumn / Winter
+     0             = 尚未举办
+     pending_*     = 事件已选，等待结果页结算
+     order/open    = 已结算（商盟秩序 / 夜市放开两种倾向）
+     failed        = 已结算但失败（不推进地点进度）
+   地点进度：$mpLocProgress_HighStreet（0-5）
+   已结事件：$mpLocEvents_HighStreet
+   终局写入：$mpWorldHighStreetOutcome = "guildpact" / "nightmarket"
+   后续读取点：MP Loc HighStreet Hub【街区归属】、MP Loc HighStreet Deep、
+              MP NPC Monet 高街画约分支、MP NPC Sera / MP NPC Lin 的高街对白
+*/
+
+:: MP Loc HighStreet Festival Hub [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetSpring to ($mpFestHighStreetSpring or 0)>><<set $mpFestHighStreetSummer to ($mpFestHighStreetSummer or 0)>><<set $mpFestHighStreetAutumn to ($mpFestHighStreetAutumn or 0)>><<set $mpFestHighStreetWinter to ($mpFestHighStreetWinter or 0)>><<set _done to ((($mpFestHighStreetSpring is "order" or $mpFestHighStreetSpring is "open" or $mpFestHighStreetSpring is "failed") ? 1 : 0) + (($mpFestHighStreetSummer is "order" or $mpFestHighStreetSummer is "open" or $mpFestHighStreetSummer is "failed") ? 1 : 0) + (($mpFestHighStreetAutumn is "order" or $mpFestHighStreetAutumn is "open" or $mpFestHighStreetAutumn is "failed") ? 1 : 0) + (($mpFestHighStreetWinter is "order" or $mpFestHighStreetWinter is "open" or $mpFestHighStreetWinter is "failed") ? 1 : 0))>>
+高街拱门内侧的墙上钉着一排节令木牌，一年换四回，四块窄板并排卡在铜轨里。板面各烙一枚记号：一篮带泥的新韭、一盏纸骨灯笼、一册摊开的账簿、一盏罩着铁纱的防风灯。木牌下压着行会执事的短笺，字迹瘦硬，边角被潮气洇出一圈淡黄。短笺不写年份，只写节气和开市的时辰，谁都看得懂，谁都得照着做。
+<br><br>
+这条街的四季从来不靠钟声提醒。春市一开，拱廊外的石板缝里全是菜叶和湿泥；夏夜灯一亮，玻璃橱窗就烤得发烫；秋粮进城，后巷的算盘从早响到晚；冬灯挂上铜钩，扫雪的伙计得先给灯让路。掌柜们把这些日子记得比账期还牢，因为一年的进项，大半落在这么几个节令上，错过一回，价牌就得重写半个月。
+<br><br>
+节令板旁边还钉着一只窄木匣，里面装着历年用剩的红纸号签和半截蜡烛。匣盖上有几道刀刻的记号，是历年办节的人留下的，深浅不一；最深的一道划在春市那一格旁边，据说是某年大雨冲了摊位后刻的。
+<br><br>
+行会执事每天清晨来换短笺。他把蘸水笔横在墨水瓶口，先看一眼天色，再决定当日的开市时辰。塞拉从钟表铺出来，袖口沾着一点机油，经过节令板时只看春市那一格；林恩站在拱门下，把巡夜的班表折成窄条塞进内袋，目光扫过每一盏还没点亮的灯。执事换完短笺，会用指腹把纸角压平，再退后半步看一眼，像在核对一笔不能出错的账。杂货行的掌柜半蹲在门槛上，拿粉笔把盐价改小一号，写罢仰头看了看木牌，又俯身补上一笔。
+<br><br>
+四块木牌如今各记着一笔：春市<<if $mpFestHighStreetSpring>>已收<<else>>未开<</if>>，夏夜<<if $mpFestHighStreetSummer>>已收<<else>>未开<</if>>，秋税<<if $mpFestHighStreetAutumn>>已收<<else>>未开<</if>>，冬灯<<if $mpFestHighStreetWinter>>已收<<else>>未开<</if>>。你把手指按在节令板的铜轨上，能摸到历年木牌磨出的浅槽。执事说，四季办齐了，会馆才肯把压在最底下的那份街约拿出来重议；办不齐，街面照旧过，只是谁都别指望价牌能稳住。
+<br>
+【节令进度】探索进度：<<print $mpLocProgress_HighStreet>> ｜ 已结事件：<<print $mpLocEvents_HighStreet>> ｜ 四季已办：<<print _done>> / 4
+<br><br>
+<<getouticon>><<link [[返回高街总枢 (0:04)|MP Loc HighStreet Hub]]>><<pass 4>><</link>>
+<br><br>
+<<mpstallicon>><<if $mpFestHighStreetSpring>><<link [[春市回看 (0:03)|MP Loc HighStreet Festival Spring Result]]>><<pass 3>><</link>><<else>><<link [[春市备摊 (0:04)|MP Loc HighStreet Festival Spring]]>><<pass 4>><</link>><</if>><br>
+<<lanternicon>><<if $mpFestHighStreetSummer>><<link [[夏夜回看 (0:03)|MP Loc HighStreet Festival Summer Result]]>><<pass 3>><</link>><<else>><<link [[夏夜掌灯 (0:04)|MP Loc HighStreet Festival Summer]]>><<pass 4>><</link>><</if>><br>
+<<mpreadicon>><<if $mpFestHighStreetAutumn>><<link [[秋册回看 (0:03)|MP Loc HighStreet Festival Autumn Result]]>><<pass 3>><</link>><<else>><<link [[秋册核账 (0:04)|MP Loc HighStreet Festival Autumn]]>><<pass 4>><</link>><</if>><br>
+<<if $mpFestHighStreetWinter>><<link [[冬会回看 (0:03)|MP Loc HighStreet Festival Winter Result]]>><<pass 3>><</link>><<else>><<link [[冬会挂灯 (0:04)|MP Loc HighStreet Festival Winter]]>><<pass 4>><</link>><</if>>
+<br><br>
+<<if _done gte 4>><<link [[街约终议 (0:02)|MP Loc HighStreet Festival Finale]]>><<pass 2>><</link>><<else>><span class="disabled">街约终议 (0:02)（四季未齐）</span><</if>>
+
+:: MP Loc HighStreet Festival Spring [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetSpring to ($mpFestHighStreetSpring or 0)>>
+<<if $mpFestHighStreetSpring>>
+春市的红纸号签已经收进铜盒，拱廊外的白粉格被踩得看不清了。那天的雨棚、价牌和湿透的账页都归了档，只剩节令板上春市那一格还留着一点浆糊印。街面照常开门，掌柜们已经把话题换成了下一趟进货。
+<br><br>
+<<getouticon>><<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>><br>
+<<walkicon>><<link [[翻看春市结果 (0:02)|MP Loc HighStreet Festival Spring Result]]>><<pass 2>><</link>>
+<<else>>
+春市开在清明后的第一个晴天。天还没亮透，郊外的菜农就推着板车从城门进来，车斗里码着带泥的春笋、成捆的韭黄、用湿布盖着的花苗。拱廊外的空地用白粉划成方格，行会的人提着浆糊桶，把红纸号签一张张贴到柱子上。风从街口灌进来，纸角啪啪地响，贴签的人得用掌心按着，才能把字贴正。白粉线被露水打湿，颜色比平日深，摊主们踩着线把车斗摆正，谁也不肯多占半寸。
+<br><br>
+执事在拱门下摆了张矮桌，桌上压着摊位图和一叠空白收据。他看见你，把一支蘸水笔递过来：「春市最怕乱。摊位要按号签排，价牌要按行会的底价写，雨水一来，先护粮，再护花。你挑一样做。」说完把收据往你面前推了推，纸角还带着墨湿。
+<br><br>
+塞拉把钟表铺的门开了一半，橱窗里那三只怀表被挪到高处，柜台上腾出一块地方摆她替人代卖的铜壳小钟。她朝拱廊外抬了抬下巴：「雨云在钟楼后面。你要去集市，先看排水沟。」说完把一只小铜钟挂到门框上，钟摆被风带动，发出很轻的响声，像是在替这条街数着开市的时辰。杂货行老板正把盐袋往门槛里搬，嘴里念着今日的价，念到一半又改了，说行会的底价压得太死，他这一袋盐赚不出灯油钱。
+<br><br>
+天色果然沉下来。风里带着湿土味，第一滴雨砸在油布上时，集市已经挤满了人。你可以去帮摊主把雨棚支起来，把粮袋和花苗挪到高处；也可以站到街口替摊主们招揽客人，趁雨还没大，把这一趟生意做满；要是手头宽裕，还能把那位老农剩下的花苗整批买下，替他腾出回家的车板。
+<br><br>
+<<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+<br><br>
+<<mpcleanicon>><<if ($housekeeping or 0) gte 220>><<link [[支起雨棚 (0:08)|MP Loc HighStreet Festival Spring Result]]>><<set $mpFestHighStreetSpring to "pending_order">><<pass 8>><<tiredness 3>><</link>><<else>><<link [[支起雨棚 (0:08)|MP Loc HighStreet Festival Spring Result]]>><<set $mpFestHighStreetSpring to "pending_fail">><<pass 8>><<tiredness 3>><</link>><</if>><br>
+<<mpbargainicon>><<if ($willpower or 0) gte 400 or ($english or 0) gte 240>><<link [[沿街招客 (0:08)|MP Loc HighStreet Festival Spring Result]]>><<set $mpFestHighStreetSpring to "pending_open">><<pass 8>><<tiredness 2>><<stress 2>><</link>><<else>><<link [[沿街招客 (0:08)|MP Loc HighStreet Festival Spring Result]]>><<set $mpFestHighStreetSpring to "pending_fail">><<pass 8>><<tiredness 2>><<stress 2>><</link>><</if>><br>
+<<if ($money or 0) gte 120>><<link [[买下花苗 (0:06)|MP Loc HighStreet Festival Spring Result]]>><<money -120>><<set $mpFestHighStreetSpring to "pending_buy">><<pass 6>><<tiredness 1>><</link>><<else>><span class="disabled">买下花苗 (0:06)（钱不够）</span><</if>>
+<</if>>
+
+:: MP Loc HighStreet Festival Spring Result [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetSpring to ($mpFestHighStreetSpring or 0)>>
+<<if $mpFestHighStreetSpring is "pending_order">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetSpring to "order">><<stress -3>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+雨在午后停了一阵，又被风吹回来。集市上的油布此起彼伏，像一片被按住又弹起的水面。行会的人沿着摊位收号签，收到拱廊尽头时，账上的数字已经改过两遍。
+<br><br>
+你把最后一根棚杆插进石缝，麻绳在柱子上绕了三圈，雨顺着油布边缘淌成一道整齐的帘。粮袋被挪到高处的木架上，花苗盆底垫了碎砖，没有一袋受潮。老农蹲在棚下，把散开的苗捆重新扎紧，抬头朝你咧嘴笑了一下，露出缺了半颗的门牙。
+<br><br>
+执事绕着摊位走了一圈，在收据背面记下你的名字，又让账房把今日的损耗减了一成。塞拉从钟表铺门口望过来，见棚子撑得住，才转身回去擦她的铜钟。杂货行老板把一包粗盐塞进你手里，说是谢你替他保住了半柜货；他没多留，转身又去搬下一袋，搬完还回头把棚角压住，怕风把油布掀了。雨停后，拱廊的伙计把湿油布一匹匹搭到栏杆上晾，水滴在石板上敲出细碎的响。你从梯子上下来，腿有些发软，掌心被麻绳勒出两道红痕，却不妨碍你把最后一笔收据交回执事手里。
+<br><br>
+春市收得比往年齐整。号签按序交回，价牌没有一块被雨水泡烂，行会的底价也稳住了。执事在节令板下补了一行小字：春市有序。夜里拱廊落灯时，湿石板把最后一排灯光拉得很长，像有人把一天的账目摊开又慢慢卷起。
+<br><br>
+塞拉收铺前把柜台上的水痕擦了两遍，说明日若还下雨，春市的棚子可以照这个搭法再来一次。她说话时没抬头，镊子已经夹起了下一枚齿轮。
+<br>
+【春市结算】按号签开市，棚架撑住了雨；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetSpring is "pending_open">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetSpring to "open">><<stress -3>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+雨在午后停了一阵，又被风吹回来。集市上的油布此起彼伏，像一片被按住又弹起的水面。行会的人沿着摊位收号签，收到拱廊尽头时，账上的数字已经改过两遍。
+<br><br>
+你把街口的客人一拨拨往里引，嗓子喊得发干。雨点落下来时，摊主们索性把油布往两边一扯，露出底下的货，客人挤在檐下挑拣，生意反倒比晴天更旺。杂货行老板的盐袋卖空了两袋，塞拉的铜壳小钟也出去了两只，她收钱时嘴角压不住地往上翘。收摊后，几个摊主把剩下的菜叶扫到一处，堆在墙根等车来拉。你嗓子哑得说不出话，塞拉递来的凉茶里放了一小片薄荷，喝下去才觉得街上的热气散了些。
+<br><br>
+执事站在拱门下数人头，脸色说不上好看，账却一笔没漏。林恩从街口过来，靴底沾着泥，朝你点了点头，又去挪下一块挡路的板车。老农的花苗卖得只剩几盆歪的，他把车板一收，说明年还来，还找你搭棚。执事把当日的摊位图卷起来，图上多了几处用炭笔改过的方格，那是临时加出来的摊子。
+<br><br>
+春市的流水比往年多出三成。收摊时，几个摊主凑钱买了一壶热茶，硬塞到你手里；茶水烫得握不住，你换了两回手。价牌上的数字被雨水洗过，仍旧看得清，行会的人抄完最后一页，把铜盒扣上。春市喧闹了一场，账上留下一笔实实在在的进项。
+<br><br>
+塞拉关窗前朝街口看了一眼，灯影在她脸上晃了晃。她说夜里若还这么热闹，钟表铺也该备些便宜的表带。
+<br>
+【春市结算】街口招客把流水推高；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetSpring is "pending_buy">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetSpring to "open">><<stress -2>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+你把老农剩下的花苗整批买下。他愣了一会儿，才把车板上的湿布掀开，让你一盆盆挑。铜板数了两遍，他把车板腾空，赶着空车往城门走，经过拱门时还回头朝你拱了拱手。花苗被你分给拱廊里的几家铺子，窗台、柜台边各摆了几盆，剩下的搬到钟表铺门口。塞拉看了一眼，说摆在这里挡光，却还是把最靠里的一盆挪到柜台后面。
+<br><br>
+雨落下来时，花苗已经不在露天里。买花的人各自把盆搬回铺子，拱廊里多出一片湿漉漉的绿。老农的空车出了城门，车辙在湿泥里压得很深。杂货行老板说这笔买卖不划算，可他自己也端走一盆，放在盐袋旁边。
+<br><br>
+春市收摊时，执事把号签收回铜盒，说今年的摊位没有剩货，账上省了一笔清扫钱。他看了你一眼，没问花苗的钱是从哪出的，只在收据背面记了一个「清」字。塞拉把门口的花苗摆正，说明年若还有这样的老农，可以早点来打招呼。
+<br><br>
+你手上沾着泥，钱袋轻了一截，街面的春意倒比先前厚了些。夜里落灯后，拱廊的窗台上还亮着几盆白花，风一吹，花瓣贴在玻璃上，像谁随手按下的指印。执事把收据本合上时，天已经黑透，拱廊的灯一盏盏亮起来。老农的空车早出了城门，街面上只剩花苗盆底留下的几圈湿印。
+<br>
+【春市结算】整批花苗清了摊，铺子各自添了绿；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetSpring is "pending_fail">>
+<<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetSpring to "failed">><<stress 5>><<tiredness 3>><<pain 1>>
+雨在午后停了一阵，又被风吹回来。集市上的油布此起彼伏，像一片被按住又弹起的水面。行会的人沿着摊位收号签，收到拱廊尽头时，账上的数字已经改过两遍。
+<br><br>
+你踩着湿石板上人字梯，手刚够到棚杆，脚下一滑，整块油布兜着水翻下来，浇了半排花苗。老农蹲下去扶盆，泥水顺着他的袖口往下淌。你重新支棚时，雨已经大了，粮袋受了潮，价牌上的字也糊成一片。
+<br><br>
+执事没说什么，只在收据背面记了一笔损耗。塞拉隔着雨帘看了你一眼，把橱窗往里关严了。林恩过来帮你把倒下的棚杆拖开，没让堵住排水沟；他裤脚湿到膝盖，走的时候只丢下一句：「下次先看脚下。」雨停后，你帮着把受潮的粮袋搬到拱廊下摊开，袋口结块的盐得用木槌敲散。老农没让你赔花苗，只把几盆还站得住的挑出来，重新码上车板。
+<br><br>
+春市散得比往年早。老农把没卖完的花苗装回车上，有几盆已经折了茎；杂货行老板蹲在门槛边，把受潮的盐袋一袋袋挑出来，挑到最后，干脆把价牌翻了个面。你在拱廊下站了一会儿，手心里全是梯子横档留下的木刺。
+<br><br>
+账房把当日的收据重新誊了一遍，损耗那一栏空着，等执事落笔。雨停后，街上只剩被踩烂的菜叶和一层薄泥，扫街的伙计骂了一句，又低头去推水。执事把损耗那一栏填完，合上收据本，说春市还有下一回，先把眼前的泥水扫干净。
+<br>
+【春市结算】棚架没有撑住，春市提前收摊；没有推进地点进度。
+<<elseif $mpFestHighStreetSpring is "order">>
+春市已经按行会的号签收过一回。那天的棚架搭得齐整，粮袋与花苗都保住了，执事在节令板下留了一行小字。如今再站到拱廊外，白粉格早被雨水冲淡，只有柱子上残着几片红纸角。
+<br><br>
+塞拉偶尔会提起那场雨，说钟表铺的橱窗那天没进水，全靠有人先把排水沟清了出来。她说完便低头擦表，不再多讲。杂货行老板把新到的粗盐码在门槛里，价牌换成了小字。
+<br><br>
+<<elseif $mpFestHighStreetSpring is "open">>
+春市已经收过一回。那天大半摊子都清了底，雨点落下来时也没散，客人挤在檐下把剩下的货买走。执事嘴上不说，账上却记了比往年厚的一页。
+<br><br>
+塞拉把铜壳小钟的存货补了回来，说春市那两只卖得最快。杂货行老板把盐袋重新码高，价牌还是小字，只是数字比春天时低了一点。街口的地面被板车碾出两道新辙。
+<br><br>
+<<elseif $mpFestHighStreetSpring is "failed">>
+春市散得早，拱廊外的白粉格被雨水冲得只剩几道浅痕。老农的花苗折了大半，杂货行把受潮的盐袋挑出来，摆在门口当次货卖。执事没再提那天的事，只把节令板上的短笺换了一张。
+<br><br>
+塞拉把橱窗擦得很干净，像是要把那场雨留下的痕迹一并抹掉。林恩路过时朝你点了点头，没有多话。你知道下一回再搭棚，得先看清脚下的石板。
+<br><br>
+<<else>>
+节令板上春市那一格还空着，红纸号签没有动过。拱廊外的空地仍用白粉划着方格，风把纸角吹得贴不住柱子。你来得太早，或者已经错过了今年的春市。
+<br><br>
+<<getouticon>><<link [[前往春市 (0:02)|MP Loc HighStreet Festival Spring]]>><<pass 2>><</link>>
+<</if>>
+<br><br>
+<<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+
+:: MP Loc HighStreet Festival Summer [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetSummer to ($mpFestHighStreetSummer or 0)>>
+<<if $mpFestHighStreetSummer>>
+夏夜的灯会已经收过一回，铜钩上只剩几缕被火燎黑的纸边。拱廊的地面被糖水粘过，扫街的伙计刷了三遍才刷干净。节令板上的夏夜格子里，执事用炭笔写了一个小小的「收」字。
+<br><br>
+<<getouticon>><<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>><br>
+<<walkicon>><<link [[翻看夏夜结果 (0:02)|MP Loc HighStreet Festival Summer Result]]>><<pass 2>><</link>>
+<<else>>
+夏夜的灯会从码头那批冰块运到时开始。天还没黑，拱廊的铜钩上已经挂满纸灯，红的黄的，画鱼画麦穗的，一串挨一串垂到人头顶。杂货行把冰敲成小块，分给鱼铺和果摊，融水沿着石板缝往低处流。行会账房在街口支起一张高脚桌，桌上压着夜市的地界图和一本收据，谁要摆摊，先来这里领号。冰块是从码头用湿草席裹着运来的，车夫一路走一路滴水，到了拱廊下，草席已经湿透。
+<br><br>
+塞拉卸下钟表铺的门板，在柜台尽头又添了一盏灯。她隔着橱窗玻璃朝你扬了扬下巴：「夜里做买卖，灯得稳。灯油钱我自己出，可要是巡夜的把人都赶走了，我这一晚就白点。」说完把一只刚擦亮的银壳表放回绒布，表盖上映着街对面晃动的灯影。她又把柜台的抽屉拉开一半，里面码着几只便宜的铜表，是专给夜里赶路的人备的。
+<br><br>
+林恩站在拱廊尽头，短棍换到另一只手，说巡夜的人手不够，灯一多，影子也多。他一边嘟囔，一边将一枚备好的铜哨按进你掌心：「真出了事，吹两声。别逞强。」闷热积到天黑前，雷声在钟楼背后滚，纸灯被风掀得斜向一侧，摊主们骂骂咧咧地把灯往廊下拽。林恩的话音没落，街口已经有人把第一串灯挂上了铜钩，灯纸被风吹得鼓起来，像一排要飞走的鸟。
+<br><br>
+你可以留下来帮摊主挂灯、看火，把灯链一盏盏固定牢；也可以跟着林恩在街口巡一圈，把挤在一起的人群分开；要是舍得花钱，还能去杂货行盘下几桶灯油和冰，把最暗的那段拱廊点亮。灯会只开一夜，错过就得等明年。
+<br><br>
+<<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+<br><br>
+<<lanternicon>><<if ($housekeeping or 0) gte 220>><<link [[挂灯引客 (0:08)|MP Loc HighStreet Festival Summer Result]]>><<set $mpFestHighStreetSummer to "pending_open">><<pass 8>><<tiredness 4>><</link>><<else>><<link [[挂灯引客 (0:08)|MP Loc HighStreet Festival Summer Result]]>><<set $mpFestHighStreetSummer to "pending_fail">><<pass 8>><<tiredness 4>><</link>><</if>><br>
+<<mpwatchicon>><<if ($athletics or 0) gte 220>><<link [[巡夜守序 (0:08)|MP Loc HighStreet Festival Summer Result]]>><<set $mpFestHighStreetSummer to "pending_order">><<pass 8>><<tiredness 3>><<stress 2>><</link>><<else>><<link [[巡夜守序 (0:08)|MP Loc HighStreet Festival Summer Result]]>><<set $mpFestHighStreetSummer to "pending_fail">><<pass 8>><<tiredness 3>><<stress 2>><</link>><</if>><br>
+<<if ($money or 0) gte 150>><<link [[盘下灯油 (0:06)|MP Loc HighStreet Festival Summer Result]]>><<money -150>><<set $mpFestHighStreetSummer to "pending_buy">><<pass 6>><<tiredness 1>><</link>><<else>><span class="disabled">盘下灯油 (0:06)（钱不够）</span><</if>>
+<</if>>
+
+:: MP Loc HighStreet Festival Summer Result [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetSummer to ($mpFestHighStreetSummer or 0)>>
+<<if $mpFestHighStreetSummer is "pending_order">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetSummer to "order">><<stress -3>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<mpnpcincr Lin trust 1>><</if>>
+雷雨到底没落下来，只在钟楼后面滚了半宿。灯会收摊后，拱廊地面粘着糖渍、栗壳，还有几副踩瘪的灯骨。行会账房把收据一张张对过，塞拉把柜台上的灯芯剪短，林恩最后一个离开街口。
+<br><br>
+你跟着林恩从东头走到西头，把挤在鱼铺门口的人群分开三次，又从人堆里拎出一个摸钱包的半大孩子。灯链按行会的时辰一盏盏熄灭，没有一盏烧着油布。塞拉收摊时朝你点了点头，把一壶凉茶放在柜台外沿。
+<br><br>
+执事在巡查簿上写下「灯会无火患」，字比平日工整。他让人把地界图卷起来，说明年的摊位得按今年的号重排。林恩把铜哨收回衣袋，班表上新添的两道线还没干透。你跟着他巡到后半夜，腿肚子发酸，短棍没有派上用场，铜哨倒吹了三回；最后一回是替一个走散的孩子找母亲，人找到时，灯已经收了大半。回到拱廊时，塞拉又把那只茶壶续满，茶里浮着两片薄荷；她没问你累不累，只说夜里乱，明早的钟表铺可以晚开半个时辰。
+<br><br>
+夏夜的热气到后半夜才散。拱廊的灯全灭之后，街面反而静得有些不习惯，只有冰块融化的水还在石板缝里慢慢走。塞拉说，夜里不乱，钟表铺才敢把好表留在橱窗里。账房把灯油账翻到最后一页，指着一处涂改过的数字问了两遍，塞拉说是她补记的，才放过去。她把补记的那一笔抄到新页上，字比平日小，怕再被人看错。
+<br>
+【夏夜结算】巡夜压住了人流与火患；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetSummer is "pending_open">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetSummer to "open">><<stress -3>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+雷雨到底没落下来，只在钟楼后面滚了半宿。灯会收摊后，拱廊地面粘着糖渍、栗壳，还有几副踩瘪的灯骨。行会账房把收据一张张对过，塞拉把柜台上的灯芯剪短，林恩最后一个离开街口。
+<br><br>
+你把灯链一路挂到街尾，又把最暗的那段拱廊补亮。客人顺着灯光涌进来，塞拉的银壳表在夜里出去了三只，杂货行的冰桶见了底。林恩在人堆里挤得满头汗，短棍始终没举起来，只靠那枚铜哨把两拨争执的人分开。
+<br><br>
+执事站在高脚桌后数人头，账上的摊位数比地界图多了两成。他没有立刻收桌，任由灯会拖到钟楼敲过午夜。塞拉把空了的绒布托盘收进柜台，说这样的夜里，贵一点的表也有人问。你把最后一盏灯挂上铜钩时，手指被灯骨上的铁丝划了一道，血珠冒出来，在灯下看得清楚；塞拉从铺子里递出一块干净布，让你先缠上，再去收钱。
+<br><br>
+灯会散得比往年晚。最后一串纸灯被摘下来时，灯骨上还带着热气；扫街的伙计推着水车过来，把糖水冲进排水沟。高街的夏夜从此多了一笔活钱，也多了几盏谁也不肯先熄的灯。杂货行的冰桶早空了，老板把空桶倒扣在门口，说明年得跟码头多订两车。街口的客人散得慢，巡夜的铜哨响过两遍，才有人肯挪步。塞拉把门关到一半，又回头看了一眼街口，说明年若还这么热闹，她得提前多进一批便宜表带。
+<br>
+【夏夜结算】灯链把夜市撑满，流水压过火患；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetSummer is "pending_buy">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetSummer to "open">><<stress -2>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+你把杂货行剩下的灯油和冰一起盘下。老板报了个价，你还了一半，他骂了一句，还是让伙计把桶搬到拱廊最暗的那一段。冰被敲碎，分进鱼铺和果摊的木盆，灯油灌进铜壶，一盏盏补过去。那段路平时入夜就黑，今夜却亮得能看清石板缝里的水光。
+<br><br>
+塞拉从铺子里探出头，见灯亮到自己门口，便把橱窗里那几只便宜铜表挪到前排。她说灯油钱你出，卖表的钱她照分，谁也别欠谁。林恩从街口过来，见暗处少了，皱着眉没说话，只把铜哨在手里转了一圈。
+<br><br>
+客人顺着新亮的灯走过来，摊主们忙着添货，杂货行的冰桶见了底。执事站在高脚桌后，把多出来的摊位记在地界图背面，说这一段的灯明年可以照这个位置挂。账房问灯油钱怎么算，执事看了你一眼，说记在街面的公账上。
+<br><br>
+灯会收摊时，最暗的那段拱廊还留着一盏灯。塞拉把门关到一半，又回头看了一眼，说夜里有人走，灯就别急着灭。你手上沾着灯油，钱袋轻了，街面的灯却比往年多亮了一截。夜深后，那段拱廊的灯还亮着，飞蛾绕着灯罩打转。塞拉把柜台上的账本翻到新页，记下今晚代卖的铜表；林恩从街口回来，见灯还亮，没催你收，只说了一句「留一盏照路」。你把空油桶摞在墙边，手上全是灯油味。
+<br>
+【夏夜结算】自掏灯油补亮暗段，夜市多出一截；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetSummer is "pending_fail">>
+<<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetSummer to "failed">><<stress 5>><<tiredness 3>><<pain 1>>
+雷雨到底没落下来，只在钟楼后面滚了半宿。灯会收摊后，拱廊地面粘着糖渍、栗壳，还有几副踩瘪的灯骨。行会账房把收据一张张对过，塞拉把柜台上的灯芯剪短，林恩最后一个离开街口。
+<br><br>
+你踮脚去够最高处的灯钩，脚下的木箱一滑，整串纸灯砸下来，火苗舔着油布边角。林恩一把扯下外套扑火，塞拉从铺子里拎出半桶沙。火没烧起来，灯却毁了七八盏，人群挤散，摊主们骂骂咧咧地收摊。
+<br><br>
+你手背燎起一小片红，耳朵里嗡嗡响。执事赶来时只看见一地碎灯骨，他蹲下捡起半张烧焦的地界图，脸色沉得厉害。林恩把铜哨塞回你手里，没说重话，只让你先到拱廊下坐着。火扑灭后，他把烧焦的油布卷起来，扔到街角的空桶里；塞拉检查了铺子的橱窗，玻璃被烟熏黑了一角，擦了两遍才透亮。她替你缠布时，手指很轻，布条却缠得极紧，缠完还把布头打了个结，说别沾水。
+<br><br>
+夏夜的后半段草草收了场。杂货行的冰化成一滩水，塞拉把橱窗关严，灯芯剪到最短。杂货行老板把没卖完的灯芯收回柜台，说下一场雪前不打算再进货了。街口的灯链缺了一截，黑下去的那段路，巡夜的得多走两遍。执事让你把毁掉的灯骨数清楚，记在巡查簿背面；你数到第七盏时，手指被焦木刺了一下，才发现掌心也在抖。
+<br>
+【夏夜结算】灯链失手，灯会提前收场；没有推进地点进度。
+<<elseif $mpFestHighStreetSummer is "order">>
+夏夜灯会已经收过一回。那晚的灯链按行会的时辰熄灭，没有一盏烧着油布，巡夜簿上留着一行工整的字。如今铜钩上只剩几缕燎黑的纸边，风一吹就贴在玻璃上。
+<br><br>
+林恩把新的班表钉在拱廊门后，说那晚的次序可以照用。塞拉把银壳表重新摆回橱窗，夜里关铺前总会多看街口一眼。杂货行的冰桶空了很久，老板说起那晚的人流，还是会摇一摇头。
+<br><br>
+<<elseif $mpFestHighStreetSummer is "open">>
+夏夜灯会已经收过一回。那晚的灯一直亮到后半夜，最暗的拱廊也被补亮，塞拉的银壳表出去了三只。执事的账上多记了两成摊位，脸色却没缓过来。
+<br><br>
+铜钩上的纸灯早摘了，只剩挂钩被磨得更亮。塞拉把夜里的灯油钱记在一张窄纸上，说下回还得这么干。林恩嘴上抱怨人手不够，还是把铜哨留在了柜台抽屉里。
+<br><br>
+<<elseif $mpFestHighStreetSummer is "failed">>
+夏夜灯会散得早。烧焦的灯骨被堆在拱廊角落，扫街的伙计分了两趟才清完。执事把地界图重新描了一遍，缺的那一截灯链空在那里，像一道没补上的口子。
+<br><br>
+塞拉把橱窗关得比平日早，林恩的巡夜路线多绕了一段黑路。你手背上的燎痕结了薄痂，碰一下还会疼。下一回挂灯，得先看清脚底下垫的是什么。
+<br><br>
+<<else>>
+夏夜那一格还空着。拱廊的铜钩上没挂灯，杂货行门口却已经摆出成捆的灯芯，像是随时等人来领号。天还没黑透，街口的高脚桌空着，地界图压在桌角。
+<br><br>
+<<getouticon>><<link [[前往夏夜灯会 (0:02)|MP Loc HighStreet Festival Summer]]>><<pass 2>><</link>>
+<</if>>
+<br><br>
+<<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+
+:: MP Loc HighStreet Festival Autumn [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetAutumn to ($mpFestHighStreetAutumn or 0)>>
+<<if $mpFestHighStreetAutumn>>
+秋税的册子已经归回档案室，矮桌上只剩一圈被墨水瓶压出的圆印。后巷的粮车卸完了，麻袋在新码的垛上落了一层薄灰。节令板上秋税那一格，执事用炭笔描了一个「平」字。
+<br><br>
+<<getouticon>><<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>><br>
+<<walkicon>><<link [[翻看秋税结果 (0:02)|MP Loc HighStreet Festival Autumn Result]]>><<pass 2>><</link>>
+<<else>>
+秋粮进城的头一天，商会后巷的麻袋堆得比人高。粮车从城门一路排到拱门下，车夫坐在车辕上啃干粮，等账房的人来验秤。行会执事把今年的税册从档案室搬出来，厚厚一摞压在矮桌上，纸脊上还留着地下室的潮气。他翻到夹着布条的那一页，指腹在几个数字上停了停：「今年的账对不上。差得不多，可差在明面上。」验秤的铜砣被擦得发亮，账房先生每称完一车，就在单子上盖一个小圆印，印泥干得很快。
+<br><br>
+杂货行老板站在桌边，两只手在围裙上擦来擦去。他说今年的盐和煤油都压了价，铺子没多赚，税却按去年的数报了上去。塞拉把钟表铺的收据簿带来，一页页摊开，替行会核对修理费和零件钱；她的指甲缝里还沾着擦铜油的灰。她翻到夹着布条的那一页，指出两笔修理费的日期写反了；老板凑过来看，脸色更难看了。
+<br><br>
+林恩押着税册从巷口进来，把包铁的木匣放在桌上，钥匙还挂在腰间。他不看账，只看人：「账可以慢慢算，粮车不能堵在街口。」执事点头，让账房先把验秤的单子发下去，税册的事留到午后。巷口的粮车又进来一辆，车夫把缰绳往桩上一绕，蹲到墙根下等，眼睛却一直往税册这边瞟。
+<br><br>
+差额不大，落在三家小铺头上。执事的意思是把账核平，该补的补，该罚的罚；老板们则盼着有人替他们说一句，把这一页揭过去。你可以坐下来把税册与收据逐笔对平，也可以替小铺去会馆递一份陈情，或者干脆自己垫上那笔差额，让账面上好看些。
+<br><br>
+<<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+<br><br>
+<<mpcalculateicon>><<if ($maths or 0) gte 240>><<link [[核平税册 (0:10)|MP Loc HighStreet Festival Autumn Result]]>><<set $mpFestHighStreetAutumn to "pending_order">><<pass 10>><<tiredness 4>><</link>><<else>><<link [[核平税册 (0:10)|MP Loc HighStreet Festival Autumn Result]]>><<set $mpFestHighStreetAutumn to "pending_fail">><<pass 10>><<tiredness 4>><</link>><</if>><br>
+<<socialiseicon>><<if ($willpower or 0) gte 400 or ($english or 0) gte 240>><<link [[替铺陈情 (0:10)|MP Loc HighStreet Festival Autumn Result]]>><<set $mpFestHighStreetAutumn to "pending_open">><<pass 10>><<tiredness 2>><<stress 2>><</link>><<else>><<link [[替铺陈情 (0:10)|MP Loc HighStreet Festival Autumn Result]]>><<set $mpFestHighStreetAutumn to "pending_fail">><<pass 10>><<tiredness 2>><<stress 2>><</link>><</if>><br>
+<<if ($money or 0) gte 200>><<link [[垫付差额 (0:08)|MP Loc HighStreet Festival Autumn Result]]>><<money -200>><<set $mpFestHighStreetAutumn to "pending_buy">><<pass 8>><<tiredness 1>><</link>><<else>><span class="disabled">垫付差额 (0:08)（钱不够）</span><</if>>
+<</if>>
+
+:: MP Loc HighStreet Festival Autumn Result [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetAutumn to ($mpFestHighStreetAutumn or 0)>>
+<<if $mpFestHighStreetAutumn is "pending_order">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetAutumn to "order">><<stress -3>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+午后的后巷安静下来，粮车一辆辆卸完，麻袋在后墙边码成新的高度。税册摊在矮桌上，风从巷口进来，把纸角吹得一下一下掀动。行会账房把验秤单收进匣子，只留下算盘和两本账簿。
+<br><br>
+你把税册与塞拉的收据簿并排摊开，从春市的摊位费一路对到夏夜的灯油账。三处差额都出在零头，一家把修理费记重了，一家把煤油折价写反了，还有一家漏了半页租金。你没有拍桌子，只把每一笔用炭笔圈出来，让账房自己念了一遍。核到最后一页时，天已经擦黑，账房点起两盏灯，灯芯剪得很短；你把算盘往旁边一推，指尖沾着墨，账面上的数字终于对上了。
+<br><br>
+执事听完，把铜印在税册的更正页上按了一下。三家小铺补了该补的数，罚则按最低一档算，账面上终于合上了。杂货行老板松了一口气，嘴里还嘟囔着明年得把盐价提回来；塞拉把收据簿合上，说钟表铺的账以后可以照这个法子先核一遍。三家小铺的人等在巷口，见执事盖章，才一个个进来签字；杂货行老板签得最快，笔尖把纸戳出一个小洞。
+<br><br>
+秋税的事落定后，后巷的算盘声稀了下来。粮车出了城，麻袋垛矮了半截。执事把税册锁回铁匣，钥匙交还林恩。街面上的价牌没有大动，只有煤油涨了一枚铜板，掌柜们骂了两句，还是照买。
+<br>
+【秋税结算】税册逐笔核平，差额补齐；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetAutumn is "pending_open">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetAutumn to "open">><<stress -3>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+午后的后巷安静下来，粮车一辆辆卸完，麻袋在后墙边码成新的高度。税册摊在矮桌上，风从巷口进来，把纸角吹得一下一下掀动。行会账房把验秤单收进匣子，只留下算盘和两本账簿。
+<br><br>
+你没有坐下核账，而是把三家小铺的难处一条条说给执事听：盐价压着，煤油卖不动，铺面又不敢关；税按去年的数报，不是想赖，是实在腾不出手重算。你说得不快，每一句都留了让执事接话的空。塞拉在旁边补了两句收据上的实数，没有替谁遮掩。执事没有立刻答话，先把茶碗端起来喝了一口；茶已经凉了，他皱了一下眉，还是喝完。
+<br><br>
+执事听完，脸色没有缓，却把罚则那一页翻了过去。他让三家铺子在月底前补一半，余下的记在下季，账面上加一行注记。杂货行老板站在门外，听见这话，肩膀塌下去一寸；他想说什么，最后只朝你点了一下头。三家小铺的人挤在门口，听见缓缴两个字，有人轻轻吐了口气；老板想进门道谢，被账房拦了一下，只好在门外朝你拱了拱手。
+<br><br>
+秋税的事没有全平，却也没有闹到会馆去。后巷的粮车照常出城，价牌上添了一行小字：缓缴。执事合上税册时，说这条街的账不能只靠算盘，还得有人肯听人把话说完。林恩把铁匣押回档案室，路过你身边时，脚步比来时慢了一点。
+<br>
+【秋税结算】陈情换来缓缴，账面留注；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetAutumn is "pending_buy">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetAutumn to "order">><<stress -2>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+你把那笔差额自己垫上。铜板一枚枚排在桌上，账房先生数了两遍，才在税册的更正页上落笔。三家小铺的人站在门外，不知道钱是谁出的，只知道账面上忽然合上了。杂货行老板探头看了一眼，见你收手，脸色变了一变，终究没说什么。
+<br><br>
+执事问你图什么。你说账平了，粮车就能出城，街面不用为几枚铜板闹到会馆去。他听完，把铜印在更正页上按了一下，罚则那一页没有翻。塞拉把收据簿合上，低声说这笔钱不该由你出；你说先把秋税收完，别的事以后再说。
+<br><br>
+三家小铺补上了该补的名目，账面上看不出谁垫过钱。执事把税册锁回铁匣，钥匙交还林恩，临走时在节令板下留了一行小字：秋账已平。杂货行老板把煤油价牌改回原数，说今年总算能睡个整觉。
+<br><br>
+后巷的粮车一辆辆出城，车夫们不知道税册里的事，只在经过拱门时把鞭子甩得很响。你钱袋轻了，账面上却干净。塞拉说明年核账，她会早点把收据送来，省得再有人替谁垫钱。傍晚时，三家小铺的掌柜不约而同地来到后巷，没人提钱的事，只各自把一包新到的货放在你脚边。杂货行老板放下一小袋粗盐，塞拉放下一只旧铜表壳，说修好了，抵不了那笔钱，算个念想。执事在楼上窗口看着，没有下来。
+<br>
+【秋税结算】垫付差额把账做平，小铺免了罚则；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetAutumn is "pending_fail">>
+<<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetAutumn to "failed">><<stress 5>><<tiredness 3>><<pain 1>>
+午后的后巷安静下来，粮车一辆辆卸完，麻袋在后墙边码成新的高度。税册摊在矮桌上，风从巷口进来，把纸角吹得一下一下掀动。行会账房把验秤单收进匣子，只留下算盘和两本账簿。
+<br><br>
+你坐下来对账，算到第三页就发现数字越对越乱。一页租金被夹进了修理费的册子，另一笔煤油折价写在纸背，翻过来时墨迹已经蹭花。你伸手去够算盘，袖子带翻了墨水瓶，半页更正被染成一片黑。账房先生把湿页一张张揭下来，铺在通风口底下晾；你坐在长桌边重新誊写，写到第三行就发现前一行又抄错了一个数。
+<br><br>
+账房先生皱着眉把湿页揭起来，执事抬手止住了他。没人提罚金，也没人让你赔纸，只让你先到巷口透口气。塞拉把收据簿合上，说这册子得重新誊一遍；她声音不高，却让你耳朵发烫。执事也没再提罚则，只把税册合上，说今日先到这里，明日再核；塞拉收好布袋，走前看了你一眼，欲言又止。账房把湿页压在铜镇纸下，说明日再核，别再打翻墨了。
+<br><br>
+秋税的事拖到了第二天。三家小铺仍按旧数挂着，执事没有再提缓缴的话。后巷的算盘声一直响到天黑，你坐在茶座外侧，手上沾着洗不掉的墨，指节因为拨算盘拨得发僵。粮车一辆辆出城，车夫们不知道税册的事，只在经过拱门时把鞭子甩得很响。
+<br>
+【秋税结算】账页对乱，核账没有完成；没有推进地点进度。
+<<elseif $mpFestHighStreetAutumn is "order">>
+秋税已经核过一回。那天的更正页上按着铜印，三家小铺补齐差额，账面上合得严丝合缝。如今税册锁回铁匣，后巷只剩新码的麻袋和一层薄灰。
+<br><br>
+执事偶尔翻出那页更正给账房看，说零头最见功夫。塞拉的收据簿换了新封皮，旧的那本收在柜台底下。杂货行老板把煤油价牌改了一枚铜板，骂归骂，生意照做。
+<br><br>
+<<elseif $mpFestHighStreetAutumn is "open">>
+秋税已经议过一回。三家小铺补了一半，余下的记在下季，税册上留着一行缓缴的注记。执事没有盖章罚人，只让账房把每一笔都写清楚。
+<br><br>
+杂货行老板把缓缴的单子压在柜台玻璃下，说这条街总算有人肯听人把话说完。塞拉照旧把收据簿摊在柜台上，只是核账时多留了半页空白。林恩押册回档案室的那条路，走得比往年慢。
+<br><br>
+<<elseif $mpFestHighStreetAutumn is "failed">>
+秋税没有核平。湿掉的更正页被重新誊过，三家小铺仍按旧数挂着，执事把税册合上时没有多话。后巷的算盘声一直响到天黑，账房先生的眉头到收摊也没松开。
+<br><br>
+塞拉把收据簿收回柜台，没再提核账的事。杂货行老板蹲在门槛边，把煤油价牌翻来覆去地看。你手上沾着墨，指节发僵，走出巷口时才发现天已经凉了。
+<br><br>
+<<else>>
+秋税那一格还空着。后巷的粮车已经排到拱门下，验秤的单子压在矮桌角，税册还没从档案室搬出来。账房先生把算盘拨得空响，等人来落第一笔。
+<br><br>
+<<getouticon>><<link [[前往秋税核账 (0:02)|MP Loc HighStreet Festival Autumn]]>><<pass 2>><</link>>
+<</if>>
+<br><br>
+<<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+
+:: MP Loc HighStreet Festival Winter [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetWinter to ($mpFestHighStreetWinter or 0)>>
+<<if $mpFestHighStreetWinter>>
+冬灯会已经收过一回，铜钩上的防风灯摘了大半，只剩街口还留着一盏照夜。玻璃顶上的雪扫干净了，铁架上还挂着几缕冻硬的麻绳。节令板上冬灯那一格，执事用炭笔画了一盏小小的灯。
+<br><br>
+<<getouticon>><<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>><br>
+<<walkicon>><<link [[翻看冬灯结果 (0:02)|MP Loc HighStreet Festival Winter Result]]>><<pass 2>><</link>>
+<<else>>
+冬灯会挂在第一场雪之后。拱廊的玻璃顶上积了薄薄一层雪，行会派人上去扫，免得压弯铁架。铜钩上挂起防风灯，灯罩外又加了一层铁纱，风一吹，火苗在纱里缩成一小团。杂货行门口摆出灯油、灯芯和成捆的麻绳，老板一边搓手一边报价，价牌上的数字被雪水洇得发毛。行会的人把梯子架在拱廊两侧，轮流上去扫雪；扫下来的雪堆在墙根，很快又被新雪盖住。
+<br><br>
+塞拉在钟表铺里生了一只小炭炉，柜台上摊着拆开的怀表。她说冬夜里的客人少，可来的都是急活，灯得亮到后半夜。炉火把她的侧脸照得发红，镊子尖在游丝上停得很稳。她把一只修好的怀表贴近耳边，听了听，又放下，说这样的天气，齿轮里的油容易凝，得比平时多上一点。
+<br><br>
+林恩沿着拱廊一盏盏检查灯钩，走到尽头又折回来：「雪压着灯，灯烤着雪。哪一盏掉下来，整条街都得乱。」执事把灯会的章程贴在节令板旁，上面写着点灯的时辰、收灯的次序和火患的罚则。雪越下越密，街口的灯已经连成一条昏黄的光带。拱廊的玻璃顶上开始结霜，站在底下能看见雪粒被风卷着贴上去，一层一层，把街灯折成模糊的团。
+<br><br>
+你可以守着灯链，把松动的灯钩逐个重新系牢，让灯一直亮到收市；也可以跟着林恩巡查火患，把离油布太近的灯挪开；要是愿意出钱，还能去杂货行添几桶灯油，把最暗的那段街补亮。
+<br><br>
+<<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+<br><br>
+<<lanternicon>><<if ($willpower or 0) gte 400>><<link [[守灯到夜 (0:10)|MP Loc HighStreet Festival Winter Result]]>><<set $mpFestHighStreetWinter to "pending_open">><<pass 10>><<tiredness 5>><</link>><<else>><<link [[守灯到夜 (0:10)|MP Loc HighStreet Festival Winter Result]]>><<set $mpFestHighStreetWinter to "pending_fail">><<pass 10>><<tiredness 5>><</link>><</if>><br>
+<<mpwatchicon>><<if ($athletics or 0) gte 220>><<link [[巡查火患 (0:10)|MP Loc HighStreet Festival Winter Result]]>><<set $mpFestHighStreetWinter to "pending_order">><<pass 10>><<tiredness 3>><<stress 2>><</link>><<else>><<link [[巡查火患 (0:10)|MP Loc HighStreet Festival Winter Result]]>><<set $mpFestHighStreetWinter to "pending_fail">><<pass 10>><<tiredness 3>><<stress 2>><</link>><</if>><br>
+<<if ($money or 0) gte 180>><<link [[添置灯油 (0:06)|MP Loc HighStreet Festival Winter Result]]>><<money -180>><<set $mpFestHighStreetWinter to "pending_buy">><<pass 6>><<tiredness 1>><</link>><<else>><span class="disabled">添置灯油 (0:06)（钱不够）</span><</if>>
+<</if>>
+
+:: MP Loc HighStreet Festival Winter Result [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetWinter to ($mpFestHighStreetWinter or 0)>>
+<<if $mpFestHighStreetWinter is "pending_order">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetWinter to "order">><<stress -3>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<mpnpcincr Lin trust 1>><</if>>
+雪在入夜后小了一阵，风却更硬。灯会散场时，拱廊的石板上结了一层薄冰，扫雪的伙计撒过盐，仍有人脚下打滑。行会的人沿着灯链一盏盏收灯，铜钩被冻得粘手。
+<br><br>
+你跟着林恩把每一盏灯都查过一遍，把离油布太近的挪开，把被雪压弯的灯钩重新系牢。走到鱼铺后墙时，你发现一根铁钩已经裂了半口，灯罩歪向堆柴的棚子，林恩用短棍把灯挑下来，火苗在雪地里滚了两圈才灭。雪在灯罩上积了薄薄一层，得不时伸手掸掉，不然火光会被压得只剩一线；你从东头查到西头，手套湿透，指尖冻得发木。
+<br><br>
+执事赶来时，那盏灯已经搁在石阶上。他没有问谁当值，只让账房把巡查簿翻到新页，写下「隐患一处，已除」。塞拉从钟表铺里探出头，见街上没有火光，才把门重新掩上。林恩把裂了口的铁钩收进工具袋，说这种钩子不能再挂灯，得让铁匠铺重打；执事点头，让账房把更换铁钩的钱记在行会的公账上。铺子里随后递出一小杯热茶，茶里放了姜，辣得你喉咙发热；塞拉说明夜若还下雪，灯会照这个查法再来一遍。
+<br><br>
+冬灯会收得比往年稳当。灯链按时熄灭，火患没有酿成，街口那盏照夜的灯留到了最后。林恩把班表上新添的两道线描粗，说雪夜巡街，宁可多走一趟。执事在节令板下补了一行小字：冬灯无患。
+<br>
+【冬灯结算】巡灯除患，灯会平安收场；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetWinter is "pending_open">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetWinter to "open">><<stress -3>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+雪在入夜后小了一阵，风却更硬。灯会散场时，拱廊的石板上结了一层薄冰，扫雪的伙计撒过盐，仍有人脚下打滑。行会的人沿着灯链一盏盏收灯，铜钩被冻得粘手。
+<br><br>
+你把松动的灯钩逐个重新系牢，麻绳在手套外打了个死结，灯链一直亮到收市。雪落在灯罩上化成水，又顺着铁纱滴下来，火苗缩一缩，终究没有灭。塞拉的钟表铺亮到后半夜，柜台前站过三个赶夜路的客人，其中一个当场买走了一只防水的铜壳表。你把灯链系到最后一钩时，麻绳在手套外结了冰，解了半天才解开；街口的雪被踩成一条泥道，灯影落在上面，晃得人眼晕。
+<br><br>
+林恩从街口回来，眉毛上挂着雪，见灯还亮着，没说什么，只把铜哨在手里转了一圈。执事站在拱门下看了一会儿，让账房把灯会的时辰往后延了半个钟头。杂货行的灯油卖空了两桶，老板把空桶摞在门边，说明年得多进一些。塞拉铺子里的客人走后，她把门开了一条缝，让街上的灯光照进来，落在柜台的怀表上；她说这样的夜，表走得比白天还准。
+<br><br>
+冬灯会亮到了后半夜。雪把街面盖白，灯光落在雪上，泛出一层暖黄。收灯时，塞拉把柜台上的炭炉封好，说这样的夜里，灯亮着，人就走不散。林恩最后一个离开街口，铜钩上只剩那盏照夜的灯。
+<br>
+【冬灯结算】灯链守到收市，冬夜客流未断；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetWinter is "pending_buy">>
+<<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetWinter to "open">><<stress -2>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>>
+你把杂货行剩下的灯油全买下，又添了几捆新灯芯。老板把桶搬到门口，问要不要叫伙计送，你说不用，自己一趟趟拎到拱廊最暗的那一段。灯油灌进铜壶，灯芯换过，原本缩成一团的火苗重新窜起来，把雪地照出一片暖黄。
+<br><br>
+塞拉从铺子里递出一块干布，让你擦手。她说这段路平时入夜就没人走，灯亮了，她的橱窗也能多亮一会儿。林恩走过来，见灯钩都系得牢，没说什么，只把铜哨在手里转了一圈。
+<br><br>
+客人顺着灯光往这段街走，摊主们把收摊的时辰往后挪了挪。执事站在拱门下看了一会儿，让账房把灯会的时辰延长半个钟头。杂货行的灯油桶空了两只，老板说明年得多进一些，省得又被你一次买空。
+<br><br>
+雪落在灯罩上化成水，火苗缩一缩，终究没有灭。收灯时，塞拉把门口那盏留到最后，说夜里有人走，灯就别急着灭。你手上沾着灯油，钱袋轻了，街面的冬夜却比往年亮了一截。林恩把新的巡查线画在班表上，说这段路以后要多走两遍；灯亮了，影子也长，不能只看灯不看人。后半夜雪停了，拱廊的灯还亮着。塞拉把炭炉封好，坐在柜台后听远处的钟声；林恩巡完最后一圈，见那段路还亮着，把铜哨收进衣袋，没有吹。你把最后一桶灯油搬回杂货行门口，桶底磕在石阶上，发出很闷的一声。
+<br>
+【冬灯结算】自购灯油补亮暗段，冬夜多留一盏；地点进度与已结事件各推进一笔。
+<<elseif $mpFestHighStreetWinter is "pending_fail">>
+<<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<set $mpFestHighStreetWinter to "failed">><<stress 5>><<tiredness 3>><<pain 1>>
+雪在入夜后小了一阵，风却更硬。灯会散场时，拱廊的石板上结了一层薄冰，扫雪的伙计撒过盐，仍有人脚下打滑。行会的人沿着灯链一盏盏收灯，铜钩被冻得粘手。
+<br><br>
+你踩上垫脚的木箱去系最高处的灯钩，箱底在冰上一滑，整个人撞向灯链。几盏防风灯一起晃下来，其中一盏砸在石板上，灯油泼开，火苗顺着油迹舔到油布边。林恩从街口冲过来，用短棍挑开油布，塞拉拎着半桶雪压在火头上。
+<br><br>
+火没有烧开，灯却毁了五六盏，油布焦了一角。你从地上爬起来，膝盖和手掌都磕破了，冷风一吹，伤口像被针扎。执事赶到时，街口已经围了一圈人，他让人先把灯链放下来，再一盏盏查。火被雪压灭后，油布还在冒烟，林恩用短棍把焦角挑开，让雪水渗进去；塞拉把铺子里的沙桶拎出来，守在旁边，直到烟彻底散了。她拎着空桶回铺子时，路过你身边停了一下，说明早若还开铺，先来把伤口洗一洗。
+<br><br>
+冬灯会提前收了场。毁掉的灯骨堆在拱廊角落，灯油味混着雪水，久久不散。塞拉把橱窗关严，林恩的巡夜路线多绕了一段黑路。你坐在钟表铺门口的台阶上，掌心贴着雪，才觉出疼来。那晚的雪一直下到天亮，毁掉的灯骨被盖了一层白；扫雪的伙计绕开那堆东西，像绕开一个不愿提的记号。
+<br>
+【冬灯结算】灯链失手，灯会提前收场；没有推进地点进度。
+<<elseif $mpFestHighStreetWinter is "order">>
+冬灯会已经收过一回。那晚的灯链按时熄灭，裂了半口的铁钩被换下，巡查簿上留着一行工整的字。如今铜钩上只剩街口那盏照夜的灯，铁架上还挂着几缕冻硬的麻绳。
+<br><br>
+林恩把新的班表钉在拱廊门后，说雪夜巡街的次序就照那晚的走。塞拉把炭炉收进柜台底下，橱窗里的怀表重新摆正。杂货行的灯油桶空了两只，老板说下一场雪前得补满。
+<br><br>
+<<elseif $mpFestHighStreetWinter is "open">>
+冬灯会已经收过一回。那晚的灯一直亮到后半夜，雪落在灯罩上化成水，火苗缩了又起，终究没有灭。塞拉的钟表铺卖出一只防水的铜壳表，杂货行的灯油空了两桶。
+<br><br>
+街口那盏照夜的灯还留着，铜钩被雪磨得发亮。塞拉把夜里的灯油钱记在窄纸上，说下回还得这么守。林恩嘴上说人手不够，还是把铜哨留在了柜台抽屉里。
+<br><br>
+<<elseif $mpFestHighStreetWinter is "failed">>
+冬灯会散得早。烧焦的油布被拆下来，毁掉的灯骨堆在拱廊角落，扫雪的伙计分了两趟才清完。执事让人把裂了口的铁钩全部换过，街口那盏照夜的灯也熄了。
+<br><br>
+塞拉把橱窗关得比平日早，林恩的巡夜路线多绕了一段黑路。你掌心上的伤口结了薄痂，碰一下还会疼。下一回再爬高挂灯，得先看清脚底下垫的是什么。
+<br><br>
+<<else>>
+冬灯那一格还空着。拱廊的铜钩上没挂灯，杂货行门口却已经摆出灯油、灯芯和成捆的麻绳。玻璃顶上的雪还没扫，风一吹，细雪从铁架缝里漏下来。
+<br><br>
+<<getouticon>><<link [[前往冬灯会 (0:02)|MP Loc HighStreet Festival Winter]]>><<pass 2>><</link>>
+<</if>>
+<br><br>
+<<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+
+:: MP Loc HighStreet Festival Finale [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpFestHighStreetSpring to ($mpFestHighStreetSpring or 0)>><<set $mpFestHighStreetSummer to ($mpFestHighStreetSummer or 0)>><<set $mpFestHighStreetAutumn to ($mpFestHighStreetAutumn or 0)>><<set $mpFestHighStreetWinter to ($mpFestHighStreetWinter or 0)>><<set _done to ((($mpFestHighStreetSpring is "order" or $mpFestHighStreetSpring is "open" or $mpFestHighStreetSpring is "failed") ? 1 : 0) + (($mpFestHighStreetSummer is "order" or $mpFestHighStreetSummer is "open" or $mpFestHighStreetSummer is "failed") ? 1 : 0) + (($mpFestHighStreetAutumn is "order" or $mpFestHighStreetAutumn is "open" or $mpFestHighStreetAutumn is "failed") ? 1 : 0) + (($mpFestHighStreetWinter is "order" or $mpFestHighStreetWinter is "open" or $mpFestHighStreetWinter is "failed") ? 1 : 0))>><<set _order to (($mpFestHighStreetSpring is "order") ? 1 : 0) + (($mpFestHighStreetSummer is "order") ? 1 : 0) + (($mpFestHighStreetAutumn is "order") ? 1 : 0) + (($mpFestHighStreetWinter is "order") ? 1 : 0)>><<set _open to (($mpFestHighStreetSpring is "open") ? 1 : 0) + (($mpFestHighStreetSummer is "open") ? 1 : 0) + (($mpFestHighStreetAutumn is "open") ? 1 : 0) + (($mpFestHighStreetWinter is "open") ? 1 : 0)>><<set _fail to (($mpFestHighStreetSpring is "failed") ? 1 : 0) + (($mpFestHighStreetSummer is "failed") ? 1 : 0) + (($mpFestHighStreetAutumn is "failed") ? 1 : 0) + (($mpFestHighStreetWinter is "failed") ? 1 : 0)>>
+会馆议事厅的长桌上，四季的册子按次序排开：春市的号签存根、夏夜的灯油账、秋税的核对页、冬灯会的巡查簿。行会执事揭开绒盒，取出那方铜印，搁在册子旁，迟迟没有落下。窗外，拱廊的灯正一盏盏亮起来，光落在玻璃上，把街面照成一条暖色的河。
+<br><br>
+塞拉坐在靠窗的位置，工具箱搁在膝头。她翻完夏夜那一页，又翻回春市那一页，指尖在几张收据的边角停了停。林恩站在门边，手里捏着巡夜班表，表上多了几条新添的线。杂货行老板坐在末席，围裙没解，像是刚从柜台后面被叫上来。
+<br><br>
+执事把四季的记录一页页念过去：春市<<if $mpFestHighStreetSpring is "order">>按号签开市，棚架撑住了雨，账上留着一笔「有序」<<elseif $mpFestHighStreetSpring is "open">>春市顺畅，流水压过往年，雨里也没有散场<<elseif $mpFestHighStreetSpring is "failed">>棚架失手，花苗折了半排，春市提前收了摊<<else>>那一格还空着<</if>>；夏夜<<if $mpFestHighStreetSummer is "order">>巡夜压住人流，灯链按时熄灭，没有火患<<elseif $mpFestHighStreetSummer is "open">>夜市灯火撑到后半夜，流水多了两成<<elseif $mpFestHighStreetSummer is "failed">>灯串砸落，烧焦了半角油布<<else>>那一格还空着<</if>>；秋税<<if $mpFestHighStreetAutumn is "order">>逐笔核平，三家小铺补齐差额<<elseif $mpFestHighStreetAutumn is "open">>陈情换来缓缴，账上留了一行注记<<elseif $mpFestHighStreetAutumn is "failed">>账页对乱，核账没有完成<<else>>那一格还空着<</if>>；冬灯<<if $mpFestHighStreetWinter is "order">>巡灯除患，灯会平安收场<<elseif $mpFestHighStreetWinter is "open">>冬灯亮到后半夜，夜里客流未断<<elseif $mpFestHighStreetWinter is "failed">>灯链失手，灯会提前收场<<else>>那一格还空着<</if>>。
+<br><br>
+<<if _done lt 4>>
+执事念到空着的那一格，把册子合上了一半。他说街约不是不能议，可得等四季都留下过账目；少一季，就少一份凭据，会馆里的老掌柜们不会认。窗外的灯还亮着，街面上的生意照做，只是那份压在最底下的街约，仍旧得等。
+<br><br>
+<<getouticon>><<link [[返回节令板 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
+<<elseif $mpWorldHighStreetOutcome is "guildpact">>
+铜印早已落过，草约封口的火漆上叠满了赭红指印。十二把椅子依行会次序排定，价牌天亮前统一换过，巡夜的灯照时辰走，税款留三成用来疏通拱廊的暗沟。塞拉把工具箱搁在脚边，林恩的新班表折在内袋里，杂货行老板的围裙搭在椅背上。四季的册子被收进铁匣，街面照旧热闹，只是每一笔都有人认。
+<br><br>
+【街区归属】商盟自治。后续会读到这一笔的地方：高街总枢的街区归属栏、高街深层议事厅的议题桌，以及莫奈支线里那场关于壁画归属的谈判。
+<br><br>
+<<link [[返回高街总枢 (0:04)|MP Loc HighStreet Hub]]>><<pass 4>><</link>><br>
+<<walkicon>><<link [[返回高街深层 (0:04)|MP Loc HighStreet Deep]]>><<pass 4>><</link>>
+<<elseif $mpWorldHighStreetOutcome is "nightmarket">>
+铜印落在夜市地界图上，朱笔勾出的三条街，天黑后交由摊主们自行看管。地租降了，灯可以亮到后半夜，巡夜的人手却没有凭空多出来。塞拉把钟表铺的灯重新点上，林恩皱着眉接过班表，杂货行老板把灯油桶搬到门口。四季的册子锁回铁匣，街面上添了一笔活钱，也添了许多只肯在夜里说的事。
+<br><br>
+【街区归属】夜市放开。后续会读到这一笔的地方：高街总枢的街区归属栏、高街深层议事厅的地界图，以及莫奈支线里那场关于壁画归属的谈判。
+<br><br>
+<<link [[返回高街总枢 (0:04)|MP Loc HighStreet Hub]]>><<pass 4>><</link>><br>
+<<link [[返回高街深层 (0:04)|MP Loc HighStreet Deep]]>><<pass 4>><</link>>
+<<else>>
+执事把四季的册子按次序摞好，铜印搁在册子顶上。他看了一眼窗外的灯，又看了一眼桌边的几个人：「街约可以重议了。商盟自治，价牌归行会统一定，巡夜按班表走；夜市放开，地租压下来，灯可以点到后半夜。两条路都有人走得起，也都有人要吃亏。你选一条。」
+<br><br>
+<<if _fail gte 3>>四季的册子翻过去，多半是没有撑住的记录：棚子塌过，灯链断过，账页也乱过。执事把草约和地界图并排推过来，说街约不能一直压着，哪怕今年的账不好看，也得给这条街留一条往下走的路。<<elseif _order gt _open>>四季的账目偏向往回收：春市护住了粮，夏夜压住了火，秋税核平了差额，冬灯除掉了隐患。执事的笔搁在草约那一侧，没有挪开。<<elseif _open gt _order>>四季的账目偏向往外放：春市做得松快，夏夜灯多，秋税留了余地，冬灯亮得久。地界图被推到桌子中央，红线圈着三条街。<<else>>四季的账目一半收、一半放，谁也压不过谁。执事把草约和地界图并排摆好，等你自己伸手。<<if $mpLocProgress_HighStreet gte 4>>街面的底子还算稳，两条路都走得下去。<<else>>街面的底子薄，无论选哪条，头一年都得熬。<</if>><</if>>
+<br><br>
+<div id="mp-loc-hs-finale-pick">
+<<socialiseicon>><<link "议定商盟 (0:20)">><<pass 20>><<if !$mpWorldHighStreetOutcome>><<set $mpWorldHighStreetOutcome to "guildpact">><</if>><<set $mpLocProgress_HighStreet to 5>><<stress -6>><<replace "#mp-loc-hs-finale-pick">>
+铜印落在草约末尾，蜡油摊开一朵暗红的花。十二把椅子按行会次序排好，面包行、铁匠铺、裁缝铺的掌柜依次上前按了指印。价牌自明早起统一换新，巡夜班表钉在门后，税款留三成用于拱廊暗沟的疏通。
+<br><br>
+塞拉写完名字，将工具箱挪到椅脚旁，肩背终于松下来；林恩接过新班表，逐行看完，折成窄条收进内袋。杂货行老板没说话，只把围裙解下来搭在椅背上。这条街不会因此变得温和，可价牌上的数目总算有人作保，雾再浓也有人去查暗沟。
+<br><br>
+【街区归属】商盟自治。后续会读到这一笔的地方：高街总枢的街区归属栏、高街深层议事厅的议题桌，以及莫奈支线里那场关于壁画归属的谈判。
+<br><br>
+<<link [[返回高街总枢 (0:04)|MP Loc HighStreet Hub]]>><<pass 4>><</link>><br>
+<<link [[返回高街深层 (0:04)|MP Loc HighStreet Deep]]>><<pass 4>><</link>>
+<</replace>><</link>>
+<br>
+<<mpstallicon>><<link "开埠夜市 (0:20)">><<pass 20>><<if !$mpWorldHighStreetOutcome>><<set $mpWorldHighStreetOutcome to "nightmarket">><</if>><<set $mpLocProgress_HighStreet to 5>><<stress -6>><<replace "#mp-loc-hs-finale-pick">>
+铜印还是盖了下去，只是盖在夜市的地界图上。朱笔勾出的三条街，入夜后由摊主自行看管；地租降了，灯可以亮到后半夜。塞拉把钟表铺的灯重新点上，说夜里的客人虽少，出手却爽快；林恩皱着眉接过巡夜班表，说人手不够，让你得空去帮一班。
+<br><br>
+杂货行老板把灯油桶搬到门口，价牌换成了大字。入夜后的拱廊第一次没有落灯，摊子从廊下一直摆到石板路上，糖霜、灯油和湿石板被踩热的气味混在一处。高街自此添了一笔活钱，也添了许多只肯在夜里说的事。
+<br><br>
+【街区归属】夜市放开。后续会读到这一笔的地方：高街总枢的街区归属栏、高街深层议事厅的地界图，以及莫奈支线里那场关于壁画归属的谈判。
+<br><br>
+<<link [[返回高街总枢 (0:04)|MP Loc HighStreet Hub]]>><<pass 4>><</link>><br>
+<<link [[返回高街深层 (0:04)|MP Loc HighStreet Deep]]>><<pass 4>><</link>>
+<</replace>><</link>>
+</div>
+<</if>>

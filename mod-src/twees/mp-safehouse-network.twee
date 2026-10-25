@@ -1,0 +1,146 @@
+:: Widgets MP Safehouse [widget nobr]
+<<widget "mpSafehouseInit">>
+<<if !$mpSafehouses>><<set $mpSafehouses to {}>><</if>>
+<<for _loc range ["docks", "orphanage", "temple", "highstreet", "forest", "school"]>>
+	<<if !$mpSafehouses[_loc]>>
+		<<set $mpSafehouses[_loc] to { unlocked: 0, tier: 0, bed: 0, stash: 0, bench: 0, beacon: 0, upkeep: 10, risk: 20 }>>
+	<</if>>
+<</for>>
+<<if $mpSafehouses.outcome is undefined>><<set $mpSafehouses.outcome to "">><</if>>
+<</widget>>
+<<widget "mpSafehouseUpgrade">>
+<<mpSafehouseInit>>
+<<set _loc to (_args[0] or "docks")>>
+<<set _sh to $mpSafehouses[_loc]>>
+<<set _sh.unlocked to 1>>
+<<set _sh.tier to Math.min(3, (_sh.tier or 0) + 1)>>
+<<if _sh.tier gte 1>><<set _sh.bed to 1>><<set _sh.stash to 1>><</if>>
+<<if _sh.tier gte 2>><<set _sh.bench to 1>><</if>>
+<<if _sh.tier gte 3>><<set _sh.beacon to 1>><</if>>
+<<set _sh.upkeep to _sh.tier * 15>>
+<<set _sh.risk to Math.max(0, 25 - _sh.tier * 7)>>
+<</widget>>
+<<widget "mpSafehouseTravel">>
+<<mpSafehouseInit>>
+<<set _loc to (_args[0] or "docks")>>
+<<if $mpAlert isnot undefined>><<mpalert -8>><</if>>
+<<stress -2>>
+<</widget>>
+
+:: MP Safehouse Network Hub [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+退潮后的旧港像一只被掏空的木箱。你绕过堆到屋檐的腌鱼桶，在四号仓库背后找到那扇只齐腰高的小门；门后没有灯，只有一枚钉在砖墙上的铜环。六把钥匙用浸过鱼油的麻绳串在一起，轻轻一碰便发出细碎的响声，像有人在你耳边数数。管钥匙的老妇把一本边角卷起的账册推过来，指尖压着其中一页：「六处窝，六把钥匙。谁替你守门，谁就替你担着风险。」
+<br><br>
+<<set _upTotal to ($mpSafehouses.docks.upkeep or 0) + ($mpSafehouses.orphanage.upkeep or 0) + ($mpSafehouses.temple.upkeep or 0) + ($mpSafehouses.highstreet.upkeep or 0) + ($mpSafehouses.forest.upkeep or 0) + ($mpSafehouses.school.upkeep or 0)>><<set _openCount to ($mpSafehouses.docks.unlocked or 0) + ($mpSafehouses.orphanage.unlocked or 0) + ($mpSafehouses.temple.unlocked or 0) + ($mpSafehouses.highstreet.unlocked or 0) + ($mpSafehouses.forest.unlocked or 0) + ($mpSafehouses.school.unlocked or 0)>><<set _fogSurcharge to ($mpFogTide or 0) * 2>>
+账册上的铜牌分列六格：码头 <<print $mpSafehouses.docks.tier>> 档、孤儿院 <<print $mpSafehouses.orphanage.tier>> 档、神殿 <<print $mpSafehouses.temple.tier>> 档、高街 <<print $mpSafehouses.highstreet.tier>> 档、森林 <<print $mpSafehouses.forest.tier>> 档、学园 <<print $mpSafehouses.school.tier>> 档。每格都记着能睡人的床铺、能藏东西的暗匣、能修家什的工台、能在雾里认路的信标，以及这处窝眼下的规模。六处里已经能落脚的 <<print _openCount>> 处，合计每周要吞掉 <<print _upTotal>> 钱，按今日行价折算，基准二百钱的账目实付 <<mpWorldPrice 200>>。你把这一串数字默念了一遍，才明白所谓网络，不过是六张嘴同时在等饭吃。
+<br><br>
+当前警戒 <<print ($mpAlert or 0)>>，雾潮水尺 <<print ($mpFogTide or 0)>>。维护费不是交给哪一位老爷的税，而是六处同时要烧的油、要补的瓦、要堵的嘴；谁家的灯灭得久，谁家就会先被巡夜的人记住。贝利的账房从不看你的名姓，只数同一扇门被推开的次数。雾潮一涨，贴着水线的码头与林间树屋先遭殃，墙根渗水、暗道改道，暴露的风险也跟着往上浮，今天低处就凭空多出 <<print _fogSurcharge>> 点。
+<br><br>
+<<if $mpSafehouses.outcome is "linked">>网络定局一栏写着「暗道贯通」：六处窝被一条条窄道接了起来，夜里的路比白天短，巡夜的哨卡也慢半拍才反应过来。<<elseif $mpSafehouses.outcome is "fortified">>网络定局一栏写着「重装加固」：六处窝各守各的门，墙比路更可靠，代价是每一趟往来都得老老实实走地面。<<else>>网络定局一栏还空着，像账册上留给最后签名的横线。<</if>>你可以先去看那间靠水的码头屋子，或去孤儿院阁楼听一听楼下的脚步，也可以下到神殿回廊的暗龛；若想把剩下三处一并排进日程，就往东翼的旧车库走一趟。路都不远，只是每走一步，天光就少一分。
+<br><br>
+<<getouticon>><<link [[返回深区名录 (0:02)|MP Deep Locations Directory]]>><<pass 2>><</link>><br>
+<<docksicon>><<link [[巡查码头据点 (0:06)|MP Safehouse Docks]]>><<pass 6>><</link>><br>
+<<bedicon>><<link [[巡查孤儿院据点 (0:06)|MP Safehouse Orphanage]]>><<pass 6>><</link>><br>
+<<templeicon>><<link [[巡查神殿据点 (0:06)|MP Safehouse Temple]]>><<pass 6>><</link>><br>
+<<link [[扩建与东翼据点 (0:06)|MP Safehouse Upgrade]]>><<pass 6>><</link>>
+<br><<link [[更多事务 (0:03)|MP Safehouse Network More Hub]]>><<pass 3>><</link>>
+
+:: MP Safehouse Upgrade [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+东翼的旧车库已经许多年没停过车。铁轨被野草拱得歪斜，尽头那间调度室的窗玻璃碎了一半，风穿过去，把墙上的市区图吹得哗啦作响。图上钉着六枚不同颜色的图钉，红线从码头牵到孤儿院，又从神殿绕到学园；有几段线还停在半空，末端用铅笔打了个问号。负责这里的老绘图员把一支炭笔塞进你手里：「线怎么连，你说了算。连得通，往后夜里走路能少绕几条街；连不通，就把墙砌厚些，至少睡得踏实。」
+<br><br>
+眼下能动工的时辰是 <<mpWorldScheduleOpen 8 21>>。钟塔的报时一过，巡夜的灯笼就会沿着铁轨一盏盏亮起来，再动土就等于敲锣。贯通暗道与重装加固是两条不同的路：前者把六处地下室接成一条链，走起来省时，警报传得也慢；后者不追求连通，只把每一扇门、每一道夹层都钉死，宁可绕远，也不让贝利的人一脚踹开。两条路都要耗掉一刻钟，落地之后，账册上的定局栏就会写上不同的字。
+<br><br>
+<<if $mpSafehouses.docks.tier gte 1 or $mpSafehouses.orphanage.tier gte 1>>你手上已经有一处能过夜的窝——码头或孤儿院的墙不再只是空壳。材料够了，红线就能从图钉底下穿过去，把六处的地下室串成一条不在街面上的路。<<else>>六处窝眼下还都是空壳，连一张能躺平的床都没有。真要动手，只能先把省下的木料和铁钉全砸进码头那面墙，至少保住一处能关门的地方。<</if>>
+<br><br>
+<<if $mpSafehouses.outcome is "linked">>图上的红线已经全部接通，像一张摊开在桌面下的血管。你从东翼走回总枢时，脚下的路确实短了一截。<<elseif $mpSafehouses.outcome is "fortified">>图上的红线断成六截，每一截末端都画着一扇加厚的门。你从东翼走回总枢时，能听见风从新钉的木板缝里被挤出去的嘶声。<<else>>目前定局未定。贯通之后，六处之间的往返会省下时间与警戒；加固之后，码头那间屋会直接多出一档设施，床与暗匣先有着落，代价是每周的维护账再往上抬。无论选哪条，东翼的灯都会在你离开后熄灭，图上的红线却留了下来。<</if>>
+<br><br>
+<<getouticon>><<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<link [[巡查高街据点 (0:06)|MP Safehouse HighStreet]]>><<pass 6>><</link>><br>
+<<foresticon>><<link [[巡查森林据点 (0:06)|MP Safehouse Forest]]>><<pass 6>><</link>><br>
+<<schoolicon>><<link [[巡查学园据点 (0:06)|MP Safehouse School]]>><<pass 6>><</link>><br>
+<<if $mpSafehouses.docks.tier gte 1 or $mpSafehouses.orphanage.tier gte 1>><<link [[贯通全城暗道 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<set $mpSafehouses.outcome to "linked">><<mpSafehouseTravel "docks">><</link>><<else>><<link [[加固隐蔽据点 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<set $mpSafehouses.outcome to "fortified">><<mpSafehouseUpgrade "docks">><</link>><</if>>
+
+:: MP Safehouse Docks [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+四号泊位的尽头堆着报废的缆桩，海水在木栈桥下咕嘟咕嘟地翻。你从两排腌鱼桶之间侧身挤过去，掀开一块写着「禁止入内」的旧帆布，底下是一道被盐霜啃出白斑的铁门。门轴刚上过油，推开时几乎没有声音；屋里一股焦油、湿麻绳和旧毯子混在一起的气味，墙角用木箱垒出一张矮床，床脚垫着两片碎船板。
+<br><br>
+这处窝的设施档位为 <<print $mpSafehouses.docks.tier>>，床铺 <<print $mpSafehouses.docks.bed>>、暗匣 <<print $mpSafehouses.docks.stash>>、工台 <<print $mpSafehouses.docks.bench>>、信标 <<print $mpSafehouses.docks.beacon>>；每周维护 <<print $mpSafehouses.docks.upkeep>> 钱，被贝利的人摸上门的风险 <<print $mpSafehouses.docks.risk>>。港区的风浪把墙根泡得发软，雾潮再涨两尺，最底下那格暗匣就得整个搬到梁上去——这也是为什么靠水的窝总比别处多一笔修缮钱。账册之外还有一笔看不见的开销：替你看门的人要吃饭，替你传话的人要喝酒，哪一样断了都撑不过一个月。
+<br><br>
+想把这里再扩一档，得先过看栈桥那关：手够快，能在众目睽睽之下把锁拨开；或者港区的人肯替你说话，让巡夜的多绕半圈。<<if ($skulduggery or 0) gte 200 or ($mpStanding and ($mpStanding.docks or 0) gte 15)>>你这两样里占了一样，铁门后的墙可以继续往里掏，木料与铁钉都堆在栈桥的旧仓里。<<else>>眼下你两样都还差一截，硬来只会把看门人惊动，白耗力气，还得在冷风里站上一阵。<</if>>
+<br><br>
+再往里掏一档，床铺和暗匣会先有着落，隔出一层能真正睡熟的角落；再往上，工台能修网具和铁器，屋顶的信标也能在雾里给回港的船指一条线。设施越多，每周要填的窟窿越大，可贝利的巡查名单也会把这扇门往后挪。扩建不是把墙往里推那么简单：腾出来的空间要先垫高地面，再拿焦油刷一遍墙脚，否则下一场雾潮就会把新铺的褥子泡透。雾潮大的月份，这笔修缮钱还得再添一份。屋里的潮气重，褥子每隔几天就得搬出去晾；晾得太勤，又容易被栈桥上的人看见。若只是累了，可以在矮床上蜷一刻钟，外头的警戒会松一松，醒来时天还没亮；走之前把暗匣的插销推到底，海风带盐，铁件一夜就能锈住。
+<br><br>
+<<getouticon>><<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<if ($skulduggery or 0) gte 200 or ($mpStanding and ($mpStanding.docks or 0) gte 15)>><<link [[扩建码头据点 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<mpSafehouseUpgrade "docks">><</link>><<else>><<link [[强行扩建受挫 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<stress 3>><<tiredness 2>><</link>><</if>><br>
+<<bedicon>><<link [[隐蔽休整降警 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<mpSafehouseTravel "docks">><<tiredness -3>><</link>>
+
+:: MP Safehouse Orphanage [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+孤儿院的阁楼比楼下冷得多。你踩着吱呀作响的第七级楼梯上去，弯腰钻过一道挂满旧外套的横杆，才看见那间用木板隔出来的小间：一张薄褥铺在龙骨上，头顶是斜下来的屋瓦，雨水顺着钉孔一滴一滴落进接水的铁罐。楼下的孩子正在念晚祷，声音隔着地板传上来，闷闷的，像从另一口井里冒出来。
+<br><br>
+这处窝的设施档位为 <<print $mpSafehouses.orphanage.tier>>，床铺 <<print $mpSafehouses.orphanage.bed>>、暗匣 <<print $mpSafehouses.orphanage.stash>>、工台 <<print $mpSafehouses.orphanage.bench>>、信标 <<print $mpSafehouses.orphanage.beacon>>；每周维护 <<print $mpSafehouses.orphanage.upkeep>> 钱，贝利巡查到这一层的风险 <<print $mpSafehouses.orphanage.risk>>。阁楼最大的本钱不是隐蔽，而是它就在贝利眼皮底下——他每两周来核一次名册，脚步从楼梯口一路响到走廊尽头，谁也没想到头顶的夹层里还能再藏一个人。核名册的日子从不提前通知，他每次来都带着两个陌生面孔，一个翻柜子，一个站在楼梯口数人头。
+<br><br>
+要把夹层再抬高一层，得先把这间屋子收拾得看不出住人：家政够细，能把新钉的板缝抹得和旧灰一样；或者在孤儿院已经攒下足够的信任，让孩子们愿意替你遮掩。<<if ($housekeeping or 0) gte 200 or ($mpLocProgress_Orphanage or 0) gte 2>>这两样你至少占了一样，木板可以继续往上加，钉子也能换成不会返潮的铜钉。<<else>>眼下还不行，敲钉子的声音会顺着楼板传下去，惊动楼下的人，少不得听一顿盘问。<</if>>
+<br><br>
+每加固一次，夹层就多一处能藏东西的暗格，床板也不再一翻身就响；贝利的人再来核名册时，风险会低一分。代价是维护账上多一笔——给孩子们多留一份面包，给守夜的老妇多塞几个铜板，都是钱。若风险已经高得压手，先别急着扩建，转去秘密账本看看那份保护名单，比多钉一块板更要紧；名单上的人一旦被划掉，这间阁楼也就失去了意义。夹层的梯子只能从里面收起来，孩子若在楼下喊你的名字，千万别应声；应一声，整块地板都会跟着露馅。等风险降下来，再考虑把床铺换成两张，一张给皮普，一张留给下一个被账本盯上的名字。
+<br><br>
+<<getouticon>><<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<if ($housekeeping or 0) gte 200 or ($mpLocProgress_Orphanage or 0) gte 2>><<link [[加固阁楼夹层 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<mpSafehouseUpgrade "orphanage">><</link>><<else>><<link [[夹层响动受惊 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<stress 4>><<tiredness 1>><</link>><</if>><br>
+<<sneakicon>><<link [[转去秘密账本 (0:04)|MP Ledger Hub]]>><<pass 4>><<mpSafehouseTravel "orphanage">><</link>>
+
+:: MP Safehouse Temple [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+神殿地下的回廊终年不见阳光，石壁上那排骨龛被烛烟熏成深褐色。你跟着管灯的老修士绕过三道拱门，在一幅垂到地面的旧帷幔后停下；帷幔一掀，里面是一间只容两人侧身的暗龛，石台上铺着干草与粗布，墙角立着一只铜烛台，火苗细得像一根针。再往里，是听不见诵经声的静室。
+<br><br>
+暗龛的设施档位为 <<print $mpSafehouses.temple.tier>>，床铺 <<print $mpSafehouses.temple.bed>>、暗匣 <<print $mpSafehouses.temple.stash>>、工台 <<print $mpSafehouses.temple.bench>>、信标 <<print $mpSafehouses.temple.beacon>>；每周的香烛与灯油要花 <<print $mpSafehouses.temple.upkeep>> 钱，被贝利的人顺着香客名单摸到的风险 <<print $mpSafehouses.temple.risk>>。这里受神殿的规矩庇护，也受教派之争的牵连——回廊的钥匙换过好几回手，昨天还肯替你留门的人，今天可能就把你的名字写进了另一本册子。香火钱按周结，教派吵得凶时连灯油都会被人卡住，你得学会在两家之间留一条自己的缝。
+<br><br>
+想再修一修暗龛，先得让自己在这座殿里站得住：意志够稳，能在夜守的寒风里把一整段圣咏念完；或者已经在神殿深处留下过脚印，让管灯的人肯把更里面的钥匙交给你。<<if ($willpower or 0) gte 360 or ($mpLocProgress_Temple or 0) gte 2>>你眼下够格了，石壁后的空隙还能再凿进去一臂深，凿下来的碎石正好垫高石台。<<else>>还差一口气，硬凿只会让烛火灭掉，白白受一场惊，还得替守夜的人把灯重新点上。<</if>>修暗龛用的不是铁钉，而是石灰、碎砖和桐油，湿气重的时候三天都干不透，急不得。
+<br><br>
+每修一次，暗龛就多一层挡风的石壁，暗匣能塞进更深处，床铺也不再硌得人半夜醒来；风险低下去，香火钱却涨上来。若只是心里发紧，可以在铜烛台前坐一刻钟，让乳香把杂念一点点熏散——走出帷幔时，肩上的东西会轻一些，外头的巡逻也正好换班。扩建之后若还有余力，去教派那边听一听两派的争执；回廊的门向来是跟着风向开的，今天的靠山，明天未必还肯替你挡风。暗龛的门没有锁，只有一块能从里面顶住的石板；真有人掀帷幔，你最多只有把烛火按灭的工夫。香灰要一天一清，不然风一倒灌，整间暗龛都是呛人的烟。
+<br><br>
+<<getouticon>><<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><</link>><br>
+<<templeicon>><<if ($willpower or 0) gte 360 or ($mpLocProgress_Temple or 0) gte 2>><<link [[修缮回廊暗龛 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<mpSafehouseUpgrade "temple">><</link>><<else>><<link [[暗龛受阻退回 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<bedicon>><<link [[静室焚香调息 (0:15)|MP Safehouse Network Hub]]>><<pass 15>><<mpSafehouseTravel "temple">><<stress -4>><</link>>
+
+:: MP Safehouse HighStreet [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+高街的钟楼从外面看只是一截灰扑扑的石塔，真正能住人的地方在钟腹下面。你跟着修钟匠从侧巷的铁梯爬上去，穿过一排挂满铜锤的木架，才看见那间被钟声震得发麻的小屋：一张行军床，一只上锁的木箱，窗台上摆着半罐冷掉的茶。整点一到，铜钟在头顶轰然作响，木梁上的灰簌簌落下来，像下了一场小雪。
+<br><br>
+这处窝的设施档位为 <<print $mpSafehouses.highstreet.tier>>，床铺 <<print $mpSafehouses.highstreet.bed>>、暗匣 <<print $mpSafehouses.highstreet.stash>>、工台 <<print $mpSafehouses.highstreet.bench>>、信标 <<print $mpSafehouses.highstreet.beacon>>；每周维护 <<print $mpSafehouses.highstreet.upkeep>> 钱，被贝利的人从街面上认出的风险 <<print $mpSafehouses.highstreet.risk>>。钟楼的好处是看得远：巡夜的火把从哪条街拐过来，你比街上的人早半刻知道。坏处也在这里——整座高街都听得见钟声，谁在钟楼里多待了一夜，楼下的店主心里都有数。钟楼的墙厚，说话声传不出去，可震动会顺着钟绳一直落到楼下的柜台；你在上面钉一颗钉子，第二天修钟匠就会知道。
+<br><br>
+要添置材料，多半得走行会的铺子。今日高街的采购折算价是 <<mpWorldPrice 150>>；港税一加，同样一捆木料就要多掏几个铜板，维护账也跟着水涨船高。行会的铺子认人不认钱，你若没有熟脸，同样一捆料还要多等两天。想把暗阁再修一档，手要够快，能在修钟匠眼皮底下多配一把钥匙；或者在高街已经混到有人愿意替你圆话。<<if ($skulduggery or 0) gte 220 or ($mpLocProgress_HighStreet or 0) gte 2>>你眼下办得到，钟腹下还有一层没被灰填满。<<else>>还差些火候，硬撬只会惊动楼下的铃铛，把整条街的人都引到塔下来。<</if>>
+<br><br>
+修好之后，钟腹下会多出一层隔板，暗匣能藏进钟锤的阴影里，工台也能摆下钳子与油壶；风险降一分，维护费涨一截。从钟楼回总枢不必走大街，顺着修钟匠的窄梯下去，再穿过两条背巷，警戒会松一松。若不想动土，也可以在行军床上和衣躺一会儿，听钟声一趟趟从头顶碾过去；睡归睡，耳朵得留一只给楼下的门铃。暗匣里最好常年放一副手套和一卷细麻绳——钟楼离地太高，真要从窗口走，绳子比门可靠。
+<br><br>
+<<getouticon>><<link [[返回扩建调度 (0:02)|MP Safehouse Upgrade]]>><<pass 2>><</link>><br>
+<<shopicon>><<if ($skulduggery or 0) gte 220 or ($mpLocProgress_HighStreet or 0) gte 2>><<link [[整修钟楼暗阁 (0:15)|MP Safehouse Upgrade]]>><<pass 15>><<mpSafehouseUpgrade "highstreet">><</link>><<else>><<link [[巡哨逼近暂退 (0:15)|MP Safehouse Upgrade]]>><<pass 15>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<walkicon>><<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><<mpSafehouseTravel "highstreet">><</link>>
+
+:: MP Safehouse Forest [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+林间的雾比镇上浓，树干下半截都泡在一层灰白里。你踩着盘结的树根往深处走，绳桥在头顶晃，木板被雨水泡得发黑。树屋架在三棵冷杉之间，地板是用旧船板拼的，缝隙里钻出几簇苔藓；屋里一只铁皮炉子，半捆干柴，墙上挂着一盏蒙尘的提灯。再远一点，阿什营地的火光在雾里只剩一团模糊的橘色。
+<br><br>
+树屋的设施档位为 <<print $mpSafehouses.forest.tier>>，床铺 <<print $mpSafehouses.forest.bed>>、暗匣 <<print $mpSafehouses.forest.stash>>、工台 <<print $mpSafehouses.forest.bench>>、信标 <<print $mpSafehouses.forest.beacon>>；每周维护 <<print $mpSafehouses.forest.upkeep>> 钱，被贝利的人循着脚印摸到的风险 <<print $mpSafehouses.forest.risk>>，雾潮水尺 <<print ($mpFogTide or 0)>>。林子会替你藏人，也会替追你的人藏脚印；雾越浓，信标越重要——没有那点灯光，连熟悉的路都会走岔。树屋的地板离地三丈，底下是湿软的腐叶；真有人顺着绳桥摸过来，你能听见绳结一下一下绷紧的声音。
+<br><br>
+想再加固树屋，得懂点林子的脾气：会看树势，知道哪根主枝吃得住力；或者在森林深处已经做过足够的事，让阿什的人肯把备用绳索借给你。<<if ($tending or 0) gte 220 or ($mpLocProgress_Forest or 0) gte 2>>你眼下够格，能再往外搭一段平台，炉子的烟也能顺着新开的导烟槽散进雾里。<<else>>还不行，锤子落下去的声音会在雾里传得很远，惊动不该惊动的东西，回来的路上还得绕开自己踩出的脚印。<</if>>林子里没有锁，只有结扣；绳结打错了，风一大就会自己松开，所以每一根新绳都要先吊一袋石头试过夜。
+<br><br>
+每加一档，树屋就多一处遮雨的檐，暗匣能塞进树干掏空的洞里，床铺也不再被夜露打湿；修到最高一档，屋顶的信标能在雾里连成一条线，与阿什营地的灯遥相呼应，走夜路的人远远就能认出来。代价是油与树脂的账越记越厚，雾潮大的月份还要多备一桶；潮水漫过溪口时，连回来的绳桥都会短一截。信标烧的是鱼油和松脂，烟一起，阿什那边就知道你还在；可烟也会给不相干的人指路，所以只在雾最浓的时候点。回总枢的路不长，沿绳桥下去再穿过溪口，警戒会松一松，但脚下要留神。
+<br><br>
+<<getouticon>><<link [[返回扩建调度 (0:02)|MP Safehouse Upgrade]]>><<pass 2>><</link>><br>
+<<foresticon>><<if ($tending or 0) gte 220 or ($mpLocProgress_Forest or 0) gte 2>><<link [[加固林间树屋 (0:15)|MP Safehouse Upgrade]]>><<pass 15>><<mpSafehouseUpgrade "forest">><</link>><<else>><<link [[迷雾遮眼受阻 (0:15)|MP Safehouse Upgrade]]>><<pass 15>><<stress 3>><<tiredness 2>><</link>><</if>><br>
+<<walkicon>><<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><<mpSafehouseTravel "forest">><</link>>
+
+:: MP Safehouse School [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+学园旧翼的走廊在放学后格外空。你从体育馆后面的消防梯上去，绕过堆满旧课桌的拐角，在一扇写着「标本室」的门前停下。门锁是后来换的，锁孔周围还留着撬过的划痕；推门进去，一排玻璃柜在暮色里泛着冷光，福尔马林的气味混着粉笔灰，呛得人喉咙发紧。最里面那间储物室被清空了一半，一张折叠床、一只铁皮柜，窗外正对着钟塔的机芯室。
+<br><br>
+这处窝的设施档位为 <<print $mpSafehouses.school.tier>>，床铺 <<print $mpSafehouses.school.bed>>、暗匣 <<print $mpSafehouses.school.stash>>、工台 <<print $mpSafehouses.school.bench>>、信标 <<print $mpSafehouses.school.beacon>>；每周维护 <<print $mpSafehouses.school.upkeep>> 钱，被贝利的人借着查学园摸进来的风险 <<print $mpSafehouses.school.risk>>。学园的好处是夜里没人查旧翼，坏处是白天的眼线太多：哪个学生多看了一眼标本室的门，门房第二天就会多问一句。旧翼的暖气管道入夜就停，暗室里比走廊更冷；折叠床上那床薄毯子，冬天得再压一件旧大衣。
+<br><br>
+想辟出更深的暗室，得先有拿得出手的本事：科学够扎实，能自己配钥匙、修锁、处理那些不能见光的瓶瓶罐罐；或者在学园已经攒下足够的进度，让管旧翼的人睁一只眼闭一只眼。<<if ($science or 0) gte 220 or ($mpLocProgress_School or 0) gte 2>>你眼下做得到，储物室的夹墙还能再往里掏，通风口也能改到背街那一面。<<else>>还差一些，硬来只会把门锁彻底弄死，临走还得把划痕擦干净。<</if>>
+<br><br>
+<<if $mpWorldSchoolOutcome or $mpWorldSeraEnding>>旧馆档案室与塞拉那边的机芯已经通了气，暗室的墙后多了一条能走的窄道，钟塔的报时也比从前准；有些夜里，机芯的咔哒声会顺着墙传过来，替你盖住搬东西的响动。<<else>>钟塔的机芯还在别处空转，暗室暂时只是一间没有窗的储物间；等学园的事有了着落，这里才会真正连上那条线。<</if>>每修一档，暗室就多一层隔音的木壁，暗匣能藏进标本柜背后，工台也能摆下焊枪与油壶；风险低一分，维护费涨一截。学园日落前清楼，回总枢要赶在门房锁门前穿过旧翼，走晚了就得在储物室里将就一夜。储物室的钥匙只有两把，一把在门房，一把在管旧翼的人手里；你能换锁，就别留着别人那一把。
+<br><br>
+<<getouticon>><<link [[返回扩建调度 (0:02)|MP Safehouse Upgrade]]>><<pass 2>><</link>><br>
+<<schoolicon>><<if ($science or 0) gte 220 or ($mpLocProgress_School or 0) gte 2>><<link [[辟建标本暗室 (0:15)|MP Safehouse Upgrade]]>><<pass 15>><<mpSafehouseUpgrade "school">><</link>><<else>><<link [[门锁卡死受挫 (0:15)|MP Safehouse Upgrade]]>><<pass 15>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<walkicon>><<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><<mpSafehouseTravel "school">><</link>>

@@ -1,0 +1,637 @@
+:: MP Deep Locations Directory [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if $mpAlert is undefined>><<mpalertinit "docks">><</if>>
+<<set $mpDocksShipStage to ($mpDocksShipStage or 0)>>
+<<set $mpDocksWarehouses to ($mpDocksWarehouses or 0)>>
+<<set $mpDockTimber to ($mpDockTimber or 0)>>
+<<set _timberPrice to Math.round(500 * ($mpWorldPriceMod or 100) / 100)>>
+<<set _nightCurfew to ($mpWorldScheduleShortened ? 18 : 21)>>
+<<set _exitPas to ($mpReturnPassage or "Docks")>>
+<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Docks">><</if>>
+梅尔街与旧港防波堤交汇的石砌海图亭内，一张用铜钉固定在橡木斜面桌上的巨幅羊皮海图正随着穿堂海风猎猎微颤。海图表面用朱砂、群青与炭笔标注着旧港码头由浅入深的三层水域结构：最外侧是白昼人声鼎沸的栈桥表层装卸区与锚链酒馆；往里是龙门吊林立、碎冰机轰鸣的中层四工序作业场与夜航调度坪；最深处则是隐没在防波堤水下暗渠与三号干船坞之后的秘密船台与走私仓网。
+<br><br>
+你俯身按住海图一角，对照旁侧悬挂的港务铜牌核查当前全域态势：
+<br>
+【旧港深区态势读数】：<<mpalerttext>> ｜ 雾潮影响：<<if ($mpFogTide or 0) gte 5>><span class="pink">浓雾锁港（夜间能见度极低，外礁航道受阻但暗渠隐蔽度提升）</span><<elseif ($mpFogTide or 0) gte 3>><span class="purple">薄雾漫堤（栈桥湿滑，夜航运费上浮）</span><<else>><span class="teal">视野清晰（日间装卸与外海垂钓顺畅）</span><</if>>
+<br>
+【船坞五阶改造与仓网】：<<if $mpDocksShipStage gte 5>><span class="gold">远洋夜航主帆合龙（五阶完备，可随时调度深海航线）</span><<elseif $mpDocksShipStage is 4>><span class="teal">黄铜破冰船首包覆（四阶成型，无惧寒潮浮冰与暗礁）</span><<elseif $mpDocksShipStage is 3>><span class="lblue">静音滑轮与暗格铺设（三阶就绪，具备独立承接私货能力）</span><<elseif $mpDocksShipStage is 2>><span class="blue">双层桐油隔水暗舱（二阶加固，底舱不再渗水）</span><<elseif $mpDocksShipStage is 1>><span class="purple">橡木新肋骨替旧（一阶起步，船体初具雏形）</span><<else>><span class="red">搁浅斑驳旧舢板（亟待收集船木与铜件修缮）</span><</if>> ｜ 已连通暗渠仓库：<<if $mpDocksWarehouses gte 3>>冷库暗道、绳缆夹层与水闸密库全通<<elseif $mpDocksWarehouses is 2>>已打通冷库暗道与绳缆夹层<<elseif $mpDocksWarehouses is 1>>已开启冷库暗道<<else>>尚未打通暗渠仓网<</if>> ｜ 储备船材：<<print $mpDockTimber>> 份（当前采购单价 £<<print (_timberPrice / 100).toFixed(2)>>）
+<br>
+【封港·撤离·议价与码头公约】：<<if ($mpWorldPriceMod or 100) gt 100>>铁链封港使进口船木与酒水价格按 <<print $mpWorldPriceMod>>% 结算；<<elseif $mpWorldScheduleShortened>>钟声撤离使港区日班提前至 <<print _nightCurfew>>:00 落锁转入夜禁；<<elseif $mpWorldFogMarketOpen>>灰雾暗市开埠使水闸暗桩与中层夜航享有额外暗市溢价；<<else>>雾潮尚未定局；<</if>><<if $mpWorldDocksOutcome is "syndicate">><span class="purple">已缔结暗潮船东联保（夜航交割溢价显著提升）</span><<elseif $mpWorldDocksOutcome is "charter">><span class="gold">已签署自由船工公约（四工序班次报酬永久上调）</span><<else>>船坞终局公约待定<</if>>
+<br><br>
+海图亭外传来远洋货轮悠长的汽笛声。你可以从这里直接步入旧港码头深区总枢纽，也可以顺着防波堤前往雾潮水尺总枢调控全城雾潮，或是先在海图亭外围巡视暗哨动向以压低警戒。
+<br><br>
+<<getouticon>><<link [[返回先前街区 (0:04)|_exitPas]]>><<pass 4>><<set $eventskip to 1>><<endevent>><</link>>
+<br>
+<<docksicon>><<link [[步入码头总枢 (0:06)|MP Deep Docks Hub]]>><<pass 6>><</link>>
+<br>
+<<mpclockworkicon>><<link [[前往雾潮水尺 (0:08)|MP Fog Tide Hub]]>><<pass 8>><</link>>
+<br>
+<<sneakicon>><<link [[登高观察巡哨 (0:14)|MP Deep Docks Hub]]>><<pass 14>><<mpalert -6>><<stress -2>><<tiredness 1>><</link>>
+<br><<link [[步入神殿深区 (0:06)|MP Loc Temple Hub]]>><<pass 6>><</link>>
+<br><<link [[步入高街深区 (0:06)|MP Loc HighStreet Hub]]>><<pass 6>><</link>>
+<br><<link [[查看安全屋网络 (0:04)|MP Safehouse Network Hub]]>><<pass 4>><</link>>
+
+:: MP Deep Docks Hub [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _nightHour to ($mpWorldScheduleShortened ? 18 : 21)>>
+<<set _isNight to (Time.hour gte _nightHour or Time.hour lt 6)>>
+<<set _canEnterNight to (!_isNight or ($mpNpcs.vesper.trust or 0) gte 4 or ($mpDocksShipStage or 0) gte 1 or ($skulduggery or 0) gte 200 or $mpWorldFogMarketOpen)>>
+你站在旧港三号栈桥与龙门吊交汇的石砌总坪上。咸涩的海风卷着柴油、咸鱼与湿麻缆的气息扑面而来。
+<<if Time.season is "winter" or Weather.isFreezing>>
+	正值寒冬结霜时节，栈桥木板与铸铁系船柱上凝结着一层滑腻的白霜与冰凌，搬运货箱的脚夫们不得不在靴底缠上粗麻绳防滑，港湾水面漂浮着咔嚓作响的碎冰块。
+<<elseif ($mpFogTide or 0) gte 4 or Weather.name is "heavyClouds">>
+	正值雾季涨潮，乳白色的海雾将十步外的龙门吊铁架吞没了大半，雾角灯塔昏黄的光束在浓雾中艰难地切开一道光廊，水手们全靠铜哨声辨别方位。
+<<else>>
+	潮水有节奏地拍打着防波堤基石，成群的灰鸥在鱼篓与桅杆之间盘旋起落，远处的单桅渔船正迎着海风徐徐收拢三角帆。
+<</if>>
+<br><br>
+【当前区域状态】：<<mpalerttext>> ｜ 维斯契约信赖：<<if ($mpNpcs.vesper.trust or 0) gte 15>><span class="gold">生死同舟</span><<elseif ($mpNpcs.vesper.trust or 0) gte 6>><span class="teal">熟稔搭档</span><<else>><span class="blue">初步接洽</span><</if>> ｜ 船坞船材储备：<<print ($mpDockTimber or 0)>> 份
+<br>
+【世界格局与宵禁门槛】：<<if $mpWorldScheduleShortened>>受钟声撤离后的短工时制度影响，港区白班提前至每日 <<print _nightHour>>:00 结束（当前<<if _isNight>>已进入夜间门禁时段<<else>>处于日间开放时段<</if>>）；<<elseif $mpWorldFogMarketOpen>>受防波堤灰雾暗市开埠影响，暗市通行牌令你夜间进出中深层工区畅行无阻；<<elseif ($mpWorldPriceMod or 100) gt 100>>受铁链封港影响，港务哨兵盘查严密且进口船木价格上浮至 <<print $mpWorldPriceMod>>%；<<else>>港区常规门禁自每日 <<print _nightHour>>:00 起生效。<</if>>
+<br><br>
+从总坪往外看，表层栈桥上依次排开海钓平台、散货装卸区、七号旧仓与铁锚酒馆；往里走，中层工区正由工头召集人手开展四道核心码头工序与夜航调度；而在干船坞帆布遮蔽的深层水域，那艘属于你们的改造船只正静静停泊在暗渠闸口旁。若想处理栈桥滑索、水闸暗桩、断缆驳船、冷库冰机、缉私探灯或船坞帆布等突发险情，可步入码头事件分枢。
+<br><br>
+连接内陆街巷与外海防波堤的石板通道两侧，高耸的铸铁龙门吊与错综复杂的蒸汽管道在海雾中勾勒出冷硬的工业轮廓。只要摸透了这里的潮汐脾气与各路人马的规矩，这片危机四伏的水域便能成为你在镇上立足的坚实后盾。
+<br><br>
+<<getouticon>><<link [[返回海图目录 (0:04)|MP Deep Locations Directory]]>><<pass 4>><</link>>
+<br>
+<<beachicon>><<link [[前往表层栈桥 (0:08)|MP Deep Docks Surface]]>><<pass 8>><</link>>
+<br>
+<<mpcarryicon>><<link [[进入中层工区 (0:10)|MP Deep Docks Mid]]>><<pass 10>>
+	<<if !_canEnterNight>><<mpalert 8>><<stress 3>><</if>>
+<</link>>
+<br>
+<<mprepairicon>><<link [[潜入深层船坞 (0:12)|MP Deep Docks Deep]]>><<pass 12>>
+	<<if !_canEnterNight>><<mpalert 8>><<stress 3>><</if>>
+<</link>>
+<br>
+<<link [[巡查码头事件 (0:06)|MP Deep Docks Events Hub]]>><<pass 6>><</link>>
+
+:: MP Deep Docks Events Hub [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set _nightHour to ($mpWorldScheduleShortened ? 18 : 21)>>
+你登上三号栈桥中段的港务瞭望石台，这里是统揽旧港六类突发插曲的「码头事件分枢」。石台栏杆上挂着一排用来传递险情信号的黄铜风铃与牛角号，下方的水面上交替闪烁着驳船风灯、水闸浮标与海关巡逻艇的探照灯光。每当寒潮结冰、雾潮漫堤或暗渠退潮时，各处泊位便会接连传出急需人手处置的突发状况。
+<br><br>
+你扶着湿冷的石栏俯瞰港区四周的动静：
+<br>
+【栈桥与水闸动向】：二号装卸栈桥的起重滑索在寒雾中频频打滑，悬在半空的樟木货箱随时可能脱钩坠海；而在退潮后的三号排水暗渠涵洞下，Wren 手下的暗桩正守着一只卡在水栅槽里的铅封私货木匣（<<if $mpWorldFogMarketOpen>>因灰雾暗市已开埠，此处暗货交割享有额外溢价与常驻兑换<<else>>需赶在税吏巡街前撬开铅封或望风掩护<</if>>）。
+<br>
+【巡缉与船坞险情】：三号泊位外围有海关稽查艇亮起弧光探照灯登岸盘查无标器物；而在干船坞外侧的废弃缆绳库旧帆布下，一名受伤的孤儿院帮工正抱着沉船航海匣躲避工头搜捕。此外，外海断缆驳船（可由表层栈桥或试航前往）与二号冷库卡死冰机（可由中层结算或水闸暗渠前往）也在等待救援。
+<br><br>
+海风吹得瞭望台上的黄铜风铃叮当作响。<<if $mpWorldScheduleShortened>>由于钟声撤离后港区在 <<print _nightHour>>:00 提前落锁，傍晚后的突发事件更具隐蔽性；<<elseif ($mpWorldPriceMod or 100) gt 100>>由于铁链封港后物资紧缺，抢救货箱与冷库鱼柳的赏格尤为紧俏。<</if>>你可以立即挑选一处突发险情赶往现场处置，也可随时返回码头总枢。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回码头总枢 (0:04)|MP Deep Docks Hub]]>><<pass 4>><</link>>
+<br>
+<<mpcarryicon>><<link [[抢险寒霜滑索 (0:10)|MP Deep Docks Event 1]]>><<pass 10>><</link>>
+<br>
+<<mplockpickicon>><<link [[摸排水闸铅封 (0:10)|MP Deep Docks Event 2]]>><<pass 10>><</link>>
+<br>
+<<sneakicon>><<link [[应对缉私探灯 (0:10)|MP Deep Docks Event 5]]>><<pass 10>><</link>>
+<br>
+<<link [[探看船坞帆布 (0:10)|MP Deep Docks Event 6]]>><<pass 10>><</link>>
+
+:: MP Deep Docks Surface [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set _aleCost to Math.round(200 * ($mpWorldPriceMod or 100) / 100)>>
+<<set _tavernClose to ($mpWorldScheduleShortened ? 18 : 22)>>
+码头表层沿着弧形防波堤铺开百余丈长的木质栈桥，这里是白昼与黄昏时分整个旧港最热闹的地界。靠海一侧的石桩上坐着几名披着油布衣的老钓客，鱼线垂入泛着白沫的回水湾；栈桥中段的滑轮吊臂下堆满了从外埠运来的樟木板与盐渍鲱鱼桶；再往西走，则是散发着麦酒与烤鱼香气的「铁锚酒馆」，以及挂着生锈铜锁的七号杂货旧仓。
+<br><br>
+老鱼贩正蹲在碎冰筐旁用木铲翻动刚上岸的银鳕，见到你过来便努了努嘴：「今天外礁回水急，要是肯下竿钓几尾肥鱼或者帮着把樟木箱卸进棚里，工钱和船木边角料都好商量。要是去铁锚酒馆找老水手长套话消警戒，<<if ($mpWorldPriceMod or 100) gt 100>>封港后黑麦酒涨到了 £<<print (_aleCost / 100).toFixed(2)>> 一扎<<else>>请一扎黑麦酒要 £<<print (_aleCost / 100).toFixed(2)>><</if>>；<<if $mpWorldScheduleShortened>>而且撤离令下达后酒馆每晚 <<print _tavernClose>>:00 就提前打烊落锁<<else>>酒馆一直营业到夜里 <<print _tavernClose>>:00<</if>>。」
+<br><br>
+你在栈桥分岔口停下脚步，打量着表层各处去处。无论是垂钓银鳕、扛运樟木箱攒船材、摸排七号旧仓，还是在酒馆请酒降警戒，都能为你带来实实在在的进项，并可将结果带往险情结算处或外海驳船救援现场。
+<br><br>
+沿着表层栈桥的松木踏板一路往外海方向走，脚下的木板缝隙间能清晰看到碧黑的海水正随着潮汐涨落拍打着涂满焦油的桩基。栈桥东侧的避风湾里聚集着不少拿着竹竿与抄网的钓客，西侧则是卸货苦力们喊着号子扛运樟木箱的坡道，处处充满着鲜活的港口气息。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回码头总枢 (0:04)|MP Deep Docks Hub]]>><<pass 4>><</link>>
+<br>
+<<mpfishicon>><<link [[垂钓寒潮银鳕 (0:20)|MP Deep Docks Event Resolve]]>><<pass 20>>
+	<<set $mpDocksEvId to 11>>
+	<<if ($athletics or 0) gte 200 or ($tending or 0) gte 200>>
+		<<set $mpDocksEvOk to 1>><<money 450>><<stress -3>><<tiredness 2>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<stress 4>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<mpcarryicon>><<link [[扛运樟木货箱 (0:22)|MP Deep Docks Event Resolve]]>><<pass 22>>
+	<<set $mpDocksEvId to 12>>
+	<<if ($physique or 0) gte 8000>>
+		<<set $mpDocksEvOk to 1>><<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<money 400>><<tiredness 3>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<pain 3>><<tiredness 4>><<stress 4>>
+	<</if>>
+<</link>>
+<br>
+<<sneakicon>><<link [[摸排七号旧仓 (0:18)|MP Deep Docks Event Resolve]]>><<pass 18>>
+	<<set $mpDocksEvId to 13>>
+	<<if ($skulduggery or 0) gte 240>>
+		<<set $mpDocksEvOk to 1>><<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<mpalert 4>><<stress -2>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<mpalert 10>><<stress 6>><<pain 2>>
+	<</if>>
+<</link>>
+<br>
+<<link [[酒馆请酒套话 (0:18)|MP Deep Docks Event 3]]>><<pass 18>>
+	<<if ($money or 0) gte _aleCost and Time.hour lt _tavernClose>>
+		<<set $money to ($money or 0) - _aleCost>>
+		<<mpalert -8>><<stress -6>><<tiredness -2>>
+	<<else>>
+		<<mpalert -4>><<stress -2>><<tiredness 1>>
+	<</if>>
+<</link>>
+
+:: MP Deep Docks Mid [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set _earlyNight to ($mpWorldScheduleShortened and Time.hour gte 18)>>
+穿过表层栈桥的铁栅门，便是机械轰鸣、水汽蒸腾的码头中层作业区。四座蒸汽绞盘与两条碎冰传送带沿着深水泊位排开，夜航船长维斯与日班大副正各自守在东西两侧的调度台前。不同于表层的零散短工，中层运作遵循严格的「四道核心工序」：起吊重缆、碎冰剔骨、潜渠清障与暗舱押运。每一道工序都会根据你的手艺水准、船坞设施加成与当前雾潮环境，划分为头等、稳妥、基础与失手四档产出。
+<br><br>
+大副敲了敲黑板上的排班表：「想拿头等工钱的，先掂量自己手头的活计！一号位『绞盘起吊重缆』吃的是膀子力气与身手；二号位『碎冰台剔骨压鲜』讲究刀工利落、不伤鱼肉；三号位『船底暗渠清障』得潜进冷水里割断缠住螺旋桨的破网；至于维斯那边的四号位『夜航暗舱押运』，赚得最多，但手脚不够机灵可别怪巡查艇不客气！」
+<<if _earlyNight>>
+	他看了一眼怀表补充道：「自从敲钟撤离后，白班在 18:00 就提前收工了，现在留下来顶晚班工序的人，结算时按规矩多发一笔夜班补贴！」
+<</if>>
+<br><br>
+你看了看四处工位：若你已在海礁鱼档或远洋渔船磨练过手艺，抑或已将深层船坞推进至高阶，当班时都能获得额外的工序把握与供货分成。请选择你要承接的工序班次，前往结算台交割。
+<br><br>
+中层作业区的地面铺着防滑的棱纹铸铁板，空气中交织着蒸汽机锅炉的煤烟味、碎冰池刺骨的寒意以及深海鱼获特有的咸腥。无论是鱼档练出的快刀手艺，还是深层船坞修好的暗舱设施，都能让你在结算时多拿一笔厚实的红封。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回码头总枢 (0:04)|MP Deep Docks Hub]]>><<pass 4>><</link>>
+<br>
+<<mpcarryicon>><<link [[绞盘起吊重缆 (0:25)|MP Deep Docks Mid Settle]]>><<pass 25>>
+	<<set $mpDocksJobKind to "crane">>
+	<<if ($physique or 0) gte 11000 and ($athletics or 0) gte 300>>
+		<<set $mpDocksTier to 3>><<athletics 2>><<tiredness 3>>
+	<<elseif ($physique or 0) gte 8500 or ($athletics or 0) gte 220>>
+		<<set $mpDocksTier to 2>><<athletics 1>><<tiredness 3>>
+	<<elseif random(1, 100) lte 65>>
+		<<set $mpDocksTier to 1>><<tiredness 4>>
+	<<else>>
+		<<set $mpDocksTier to 0>><<pain 4>><<stress 5>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<mpfishicon>><<link [[碎冰剔骨压鲜 (0:25)|MP Deep Docks Mid Settle]]>><<pass 25>>
+	<<set $mpDocksJobKind to "fillet">>
+	<<if ($tending or 0) gte 300 or ($housekeeping or 0) gte 300 or ($mpJobFishExp or 0) gte 6>>
+		<<set $mpDocksTier to 3>><<tending 2>><<tiredness 2>>
+	<<elseif ($tending or 0) gte 200 or ($housekeeping or 0) gte 200>>
+		<<set $mpDocksTier to 2>><<tending 1>><<tiredness 3>>
+	<<elseif random(1, 100) lte 70>>
+		<<set $mpDocksTier to 1>><<tiredness 3>>
+	<<else>>
+		<<set $mpDocksTier to 0>><<pain 3>><<stress 5>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<swimicon>><<link [[潜渠割除缠网 (0:25)|MP Deep Docks Mid Settle]]>><<pass 25>>
+	<<set $mpDocksJobKind to "dive">>
+	<<if ($swimmingskill or 0) gte 300 and ($science or 0) gte 220>>
+		<<set $mpDocksTier to 3>><<swimmingskill 2>><<tiredness 3>>
+	<<elseif ($swimmingskill or 0) gte 220>>
+		<<set $mpDocksTier to 2>><<swimmingskill 1>><<tiredness 4>>
+	<<else>>
+		<<set $mpDocksTier to 0>><<pain 5>><<stress 6>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<link [[押运夜航暗舱 (0:28)|MP Deep Docks Mid Settle]]>><<pass 28>>
+	<<set $mpDocksJobKind to "smuggle">>
+	<<if ($skulduggery or 0) gte 300 or ($mpDocksShipStage or 0) gte 3 or $mpWorldFogMarketOpen>>
+		<<set $mpDocksTier to 3>><<skulduggery 2>><<mpalert 5>><<tiredness 3>>
+	<<elseif ($skulduggery or 0) gte 220>>
+		<<set $mpDocksTier to 2>><<skulduggery 1>><<mpalert 7>><<tiredness 3>>
+	<<else>>
+		<<set $mpDocksTier to 0>><<mpalert 12>><<stress 7>><<pain 3>>
+	<</if>>
+<</link>>
+
+:: MP Deep Docks Mid Settle [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _charterBonus to ($mpWorldDocksOutcome is "charter" ? 250 : 0)>>
+<<set _syndicateBonus to ($mpWorldDocksOutcome is "syndicate" ? 250 : 0)>>
+<<set _fogMarketBonus to ($mpWorldFogMarketOpen ? 200 : 0)>>
+<<set _shortSchedBonus to (($mpWorldScheduleShortened and Time.hour gte 18) ? 150 : 0)>>
+<<set _shipBonus to (($mpDocksShipStage or 0) * 60)>>
+你摘下沾满盐水与机油的粗布手套，走到中层调度亭的黄铜窗口前核验刚刚完成的工序（<<if $mpWorldFogMarketOpen>>因防波堤灰雾暗市已开埠，每班次额外计入 £2.00 暗市分润；<<elseif $mpWorldScheduleShortened and Time.hour gte 18>>因钟声撤离后晚班提前，额外计入 £1.50 留守补贴；<<elseif ($mpWorldPriceMod or 100) gt 100>>当前处于铁链封港期间，港务督察在旁严密监工；<<else>>当前按港区常规标准核发工钱；<</if>>）：
+<br><br>
+<<if ($mpDocksTier or 0) gte 3>>
+	<<set _pay to (950 + _charterBonus + _syndicateBonus + _fogMarketBonus + _shortSchedBonus + _shipBonus)>>
+	<<money _pay>>
+	<<set $mpDockTimber to ($mpDockTimber or 0) + 1>>
+	<<set $mpNpcs.vesper.trust to Math.min(100, ($mpNpcs.vesper.trust or 0) + 2)>>
+	<span class="green">【头等交割】</span>你的手法干净利落，无论是起吊配重、鱼柳成色还是暗渠封舱都挑不出半点毛病。大副与维斯同时在工牌上盖下头等红戳，当场向你发放了 £<<print (_pay / 100).toFixed(2)>> 的丰厚薪酬，并额外拨给你一份优质船坞木材！
+<<elseif ($mpDocksTier or 0) is 2>>
+	<<set _pay to (680 + _charterBonus + _fogMarketBonus + _shortSchedBonus + _shipBonus)>>
+	<<money _pay>>
+	<<set $mpNpcs.vesper.trust to Math.min(100, ($mpNpcs.vesper.trust or 0) + 1)>>
+	<span class="teal">【稳妥交割】</span>你按部就班地完成了整套班次，虽然中途遇上几阵横风与碎冰阻滞，但好在没有延误装船时刻。账房核对完单据后，将 £<<print (_pay / 100).toFixed(2)>> 工钱推到你手边。
+<<elseif ($mpDocksTier or 0) is 1>>
+	<<set _pay to (420 + _charterBonus + _shortSchedBonus)>>
+	<<money _pay>>
+	<span class="blue">【基础交割】</span>你勉强跟上了老船工们的节奏，紧赶慢赶总算在换班铃响前交了差，领到了 £<<print (_pay / 100).toFixed(2)>> 的基础辛苦钱。
+<<else>>
+	<<set _pay to 0>>
+	<span class="red">【工序失手】</span>由于风浪颠簸与气力不济，你在操作中出了岔子，不仅弄乱了绳缆与冰筐，还险些惊动港务督察。按码头规矩本班次不发工钱（但绝不倒扣你分毫存款），工头沉着脸让你先去旁侧歇口气或帮忙排查险情将功补过。
+<</if>>
+<br><br>
+就在你收起工牌准备离开调度亭时，二号盐冰冷库方向忽然传来刺耳的齿轮卡死声，而深层船坞的水位也恰好退到了适合施工的刻度。你可以带着刚攒下的工钱与木料直接转入深层船坞，也可以立刻赶去抢修冷库冰机。
+<br><br>
+中层作业区的蒸汽管道发出一声长长的泄压长鸣，标志着这一轮紧张繁忙的码头工序正式告一段落。工友们三三两两地聚在防风廊檐下拧干湿透的袖口，空气里弥漫着粗盐、铁锈与热茶混合的气息。
+<br><br>
+<<getouticon>><<link [[返回码头总枢 (0:04)|MP Deep Docks Hub]]>><<pass 4>><</link>>
+<br>
+<<mprepairicon>><<link [[投入船坞改造 (0:12)|MP Deep Docks Deep]]>><<pass 12>><</link>>
+<br>
+<<investigateicon>><<link [[抢修冷库冰机 (0:12)|MP Deep Docks Event 4]]>><<pass 12>><</link>>
+<br>
+<<beachicon>><<link [[退回表层栈桥 (0:10)|MP Deep Docks Surface]]>><<pass 10>><<mpalert -5>><</link>>
+
+:: MP Deep Docks Deep [nobr]
+<<set $outside to 0>><<set $location to "docks_building">><<effects>><<mpAmbient>>
+<<set $mpDocksShipStage to ($mpDocksShipStage or 0)>>
+<<set $mpDocksWarehouses to ($mpDocksWarehouses or 0)>>
+<<set $mpDockTimber to ($mpDockTimber or 0)>>
+<<set _timberCost to Math.round(500 * ($mpWorldPriceMod or 100) / 100)>>
+<<if $mpWorldFogMarketOpen>><<set _timberCost to Math.max(350, _timberCost - 100)>><</if>>
+掀开三号干船坞外围厚重的防雨油布，一股混合着桐油、雪松木屑与暗渠潮水的气息扑面而来。这里是旧港码头最深层的隐秘腹地，两盏涂着防雾绿漆的牛角灯挂在铸铁拱梁上，照亮了船台中央那艘正在秘密修缮的单桅船，以及通往冷库、绳缆房与防波堤外海的三道地下暗渠水闸。
+<br><br>
+你沿着船台木架缓步巡视，查看当前的船坞五阶工程与暗渠仓网状态：
+<br>
+【船体五阶工程现状】：
+<<if $mpDocksShipStage gte 5>>
+	<span class="gold">远洋夜航主帆合龙</span>——黑帆、铜首、静音滑轮、双层隔水舱与橡木新肋已全部完工，整艘船随时可破浪远航。
+<<elseif $mpDocksShipStage is 4>>
+	<span class="teal">黄铜破冰船首已包覆</span>——船头已铆接加厚黄铜护板，仅差最后一步「悬挂浸蜡远洋主帆与校准罗盘」即可彻底合龙。
+<<elseif $mpDocksShipStage is 3>>
+	<span class="lblue">静音滑轮与秘格已装妥</span>——甲板索具已换上消音铜轮，下一步需「包覆黄铜破冰船首」以抵御外海浮冰与暗礁。
+<<elseif $mpDocksShipStage is 2>>
+	<span class="blue">双层桐油隔水暗舱已封固</span>——底舱滴水不漏，下一步需「加装甲板静音滑轮与藏货暗格」。
+<<elseif $mpDocksShipStage is 1>>
+	<span class="purple">橡木新肋骨已替旧</span>——腐朽龙骨已被替换，下一步需「铺设双层桐油隔水暗舱」。
+<<else>>
+	<span class="red">搁浅斑驳旧舢板</span>——船底肋木仍有裂隙，亟需先用船材与工钱完成首步「替换腐朽橡木龙骨」。
+<</if>>
+<br>
+【暗渠仓网与世界物价差异】：当前已打通 <<if $mpDocksWarehouses gte 3>>全部三处暗渠密库<<elseif $mpDocksWarehouses is 2>>冷库暗道与绳缆夹层两处<<elseif $mpDocksWarehouses is 1>>冷库暗道一处<<else>>零处（尚未疏通）<</if>> ｜ 随身可用船材：<<print $mpDockTimber>> 份 ｜ 若直接用现钱采购船木铜件，<<if ($mpWorldPriceMod or 100) gt 100>>因铁链封港断绝木材海运，工料费已按 <<print $mpWorldPriceMod>>% 涨至 £<<print (_timberCost / 100).toFixed(2)>><<elseif $mpWorldFogMarketOpen>>因灰雾暗市走私木料充沛，工料费优惠至 £<<print (_timberCost / 100).toFixed(2)>><<else>>常规工料费为 £<<print (_timberCost / 100).toFixed(2)>><</if>>。
+<br><br>
+船坞穹顶下方的横梁上垂下数条涂满牛油的铁链，随着暗渠水位的微微涨落发出细碎的金属碰撞声。在这片与世隔绝的地下船台里，每一锤敲击、每一道桐油涂刷都肉眼可见地改变着船体的轮廓，将原本破败的旧船一步步锻造成足以抗衡风暴与灰雾的海上利器。
+<br><br>
+<<getouticon>><<link [[返回码头总枢 (0:04)|MP Deep Docks Hub]]>><<pass 4>><</link>>
+<br>
+<<mprepairicon>><<link [[推进船体改造 (0:25)|MP Deep Docks Deep Upgrade]]>><<pass 25>>
+	<<if ($mpDockTimber or 0) gte 1>>
+		<<set $mpDockTimber to ($mpDockTimber or 1) - 1>>
+		<<set $mpDocksShipStage to Math.min(5, ($mpDocksShipStage or 0) + 1)>>
+		<<tiredness 3>><<stress -3>>
+	<<elseif ($money or 0) gte _timberCost>>
+		<<set $money to ($money or 0) - _timberCost>>
+		<<set $mpDocksShipStage to Math.min(5, ($mpDocksShipStage or 0) + 1)>>
+		<<tiredness 3>><<stress -3>>
+	<<else>>
+		<<set $mpDockTimber to ($mpDockTimber or 0) + 1>>
+		<<set $mpDocksShipStage to Math.min(5, ($mpDocksShipStage or 0) + 1)>>
+		<<tiredness 4>><<pain 2>><<stress 3>>
+	<</if>>
+<</link>>
+<br>
+<<mplockpickicon>><<link [[疏通暗渠仓网 (0:20)|MP Deep Docks Deep Upgrade]]>><<pass 20>>
+	<<if ($skulduggery or 0) gte 220 or ($swimmingskill or 0) gte 220>>
+		<<set $mpDocksWarehouses to Math.min(3, ($mpDocksWarehouses or 0) + 1)>>
+		<<mpalert -5>><<stress -2>><<tiredness 2>>
+	<<else>>
+		<<set $mpDocksWarehouses to Math.min(3, ($mpDocksWarehouses or 0) + 1)>>
+		<<mpalert 6>><<pain 3>><<stress 4>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<mpcarryicon>><<link [[返回中层当班 (0:10)|MP Deep Docks Mid]]>><<pass 10>><</link>>
+
+:: MP Deep Docks Deep Upgrade [nobr]
+<<set $outside to 0>><<set $location to "docks_building">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+随着最后一枚黄铜铆钉被重锤砸入龙骨隼槽，干船坞底部的水闸缓缓开启，清冽的海水涌入船台，将修葺一新的船身稳稳托起。浸过桐油的船壳在牛角灯下泛着温润的乌光，不论是吃水深度、底舱密闭性还是转向舵轮的灵敏度，都已今非昔比。与此同时，连通冷库、绳缆房与防波堤外海的暗渠水道也已在脚下贯通。
+<br><br>
+夜航船长维斯与十余名老码头工围拢在船头甲板上。随着这艘主力夜航船与暗渠仓网的成型，旧港深区未来的归属与利益分配摆在了台面上：维斯与Wren的联络人希望以这艘船为核心缔结「暗潮船东联保」，将暗渠彻底用作夜间免税私货通道，让所有封存暗货与夜航押运享受高额溢价；而以老鱼贩和日班大副为首的船工们，则盼望着借机立下「自由船工公约」，用新船保障渔民与苦力的公开分红，永久提高码头各项工序与鱼档的工钱。
+<br><br>
+你站在甲板主桅杆旁，手握象征船东话语权的黄铜船哨。你可以现在就拍板定下旧港码头的终局公约（写入不可逆的世界状态 `$mpWorldDocksOutcome`），也可以先驾船驶入外海回水湾做一次实船试航，顺道搜救在浓雾中断缆的驳船。
+<br><br>
+干船坞四周的石壁上挂满了全套修船工具：从锻打精密的黄铜铆钉、浸泡过防腐松脂的麻绳填料，到塞拉特意帮忙校准过的防潮航海罗盘，每一处细节都凝聚着你这段时间在码头摸爬滚打的心血。船工们屏息凝神地等待着你的最终示下——无论是将这片秘坞化作暗夜走私的避风港，还是将其打造为全体苦力共享红利的自治船台，你的名字都将被刻进旧港的航标碑里。
+<br><br>
+<<getouticon>><<link [[返回码头总枢 (0:04)|MP Deep Docks Hub]]>><<pass 4>><</link>>
+<br>
+<<keepsakeicon>><<link [[缔结船东联保 (0:20)|MP Deep Docks Hub]]>><<pass 20>>
+	<<set $mpWorldDocksOutcome to "syndicate">>
+	<<set $mpNpcs.vesper.trust to Math.min(100, ($mpNpcs.vesper.trust or 0) + 5)>>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("docks_ending_syndicate_v39")>>
+		<<money 1600>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+	<</if>>
+	<<mpalert -10>><<stress -8>>
+<</link>>
+<br>
+<<shopicon>><<link [[签署船工公约 (0:20)|MP Deep Docks Hub]]>><<pass 20>>
+	<<set $mpWorldDocksOutcome to "charter">>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("docks_ending_charter_v39")>>
+		<<money 1600>>
+		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+	<</if>>
+	<<mpalert -8>><<stress -10>>
+<</link>>
+<br>
+<<mprowicon>><<link [[驾船出海试航 (0:18)|MP Deep Docks Event 3]]>><<pass 18>><<stress -4>><<tiredness 2>><</link>>
+
+:: MP Deep Docks Event 1 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+一阵夹杂着冰粒的凛冽朔风横扫过二号装卸栈桥。<<if Time.season is "winter" or Weather.isFreezing>>严冬的寒潮让栈桥木板与起重滑索表面结了一层坚硬的透明冰壳，踩上去稍不留神便会打滑。<<else>>潮湿的海雾在铁索上凝成油滑的水膜，令吊臂的制动棘轮频频打滑。<</if>>只听见半空中传来一声刺耳的金属崩裂声，一只正在起吊的樟木货箱突然挣脱了一侧副钩，悬在距离冰冷海面不足两丈的半空中剧烈摇摆，箱盖缝隙里已经露出了精心包装的钟表铜件与防风鲸油罐！
+<br><br>
+站在绞盘边的年轻学徒吓得脸色惨白，双手死死抓着打滑的麻缆却被拽得一步步往栈桥边缘滑去。如果任由货箱砸进暗礁翻涌的深水区，不仅整箱贵重物资会瞬间报废，飞溅的木刺与失控的铁钩还会伤及周围的船工；但此时栈桥边缘湿滑无比，直接冲上去抢险极易被甩动的铁索扫中。
+<br><br>
+千钧一发之际，你可以凭借强健的体魄冲上前用铁撬棍卡死绞盘主齿轮，也可以展现出敏捷身手顺着副缆滑过去用双股水手结兜住箱底；若是力气不足，还可以果断吹响警哨招呼附近的脚夫一齐抛网接应。
+<br><br>
+寒风吹得龙门吊顶端的滑轮组发出凄厉的尖啸，半空中那只摇摇欲坠的樟木货箱每一次晃动都会甩落几片碎木屑与冰渣。栈桥下方的暗礁区正值回流最急的时刻，浑浊的浪花在黑色礁石上撞得粉碎。围在栈桥边的几名老脚夫急得直跺脚，全看你能否在绳索彻底断裂前果断出手稳住局面。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回事件分枢 (0:04)|MP Deep Docks Events Hub]]>><<pass 4>><</link>>
+<br>
+<<mpcarryicon>><<link [[撬棍锁死绞盘 (0:15)|MP Deep Docks Event Resolve]]>><<pass 15>>
+	<<set $mpDocksEvId to 1>>
+	<<if ($physique or 0) gte 9500 or ($athletics or 0) gte 260>>
+		<<set $mpDocksEvOk to 1>><<money 550>><<set $mpLanternOil to ($mpLanternOil or 0) + 1>><<stress -3>><<tiredness 3>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<pain 5>><<stress 6>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<mpsewicon>><<link [[绳结兜住箱底 (0:15)|MP Deep Docks Event Resolve]]>><<pass 15>>
+	<<set $mpDocksEvId to 1>>
+	<<if ($housekeeping or 0) gte 230 or ($skulduggery or 0) gte 230>>
+		<<set $mpDocksEvOk to 1>><<money 480>><<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<stress -3>><<tiredness 2>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<pain 4>><<stress 5>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<mpwatchicon>><<link [[吹哨铺缓冲网 (0:16)|MP Deep Docks Event Resolve]]>><<pass 16>>
+	<<set $mpDocksEvId to 1>><<set $mpDocksEvOk to 1>>
+	<<money 260>><<mpalert 3>><<tiredness 2>>
+<</link>>
+
+:: MP Deep Docks Event 2 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _contrabandPay to ($mpWorldFogMarketOpen ? 1400 : 1100)>>
+退潮后的三号排水暗渠露出了半截长满青苔的生铁水栅。你顺着石阶走下背风的涵洞口，只见水栅内侧栓着一只用黑蜡密封的浮筒木匣，而一名披着深灰斗篷、帽檐压得很低的联络人正蹲在石阶旁，手里捏着一枚刻有渡鸦标记的铜币——那是经常在荒原与海岸之间倒卖私货的Wren手下的暗桩。
+<br><br>
+听到你的脚步声，那名暗桩迅速按住腰间的短柄撬棍，待看清你袖口沾着的旧港桐油印记后才松了口气：「维斯船长的人？正好，这批从外海沉船带捞上来的铅封私货卡在水栅铸铁槽里了，上面巡街的港务税吏再有一刻钟就会经过栈桥顶。」他拍了拍浮筒木匣：
+<<if $mpWorldFogMarketOpen>>
+	「自从你们在防波堤跟雾潮议价、把雾中暗市彻底开埠后，Wren 这边的暗渠摊位全天都能跟外海走私船直接交割！你手头若有封存暗货，我按暗市溢价 £<<print (_contrabandPay / 100).toFixed(2)>> 当场收下；就算没带现成暗货，也能随时在这儿帮我转手暗市包裹拿分成！」
+<<else>>
+	「你要是有开锁或潜水的本事帮我把底槽别开，匣子里的封存暗货和分红咱们二一添作五；或者你手头有现成的封存暗货，我也可以按 £<<print (_contrabandPay / 100).toFixed(2)>> 当场给你折成现钱。」
+<</if>>
+<br><br>
+涵洞上方隐约传来巡查马车的铁轮声。帮暗桩撬开水下铁槽固然能拿到丰厚分成与维斯的赞许，但一旦失手弄出声响就会拉高码头警戒；你也可以在涵洞口交割暗货或替他望风打掩护。
+<br><br>
+三号水闸底部的青石涵洞阴暗潮湿，只有从栈桥木板缝隙间漏下的几缕微光在水面上投出斑驳的条纹。铁栅下方的铅封木匣随着暗流轻轻撞击着生锈的铸铁滑槽，形势紧迫得容不得半点迟疑。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回事件分枢 (0:04)|MP Deep Docks Events Hub]]>><<pass 4>><</link>>
+<br>
+<<mplockpickicon>><<link [[钢针拨开铅封 (0:16)|MP Deep Docks Event Resolve]]>><<pass 16>>
+	<<set $mpDocksEvId to 2>>
+	<<if ($skulduggery or 0) gte 260 or ($swimmingskill or 0) gte 240>>
+		<<set $mpDocksEvOk to 1>>
+		<<money 650>>
+		<<set $mpNpcs.vesper.trust to Math.min(100, ($mpNpcs.vesper.trust or 0) + 2)>>
+		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("docks_ev2_wren_cache_v39")>>
+			<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
+		<</if>>
+		<<mpalert 4>><<stress -3>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<mpalert 10>><<pain 3>><<stress 6>>
+	<</if>>
+<</link>>
+<br>
+<<keepsakeicon>><<link [[当场交割暗货 (0:14)|MP Deep Docks Event Resolve]]>><<pass 14>>
+	<<set $mpDocksEvId to 2>><<set $mpDocksEvOk to 1>>
+	<<if ($mpContrabandSealed or 0) gte 1>>
+		<<set $mpContrabandSealed to ($mpContrabandSealed or 1) - 1>>
+		<<money _contrabandPay>><<mpalert 3>><<stress -4>>
+	<<elseif $mpWorldFogMarketOpen>>
+		<<money 550>><<mpalert 4>><<stress -3>>
+	<<else>>
+		<<mpalert -4>><<stress -3>><<tiredness 1>>
+	<</if>>
+<</link>>
+<br>
+<<sneakicon>><<link [[涵洞望风示警 (0:15)|MP Deep Docks Event 4]]>><<pass 15>>
+	<<set $mpDocksEvId to 2>><<set $mpDocksEvOk to 1>>
+	<<money 350>><<mpalert -4>><<stress -2>>
+<</link>>
+
+:: MP Deep Docks Event 3 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+外海防波堤尽头的回水湾里忽然传来一阵急促而杂乱的雾角铜钟声。<<if ($mpFogTide or 0) gte 4>>由于当前雾潮高企，浓得化不开的灰白色水雾将海面能见度压到了不足三丈，连灯塔顶层的弧光都成了模糊的红点。<<else>>傍晚涨潮卷起的涌浪拍打着礁石群，水面上浮着一层湿冷的薄雾。<</if>>一艘满载着河湾麦袋与修船木料的单桅驳船因为主锚缆被暗礁割断，正在湍急的回流中失去控制，眼看就要横着撞向防波堤外侧的尖锐石桩！
+<br><br>
+驳船甲板上的老舵手拼命扳动木舵，奈何没有岸上引航火光与牵引绳的配合，船身仍在不断打横。一旦驳船触礁解体，不仅船上的木料与粮食会尽数沉入海底，散落的船板还会彻底堵死三号干船坞的暗渠出口。
+<br><br>
+你站在防波堤最前端的系船石台上。此时你可以点燃高亮度防风火把登上引航石柱，用旗语与火光指引驳船避开暗礁（接入 `$mpLight` 火光系统）；也可以抓起岸边的重型抓钩缆绳，迎着风浪将其精准抛向驳船船首的铁环。
+<br><br>
+翻涌的灰白色海雾中，那艘断缆驳船的帆影在浪峰与浪谷之间剧烈起伏，船壳擦过外围暗礁时发出的闷响令人心惊肉跳。岸边的引航石柱高达两丈，石阶表面覆满了湿滑的海苔；而防波堤边缘的铸铁系船环旁虽备有加粗的救援抓钩缆，却需要极强的臂力与准头才能逆着狂风将铁钩抛上颠簸的甲板。船上几名年轻水手正声嘶力竭地朝岸边呼喊，等待着岸上有人亮起引路明灯。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回事件分枢 (0:04)|MP Deep Docks Events Hub]]>><<pass 4>><</link>>
+<br>
+<<caveicon "torch">><<link [[燃起信标引航 (0:18)|MP Deep Docks Event Resolve]]>><<pass 18>>
+	<<set $mpDocksEvId to 3>>
+	<<if ($mpLight or 0) gte 30 or ($mpLanternOil or 0) gte 1 or ($science or 0) gte 230>>
+		<<set $mpDocksEvOk to 1>>
+		<<mplight 15>><<money 580>><<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<stress -4>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<mplight -10>><<stress 6>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<mprowicon>><<link [[抛投抓钩麻缆 (0:18)|MP Deep Docks Event Resolve]]>><<pass 18>>
+	<<set $mpDocksEvId to 3>>
+	<<if ($athletics or 0) gte 250 or ($physique or 0) gte 9000>>
+		<<set $mpDocksEvOk to 1>><<money 520>><<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<tiredness 3>><<stress -2>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<pain 4>><<stress 5>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<mpwatchicon>><<link [[摇动雾角铜钟 (0:16)|MP Deep Docks Event Resolve]]>><<pass 16>>
+	<<set $mpDocksEvId to 3>><<set $mpDocksEvOk to 1>>
+	<<money 300>><<tiredness 2>>
+<</link>>
+
+:: MP Deep Docks Event 4 [nobr]
+<<set $outside to 0>><<set $location to "docks_building">><<effects>><<mpAmbient>>
+位于中层泊位后方的二号盐冰冷库突然传出一阵刺耳的齿轮卡死声，紧接着两股刺鼻的白霜寒气从排风百叶窗里喷涌而出。海礁鱼档的老鱼贩与丰收街酒馆的采买厨师布鲁诺正焦急地站在冷库铁门外——原来是碎冰传送带的主链条被一块冻硬的橡木楔子卡住，而里面还存着三十筐准备今晚送往酒馆后厨与海风咖啡馆的特级银鳕鱼柳！
+<br><br>
+「再拖上半个钟头，传动轴憋断了不说，这批刚剔好刺的银鳕也得被冷凝水泡坏！」老鱼贩搓着手向四周张望，一眼看到了人群中的你，「你在码头和鱼档都干过活，手脚比那帮莽汉利索。敢不敢裹上厚油布进去把卡死的齿轮撬开？或者先帮布鲁诺把最里头那十筐头水鱼柳抢运出来？」
+<br><br>
+冷库门缝里不断渗出冰冷的白雾。进去拆解卡死的碎冰机需要懂些机械机关的巧劲，抢运鱼筐则要在结冰的地面上保持平衡，但只要保住这批鲜鱼，鱼档与酒馆两边都会给出不菲的加急赏钱。
+<br><br>
+二号冷库厚重的包铁木门半敞着，从里面涌出的盐冰寒气让门口青石板地面都结起了一层白霜。透过翻腾的冷雾望进去，只见传送带尽头的青铜主齿轮被一块冻得像铁块一样的橡木楔死死别住，电机皮带在滚轮上剧烈摩擦并冒出焦糊味。布鲁诺与老鱼贩急得团团转，只盼着有人能赶紧进库化解这场危机。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回事件分枢 (0:04)|MP Deep Docks Events Hub]]>><<pass 4>><</link>>
+<br>
+<<mprepairicon>><<link [[撬木楔复链条 (0:18)|MP Deep Docks Event Resolve]]>><<pass 18>>
+	<<set $mpDocksEvId to 4>>
+	<<if ($science or 0) gte 230 or ($skulduggery or 0) gte 230 or ($mpJobFishExp or 0) gte 4>>
+		<<set $mpDocksEvOk to 1>><<money 620>><<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<stress -4>><<tiredness 2>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<pain 4>><<stress 6>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<mpcarryicon>><<link [[抢运十筐银鳕 (0:18)|MP Deep Docks Event Resolve]]>><<pass 18>>
+	<<set $mpDocksEvId to 4>>
+	<<if ($athletics or 0) gte 230 or ($tending or 0) gte 220>>
+		<<set $mpDocksEvOk to 1>><<money 540>><<stress -3>><<tiredness 3>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<pain 3>><<stress 5>><<tiredness 4>>
+	<</if>>
+<</link>>
+<br>
+<<mpcookicon>><<link [[粗盐海带封冰 (0:16)|MP Deep Docks Event Resolve]]>><<pass 16>>
+	<<set $mpDocksEvId to 4>><<set $mpDocksEvOk to 1>>
+	<<money 320>><<tending 1>><<tiredness 2>>
+<</link>>
+
+:: MP Deep Docks Event 5 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+随着两声短促而严厉的汽笛鸣响，一艘船首架着雪亮弧光探照灯的海关稽查艇突然从外港迷雾中切入三号泊位。刺眼的白光像刀子一样扫过栈桥上的货堆与系泊船只，四名挎着警棍的港务税吏顺着跳板快步登岸，领头的稽查官手里捧着一本厚厚的进出港舱单，正挨个打开栈桥边的木箱检查是否藏有未交税的暗货或违禁古物。
+<br><br>
+此时你手边正好放着刚从干船坞旁整理出来的两只旧帆布袋，里面不仅有修船用的黄铜配件，底层夹袋里还塞着一张未盖章的旧港水路图。一旦被税吏当场搜出无标器物，不仅港区警戒会瞬间飙升，连深层船坞的入口都可能暴露在港务局眼皮底下。
+<br><br>
+探照灯的光柱正沿着栈桥木板一寸寸逼近。你可以趁灯光扫过龙门吊死角的瞬间，将帆布袋栓上铅坠沉入栈桥下方的暗桩水下；也可以主动迎上前去，凭着流利的口才与事先备好的常规鱼档收据应付稽查官的盘问。
+<br><br>
+海关稽查艇的探照灯光束在湿漉漉的栈桥与集装箱之间来回扫动，将每一处阴影都照得纤毫毕现。领头的稽查官戴着白手套，正用铁尺敲打着沿途的货箱边缘，盘问着每一名滞留在泊位上的船工与苦力。你深吸一口气稳住心神，目光迅速在脚下的活水暗桩、手里的鱼档凭证以及不远处的旧货仓之间权衡着最稳妥的脱身之策。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回事件分枢 (0:04)|MP Deep Docks Events Hub]]>><<pass 4>><</link>>
+<br>
+<<sneakicon>><<link [[沉袋入水暗钩 (0:15)|MP Deep Docks Event Resolve]]>><<pass 15>>
+	<<set $mpDocksEvId to 5>>
+	<<if ($skulduggery or 0) gte 250>>
+		<<set $mpDocksEvOk to 1>><<mpalert -10>><<money 480>><<stress -4>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<mpalert 12>><<stress 7>><<pain 2>>
+	<</if>>
+<</link>>
+<br>
+<<socialiseicon>><<link [[出示工牌周旋 (0:16)|MP Deep Docks Event Resolve]]>><<pass 16>>
+	<<set $mpDocksEvId to 5>>
+	<<if ($english or 0) gte 230 or ($maths or 0) gte 230>>
+		<<set $mpDocksEvOk to 1>><<mpalert -8>><<money 420>><<stress -3>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<mpalert 8>><<stress 6>>
+	<</if>>
+<</link>>
+<br>
+<<walkicon>><<link [[引开稽查视线 (0:15)|MP Deep Docks Event Resolve]]>><<pass 15>>
+	<<set $mpDocksEvId to 5>><<set $mpDocksEvOk to 1>>
+	<<mpalert -4>><<tiredness 2>>
+<</link>>
+
+:: MP Deep Docks Event 6 [nobr]
+<<set $outside to 0>><<set $location to "docks_building">><<effects>><<mpAmbient>>
+你在巡视三号干船坞外侧的废弃缆绳库时，忽然听见堆叠如山的旧油帆布底下传出一阵压抑的咳嗽声。拨开沾满盐霜的麻绳圈一看，一名十四五岁、身穿洗得发白的孤儿院旧衬衫的年轻帮工正蜷缩在两只空橡木桶之间，脚踝上有一道被铁丝刮破的红痕，怀里却死死抱着一只长满绿锈的六角黄铜航海匣。
+<br><br>
+见你并非贝利手下的黑衣清道夫，也不是港务局的巡警，少年紧绷的肩膀才稍微松弛下来：「别、别把声响弄大了……我是替老船长清理沉船肋木时摸到这只铜匣的，没想到工头想独吞去换赌债，我只好躲进干船坞底下。」他喘了口气，低头看了看自己发肿的脚踝，「你要是能帮我包扎一下伤口、再借条水路让我安全回宅邸街，我就把这只航海匣和藏在夹壁里的修船铜件留给你！」
+<br><br>
+缆绳库外不时有寻找跑单学徒的工头经过。你可以取出随身干净的亚麻布与草药替少年包扎伤处，并送他从暗渠水道安全离开；也可以帮他把外头的工头支开，换取他怀里的航海古物。
+<br><br>
+废弃缆绳库里弥漫着陈年麻绳、桐油与海盐混合的古怪气味，高处破损的气窗外不时掠过海鸥的影子。那名受伤的孤儿院帮工缩在橡木桶后，冻得发紫的嘴唇微微颤抖，却依旧用衣襟仔细擦拭着怀里那只镌刻着星象与海锚纹样的六角黄铜航海匣。库房木门外隐约传来粗暴的叫骂声，你必须立刻拿定主意。
+<br><br>
+海浪一下接一下地拍打着涂满防腐焦油的栈桥桩基，远处防波堤的雾角铜钟随着潮水涨落传来低沉悠长的回响。来往的船工与苦力们踩着湿滑的踏板擦肩而过，空气里始终弥漫着咸鱼、柴油与湿麻缆交织的港口气息，每一处泊位的细微动静都牵动着整片深水港区安全的神经。
+<br><br>
+<<getouticon>><<link [[返回事件分枢 (0:04)|MP Deep Docks Events Hub]]>><<pass 4>><</link>>
+<br>
+<<mpfirstaidicon>><<link [[包扎护送暗渠 (0:18)|MP Deep Docks Event Resolve]]>><<pass 18>>
+	<<set $mpDocksEvId to 6>>
+	<<if ($tending or 0) gte 220 or ($housekeeping or 0) gte 220>>
+		<<set $mpDocksEvOk to 1>>
+		<<set $mpDockTimber to ($mpDockTimber or 0) + 1>>
+		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("docks_ev6_orphan_seabox_v39")>>
+			<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+			<<money 500>>
+		<</if>>
+		<<stress -5>><<tiredness 2>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<stress 4>><<tiredness 3>>
+	<</if>>
+<</link>>
+<br>
+<<sneakicon>><<link [[制造响动引工 (0:16)|MP Deep Docks Event Resolve]]>><<pass 16>>
+	<<set $mpDocksEvId to 6>>
+	<<if ($skulduggery or 0) gte 220 or ($athletics or 0) gte 220>>
+		<<set $mpDocksEvOk to 1>><<money 450>><<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<mpalert -4>><<stress -3>>
+	<<else>>
+		<<set $mpDocksEvOk to 0>><<mpalert 6>><<pain 3>><<stress 5>>
+	<</if>>
+<</link>>
+<br>
+<<mpcookicon>><<link [[分予干粮藏匿 (0:14)|MP Deep Docks Event Resolve]]>><<pass 14>>
+	<<set $mpDocksEvId to 6>><<set $mpDocksEvOk to 1>>
+	<<set $mpDockTimber to ($mpDockTimber or 0) + 1>><<stress -3>>
+<</link>>
+
+:: MP Deep Docks Event Resolve [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+港区栈桥上的风浪渐渐平息下来，刚才那番作业或突发插曲也随之落下了帷幕：
+<br><br>
+<<if ($mpDocksEvOk or 0) is 1>>
+	<<if $mpDocksEvId is 1>>
+		<span class="green">脱钩的樟木货箱被稳稳降落在防雨栈桥上，箱内的防风鲸油与精密铜件完好无损。</span>货主感激地为你点出赏金，并将加固外箱的厚橡木板一并送给了你。
+	<<elseif $mpDocksEvId is 2>>
+		<span class="green">三号水闸底槽的铅封浮筒与暗市货包顺利完成交割，Wren的暗桩满脸钦佩地按约分给你丰厚现钱，转眼便消失在涵洞阴影中。</span>
+	<<elseif $mpDocksEvId is 3>>
+		<span class="green">在信标火光与抓钩麻缆的牵引下，失控的单桅驳船擦着暗礁边缘平安靠泊在防波堤内侧。</span>老舵手抹去脸上的海水，将船上富余的优质船材与谢礼塞进你怀里。
+	<<elseif $mpDocksEvId is 4>>
+		<span class="green">二号冷库的碎冰机重新发出均匀有力的运转声，三十筐特级银鳕鱼柳准时送上了酒馆采买马车。</span>老鱼贩与布鲁诺当场给你结清了加急红封。
+	<<elseif $mpDocksEvId is 5>>
+		<span class="green">海关稽查艇的探照灯在栈桥上扫视一圈后并未发现任何破绽，稽查官合上舱单挥手收队，港区原本紧绷的警戒彻底松弛下来。</span>
+	<<elseif $mpDocksEvId is 6>>
+		<span class="green">受惊的孤儿院帮工顺着暗渠安全脱身，临走前将那只沉甸甸的六角黄铜航海匣与夹壁里的修船木料郑重交托到你手中。</span>
+	<<elseif $mpDocksEvId is 11>>
+		<span class="green">你顺着水波纹路稳住竿梢，连续挑起三尾肥硕透亮的寒潮银鳕，老鱼贩当场给你点出四镑半鲜鱼钱。</span>
+	<<elseif $mpDocksEvId is 12>>
+		<span class="green">你将沉重的樟木箱码放得严丝合缝，工头不仅痛快结了工钱，还准许你挑走上好的修船替肋材。</span>
+	<<else>>
+		<span class="green">你灵巧地拨开七号旧仓后门挂锁，顺利取出了精心刨制的船坞构件与防水帆布。</span>
+	<</if>>
+<<else>>
+	<span class="red">由于海风湿滑与时机偏差，你在处置时没能完全得手，不仅耗费了不少气力、蹭伤了手脚，还让周遭的哨兵多看了几眼。</span>好在你及时抽身退入阴影，没有造成不可挽回的损失。
+<</if>>
+<br><br>
+海雾在防波堤灯火下缓缓流动。你可以趁着空档前往深层船坞把新攒下的木料投入船体改造，或者去中层工区继续当班，也可以返回事件分枢或码头总枢稍作休整。
+<br><br>
+防波堤外的浪头撞在消波石上激起一片白沫，很快又退回幽暗的海面。栈桥上的脚夫与水手们陆续散去，各自回到原本的工位上继续忙碌，仿佛刚才那场惊心动魄的险情只是旧港日常里再普通不过的一朵浪花。你在背风的缆桩旁拍了拍衣摆上的盐粒与木屑，将刚刚所得的收获妥善收好，目光重新投向灯火摇曳的港区深处。
+<br><br>
+<<getouticon>><<link [[返回码头总枢 (0:04)|MP Deep Docks Hub]]>><<pass 4>><</link>>
+<br>
+<<investigateicon>><<link [[返回事件分枢 (0:04)|MP Deep Docks Events Hub]]>><<pass 4>><</link>>
+<br>
+<<mprepairicon>><<link [[前往深层船坞 (0:12)|MP Deep Docks Deep]]>><<pass 12>><</link>>
+<br>
+<<mpcarryicon>><<link [[转赴中层当班 (0:10)|MP Deep Docks Mid]]>><<pass 10>><</link>>

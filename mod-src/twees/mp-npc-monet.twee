@@ -1,0 +1,334 @@
+:: Widgets MP NPC Monet [widget nobr]
+<<widget "mpInitNpcMonet">>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.monet>><<set $mpNpcs.monet to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1, axis: 0, axisLabel: "缪斯", pigment: 0, artworks: 0, poseStyle: "none" }>><</if>>
+<<if $mpNpcs.monet.axis is undefined>><<set $mpNpcs.monet.axis to 0>><</if>>
+<<if !$mpNpcs.monet.axisLabel>><<set $mpNpcs.monet.axisLabel to "缪斯">><</if>>
+<<if $mpNpcs.monet.pigment is undefined>><<set $mpNpcs.monet.pigment to 0>><</if>>
+<<if $mpNpcs.monet.artworks is undefined>><<set $mpNpcs.monet.artworks to 0>><</if>>
+<<if !$mpNpcs.monet.poseStyle>><<set $mpNpcs.monet.poseStyle to "none">><</if>>
+<</widget>>
+
+:: MP NPC Monet Deep Hub [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+阁楼画室在康努达图斯街的最上一层。斜屋顶的天窗把午后的光削成一片薄柠檬黄，铺在波斯地毯、颜料箱和半干的画布上；松节油、亚麻籽油与冷掉的咖啡气味交叠着，尘埃在光柱里慢慢下沉。莫奈背对着门立在画架前，袖口蹭着群青与赭石，听见门响也不回头。
+<br><br>
+「先别动。」她说，「你站在门口这一下，把墙上的灰蓝压暗了半个调。正好，就停在那儿。」
+<br><br>
+她换左手持笔，这才转过身来，眼神还带着审视画布时的那种专注：「我这里不接闲客，只接缪斯。你想看账簿，还是替我看光？」
+<br><br>
+墙上钉着一张手绘进度表，边角被颜料染得发硬。你走过去，把眼下的状况逐条对过：
+<br>
+【缪斯共鸣】<<print _npc.axis>>/100 ｜ 矿物颜料 <<print _npc.pigment>> 份 ｜ 馆藏画作：<<if _npc.artworks gte 3>>灰雾肖像、钟楼夜雨与壁画手稿，三幅都挂在里间<<elseif _npc.artworks gte 2>>灰雾肖像与钟楼夜雨两幅<<elseif _npc.artworks gte 1>>只有一幅灰雾肖像，其余墙面空着<<else>>四面空墙，连钉子都没钉<</if>>
+<br>
+【未完成的壁画】<<if (_npc.stage or 0) gte 5>>已经定了归属，不再需要旁人插手<<elseif (_npc.stage or 0) gte 4>>底稿拼合完毕，只等上墙<<elseif (_npc.stage or 0) gte 3>>画框暗码核对过，颜料却还没调匀<<elseif (_npc.stage or 0) gte 2>>古法矿物调成了，旧墙仍光着<<elseif (_npc.stage or 0) gte 1>>白灰刮净，底下的线稿露了一角<<else>>旧墙还蒙着厚厚一层白灰，她三年没让人碰<</if>>
+<br>
+【世界】<<if $mpWorldMonetEnding is "public">>侧厅的壁画早已揭幕，镇上的人管那面墙叫「雾里的海」，沙龙请柬开始往这间阁楼寄。<<elseif $mpWorldMonetEnding is "private">>壁画覆着亚麻布，钥匙只在她手里；贵族委托断了大半，她靠小画与修画过活。<<else>>壁画还没定归属，市政厅催过两回。<<if $mpWorldHighStreetOutcome is "guildpact">>高街商盟替你压下过其中一回。<<elseif $mpWorldHighStreetOutcome is "nightmarket">>夜市的人放话说，画里得留他们的一块招牌。<</if>><</if>>
+<br><br>
+「光会说实话。」莫奈在你身后开口，声音不高，「人不说，颜料也不说。你要是愿意留下，我这儿有四件事缺人手。」
+<br><br>
+<<getouticon>><<link [[返回莫奈身边 (0:02)|MP NPC Monet Hub]]>><<pass 2>><</link>><br>
+陪她说话最省力，只是她记性太好，你敷衍过一次，下一回她就只同你谈天气与松节油的价钱。
+<br>
+<<socialiseicon>><<link [[核对关系阶位 (0:06)|MP NPC Monet Tier Action]]>><<pass 6>><</link>><br>
+三张画室委托压在软木板上，颜料从她柜里出，交期却算在你头上——做坏了没有工钱，她也只会说一句「光今天不站在你这边」。
+<br>
+<<investigateicon>><<link [[承接画室委托 (0:10)|MP NPC Monet Loop]]>><<pass 10>><</link>><br>
+里间挂着的画，每一幅都改过她说话的方式；可要再添一幅，得先凑够两份矿物颜料。
+<br>
+<<shopicon>><<link [[查看画作陈列 (0:08)|MP NPC Monet Subsys]]>><<pass 8>><</link>><br>
+市政厅侧厅那面墙，她提到时总是先说颜色，再忽然停住，像画到一半忘了下一笔。你若真问起，她会领你下楼，一路不说话。
+<br>
+<<link [[追查未竟壁画 (0:12)|MP NPC Monet Deep Quest 1]]>><<pass 12>><</link>>
+
+:: MP NPC Monet Tier Action [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+莫奈把调色盘搁在窗台上，先看光，再看你。今天的光偏冷，是一种没调匀的象牙白，落在你脸侧，把她眼底那点笑意也压得淡了。
+<br><br>
+<<if _npc.axis gte 60 and (_npc.love or 0) gte 20>>
+【深层绑定】她把画笔随手插进陶罐，走过来替你把领口扶正，指尖在你肩线上量了量：「你站左边三分之一，光从右肩进来，这样画出来的人像会自己往里走。」她没有问你今天来做什么——她已经默认你会留下，直到窗外的光转过屋脊。画架上的布半掀着，底下那幅画只画到肩，她说脸要等你来才动笔。
+<<elseif _npc.axis gte 35 or (_npc.trust or 0) gte 12>>
+【知己共鸣】她掀开画架上的防尘布，露出一幅没给赞助人看过的画：雨天窗边一个背影，脸被雾吃掉。「艾弗里要的是能挂进客厅的东西，这一幅不行。」她把笔递给你，「你替我看看，这层灰是不是压得太重了。」你伸手去比颜色的深浅，她把灯往你这边挪了挪，没说话。
+<<elseif _npc.axis gte 15 or (_npc.trust or 0) gte 5>>
+【熟识协作】她让你端着调色盘，自己退开两步打量你的姿势：「手别抬那么高，会把光挡掉。对，就这样。」她一边调色一边问你镇上的事，问得很轻，像怕惊动什么。你端得久了一点，她也没催，只在颜色快干时伸手过来，替你添了半勺亚麻油。
+<<else>>
+【初识试探】她只同你谈材料，指节敲着一罐亚麻仁油：「新压的油清亮，陈油发黄，画三年就看出来了。」你试着问她的私事，她把话头拐回颜料价钱，语气不冷不热，像一层还没干透的底料。窗台上的群青罐子被人反复开合，边缘结了硬壳，她也不擦。
+<</if>>
+<br><br>
+<<if $mpWorldMonetEnding>>壁画的风声传开以后，来找她的人多了，她反倒更愿意同你说话——你是少数不冲着那面墙来的人。<<if _npc.axis gte 60>>她说，画上墙之后，肯坐下来的人比站着看的人少得多。<</if>><</if>>
+<br><br>
+寒暄不必挑时机。你在画室待得够久，知道她几点磨颜料、几点需要有人递一块干净布；八分钟里哪怕只说天气，缪斯也会悄悄涨一点，走的时候肩上的疲惫轻了些。她递过来的那块布总是洗得发白，边角有过被剪掉的旧名字。
+<br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[日常寒暄交流 (0:08)|MP NPC Monet Deep Hub]]>><<pass 8>><<set _npc.axis to Math.min(100, _npc.axis + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><</link>><br>
+<<if _npc.axis gte 15 or (_npc.trust or 0) gte 5>>
+交心要有凭据。她肯把未完成的画转过来给你看，才说明她愿意让你走进构图里；坐十二分钟，听她说完一段不愿登门的委托，出来时人会轻很多。她说那些话时眼睛一直盯着画，只有在提到某个名字时才偏过来看你一下。
+<br>
+<<investigateicon>><<link [[知己深度交心 (0:12)|MP NPC Monet Deep Hub]]>><<pass 12>><<set _npc.axis to Math.min(100, _npc.axis + 6)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<stress -4>><</link>><<else>>
+可你们还没熟到那一步。她正在调一块赭石，头也不抬：「这块还没干，别碰。」被挡回来的人只能自己找台阶下，缪斯反而退了两分，胸口闷上一阵。窗外的光挪过去，画架上的布重新罩严。
+<br>
+<<mpsneakicon>><<link [[冒昧打探底细 (0:12)|MP NPC Monet Deep Hub]]>><<pass 12>><<set _npc.axis to Math.max(0, _npc.axis - 2)>><<stress 3>><</link>><</if>>
+
+:: MP NPC Monet Loop [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+三张委托并排钉在软木板上，下角都用炭笔标着交期。莫奈用笔杆点过去，先点最暖的一张：「这张要暖，暖到像屋里有人提前生了炉子。」再点中间那张，颜色忽然压低：「这张要冷，冷得让人不敢多看。」最后一张她没碰，只抬了抬下巴示意窗外。
+<br><br>
+「暖的那张是给香料商女儿的，坐不住，画到一半就要吃糖。」她把一叠炭稿翻过去，「冷的那张没有名字，画完就进箱子，钱先付了一半。街上那张不用谁点头，雾说了算。」她顿了一下，「三张里只有一张能挂到人前。你挑，我不劝。」
+<br><br>
+你手上的矿物颜料现在是 <<print _npc.pigment>> 份。交期不会等人，颜料却可以再攒；窗台上的雾潮水尺停在 <<print ($mpFogTide or 0)>>，玻璃上的水汽正往一边斜，说明外面的雾还要再厚一阵。
+<br><br>
+上一回你选的是<<if _npc.poseStyle is "light">>暖光下的光影速写<<elseif _npc.poseStyle is "darkroom">>暗室里的显影<<elseif _npc.poseStyle is "street">>雾里的街景临摹<<else>>——还没开工<</if>>，画架上的痕迹还在，她没动过。
+<br><br>
+她不催你。她说光这种事，催出来的都不算数，何况画布又不会跑。
+<br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+【光影速写】暖光肖像最讨贵族喜欢。你只需坐在窗边让她看清下颌到锁骨那道明暗，剩下的交给她。代价是十五分钟里不能动，肩背会僵；她若嫌光不对，会亲自动手调整你的姿势，指尖凉，动作却稳。做完这一张，颜料能多出两份，可你的腿会麻到站不起来。
+<br>
+<<investigateicon>><<link [[尝试光影速写 (0:15)|MP NPC Monet Loop Resolve]]>><<pass 15>><<set _npc.poseStyle to "light">><</link>><br>
+【暗室显影】禁画不在委托单上，只在口耳之间。药水的气味冲得人眼睛发酸，红灯光下看不清彼此的脸，做成了能卖出高价，做砸了没人会承认经手。她知道风险，仍把钥匙放在你够得到的地方；进门之前，她只说了一句「里面那盏灯是红的，看久了，出来会觉得什么都偏青」。
+<br>
+<<shopicon>><<link [[协助暗室显影 (0:15)|MP NPC Monet Loop Resolve]]>><<pass 15>><<set _npc.poseStyle to "darkroom">><</link>><br>
+【街景临摹】雾是活的，构图得跟着它跑。你得抱着画板在街口站足十五分钟，膝盖发酸，回来时袖口全是潮气；可只要雾的层次抓准了，那幅画会比肖像更耐看。她说雾天最难的不是画，是决定哪一层先落笔。
+<br>
+<<socialiseicon>><<link [[配合街景临摹 (0:15)|MP NPC Monet Loop Resolve]]>><<pass 15>><<set _npc.poseStyle to "street">><</link>>
+
+:: MP NPC Monet Loop Resolve [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+收工的时候，画室里只剩一盏灯。莫奈把围裙解下来搭在椅背，先看你，再看画。窗外天色已经沉成深紫，玻璃上映出两个人影，恰好一个站着一个坐着。
+<br><br>
+<<if _npc.poseStyle is "light">>
+暖光那一幅干得最快。画面里的你侧着脸，右肩有一段很薄的亮边，像有人从窗外伸手托了一下。她用指背蹭了蹭画布边缘：「这块柠檬黄调对了，你坐着的时候没乱动，光才留得住。」她又退开半步，眯眼看了看，「脸颊那块还差一道，明天光进来我再补。」
+<<elseif _npc.poseStyle is "darkroom">>
+红灯熄了，药水盘里的纸还滴着水。她把那张不能见光的画翻过来扣在架子上，声音压得很低：「显影过头半分，脸就糊了。今天刚好。」她没有说这幅画将来去哪儿，只把暗室钥匙重新收进衣袋，钥匙串上多了一枚你没有见过的铜牌。
+<<elseif _npc.poseStyle is "street">>
+画板上的雾分了三层：近处灰紫，中景是发白的青，远处只剩一道没擦干净的赭。她对着窗外的街口比了比：「雾走得比人快。你要是再站十分钟，这一层就没了。」说完自己先笑了，说可惜画布不会走路。
+<<else>>
+画架上是一张空画布。她还没决定今天画什么，只把调色刀擦干净，等你说。
+<</if>>
+<br><br>
+接下来要怎么收，得看你手上的功夫。若你舞步稳、心里定得住，或者她已经在构图里给你留了位置，就能把这一回的成果稳稳收拢：颜料过滤、研磨、装罐登记，带走两份矿物颜料，缪斯也会跟着涨。她会在罐口贴一小条纸，写上当天的日期和光的样子，字很小，像怕占地方。
+<br><br>
+若火候不够，颜料会结块，边缘起皮，只能把画布从架子上取下来。她不责怪，只让你自己收拾：多站几个钟头，肩颈发沉，心口也跟着发闷。这一趟既没有颜料入库，也不会有任何报酬——她既不罚你钱，也不会替你把损失补上。颜料罐还是空的，她只把盖子盖好，放回原处。
+<br><br>
+「画坏不要紧。」她背对着你洗手，水声哗哗，「怕的是坏了还硬说好。今天坏了，明天还有光。」
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if ($danceskill or 0) gte 220 or ($willpower or 0) gte 380 or _npc.axis gte 25>><<link [[稳妥收拢成果 (0:10)|MP NPC Monet Deep Hub]]>><<pass 10>><<set _npc.pigment += 2>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><<stress -2>><</link>><<else>><<link [[勉强收拾残局 (0:10)|MP NPC Monet Deep Hub]]>><<pass 10>><<set _npc.axis to Math.max(0, _npc.axis - 1)>><<tiredness 3>><<stress 4>><</link>><</if>><br>
+<<shopicon>><<link [[转去子系统页 (0:04)|MP NPC Monet Subsys]]>><<pass 4>><</link>>
+
+:: MP NPC Monet Subsys [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+里间比外头凉两三度，墙上挂着不同年份的画，每幅下面钉一枚小铜牌，写着年份和一句她自己的批注。她端着灯走在前面，光扫过画框边缘，像在点数什么。地板有一道旧划痕，从门口一直延伸到最里的那面墙，是被画架腿磨出来的。
+<br><br>
+靠墙的木箱里码着旧画布，标签上写着年份与用途，最底下那一卷一直没拆开。她见你看，说那是很多年前买的，画什么都嫌配不上，就先放着。「有些布是留着给以后的。」她说这话时语气很轻，像在说一件与自己无关的事。
+<br><br>
+<<if _npc.artworks gte 1>>
+【灰雾肖像】画的是雨天窗边的背影，脸被雾吃掉。铜牌上只有一行字：「不卖给客厅。」自从它挂上墙，莫奈同你说话时会绕开「脸」这个字；你若追问，她就说那天窗上的水汽太厚，人本来就看不清。
+<br><br>
+<</if>>
+<<if _npc.artworks gte 2>>
+【钟楼夜雨】钟楼立在雨里，钟面是空的，指针被人刮掉了。她说那是「时间不敢落笔的地方」。有这幅画在，她提起市政厅的口气会松一些，偶尔还会问你要不要一起去钟楼底下看看那面空钟。
+<br><br>
+<</if>>
+<<if _npc.artworks gte 3>>
+【壁画手稿】炭笔与蛋彩的小稿，边缘卷起，右下角有一道被反复涂改的痕。它挂在这里以后，那面墙才真正成了可以谈的事，而不是一句说到一半就停住的话。她说小稿比成品诚实，成品要给人看，小稿只给自己看。
+<br><br>
+<</if>>
+<<if _npc.artworks lt 3>>空着的墙面还在等下一幅。她掂了掂你带回的颜料罐：「再有两份，就能绷一块新画布。颜色得自己磨，磨细了才不发灰。」说完又补一句，墙上的钉子她已经提前钉好了，位置量过三遍。<</if>>
+<br><br>
+当前馆藏 <<print _npc.artworks>> 幅，手里矿物颜料 <<print _npc.pigment>> 份。
+<br><br>
+【扩建】两份矿物颜料换一幅新画：绷布、上底、起稿，耗掉一刻钟。颜料足够时，她会让你亲手把画挂上钉，再退到门口看位置正不正；不够时硬要凑，只能用陈颜料兑松节油，颜色发灰，墙面起皮，人也会被那股味道熏得发闷。她说颜料和光一样，欠一分就是欠一分，凑不出来。
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<if _npc.artworks lt 3 and _npc.pigment gte 2>><<link [[投入资源扩建 (0:15)|MP NPC Monet Subsys Upgrade]]>><<pass 15>><<set _npc.pigment -= 2>><<set _npc.artworks += 1>><<set _npc.axis to Math.min(100, _npc.axis + 8)>><</link>><<else>><<link [[资源不足强修 (0:15)|MP NPC Monet Subsys Upgrade]]>><<pass 15>><<tiredness 2>><<stress 3>><</link>><</if>><br>
+颜料见底就去接委托。她把空罐子倒扣在窗台上晾着，说画布可以等，光不能等。
+<br>
+<<investigateicon>><<link [[去筹集新资源 (0:04)|MP NPC Monet Loop]]>><<pass 4>><</link>>
+
+:: MP NPC Monet Subsys Upgrade [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+新画挂上去的那一刻，莫奈退到门口，站了很久没说话。灯光斜斜地打在画框上，画布的白还带着潮气，边角有一小片没调匀的青。她抬手比了比画框与墙的距离，又放下，像在等颜色自己走完最后一点。
+<br><br>
+「光从左边来的时候，它会亮一点。」她终于开口，「等干透了，我再补一道罩光。」说完她蹲下去看画框底边，指尖在木纹上敲了两下，确认钉子吃住了墙。
+<br><br>
+馆藏画作已有 <<print _npc.artworks>> 幅，剩下的矿物颜料 <<print _npc.pigment>> 份。她说这些东西急不得，也不催你再去接委托；倒是把窗帘往旁边拢了拢，让下午的光能多留一刻。
+<br><br>
+「往左半寸。」她忽然开口，自己却没有动手，「从你站的位置看，框子是偏的。」你侧头去看，果然有一线墙比另一边宽。她等你点头，才把钉子重新量过。挂好以后她退到门口，说这些画挂起来以后，将来拼壁画底稿时，哪一段该接哪里，心里就有数了。
+<br><br>
+剩下的颜料被她收进一只铁盒，盒盖内侧写着年份和产地，字迹一年比一年潦草。她说下一幅想画钟楼，可钟楼的雨还没下够；说完自己也觉得好笑，说画家的毛病就是总在等天。
+<br><br>
+里间的旧躺椅靠着窗，毯子上有洗不掉的松节油味。画挂得够多的时候，这间屋子终于像个能坐下来的地方：你可以在这里歇十分钟，肩膀卸下来，眼睛离开画布一会儿，她坐在另一头修一小块脱落的颜色，谁也不说话。若一幅都还没挂上，屋里只有硬木箱和半干的颜料，坐下去只会更累，墙也空得让人心里发慌。
+<br><br>
+「椅子腿有点晃。」她蹲下去，在椅脚底下垫了一张折起的旧画报，又试了试，才让你坐。窗外的光正好移过来，把新画上那片青照得发亮，她眯起眼看了一会儿，什么也没说。铁盒里的颜料她数过一遍，说再攒两份就够下一块布，语气平平的，没有催促的意思。
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<link [[返回子系统页 (0:02)|MP NPC Monet Subsys]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[利用设施休整 (0:10)|MP NPC Monet Deep Hub]]>><<pass 10>><<if _npc.artworks gte 1>><<stress -4>><<tiredness -2>><<else>><<stress 1>><</if>><</link>>
+
+:: MP NPC Monet Deep Quest 1 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+市政厅侧厅搭着脚手架，脚下一层细白灰，踩上去吱吱作响。莫奈仰头看那面墙，先说的是颜色：「这层白灰是发暖的，暖得假，像有人往石灰里掺了糖。底下的线稿该是冷的，青灰，被盖了二十年。」
+<br><br>
+墙比人还老。白灰是后来糊上去的，糊的人不懂画，只想把旧东西盖住。管事的书记员在门口探头，说这面墙本来要拆，是那位女画师递了七页纸才保下来的。她没接话，递给你一把宽刃刮刀：「慢一点。线稿是炭的，用力过猛，一刮就跟着掉了。」
+<br><br>
+「我不碰。」她补了一句，声音低下去，「手一放上去，就会想起二十年前站在这面墙前的人。刮灰这活儿，得交给现在的手。」说完她把刮刀塞进你掌心，自己退到两步外扶灯，灯罩上的缺口漏出一线白光，正落在墙根。
+<br><br>
+当前缪斯 <<print _npc.axis>>，馆藏画作 <<print _npc.artworks>> 幅，壁画停在：<<if (_npc.stage or 0) gte 1>>白灰已刮开一角<<else>>整面墙还蒙着白灰<</if>>。
+<br><br>
+【轻刮表层白灰】她在旁边替你扶着灯，光要一直照在刀口上。你若已经能读懂她的构图，或里间的画让她信得过你的手，又或者你自己熬得住长时间举臂，这一刀就能稳稳落下，露出底下的线稿，青灰的炭线像从水里浮出来。若火候不到，刀会打滑，白灰簌簌落进眼睛，你只能退开，胸口发闷，肩颈发酸。若这一刀成了，她会用指腹顺着露出的线走一遍，像替谁认路；指尖在转角处停了很久，才慢慢收回去。
+<br><br>
+【拓印底层线稿】不去动墙，改用薄纸覆上去，隔着纸用炭粉轻轻拍打，把线稿的起伏拓下来。伤不着画，只是要一直半弯着腰，站起来时腰像被人从中间折过。她在一旁看着，说这样也很好——「看不见的东西，先记下来。」拓完的纸她会一张张收进木筒，背面写上日期与当天的天气，说这些纸将来比画值钱。
+<br><br>
+收工前她让你把手贴在刚露出的线稿上，隔着一层薄薄的炭痕。墙是凉的，凉得像深水；她却说这温度刚刚好，说明底子还活着，只是被人按住太久了。
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 10 or _npc.artworks gte 1 or ($willpower or 0) gte 360>><<link [[轻刮表层白灰 (0:15)|MP NPC Monet Deep Quest 2]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 1)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[轻刮表层白灰 (0:15)|MP NPC Monet Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<link [[拓印底层线稿 (0:15)|MP NPC Monet Deep Quest 2]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 1)>><<tiredness 2>><</link>>
+
+:: MP NPC Monet Deep Quest 2 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+画室后间的工作台上摊着几块矿石。莫奈拿起最蓝的一块，对着窗举起来：「群青不是蓝，是蓝里带一点紫的冷。磨太粗会发脏，磨太细又会失掉骨头。」石头在光里透出一点深红，她说那是青金石里藏着的晚霞。
+<br><br>
+她说话时手上没停，研杵在钵里转着圈，声音像雨。二十年前的老画师用蛋清调它，如今她试的是亚麻油：「油慢，可油能留住光。急不得。」矿石是格威岚从码头替她留的，一批比一批贵，她只挑最沉的那几块，说轻的没有骨头。
+<br><br>
+「石头得挑沉的，轻的里头空。」她把选剩的碎块扫进抽屉，「格威岚说这批是从旧教堂地基里挖出来的，敲开时还带着灰。」她挑出一块放在你手边，青得发暗，「今天用它。磨完你带一点回去，搁在窗台上，看它在不同时辰变成什么颜色。」
+<br><br>
+当前缪斯 <<print _npc.axis>>，馆藏画作 <<print _npc.artworks>> 幅，壁画停在：<<if (_npc.stage or 0) gte 2>>古法矿物已调成<<elseif (_npc.stage or 0) gte 1>>白灰刮净，正缺颜料<<else>>旧墙还没动<</if>>。
+<br><br>
+【研磨群青石粉】研钵要压稳，手腕转得匀，一圈一圈把石粉收到钵底。你若已经摸清她的配色习惯，或里间那幅画证明过你的手，或你自己有那份耐性，磨出来的粉会细得在光里浮起来，落进油里像一小片海。若心浮，粉里会混进粗粒，一涂就发灰；她会让你停下，你却已累得抬不起手腕，心口也堵着。磨好的粉还要过三道筛，最后一道用指腹蹭，细到觉不出颗粒才算成。
+<br><br>
+【测试亚麻底油】先在边角小木板上刷一层底油，看它吃不吃颜料。这活儿不难，却要反复等干、再刷，一刻钟下来腰背发僵。她说不怕慢，怕的是画到一半才发现底子没吃住，到那时整幅都得铲掉重来。她教你看木板的边：油吃住了，边会微微发暗；没吃住，便永远是干的白。
+<br><br>
+「你看这块蓝。」她把矿石放回台面，「它自己不知道会变成什么。是我们让它落在光里。」
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 20 or _npc.artworks gte 1 or ($willpower or 0) gte 360>><<link [[研磨群青石粉 (0:15)|MP NPC Monet Deep Quest 3]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 2)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[研磨群青石粉 (0:15)|MP NPC Monet Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<link [[测试亚麻底油 (0:15)|MP NPC Monet Deep Quest 3]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 2)>><<tiredness 2>><</link>>
+
+:: MP NPC Monet Deep Quest 3 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+钟楼下的旧画廊夜里不上锁，门轴一响，整条走廊都跟着回音。莫奈提着一盏罩了蓝布的灯走在前面，光被布滤成很深的靛色，落在画框上，金漆浮出一点冷白。她走得很慢，鞋跟叩在石板上，一声一声，像替谁数着时辰。
+<br><br>
+「白天看不出来。」她把灯举高，「这些框子是艾弗里家旧宅拆下来的，背面刻过号码。号码对上了，才知道壁画原本该挂在哪一面墙。」她说着停在一幅空框前，框里没有画，只剩四个钉眼，「这一幅被人取走了，取的人连钉子都拔干净了。」
+<br><br>
+「框里原先画的是海。」她指着空框旁边的钉眼，「画的就是侧厅那面墙如今的位置，二十年前已经有人画过一遍。后来墙被糊了，画也被取走。我找了很多年，只找到这个框。」灯影里她的侧脸很静，像在跟谁对峙，又像在等一个回答。
+<br><br>
+当前缪斯 <<print _npc.axis>>，馆藏画作 <<print _npc.artworks>> 幅，壁画停在：<<if (_npc.stage or 0) gte 3>>画框暗码已核<<elseif (_npc.stage or 0) gte 2>>矿物调成，缺的是旧档<<else>>还停在更早的一步<</if>>。
+<br><br>
+【核对画框暗码】把画框一幅幅翻过来，就着靛色的灯辨认刻痕。这活儿要眼力也要沉得住气；你若已经能跟上她的思路，或里间那幅画替你作过保，或你自己撑得住整夜不睡，暗码会一行行对上，把侧厅那面墙的来历拼出来。若眼花了、手抖了，灯影一晃，刻痕便糊成一片，你只能退到走廊里，疲惫和懊恼一起压上来。
+<br><br>
+【临摹残缺落款】落款被虫蛀掉大半，只剩起笔与收锋。你伏在画框边一毫米一毫米描，纸换了三张，膝盖跪得发麻。她说落款是画家的手印，「描得像不算本事，描得敢认才算。」描完她把纸举到灯下，看了很久，才轻轻折好收进怀里。
+<br><br>
+走廊尽头有扇小窗，雾从缝里渗进来。她忽然说：「你发现没有，这些画全都朝着同一面墙挂。挂它们的人，一直在等一幅还没画完的东西。」
+<br><br>
+「你要是哪天路过钟楼，替我看看那口空钟。」她把灯放低，声音几乎被走廊吞掉，「我不太敢一个人去。」
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 30 or _npc.artworks gte 1 or ($willpower or 0) gte 360>><<link [[核对画框暗码 (0:15)|MP NPC Monet Deep Quest 4]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 3)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[核对画框暗码 (0:15)|MP NPC Monet Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<link [[临摹残缺落款 (0:15)|MP NPC Monet Deep Quest 4]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 3)>><<tiredness 2>><</link>>
+
+:: MP NPC Monet Deep Quest 4 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+三幅残卷铺在画室地板上，用镇纸压住四角。拼起来是一整幅壁画的底稿：左边是海，中间是钟楼，右边空着一大块，什么都没画。纸比现在的画纸薄，透光能看见背面还有一层更早的线，是她自己刮掉重来的。
+<br><br>
+「空的这块，我改了七次。」莫奈蹲在边上，指尖悬在纸面上没落下去，「每一次都觉得该画个人，可画谁都不对。太满，光进不来。」她抬眼看你，又移开，「后来我想，也许该留一道门。」说完这句，她把最右边那张残卷往你这边推了推。
+<br><br>
+她翻过最左边那张，背面用铅笔写着几行小字，年份一层压着一层。「每次改，我都记一笔。你看这条，写的是『今天的光太亮了，画什么都多余』。那天我什么也没画。」说完她把纸抚平，掌心在折痕上按了很久，像在安抚一道旧伤口。
+<br><br>
+当前缪斯 <<print _npc.axis>>，馆藏画作 <<print _npc.artworks>> 幅，壁画停在：<<if (_npc.stage or 0) gte 4>>底稿已拼合<<elseif (_npc.stage or 0) gte 3>>旧档核过，底稿还散着<<else>>更早的步骤<</if>>。
+<br><br>
+【拼合三幅残卷】边缘的撕口要对上，纸的纹理也要顺着。你若熟悉她的构图，或里间的画让她愿意把这一角交给你，或有那份定力，三幅能严丝合缝地接起来，空处的位置也刚好留出来，像本来就该在那儿。若对不准，纸边会起毛，她的呼吸会停半拍，你只能把残卷重新分开，肩背酸得直不起来。
+<br><br>
+【固定画布木框】把新绷的画布敲进木框，四角加楔，锤子落轻了松，落重了裂。一刻钟敲下来，虎口发麻，耳朵里全是木头绷紧的响声。她在一旁听，说木头和画布一样，都得留一点余地；说完又递给你一块砂纸，让你把边角磨圆。
+<br><br>
+拼好的底稿铺在地上，像一扇开向别处的窗。她蹲了很久，忽然说：「等它上了墙，光每天都会来一次。来一次，就少一次。所以得画对。」
+<br><br>
+她把三张残卷按顺序叠好，用一条旧布带捆起来，放进木筒最里侧。筒口塞紧之前，她回头看了你一眼，像确认什么还在。
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<if _npc.axis gte 40 or _npc.artworks gte 1 or ($willpower or 0) gte 360>><<link [[拼合三幅残卷 (0:15)|MP NPC Monet Deep Quest 5]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 4)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[拼合三幅残卷 (0:15)|MP NPC Monet Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<socialiseicon>><<link [[固定画布木框 (0:15)|MP NPC Monet Deep Quest 5]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 4)>><<tiredness 2>><</link>>
+
+:: MP NPC Monet Deep Quest 5 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>>
+最后一层光油刷完，壁画在侧厅的墙上慢慢暗下去，又慢慢亮起来。莫奈退后三步，第一次没有评价颜色。她把刷子搁进溶剂罐，站得笔直，像在等谁先开口。脚手架已经撤了，地面的白灰扫干净，只剩墙上那一片刚醒过来的海。
+<br><br>
+空着的那一块，最后画的是一道没有人的门。门缝里透出一点暖光，颜色很薄，靠近才看得见。她画门的时候没有让你看，只在收笔后说了一句：「光总得有个地方进来。」
+<br><br>
+「门是我最后画的。」她把手上的光油擦掉，「画的时候一直在想，谁会从那儿进来。想来想去，想到的都是同一个人。」她没有看你，只把灯往画那边挪了挪，让那一道暖光更清楚一点。
+<br><br>
+当前缪斯 <<print _npc.axis>>，馆藏画作 <<print _npc.artworks>> 幅，壁画归属：<<print ($mpWorldMonetEnding or "还没定")>>。
+<br><br>
+市政厅的人在楼下等到第三回，艾弗里派来的马车停在街角，遮雨布上积着雾水。书记员捧着契书，说只要她签个字，这面墙就归市政厅，往后由公家出钱维护。她终于转向你：「这面墙怎么处置，我想听你的。不是我拿不定主意——是这幅画里有你的位置，你该说话。」
+<br><br>
+【揭幕】让所有人来看。市政厅会办一场小小的开展，雾天里挂灯笼，镇上的人挤在侧厅门口，孩子的脸贴在玻璃上。她会成名，会收到外地的请柬，也许有一天会离开这间阁楼。这是她的画该走的路，可从此它不再只属于这间屋子，也不再只属于你们两个人。
+<br><br>
+【封存】用亚麻布把它盖起来，钥匙只留一把。市政厅会不高兴，赞助也会断，她得靠小画和修画过日子。但那面墙会一直停在最好的时候，光每天来一次，只来给愿意走进画阁的人看。代价是她往后要一遍遍对人说「不卖」。
+<br><br>
+她没有催你。窗外雾正浓，灯笼的光在雾里散成一团，像她调色盘上那块从没用完的暖黄。
+<br><br>
+她把沾了光油的手在围裙上擦干净，动作很慢，像在给自己留一点时间。楼下传来书记员合上契书的声音，很轻，却听得清清楚楚。
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:02)|MP NPC Monet Deep Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<link [[揭幕公共壁画 (0:20)|MP NPC Monet Ending A]]>><<pass 20>><<set _npc.stage to 5>><<set $mpWorldMonetEnding to "public">><<set _npc.axis to Math.min(100, _npc.axis + 10)>><</link>><br>
+<<socialiseicon>><<link [[封存私人画阁 (0:20)|MP NPC Monet Ending B]]>><<pass 20>><<set _npc.stage to 5>><<set $mpWorldMonetEnding to "private">><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 5)>><</link>>
+
+:: MP NPC Monet Ending A [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>><<set $mpWorldMonetEnding to "public">><<set _npc.stage to 5>>
+揭幕那天下着雾。市政厅侧厅挂起一排纸灯笼，暖黄的光被雾泡得发软，落在壁画上，海面像真的在动。人挤到台阶下面，孩子把脸贴在玻璃上哈气，艾弗里站在人群里，礼帽压得很低，没有上前；书记员念了一小段开场词，念到一半就被掌声打断。
+<br><br>
+莫奈在画前找到你。她没穿工作围裙，裙摆上还是沾了一点青。「你看那道门。」她说，「我画了七次，最后画成没有人的。现在我知道了，人不用画在门里，站在门前就够了。」她说完没有看你，只把手里那杯温热的酒递过来。
+<br><br>
+人群散到很晚。有人请她讲话，她站在画前只说了一句：「这面墙是镇上还给光的。」说完就下来了，把剩下的时间留给看画的人。艾弗里在台阶下等了很久，始终没有走近，只把一张名片交给门房；她看也没看，任它留在托盘里。
+<br><br>
+三个月后，她把阁楼的钥匙交给孤儿院，自己搭船去了北边的城。走之前她只留下一幅小画和一句话：「画室的窗别钉死，光要进得来。」孩子们搬进去那天，把画架当成了晾衣架，院长也没有拦。
+<br><br>
+画室窗台上一直摆着那只铁盒，盒盖上的年份被人用粉笔重新描过，越描越粗。院长在门边钉了一块小木牌，写着「画室」两个字，歪歪扭扭，是个刚学会写字的孩子刻的。
+<br><br>
+此后每隔一段日子，会有一封信寄到康努达图斯街。信很短，说的都是颜色：北边的海是灰蓝，比镇上的冷；她新调的赭石偏红，还得再试。信封里有时夹一小片试色纸，边上写着当天的天气，偶尔只有两个字：「有光。」
+<br><br>
+<<if _npc.axis gte 60>>信里她偶尔会多写一句：「你还在画里。」你知道她说的是哪一幅——侧厅那面墙上，门边那点暖光是照着你站过的位置调的。<<else>>信里她从不提那面墙，只说颜色和天气；有些话她宁可留给画布。<</if>>
+<br><br>
+侧厅的壁画留了下来，镇上的人管它叫「雾里的海」。逢雾天，总有人站在画前不肯走，说那面墙会呼吸。
+<br><br>
+你偶尔会收到她托人带回来的画，尺寸都很小，画的多半是窗，窗外的天色各不相同。没有附信，只在背面写一行颜色名。你把它们一排摆在原来的位置，等下一次雾起。
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:04)|MP NPC Monet Deep Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<socialiseicon>><<link [[返回莫奈身边 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+
+:: MP NPC Monet Ending B [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcMonet>>
+<<set _npc to $mpNpcs.monet>><<set $mpWorldMonetEnding to "private">><<set _npc.stage to 5>>
+覆画是在一个没有雾的清晨。莫奈踩上梯子，把浸过桐油的亚麻布从墙顶慢慢放下，布面贴着壁画滑下去，最后一点海的颜色被盖住。市政厅的人站在门口，脸色比墙还白；她只说了句：「定金我退。」声音很平，像在说今天的颜色偏灰。
+<br><br>
+赞助断得比想象中快。艾弗里的管事来取画框，一件件搬走，阁楼空下来，反而显得亮。她把画室的门槛拆了，改成谁都能推开的样子，街上的孩子放学后挤在窗边看她调色，手上沾了颜料也不挨骂。有人问她图什么，她说图个亮堂。
+<br><br>
+第一个进来的是街口卖鱼的女人，站在布前问能不能看看。莫奈把灯点上，掀开一角，只够一个人侧身进去。女人看了很久，出来时眼睛红着，说明天还来。后来每天都有人来，多半不说话，看完就走；她把门口的凳子挪到墙边，谁想坐就坐。
+<br><br>
+「这面墙不卖。」她对每个来打听的人说，语气平静，「但你可以进来看。」有些人真进来了，站在布前什么也看不见，她也照样把灯点上，说光在布底下，得等。
+<br><br>
+画阁的钥匙有两把，一把在她围裙口袋里，一把在你这里。每逢光好的日子，她会提前把布掀开一角，等你来了一起站一会儿。她开始在自己满意的画角写上两个人的名字，笔迹一深一浅，像同一束光落下的两道影子；写的时候她总要先看看你站的位置，才落笔。
+<br><br>
+<<if (_npc.trust or 0) gte 20>>钥匙交到你手上时她没有多说什么，只把写着两个人名字的那一角指给你看，然后转身去调下一块颜色。<<else>>钥匙她放在桌上，说想来看就自己开；她背对着你，肩膀却一直没松下来。<</if>>
+<br><br>
+冬天来了，画室买不起好煤，孩子们便挤在画架边取暖，她也不赶。有人把颜料蹭到墙上，她看了半晌，说留着吧，像一朵开错地方的花。那面墙从此有了几处不相干的颜色，她一次也没让人刷掉。
+<br><br>
+她再也没有提过离开的事。有时收工晚，她会靠着画架说：「从前我以为画完就算完。现在觉得，画完了，才轮到人进来。」
+<br><br>
+说完她把围裙挂好，顺手关掉一半的灯，留一盏在门边，说万一还有人想来。布下的海沉在暗处，颜色比白天更深。
+<br><br>
+<<getouticon>><<link [[返回缪斯深枢 (0:04)|MP NPC Monet Deep Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<socialiseicon>><<link [[返回莫奈身边 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>

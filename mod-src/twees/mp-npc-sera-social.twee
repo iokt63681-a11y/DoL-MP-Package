@@ -1,0 +1,282 @@
+:: MP NPC Sera Social Hub [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<set _love to (_sera.love or 0)>>
+<<set _trust to (_sera.trust or 0)>>
+<<set _cadence to (_sera.cadence or 0)>>
+下午四点零七分，高街钟表铺里正过着一天中最安静的十六分钟。塞拉把三只待修的怀表并排摆上绒布，先低头看表，再看你，最后才把目光落回你的鞋尖：「你比约定的四点整晚了七分十一秒。路上有风，我知道。」她合上表盖，又补一句，「我今天心里有零点八秒的抖动，不算在你账上。」
+<br><br>
+铺子里的三十六座钟并不齐声。它们各自快慢半拍，像三十六个人在同一个屋檐下呼吸。塞拉听得出来哪一只咳嗽，哪一只只是困了。她把一杯温着的佛手柑红茶推到你手边，杯底压着一张裁得极齐的纸片，上面用铅笔写着三件事：旧港的零件、画框的铜绿、镇钟楼的新年。纸片的右下角留着一小截空白，是她随时补记的地方。
+<br><br>
+【节律轴】<<print _cadence>>/100 —— 她愿意分给你多少个不被打断的分钟。
+<br>
+<<if _love gte 24 or _trust gte 30>>
+【关系档位·把秒针交给你】她会把你的表也接过去，替你上弦，动作比修客人的表慢一半：「你的秒针我调过。慢两秒，等你进门时刚好对上我的心跳。」说完她把你的手按在柜台上，不急着松。
+<<elseif _love gte 12 or _trust gte 14>>
+【关系档位·留一盏茶】柜台上多了一只杯子，杯沿朝你的方向偏了半寸。她不说留你，只把灯芯挑亮一点。你坐得久，她也不催，任钟摆替两个人数着停顿。
+<<else>>
+【关系档位·按刻点待客】她隔着柜台报价，语气像秒针一样直。茶是温的，椅子还在原处，没有往前挪。你若要靠近，得先把下一次到店的时刻守准。
+<</if>>
+<br><br>
+纸片上的三件事，她一件也没催。第一件是旧港捎来的油布包，包里那束游丝没有海关火漆；雷恩说急用，塞拉说来源不明。第二件是莫奈定制的铜镶画框，框上的铜绿正被她的擦铜膏一寸寸吃掉。第三件是镇钟楼的新年钟声，今年轮到她守岁。三件事都卡在误差的边缘，像三只同时慢下来的表。
+<br><br>
+她把擦铜膏的盖子拧开又合上，忽然问你：「要是修一件东西，得先弄脏另一件，你替我先动哪一件？」问完她没等你答，先看了一眼表，像在给自己的耐心计一个起始时刻。
+<br><br>
+<div id="sera-social-hub-actions">
+<<mpclockworkicon>><<link "陪她校门钟 (0:08)">><<pass 8>><<replace "#sera-social-hub-actions">>
+<<if ($science or 0) gte 200 or ($maths or 0) gte 200>>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>><<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+	你托住门钟的摆锤，让她把游丝外桩重新压紧。她盯着你的手看了四秒，才说：「误差从三秒缩到半秒。你的手比表稳。」她把这句话记在簿子背面，没有写日期。<<stress -2>><<tiredness 1>>
+	<br><br>
+	<<getouticon>><<link [[回铺子柜台 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>>
+<<else>>
+	你的指腹在游丝上多停了一息，摆轮抖出一串碎响。塞拉没有叹气，只把镊子接回去：「不是坏事。表肯把错给你看，说明它还愿意走。」她重新调了六分钟，你的肩先酸了。<<stress 2>><<tiredness 2>>
+	<br><br>
+	<<link [[回铺子柜台 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpcleanicon>><<link "替她理零件单 (0:06)">><<pass 6>><<replace "#sera-social-hub-actions">>
+<<if ($housekeeping or 0) gte 200>>
+	<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>><<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>>
+	你把零件单按尺寸、成色、来路分作三摞，连边角翘起的纸页都压平了。塞拉翻了一遍，抽出一张放回你手边：「这一张你留着。上面那只表，我想让你陪我修完。」<<stress -1>><<tiredness 1>>
+	<br><br>
+	<<link [[回铺子柜台 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>>
+<<else>>
+	你把两只同型号的游丝盒放错了格。塞拉没说什么，只把盒子换回来，指尖在标签上点了两下：「下次看齿数，不看盒子颜色。」你多花了些时候才理完。<<tiredness 2>><<stress 1>>
+	<br><br>
+	<<link [[回铺子柜台 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>>
+<</if>>
+<</replace>><</link>>
+</div>
+<br>
+<<mpbargainicon>><<link [[谈走私零件 (0:03)|MP NPC Sera Social 1]]>><<pass 3>><</link>>
+<br>
+<<link [[谈画框旧事 (0:03)|MP NPC Sera Social 2]]>><<pass 3>><</link>>
+<br>
+<<link [[守新年钟声 (0:03)|MP NPC Sera Annual]]>><<pass 3>><</link>>
+<br>
+<<link [[回塞拉身边 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Sera Social 1 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<set _wrenName to ($NPCNameList and $NPCNameList.includes("Wren") ? "雷恩" : "戴兜帽的走私客")>>
+<<set _wrenMet to ($NPCNameList and $NPCNameList.includes("Wren"))>>
+旧港三号栈桥在傍晚五点四十分退潮。风把系缆桩上的盐霜吹成一层薄粉，<<print _wrenName>>蹲在一只翻扣的货箱上，膝头摊着油布包，包里是十二枚用蜡纸隔开的铍铜游丝。没有海关火漆，没有出厂印记，只有一张用铅笔画的齿距图，图的边角还沾着咖啡渍。
+<br><br>
+「修表的小姐要的货，」他抬了抬下巴，指间那枚旧铜币翻了个面，「我给她留了三天。三天后船走，货也走。到时候她再想找，就得去外海追我的船了。」
+<br><br>
+塞拉是踩着整点的最后一响到的。她没有先看货，先看腕上的基准表，再看栈桥边的潮位尺，最后才把目光落到那包游丝上。她戴上单眼放大镜，用卡尺量了其中最上面一枚的厚度，报出数字：「零点零四二毫米。正货是零点零四〇，这包多出两微米。」她把游丝举到灯下，让光穿过螺旋，「多两微米，走时就会在第四天开始漂。客人不一定听得出来，我听得出。」
+<br><br>
+「多两微米也是铜。」<<print _wrenName>>笑了一声，把铜币抛起来又接住，「你那台周年钟等到走正关的货，客人的纪念日早过完了。他要把钟摆在家里，还是要一个说得过去的来历？」
+<br><br>
+塞拉没有立刻回答。她把放大镜推上额角，指腹在游丝边缘来回摩挲了三次，才慢慢开口：「来源不明的东西，走得再准，也是别人的时间。可客人的钟停在昨天，我不能替他把昨天拨回去。」她说完，下意识又看了一眼表，像在确认这番话有没有超时。
+<br><br>
+<<print _wrenName>>把油布包往你这边推了半寸。塞拉没有伸手，也没有走。海风把她的围裙角吹得贴在腿上，她等着你替这段误差定一个方向。栈桥尽头，夜航船的灯一盏盏亮起来，把三个人的影子拉得很长。
+<br><br>
+<div id="sera-social-1-actions">
+<<mpbargainicon>><<link "劝她收零件 (0:18)">><<pass 18>><<replace "#sera-social-1-actions">>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 2)>><<set _sera.trust to Math.max(0, (_sera.trust or 0) - 1)>><<if _wrenMet>><<npcincr Wren love 1>><</if>>
+	你说客人的钟等不起，来路的账可以以后补。塞拉看了你两秒，把油布包接过去，动作很轻，像接一件已经走慢的证物。「我收。但我要在簿子上写明是谁送来的，哪一天，几点。」<<print _wrenName>>吹了声口哨，说随你写，别写他的真名就行。塞拉没再看他，只把游丝一枚枚放进绒盒；盒盖合上时，你听见她轻轻吐出一口气。
+	<br>
+	<span class="red">她收下了零件，也收下了一笔来路不明的误差。</span><<stress 2>><<tiredness 1>>
+	<br><br>
+	<<socialiseicon>><<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+	<br>
+	<<getouticon>><<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+<br>
+<<mpwatchicon>><<link "陪她等正货 (0:22)">><<pass 22>><<replace "#sera-social-1-actions">>
+	<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 3)>><<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>><<if _wrenMet>><<npcincr Wren love -1>><</if>>
+	你替她把油布包推回去，说这单可以退，钟可以晚三天。塞拉的肩膀松了半寸，第一次当着外人的面把腕表摘下来，放进围裙口袋。「正货到之前，我先替客人把机芯洗一遍。等得起的钟，才走得长。」<<print _wrenName>>耸耸肩，把包收回怀里，临走前冲你比了个下次再谈的手势。你们在栈桥上站到灯全亮，海风把她的头发吹乱，她没有再校正过一次时间。
+	<br>
+	<span class="green">她今天把表收了起来，把等待留给了你。</span><<stress 1>><<tiredness 3>>
+	<br><br>
+	<<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+	<br>
+	<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+<br>
+<<link "让雷恩试走 (0:20)">><<pass 20>><<replace "#sera-social-1-actions">>
+	<<if ($science or 0) gte 220 or ($maths or 0) gte 220>>
+		<<set _sera.love to Math.min(100, (_sera.love or 0) + 2)>><<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>><<if _wrenMet>><<npcincr Wren love 1>><</if>>
+		你提出只借一枚，装进空壳机芯里试走一夜。<<print _wrenName>>挑眉，说借可以，押金免了，算他请客。塞拉把游丝装上摆轮，调了三次快慢针，最后把表贴在耳边听了整整一分钟才放下。「走得住。明天这个时辰，我来还货，也来付钱。」她把「付钱」两个字说得很清楚，<<print _wrenName>>笑着摆手，说跟修表的人谈钱最没意思。
+		<br>
+		<span class="green">试走的游丝在天亮时仍然稳稳地摆着。</span><<stress -1>><<tiredness 2>>
+	<<else>>
+		<<set _sera.trust to Math.max(0, (_sera.trust or 0) - 1)>><<if _wrenMet>><<npcincr Wren love 1>><</if>>
+		试走的机芯在凌晨断了游丝。塞拉没有责怪谁，只把断口夹在两张纸中间，写上时刻与温度。「不是你的错，是它本来就有伤。」她把残件还给<<print _wrenName>>，转身时又把表摸出来看了一眼。你陪她走回高街，一路上谁都没提那枚断掉的游丝。
+		<br>
+		<span class="red">断掉的游丝让她的信任往回缩了一格。</span><<stress 3>><<tiredness 3>><<pain 1>>
+	<</if>>
+	<br><br>
+	<<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+	<br>
+	<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+</div>
+
+:: MP NPC Sera Social 2 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<set _monetMet to ($mpNpcs and $mpNpcs.monet)>>
+莫奈把画框搬上钟表铺二楼时，天窗正落下一束下午三点的光。框子是黄铜的，边角生着一层薄薄的青绿，像雾停在金属上。塞拉用指腹蹭了一下，指腹立刻绿了一小块。她没有立刻擦手，先低头看表，像在给这场争执计一个起始时刻。
+<br><br>
+「别擦。」莫奈站在天窗下，袖口沾着群青，「那层绿我养了两年。你把它擦掉，画里的雾就少一层。」
+<br><br>
+「铜绿在画上是颜色，在机芯里是病。」塞拉把画框侧过来，让光落进框子内侧，「这里面卡着三枚齿轮，不擦开，我看不见咬合。看不见咬合，我就不能保证它明天还走。」
+<br><br>
+「你保证它走，谁保证我的画还活着？」莫奈的声音不高，却像一笔压得很重的颜色，「框和画是一体的。你把框擦成新铜，画框就变成了一只借来的架子。」
+<br><br>
+塞拉没有马上反驳。她摘下放大镜，用绒布把镜片擦了两遍，才说：「我给你四分钟。四分钟后，光移过窗棂，我就得下刀。到时候擦不擦，你说了不算，光说了算。」她说完又看了一次表，四分钟在她那里被切成了很细的刻度。
+<br><br>
+莫奈没有动。她看着塞拉手里的擦铜膏，像看一管会吃掉画的颜料。塞拉也没有动。她看着画框内侧那圈被铜绿糊死的齿轮，像看一只不肯走的表。两个人隔着一张工作台站着，谁都不肯先把自己的时间让出去。天窗的光沿着框角慢慢爬，像一根正在走动的秒针。
+<br><br>
+塞拉把擦铜膏放在两人中间，膏管上的标签已经磨掉了一半。她说这不是让步，是留一个可以复核的时刻；莫奈听完，从围裙口袋里摸出一截炭笔，在画框背面写下一个日期，字很小，像怕被光看见。两个人都退开半步，让那束光自己去选。塞拉趁这个空当又看了一眼表，把四分钟的余量在心里重新切了一遍。
+<br><br>
+<div id="sera-social-2-actions">
+<<mpcleanicon>><<link "按塞拉擦亮框 (0:18)">><<pass 18>><<replace "#sera-social-2-actions">>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 2)>><<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>><<if _monetMet>><<set $mpNpcs.monet.trust to Math.max(0, Math.min(100, ($mpNpcs.monet.trust or 0) - 1))>><</if>>
+	你替塞拉把绒布递过去，说钟先走，画可以以后再养一层绿。塞拉下刀很稳，擦铜膏沿着框角走了一圈，青绿褪成一条细细的水痕。莫奈一直看到最后一枚齿轮露出来，才把袖口放下。「新铜也有新铜的光。」她说，语气听不出是让步还是记账。塞拉把机芯装回去，指针重新走字时，你听见她轻轻舒了一口气。
+	<br>
+	<span class="green">钟修好了。画框旧了一层，莫奈把这件事记在了心里。</span><<stress 2>><<tiredness 1>>
+	<br><br>
+	<<socialiseicon>><<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+	<br>
+	<<getouticon>><<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+<br>
+<<investigateicon>><<link "护住那层铜绿 (0:18)">><<pass 18>><<replace "#sera-social-2-actions">>
+	<<set _sera.trust to Math.max(0, (_sera.trust or 0) - 1)>><<if _monetMet>><<set $mpNpcs.monet.trust to Math.min(100, ($mpNpcs.monet.trust or 0) + 2)>><<set $mpNpcs.monet.love to Math.min(100, ($mpNpcs.monet.love or 0) + 1)>><</if>>
+	你按住塞拉拿擦铜膏的手，说这层绿不能动。塞拉看了你一会儿，把膏管放回盒里，盖子拧得很慢。「行。框我不碰。钟修好了，画框自己会说话。」她把画框推回莫奈面前，转身去收工具。莫奈没有道谢，只把画框抱回窗下，让光重新落在铜绿上；她经过你身边时，脚步比来时轻了半拍。塞拉背对着你们，把镊子一根根插回皮套，插得比平时整齐。
+	<br>
+	<span class="red">你护住了画，塞拉把你的选择记成了一笔慢账。</span><<stress 1>><<tiredness 1>>
+	<br><br>
+	<<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+	<br>
+	<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+<br>
+<<link "只擦机芯留框 (0:22)">><<pass 22>><<replace "#sera-social-2-actions">>
+	<<if ($housekeeping or 0) gte 220 or ($skulduggery or 0) gte 200>>
+		<<set _sera.love to Math.min(100, (_sera.love or 0) + 2)>><<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>><<if _monetMet>><<set $mpNpcs.monet.trust to Math.min(100, ($mpNpcs.monet.trust or 0) + 2)>><<set $mpNpcs.monet.love to Math.min(100, ($mpNpcs.monet.love or 0) + 1)>><</if>>
+		你用蜡纸把画框外沿仔细封住，只让内侧那圈齿轮露出来。塞拉看了你的包边手法，没说话，把最小号的铜刷递给你。你们一个擦内侧，一个守外侧，光从窗棂移到墙根时，机芯重新走字，铜绿一点没少。莫奈把画框举到窗下看了很久，最后说：「下次要封边，叫我。我带的纸比你的软。」
+		<br>
+		<span class="green">机芯干净了，铜绿还在，两个人的时间都没被谁擦掉。</span><<stress -2>><<tiredness 3>>
+	<<else>>
+		<<set _sera.trust to Math.max(0, (_sera.trust or 0) - 1)>><<if _monetMet>><<set $mpNpcs.monet.trust to Math.max(0, ($mpNpcs.monet.trust or 0) - 1)>><</if>>
+		蜡纸没有封严，擦铜膏从缝里渗出去，在画框外沿留下一道浅白的痕。塞拉立刻停手，用清水冲了三遍，那道痕还是留下了。莫奈俯身看了看，没有发火，只把画框抱起来：「光今天不站在你们这边。」塞拉把擦铜膏收进盒底，手指被框角划了一道细口，她看了一眼，说不要紧。
+		<br>
+		<span class="red">画框留下一道白痕，两个人都没再说话。</span><<stress 3>><<tiredness 2>><<pain 1>>
+	<</if>>
+	<br><br>
+	<<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+	<br>
+	<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+</div>
+
+:: MP NPC Sera Annual [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<set _yearDone to (($mpNpcs.sera.annualYear or 0) is (Time.date.year or 0))>>
+<<if _yearDone>>
+今年的钟声已经响过。塞拉把钟楼钥匙挂回墙上的铜钩，钥匙旁边多了一小截用过的灯芯。她偶尔会提起那一夜，语气平平的，像在报一只表的走时。你问她到底算不算圆满，她先低头看表，再答：「误差在能修的范围内。剩下的，明年再调。」
+<br><br>
+铺子里的三十六座钟照旧各走各的，只有最靠窗的那一只被她拨快了两秒。她说不是坏了，是想让新年早一点到，又不想早得太多。铜钩上的钥匙被风吹得轻轻碰墙，一声一声，像很远的钟。
+<br><br>
+她把绒布摊开，示意你搭把手收拾昨夜留下的东西。钟绳还绕在椅背上，钟锤的边缘凝着一层薄霜，她不想让这些东西带着旧年的凉气过夜。
+<br><br>
+<div id="sera-annual-after-actions">
+<<mpcleanicon>><<link "陪她收钟绳 (0:06)">><<pass 6>><<replace "#sera-annual-after-actions">>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>>
+	你把钟绳一圈圈绕回木轴，塞拉在另一头接着，两个人的手在绳结处碰了一下。她没有缩回去，只把绳尾压进最后一圈：「这样明年一拉就开，不会打结。」她说完看了看表，像是替这句话记了一个时刻。<<stress -2>><<tiredness 1>>
+	<br><br>
+	<<getouticon>><<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+<br>
+<<mprepairicon>><<link "替她擦钟锤 (0:05)">><<pass 5>><<replace "#sera-annual-after-actions">>
+	<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+	你用干布把钟锤上的霜擦净，塞拉在旁边看着，忽然说：「你擦得比我慢。」她接过布，又擦了一遍你擦过的地方，动作却比你更轻。「慢一点好。铁也会记住手劲。」她把钟锤挂回原位，铜面在灯下泛出一小片暖光。<<stress -1>><<tiredness 1>>
+	<br><br>
+	<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+</div>
+<br>
+<<socialiseicon>><<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+<br>
+<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<<else>>
+十二月三十一日下午，镇钟楼脚下的风把纸屑卷成小小的旋。塞拉把钟楼钥匙串挂在腕上，先对了一遍市政厅的母钟，再对了一遍自己的表，两个时刻差了一秒半。她说这一秒半可以接受，又说明天不能接受。
+<br><br>
+钟楼里的铸铁大钟有八十四枚齿。塞拉已经连续来了十一天，每天把齿缝里的旧油刮掉一层。她说冷天里牛油会硬千分之三，凌晨那一下要是咬不住，整条街的新年就会晚。她说这些数字时并不看钟，只看你的反应，像在等你替她判断哪一部分可以省。
+<br><br>
+她把一盏防风灯递给你，灯罩上有一道旧裂纹，用铜丝缠着。「今晚你只要替我举灯。别照我的眼，照齿。」她顿了顿，又补一句，「要是手酸了就说。灯歪一寸，影子就偏一分，我看不清齿根。」
+<br><br>
+铺子里的三十六座小钟留在楼下，各自走着。塞拉说它们今晚不重要，重要的是楼顶那一声。她把围裙口袋里的表摸出来看了第三次，才承认自己从午后开始就有一分二十秒的心不在焉。她没有解释这一分二十秒是怎么来的，只把钥匙串在指间转了一圈。
+<br><br>
+她把灯罩上的铜丝又缠紧一圈，说这盏灯跟了她父亲很多年，灯芯换过十几回，灯罩上的裂纹却一直留着。留着的物件比修好的物件更会记时间。她说这话时没有看你，只把灯递到你手里，指尖在灯柄上多停了一息才松开。灯柄上有一圈被掌心磨亮的包浆，摸上去比铜还温。她说今晚要是顺利，明早就把这只灯擦干净，收进柜子最上层。
+<br><br>
+<div id="sera-annual-stage">
+<<link "帮她抬灯照齿 (0:10)">><<pass 10>><<replace "#sera-annual-stage">>
+	<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+	你举着灯站在她侧后方，光柱稳稳落在齿根。塞拉刮一下，停一下，等你把灯挪过去；两个人谁也没说话，只有铜刮刀擦过铸铁的细响。刮到最后一枚齿时，她直起腰，轻轻敲了敲你的手腕：「手很稳。今晚就按这个手劲来。」<<stress -2>><<tiredness 1>>
+	<<run document.getElementById('sera-annual-day').style.display = 'block'>>
+<</replace>><</link>>
+<br>
+<<link "替她温一壶油 (0:08)">><<pass 8>><<replace "#sera-annual-stage">>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>>
+	你把牛油罐坐在热水里慢慢化开，塞拉隔一会儿就用指背试一次温度。她没有夸你，只把罐子挪到离灯更近的地方：「化到能挂住齿就行，别太稀。」等油面泛起一层柔光，她把罐口封好，顺手替你抚平被风吹乱的衣领。<<stress -1>><<tiredness 1>>
+	<<run document.getElementById('sera-annual-day').style.display = 'block'>>
+<</replace>><</link>>
+</div>
+<div id="sera-annual-day" style="display:none">
+夜里十一点五十二分，钟楼里冷得能听见自己牙齿相碰。塞拉把最后一枚齿擦净，抬头看表：「还有七分四十秒。现在上弦，正好。」她握住摇柄，转了半圈，摇柄却卡住了。不是发条，是钟锤的转轴被夜里的霜咬死。她用力试了第二次，铸铁发出一声闷响，整座钟楼跟着抖了一下。
+<br><br>
+「误差不能超过七分钟。」她的声音很稳，手却停在摇柄上没动，「否则对岸的船会按旧年时间进港。」她看向你，又低头看表。表盘上的秒针走得很轻，像在替她数你还剩多少决定。
+<br><br>
+<<link "攀上钟楼解榫 (0:20)">><<pass 20>><<replace "#sera-annual-day">>
+	<<set $mpNpcs.sera.annualYear to (Time.date.year or 0)>>
+	<<if ($athletics or 0) gte 250 or ($willpower or 0) gte 320>>
+		<<set _sera.love to Math.min(100, (_sera.love or 0) + 3)>><<set _sera.trust to Math.min(100, (_sera.trust or 0) + 3)>>
+		你踩着铁梯上去，手掌贴在冻住的转轴上，先把霜搓化，再一点点把钟锤扳回卡槽。塞拉在下面举灯，光柱抖得厉害，却始终照着你的手。十一点五十九分五十秒，钟锤落下。第一声比母钟早了半秒，第二声就追平了。整条高街的窗户依次亮起来，塞拉在钟声里抬头看你，嘴唇动了动，没说出话。
+		<br>
+		<span class="green">新年钟声分秒不差。</span><<stress -6>><<tiredness 2>><<pain 1>>
+	<<else>>
+		<<set _sera.love to Math.min(100, (_sera.love or 0) + 1)>><<set _sera.trust to Math.min(100, (_sera.trust or 0) + 1)>>
+		你爬到一半，靴底在结霜的铁梯上滑了一下。塞拉在下面喊你的名字，声音第一次失了准。你抓住栏杆，硬把钟锤推回槽里，钟声还是晚了七分钟。对岸的船灯在雾里多等了一会儿才转向。塞拉没有怪你，只把灯放在地上，替你搓了搓冻僵的手：「七分钟。我记下了。明年我们从十一月开始擦齿。」
+		<br>
+		<span class="red">钟声迟了七分钟。</span><<stress 4>><<tiredness 2>><<pain 2>>
+	<</if>>
+	<br><br>
+	<<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+	<br>
+	<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+<br>
+<<link "在铺里敲手铃 (0:15)">><<pass 15>><<replace "#sera-annual-day">>
+	<<set $mpNpcs.sera.annualYear to (Time.date.year or 0)>>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 5)>><<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>>
+	你没有上楼。你拉着塞拉回到铺子里，把那盏防风灯放在柜台中央。楼下三十六座钟正好走到十一点五十九分。塞拉愣了两秒，忽然明白过来，从抽屉最深处取出一只黄铜手铃——那是她父亲留下的，铃舌上刻着一行小字。你们并肩站着，在午夜的最后一秒同时摇响它。声音不大，却把整间铺子的钟都带着响了一遍。塞拉笑着低下头：「原来新年不一定非要在最高的地方过。」
+	<br>
+	<span class="green">两个人的钟声，也算准时。</span><<stress -4>><<tiredness 2>>
+	<br><br>
+	<<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+	<br>
+	<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</replace>><</link>>
+</div>
+<br>
+<<link [[回社交总览 (0:02)|MP NPC Sera Social Hub]]>><<pass 2>><</link>>
+<br>
+<<link [[回塞拉身边 (0:03)|MP NPC Sera Hub]]>><<pass 3>><</link>>
+<</if>>

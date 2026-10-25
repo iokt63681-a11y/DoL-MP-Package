@@ -1,89 +1,467 @@
+/* ==================== 马厩插曲 1–5 与 渔船插曲 1–5 ==================== */
+
 :: MP Job Stable Encounter [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
 <<set $daily to ($daily or {})>><<set $daily.mpJobStableEncounter to 1>>
-马厩外一声长嘶，新到的挽马被装车的号子惊得人立而起，前蹄在半空乱刨，缰绳把木桩勒得咯吱作响。货运车夫扒着车辕催你把最后一捆干草码稳，说再耽搁就赶不上镇口交接的钟点。偏偏檐下那垛干草被夜露浸得发潮，捆绳一勒就往下淌水，马蹄踩上去直打滑。
+马厩外一声长嘶，新到的挽马被装车的号子惊得人立而起，前蹄在半空乱刨，缰绳把木桩勒得咯吱作响。常客粮商吉尔伯特扒着车辕催你把最后一捆干草码稳，说再耽搁就赶不上高街粮行交接的钟点。偏偏檐下那垛干草被夜露浸得发潮，马蹄踩上去直打滑。
 <br><br>
 <div id="mp-job-stable-enc">
-<<mpanimalicon>><<if ($tending or 0) gte 220>><<link "按住惊马 (0:06)">><<pass 6>><<replace "#mp-job-stable-enc">>
-<<if ($tending or 0) gte 240 or random(1, 3) gte 2>>
-	你贴着马颈低声安抚，一把攥住笼头把惊马按回栏边，又顺势替它理开缠在辔头上的草绳。车夫趁势把干草捆甩上车栏，甩手丢给你一份加急装车钱。<span class="green">惊马被稳稳制住，货也按时装齐了。</span>
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 620>><</if>>
-	<<tending 1>><<stress -2>><<lstress>>
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+<br>
+<<mpanimalicon>><<if ($tending or 0) gte 240>><<link "贴颈低哨安抚 (0:06)">><<pass 6>><<replace "#mp-job-stable-enc">>
+<<if ($tending or 0) gte 260 or random(1, 3) gte 2>>
+	你贴着马颈顺毛摩挲，吹出平稳的安抚低哨，一把攥住笼头把惊马按回栏边，又顺势替它理开缠在辔头上的草绳。吉尔伯特趁势让伙计把谷袋码齐，甩手丢给你一份加急装车赏钱。<span class="green">惊马被稳稳制住，粮车按时出发了。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 700>><</if>>
+	<<tending 1>><<stress -2>><<lstress>><<set $mpJobReg_Stable_1 to ($mpJobReg_Stable_1 or 0) + 1>>
 <<else>>
 	你刚摸到笼头，惊马猛地甩头挣开，后蹄踢翻半垛干草，捆绳散了一地。<span class="red">你被缰绳带得踉跄，只能重新拢马。</span><<stress 3>><<tiredness 2>><<gstress>>
 <</if>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[贴颈低哨安抚 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "贴颈低哨安抚">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
 <br>
-<<link [[返回农场 (0:08)|Farmland]]>><<pass 8>><</link>>
-<</replace>><</link>><<else>><<link [[按住惊马 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "按住惊马">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mpcarryicon>><<if ($athletics or 0) gte 220>><<link "稳住车辕 (0:06)">><<pass 6>><<replace "#mp-job-stable-enc">>
-<<if ($athletics or 0) gte 240 or random(1, 3) gte 2>>
-	你顶住车辕让车夫把干草一层层压紧，又用膝盖抵住轮子防止板车后溜。潮草压得再实也不塌，车夫抹了把汗，按加急趟给你结了脚力钱。<span class="green">板车稳稳装齐，赶在钟点前出了院门。</span>
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 520>><</if>>
-	<<athletics 1>><<stress -2>><<lstress>>
+<<mpcarryicon>><<if ($athletics or 0) gte 220>><<link "肩顶车辕压草 (0:06)">><<pass 6>><<replace "#mp-job-stable-enc">>
+<<if ($athletics or 0) gte 250 or random(1, 3) gte 2>>
+	你用肩头顶住车辕，用木楔卡死后轮防止板车后溜，再将干草捆十字交错勒在车栏上。潮草压得纹丝不动，吉尔伯特抹了把汗，按加急趟给你结了脚力钱。<span class="green">板车稳稳装齐，赶在钟点前出了院门。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 560>><</if>>
+	<<athletics 1>><<stress -2>><<lstress>><<set $mpJobReg_Stable_1 to ($mpJobReg_Stable_1 or 0) + 1>>
 <<else>>
 	湿草比看上去沉，你顶到一半脚下打滑，车辕猛地一沉，最上面两捆干草滚进泥里。<span class="red">车夫只得跳下来重新码车。</span><<stress 3>><<tiredness 2>><<gstress>>
 <</if>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[肩顶车辕压草 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "肩顶车辕压草">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
 <br>
-<<link [[返回农场 (0:08)|Farmland]]>><<pass 8>><</link>>
-<</replace>><</link>><<else>><<link [[稳住车辕 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "稳住车辕">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mpcleanicon>><<link "翻晒干草 (0:05)">><<pass 5>><<replace "#mp-job-stable-enc">>
-你把受潮的干草一叉叉挑到通风的檐口摊开，又把底层湿草翻上来晾着。车夫见草料松爽了些，脸色缓和下来，没再提工钱的事。<span class="teal">这趟只算搭了把手。</span><<stress -1>><<lstress>>
+<<mpfarmicon>><<if ($mpJobFarmLevel or 0) gte 2>><<link "调谷仓干苜蓿 (0:05)">><<pass 5>><<replace "#mp-job-stable-enc">>
+你有河湾农场谷仓的门路，转身从隔墙草棚取来两捆烘得喷香的干苜蓿铺在马槽与脚垫下。挽马闻到甜香立刻安静下来低头咀嚼，马蹄下也不再打滑，吉尔伯特夸你办事牢靠。<span class="green">农场的干苜蓿让惊马顷刻温顺下来。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 640>><</if>>
+<<stress -2>><<lstress>><<set $mpJobReg_Stable_1 to ($mpJobReg_Stable_1 or 0) + 1>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">调谷仓干苜蓿 (0:05)（农场还没这份交情）</span><</if>>
 <br>
-<<link [[返回农场 (0:08)|Farmland]]>><<pass 8>><</link>>
-<</replace>><</link>>
-<br>
+<<link "翻晒檐下干草 (0:05)">><<pass 5>><<replace "#mp-job-stable-enc">>
+你把受潮的干草一叉叉挑到通风的檐口摊开，又把底层干爽的垫草翻上来铺在车道上防滑。<span class="teal">虽慢了些，粮车总算平顺发车。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 300>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
 <<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
 </div>
+
+:: MP Job Stable Encounter 2 [nobr]
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobStableEncounter to 1>>
+领头栗色马的右前蹄铁在碎石路上磕松了两枚掌钉，常客铁匠巴尔德的学徒送来一打备用熟铁马掌，可比对之下发现弧口窄了一分。下午还有一趟往镇口送苹果酒桶的重车，硬钉上去必定夹伤马蹄。
+<br><br>
+<div id="mp-job-stable-enc2">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+<br>
+<<mpsmithicon>><<if ($physique or 0) gte 7800 or ($science or 0) gte 240>><<link "借炭炉扩掌口 (0:07)">><<pass 7>><<replace "#mp-job-stable-enc2">>
+<<if ($physique or 0) gte 8400 or ($science or 0) gte 260 or random(1, 3) gte 2>>
+	你点起马厩修具间的小炭炉，把窄马掌烧至暗红，架在铁砧角上稳稳敲击六锤，将U形弧口扩开一分半，淬水冷却后与栗色马的右前蹄严丝合缝。铁匠巴尔德赶来检验时连声叫好，当场将钉掌工钱翻倍结给你。<span class="green">扩口后的新马掌贴合得天衣无缝。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 840>><</if>>
+	<<scienceskill 1 "no_star">><<stress -2>><<lstress>><<set $mpJobReg_Stable_2 to ($mpJobReg_Stable_2 or 0) + 1>>
+<<else>>
+	锤头落点偏了，马掌两边宽窄不一，钉不进原孔，只得等巴尔德亲自重打。<span class="red">手臂震得发麻，白烧了一炉炭。</span><<pain 1>><<stress 3>><<tiredness 2>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[借炭炉扩掌口 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "借炭炉扩掌口">><<set $mpInsuffReq to "体魄：7800 或 科学等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<br>
+<<mpanimalicon>><<if ($tending or 0) gte 250>><<link "修蹄缘垫厚皮 (0:06)">><<pass 6>><<replace "#mp-job-stable-enc2">>
+<<if ($tending or 0) gte 270 or random(1, 3) gte 2>>
+	你把栗色马前蹄架在膝上，用修蹄刀削去外扩的老旧角质，再垫入一层浸油厚牛皮减震，用旧马掌加换长方钉重新铆牢。栗色马落地试踏两步，步伐轻快稳健，老马夫欣然给你加了赏钱。<span class="green">精修蹄缘加皮垫稳稳保住了下午的车次。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 680>><</if>>
+	<<tending 1>><<stress -2>><<lstress>><<set $mpJobReg_Stable_2 to ($mpJobReg_Stable_2 or 0) + 1>>
+<<else>>
+	修蹄刀削得稍薄，栗色马吃痛缩腿，不肯再让你碰前蹄。<span class="red">只得先牵回栏里歇养。</span><<stress 3>><<tiredness 1>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[修蹄缘垫厚皮 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "修蹄缘垫厚皮">><<set $mpInsuffReq to "照料等级：<span class='purple'>D+</span>">><<pass 6>><</link>><</if>>
+<br>
+<<walkicon>><<link "换套灰斑副马 (0:05)">><<pass 5>><<replace "#mp-job-stable-enc2">>
+你把栗色马牵回栏里歇蹄，改将二号栏的灰斑挽马套上主辕。灰斑马脚程虽慢一成，总算没误了下午的酒桶车。<span class="teal">换马顶班，稳妥跑完了这一趟。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 320>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Stable Encounter 3 [nobr]
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobStableEncounter to 1>>
+常来借马换乘的老邮差托马斯赶着轻便邮车停在河湾桥头，左后轮的生铁车轴销在石坎上颠断成了两截。车厢里还压着半袋赶在日落前送进高街的公文包，车轮随时会滑脱出去。
+<br><br>
+<div id="mp-job-stable-enc3">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+<br>
+<<mprepairicon>><<if ($skulduggery or 0) gte 230 or ($science or 0) gte 230>><<link "削硬栎木代销 (0:06)">><<pass 6>><<replace "#mp-job-stable-enc3">>
+<<if ($skulduggery or 0) gte 260 or ($science or 0) gte 260 or random(1, 3) gte 2>>
+	你从备料堆里挑出一截浸过桐油的陈年硬栎木，削成略带倒锥的八角木销砸进轴孔，外端再用双股铁丝十字缠紧锁死。邮车跑回城里二十里路纹丝不松，老邮差托马斯感激地将加急路费分了你大半。<span class="green">油浸硬栎木销稳稳撑住了整趟急程。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 660>><</if>>
+	<<skulduggery 1>><<stress -2>><<lstress>><<set $mpJobReg_Stable_3 to ($mpJobReg_Stable_3 or 0) + 1>>
+<<else>>
+	木质纹理偏脆，刚敲进去就裂开一道缝，还是老马夫翻出旧铁栓才替上。<span class="red">虎口磨出了水泡。</span><<pain 1>><<stress 2>><<tiredness 2>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[削硬栎木代销 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "削硬栎木代销">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 科学等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<runicon>><<if ($mpJobCourierCount or 0) gte 6>><<link "骑快马替送件 (0:05)">><<pass 5>><<replace "#mp-job-stable-enc3">>
+你熟记街巷跑腿行的各条交接点，让托马斯留在马厩喝热麦茶修车，自己跨上轻便快马背起那半袋公文包直奔高街代办亭。半个时辰内回执全部签妥带回，托马斯连连夸你是跑腿行的行家里手。<span class="green">快马接力跑腿，公文一封没耽误。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 740>><</if>>
+<<stress -2>><<lstress>><<set $mpJobReg_Stable_3 to ($mpJobReg_Stable_3 or 0) + 1>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">骑快马替送件 (0:05)（尚未熟记跑腿行交接路线）</span><</if>>
+<br>
+<<mpcarryicon>><<link "腾出马厩备车 (0:05)">><<pass 5>><<replace "#mp-job-stable-enc3">>
+你帮托马斯把邮袋搬上马厩那辆运草的小两轮车，套上他的邮马先赶路，坏车留在院里慢慢修。<span class="teal">换车救急，托马斯赶在天黑前进了城。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 310>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Stable Encounter 4 [nobr]
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobStableEncounter to 1>>
+远郊炸响一记闷雷，围栏里的两匹年轻母驹受惊撞断了木横栓，尥着蹶子朝河湾泥滩冲去。若是陷进河滩淤泥里扭伤了马腿，今年秋收的驮队就要少一半脚力。
+<br><br>
+<div id="mp-job-stable-enc4">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+<br>
+<<runicon>><<if ($athletics or 0) gte 260>><<link "跃马斜抄拦驹 (0:07)">><<pass 7>><<replace "#mp-job-stable-enc4">>
+<<if ($athletics or 0) gte 280 or random(1, 3) gte 2>>
+	你翻身跨上栓在桩边的领头栗色马，不系马鞍便沿着田埂斜刺里疾驰而出，赶在母驹踏上烂泥滩前横马截住去路，甩出套马麻绳稳稳套住头驹脖颈。两匹母驹乖乖跟着领头马回栏，老马夫激动地拍着你的肩，发出重赏。<span class="green">漂亮利落的斜抄截马保住了马队主力。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 900>><</if>>
+	<<athletics 1>><<stress -2>><<lstress>>
+<<else>>
+	田埂泥滑，你抄近道时慢了半拍，头驹前蹄踏进泥洼溅了你一身泥，费了半个时辰才用长绳拽回马栏。<span class="red">大腿内侧磨得生疼，累得直喘粗气。</span><<pain 2>><<stress 3>><<tiredness 2>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[跃马斜抄拦驹 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "跃马斜抄拦驹">><<set $mpInsuffReq to "运动等级：<span class='purple'>D+</span>">><<pass 7>><</link>><</if>>
+<br>
+<<mpanimalicon>><<if ($tending or 0) gte 230>><<link "摇铜铃撒甜麦 (0:06)">><<pass 6>><<replace "#mp-job-stable-enc4">>
+<<if ($tending or 0) gte 260 or random(1, 3) gte 2>>
+	你摘下檐下开饭专用的黄铜母铃连摇三声，同时迎风扬出一斗掺了红糖水的熟燕麦。两匹受惊的母驹听熟了这记饭铃，脚步顿住，顺着甜麦香一步步退回院门内。粮商吉尔伯特看得啧啧称奇，赏了你一袋铜币。<span class="green">不费一鞭一绳便把惊驹哄回了栏。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 620>><</if>>
+	<<tending 1>><<stress -2>><<lstress>><<set $mpJobReg_Stable_1 to ($mpJobReg_Stable_1 or 0) + 1>>
+<<else>>
+	雷声盖过了铜铃声，只引回了一匹母驹，另一匹还是跑到了谷仓外才被拦下。<span class="red">白撒了半斗甜燕麦。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[摇铜铃撒甜麦 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "摇铜铃撒甜麦">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpwatchicon>><<link "合拢外院木闸 (0:04)">><<pass 4>><<replace "#mp-job-stable-enc4">>
+你飞快奔到马厩外院大门口，将两扇厚木闸门合拢落栓，把受惊的母驹截在外院晒谷场内，没让它们冲出去踩伤田垄。<span class="teal">关门打狗，稳稳守住了外院防线。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 320>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Stable Encounter 5 [nobr]
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobStableEncounter to 1>>
+霜寒袭人，院角木饮水槽结了一层薄冰。一匹刚跑完长途回栏的挽马贪饮了带冰碴的冷水，不多时便肚腹鼓胀、打着响鼻在栏里焦躁转圈，不肯进食。
+<br><br>
+<div id="mp-job-stable-enc5">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+<br>
+<<mpherbicon>><<if ($mpJobPubKitchenCount or 0) gte 6 or ($tending or 0) gte 250>><<link "热麦酒糟揉腹 (0:07)">><<pass 7>><<replace "#mp-job-stable-enc5">>
+<<if ($mpJobPubKitchenCount or 0) gte 6 or ($tending or 0) gte 270 or random(1, 3) gte 2>>
+	你取来丰收酒馆后厨送来的温热黑麦酒糟，用粗麻布包成热敷袋，顺着马腹肠胃走向用力推揉两刻钟，又灌下半瓢温热的茴香草茶。挽马打出一连串响亮的长嗝，腹胀尽消，又欢快地嚼起干草，老马夫给了你一份厚实的看护钱。<span class="green">热麦酒糟推腹法立竿见影。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 760>><</if>>
+	<<tending 1>><<stress -2>><<lstress>>
+<<else>>
+	酒糟袋凉得太快，你推揉了半天马腹还是硬邦邦的，只得重新烧热水热敷。<span class="red">双手搓得发酸，忙到擦黑才缓过来。</span><<stress 3>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[热麦酒糟揉腹 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "热麦酒糟揉腹">><<set $mpInsuffReq to "照料等级：<span class='purple'>D+</span>（或有酒馆后厨热酒糟）">><<pass 7>><</link>><</if>>
+<br>
+<<walkicon>><<if ($athletics or 0) gte 210>><<link "披毯牵行消胀 (0:06)">><<pass 6>><<replace "#mp-job-stable-enc5">>
+<<if ($athletics or 0) gte 240 or random(1, 3) gte 2>>
+	你给挽马披上厚羊毛马衣，不让它卧倒打滚扭伤肠管，牵着笼头在背风的晒谷场上匀速慢走三十圈。借着走动暖开胃肠，挽马渐渐平复下来，老马夫点头夸你懂行。<span class="green">耐心牵行让病马平安渡过了肠痉挛。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 500>><</if>>
+	<<athletics 1>><<stress -1>><<lstress>>
+<<else>>
+	挽马走得不情不愿，几次想往草堆上卧，你拽着缰绳跟它较劲，累得满身是汗。<span class="red">胳膊拽得酸痛。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[披毯牵行消胀 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "披毯牵行消胀">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpcleanicon>><<link "破冰兑入热水 (0:04)">><<pass 4>><<replace "#mp-job-stable-enc5">>
+你先把饮水槽里的浮冰全部捞净，提来两桶滚水兑成温水，免得其余挽马再喝坏肚子，又给病马加铺了一层干草。<span class="teal">管住了水源，马群安然无恙。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_stable_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 290>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Stable]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+/* ==================== 旧港近海渔船当班插曲 1–5 ==================== */
 
 :: MP Job Trawler Encounter [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set $daily to ($daily or {})>><<set $daily.mpJobTrawlerEncounter to 1>>
-渔船刚退出外礁，螺旋桨就被一截旧渔网死死缠住，船身随暗涌横摆，机舱里传出闷响。大副盯着正在上涨的潮水，催你在转向彻底失灵前把缠网割净。底舱的鱼箱还空着，他还要赶在涨潮前把最后一网收上来过秤。
+渔船刚退出外礁，螺旋桨就被一截旧渔网死死缠住，船身随暗涌横摆，机舱里传出闷响。独眼船长盯着正在上涨的潮水，催你在转向彻底失灵前把缠网割净；岸上的鱼商克劳斯还在三号防波堤等最后一网深水银鳕过秤。
 <br><br>
 <div id="mp-job-trawler-enc">
-<<swimicon>><<if ($swimmingskill or 0) gte 220>><<link "辨潮避涌 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc">>
-<<if ($swimmingskill or 0) gte 240 or random(1, 3) gte 2>>
-	你盯住外礁涌线的白沫，趁两次浪头之间的空档把船头绞正，又用长篙顶开贴舷的暗流。大副顺着你指的水色把住舵，船身终于不再横摆，顺手把一份压惊钱塞进你口袋。<span class="green">船在暗涌里重新稳住了。</span>
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 660>><</if>>
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+<br>
+<<swimicon>><<if ($swimmingskill or 0) gte 240>><<link "辨涌线把舵稳船 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc">>
+<<if ($swimmingskill or 0) gte 270 or random(1, 3) gte 2>>
+	你盯住外礁涌线的白沫，趁两次浪头之间的空档把船头绞正，又用长篙顶开贴舷的暗流。独眼船长顺着你指的水色把住舵，船身终于不再横摆，当场把一份压惊船份钱塞进你口袋。<span class="green">船在暗涌里重新稳住了航向。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 740>><</if>>
+	<<swimmingskill 1>><<stress -2>><<lstress>><<set $mpJobReg_Trawler_1 to ($mpJobReg_Trawler_1 or 0) + 1>>
+<<else>>
+	涌浪比你看的更急，船身猛地一偏，你被甩到船舷边，长篙脱手磕在栏杆上。<span class="red">船长厉声让你先抓住安全绳。</span><<pain 1>><<stress 3>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[辨涌线把舵稳船 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "辨涌线把舵稳船">><<set $mpInsuffReq to "游泳等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpfishicon>><<if ($athletics or 0) gte 220>><<link "探舷割断缠网 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc">>
+<<if ($athletics or 0) gte 250 or random(1, 3) gte 2>>
+	你趴在湿滑的舷板上探身下去，用割网刀贴着轴套一寸寸挑断麻绳，赶在下一个涌头前把缠网整段扯开。螺旋桨重新吃上力，克劳斯在岸边顺利收到了满舱鲜鱼。<span class="green">轴套转开了，收网赶上了潮头。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 600>><</if>>
+	<<athletics 1>><<stress -2>><<lstress>><<set $mpJobReg_Trawler_1 to ($mpJobReg_Trawler_1 or 0) + 1>>
+<<else>>
+	刀口在轴套上一滑，只割断半边网结，剩下的麻绳反而绞得更紧。你被船身一带撞在舱壁上，船长黑着脸把刀收了回去。<span class="red">螺旋桨仍卡着，收网只得往后拖。</span><<stress 3>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[探舷割断缠网 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "探舷割断缠网">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mprowicon>><<if ($mpJobFishLevel or 0) gte 2>><<link "用栈桥弯镰钩 (0:05)">><<pass 5>><<replace "#mp-job-trawler-enc">>
+你在海礁鱼档用惯了清暗礁死网的长柄弯镰，不用探身入水，直接把镰钩绑在竹篙尖端伸入船尾水下，顺着轴套旋转的反方向一拧一挑，整团废网便被完整勾出水面。独眼船长看得两眼放光，夸你是天生的老海狗。<span class="green">鱼档的弯镰手法兵不血刃地解开了死网。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 680>><</if>>
+<<stress -2>><<lstress>><<set $mpJobReg_Trawler_1 to ($mpJobReg_Trawler_1 or 0) + 1>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">用栈桥弯镰钩 (0:05)（尚未熟稔鱼档清网手艺）</span><</if>>
+<br>
+<<link "递刀盘整缆绳 (0:05)">><<pass 5>><<replace "#mp-job-trawler-enc">>
+你蹲在甲板上把割下来的湿网卷成一捆，又替水手长递刀递缆，没敢往船舷外多探半步。潮水漫过跳板前，甲板总算收拾利落。<span class="teal">安分打下手，领了基础贴补。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_1_d" + ((window.Time && Time.days) or 0))>><<money 290>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Trawler Encounter 2 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobTrawlerEncounter to 1>>
+拖网船经过外礁灯塔栈道时，顺带替老灯塔守望人摩根捎去一箱灯油与干粮。不料一道横浪拍上船头，绑木箱的麻绳滑脱，密封补给箱落入涌浪中，正顺着白沫朝尖锐的牡蛎礁漂去，摩根提着风灯在礁台高处焦急招手。
+<br><br>
+<div id="mp-job-trawler-enc2">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+<br>
+<<swimicon>><<if ($swimmingskill or 0) gte 260>><<link "系安全绳捞箱 (0:07)">><<pass 7>><<replace "#mp-job-trawler-enc2">>
+<<if ($swimmingskill or 0) gte 280 or random(1, 3) gte 2>>
+	你在腰间扎紧粗麻安全绳纵身入水，借着浪谷退潮的间隙游到木箱侧后方，把铁扣锁在箱环上。甲板水手齐力收绳，补给箱赶在撞碎前被完好吊上灯塔栈道，摩根扔下一袋守塔津贴向你致谢。<span class="green">灯塔补给箱滴水未进地送到了摩根手中。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 880>><</if>>
+	<<swimmingskill 1>><<stress -2>><<lstress>><<set $mpJobReg_Trawler_2 to ($mpJobReg_Trawler_2 or 0) + 1>>
+<<else>>
+	冷水刺骨，浪头打得你呛了一口咸水，只抓回了浮在水面的干粮袋，灯油桶磕在礁石上瘪了一角。<span class="red">你裹着湿透的油布衣直打哆嗦。</span><<pain 2>><<stress 3>><<tiredness 2>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[系安全绳捞箱 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "系安全绳捞箱">><<set $mpInsuffReq to "游泳等级：<span class='purple'>D+</span>">><<pass 7>><</link>><</if>>
+<br>
+<<mprowicon>><<if ($athletics or 0) gte 230>><<link "长挠钩挑箱环 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc2">>
+<<if ($athletics or 0) gte 260 or random(1, 3) gte 2>>
+	你双腿卡住船舷栏杆，探出两丈长的搭船铁挠钩，在船身下沉的瞬间精准勾住木箱铜提环，一鼓作气提回甲板。独眼船长吐出一口烟圈，夸你手眼够稳。<span class="green">一钩提回落水箱，没耽误半点航程。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 620>><</if>>
+	<<athletics 1>><<stress -2>><<lstress>><<set $mpJobReg_Trawler_2 to ($mpJobReg_Trawler_2 or 0) + 1>>
+<<else>>
+	挠钩杆被海浪拍偏，只在木箱盖上划出一道白印，最后还是靠摩根抛下岸钩才捞起来。<span class="red">双臂酸麻，没能领到头功。</span><<stress 2>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[长挠钩挑箱环 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "长挠钩挑箱环">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpwatchicon>><<link "抛浮筒标箱位 (0:04)">><<pass 4>><<replace "#mp-job-trawler-enc2">>
+你将系着细绳的软木浮筒抛向补给箱旁，替掌舵的船长标清水流方向，让渔船顺流绕到背风面慢慢捞起木箱。<span class="teal">稳妥配合船长捞起了补给。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 330>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Trawler Encounter 3 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobTrawlerEncounter to 1>>
+出海前检查网具时，常在防波堤补网的补网妇梅芙一眼看出主拖网底纲第三节麻股已被礁石磨断了大半。鱼商克劳斯偏在这时赶来催船，说今天早潮的银鳕行情最高，晚出船半刻钟就要跌价。
+<br><br>
+<div id="mp-job-trawler-enc3">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+<br>
+<<mpsewicon>><<if ($skulduggery or 0) gte 240 or ($tending or 0) gte 240>><<link "双股油麻速接 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc3">>
+<<if ($skulduggery or 0) gte 270 or ($tending or 0) gte 260 or random(1, 3) gte 2>>
+	你接过梅芙手里的骨梭，用浸过松焦油的双股粗麻绳施展水手插接法，将断股两端反向穿插六道锁死，接茬处比原绳还要粗壮耐磨。拖网船准点拔锚，满载而归后克劳斯与船长双双给你记了头功。<span class="green">一手漂亮的水手插绳绝活保住了满网大鱼。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 760>><</if>>
+	<<skulduggery 1>><<stress -2>><<lstress>><<set $mpJobReg_Trawler_3 to ($mpJobReg_Trawler_3 or 0) + 1>>
+<<else>>
+	插绳时麻股捻反了方向，下水一拽便松开半寸，船长只得提前收网，少捕了三筐鱼。<span class="red">手指被粗麻绳磨得通红。</span><<pain 1>><<stress 3>><<tiredness 1>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[双股油麻速接 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "双股油麻速接">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span> 或 照料等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpfishicon>><<if ($mpJobFishLevel or 0) gte 2>><<link "借鱼档副网纲 (0:05)">><<pass 5>><<replace "#mp-job-trawler-enc3">>
+你跑去隔壁海礁鱼档棚子里，借来老鱼贩备用的那条包铅副网纲，和梅芙一起用活扣并进主拖网底沿。出海起网时稳如泰山，鱼商克劳斯当场结了加急赏金。<span class="green">鱼档的包铅副网纲替拖网船解了围。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 660>><</if>>
+<<stress -2>><<lstress>><<set $mpJobReg_Trawler_3 to ($mpJobReg_Trawler_3 or 0) + 1>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">借鱼档副网纲 (0:05)（鱼档还没这份交情）</span><</if>>
+<br>
+<<mpbargainicon>><<if ($money or 0) gte 300>><<link "垫资换钢芯缆 (0:04)">><<pass 4>><<money -300>><<replace "#mp-job-trawler-enc3">>
+你掏出三镑钱从船具行买下一截新到的细钢丝芯底缆换上。这趟拖网在水底暗礁区刮过也毫发无损，返航结账时船长不仅补还了缆钱，还多分了你一份红利。<span class="green">换上钢芯底缆后渔获比往常多出两成。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 820>><</if>>
+<<stress -2>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><span class="disabled">垫资换钢芯缆 (0:04)（£3，钱不够）</span><</if>>
+<br>
+<<link "减半下网深度 (0:04)">><<pass 4>><<replace "#mp-job-trawler-enc3">>
+你用备用铁丝先把磨断的底纲缠住，建议船长今日只在中层水域下网，避开海底乱石。鱼获虽少了些，拖网总算平安收回。<span class="teal">稳妥收网，没让渔网破在海里。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 320>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
+</div>
+
+:: MP Job Trawler Encounter 4 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobTrawlerEncounter to 1>>
+返航途中海面忽然漫起浓白海雾，三丈外便不见五指。新学徒把两柄生铁备用船锚堆在了驾驶台正下方，磁铁干扰得黄铜罗盘偏了五度，雾角灯塔的号角声在雾里忽左忽右，独眼船长握着舵轮眉头紧锁。
+<br><br>
+<div id="mp-job-trawler-enc4">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<if ($mpJobClockLevel or 0) gte 2 or ($science or 0) gte 250>><<link "挪铁锚校磁偏 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc4">>
+<<if ($mpJobClockLevel or 0) gte 2 or ($science or 0) gte 270 or random(1, 3) gte 2>>
+	你在钟表铺修过受磁怀表，一眼瞥见驾驶台下的两柄铁锚，当即让人把铁器全挪去船尾，再根据防波堤灯塔的雾角回音推算出五度磁偏角。渔船穿雾而出，分毫不差地停靠在三号泊位，老灯塔守望人摩根和船长都对你竖起大拇指。<span class="green">除磁校航，拖网船在浓雾里稳稳归港。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 840>><</if>>
+	<<scienceskill 1 "no_star">><<stress -2>><<lstress>><<set $mpJobReg_Trawler_2 to ($mpJobReg_Trawler_2 or 0) + 1>>
+<<else>>
+	铁锚挪开了，你却算反了东西偏角，渔船绕到一号浅滩外才看清岸灯，晚了半个时辰才靠岸。<span class="red">在冷雾里吹得手脚冰凉。</span><<stress 3>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[挪铁锚校磁偏 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "挪铁锚校磁偏">><<set $mpInsuffReq to "科学等级：<span class='purple'>D+</span>（或熟稔钟表铺罗盘校磁）">><<pass 6>><</link>><</if>>
+<br>
+<<mpeavesdropicon>><<if ($swimmingskill or 0) gte 220 or ($maths or 0) gte 230>><<link "听拍礁声辨位 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc4">>
+<<if ($swimmingskill or 0) gte 250 or ($maths or 0) gte 250 or random(1, 3) gte 2>>
+	你伏在船头栏杆边，凭着海浪拍击外礁空腔的闷响与雾角间隔秒数，一左一右报出水道深浅。独眼船长听着你的口令转舵，顺顺当当避开暗礁驶入内港。<span class="green">耳听浪声辨位，引着渔船平安穿出迷雾。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 600>><</if>>
 	<<swimmingskill 1>><<stress -2>><<lstress>>
 <<else>>
-	涌浪比你看的更急，船身猛地一偏，你被甩到船舷边，长篙脱手磕在栏杆上。<span class="red">大副厉声让你先抓住安全绳。</span><<stress 3>><<tiredness 1>><<gstress>>
+	海雾折射了雾角回音，你报偏了半度，船底擦过沙洲发出一阵闷响，幸好及时倒船退开。<span class="red">惊出了一身冷汗。</span><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[听拍礁声辨位 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "听拍礁声辨位">><<set $mpInsuffReq to "游泳等级：<span class='purple'>D</span> 或 算术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
 <br>
-<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
-<</replace>><</link>><<else>><<link [[辨潮避涌 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "辨潮避涌">><<set $mpInsuffReq to "游泳等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mpfishicon>><<if ($athletics or 0) gte 220>><<link "割断缠网 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc">>
-<<if ($athletics or 0) gte 240 or random(1, 3) gte 2>>
-	你趴在湿滑的舷板上探身下去，用割网刀贴着轴套一寸寸挑断麻绳，赶在下一个涌头前把缠网整段扯开。螺旋桨重新吃上力，大副把最满的一只鱼箱推到你脚边。<span class="green">轴套转开了，收网还赶得上潮头。</span>
-	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 580>><</if>>
-	<<athletics 1>><<stress -2>><<lstress>>
-<<else>>
-	刀口在轴套上一滑，只割断半边网结，剩下的麻绳反而绞得更紧。你被船身一带撞在舱壁上，大副黑着脸把刀收了回去。<span class="red">螺旋桨仍卡着，收网只得往后拖。</span><<stress 3>><<tiredness 2>><<gstress>>
-<</if>>
+<<mpwatchicon>><<link "吹船哨应灯塔 (0:05)">><<pass 5>><<replace "#mp-job-trawler-enc4">>
+你站在船头连续吹响黄铜船哨，灯塔上的摩根听见哨音，立即摇响近岸铜钟为你引路，渔船慢慢摸回了泊位。<span class="teal">哨钟呼应，浓雾中平安靠岸。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_4_d" + ((window.Time && Time.days) or 0))>><<money 320>><</if>>
+<<stress -1>><<lstress>><<set $mpJobReg_Trawler_2 to ($mpJobReg_Trawler_2 or 0) + 1>>
 <br><br>
 <<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
-<br>
-<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
-<</replace>><</link>><<else>><<link [[割断缠网 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "割断缠网">><<set $mpInsuffReq to "运动等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mpcleanicon>><<link "递刀理网 (0:05)">><<pass 5>><<replace "#mp-job-trawler-enc">>
-你蹲在甲板上把割下来的湿网卷成一捆，又替大副递刀递缆，没敢往船舷外多探半步。潮水漫过跳板前，甲板总算收拾利落，大副只让你先去舱口歇着。<span class="teal">这趟没算船份钱。</span><<stress -1>><<lstress>>
-<br><br>
-<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
-<br>
-<<link [[返回码头 (0:08)|Docks]]>><<pass 8>><<mpalertclear>><</link>>
+
 <</replace>><</link>>
+</div>
+
+:: MP Job Trawler Encounter 5 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "docks">><<mpalertinit "docks">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $daily to ($daily or {})>><<set $daily.mpJobTrawlerEncounter to 1>>
+今日外海收成极旺，可返航遇上顶风，多走了半个时辰。底舱排水泵被鱼鳞堵住，融化的温水积在舱底，眼看就要把上层鱼箱里的碎冰泡化，岸上的鱼商克劳斯和酒馆采买正在防波堤翘首以待。
+<br><br>
+<div id="mp-job-trawler-enc5">
+<<getouticon>><<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
 <br>
+<<mpcleanicon>><<if ($housekeeping or 0) gte 230 or ($tending or 0) gte 230>><<link "通泵撒盐保冰 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc5">>
+<<if ($housekeeping or 0) gte 260 or ($tending or 0) gte 260 or random(1, 3) gte 2>>
+	你探手掏净排水泵滤网上的鱼鳞，抽干舱底积水，又把备用粗海盐一层层撒在剩余碎冰上锁住冷气。靠岸开舱时，银鳕鱼鳃鲜红硬挺，克劳斯当场按头等冰鲜价全舱包圆。<span class="green">底舱鱼获保持了最佳鲜度。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 720>><</if>>
+	<<housekeeping 1>><<stress -2>><<lstress>><<set $mpJobReg_Trawler_1 to ($mpJobReg_Trawler_1 or 0) + 1>>
+<<else>>
+	舱底又黑又滑，你掏完滤网时已经化了三箱底冰，克劳斯把那三箱鱼压了两成价。<span class="red">双手被咸冰水泡得发白。</span><<stress 3>><<tiredness 2>><<gstress>>
+<</if>>
+<br><br>
 <<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[通泵撒盐保冰 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "通泵撒盐保冰">><<set $mpInsuffReq to "家政等级：<span class='purple'>D</span> 或 照料等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mprowicon>><<if ($physique or 0) gte 7800 or ($athletics or 0) gte 250>><<link "摇辅桨抢潮头 (0:06)">><<pass 6>><<replace "#mp-job-trawler-enc5">>
+<<if ($physique or 0) gte 8400 or ($athletics or 0) gte 270 or random(1, 3) gte 2>>
+	你和老水手一人架起一支长柄辅桨，配合柴油机顶着逆风全力划水，硬是抢在底冰化透前把船头顶上了三号防波堤。克劳斯与酒馆伙计立刻上前接筐，船长把抢潮奖金拍在你掌心。<span class="green">硬凭双臂膂力抢回了半刻钟船程。</span>
+	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 800>><</if>>
+	<<athletics 1>><<stress -2>><<lstress>><<set $mpJobReg_Trawler_1 to ($mpJobReg_Trawler_1 or 0) + 1>>
+<<else>>
+	逆浪拍得木桨直震虎口，你划到半途脱了力，还是晚了一步靠岸。<span class="red">肩膀酸痛不已。</span><<pain 1>><<stress 2>><<tiredness 3>><<gpain>><<gstress>>
+<</if>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>><<else>><<link [[摇辅桨抢潮头 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "摇辅桨抢潮头">><<set $mpInsuffReq to "体魄：7800 或 运动等级：<span class='purple'>D+</span>">><<pass 6>><</link>><</if>>
+<br>
+<<mpcarryicon>><<link "高架垫起鱼箱 (0:04)">><<pass 4>><<replace "#mp-job-trawler-enc5">>
+你跳进底舱，用备用木条把最贵重的六箱银鳕垫高半尺，脱离舱底温水，再盖上湿帆布隔热。<span class="teal">保住了最值钱的头层银鳕。</span>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_trawler_enc_5_d" + ((window.Time && Time.days) or 0))>><<money 310>><</if>>
+<<stress -1>><<lstress>>
+<br><br>
+<<link [[返回岗位 (0:02)|MP Job Trawler]]>><<pass 2>><</link>>
+
+<</replace>><</link>>
 </div>

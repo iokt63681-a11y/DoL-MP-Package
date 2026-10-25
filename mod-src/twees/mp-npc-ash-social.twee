@@ -1,0 +1,222 @@
+:: MP NPC Ash Social Hub [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpNpcs to ($mpNpcs or {})>>
+<<set $mpNpcs.ash to ($mpNpcs.ash or {})>>
+<<set $mpNpcs.ash.love to ($mpNpcs.ash.love or 0)>>
+<<set $mpNpcs.ash.trust to ($mpNpcs.ash.trust or 0)>>
+<<set _npc to $mpNpcs.ash>>
+<<set _axis to ($mpNpcs.ash.axis or 0)>>
+<<set _bond to ((_npc.love or 0) + (_npc.trust or 0))>>
+<<set _tier to (_bond gte 60 ? "守夜之交" : _bond gte 36 ? "并肩同行" : _bond gte 18 ? "熟路相托" : "初识问路")>>
+雾从北谷一层层往上爬，爬到火塘边时已经薄得只剩水汽。阿什蹲在石圈旁削灯芯，刀口贴着木芯走，薄薄一卷落在膝头。他没先看你，先抬头看树梢：风从北面来，烟被压得很低。又低头看火：火苗贴着石头打旋，不肯直起来。天、火、人，他这个次序从来没换过。
+<br><br>
+「雾脚贴地，今夜走不远。」他把刀收回鞘，往旁边让出半块烤热的石头，「坐。正好有两处地方，我不好一个人去。」
+<br><br>
+两处都不在灯簿上。北坡是伊甸的猎场，铁夹从猎台一路排到灯线附近，夹齿埋在落叶底下，野兽踩得，人也踩得；界桩那头是黑狼的地界，雾一浓，狼群就顺着旧兽径往灯线这边靠。灯照的是迷路的人，夹子算的是一季的肉，界桩守的是一整群。三样东西挤在同一面坡上，谁都没做错，可总得有人先挪半步。
+<br><br>
+他折了根树枝，在地上划出三道线：最里一道是灯线，最外一道是猎线，中间那条弯弯扭扭的是兽径。三道线在雾里都看不清，落到土上却分得明白。他用树枝点了点最里那道：「线是我画的。画错了，我认。」
+<br><br>
+【火种】：<<if $mpNpcs.ash.axisLabel>><<print $mpNpcs.ash.axisLabel>><<else>>火种<</if>> <<print _axis>>/100 —— 他肯把多少条夜路交到你脚下
+<br>
+【相处】：<<print _tier>> —— 火塘边给你留的位置，比说出口的话多
+<br>
+【雾潮水尺】：<<print ($mpFogTide or 0)>> —— 水尺一高，北坡的兽径就跟着往灯线这边缩
+<br>
+【雾季守夜】：<<if ($mpNpcs.ash.annualYear or 0) eq (Time.date.year or 0)>>今年已经守过<<else>>今年还没守<</if>> —— 一年只点一回的七盏灯
+<br><br>
+他往火里添了根松柴，火苗腾起来，照亮手背上那几道旧疤。他说伊甸不是不讲理的人，只是讲的是另一本账：几天口粮、几趟下山、几张皮子。黑狼更简单，连账都不讲，只在地上留记号。夹在中间的人若只会说好话，两边都当耳旁风。
+<br><br>
+「你去，比我合适。」他看着火，不看你，「我开口就是路，他们听腻了。」
+<br><br>
+<<mpwatchicon>><<link [[去北坡见伊甸 (0:04)|MP NPC Ash Social 1]]>><<pass 4>><<tiredness 1>><</link>><br>
+<<mpanimalicon>><<link [[去界桩看黑狼 (0:04)|MP NPC Ash Social 2]]>><<pass 4>><<stress 1>><</link>><br>
+<<mpritualicon>><<link [[筹备雾季守夜 (0:04)|MP NPC Ash Annual]]>><<pass 4>><<tiredness 1>><</link>><br>
+<<mprepairicon>><<link "替他压火塘 (0:08)">><<pass 8>><<if ($athletics or 0) gte 220 or (_npc.trust or 0) gte 8>><<stress -3>><<replace "#ash-social-hub-out">>
+你按他指的位置把挡风的石头一块块码正，火苗终于直了起来。阿什伸手在火上方停了停，点了点头，把烘热的半块饼掰给你。<span class="green">他没说道谢，只把火塘边最靠里的位置留给了你。</span>
+<</replace>><<else>><<tiredness 2>><<stress 2>><<replace "#ash-social-hub-out">>
+石头没压稳，风一过就从缝里钻进来，火苗歪向一边，燎了你手背一下。阿什接过石头，三两下垫好，没责怪，只让你把手伸到火边烤着。<span class="red">火塘没压住，你反倒添了一身冷。</span>
+<</replace>><</if>><</link>><br>
+<<link "抄一页灯簿 (0:10)">><<pass 10>><<if ($english or 0) gte 220 or ($tending or 0) gte 220>><<stress -2>><<replace "#ash-social-hub-out">>
+你把灯簿摊在膝上，照他的字迹抄下今日的风向、雾高和巡过的路。阿什在旁边看了一会儿，指出你漏掉的一处水痕，又把炭笔递回来。<span class="green">他说记得住的东西才靠得住，纸只是替人留个把柄。</span>
+<</replace>><<else>><<tiredness 2>><<stress 3>><<replace "#ash-social-hub-out">>
+纸页被火气烘得发脆，你抄错了两行，炭笔在指间打滑。阿什把册子抽回去，说这本不急，先把手烤热。<span class="red">灯簿没抄成，你倒被烟熏得眼睛发酸。</span>
+<</replace>><</if>><</link>><br>
+<div id="ash-social-hub-out"></div>
+<<link [[回阿什身边 (0:02)|MP NPC Ash Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Ash Social 1 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpNpcs to ($mpNpcs or {})>>
+<<set $mpNpcs.ash to ($mpNpcs.ash or {})>>
+<<set $mpNpcs.ash.love to ($mpNpcs.ash.love or 0)>>
+<<set $mpNpcs.ash.trust to ($mpNpcs.ash.trust or 0)>>
+<<set _npc to $mpNpcs.ash>>
+北坡的落叶被霜压得很实，踩上去不响。阿什走在前面，每走十几步就用弓梢挑开一丛枯草，露出底下那根细得几乎看不见的铁丝。铁夹排成一列，从猎台一直下到灯线附近，最近的一只离灯座不到十步。夹口张着，齿上抹了防锈的油，在雾里泛一点暗光。
+<br><br>
+「这只不该在这儿。」他蹲下去，没碰夹子，只把上面的落叶拨开给你看，「夜里有人顺着灯走，脚底下不会看这么细。」
+<br><br>
+<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>北坡的猎人<</if>>从坡上下来，猎枪横在臂弯里，靴底沾着泥。他先看夹子，再看灯座，最后才看你，语气平得像在报数：「鹿不认灯。夹子挪走，这一季的肉就少一半。」
+<br><br>
+阿什站起来，没跟他争鹿认不认灯，只说：「人认。」
+<br><br>
+两个人都不大声。<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>猎人<</if>>把话说在明处：哪条兽径最肥、哪几天风向合适、一张皮能换多少盐；他的账算得清，损失也说得出口。阿什把话说在暗处：灯线一改，走夜路的人就得绕远，绕到哪儿能歇脚、哪儿有断枝，他都在心里排好了。一个盯着脚下，一个盯着前头，谁也没打算让。
+<br><br>
+风从坡口灌下来，吹得灯座里的火苗一缩。<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>猎人<</if>>弯腰把最近那只夹子往旁边拨了拨，没挪远，只挪开了半步。那半步不够，可也不是完全不让。
+<br><br>
+「你定。」阿什把弓背回肩上，退开半步，把中间的位置留给你，「挪夹子还是改灯线，今天只能做一样。两样都做，天黑前做不完。」
+<br><br>
+坡下传来一声铃响，是哪个赶夜路的人提前把铃系在了包上。阿什侧耳听了一下，说这声音他认得，是山下送药的老妇人，每回都走这条灯线。<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>猎人<</if>>也听见了，手上停了一停，没抬头。雾把两个人的影子拉得很近，又推得很远。
+<br><br>
+阿什从腰袋里摸出一小截红布，系在离夹子最近的那根灯柱上，算是给后来的人提个醒。红布在灰雾里很扎眼，风一吹就抖。他说这不算解决，只算让人少踩一次。
+<br><br>
+<div id="ash-social1-choices">
+<<mprepairicon>><<link "帮伊甸挪夹 (0:12)">><<pass 12>><<tiredness 3>><<pain 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<replace "#ash-social1-choices">><span class="teal">坡上的事已经做了取舍。</span><</replace>><<replace "#ash-social1-out">>
+你照猎人方才的做法，把最近的三只夹子挪到猎线外侧。先起桩，再压浮土，最后用松针把新土盖回去。猎人在旁边看着，见你没有把夹齿碰歪，才伸手替你扶住桩子。阿什没有过来，只站在灯线那头，把红布重新系紧。
+<br><br>
+夹子挪完，灯线内侧空出一条能走人的窄带。猎人沉默了一会儿，把一只空夹子收进背篓，没再说肉少一半的事。阿什走过来，看了看新土，又看了看你手上的泥，点了一下头。<span class="green">他嘴上讲的是路，心里记的是你肯替他多走这一趟。</span>
+<</replace>><</link>><br>
+<<mpanimalicon>><<link "替阿什改灯线 (0:12)">><<pass 12>><<tiredness 2>><<stress 3>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust -1>><</if>><<replace "#ash-social1-choices">><span class="teal">坡上的事已经做了取舍。</span><</replace>><<replace "#ash-social1-out">>
+你把灯线往坡内侧改了一段，避开猎人的夹阵。新线要重新立两根灯柱，柱脚得砸进冻土里，砸到第三下时你的虎口发麻。阿什替你扶柱，猎人在猎台上看，没有下来帮忙，也没有阻止。
+<br><br>
+灯亮起来时，光落在旧夹阵的外侧，走夜路的人会顺着光绕开。猎人收完夹子，路过灯柱时停了一下，说这条路今年算是让给你们了。他的语气不重，可你听得出，他记下了这一笔。阿什把灯罩擦干净，说绕远总比踩夹子强。<span class="green">他把新灯线在心里走了一遍，才允许自己松口气。</span>
+<</replace>><</link>><br>
+<<mpherbicon>><<if ($athletics or 0) gte 220 or ($tending or 0) gte 220 or (_npc.trust or 0) gte 6>><<link "两边各让一步 (0:14)">><<pass 14>><<tiredness 3>><<pain 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<replace "#ash-social1-choices">><span class="teal">坡上的事已经做了取舍。</span><</replace>><<replace "#ash-social1-out">>
+你们三个人把线重新排了一遍：夹子退到猎线外，灯线往里收半步，中间留出一条窄窄的过道，人和兽都能走。阿什量灯距，猎人压浮土，你在中间传话。雾散了一阵，坡口露出一点灰白的天。
+<br><br>
+活干完，猎人把一只没动过的夹子递给你，说拿着，防身。阿什看了一眼，没反对，只提醒你别把它下在灯线以内。两个人第一次在同一件事上点了头。<span class="green">灯线没断，猎线也没废，你替两本账找到了一个都能写下的数。</span>
+<</replace>><</link>><<else>><<link "两边各让一步 (0:14)">><<pass 14>><<tiredness 2>><<stress 4>><<pain 2>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust -1>><</if>><<replace "#ash-social1-choices">><span class="teal">坡上的事已经做了取舍。</span><</replace>><<replace "#ash-social1-out">>
+你想两边都顾，结果两边都没顾全。灯线改了一半，夹子挪了一半，天黑前雾先压了下来。猎人摸黑收夹子时踩空了一步，骂了一句；阿什举着灯在坡口等，灯油烧掉大半。
+<br><br>
+回程时谁都没说话。猎人先把背篓甩上肩走了，阿什把剩下的红布收进袋子，说明天还得再来一趟。他没有怪你，只把回程的路说得很细，细到哪块石头会滑。<span class="red">这一趟没办成一件事，只觉得比走了一整天还累。</span>
+<</replace>><</link>><</if>><br>
+<</div>
+<div id="ash-social1-out"></div>
+<<getouticon>><<link [[回火塘边 (0:02)|MP NPC Ash Social Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Ash Social 2 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpNpcs to ($mpNpcs or {})>>
+<<set $mpNpcs.ash to ($mpNpcs.ash or {})>>
+<<set $mpNpcs.ash.love to ($mpNpcs.ash.love or 0)>>
+<<set $mpNpcs.ash.trust to ($mpNpcs.ash.trust or 0)>>
+<<set _npc to $mpNpcs.ash>>
+界桩立在林线最北的坡口，树皮被磨掉一圈，露出浅色的木芯。阿什每回走到这里都会停一下，先看桩上的毛，再看地上的印。今天桩上的黑毛朝外，印子却比上回浅——狼群没有退，只是走得更小心。
+<br><br>
+雾从谷底漫上来，把旧兽径吞掉半截。那条径从界桩内侧穿过，离灯线只有几步。狼群要过坡，就得贴着灯走；灯一亮，狼又不敢过来。阿什把弓从肩上取下来，看了看，又背回去。他不想射，也不想让。
+<br><br>
+黑狼在树影里。它不出声，也不靠近，只把前爪搭在一根倒木上，眼睛先落在你身上，再落回阿什身上。它不讲道理，只留记号：桩上的毛朝外是警告，朝里是认了这条线；骨头挪了位置，说明有别的兽闯过。
+<br><br>
+阿什蹲下去，把界桩扶正，用石头垫稳桩脚。他做得很慢，像在跟谁商量。他说狼群今年添了幼崽，旧兽径被雾一淹，能走的路就只剩这一条。可灯线也不能退，退了，夜里下山的人就得摸黑穿林子。
+<br><br>
+「它不会说话。」阿什站起来，拍了拍手上的土，「可它每回都先让一步。让到最后没地方让了，才龇牙。」
+<br><br>
+黑狼从树影里往前走了一点，停在灯线外侧。它低下头，鼻尖几乎碰到地上的灯座，又退开。那意思是它认得这盏灯，也认得灯后头的人。可它身后的坡上还有幼狼，幼狼不懂灯，只怕黑。
+<br><br>
+风把雾推过来，灯苗矮下去。阿什伸手护住灯，掌心的影子落在狼身上。黑狼没有动，只把尾巴压低了一点。你们三个站在坡口，谁也没有先开口。
+<br><br>
+阿什说，守界桩不是跟狼争地。界桩是给两边看的：人知道走到哪儿该停，狼知道走到哪儿有人。桩子歪了，两边都得猜；猜错了，就要见血。
+<br><br>
+他把一截旧绳系在桩顶，绳头垂到狼能闻到的高度。那是他每年雾季都做的事，绳子换新的，结还是同一个结。黑狼走上前闻了闻，没有咬，只把下巴在绳上蹭了一下。
+<br><br>
+<div id="ash-social2-choices">
+<<mpanimalicon>><<link "把界桩外移 (0:12)">><<pass 12>><<tiredness 3>><<pain 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<replace "#ash-social2-choices">><span class="teal">界桩上的事已经定下了。</span><</replace>><<replace "#ash-social2-out">>
+你和阿什把界桩往外移了十步。新桩砸进坡口的冻土，桩脚用碎石塞紧，桩顶系上那截旧绳。黑狼一直在树影里看着，等最后一根桩立稳，才走出来，沿着新界走了一趟。
+<br><br>
+它在每根桩上留下一点气味，走到最后一根时停住，回头看了你一眼。阿什说那是认了。界桩外多出一条能过狼的窄带，灯线没动，走夜路的人也不用绕。<span class="green">回程时阿什把弓背得很松，脚步比来时轻。</span>
+<</replace>><</link>><br>
+<<lanternicon>><<link "守住灯线 (0:12)">><<pass 12>><<tiredness 2>><<stress 3>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love -1>><</if>><<replace "#ash-social2-choices">><span class="teal">界桩上的事已经定下了。</span><</replace>><<replace "#ash-social2-out">>
+你没有移桩，只把灯线外侧的枯枝清开，又添了一盏小灯。灯亮起来时，黑狼往后退了半步，退到光够不着的地方。它没有叫，也没有走，就站在那里看。
+<br><br>
+阿什把灯芯拨正，说这样至少夜里下山的人不会误闯狼群的地界。狼群当夜从坡后绕了远路，幼狼跟得很吃力，但没有一只掉队。黑狼临走前在界桩上留了一撮毛，毛尖朝里，像是把这条线重新认了一遍，又像是记下了这一晚。<span class="teal">灯守住了，狼也让了，只是各自都多走了几步。</span>
+<</replace>><</link>><br>
+<<mpsneakicon>><<if ($sneak or 0) gte 220 or ($athletics or 0) gte 220 or (_npc.trust or 0) gte 7>><<link "留一条兽径 (0:14)">><<pass 14>><<tiredness 3>><<pain 2>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<replace "#ash-social2-choices">><span class="teal">界桩上的事已经定下了。</span><</replace>><<replace "#ash-social2-out">>
+你们在界桩和灯线之间留出一条窄窄的兽径：外侧给狼，内侧给人，中间用倒木和石块隔开。阿什搬石头，你削木桩，黑狼在坡上看着，偶尔下来闻一闻新立的界。
+<br><br>
+天黑前兽径通了。黑狼带着狼群从中间穿过去，幼狼走在外侧，母狼压后。阿什把灯一盏盏点起来，光落在兽径边缘，没有照进去。他说这就对了：灯是给人认路的，不是给狼划牢的。<span class="green">这一夜，人和狼各走各的，谁也没踩谁的影子。</span>
+<</replace>><</link>><<else>><<link "留一条兽径 (0:14)">><<pass 14>><<tiredness 3>><<stress 4>><<pain 3>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love -1>><</if>><<replace "#ash-social2-choices">><span class="teal">界桩上的事已经定下了。</span><</replace>><<replace "#ash-social2-out">>
+你想把两边都安顿好，可倒木太重，石墙垒到一半就塌了。天黑时兽径只通了一半，狼群在坡上等了一阵，最后从旧路硬挤过去，幼狼被挤散了一只。
+<br><br>
+阿什举着灯找了半宿，才在坡后的石缝里找到那只幼狼。它没伤，只是抖得厉害。黑狼站在远处看着，没有靠近。阿什把幼狼放在界桩边，退开很远，才转身对你说：「路没修成，不怪你。明天再来。」<span class="red">他嘴上说不怪，回程却一直走在你前面，没让你看见他的脸色。</span>
+<</replace>><</link>><</if>><br>
+<</div>
+<div id="ash-social2-out"></div>
+<<getouticon>><<link [[回火塘边 (0:02)|MP NPC Ash Social Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Ash Annual [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpNpcs to ($mpNpcs or {})>>
+<<set $mpNpcs.ash to ($mpNpcs.ash or {})>>
+<<set $mpNpcs.ash.love to ($mpNpcs.ash.love or 0)>>
+<<set $mpNpcs.ash.trust to ($mpNpcs.ash.trust or 0)>>
+<<set _npc to $mpNpcs.ash>>
+<<set _annualYear to ($mpNpcs.ash.annualYear or 0)>>
+<<set _done to (_annualYear eq (Time.date.year or 0))>>
+<<if _done>>
+灯簿上今年的那一页已经写过一笔。阿什把册子合上，说守过了就是守过了，灯不能一夜点两回。他把剩下的灯油收进陶罐，罐口用蜡封好，留到明年雾季。
+<br><br>
+火塘边还留着那晚的松柴灰。他蹲下去拨了拨，说雾季年年有，守夜的人却不一定年年都在。所以能守的时候，别省力气。
+<br><br>
+【今年雾季】：已守过，灯簿最后一页的墨迹还没褪。他不再提那晚的细节，只把火塘边最靠里的位置空着，像给下一个走夜路的人留的。
+<br><br>
+<<else>>
+今年的头一场浓雾来得比往年早。午后还看得见北岭的轮廓，傍晚就只剩一团灰白。阿什把七盏灯的灯罩一只只擦干净，排在石台上，灯芯剪得一样长。他说雾季守夜不求什么，只让走夜路的人知道，这一夜林子里还有人醒着。
+<br><br>
+灯簿翻到空白的一页，上面已经画好七个小方格，每个格子旁注着灯座的位置：北岭岩台、断桥旧道、深谷暗哨……他写字很省，一笔是一笔。往年这些格子由他一个人填，今年他把炭笔递给你，让你来排。
+<br><br>
+「油要够七盏烧到天亮，火把要经得住风，界桩那边也得有人说一声。」他一样样数，像在报路线，「三样齐了，夜里的雾才不算白等。」
+<br><br>
+火塘边堆着新劈的松柴，陶罐里的灯油只剩半罐。<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>北坡的猎人<</if>>上午下来过一趟，留下半扇鹿肉，没多说话就走了；界桩那边的黑毛是新蹭的，狼群也在等这一夜。阿什没有替他们开口，只把该做的事摆在你面前。
+<br><br>
+「你排，我照做。」他说完就蹲下去削火把，把决定留给你。
+<br><br>
+<div id="ash-annual-prep">
+<<mpcookicon>><<link "备齐三样东西 (0:14)">><<pass 14>><<tiredness 3>><<pain 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<replace "#ash-annual-prep">>
+你把灯油添满，火把扎成一捆，又替阿什往界桩那边走了一趟，把旧绳重新系紧。三样事做完，天已经黑透。阿什把最后一根火把递给你，说该走了。
+<br><br>
+<<mpwatchicon>>
+天黑得比算的还快。雾先从谷底翻上来，淹掉界桩，再淹掉旧桥，最后连火塘的光都只剩一团黄。七盏灯要一盏盏点过去，从最近的灯座到北岭岩台，中间隔着半座林子。风不大，可雾里有水，火苗一低就得停下来护。
+<br><br>
+阿什走在前面，火把举得很低，让光贴着地面走。他说雾里的人看不见远光，只看得见脚下那一小圈。每过一处灯座，他就停下来，把灯芯拨正，再用手掌护着，等火站稳了才走。
+<br><br>
+走到第三盏时，界桩那边传来一声很短的狼嚎。不长，也不凶，像在报位置。阿什停住，侧耳听了一阵，说黑狼在把落在后面的幼狼往坡上赶。雾太厚，狼群不敢穿灯线，只能贴着外侧绕。
+<br><br>
+同一时刻，北岭岩台那边还有四盏灯没点。一个人走不完两条路：灯线要守到天亮，雾里的狼群也得有人看着灯不会灭。阿什把火把递给你，自己退开半步，等你选。
+<br><br>
+<<link "守北岭灯线 (0:20)">><<pass 20>><<tiredness 4>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>><<set $mpNpcs.ash.annualYear to (Time.date.year or 0)>><<replace "#ash-annual-prep">><span class="teal">今夜的事已经定了。</span><</replace>><<replace "#ash-annual-after">>
+你留在灯线上。七盏灯一盏盏亮起来，从断桥到深谷，光在雾里连成一条断断续续的线。阿什走在你前头，每点完一盏就在灯簿上画一个小勾，画到最后一盏时，天边已经泛白。
+<br><br>
+雾没有散，可也没有再往里压。天亮前，山下送药的老妇人顺着灯线走上来，铃在雾里响得很轻。她看见灯还亮着，冲你们点了点头，没有停。阿什把最后一盏灯的铜盖扣好，说这就够了。
+<br><br>
+回火塘时，<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>北坡的猎人<</if>>已经等在坡口，脚边放着半扇鹿肉。他看了一眼灯线，又看了一眼你们被雾打湿的肩，什么也没问。黑狼没有露面，界桩上的毛朝里，像是也算过了这一夜。
+<br><br>
+阿什把灯簿合上，在最后一格旁边添了一笔：今夜无失。他没说是谁守的，只把册子推给你看。火塘重新烧起来，暖意慢慢铺到脚边。<span class="green">他没劝你留下，只说明早走亮的那一侧。</span>
+<</replace>><</link>><br>
+<<mpanimalicon>><<link "随黑狼入雾 (0:20)">><<pass 20>><<tiredness 4>><<pain 2>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<set $mpNpcs.ash.annualYear to (Time.date.year or 0)>><<replace "#ash-annual-prep">><span class="teal">今夜的事已经定了。</span><</replace>><<replace "#ash-annual-after">>
+你跟着黑狼进了雾。狼群走得不快，黑狼每走十几步就停下来，鼻尖贴近地面，再抬头嗅风。你学它的样子，发现雾里其实有路：苔厚的地方脚下发软，风从左边来时，右前方的树会先挡住气流。
+<br><br>
+落在最后的是两只幼狼，一只腿短，一只总想往回跑。你把火把举低，让光贴着地，黑狼在前头压着速度。走到坡顶时，两只幼狼都跟上了，母狼回头看了你一眼，没有龇牙。
+<br><br>
+回程时雾薄了一层。阿什还站在灯线上，七盏灯亮着六盏，最后一盏的灯芯烧歪了，他正低头修。看见你从狼群里走出来，他眉头皱了一下，终究没说什么，只把火把接过去，让你烤手。
+<br><br>
+天亮后，黑狼在界桩上留了新毛，毛尖朝里。阿什把灯簿翻到最后一格，写了一句：狼群归坡。他把剩下的灯油收进罐里，说下回雾季还用得上。<span class="teal">他没夸你，只在回程时把最难走的那段留给了自己。</span>
+<</replace>><</link>><br>
+<<mpritualicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420 or (_npc.trust or 0) gte 10>><<link "分头各守一半 (0:20)">><<pass 20>><<tiredness 5>><<pain 2>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<set $mpNpcs.ash.annualYear to (Time.date.year or 0)>><<replace "#ash-annual-prep">><span class="teal">今夜的事已经定了。</span><</replace>><<replace "#ash-annual-after">>
+你和阿什分头走。他守北岭的灯线，你带着火把去界桩外侧接狼群。雾里看不见彼此，只能靠灯的位置辨方向。每点完一盏，你就把火把举高三下，阿什在远处回一下，光对上了，才知道人还在。
+<br><br>
+狼群从旧兽径下来时，幼狼已经走散了一只。你在界桩边找到它，没伸手去抱，只把火把插在石缝里，退开几步。幼狼自己凑到光边，母狼跟上来，把它叼走了。黑狼在坡上看完这一切，转身时尾巴没有压低。
+<br><br>
+天亮前，七盏灯全亮了，一盏没灭。阿什从北岭下来，靴子上全是泥，看见你坐在界桩边，先看你的手，再看你的脸，最后才说：「灯都在。」
+<br><br>
+他把灯簿摊开，在最后一格写下两行：灯线无缺，狼群归坡。写完把炭笔递给你，让你也添一笔。你想了想，只写了日期。<span class="green">他说这一页不用多写，路已经把该说的都说完了。</span>
+<</replace>><</link>><<else>><<link "分头各守一半 (0:20)">><<pass 20>><<tiredness 5>><<stress 5>><<pain 4>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 2)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love -1>><</if>><<set $mpNpcs.ash.annualYear to (Time.date.year or 0)>><<replace "#ash-annual-prep">><span class="teal">今夜的事已经定了。</span><</replace>><<replace "#ash-annual-after">>
+你们分头走，可雾比算的厚。你带的火把烧到一半就灭了，界桩那边一片黑，狼嚎从很近的地方传来。你摸着树往回走，脚下一滑，膝盖磕在石头上。
+<br><br>
+北岭那边也不顺。阿什一个人顾不过来七盏灯，第四盏的灯芯烧断，光灭了一阵。等他重新点上，雾已经压到岩台边上。天亮时你们在火塘边碰头，谁都不太好看。
+<br><br>
+灯簿上那一页写得比往年短：一盏失明，狼群绕行。阿什没有责怪你，只把你的裤腿卷起来，看了看膝盖上的伤，说雾季还没过去，明天还得补灯。黑狼当夜没有再来，界桩上的毛被风吹散了。<span class="red">你守着两条路，到头来两条都只守住一半。</span>
+<</replace>><</link>><</if>><br>
+<</replace>><</link>>
+<</div>
+<</if>>
+<div id="ash-annual-after"></div>
+<<link [[回火塘边 (0:02)|MP NPC Ash Social Hub]]>><<pass 2>><</link>>

@@ -1,0 +1,567 @@
+:: MP NPC Sera Deep Hub [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<set _sera to $mpNpcs.sera>>
+<<if _sera.cadence is undefined>><<set _sera.cadence to 25>><</if>>
+<<if _sera.fatherLog is undefined>><<set _sera.fatherLog to 0>><</if>>
+<<if _sera.rep is undefined>><<set _sera.rep to 50>><</if>>
+<<if _sera.questStage is undefined>><<set _sera.questStage to 0>><</if>>
+<<set $mpClockParts to ($mpClockParts is undefined ? 3 : $mpClockParts)>>
+<<set _curWeek to Math.floor(Time.days / 7)>>
+<<if $mpSeraWeekId isnot _curWeek>>
+	<<set $mpSeraWeekId to _curWeek>>
+	<<set $mpSeraW1 to 0>><<set $mpSeraW2 to 0>><<set $mpSeraW3 to 0>>
+<</if>>
+高街钟表铺的玻璃橱窗后，几十座大小不一的黄铜座钟、航海天文钟与银壳怀表正以毫厘不差的节拍齐声滴答。空气里浮动着钟表机油、雪松木盒与锡兰红茶交织的静谧气息。修表台后，<<if $mpWorldSeraDeparted>>塞拉留下的单眼放大镜与工作围裙整齐叠放在绒布垫上，整间铺面已由你代管经营，柜台角擺着她从远洋寄回的齿轮信笺<<else>>戴着单眼放大镜的塞拉先低头看了一眼腕上的基准表，核准你推门而入的时辰误差，随后才抬起清澈的眼眸望向你<</if>>。
+<br><br>
+你走到胡桃木修表台前，对照黄铜校时牌核查当前的节律状态与委托进展：
+<br>
+【节律共鸣轴（Cadence）】：<<print _sera.cadence>>/100 ｜ 钟表铺信誉：<<print _sera.rep>>/100 ｜ 精密铜件储备：<<print $mpClockParts>> 份 ｜ 父亲日记已揭示：<<print _sera.fatherLog>>/6 段
+<br>
+【可见行为分层】：<<if _sera.cadence gte 90>><span class="gold">停摆之秘（塞拉将父亲留下的那只停在七点十五分的银壳怀表交到你手心，向你敞开埋藏十年的心结）</span><<elseif _sera.cadence gte 70>><span class="teal">阁楼准入（塞拉允许你踏上从不对外人开放的二楼阁楼工作间，共同调校精密星象钟与私藏机芯）</span><<elseif _sera.cadence gte 30>><span class="lblue">红茶留香（修表台侧总为你温着一杯佛手柑锡兰红茶，她习惯了你在灯下安静陪伴她分拣游丝）</span><<else>><span class="blue">只谈修表（塞拉隔着玻璃展柜与你核对机芯故障、工料报价与取件时刻，言辞精确得如同秒针）</span><</if>>
+<br>
+【停摆怀表终局与世界状态】：<<if $mpWorldSeraSecondFloor>><span class="gold">已修好·二层天文工坊扩建（塞拉已与父亲和解并常驻高街，修表报酬永久上浮且二层阁楼深夜亲密陪伴常驻开放）</span><<elseif $mpWorldSeraDeparted>><span class="purple">未修·离镇寻父代管铺面（塞拉已将逆跳怀表留给你并离镇寻父，每日一次时间慢一拍常驻可用，铺面由你独立掌管分红）</span><<else>>停摆怀表任务进行中（当前阶段：<<print _sera.questStage>>/5，镇钟时刻表：<<if $mpSeraTimetableUnlocked>>已解锁<<else>>待修好三号镇钟机芯后解锁<</if>>）<</if>>
+<br><br>
+柜台上的基准摆钟平稳地划出金色弧线。你可以承接每周三只钟表的修复委托、守候整点窗口与怀表回溯、进行守时赴约与分层陪伴，或是深入追查那只停摆怀表的来历。
+<br><br>
+<<getouticon>><<link [[返回塞拉身边 (0:02)|MP NPC Sera Hub]]>><<pass 2>><</link>>
+<br>
+<<mpclockworkicon>><<link [[承接修表委托 (0:06)|MP NPC Sera Repair Hub]]>><<pass 6>><</link>>
+<br>
+<<mpcalculateicon>><<link [[守候整点怀表 (0:06)|MP NPC Sera Watch Windows]]>><<pass 6>><</link>>
+<br>
+<<shopicon>><<link [[守时分层陪伴 (0:08)|MP NPC Sera Tier And Loft]]>><<pass 8>><</link>>
+<br>
+<<link [[追查停摆怀表 (0:08)|MP NPC Sera Quest Step 1]]>><<pass 8>><</link>>
+
+:: MP NPC Sera Tier And Loft [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _onTime to (Time.minute lte 15 or Time.hour is 8 or Time.hour is 12 or Time.hour is 18)>>
+<<set $mpSeraSnapshot to { money: ($money or 0), stress: ($stress or 0), tiredness: ($tiredness or 0), pain: ($pain or 0), cadence: (_sera.cadence or 25), rep: (_sera.rep or 50), parts: ($mpClockParts or 0), log: (_sera.fatherLog or 0), w1: ($mpSeraW1 or 0), w2: ($mpSeraW2 or 0), w3: ($mpSeraW3 or 0) }>>
+对于习惯用分秒与游丝振频衡量一切的塞拉而言，守时与安静是最珍贵的默契。每当你按照约定推开高街钟表铺的木门，她都会先看一眼柜台上的天文母钟（当前时刻 <<print String(Time.hour).padStart(2, "0")>>:<<print String(Time.minute).padStart(2, "0")>>，<<if _onTime>><span class="teal">准时赴约，分秒不差</span><<else>><span class="purple">比整点约定略晚了几刻</span><</if>>），并根据你们之间的节律共鸣（<<print _sera.cadence>>/100）展现出不同的相处姿态：
+<br><br>
+<<if (_sera.cadence or 0) lt 30>>
+	【第一层·只谈修表（节律未满三十）】：塞拉用绒布垫托起一只待修的黄铜怀表，隔着柜台向你说明：「发条盒齿牙磨损了两格，更换游丝与清洗油槽需要十六分钟。若是取件迟到超过半个时辰，机芯受潮的误差需要重新校准。」她手指稳健，目光专注在齿轮啮合处，不谈任何与钟表无关的私事。
+<<elseif (_sera.cadence or 0) lt 70>>
+	【第二层·留锡兰茶（节律三十至六十九）】：听见门铃在约定的刻点响起，塞拉嘴角浮现出一抹极浅的笑意，伸手将紫铜茶壶里温着的佛手柑红茶倒进骨瓷杯推到你手边：「今天比昨天准了四十秒。你要是不赶时间，可以坐在里侧的高脚凳上陪我把这组三问报时簧理完。」茶香袅袅中，两人的呼吸与座钟滴答声渐渐合为一拍。
+<<elseif (_sera.cadence or 0) lt 90>>
+	【第三层·登二楼阁楼（节律七十至八十九）】：塞拉轻轻翻过门上的“暂停待客”木牌，提着煤油灯领你踏上铺后狭窄的螺旋木梯，进入从不对外开放的二楼阁楼工作间。天窗下摆着她复原的星象仪与画框（其中有莫奈定制的铜镶画框），她挨着你的肩膀坐下，任由你在静谧的灯影里握住她微凉的指尖。
+<<else>>
+	【第四层·停摆怀表（节律九十以上）】：在阁楼最深处的丝绒匣里，塞拉取出了那只指针永远停在七点十五分的旧银壳怀表，轻轻放在你的掌心：「十年了，我修好了镇上成百上千只表，唯独不敢碰父亲留下的这一只。既然你的节拍从来没有乱过，我想请你陪我一起打开它的后盖。」
+<</if>>
+<br><br>
+<<if $mpWorldSeraSecondFloor>>
+	【二层天文工坊（`$mpWorldSeraSecondFloor` 已生效）】：扩建后的二层阁楼增设了全景天窗与双人修表台，塞拉在夜色中依偎着你，与你共享静谧的星象夜话。
+<<elseif $mpWorldSeraDeparted>>
+	【代管钟表铺（`$mpWorldSeraDeparted` 已生效）】：塞拉虽已离镇寻父，但她在二楼桌案上留下了详尽的调校手记与远方来信，你独自打理铺面并收拢代管分红。
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpclockworkicon>><<link [[准时赴约品茶 (0:15)|MP NPC Sera Deep Hub]]>><<pass 15>>
+	<<if _onTime>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 6)>>
+		<<set _sera.love to Math.min(100, (_sera.love or 0) + 2)>>
+		<<stress -5>><<tiredness -2>>
+	<<else>>
+		<<set _sera.cadence to Math.max(0, (_sera.cadence or 0) - 3)>>
+		<<stress 2>>
+	<</if>>
+<</link>>
+<br>
+<<shopicon>><<link [[安静陪伴修表 (0:18)|MP NPC Sera Repair Hub]]>><<pass 18>>
+	<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 5)>>
+	<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 2)>>
+	<<if $mpWorldSeraSecondFloor>>
+		<<set _sera.love to Math.min(100, (_sera.love or 0) + 3)>><<arousal 300>><<stress -8>>
+	<<elseif $mpWorldSeraDeparted>>
+		<<money 350>><<stress -4>>
+	<<else>>
+		<<stress -5>>
+	<</if>>
+<</link>>
+<br>
+<<mpcalculateicon>><<link [[登阁楼看星钟 (0:20)|MP NPC Sera Timetable]]>><<pass 20>>
+	<<if (_sera.cadence or 0) gte 70 or $mpWorldSeraSecondFloor>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 5)>>
+		<<set $mpClockParts to ($mpClockParts or 0) + 1>>
+		<<stress -6>>
+	<<else>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 3)>>
+		<<tiredness 2>>
+	<</if>>
+<</link>>
+<br>
+<<link [[取消今日约定 (0:04)|MP NPC Sera Watch Rewind]]>><<pass 4>>
+	<<set _sera.cadence to Math.max(0, (_sera.cadence or 0) - 6)>>
+	<<set _sera.rep to Math.max(0, (_sera.rep or 50) - 3)>>
+	<<stress 4>>
+<</link>>
+
+:: MP NPC Sera Repair Hub [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _curWeek to Math.floor(Time.days / 7)>>
+<<if $mpSeraWeekId isnot _curWeek>>
+	<<set $mpSeraWeekId to _curWeek>>
+	<<set $mpSeraW1 to 0>><<set $mpSeraW2 to 0>><<set $mpSeraW3 to 0>>
+<</if>>
+<<set $mpSeraSnapshot to { money: ($money or 0), stress: ($stress or 0), tiredness: ($tiredness or 0), pain: ($pain or 0), cadence: (_sera.cadence or 25), rep: (_sera.rep or 50), parts: ($mpClockParts or 0), log: (_sera.fatherLog or 0), w1: ($mpSeraW1 or 0), w2: ($mpSeraW2 or 0), w3: ($mpSeraW3 or 0) }>>
+修表台中央的软绒托盘上，并排摆放着本周送来检修的三只核心钟表委托。每一只钟表内部都卡着一处精密的机芯故障，不仅需要消耗一份黄铜修表零件（当前储备：<<print ($mpClockParts or 0)>> 份），还必须运用对应的学科手艺（算术、科学、诡术或家务）才能严丝合缝地复原。更奇妙的是，这三只钟表当年都曾经过塞拉父亲之手，每成功修好一只，都能从机芯夹层或底座铭文里揭示一段她父亲留下的旧日记（当前已收集：<<print (_sera.fatherLog or 0)>>/6 段）。
+<br><br>
+你戴上放大镜，逐一查看本周三只委托钟表的状态：
+<br>
+【一号委托·远洋双轴航海钟】：<<if $mpSeraW1 is 1>><span class="green">本周已成功修复</span><<elseif $mpSeraW1 is -1>><span class="red">本周操作失手已锁定（需等下周或用怀表回溯）</span><<else>><span class="teal">待检修（偏重科学温差与算术齿比）</span><</if>>
+<br>
+【二号委托·银雕三问报时怀表】：<<if $mpSeraW2 is 1>><span class="green">本周已成功修复</span><<elseif $mpSeraW2 is -1>><span class="red">本周操作失手已锁定（需等下周或用怀表回溯）</span><<else>><span class="teal">待检修（偏重诡术拨簧与家务拭油）</span><</if>>
+<br>
+【三号委托·市政厅镇钟副机芯】：<<if $mpSeraW3 is 1>><span class="green">本周已成功修复（已解锁全镇时刻表）</span><<elseif $mpSeraW3 is -1>><span class="red">本周操作失手已锁定（需等下周或用怀表回溯）</span><<else>><span class="teal">待检修（修好后永久解锁「看时刻表」查看全镇 NPC 日程）</span><</if>>
+<br>
+【世界状态工钱修正】：<<if $mpWorldSeraSecondFloor>>因二层天文工坊已建成，精密工具齐全，每单修复工钱额外上浮 £3.50！<<elseif $mpWorldSeraDeparted>>因塞拉离镇寻父、铺面由你全权代管，每单修复直接领取全额掌柜分红（+£4.00）！<<else>>当前按钟表铺标准工钱结算。<</if>>
+<br><br>
+请注意：若在解谜中选错手法或缺少零件导致失手，不仅会损失零件、降低信誉与节律，该只钟表在本周内也无法再次尝试（但绝不倒扣存款；若持有怀表信物，可发动每日一次的「时间慢一拍」回溯重选）。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpclockworkicon>><<link [[拆修航海天钟 (0:20)|MP NPC Sera Repair Puzzle]]>><<pass 20>><<set $mpSeraTargetWatch to 1>><</link>>
+<br>
+<<mpcalculateicon>><<link [[校准三问怀表 (0:20)|MP NPC Sera Repair Puzzle]]>><<pass 20>><<set $mpSeraTargetWatch to 2>><</link>>
+<br>
+<<shopicon>><<link [[检修镇钟机芯 (0:22)|MP NPC Sera Repair Puzzle]]>><<pass 22>><<set $mpSeraTargetWatch to 3>><</link>>
+<br>
+<<link [[查阅镇钟时刻 (0:08)|MP NPC Sera Timetable]]>><<pass 8>><</link>>
+
+:: MP NPC Sera Repair Puzzle [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _w to ($mpSeraTargetWatch or 1)>>
+<<set _wState to (_w is 1 ? ($mpSeraW1 or 0) : (_w is 2 ? ($mpSeraW2 or 0) : ($mpSeraW3 or 0)))>>
+<<set $mpSeraSnapshot to { money: ($money or 0), stress: ($stress or 0), tiredness: ($tiredness or 0), pain: ($pain or 0), cadence: (_sera.cadence or 25), rep: (_sera.rep or 50), parts: ($mpClockParts or 0), log: (_sera.fatherLog or 0), w1: ($mpSeraW1 or 0), w2: ($mpSeraW2 or 0), w3: ($mpSeraW3 or 0) }>>
+你将选中的<<if _w is 1>>【一号·远洋双轴航海钟】<<elseif _w is 2>>【二号·银雕三问报时怀表】<<else>>【三号·市政厅镇钟副机芯】<</if>>稳稳固定在黄铜万向夹具上，拧亮修表台的无影煤油灯。当前随身精密零件储备为 <<print ($mpClockParts or 0)>> 份，该钟表本周状态为：<<if _wState is 1>><span class="green">已修复完毕</span><<elseif _wState is -1>><span class="red">本周已失手锁定（强行拆修将无法推进，请先去时刻表备料或用怀表回溯）</span><<else>><span class="teal">机芯敞开，等待解谜施修</span><</if>>。
+<br><br>
+透过十倍放大镜片，你可以清晰看见机芯内部的症结所在：
+<<if _w is 1>>
+	这台跟随维斯夜航船队跑过外海的双轴航海钟，因受寒潮盐雾侵蚀，主传动轮缺失了两枚微米级齿牙，且双金属游丝在低温下出现了明显的振频漂移。要想将其完美复原，最好以【算术】精确重算六十齿分度配比，或以【科学】原理校准温差补偿游丝。
+<<elseif _w is 2>>
+	这只由城东贵族送修的银雕三问怀表，内部的音簧击锤被一颗错位的暗销死死卡住，且宝石轴承里的钟表油早已干涸结块。若想在不伤及纤细音簧的前提下令其重鸣清音，最宜用【诡术】巧劲拨开暗槽卡销，或用【家务】细拭手艺清理油槽积垢。
+<<else>>
+	这座拆自高街钟楼的「市政厅镇钟副机芯」，承担着全镇报时与日晷联动的核心职能。其擒纵叉与秒轮之间存在着复杂的齿比与摩擦耦合，无论你擅长【算术】、【科学】、【诡术】还是【家务】，只要有一门手艺扎实（或由二层天文工坊提供辅助）并配齐一份铜件，就能令镇钟重归分秒不差！
+<</if>>
+<br><br>
+塞拉屏住呼吸守在台侧，随时准备替你递上铜镊。请选择你的解谜切入手法，前往结算台检验机芯走字成色。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回修表委托 (0:03)|MP NPC Sera Repair Hub]]>><<pass 3>><</link>>
+<br>
+<<mpcalculateicon>><<link [[算术配比齿轮 (0:18)|MP NPC Sera Repair Settle]]>><<pass 18>>
+	<<if _wState is 0 and ($mpClockParts or 0) gte 1 and (($maths or 0) gte 200 or $mpWorldSeraSecondFloor)>>
+		<<set $mpSeraPuzzleOk to 1>>
+	<<else>>
+		<<set $mpSeraPuzzleOk to 0>>
+	<</if>>
+<</link>>
+<br>
+<<mpclockworkicon>><<link [[科学调校游丝 (0:18)|MP NPC Sera Repair Settle]]>><<pass 18>>
+	<<if _wState is 0 and ($mpClockParts or 0) gte 1 and (($science or 0) gte 200 or $mpWorldSeraSecondFloor)>>
+		<<set $mpSeraPuzzleOk to 1>>
+	<<else>>
+		<<set $mpSeraPuzzleOk to 0>>
+	<</if>>
+<</link>>
+<br>
+<<shopicon>><<link [[巧手拨正擒纵 (0:18)|MP NPC Sera Repair Settle]]>><<pass 18>>
+	<<if _wState is 0 and ($mpClockParts or 0) gte 1 and (($skulduggery or 0) gte 200 or $mpWorldSeraSecondFloor)>>
+		<<set $mpSeraPuzzleOk to 1>>
+	<<else>>
+		<<set $mpSeraPuzzleOk to 0>>
+	<</if>>
+<</link>>
+<br>
+<<link [[绒布细拭油槽 (0:18)|MP NPC Sera Repair Settle]]>><<pass 18>>
+	<<if _wState is 0 and ($mpClockParts or 0) gte 1 and (($housekeeping or 0) gte 200 or $mpWorldSeraSecondFloor)>>
+		<<set $mpSeraPuzzleOk to 1>>
+	<<else>>
+		<<set $mpSeraPuzzleOk to 0>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Repair Settle [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _w to ($mpSeraTargetWatch or 1)>>
+<<set _worldPayBonus to ($mpWorldSeraSecondFloor ? 350 : ($mpWorldSeraDeparted ? 400 : 0))>>
+你放下手中的黄铜镊子与单眼放大镜，屏息凝神地注视着万向夹具上的机芯摆轮：
+<br><br>
+<<if ($mpSeraPuzzleOk or 0) is 1>>
+	<<set $mpClockParts to Math.max(0, ($mpClockParts or 1) - 1)>>
+	<<if _w is 1>><<set $mpSeraW1 to 1>><<elseif _w is 2>><<set $mpSeraW2 to 1>><<else>><<set $mpSeraW3 to 1>><<set $mpSeraTimetableUnlocked to 1>><</if>>
+	<<set _sera.fatherLog to Math.min(6, (_sera.fatherLog or 0) + 1)>>
+	<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 8)>>
+	<<set _sera.rep to Math.min(100, (_sera.rep or 50) + 5)>>
+	<<set _pay to (650 + _worldPayBonus)>><<money _pay>>
+	<<stress -5>><<tiredness 2>>
+	<span class="green">【机芯复原·父亲日记揭示】</span>随着擒纵轮一声清脆的啮合，金色的摆轮重新以稳定而充满活力的节拍左右摆动起来！<<if _w is 3>>随着镇钟副机芯彻底复原，高街钟楼的报时联动重新打通，你已永久解锁「看时刻表」（可随时查看全镇 NPC 按小时排班日程）！<</if>>
+	<br><br>
+	在拆洗机芯底盖时，你从暗槽夹层里取出了第 <<print _sera.fatherLog>> 页塞拉父亲留下的缩微手记：
+	<<if _sera.fatherLog is 1>>「一月记：港务局要我在防波堤雾角主塔造一座能预测寒潮的潮汐钟，可行会老爷们只想用劣质黄铜糊弄账目。」<<elseif _sera.fatherLog is 2>>「三月记：塞拉今天学会了自己打磨游丝，这孩子比我更有耐性，我不能让行会的脏事连累高街的铺子。」<<elseif _sera.fatherLog is 3>>「五月记：水下分流闸的谐振频率算出来了，只要在整点窗口下锤，就能把海雾导回外海。」<<elseif _sera.fatherLog is 4>>「七月记：行会威胁要收走钟表铺地契，我只能假装与他们决裂，独自出海去寻找耐寒铍铜游丝。」<<elseif _sera.fatherLog is 5>>「九月记：临走前那晚七点十五分，我用止动销锁死了留给塞拉的银怀表，免得里面的海图坐标被外人看穿。」<<else>>「冬月记：若塞拉有一天能解开止动销，告诉她父亲从未嫌她手慢，我在远洋钟表城等她音讯。」<</if>>
+	<br>
+	本次修复共获得工钱 £<<print (_pay / 100).toFixed(2)>>（已计入当前世界状态修正）。
+<<else>>
+	<<if ($mpClockParts or 0) gte 1>><<set $mpClockParts to ($mpClockParts or 1) - 1>><</if>>
+	<<if _w is 1 and ($mpSeraW1 or 0) is 0>><<set $mpSeraW1 to -1>><<elseif _w is 2 and ($mpSeraW2 or 0) is 0>><<set $mpSeraW2 to -1>><<elseif _w is 3 and ($mpSeraW3 or 0) is 0>><<set $mpSeraW3 to -1>><</if>>
+	<<set _sera.cadence to Math.max(0, (_sera.cadence or 0) - 5)>>
+	<<set _sera.rep to Math.max(0, (_sera.rep or 50) - 6)>>
+	<<stress 6>><<tiredness 3>>
+	<span class="red">【调校失手·当周锁定】</span>只听见机芯内部传来一声细微的金属崩断声，游丝卡死在擒纵叉上！你不仅损耗了一份精密铜件、掉了钟表铺信誉与节律，这只钟表在本周内也无法再次尝试拆修（按规矩绝不倒扣你分毫存款）。不过，若你今日尚未动用过怀表信物的逆跳机关，可以立即启动「时间慢一拍」回溯到拆修前的状态重做选择！
+<</if>>
+<br><br>
+修表台上的煤油灯静静燃烧，你可以返回委托台继续检修其他钟表、查阅全镇时刻表，或是拨动怀表让时间慢一拍。
+<br><br>
+<<getouticon>><<link [[返回修表委托 (0:03)|MP NPC Sera Repair Hub]]>><<pass 3>><</link>>
+<br>
+<<mpcalculateicon>><<link [[查阅全镇时刻 (0:06)|MP NPC Sera Timetable]]>><<pass 6>><</link>>
+<br>
+<<mpclockworkicon>><<link [[拨怀表慢一拍 (0:04)|MP NPC Sera Watch Rewind]]>><<pass 4>><</link>>
+<br>
+<<link [[研读父志追查 (0:12)|MP NPC Sera Quest Step 2]]>><<pass 12>><</link>>
+
+:: MP NPC Sera Timetable [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+你站在钟表铺内侧与高街钟楼联动的「全镇机械时刻盘」前。随着镇钟副机芯与基准母钟的齿轮紧密咬合，刻着全镇六位常驻伙伴与关键人物动向的黄铜时刻表在灯下清晰展开（现在时刻：<<print String(Time.hour).padStart(2, "0")>>:<<print String(Time.minute).padStart(2, "0")>>）：
+<br><br>
+【一·塞拉（修表师）】：<<if $mpWorldSeraDeparted>>已离镇远赴海外寻父（钟表铺全天由你代管收租，逆跳怀表留驻你身）<<elseif $mpWorldSeraSecondFloor>>08:00–15:00 一楼修表台 · 15:00–23:00 二层天文工坊（已扩建开放深夜陪伴）<<else>>08:00–15:00 高街钟表铺柜台 · 15:00–19:00 二楼阁楼工作间 · 19:00–21:00 高街散步<</if>>
+<br>
+【二·林恩（守夜人）】：<<if $mpWorldLinGym>>16:00–24:00 宅邸街夜间武馆授拳 · 00:00–07:00 与你同行夜巡三街区<<elseif $mpWorldLinCaptain>>16:00–07:00 全城夜巡总队部督查（治安极稳，私人亲密关闭）<<else>>16:00–24:00 宅邸街岗棚 · 00:00–04:00 多姆斯街巡逻 · 04:00–07:00 岗棚整备<</if>>
+<br>
+【三·阿什（守林人）】：06:00–12:00 森林石径巡灯 · 12:00–18:00 河湾营地整备 · 18:00–23:00 废祠石阶守夜
+<br>
+【四·莫奈（画师）】：10:00–16:00 康努达图斯街阁楼画室 · 16:00–20:00 露台写生 · 20:00–23:00 夜市寻觅灵感
+<br>
+【五·诺艾尔（植物学徒）】：07:00–12:00 学园标本室 · 12:00–17:00 温室花房药圃 · 17:00–20:00 公园与林缘采集
+<br>
+【六·维斯（夜航船长）】：<<if $mpWorldScheduleShortened>>受钟声撤离影响，提前于 17:00–24:00 驻守三号栈桥 · 00:00–06:00 灰雾航道与干船坞<<else>>18:00–24:00 旧港栈桥调度 · 00:00–04:00 外礁夜航 · 04:00–10:00 深层船坞底舱<</if>>
+<br><br>
+这座与高街钟楼母钟同频运转的黄铜时刻盘，是由塞拉根据父亲留下的齿轮传图纸亲手复原的。盘面外圈刻着二十四小时的罗马数字与潮汐涨落标记，内圈则以六枚不同色泽的珐琅指针实时指示着镇上各位伙伴的行踪轨迹。时刻盘下方还设有一处分拣旧铜件的备料抽屉；若你在修表解谜中缺少精密零件，可以在此拆解废旧怀表补充铜件，或直接转往整点报时窗口。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpclockworkicon>><<link [[拆旧表补零件 (0:16)|MP NPC Sera Repair Hub]]>><<pass 16>>
+	<<set $mpClockParts to ($mpClockParts or 0) + 2>>
+	<<tiredness 2>><<stress -2>>
+<</link>>
+<br>
+<<mpcalculateicon>><<link [[前往整点窗口 (0:06)|MP NPC Sera Watch Windows]]>><<pass 6>><</link>>
+
+:: MP NPC Sera Watch Windows [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _hr to Time.hour>>
+<<set _is6 to (_hr is 6)>>
+<<set _is12 to (_hr is 12)>>
+<<set _is18 to (_hr is 18)>>
+<<if !$daily>><<set $daily to {}>><</if>>
+高街钟表铺的三座主母钟分别对应着一日之中的三个「黄金整点窗口」：清晨 **06:00** 的晨钟校音、正午 **12:00** 的日晷对时，以及傍晚 **18:00** 的暮色红茶上弦。每一处整点窗口都有其独一无二的精密韵律，一旦错过当下的整点钟声，或者今日该整点事件已经触发完毕，便只能耐心等待次日同一时刻再来赴约。
+<br><br>
+你握着怀表站在主母钟前，核对当前的整点窗口状态（当前时刻：<<print String(Time.hour).padStart(2, "0")>>:<<print String(Time.minute).padStart(2, "0")>>）：
+<br>
+<<if _is6 and !$daily.mpSeraWin6>>
+	【06:00 晨钟校音窗口（当前可触发）】：破晓的第一缕晨光穿过高街薄雾，塞拉正站在梯凳上用音叉校准报时铜簧。此时协助她听音定弦，可大幅提升节律共鸣并获赠晨间精工零件。
+<<elseif _is12 and !$daily.mpSeraWin12>>
+	【12:00 正午日晷窗口（当前可触发）】：正午阳光垂直落在橱窗外的青铜日晷针上，影子与子午线分毫无差。此时与塞拉一同核对天文母钟秒差，可领悟精密计时奥秘并获得校时津贴。
+<<elseif _is18 and !$daily.mpSeraWin18>>
+	【18:00 暮色上弦窗口（当前可触发）】：夕阳将钟表铺染成温暖的琥珀色，塞拉泡好了一壶锡兰红茶，正准备为全店三十六座座钟逐一上弦。此时陪她安静上弦，不仅能大涨好感与节律，还能听她聊起父亲的往事。
+<<else>>
+	【非整点窗口或今日已触发（需等次日 6:00 / 12:00 / 18:00）】：当前指针并未停留在未触发的三大整点刻度上。塞拉提醒你，时间的齿轮从不为匆忙者倒转——若想体验专属整点事件，请算准钟点再来，或先在此保养怀表发条、启动每日一次的「时间慢一拍」回溯。
+<</if>>
+<br><br>
+你可以立即响应当前的整点窗口事件，也可以预约次日整点守时赴约，或是打开随身怀表进入「时间慢一拍」回溯界面。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpclockworkicon>><<link [[响应整点校音 (0:15)|MP NPC Sera Deep Hub]]>><<pass 15>>
+	<<if _is6 and !$daily.mpSeraWin6>>
+		<<set $daily.mpSeraWin6 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 8)>>
+		<<set $mpClockParts to ($mpClockParts or 0) + 1>>
+		<<stress -5>>
+	<<elseif _is12 and !$daily.mpSeraWin12>>
+		<<set $daily.mpSeraWin12 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 8)>>
+		<<money 450>><<science 2>><<stress -4>>
+	<<elseif _is18 and !$daily.mpSeraWin18>>
+		<<set $daily.mpSeraWin18 to 1>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 9)>>
+		<<set _sera.love to Math.min(100, (_sera.love or 0) + 3)>>
+		<<stress -8>>
+	<<else>>
+		<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 2)>>
+		<<stress -2>><<tiredness 1>>
+	<</if>>
+<</link>>
+<br>
+<<shopicon>><<link [[约定次日守时 (0:06)|MP NPC Sera Tier And Loft]]>><<pass 6>>
+	<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 3)>>
+<</link>>
+<br>
+<<mpcalculateicon>><<link [[启动怀表回溯 (0:04)|MP NPC Sera Watch Rewind]]>><<pass 4>><</link>>
+
+:: MP NPC Sera Watch Rewind [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _canRewind to ($mpSeraRewindDay isnot Time.days)>>
+你从贴身衣袋里取出那枚镌刻着繁复星轨纹样的黄铜双盖怀表。这枚由塞拉亲手调校的怀表信物内部装有一组极其罕见的「逆跳双游丝蓄能器」——每天你都可以按下表冠侧面的止动簧一次，令机芯产生「时间慢一拍」的奇妙共鸣，将刚刚做出的修表解谜或约定选择完整回溯到抉择前的保存状态，且该状态记录在存档变量中，绝不会因为刷新页面而丢失或被违规重置。
+<br><br>
+你低头查看怀表内盖的蓄能刻度与保存快照：
+<br>
+【今日回溯冷却状态】：<<if _canRewind>><span class="green">逆跳发条已满弦（今日尚未动用，可立即发动 1 次「时间慢一拍」重置刚做的选择！）</span><<else>><span class="red">逆跳发条冷却中（今日已动用过时间回溯，双游丝需随昼夜交替蓄满发条，请明日再试）</span><</if>>
+<br>
+【怀表已保存的前置状态快照】：<<if $mpSeraSnapshot>>节律 <<print $mpSeraSnapshot.cadence>>/100 · 信誉 <<print $mpSeraSnapshot.rep>>/100 · 零件 <<print $mpSeraSnapshot.parts>> 份 · 日记 <<print $mpSeraSnapshot.log>>/6 段（回溯后将解除本周刚锁定的失手钟表并恢复损耗零件）<<else>>已就绪，可随时记录并回溯修表与陪伴抉择<</if>>
+<br>
+<<if $mpWorldSeraDeparted>>
+	【离镇留表加成（`$mpWorldSeraDeparted` 已生效）】：这正是塞拉离镇寻父前留给你的那只传世怀表，每次拨动逆跳秒针时，表盖内侧都会传来温和的节拍，额外为你抚平旅途压力与疲惫。
+<</if>>
+<br><br>
+你将怀表贴在耳畔，能清晰听见内部两组反向缠绕的铍铜游丝正在以奇妙的差频相互咬合。这件凝聚了塞拉父女两代人心血的精密造物，不仅是一枚记录晨昏的计时器，更是你在面对繁复机芯谜题与人生岔路时的定心锚。指尖搭在微凉的黄铜表冠上，只要趁着每日一次的满弦时机轻轻逆向拨动一格，刚才因一时疏忽而卡死的齿轮或错失的抉择便能重头再来。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpclockworkicon>><<link [[逆拨重开修表 (0:05)|MP NPC Sera Repair Puzzle]]>><<pass 5>>
+	<<if _canRewind>>
+		<<set $mpSeraRewindDay to Time.days>>
+		<<if $mpSeraSnapshot>>
+			<<set _sera.cadence to $mpSeraSnapshot.cadence>>
+			<<set _sera.rep to $mpSeraSnapshot.rep>>
+			<<set $mpClockParts to Math.max($mpClockParts or 0, $mpSeraSnapshot.parts)>>
+			<<set $mpSeraW1 to $mpSeraSnapshot.w1>>
+			<<set $mpSeraW2 to $mpSeraSnapshot.w2>>
+			<<set $mpSeraW3 to $mpSeraSnapshot.w3>>
+		<<else>>
+			<<set $mpClockParts to ($mpClockParts or 0) + 1>>
+		<</if>>
+		<<if $mpWorldSeraDeparted>><<stress -8>><<tiredness -3>><<else>><<stress -4>><</if>>
+	<<else>>
+		<<stress 2>>
+	<</if>>
+<</link>>
+<br>
+<<shopicon>><<link [[逆拨重开陪伴 (0:05)|MP NPC Sera Tier And Loft]]>><<pass 5>>
+	<<if _canRewind>>
+		<<set $mpSeraRewindDay to Time.days>>
+		<<if $mpSeraSnapshot>>
+			<<set _sera.cadence to $mpSeraSnapshot.cadence>>
+			<<set _sera.rep to $mpSeraSnapshot.rep>>
+		<</if>>
+		<<if $mpWorldSeraDeparted>><<stress -8>><<else>><<stress -4>><</if>>
+	<<else>>
+		<<stress 2>>
+	<</if>>
+<</link>>
+
+:: MP NPC Sera Quest Step 1 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _sera.questStage to Math.max(_sera.questStage or 0, 1)>>
+夜色深沉，高街钟表铺一楼的店门已经落锁，唯有二楼阁楼工作间的天窗下亮着一盏防风煤油灯。塞拉坐在摆满精密卡尺与铜镊的工作台前，将那只伴随了她整整十年、指针永远定格在七点十五分的旧银壳怀表放在黑丝绒软垫中央。她的指尖微微有些发凉，在你的握持与鼓励下，才终于拿起开表刀撬开了紧闭的银质后盖。
+<br><br>
+后盖弹开的瞬间，你们两人都怔住了——怀表内部的主发条根本没有像塞拉多年来以为的那样崩断，而是在擒纵轮与双金属摆轮之间，被人用一枚镌刻着微缩经纬刻度与旧港海图标记的纯银止动销人为锁死在了七点十五分！塞拉摘下放大镜，声音里带着难以置信的微颤：「不是坏了……父亲当年离开前，是故意在七点十五分把这只表锁住的！这枚止动销上的数字，分明对应着我平时修表时见过的那六页父亲手记！」
+<br><br>
+阁楼外传来高街钟楼悠远的报时声。要想弄清塞拉父亲当年为何锁死怀表、突然离家，你们必须将修表委托中收集到的六页父亲日记残篇拼合起来，对照旧图纸彻底还原十年前的真相。
+<br><br>
+煤油灯的暖光映照在银怀表精细的鱼鳞纹夹板上，历经十年岁月依然不见半点锈迹，足见当年锁表之人在密封表壳时倾注了何等周密的心血。塞拉屏住呼吸俯在工作台边，长长的睫毛在眼睑下投出柔和的浅影，她将记录本推到你面前，等待着与你一同顺着那枚纯银止动销上的微缩经纬刻度，去揭开尘封在旧港海雾与钟楼齿轮背后的秘密。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpclockworkicon>><<link [[探查纯银止销 (0:16)|MP NPC Sera Quest Step 2]]>><<pass 16>>
+	<<set _sera.questStage to Math.max(_sera.questStage or 0, 2)>>
+	<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 4)>>
+	<<stress -3>><<tiredness 2>>
+<</link>>
+<br>
+<<mpcalculateicon>><<link [[拓录内盖坐标 (0:16)|MP NPC Sera Quest Step 2]]>><<pass 16>>
+	<<set _sera.questStage to Math.max(_sera.questStage or 0, 2)>>
+	<<set _sera.trust to Math.min(100, (_sera.trust or 0) + 3)>>
+	<<stress -4>><<tiredness 2>>
+<</link>>
+
+:: MP NPC Sera Quest Step 2 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _sera.questStage to Math.max(_sera.questStage or 0, 2)>>
+你在阁楼宽大的绘图桌上将收集到的父亲日记手稿与旧港防波堤塔钟蓝图一一摊开（当前已掌握父亲日记：<<print (_sera.fatherLog or 0)>>/6 段）。当止动销上的微缩刻度与蓝图底部的比例尺重叠在一起时，十年前那场围绕着雾角主塔潮汐钟的风波终于清晰浮现出来。
+<br><br>
+原来十年前，塞拉的父亲受命设计防波堤雾角主塔的核心天文计时器，却发现行会高管暗中将耐寒铍铜游丝掉包成了劣质黄铜，企图吞没大笔工程款。一旦劣质机芯在寒潮夜停摆，整座海港的引航灯网都会瘫痪。为了保住高街钟表铺不被行会以“违约”名义强行查封，也为了不连累年幼的塞拉，父亲故意在离家当晚七点十五分用止动销锁死怀表，将真正的双金属温差摆轮与校准发条盒分别托付给了旧港与高街的故交保管，自己则远赴海外钟表城筹措正牌铍铜件。
+<br><br>
+「原来他从来没有丢下我不管……」塞拉用指腹轻轻摩挲着日记末尾那句“父亲从未嫌她手慢”，眼眶微红却无比坚定地抬起头看向你，「蓝图背面记着温差摆轮和发条盒的藏匿坐标，就在旧港海图亭与高街画框旧库里。你愿意陪我去把这两件核心零件找回来吗？」
+<br><br>
+窗外的夜雾在阁楼玻璃上凝成细密的水珠，顺着木质窗框缓缓滑落。塞拉小心翼翼地将六页父亲手记按月份装订成册，原本因为常年独自守铺而显得有些清冷的眉眼间，此刻漾起了一层久违的暖意。十年来横亘在她心头的误解与隔阂在这一刻烟消云散，化作了与你并肩走访旧港与高街、找回那两件遗落核心机芯的坚定决心。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpcalculateicon>><<link [[比对塔钟蓝图 (0:18)|MP NPC Sera Quest Step 3]]>><<pass 18>>
+	<<set _sera.questStage to Math.max(_sera.questStage or 0, 3)>>
+	<<set _sera.fatherLog to 6>>
+	<<stress -4>><<tiredness 2>>
+<</link>>
+<br>
+<<mpclockworkicon>><<link [[拼合六页父志 (0:18)|MP NPC Sera Quest Step 3]]>><<pass 18>>
+	<<set _sera.questStage to Math.max(_sera.questStage or 0, 3)>>
+	<<set _sera.fatherLog to 6>>
+	<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 5)>>
+	<<stress -5>><<tiredness 2>>
+<</link>>
+
+:: MP NPC Sera Quest Step 3 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _sera.questStage to Math.max(_sera.questStage or 0, 3)>>
+按照止动销与父亲手记指引的坐标，你陪着披上防风斗篷的塞拉先后走访了康努达图斯街莫奈的画框旧库与旧港码头的石砌海图亭。在莫奈保存的一只镶铜古董画框暗格里，你们顺利取出了用油纸层层包裹的「恒力校准发条盒」；而在旧港三号栈桥边，夜航船长维斯正拎着一只打捞上来的密封黄铜浮筒等候你们多时。
+<br><br>
+「老钟表匠当年搭我的船出海前，特意嘱咐我把这只装着『双金属温差摆轮』的铜筒锁进海图亭暗桩里。」维斯将沉甸甸的铜筒抛给你，目光扫过塞拉微红的眼角，「他说等哪天他女儿的手艺能看懂七点十五分的止动销了，再把这件宝贝交还给她——顺便，筒底还塞了一封他上个月托远洋商船捎回来的信。」
+<br><br>
+塞拉双手接过铜筒，指尖触碰到冰凉却完好无损的双金属摆轮时，呼吸都变得轻柔起来。这不仅是一套能够彻底唤醒停摆怀表的顶级古物构件，更是跨越十年山海的父女回响。你们谢过维斯与莫奈，带着集齐的温差摆轮、恒力发条盒与那封远洋家书匆匆赶回高街钟表铺阁楼。
+<br><br>
+海风吹拂着塞拉耳畔的碎发，旧港防波堤上的雾角灯塔在远方投来一束温暖的琥珀色光柱。塞拉怀里紧紧揣着装有双金属温差摆轮与恒力发条盒的绒布包，另一只手则自然而然地挽住你的小臂。走在返回高街的青石板路上，她不再像从前那样每走几步就低头核对怀表误差，脚步变得前所未有地轻快而笃定。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:04)|MP NPC Sera Deep Hub]]>><<pass 4>><</link>>
+<br>
+<<mpclockworkicon>><<link [[接过温差摆轮 (0:18)|MP NPC Sera Quest Step 4]]>><<pass 18>>
+	<<set _sera.questStage to Math.max(_sera.questStage or 0, 4)>>
+	<<set $mpClockParts to ($mpClockParts or 0) + 2>>
+	<<stress -4>><<tiredness 2>>
+<</link>>
+<br>
+<<shopicon>><<link [[收妥恒力发条 (0:18)|MP NPC Sera Quest Step 4]]>><<pass 18>>
+	<<set _sera.questStage to Math.max(_sera.questStage or 0, 4)>>
+	<<set _sera.cadence to Math.min(100, (_sera.cadence or 0) + 5)>>
+	<<stress -4>><<tiredness 2>>
+<</link>>
+
+:: MP NPC Sera Quest Step 4 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set _sera.questStage to Math.max(_sera.questStage or 0, 4)>>
+回到二楼阁楼工作间后，塞拉深吸一口气，与你一左一右配合着将恒力发条盒与双金属温差摆轮精准嵌入那只银壳怀表的机芯底座。你的手指稳稳扶住夹板，塞拉则用细如发丝的铜镊将游丝外桩固定到位。就在摆轮归位的刹那，怀表底盖内侧的一道微型簧片自动弹开，露出了藏在表壳暗夹层里的半张远洋船票存根，与维斯转交的那封家书正好拼合在一起。
+<br><br>
+信纸上字迹苍劲而温暖：「吾女塞拉亲启：当年行会势大，为父不得已锁表远行。如今我在瑞恩钟表城已主持建起新的精密天文台，身体尚健，勿念。若你愿意留在镇上守住祖传铺面，只管拔除止动销让怀表重新走字，把阁楼扩建成属于你自己的二层工坊；若你想看看外面的星象钟与广阔天地，便带着父亲的信来远洋寻我。」
+<br><br>
+塞拉捧着信纸读了整整三遍，泪水无声地滴落在银怀表玻璃表蒙上。此刻机芯已经全部装妥，只差最后一步——是否拔除那枚定格在七点十五分的纯银止动销，将决定她未来的人生走向。
+<br><br>
+阁楼天窗外星光澄澈，夜风吹散了高街屋顶上方的薄雾，露出一弯如钩新月。工作台四周的三十六座铜钟与天文摆钟齐声轻响，清脆的滴答声在静谧的木屋里交织成一首温柔的夜曲。塞拉将那封来自远洋钟表城的家书仔细折好放进胸口衣袋，转过身仰望着你，满屋座钟仿佛都在等待你们为这段长达十年的守望画上圆满的句点。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpclockworkicon>><<link [[嵌合温差摆轮 (0:18)|MP NPC Sera Quest Finale]]>><<pass 18>>
+	<<set _sera.questStage to 5>>
+	<<stress -5>>
+<</link>>
+<br>
+<<mpcalculateicon>><<link [[展读远洋家书 (0:18)|MP NPC Sera Quest Finale]]>><<pass 18>>
+	<<set _sera.questStage to 5>>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 5)>>
+	<<stress -6>>
+<</link>>
+
+:: MP NPC Sera Quest Finale [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+银壳怀表静静躺在阁楼工作台正中央，纯银止动销在煤油灯下折射出柔和的光泽。只要用镊子轻轻一提，停滞了十年的秒针便会立刻跨过七点十五分的刻度；而若是将止动销原样封存，这只怀表便会永远替塞拉记住父亲离家那一刻的守望，指引她踏上远航寻父的旅程。
+<br><br>
+塞拉握住你的手，把铜镊柄端轻轻搭在你指尖上，轻声问道：「十年来我一直困在七点十五分的误差里，是你陪我把散落的齿轮和日记一片片找了回来。现在我想听你的——我们是把这只怀表【彻底修好】，让我与过去和解、留在镇上把钟表铺扩建成二层天文工坊陪着你；还是【保留停摆刻度】，把怀表留给你作信物，让我乘船离镇去远洋找父亲？」
+<br><br>
+阁楼的煤油灯芯偶尔爆出一朵细小的灯花，将你们两人并肩而坐的身影投在挂满钟摆与图纸的木墙上。这只历经十年风霜的银壳怀表，此刻正静静等待着你们做出最后的裁决。这两条道路都将写入不可逆的世界状态，并永久改变后续的修表工钱、全镇日程与亲密互动：
+<br>
+若选择【拔除止销修好表】，将触发「修好」结局（`$mpWorldSeraSecondFloor = 1`），钟表铺扩建出二层天文工坊，修表报酬永久上浮且解锁二层深夜亲密陪伴；若选择【保留刻度送她走】，将触发「不修」结局（`$mpWorldSeraDeparted = 1`），塞拉离镇寻父并将传奇怀表留给你（每日回溯永久强化可用），钟表铺由你代管收租。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:03)|MP NPC Sera Deep Hub]]>><<pass 3>><</link>>
+<br>
+<<mpclockworkicon>><<link [[拔除止销修好 (0:25)|MP NPC Sera Ending SecondFloor]]>><<pass 25>>
+	<<set $mpWorldSeraSecondFloor to 1>>
+	<<set $mpWorldSeraDeparted to 0>>
+	<<set $mpSeraTimetableUnlocked to 1>>
+	<<set _sera.cadence to 100>>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 12)>>
+	<<set _sera.trust to 100>>
+<</link>>
+<br>
+<<mpcalculateicon>><<link [[保留刻度送行 (0:25)|MP NPC Sera Ending Departed]]>><<pass 25>>
+	<<set $mpWorldSeraDeparted to 1>>
+	<<set $mpWorldSeraSecondFloor to 0>>
+	<<set $mpSeraTimetableUnlocked to 1>>
+	<<set _sera.cadence to 100>>
+	<<set _sera.trust to 100>>
+<</link>>
+
+:: MP NPC Sera Ending SecondFloor [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set $mpWorldSeraSecondFloor to 1>><<set $mpWorldSeraDeparted to 0>>
+你与塞拉共同握紧铜镊，缓缓拔出了那枚锁住机芯整整十年的纯银止动销。清脆悦耳的“滴答”声瞬间在寂静的阁楼里响起——停在七点十五分的蓝钢秒针轻盈一跃，与双金属温差摆轮合奏出分秒不差的完美节律！塞拉将重新走字的银怀表贴在胸口，积郁十年的心结在这一刻彻底化作释然的微笑。
+<br><br>
+在随后的日子里，塞拉给远洋的父亲寄去了亲笔回信与怀表走字拓片，并动用积蓄将高街钟表铺正式扩建为上下两层的「二层天文钟表工坊」（世界状态 `$mpWorldSeraSecondFloor = 1` 已永久生效）。扩建后的二层工坊不仅配备了全镇最精密的校音仪，令你每次完成修表委托的工钱永久上浮 £3.50，塞拉的每日日程也延长至夜里二十三点，二楼观星榻上的深夜红茶与亲密依偎自此向你永久敞开。
+<br><br>
+新落成的二层天窗下，塞拉轻轻靠在你肩头，握着你的手一起听着怀表清脆的心跳：「父亲在远洋守着他的天文台，而我守着高街的钟声和你——我们的时间，从今往后一秒都不会再错开。」
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("sera_ending_secondfloor_v40")>>
+	<<money 1800>>
+	<<set $mpClockParts to ($mpClockParts or 0) + 3>>
+<</if>>
+<<stress -12>><<trauma -6>>
+<br><br>
+星光穿过二层工坊新落成的弧形玻璃穹顶，洒在缓缓旋转的黄铜星象仪与双人修表台上。塞拉将那只重新走字的银壳怀表挂在床头的红木支架上，与一楼传来的母钟报时声遥相呼应。空气中萦绕着佛手柑红茶的醇厚香气与淡淡的雪松木香，她安心地蜷在你的怀抱里，听着彼此平稳的心跳与时光一同流淌。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:04)|MP NPC Sera Deep Hub]]>><<pass 4>><</link>>
+<br>
+<<shopicon>><<link [[二层观星依偎 (0:20)|MP NPC Sera Tier And Loft]]>><<pass 20>>
+	<<set _sera.love to Math.min(100, (_sera.love or 0) + 4)>>
+	<<stress -8>><<arousal 400>>
+<</link>>
+<br>
+<<mpclockworkicon>><<link [[工坊精密修表 (0:15)|MP NPC Sera Repair Hub]]>><<pass 15>><</link>>
+
+:: MP NPC Sera Ending Departed [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set _sera to $mpNpcs.sera>>
+<<set $mpWorldSeraDeparted to 1>><<set $mpWorldSeraSecondFloor to 0>>
+你轻轻按住塞拉执镊的手背，替她将那只依旧定格在七点十五分的银壳怀表后盖重新合拢。塞拉凝视着表盘上永恒不变的刻度，眼中闪过一丝释然与向往：「你说得对……有些刻度之所以停在那里，是为了提醒我们亲自走出去把下一段路接上。」
+<br><br>
+三天后的清晨，当六点整的晨钟敲响时，背着牛皮修表工具箱的塞拉在旧港三号栈桥登上了维斯联络的远洋邮轮，正式踏上了前往海外钟表城寻父的旅途（世界状态 `$mpWorldSeraDeparted = 1` 已永久生效）。临行前，她将高街钟表铺的全套钥匙与那只装有逆跳双游丝的传奇怀表郑重留在了你手中：从今往后，每日一次的「时间慢一拍」回溯不仅照常可用且附带安神减压效果；虽然塞拉离镇后你们无法再在阁楼当面亲密相伴，但整间钟表铺由你全权代管经营，每完成一单修表委托都能直接支取全额掌柜分红。
+<br><br>
+海雾中，站在甲板栏杆边的塞拉朝岸上的你用力挥了挥手，海风送来她清亮的告别声：「等我和父亲把远洋天文钟校准好，一定会顺着你守住的钟声回来的！」
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("sera_ending_departed_v40")>>
+	<<money 2000>>
+	<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
+<</if>>
+<<stress -10>><<trauma -6>>
+<br><br>
+回到高街钟表铺内，满屋的座钟依旧不知疲倦地滴答走字，阳光透过擦得一尘不染的玻璃橱窗，在胡桃木柜台上投下温暖的光斑。你翻开塞拉留下的掌柜账册与机芯养护手记，发现每一页边角都画着方便你查阅的精细图解，而贴身衣袋里那只逆跳怀表正随着你的步伐轻轻跳动，替远行海外的人守望着重逢的归期。
+<br><br>
+高街钟表铺内的三十六座铜钟依旧以毫厘不差的节拍轻轻滴答，煤油灯温暖的火光在黄铜游丝与蓝钢指针之间流转跳跃。窗外的街巷喧嚣仿佛被那扇擦得一尘不染的玻璃橱窗隔绝在了另一个世界，只剩下机芯齿轮每一次精准啮合时传来的清脆回音，静静丈量着你们共同度过的分秒时光。
+<br><br>
+<<getouticon>><<link [[返回钟表总枢 (0:04)|MP NPC Sera Deep Hub]]>><<pass 4>><</link>>
+<br>
+<<mpclockworkicon>><<link [[代管铺面收租 (0:15)|MP NPC Sera Repair Hub]]>><<pass 15>><<money 400>><<stress -4>><</link>>
+<br>
+<<mpcalculateicon>><<link [[摩挲留存怀表 (0:10)|MP NPC Sera Watch Rewind]]>><<pass 10>><<stress -6>><</link>>

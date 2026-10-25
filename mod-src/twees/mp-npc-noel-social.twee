@@ -1,0 +1,387 @@
+:: MP NPC Noel Social Hub [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1, axis: 0, axisLabel: "共生", spores: 0, gardenTier: 0, trialType: "none" }>><</if>>
+<<if $mpNpcs.noel.annualYear is undefined>><<set $mpNpcs.noel.annualYear to 0>><</if>>
+<<set _npc to $mpNpcs.noel>>
+<<set _love to (_npc.love or 0)>><<set _trust to (_npc.trust or 0)>><<set _axis to (_npc.axis or 0)>>
+标本室的门半掩着，走廊尽头的风把梁下倒挂的干花吹得彼此相碰。诺艾尔背对着门，正用镊子给一只广口瓶换标签，听见脚步也没有回头，只把镊子放下：「站住。先别说话。」她走过来，指尖搭在你的腕上，数到第七下才松开，又翻开你的眼皮看了一眼：「脉比上回稳，眼下却还青着。昨晚睡了几个时辰？空着肚子来的？」她没等你答完，已经转身从架上取下一小包陈皮和两片干姜，塞进你手里：「三片陈皮、两片姜，水开后再煮一盏茶的工夫。别放糖。」
+<br><br>
+等你答完，她才退开半步，像是终于准许你说明来意。桌上的台灯罩着一块蓝布，光落在两只并排的浅盘里：一盘是压平的干花，一盘是切开的根须。空气里有湿苔、陈醋和烘烤过的苦味，窗玻璃蒙着水汽，外面校园的灯一盏一盏亮起来。
+<br><br>
+【情谊】：<<print _love>> ｜ 【信赖】：<<print _trust>> ｜ 【共生刻度】：<<print _axis>>/100（<<print (_npc.axisLabel or "共生")>>）
+<br>
+<<if _love gte 24 or _trust gte 30>>
+【关系档位·把钥匙交给你】她把标本室最里面那只抽屉的钥匙放在你手边，钥匙上系着一小截褪色的红绳：「你来了就自己开。里面的东西不怕你看，怕的是你看了不告诉我哪里配错了。」
+<<elseif _love gte 12 or _trust gte 14>>
+【关系档位·多摆一只杯子】窗台边多了一只粗陶杯，杯底沉着两片洋甘菊。她说是顺手多泡的，可杯子摆的位置正对着你常坐的那把椅子，杯沿朝着门。
+<<elseif _love gte 4 or _trust gte 4>>
+【关系档位·记得你的脉象】她不用你开口，先报出你上回留下的症状，又问你这两天有没有照方子喝。问完才想起正事，把桌上的东西往你这边挪了挪。
+<<else>>
+【关系档位·先问身体】她隔着桌子待客，茶是温的，椅子没有往前挪。你要靠近，得先回答她关于睡眠和饮食的那几个问题。
+<</if>>
+<br><br>
+桌上摊着两样东西。一样是医院送来的便笺，纸角盖着哈珀的印章，字迹干净得像一张病历；另一样是一片压平的叶子，叶脉里还嵌着林地的黑土，边上用炭笔写了一个地名，笔画粗硬，像用刀刻的。诺艾尔把便笺往你这边推了推，又按住那片叶子，像怕它被穿堂风吹走。
+<br><br>
+「哈珀医生想要一份活的菌样，说是给病人用。伊甸那边有我要的霜脉草，可他不肯把草交给学园。」她说得很慢，每说一句就捏一下围裙口袋里的干花，「两件事都不急，也都不好办。你来了，我就有个人可以商量。」
+<br><br>
+【节令册】：<<if (_npc.annualYear or 0) is (Time.date.year or 0)>>今年的节庆已经收进册子，纸页边还留着新压的痕迹<<elseif Time.season is "spring">>花期祭就在三天后，压花板已经排满了窗台<<elseif Time.season is "winter">>冬至药膳的方子还没定稿，小灶先试了三回<<else>>离下一场节庆还有些日子，她把花与根分开收着<</if>>
+<br><br>
+<div id="noel-social-hub-actions">
+<<mpherbicon>><<link "替她分干花 (0:08)">><<pass 8>><<replace "#noel-social-hub-actions">>
+<<if ($tending or 0) gte 200 or ($housekeeping or 0) gte 200>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
+	你把干花按颜色和花期分成三摞，又把散落的标签一张张压平。诺艾尔在旁边看了会儿，伸手把最上面一朵歪掉的洋甘菊重新摆正：「这样好。以后我不在，你也知道哪一格该放什么。」她说完把抽屉合上，动作比来时轻。<<stress -2>>
+<<else>>
+	你把两种颜色相近的花瓣混在了一处，等发现时已经分不清哪朵是哪天的。诺艾尔没有责怪，只把整摞花倒回盘里，陪你从头挑了一遍：「不急。花不会跑，跑的是人的耐性。」等分完，你的肩已经酸了。<<tiredness 2>><<stress 1>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpdrinkicon>><<link "试喝安神茶 (0:10)">><<pass 10>><<replace "#noel-social-hub-actions">>
+<<if ($willpower or 0) gte 300 or ($tending or 0) gte 200>>
+	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
+	茶汤入口先是苦，随后从舌根泛起一点蜂蜜的甜。诺艾尔一直盯着你的喉咙，等你咽下去才问：「胃里是暖的，还是烧的？」你说暖。她点点头，在册子上写下一行小字，笔尖在末尾顿了顿，又添了一个「可」。<<stress -3>>
+<<else>>
+	茶里有一味放多了，苦味压得舌头发麻。你勉强咽下去，胃里很快翻起一阵热。诺艾尔立刻把杯子拿开，塞给你一小块糖渍陈皮：「是我配急了。你先含着，别说话。」她转身去改方子，背对着你时，手在围裙上擦了两下。<<stress 2>><<pain 1>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "听她讲旧事 (0:12)">><<pass 12>><<replace "#noel-social-hub-actions">>
+<<if _love gte 8 or _trust gte 8>>
+	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	她讲起刚进学园那年，标本室只有一张空桌，窗台漏雨，她把第一份标本压在旧课本底下。讲到一半她停下来，从口袋里摸出干花，一瓣一瓣数到七，才接着往下说：「那时候我以为，只要把每片叶子都记清楚，就不会再弄丢什么。」她没有看你，但把椅子往你这边挪了半寸。<<stress -2>>
+<<else>>
+	她只说了个开头，就把话咽了回去，低头去理桌上的标签。你多问了一句，她把干花捏得更紧：「这些事不值当讲。你今天是来做什么的？」气氛冷下来，你站了一会儿，才想起自己原本的来意。<<stress 2>><<set _npc.love to Math.max(0, (_npc.love or 0) - 1)>>
+<</if>>
+<</replace>><</link>>
+</div>
+<br>
+<<mpfirstaidicon>><<if $NPCNameList and $NPCNameList.includes("Harper")>><<link [[查看哈珀来信 (0:02)|MP NPC Noel Social 1]]>><<pass 2>><</link>><<else>><span class="disabled">查看哈珀来信 (0:02)（尚未结识哈珀）</span><</if>>
+<br>
+<<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[赴林缘采药 (0:03)|MP NPC Noel Social 2]]>><<pass 3>><</link>><<else>><span class="disabled">赴林缘采药 (0:03)（尚未结识伊甸）</span><</if>>
+<br>
+<<link [[备办节庆事 (0:02)|MP NPC Noel Annual]]>><<pass 2>><</link>>
+<br><br>
+<<getouticon>><<link [[回诺艾尔身边 (0:02)|MP NPC Noel Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Noel Social 1 [nobr]
+<<set $outside to 0>><<set $location to "hospital">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1, axis: 0, axisLabel: "共生", spores: 0, gardenTier: 0, trialType: "none" }>><</if>>
+<<if $mpNpcs.noel.annualYear is undefined>><<set $mpNpcs.noel.annualYear to 0>><</if>>
+<<set _npc to $mpNpcs.noel>>
+<<set _harperMet to ($NPCNameList and $NPCNameList.includes("Harper"))>>
+<<set _harperName to (_harperMet ? "哈珀" : "值夜的医生")>>
+医院的走廊比标本室冷。消毒水的气味压在墙缝里，护士推车的轮子在地砖上滚出一串细响。诺艾尔把布包抱在胸前，走到办公室门口却停住了，先低头看你的脸色，又伸手把你肩头被风吹歪的衣领压平：「你昨晚也没睡好。等会儿不管里面说什么，你先站在我这边，别急着答应。」
+<br><br>
+<<print _harperName>>坐在桌后，白大褂的袖口挽到小臂，写字板上夹着一沓表格。见你们进来，<<print _harperName>>没有起身，只把笔帽扣上，目光从诺艾尔的布包移到你的脸上：「标本学徒把我要的东西带来了？」
+<br><br>
+诺艾尔把布包放在桌沿，没有解开：「先告诉我，病人现在是什么状况。发热吗？夜里醒几次？用过什么药？」她问得很快，像在背一张方子。<<print _harperName>>笑了一下，把写字板转过来，上面只有一行编号和一个日期：「你只需要知道，病人需要睡一觉。」
+<br><br>
+「菌丝还没做过人体耐受。」诺艾尔的声音低下去，手指摸向围裙口袋，「我自己都不敢用。」
+<br>
+「你每天替人号脉，也没有先在自己身上试过每一味药。」<<print _harperName>>的语气仍旧温和，「医生和标本学徒的区别，只在于谁愿意替病人承担一点不确定。」
+<br><br>
+办公室的钟走得很慢。诺艾尔没有坐下，指尖在口袋边缘一下一下地捻着，你能看出她在数花瓣。<<print _harperName>>看见了，笔尖在纸上轻轻点了两下：「紧张的时候数东西，是很常见的自我安抚。你数到第几瓣了？」诺艾尔的手停住，耳根慢慢红了。
+<br><br>
+布包里的玻璃瓶贴着三层标签，瓶底那层菌丝泛着一点冷冷的青光。<<print _harperName>>的目光在瓶身上停了很久，像在看一件已经属于自己的东西。诺艾尔没有把瓶子推过去，也没有收回来。走廊尽头有人推门，冷风灌进来，把桌上的表格掀起一角。
+<br><br>
+<div id="noel-social-1-actions">
+<<mpfirstaidicon>><<link "先问病人状况 (0:18)">><<pass 18>><<replace "#noel-social-1-actions">>
+<<if ($tending or 0) gte 220 or ($science or 0) gte 200>>
+	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<if _harperMet>><<npcincr Harper love -1>><</if>>
+	你把写字板转回来，指着那行编号问：病人有没有药物过敏，最近一次进食是什么时候，夜里醒来后还能不能再入睡。<<print _harperName>>看了你两秒，终于报出三个症状，又补了一句「他很怕黑」。诺艾尔立刻在册子上记下，笔尖不再抖：「怕黑的人，剂量要轻。先让他能睡，再让他敢关灯。」<<print _harperName>>没有反驳，只把表格翻到下一页。
+	<br>
+	<span class="green">她要的不是一份样本，是一个能对得上症状的答案。</span><<stress -2>>
+<<else>>
+	你问得太急，把几个问题混在一处。<<print _harperName>>把笔帽重新扣上，语气仍旧温和：「你不是他的医生，问这些没有用。」诺艾尔替你解围，却也因此失了先机。她把布包往自己这边挪了挪，指尖在瓶盖上按了又按。<<stress 2>><<tiredness 1>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<socialiseicon>><<link "替哈珀劝她 (0:16)">><<pass 16>><<replace "#noel-social-1-actions">>
+<<set _npc.love to Math.max(0, (_npc.love or 0) - 2)>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 2)>><<if _harperMet>><<npcincr Harper love 2>><</if>>
+	你说样本只是样本，救人要紧，先让医生试一试。诺艾尔转头看你，眼神像被针扎了一下。她没有争辩，只把布包解开，把瓶子放在桌上，退后一步：「用多少，怎么用，写清楚。出了事，我要看到记录。」<<print _harperName>>点头，把瓶子收进抽屉，动作利落得像收起一件器械。诺艾尔的手一直插在口袋里，直到走出办公室都没有再拿出来。
+	<br>
+	<span class="red">瓶子留在了医院，她把这件事记在了你身上。</span><<stress 2>><<tiredness 1>>
+<</replace>><</link>>
+<br>
+<<mpherbicon>><<link "折中留样本 (0:20)">><<pass 20>><<replace "#noel-social-1-actions">>
+<<if ($science or 0) gte 220 or ($tending or 0) gte 220>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if _harperMet>><<npcincr Harper love 1>><</if>>
+	你提出只留一小瓶灭活的样本，附上培养记录和剂量上限，活株仍归标本室。<<print _harperName>>盯着「灭活」两个字看了片刻，最终把抽屉打开一条缝：「能证明有效，再谈活的。」诺艾尔把瓶子重新包好，解开一层布，又包上一层，像给一件易碎的东西多穿了一件衣服。
+	<br>
+	<span class="green">双方都退了一步，瓶子还在她怀里。</span><<stress -1>><<tiredness 2>>
+<<else>>
+	你试着在两边之间找一个折中，话说得太圆，反而谁都没听懂。<<print _harperName>>把表格合上，诺艾尔也把布包抱了回去。两个人都没有发火，只是各自往后退了半步，把你留在了中间。走出医院时，诺艾尔才轻声说：「下次别替两个人同时做主。」<<stress 2>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<if _harperMet>><<npcincr Harper love -1>><</if>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "护住标本瓶 (0:12)">><<pass 12>><<replace "#noel-social-1-actions">>
+<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<if _harperMet>><<npcincr Harper love -1>><</if>>
+	你伸手按住布包，说今天不带活株出标本室。<<print _harperName>>的手指在桌面上停了一下，笑意没有变：「标本学徒的规矩，我理解。」诺艾尔看了你一眼，把那句已经到嘴边的软话咽了回去，转而把瓶子的标签翻给<<print _harperName>>看：「上面写着采集时辰和耐受记录。等记录齐了，我亲自送来。」她说完就走，脚步比来时快，到了走廊才慢慢停下，长长吐出一口气。
+	<br>
+	<span class="green">瓶子没有离手，她把你的手记在了心里。</span><<stress 1>><<tiredness 1>>
+<</replace>><</link>>
+<br>
+<<link "带她先离开 (0:10)">><<pass 10>><<replace "#noel-social-1-actions">>
+<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if _harperMet>><<npcincr Harper love -1>><</if>>
+	你说今天先到这里，拉着诺艾尔往外走。她起初有些迟疑，走到楼梯口才跟上你的步子，手在袖子里慢慢松开。医院门口的风很冷，她低头数了数口袋里的干花，数到第五瓣时忽然说：「其实我还没想好怎么拒绝。谢谢你替我先把门打开。」回到标本室，她把瓶子放回架上，没有再提医院的事。<<stress -3>>
+<</replace>><</link>>
+</div>
+<br><br>
+<<getouticon>><<link [[回社交总览 (0:02)|MP NPC Noel Social Hub]]>><<pass 2>><</link>>
+<br>
+<<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
+
+:: MP NPC Noel Social 2 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1, axis: 0, axisLabel: "共生", spores: 0, gardenTier: 0, trialType: "none" }>><</if>>
+<<if $mpNpcs.noel.annualYear is undefined>><<set $mpNpcs.noel.annualYear to 0>><</if>>
+<<set _npc to $mpNpcs.noel>>
+<<set _edenMet to ($NPCNameList and $NPCNameList.includes("Eden"))>>
+<<set _edenName to (_edenMet ? "伊甸" : "林中的猎人")>>
+林缘的雾还没散，蕨叶上挂着水珠。诺艾尔的靴子沾了厚厚一层泥，她走得很慢，每踩一步都要先看脚下，怀里还抱着那只装标本的藤篮。<<print _edenName>>从坡上下来时没有出声，直到走近了才把肩上的铁夹往地上一放：「镇上来的人，脚别踩那条线。」
+<br><br>
+诺艾尔没有先看草，先看<<print _edenName>>的手。手背上有一道新划的口子，边缘还渗着血。「这道伤多久了？」她问。<<print _edenName>>把手往袖子里缩了缩：「不关你的事。」
+<br><br>
+「霜脉草长在背阴的石缝里，」<<print _edenName>>用靴尖点了点坡下，「叶子可以摘，根不能动。根一断，那片就再也不长。你们学园要标本，我把去年落下的种子给你们，活的别碰。」
+<br><br>
+诺艾尔蹲下去，指尖悬在叶片上方，没有碰：「我要的是能入药的叶，不是一整株。可我得知道它长在哪一缝、朝哪一面，回去才能把配比写准。」她说着，从口袋里摸出干花，掰下一瓣。「你要是不放心，可以跟着我。」
+<br><br>
+<<print _edenName>>看了她一会儿，又看你：「她数花瓣，是怕我，还是怕她自己？」
+<br><br>
+坡下的石缝比看上去更深。苔藓把缝口盖住大半，只有几片细长的叶子从阴影里探出来，叶背泛着一层银白。诺艾尔把藤篮放下，先取出软纸和木夹，又用指背试了试石面的温度，才决定从哪一侧下刀。<<print _edenName>>没有催，只把铁夹挪远了一点，像是给这片草让出一块地方。
+<br><br>
+「你们学园的人，总想把活的东西变成纸上的东西。」<<print _edenName>>蹲在坡边，语气不算刻薄，「纸上的东西不会死，也不会再长。」诺艾尔的手停在叶柄上方，过了一会儿才说：「纸上的东西能救不在林子里的人。」两个人都没有再说话，雾从坡脚慢慢往上爬。
+<br><br>
+<div id="noel-social-2-actions">
+<<mpanimalicon>><<link "帮伊甸搬夹 (0:16)">><<pass 16>><<replace "#noel-social-2-actions">>
+<<if ($athletics or 0) gte 220 or ($willpower or 0) gte 300>>
+	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<if _edenMet>><<npcincr Eden trust 2>><</if>>
+	你和<<print _edenName>>把三只铁夹从草坡下挪到上风处，又把露出来的触发线重新埋进落叶里。诺艾尔在旁边递绳子，递到第三根时手已经稳了。<<print _edenName>>检查了一遍夹口，冲你点了下头：「这片草归你们采叶。根留下，明年我还会来看。」诺艾尔把这句话记在册子边上，写得比平时慢。
+	<br>
+	<span class="green">夹子挪开了，草根还在土里。</span><<stress -2>><<tiredness 2>>
+<<else>>
+	铁夹比看上去沉，你抬到一半就滑了手，夹口在石头上磕出一声闷响。<<print _edenName>>立刻接过去，眉头皱起来：「这东西不是给人逞强的。」诺艾尔蹲下来看你的手，确认没有夹到，才把绳子收好。草叶还在原处，你们却多花了半个时辰。<<pain 2>><<tiredness 2>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<if _edenMet>><<npcincr Eden trust -1>><</if>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpherbicon>><<link "只取叶留根 (0:18)">><<pass 18>><<replace "#noel-social-2-actions">>
+<<if ($tending or 0) gte 220 or ($sneak or 0) gte 200>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<if _edenMet>><<npcincr Eden trust 1>><</if>>
+	你按住诺艾尔拿刀的手，说只取叶，不碰根。她看了你一眼，把刀收回去，改用指甲沿着叶柄基部一点点掐断，断口整齐，没有伤到芽点。<<print _edenName>>在旁边看着，等她采完才伸手把石缝边的苔藓重新盖好：「你比我想的懂规矩。」诺艾尔把叶子夹进软纸，低头数了数，一共七片。
+	<br>
+	<span class="green">七片叶子，一条根也没有断。</span><<stress -2>><<tiredness 2>>
+<<else>>
+	你伸手去够石缝深处的叶子，脚下一滑，膝盖磕在石棱上。诺艾尔赶紧拉住你的胳膊，<<print _edenName>>也跨过来，把铁夹往旁边一踢。叶子采到了，根却被你踩松了一角。<<print _edenName>>蹲下去把土重新压实，没有骂人，只说：「明年这片要是不长，我记在你账上。」<<pain 2>><<stress 2>><<if _edenMet>><<npcincr Eden trust -1>><</if>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "替诺艾尔争 (0:14)">><<pass 14>><<replace "#noel-social-2-actions">>
+<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<if _edenMet>><<npcincr Eden trust -2>><</if>>
+	你说只取一片根茎，不会伤到整片草。<<print _edenName>>把铁夹往地上一顿，声音不大，却让坡上的鸟都停了：「你们拿走一片根，明年就少一片叶。你们学园等得起，这片草等不起。」诺艾尔没有接话，只把你的袖子拉了拉，示意你别再说。她最后只采了叶，临走时把自己带来的那包干花留在石头上，算是赔礼。
+	<br>
+	<span class="red">她没接你的话，却替你还了一份人情。</span><<stress 1>><<tiredness 1>>
+<</replace>><</link>>
+<br>
+<<mpfirstaidicon>><<link "先替她包扎 (0:12)">><<pass 12>><<replace "#noel-social-2-actions">>
+<<if ($tending or 0) gte 200 or ($housekeeping or 0) gte 200>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if _edenMet>><<npcincr Eden love 1>><<npcincr Eden trust 1>><</if>>
+	诺艾尔先不管草，拉过<<print _edenName>>的手，用清水冲掉伤口里的泥，再从藤篮底层取出干净的布条。<<print _edenName>>起初想抽回手，试了两次没抽动，也就随她去了。包扎完，<<print _edenName>>活动了一下手指，闷声说了句「还行」，转身把石缝边的苔藓拨开，指了最厚的一丛：「那片叶子老，药性足。采吧。」
+	<br>
+	<span class="green">伤口包好了，石缝也开了。</span><<stress -2>><<tiredness 1>>
+<<else>>
+	你抢着去包扎，布条缠得太紧，<<print _edenName>>的手指很快泛白。诺艾尔轻轻把布条解开，重新缠了一遍，没有责怪你，只低声说：「先止血，再谈紧不紧。」<<print _edenName>>看着你们两个，脸上的警惕没有完全退，但也没有再赶人。<<stress 1>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "按伊甸规矩 (0:15)">><<pass 15>><<replace "#noel-social-2-actions">>
+<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if _edenMet>><<npcincr Eden trust 2>><</if>>
+	你把诺艾尔的刀接过来，放回藤篮，说今天只按林子里的规矩办：采叶、留根、不碰芽点。诺艾尔沉默了一会儿，蹲下去重新挑叶子，挑得比刚才更慢。<<print _edenName>>在旁边看着，等你们收好篮子，才从怀里摸出一小包去年收的种子，放在诺艾尔手边：「这个能种。种不活，也别再来找我要根。」诺艾尔把纸包捧在掌心，郑重地点了点头。<<stress -2>><<tiredness 1>>
+<</replace>><</link>>
+</div>
+<br><br>
+<<getouticon>><<link [[回社交总览 (0:02)|MP NPC Noel Social Hub]]>><<pass 2>><</link>>
+<br>
+<<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
+
+:: MP NPC Noel Annual [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
+<<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1, axis: 0, axisLabel: "共生", spores: 0, gardenTier: 0, trialType: "none" }>><</if>>
+<<if $mpNpcs.noel.annualYear is undefined>><<set $mpNpcs.noel.annualYear to 0>><</if>>
+<<set _npc to $mpNpcs.noel>>
+<<set _love to (_npc.love or 0)>><<set _trust to (_npc.trust or 0)>><<set _year to (Time.date.year or 0)>>
+<<set _done to ((_npc.annualYear or 0) is _year)>>
+<<if _done>>
+今年的节庆已经收进册子。办过的那一场，总会在屋里留下一样东西：墙上一页压平的花，或灶边一只洗到发亮的砂锅。诺艾尔把册子合上，指腹在封皮上按了按，没有立刻说话。
+<br><br>
+【余波】：<<if _love gte 18 and _trust gte 16>>那一页的边角多了一行小字，是你的名字，后面跟着她画的一朵五瓣小花。她见你看见了，没有遮，只把册子往你手边推了推：「明年这一页，我还想让你站在旁边。」<<elseif _love gte 8 or _trust gte 8>>她翻到那一页给你看，纸上有几处被水汽洇开的痕迹，字却写得很整齐。「今年这样就好。」她把册子收回去，又停了一下，「明年要是你还来，我早点准备。」<<else>>她只把册子翻开一条缝，让你看见里面夹着的纸条和一小截干花，很快就合上了。「谢谢你帮忙。剩下的我自己收。」她的语气仍旧客气，手却一直捏着口袋里那朵干花。<</if>>
+<br><br>
+桌上的水壶轻轻响起来。她把册子放回架上，转身去倒水，动作很慢，像在给这一页留一点收尾的时间。窗外有学生走过，脚步声远了，屋里只剩水汽和干花的气味。
+<br><br>
+<div id="noel-annual-after">
+<<link "陪她收节庆物 (0:06)">><<pass 6>><<replace "#noel-annual-after">>
+<<if ($housekeeping or 0) gte 180 or ($tending or 0) gte 180>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>你把节庆用过的器具一件件收进木箱，诺艾尔在另一头接，两个人的手在箱沿碰了一下。她没有缩回去，只把最上面那件东西摆正：「明年开箱时，这些还在。」<<stress -2>><<tiredness 1>>
+<<else>>
+	你收得太快，一张标签从缝隙里滑出来，落在地上。诺艾尔弯腰捡起，吹掉灰，重新放回原处，没有说什么，只把箱子往你这边推了推，让你再收一遍。<<tiredness 2>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "替她擦净器皿 (0:06)">><<pass 6>><<replace "#noel-annual-after">>
+<<if ($tending or 0) gte 180 or ($housekeeping or 0) gte 180>>
+	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>器皿底结着一层干掉的残渍，你用温水泡开，一点点刮净。诺艾尔站在旁边看，忽然说：「这圈黑，是今年用得最久的一次。」她把器皿接过去，用布擦干，放回架上。<<stress -1>><<tiredness 1>>
+<<else>>
+	你手劲太大，器皿沿在台面上磕出一个小缺口。诺艾尔接过去看了看，说不要紧，仍把它放回原处，只是放得比平时慢。你站在旁边，听见她轻轻数了一声花瓣。<<tiredness 2>><<pain 1>><<set _npc.love to Math.max(0, (_npc.love or 0) - 1)>>
+<</if>>
+<</replace>><</link>>
+</div>
+<br>
+<<else>>
+<<if Time.season is "spring">>
+花期祭前三天，标本室的窗台上排满了压花板。诺艾尔把最后一叠吸水纸换完，直起腰时后颈响了一声。她没顾上揉，先抓过你的手腕：「你手怎么这么凉？先搓热再碰花，冷手会把花瓣惊得卷边。」
+<br><br>
+祭上要摆十二格花期标本，还要有人在花棚前讲配比。学园把讲解的差事交给了她。她答应了，转头就把讲稿改了好几遍，每一遍都在页边画一朵小花。桌上摊着三份不同颜色的干花，她按开放的日子排好，又在每份旁边写下一行小字：采于晴日、阴干两夜、避光保存。
+<br><br>
+「我不怕讲错，」她把干花塞回口袋，又拿出来，「我怕讲到一半，忘了下一句，然后所有人看着我数花瓣。」她说完真的数了一遍，数到第七瓣才停。
+<br><br>
+祭日一早，花棚外挤满了人。风从河面吹上来，把压花板的覆纸掀得哗哗响。诺艾尔的讲稿压在镇纸下，第一页被风翻过去，她伸手按住，指尖在纸边停了两秒。十二格标本在长桌上排开，最末一格还空着，是留给今年新开的那一种。
+<br><br>
+<div id="noel-annual-day">
+<<mpwatchicon>><<link "守好压花册 (0:16)">><<pass 16>><<replace "#noel-annual-day">>
+<<set $mpNpcs.noel.annualYear to Time.date.year>>
+<<if ($tending or 0) gte 220 or ($science or 0) gte 200>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
+	你把压花册移到背风的棚角，用两块镇纸压住四角，又把散开的覆纸一张张理平。诺艾尔腾出手来讲解，声音起初发紧，讲到第三格时慢慢稳了。最后她把那格空位补上一朵新压的花，合上册子，在人群散去之后轻轻碰了碰你的手背：「今天没有一瓣被风吹走。」<<stress -4>><<tiredness 2>>
+	<br><span class="green">花期祭的十二格，一瓣不少。</span>
+<<else>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	风比预想的大，覆纸被掀起两次，等你压住时，最上面一页的花瓣已经卷了边。诺艾尔讲到一半停下来，低头把那朵花重新摆正，再抬头时忘了下一句。她捏着讲稿站了几秒，才接着往下说。祭还是办完了，只是最后一格空着。<<stress 4>><<tiredness 2>><<pain 1>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>>
+	<br><span class="red">风卷走了一瓣，她数了很久才把话接上。</span>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "替她挡人群 (0:14)">><<pass 14>><<replace "#noel-annual-day">>
+<<set $mpNpcs.noel.annualYear to Time.date.year>>
+<<if ($willpower or 0) gte 300 or ($athletics or 0) gte 220>>
+	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	你站在长桌外侧，替她拦住往前挤的人，把最吵的几个孩子引到另一边的花架前。诺艾尔背后终于空出一小块地方，她讲解时不用再侧着身子护住标本。散场后她靠在桌边，长长舒了一口气：「原来有人挡在前面，讲话会容易一点。」<<stress -2>><<tiredness 3>>
+	<br><span class="green">她讲完了全套配比，一次也没有回头数花瓣。</span>
+<<else>>
+	人群比你能拦的多，一个孩子撞在桌角，压花板滑出去半寸。诺艾尔赶紧扶住，讲解断了一拍。你被人群挤到外围，再挤回来时，她已经自己把场面收拾好了，只是声音比先前低。<<stress 3>><<pain 1>><<set _npc.love to Math.max(0, (_npc.love or 0) - 1)>>
+	<br><span class="red">你没能挡住所有人，她也没有怪你。</span>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "让她自己讲 (0:12)">><<pass 12>><<replace "#noel-annual-day">>
+<<set $mpNpcs.noel.annualYear to Time.date.year>>
+<<if _love gte 8 or _trust gte 8>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>>
+	你退到人群后面，把位置让给她。诺艾尔起初看了你一眼，见你没有上前，反而站直了。她讲花的开合、采的时辰、阴干的日数，讲到最后一格时，声音已经不用停顿。散场后她走过来，耳根还红着，却把讲稿递给你：「下一回，你来写开头。」<<stress -3>><<tiredness 1>>
+	<br><span class="green">她一个人讲完了，也第一次没有数花瓣。</span>
+<<else>>
+	<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>>
+	你退得太远，她讲到一半找不到人，目光在人群里转了两圈，声音越来越小。最后她草草收了尾，把剩下的标本交给旁边的学生。散场后她蹲在桌边收压花板，背对着你，肩膀绷得很紧。<<stress 3>><<tiredness 1>>
+	<br><span class="red">她讲完了，却没有讲完想讲的话。</span>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "提前收摊子 (0:08)">><<pass 8>><<replace "#noel-annual-day">>
+<<set $mpNpcs.noel.annualYear to Time.date.year>>
+<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
+你说风太大，不如早点收。诺艾尔看了看来的人，又看了看桌上还没讲完的标本，最后点了点头。你们把压花板一格格合上，她一边收一边给留下的人讲，讲得比原定短，却讲得很细。收完最后一格，她把空着的那格指给你看：「明年再补。今天先这样。」<<stress -2>><<tiredness 2>>
+<</replace>><</link>>
+</div>
+<<elseif Time.season is "winter">>
+冬至前五天，标本室的小灶第一次生火。诺艾尔把药膳方子摊在案上，旁边摆着三只小碗，碗底是不同配比的汤。她先盛了一勺递到你嘴边：「先尝。别说好喝，说你喝完胃里是暖的还是烧的。」
+<br><br>
+方子里有一味霜脉草的叶，是她从伊甸那里换来的，只剩一小包。她把纸包打开又合上，反复三次，才舍得抓出一撮。药香混着姜和枣的甜味，在玻璃窗上凝出一层白雾。她用指背试了试砂锅外壁的温度，又低头看方子，像在给一锅汤把脉。
+<br><br>
+「冬至那天，医院候诊的人会来学园避寒。哈珀说可以把人带过来，条件是分哈珀一碗。」她低头数了数碗边的缺口，「我不怕分，我怕分到一半不够。」说完她把干花从口袋里摸出来，数到第三瓣又塞回去。
+<br><br>
+冬至午后，雪把窗子糊成一片白。小灶上的砂锅咕嘟咕嘟响，药香顺着走廊往外飘。候诊的人陆续到了，有人捧着碗不说话，有人把冻红的手贴在锅边。诺艾尔站在灶台后，围裙上沾着药渣，先给最里面的老人盛了一碗。
+<br><br>
+<div id="noel-annual-day">
+<<mpcookicon>><<link "按方配药膳 (0:18)">><<pass 18>><<replace "#noel-annual-day">>
+<<set $mpNpcs.noel.annualYear to Time.date.year>>
+<<if ($tending or 0) gte 220 or ($science or 0) gte 200>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
+	你替她看着火，按方子分三次下料，每次都在锅边等一会儿，让前一味药性散开。诺艾尔腾出手来分碗，脸上的绷紧慢慢松了。锅见底时，连最里面那位老人都把碗递回来，说夜里也许能睡个好觉。她把最后一勺刮进碗里，抬头看你，眼睛亮了一下。<<stress -4>><<tiredness 2>>
+	<br><span class="green">一锅药膳见了底，候诊的人都分到了。</span>
+<<else>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+	火候没看住，锅底结了一层薄糊。诺艾尔闻到焦味时已经晚了，她赶紧把上层清汤舀出来，兑了点热水，才勉强够分。没有人抱怨，可她把空碗收回来时，指尖在缺口上停了很久。<<stress 4>><<tiredness 2>><<pain 1>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>>
+	<br><span class="red">锅底糊了一层，她还是把每一碗都盛满了。</span>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "先尝一口汤 (0:10)">><<pass 10>><<replace "#noel-annual-day">>
+<<set $mpNpcs.noel.annualYear to Time.date.year>>
+<<if ($willpower or 0) gte 300 or ($tending or 0) gte 200>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
+	你先尝了一口，把苦味和暖意都说清楚，又提醒她霜脉草的叶可以再减半撮。诺艾尔照着改了，第二锅的味道果然顺了。她把勺子放下，轻声说：「你比我敢尝。」说完自己先笑了，笑到一半又低头去数碗边的花。<<stress -2>><<tiredness 1>>
+	<br><span class="green">她信你的舌头，也信你的判断。</span>
+<<else>>
+	汤刚滚，你尝得太急，舌尖烫出一层白。诺艾尔赶紧把凉水递过来，又替你看了看，确认没有起泡才放心。药膳还是照常分完了，只是她每隔一会儿就问你舌头还疼不疼。<<pain 1>><<stress 3>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>>
+	<br><span class="red">汤分完了，你的舌头疼了一下午。</span>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "分给候诊人 (0:12)">><<pass 12>><<replace "#noel-annual-day">>
+<<set $mpNpcs.noel.annualYear to Time.date.year>>
+<<if ($housekeeping or 0) gte 200 or _love gte 8>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>>
+	你先数了人数，把碗按老少分开，又留出两碗给还没到的人。诺艾尔看见你把最后一碗盖上盖子放在灶边，肩膀松了下来。候诊的人捧着碗慢慢喝，屋里第一次有了说话声。她站在灶台后，没有再数花瓣。<<stress -3>><<tiredness 2>>
+	<br><span class="green">每个人都分到了，最后两碗还温着。</span>
+<<else>>
+	你分得太快，前面的人多盛了，后面的人只剩下半碗。诺艾尔没有说什么，把自己那份倒进最后一只碗里，笑着说自己不饿。等人散了，她才在灶边坐下，数了数空碗，又数了数没洗的勺子。<<stress 2>><<tiredness 2>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>>
+	<br><span class="red">锅见了底，她自己一口也没喝上。</span>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "改煮一锅粥 (0:14)">><<pass 14>><<replace "#noel-annual-day">>
+<<set $mpNpcs.noel.annualYear to Time.date.year>>
+<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
+你看药膳不够分，提议把剩下的米和两味温和的药材一起煮成粥。诺艾尔愣了一下，随即把霜脉草的纸包收好，说这味留着明年用。粥煮得稠，每个人都分到一大碗，味道不如药膳讲究，却把屋子烘得很暖。她捧着碗坐在灶边，轻声说：「原来不够的时候，也可以换个做法。」<<stress -2>><<tiredness 3>>
+<</replace>><</link>>
+</div>
+<<else>>
+离节庆还早。诺艾尔把春天压好的花一页页翻晒，又把冬天要用的药材按气味分屉。她做这些事的时候话不多，偶尔停下来数一数花瓣，数完再接着做。
+<br><br>
+「花期祭和冬至药膳，一年只能办一场。」她把一束晒脆的茎秆折断，断口发出很轻的一声，「不是学园不让，是我一个人只有一双手。办完一场，另一场就得等明年。」她说这话时没有看你，只把断掉的茎秆放进废料盘里。
+<br><br>
+窗台上摆着两只木盒，一只装着压平的花，一只装着切好的根。她每天开一次，检查有没有返潮，再合上。两只盒子并排放在那里，像两个还没到日子就被提前准备的季节。
+<br><br>
+<div id="noel-annual-prep">
+<<mpherbicon>><<link "清点节庆物 (0:08)">><<pass 8>><<replace "#noel-annual-prep">>
+<<if ($housekeeping or 0) gte 200 or ($tending or 0) gte 200>>
+	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>你把两只木盒里的东西逐件清点，把受潮的挑出来，又在册子上补了日期。诺艾尔在旁边看着，等最后一笔写完，才说：「你记得比我还细。」她把盒子盖好，往窗台里侧推了推，避开直射的光。<<stress -1>><<tiredness 1>>
+<<else>>
+	你清点到一半，把两只盒子的标签弄混了。诺艾尔接过去重新分了一遍，没有责怪，只把册子往你手边推：「照着这个来，不急着一次点完。」等重新理好，窗外已经暗了。<<tiredness 2>><<stress 1>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "翻晒压花册 (0:10)">><<pass 10>><<replace "#noel-annual-prep">>
+<<if ($tending or 0) gte 200>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>你把压花册一页页摊在背阴的窗台上，让潮气慢慢散掉。诺艾尔在旁边换吸水纸，换到第七页时忽然说：「这一页是去年花期祭压的。花还在，颜色淡了一半。」她没有叹气，只把纸重新压平。<<stress -2>><<tiredness 1>>
+<<else>>
+	你把册子摊得太靠外，一阵风翻过几页，干花碎了一角。诺艾尔赶紧合上册子，把碎片收进小纸包，说可以留着做引子。她嘴上说不要紧，收拾的动作却比平时慢。<<tiredness 2>><<stress 2>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "试配安神汤 (0:12)">><<pass 12>><<replace "#noel-annual-prep">>
+<<if ($science or 0) gte 200 or ($tending or 0) gte 200>>
+	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>你按她写的配比分出三小碗，一碗减半、一碗照旧、一碗多一味陈皮。诺艾尔逐碗尝过，在册子上圈了减半的那碗：「这碗最稳。等节庆那几天，就照这个来。」她把剩下的两口推给你，自己转身去洗勺子。<<stress -3>>
+<<else>>
+	你把两味药的分量记反了，汤色比预想的深。诺艾尔尝了一口就放下，把整碗倒进废液桶，重新抓药。她没有怪你，只说：「配方记错一位，苦的就是喝的人。」你陪她重配了一遍，等收拾好，天已经黑了。<<stress 2>><<pain 1>><<tiredness 1>>
+<</if>>
+<</replace>><</link>>
+</div>
+<</if>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[回社交总览 (0:02)|MP NPC Noel Social Hub]]>><<pass 2>><</link>>
+<br>
+<<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>

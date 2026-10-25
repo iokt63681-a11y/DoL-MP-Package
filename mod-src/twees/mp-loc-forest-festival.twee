@@ -1,0 +1,395 @@
+/* Wave E 森林节日线（10 页）
+   状态契约：
+   - $mpFestForestSpring / Summer / Autumn / Winter：写入 (Time.date.year or 0) + 1，
+     表示该季在本年已结算；跨年后自动失效，可以重做。
+   - 所选分支写在 $mpFest.ForestSpring / ForestSummer / ForestAutumn / ForestWinter，
+     值为 levee / channel / den / lamp / bell / packfog /
+     boundary / hunt / share / clear / mark / trail / seal。
+   - 失败不写季节键，只写 $daily.mpFestForest<Season>Fail；当日不可重试，次日元日可再来。
+   - Hub 的当季入口按「今年是否已结算」判断；Finale 解锁按「四季是否都曾完成」判断，
+     这样跨年后不必同一个自然年凑齐四季，也能保留上一轮的分支倾向。
+   - $mpWorldForestOutcome 复用既有 "warded" / "untamed" 两个值。
+*/
+
+:: MP Loc Forest Festival Hub [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<set $daily to ($daily or {})>>
+<<set _springDone to ($mpFestForestSpring is ((Time.date.year or 0) + 1))>><<set _summerDone to ($mpFestForestSummer is ((Time.date.year or 0) + 1))>><<set _autumnDone to ($mpFestForestAutumn is ((Time.date.year or 0) + 1))>><<set _winterDone to ($mpFestForestWinter is ((Time.date.year or 0) + 1))>>
+<<set _springEver to (($mpFestForestSpring or 0) gte 1)>><<set _summerEver to (($mpFestForestSummer or 0) gte 1)>><<set _autumnEver to (($mpFestForestAutumn or 0) gte 1)>><<set _winterEver to (($mpFestForestWinter or 0) gte 1)>>
+<<set _done to 0>><<if _springEver>><<set _done += 1>><</if>><<if _summerEver>><<set _done += 1>><</if>><<if _autumnEver>><<set _done += 1>><</if>><<if _winterEver>><<set _done += 1>><</if>>
+界石背面嵌着一块薄石板，四道浅槽从上往下排开，槽口各压着一根打了结的布绳：蓝的管春水，白的管夏雾，红的管秋猎，黑的管冬雪。石板右下角有一行阿什用炭笔写的小字——「一年只记四笔，写满了，再把绳子并成一股。」
+<br><br>
+布绳不是装饰。每做完一季的事，阿什就把对应的那根重新打一个结，结的大小记着当时用了多少力气，结的位置记着事情落在林子的哪一处。他说人的记性靠不住，绳子比人老实。石板旁边还挂着一小截炭笔，笔头被手汗磨得发亮，是谁都能拿来添一笔的意思。
+<br><br>
+【节令册】当令：<<if Time.season is "spring">>春汛<<elseif Time.season is "summer">>夏雾<<elseif Time.season is "autumn">>秋猎<<elseif Time.season is "winter">>冬雪<<else>>无<</if>> ｜ 已入册：<<print _done>>/4 ｜ 林区探索：<<print $mpLocProgress_Forest>> ｜ 已结林务：<<print $mpLocEvents_Forest>> ｜ 雾潮：<<print ($mpFogTide or 0)>>
+<br><br>
+春汛看的是寒溪的水线，夏雾看的是灯线能不能连起来，秋猎看的是肉怎么分，冬雪看的是路还通不通。四件事都不大，却都要人拿时间、力气或者一点胆子去换。阿什不替你选，他只把当季那根绳子从槽里抽出来，放在你手边。
+<br><br>
+<<if _springDone>>春汛那一格已经落了笔，蓝绳上的结已经打好了。<<elseif _springEver>>春汛那一格记着往年的结，今年还可以再添一笔。<<elseif Time.season is "spring">>春汛那一格还空着，蓝绳搭在槽口，被风吹得轻轻碰石面。<<else>>春汛那一格空着，蓝绳收在槽里，等雪化。<</if>><br>
+<<if _summerDone>>夏雾那一格也满了，白绳上留着一圈被水汽泡过的淡痕。<<elseif _summerEver>>夏雾那一格记着往年的结，今年还可以再添一笔。<<elseif Time.season is "summer">>夏雾那一格空着，白绳的一端垂到石阶下。<<else>>夏雾那一格空着，白绳还压在石头底下。<</if>><br>
+<<if _autumnDone>>秋猎那一格写着分账的结果，红绳的结打得很低。<<elseif _autumnEver>>秋猎那一格记着往年的结，今年还可以再添一笔。<<elseif Time.season is "autumn">>秋猎那一格空着，红绳被日头晒得发脆。<<else>>秋猎那一格空着，红绳收得很整齐。<</if>><br>
+<<if _winterDone>>冬雪那一格也落了笔，黑绳上的雪水还没干透。<<elseif _winterEver>>冬雪那一格记着往年的结，今年还可以再添一笔。<<elseif Time.season is "winter">>冬雪那一格空着，黑绳冻得发硬。<<else>>冬雪那一格空着，黑绳盘在槽底。<</if>>
+<br><br>
+<<if $mpWorldForestOutcome is "warded">>界石外的灯线已经立成，夜里能看见一串不散的光。<<elseif $mpWorldForestOutcome is "untamed">>界石外的旧路已经改过几处，藤蔓正往刻线这边爬。<<else>>界石外的路还没有定局。<</if>>
+<br><br>
+<<if _done gte 4>>四根绳子已经并成一股，结打在石板正中。石板的边角还刻着一行更老的字，笔画被苔填过又清出来：「灯随人走，路随林转。」两种读法都说得通，阿什把这句话留到最后，说等四季的账都清了，再由你决定它到底是什么意思。<<else>>石板的下半截还空着一大块，炭笔搁在槽边。阿什说四季没走完之前，这页不翻。你数了数已经打上的结，心里有数。<</if>>
+<br><br>
+<<mpwatchicon>><<if Time.season is "spring" and not _springDone>><<if $daily.mpFestForestSpringFail>><span class="disabled">今日春汛已收工 (0:02)</span><<else>><<link [[查看春汛水线 (0:02)|MP Loc Forest Festival Spring]]>><<pass 2>><</link>><</if>><<elseif Time.season is "summer" and not _summerDone>><<if $daily.mpFestForestSummerFail>><span class="disabled">今日夏雾已收工 (0:02)</span><<else>><<link [[查看夏雾征兆 (0:02)|MP Loc Forest Festival Summer]]>><<pass 2>><</link>><</if>><<elseif Time.season is "autumn" and not _autumnDone>><<if $daily.mpFestForestAutumnFail>><span class="disabled">今日秋猎已收工 (0:02)</span><<else>><<link [[查看秋猎痕迹 (0:02)|MP Loc Forest Festival Autumn]]>><<pass 2>><</link>><</if>><<elseif Time.season is "winter" and not _winterDone>><<if $daily.mpFestForestWinterFail>><span class="disabled">今日冬雪已收工 (0:02)</span><<else>><<link [[查看冬雪封径 (0:02)|MP Loc Forest Festival Winter]]>><<pass 2>><</link>><</if>><<else>><span class="disabled">当季林事已入册 (0:02)</span><</if>>
+<br>
+<<mpritualicon>><<if _done gte 4>><<link [[合绳了结林事 (0:20)|MP Loc Forest Festival Finale]]>><<pass 20>><</link>><<else>><span class="disabled">合绳了结林事 (0:20)（四季未齐）</span><</if>>
+<br>
+<<getouticon>><<link [[返回森林总枢 (0:02)|MP Loc Forest Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Spring [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<set $daily to ($daily or {})>>
+<<if $mpFestForestSpring is ((Time.date.year or 0) + 1)>>
+春汛那一格已经落了笔。寒溪的水线退回桥柱第三道刻痕以下，蓝绳在石板上打了个结。阿什说这一页不用再翻，水已经替你们把答案写在了岸上。
+<br><br>
+<<elseif $daily.mpFestForestSpringFail>>
+你今天已经在寒溪边耗掉了大半力气，水势却没有退。阿什把湿透的沙袋摊在石头上，说今天到此为止，明天水退了再来。蓝绳还搭在槽口，没有打结。
+<br><br>
+<<else>>
+暖雨连下了三天，北岭的雪线退到只剩一道白边。寒溪的水色从清灰变成浑黄，漂下来的断枝在桥墩前打个旋，又往下游去。阿什天没亮就到渡口，在桥柱上添了两道新刻：一道是今晨的水位，一道是他估的今夜水位，两指宽的距离，看着不多，水真涨上来却能没过桥板。
+<br><br>
+断桥上游的窄口被冬天的倒木和淤泥堵住，水在那里憋成一片浑圆的潭。潭水若漫过岸，先淹的是狼群低处的旧窝——去年新添的三只幼崽还在里头。阿什把蓝布绳从腰上解下来，在手里绕了两圈：「先保桥，还是先保窝，你定。两样都保，就得有人下水。」
+<br><br>
+伊甸从北坡下来，靴底沾着湿泥，肩上挂着两张收起来的铁夹。他看了一眼水尺，又看了一眼潭口：「今夜亥时前后最高。桥归你们，窝归它们，我只管把我的夹子挪高。」他说完真就蹲下去，把夹子一只只从低洼处收进背篓，动作不快，也没有帮忙的意思。
+<br><br>
+要保桥，得把沙袋和石块压进桥墩迎水的一面，再用长杆把缠在桩上的断枝挑开；水冷得刺骨，站久了腿会发麻，脚下稍一滑就会被卷进桥洞。要保窝，得在上游开一道浅渠，把水引回早就干涸的旧河道；土坡看着松，挖下去却夹着碎石，渠底找不准，水会回头冲垮刚垒好的岸。也可以先护狼窝：用削尖的木桩和气味线把幼崽往高处引，别伸手去抓，母狼就在坡上看。
+<br><br>
+雨停了一阵，云缝里漏下一点白光。潭水翻着细沫，漂来的松针贴在桥柱上，像一层湿毡。阿什没有再催，只把骨刀插在腰后，站在你能看见的地方。伊甸背起篓子往北坡走，走到一半回头丢下一句：「水不等人，也别跟水较劲。」
+<br><br>
+<<mprepairicon>><<if ($athletics or 0) gte 220 or ($willpower or 0) gte 420>><<link [[加固春汛堤桩 (0:14)|MP Loc Forest Festival Spring Result]]>><<set $mpFestForestSpring to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestSpring to "levee">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $mpNpcs and $mpNpcs.ash>><<set $mpNpcs.ash.trust to Math.min(100, ($mpNpcs.ash.trust or 0) + 1)>><</if>><<stress -3>><<pass 14>><</link>><<else>><<link [[加固春汛堤桩 (0:14)|MP Loc Forest Festival Spring Result]]>><<set $daily.mpFestForestSpringFail to 1>><<stress 4>><<tiredness 3>><<pass 14>><</link>><</if>>
+<br>
+<<mpcarryicon>><<if ($tending or 0) gte 220 or ($housekeeping or 0) gte 220 or ($willpower or 0) gte 420>><<link [[开渠引洪入旧道 (0:16)|MP Loc Forest Festival Spring Result]]>><<set $mpFestForestSpring to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestSpring to "channel">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $mpNpcs and $mpNpcs.ash>><<set $mpNpcs.ash.trust to Math.min(100, ($mpNpcs.ash.trust or 0) + 1)>><</if>><<stress -2>><<tiredness 1>><<pass 16>><</link>><<else>><<link [[开渠引洪入旧道 (0:16)|MP Loc Forest Festival Spring Result]]>><<set $daily.mpFestForestSpringFail to 1>><<stress 4>><<tiredness 3>><<pass 16>><</link>><</if>>
+<br>
+<<mpanimalicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[帮狼群迁高处 (0:12)|MP Loc Forest Festival Spring Result]]>><<set $mpFestForestSpring to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestSpring to "den">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<stress -2>><<pain 1>><<pass 12>><</link>><<else>><<link [[帮狼群迁高处 (0:12)|MP Loc Forest Festival Spring Result]]>><<set $daily.mpFestForestSpringFail to 1>><<stress 3>><<pain 2>><<tiredness 2>><<pass 12>><</link>><</if>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Spring Result [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<if $mpFest.ForestSpring is "levee">>
+沙袋压下去的时候，水从袋缝里挤出来，冰凉地灌进袖口。你和阿什一人扶桩一人填石，把迎水那面垒成一道斜肩，让水顺着坡走，不再直撞桥墩。天擦黑时，潭口的断枝被长杆一根根挑开，水位在第三道刻痕下面停住，抖了两下，没有再往上爬。桥板保住了。阿什用掌心抹掉桩上的泥，把蓝绳重新系紧，绳结比原来低了一指——那是他留给明年春天的余量。
+<br><br>
+狼窝那边没有淹。母狼站在高处的倒木旁，看着你们忙完，才把幼崽一只只叼回干燥的穴口。黑狼没有露面，但坡上的脚印比来时深，像是来回走了好几趟。伊甸收完夹子回来，看了一眼桥，又看了一眼你湿透的裤脚，什么也没说，只把一小块烤干的鹿肉塞进你手里。
+<br><br>
+入夜后雨又落了一阵，落在新垒的堤肩上，声音比打在桥板上闷。阿什把今天的水位、风向和用工记进灯簿，末了添了一句：桥在，窝也在。你把湿衣服拧干，坐在火边烤手，指尖慢慢回了血色。
+<br><br>
+回程时你回头看了一眼，寒溪在夜色里泛着一点灰白，像一条被按住脊背的鱼。阿什走在前头，蓝绳在腰间轻轻晃。他没有说下次还会不会涨，只说明天再来看看。
+<<elseif $mpFest.ForestSpring is "channel">>
+旧河道在坡后，沟底积着多年的枯叶，脚踩下去软得发虚。你按阿什指的走向挖开第一锹，土里果然夹着碎石，锹刃磕出火星。挖到半人深时，水自己找了过来，先是一线，再是一股，浑黄的水头顺着旧沟往下跑，潭口的水位肉眼可见地松了。阿什站在坡上盯着渠底，直到水势稳住，才把蓝绳解下来，在渠口插了一根新削的木桩。
+<br><br>
+新渠把水带走了，也把坡脚的一段猎径冲成了泥沟。伊甸蹲在泥边看了会儿，说这条路今年算是废了，绕后坡多走一刻钟。他没有抱怨，只把夹子挪到后坡的干地上。狼群当夜从旧窝里出来，沿着新渠下游的浅滩过了溪，湿了爪子，但没有一只被水冲走。黑狼在渠对岸留下了一枚很深的脚印，像是替整群认了这条新路。
+<br><br>
+阿什在灯簿上画了一条弯弯的线，标出新渠和改道的猎径，又用炭笔在旁边写了「明年再看」。他说水会自己找低处，人只能顺着它，不能替它拿主意。你把锹上的泥刮干净，掌心磨出的泡已经破了，沾着湿土，有点疼，但不碍事。
+<br><br>
+雨后的林子有一股翻开的土腥味，混着松脂。远处传来一声短促的狼嚎，不长，像是在报平安。
+<<elseif $mpFest.ForestSpring is "den">>
+你没有去碰桥。阿什把沙袋卸在桥头，看了你一眼，没问，只把长杆递过来，自己走在前头。你们沿着狼群踩出来的浅径上到高坡，用削尖的木桩在旧窝上方围出一个半圆的缓坡，又把沾了松脂的布条系在两侧，让气味把母狼往高处引。幼崽还不会跑远，母狼先是不肯动，绕着旧窝转了两圈，最后叼起一只，慢慢上了坡。
+<br><br>
+第二只、第三只都是母狼自己搬的。你们退到坡下，不看不催。黑狼从树影里出来时，天已经暗了，它站在旧窝边闻了很久，才抬眼看向你。那目光不软，但也没有龇牙。它把前爪按在新界的泥上，留下一个清楚的印子，然后转身走了。
+<br><br>
+桥那边传来一声闷响，像是有块桥板被水顶脱了。阿什没有回头，只说：「桥可以再修，窝塌了就没了。」他的语气不重，也没有夸你。你裤脚全湿了，膝盖上沾着泥，手掌被木桩磨出一道红痕。
+<br><br>
+回程时水已经漫过桥头最低的一级石阶，你们从上游的浅滩绕了过去。阿什在灯簿上记下旧窝的位置和新界的走向，字写得很慢。夜里雨声渐小，坡上传来幼崽细细的叫声，一声接一声，听着不像害怕。
+<br><br>
+你把湿袜子拧了拧，搭在火边的石头上。阿什把蓝绳在指间绕了两圈，打了一个不紧不慢的结。
+<<else>>
+水比阿什估的来得快。沙袋刚垒到一半，桥墩迎水面的泥就被掏空了一块，整道堤肩往下一沉，你脚下一滑，半条腿陷进水里。阿什抓住你的后领，硬把你从水里拖了回来；长杆脱了手，顺着桥洞冲了下去。桥板没有全塌，但最外侧的那块被水掀翻，露出底下发黑的横梁。
+<br><br>
+狼窝那边也进了水。母狼把幼崽往坡上叼，叼到第三只时水已经漫过旧窝的门槛。黑狼在坡顶看着，没有下来，也没有叫。伊甸从北坡赶过来，帮你们把剩下的沙袋推到桥头，但水势已经过了最好的时候，做什么都慢了一步。
+<br><br>
+雨停时，你们都坐在湿石头上喘气。阿什把灯簿翻到今天那一页，写了两行，又划掉一行，最后只留下「水快，人慢」四个字。他没责怪你，只说：「今天到此为止，明天水退了再来。」
+<br><br>
+你拧干衣袖，冷水顺着指缝往下滴。桥还能走人，只是得绕着缺口。狼群当夜宿在高处，幼崽的叫声断断续续，一直到后半夜才安静下来。
+<br><br>
+回程时阿什把蓝绳收进怀里，说明天再来看水线。石板上的春汛那一格还空着，炭笔搁在槽边，等下一次落笔。你走得很慢，湿裤腿贴着膝盖，每走一步都发凉。阿什在前面把倒下的树枝踢到路边，没有回头催你。
+<</if>>
+<br><br>
+回到界石时，天已经黑透了。阿什在石板前站了一会儿，把今天的水位和风向在心里过了一遍，才伸手去拿炭笔。他说水势记在册子上，也记在人心里，两样都不能丢。你把湿透的鞋脱下来，倒出里面的沙，脚底被水泡得发白。林子里的水声比白天远了些，像退到了一层树影后面。伊甸的灯在坡上亮了一下，又灭了。
+<br><br>
+火边烤着的衣服冒起白气，带着一股湿土味。阿什把灯簿摊在膝上，写下今天的水位和风向，字迹被热气熏得有点潮。他没有催你睡，也没有说明天会怎样，只把炭笔搁在槽边，让那一页自己晾干。
+<br><br>
+你把烤干的袜子翻了个面，火苗舔着布边，发出轻微的噼啪声。阿什把灯簿合上，用一块石头压住，说明天翻开时纸页才不会卷边。界石外的水声又低了一些。伊甸的靴子印在坡口停了一下，像是回头看了一眼，才转进树影里。
+<br><br>
+<<foresticon>><<if $mpFestForestSpring is ((Time.date.year or 0) + 1)>><<link [[再看寒溪水势 (0:04)|MP Loc Forest Festival Spring]]>><<pass 4>><</link>><<else>><span class="disabled">再看寒溪水势 (0:04)（今日已收工）</span><</if>><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Summer [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<set $daily to ($daily or {})>>
+<<if $mpFestForestSummer is ((Time.date.year or 0) + 1)>>
+夏雾那一格已经落了笔。白绳上的结被水汽泡得发胀，阿什说那天的雾比往年厚，灯线却比往年稳。他把绳子收回槽里，没让你再往岔口跑一趟。
+<br><br>
+<<elseif $daily.mpFestForestSummerFail>>
+你今天在雾里绕了太久，衣领湿透，火折子也进了水。阿什把碎灯罩收进袋子，说雾太厚的时候，人只能等。白绳还搭在槽口，没有打结。
+<br><br>
+<<else>>
+正午的林子闷得像扣着一口锅。蝉声在午前忽然断了，断得很齐，像有人把线剪了一刀。阿什抬头看了一眼雾谷方向，把手里削到一半的木钉放下：「来了。」话音没落，白雾已经从谷口翻上坡，贴着地皮走，先吞掉蕨丛，再吞掉猎径，最后把两侧的树只剩下一截模糊的轮廓。
+<br><br>
+雾来得比往年早。阿什的灯线还没点，灯罩里凝着水珠，油也只剩半罐。岔口那边停着一辆从镇上来的板车，赶车的少年把缰绳攥得发白，车上的药包用油布裹着，看不清路，不敢再往前走。更远的地方传来一声狼嚎，闷在雾里，听不出远近。
+<br><br>
+伊甸从雾里走出来时，肩上盘着一捆细麻绳。他把绳头递给你，说雾会吃掉声音，也会把声音送到不该去的地方；听见有人喊你的名字，先看脚下有没有狼爪印，再决定回不回头。他顿了顿，又说狼群今天在换哨，旧的界桩被雾盖住了，两边很容易撞上。
+<br><br>
+阿什的法子是把灯一盏盏点起来，让光在雾里连成一条能看见的线；灯油不够，就得省着点，先照岔口和桥头。另一个法子是在狼群常走的边界上挂一排铜铃，铃响的地方就是界线，人听见会绕开，狼听见也会停一停。也有人会选更冒险的路：跟着狼群穿雾，看它们怎么在看不见的地方认路。
+<br><br>
+铜铃是旧年留下的，铃口锈了一圈，摇起来声音发闷。阿什说闷铃反而好，雾里传得远，又不至于惊了兽。他把铃绳在臂上绕好，等你先开口。
+<br><br>
+雾贴在脸上是凉的，衣领很快就湿了。板车那边传来少年压低的咳嗽声。阿什把火折子递给你，没有催。你知道他在等你说先做哪一样。
+<br><br>
+<<lanternicon>><<if ($tending or 0) gte 220 or ($willpower or 0) gte 420>><<link [[点灯引路出雾 (0:14)|MP Loc Forest Festival Summer Result]]>><<set $mpFestForestSummer to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestSummer to "lamp">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $mpNpcs and $mpNpcs.ash>><<set $mpNpcs.ash.trust to Math.min(100, ($mpNpcs.ash.trust or 0) + 1)>><</if>><<stress -2>><<pass 14>><</link>><<else>><<link [[点灯引路出雾 (0:14)|MP Loc Forest Festival Summer Result]]>><<set $daily.mpFestForestSummerFail to 1>><<stress 4>><<tiredness 2>><<pass 14>><</link>><</if>>
+<br>
+<<mpwatchicon>><<if ($athletics or 0) gte 220 or ($sneak or 0) gte 220>><<link [[挂铃划出狼界 (0:12)|MP Loc Forest Festival Summer Result]]>><<set $mpFestForestSummer to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestSummer to "bell">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<tiredness 2>><<pass 12>><</link>><<else>><<link [[挂铃划出狼界 (0:12)|MP Loc Forest Festival Summer Result]]>><<set $daily.mpFestForestSummerFail to 1>><<stress 3>><<tiredness 2>><<pain 1>><<pass 12>><</link>><</if>>
+<br>
+<<mpanimalicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[随狼穿雾巡界 (0:16)|MP Loc Forest Festival Summer Result]]>><<set $mpFestForestSummer to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestSummer to "packfog">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<stress -2>><<tiredness 2>><<pass 16>><</link>><<else>><<link [[随狼穿雾巡界 (0:16)|MP Loc Forest Festival Summer Result]]>><<set $daily.mpFestForestSummerFail to 1>><<stress 4>><<tiredness 3>><<pain 1>><<pass 16>><</link>><</if>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Summer Result [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<if $mpFest.ForestSummer is "lamp">>
+火折子受潮，划了三下才着。你护着火苗，沿灯线一盏盏点过去，灯罩里的水汽被烤成白烟，光晕在雾里扩开，像一串隔得很远的星。岔口的板车先看见了光，少年把缰绳一抖，车轮慢慢碾上路肩；你站在两盏灯之间给他打手势，让他别往狼界那边偏。灯油烧到最后一盏时，车已经过了桥头。
+<br><br>
+阿什跟在后头添油，没说什么，只把空罐收进袋子。伊甸从雾里出来，看了一眼灯线，说今晚雾不会散，但路已经够一个人走了。狼群没有靠近，只在坡上远远地嚎了一声，像是在确认这边没有越界。
+<br><br>
+灯灭了一盏，是岔口最外头那盏，灯芯烧尽了。阿什把它取下来，换上一截新的，火苗重新立起来。他说灯不怕少，怕的是有人以为灯会一直亮着。
+<br><br>
+雾到后半夜才退，退得很慢，先露出树根，再露出路面。你坐在灯下，衣服湿透了，指尖被火烤得发烫。石板上的夏雾那一格已经落了笔，炭迹被潮气洇开一点，但还认得出。少年临走前回头朝你点了点头，没有喊谢，大概是怕声音在雾里传歪。
+<<elseif $mpFest.ForestSummer is "bell">>
+铜铃一只只挂上去，绳子从这棵树拉到那棵树，铃口朝下，离地一人高。你踩着湿滑的树根走，脚下一滑，膝盖磕在石棱上，铃声却因此响了一串。雾里的狼嚎停了一瞬，随后换了方向，慢慢远了。阿什在另一头把绳尾系紧，说界线不用笔，铃响就是笔。
+<br><br>
+挂到第七只时，你看见雾里有一双黄眼睛，不高，隔着两棵树。它没有靠近，只在你把铃绳拉直时偏了偏头，像在听声辨位。你退开两步，它才从树影里出来，沿着铃线的外侧走，把每一只铃都闻了一遍。
+<br><br>
+铃线没有把狼群挡在外面，只是让它们知道人在哪一侧。这个区别阿什没有解释，伊甸也没有。你只看见那双黄眼睛最后停在铃线尽头，抬起后腿留了个记号，转身进了雾。
+<br><br>
+雾散时，铃线上挂着一层细水珠，风一过就叮叮地响。阿什把松了的绳结重新打紧，说这排铃能用到入冬。你膝盖上的淤青开始发疼，走起路来一瘸一拐，但铃线还在响。下山的露水打湿了裤脚，铃声在背后越来越轻，最后只剩风穿过绳子的声音。
+<<elseif $mpFest.ForestSummer is "packfog">>
+你跟着狼群进了雾。它们走得不快，领头的那匹黑狼每走十几步就停下来，鼻尖贴近地面，再抬头嗅一嗅风。你学它的样子，发现雾里其实有路：苔厚的地方脚下发软，风从左边来的时候，右前方的树会先挡住气流，连成一条看不见的走廊。狼群走的就是这条走廊。
+<br><br>
+走到雾谷边缘时，黑狼停住了。前头是断桥的方向，水声在雾里听着像从头顶落下来。它没有过桥，只沿着岸走了一段，在一处被水冲出的浅滩前抬起前爪，按了按湿沙。你明白它的意思：这条路今天能走，明天不一定。
+<br><br>
+回程时你走在狼群外侧，黑狼没有回头，但放慢了速度，让你跟得上。出雾时，阿什正站在灯线下，看见你从狼群里走出来，眉头皱了一下，终究没说什么，只把火折子塞回你手里。
+<br><br>
+雾在身后合拢，狼群的脚步声很快被吞掉。你回头看，只看见一片白，连刚才走过的路都认不出来。阿什说这就是雾的规矩：它让你看见什么，你才能看见什么。你把湿透的袖子卷到肘上，袖口沾着狼毛，拍了两下才掉。石板上的白绳已经打了结，结打得很松。
+<<else>>
+火折子划到第五下才着，火苗刚立起来就被雾压灭了。你摸黑去够第二盏灯，脚下一空，整个人滑进路边的浅沟，手腕磕在石头上，灯罩也碎了。雾里传来一声喊，像是那少年在叫，你应了一声，声音却被雾送回了自己耳边，辨不出方向。
+<br><br>
+阿什找到你时，你正扶着沟壁往上爬，裤腿全是泥。他没有责备，只把绳子放下来，让你攥住。板车那边最后是伊甸带出去的——他熟悉雾里的水声，沿着排水沟把人和车领到了桥头。
+<br><br>
+灯线没有连起来，狼界那边的铃声也断了一截。你在沟边坐了很久，手腕肿起来，火折子进了水，再也划不着。阿什把碎灯罩收进袋子，说今天雾太厚，不怪你，明天再试。
+<br><br>
+那少年的药包最终送到了镇上，只是晚了一天。伊甸说药不会因为晚一天就失效，人却会因为多走一步就走进狼界。
+<br><br>
+回程时雾还没散，你只能踩着阿什的脚印走。石板上的夏雾那一格空着，炭笔被潮气浸软了，写上去也留不住。你把碎灯罩的玻璃片从袖口抖出来，指尖被划了一道细口。阿什看了一眼，没说什么，只把自己的手套递过来。
+<</if>>
+<br><br>
+雾退到谷底时，天已经蒙蒙亮了。阿什把灯一盏盏收下来，灯罩里的水汽凝成细流，顺着铜边往下滴。你把湿透的袖子拧了拧，水落在石面上，很快就渗进苔里。伊甸从岔口回来，说板车已经出了林子，少年没有回头。
+<br><br>
+阿什把今天的事记进灯簿：雾起的时间，灯线的位置，铃声断在哪一段。他写字很慢，像在把雾里的路重新走一遍。你坐在火边，听见林子的声音一点点回来——先是水滴，再是鸟叫，最后是远处溪水翻过石头的响。石板上的白绳被风吹得轻轻碰石面，槽口的炭笔还没有收。
+<br><br>
+天光一点点亮起来，雾在低处缩成一条窄带。阿什把灯罩擦干，码进木箱，说明天还得晒。你把手套上的水拧掉，搭在箱沿上。林子里第一声鸟叫从很远的地方传来，随后就近了。伊甸没有回来，岔口那边只剩板车压过的车辙。
+<br><br>
+<<mpmapicon>><<if $mpFestForestSummer is ((Time.date.year or 0) + 1)>><<link [[再看夏雾灯线 (0:04)|MP Loc Forest Festival Summer]]>><<pass 4>><</link>><<else>><span class="disabled">再看夏雾灯线 (0:04)（今日已收工）</span><</if>><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Autumn [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<set $daily to ($daily or {})>>
+<<if $mpFestForestAutumn is ((Time.date.year or 0) + 1)>>
+秋猎那一格已经落了笔。红绳的结打得很低，阿什说那是按今年的兽群数目算出来的分寸。收肉车走了，猎台也收了，林子重新安静下来。
+<br><br>
+<<elseif $daily.mpFestForestAutumnFail>>
+你今天在猎径上追空了一趟，腿上还带着伤。阿什把册子合上，说明天兽群还在，不必赶这一时。红绳还压在槽里，没有打结。
+<br><br>
+<<else>>
+第一场霜落在蕨叶上，太阳一出来就化成水。山脊上的兽群开始往南挪，灌木被拱得东倒西歪，猎径一夜之间宽了半尺。阿什把秋猎那根红绳从石板上解下来，在手里捋直：「今年兽多，人也多。多不是好事。」
+<br><br>
+伊甸在坡上搭了猎台，三根木桩支着一块旧船板，离地一人高。他磨了一早上的刀，刀刃薄得能映出树影。他说今年不追带崽的母兽，也不动领头的老雄，剩下的按脚印算，够吃就停。黑狼的狼群也在同一片山坡上，它们没有猎台，只有耐心。
+<br><br>
+镇上的收肉车停在林缘，车斗里铺着干净稻草，赶车人靠着车辕打盹。他出价不低，也不问猎法，只要肉。阿什没有赶他走，只说了一句：「车停在外头，别把轮子碾进猎径。」收肉人笑笑，把车往后退了两步。
+<br><br>
+秋猎的难处不在追，在分。给镇上的车留多少，给狼群留多少，给林子自己留多少，三笔账要在同一张纸上算平。阿什的册子上画着兽群的走向，伊甸的猎台上挂着风干的肉条，黑狼的界桩上蹭着新毛。你站在三者中间，能听见远处鹿角撞树的闷响。
+<br><br>
+日头偏西时，风从山脊翻下来，带着松脂和血腥气。伊甸把刀插回鞘里，朝你抬了抬下巴。阿什把红绳递过来，没有替你打结。山坡下方，狼群的身影在灌木间一闪而过，像几块移动的阴影。
+<br><br>
+你蹲下去看最近的一串蹄印，印子边缘还湿，鹿群没有走远。收肉人把车辕上的绳结解开又系上，眼睛一直往坡上瞟。阿什把红绳的一头压在册子下，免得风把绳子吹乱。伊甸敲了敲猎台，示意你该动了。
+<br><br>
+<<mpmapicon>><<if ($tending or 0) gte 220 or ($willpower or 0) gte 420>><<link [[按阿什划猎界 (0:14)|MP Loc Forest Festival Autumn Result]]>><<set $mpFestForestAutumn to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestAutumn to "boundary">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $mpNpcs and $mpNpcs.ash>><<set $mpNpcs.ash.trust to Math.min(100, ($mpNpcs.ash.trust or 0) + 1)>><</if>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<stress -2>><<pass 14>><</link>><<else>><<link [[按阿什划猎界 (0:14)|MP Loc Forest Festival Autumn Result]]>><<set $daily.mpFestForestAutumnFail to 1>><<stress 3>><<tiredness 2>><<pass 14>><</link>><</if>>
+<br>
+<<runicon>><<if ($athletics or 0) gte 240 or ($sneak or 0) gte 220>><<link [[随伊甸追猎群 (0:16)|MP Loc Forest Festival Autumn Result]]>><<set $mpFestForestAutumn to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestAutumn to "hunt">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<tiredness 3>><<pass 16>><</link>><<else>><<link [[随伊甸追猎群 (0:16)|MP Loc Forest Festival Autumn Result]]>><<set $daily.mpFestForestAutumnFail to 1>><<pain 2>><<stress 3>><<tiredness 2>><<pass 16>><</link>><</if>>
+<br>
+<<mpanimalicon>><<if ($athletics or 0) gte 220 or ($sneak or 0) gte 200>><<link [[给狼群留一份 (0:12)|MP Loc Forest Festival Autumn Result]]>><<set $mpFestForestAutumn to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestAutumn to "share">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<stress -2>><<pass 12>><</link>><<else>><<link [[给狼群留一份 (0:12)|MP Loc Forest Festival Autumn Result]]>><<set $daily.mpFestForestAutumnFail to 1>><<stress 3>><<pain 1>><<pass 12>><</link>><</if>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Autumn Result [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<if $mpFest.ForestAutumn is "boundary">>
+你按阿什的册子把猎界重新走了一遍：带崽的母兽常走的沟口插上红布条，领头雄兽歇脚的密林留出来，镇上车能停的地方用石头压出界线。伊甸在猎台上看着，等你走完才下来，把刀尖在地上划了一道，说今年就照这条线。
+<br><br>
+狼群没有越过红布条。黑狼沿着界线走了一趟，在布条外侧留下一串脚印，像在确认这条线是给人看的，也是给狼看的。收肉车最后只装走半车，赶车人有些不快，但没多说什么，把稻草抖干净就赶车走了。
+<br><br>
+阿什把三条界线画进册子，又在旁边添了兽群的数目。他说今年不算丰收，但够过冬。你手上沾着红布条的染料，洗了两遍才淡下去。
+<br><br>
+入夜后霜又落了一层，猎台上的肉条冻得发硬。伊甸切了一块递给你，说秋猎的规矩是先喂守夜的人。你嚼着冷肉，听见山脊上狼群分食的细小声响，远远的，不凶。回程时月亮已经升起来了，红布条在风里翻动，像一排没有点着的灯。阿什走一段就停下来看一眼，确认布条没有倒。
+<<elseif $mpFest.ForestAutumn is "hunt">>
+你跟着伊甸上了猎台。他指给你看风从哪边来，脚印哪一头深，鹿群会在哪道沟里停。你们没有追整群，只挑了一头掉队的小雄鹿。伊甸一箭射穿它的肩胛，鹿跑出十几步就倒了。他下台去放血、开膛，动作利落，没有多余的一刀。
+<br><br>
+肉分作三份：一份留给镇上，一份熏起来过冬，剩下的下水与骨架子留在林缘的凹地里。伊甸说狼群夜里会来，别去看，看了它们反而不敢吃。你手上全是血，洗了很久才洗净。
+<br><br>
+回程时伊甸难得说了句多的话：打猎不是杀得多，是知道什么时候停。他背上的弓弦松了，走起路来轻轻晃。
+<br><br>
+夜里狼嚎响了很久，声音从凹地方向传来，听着比平时近。阿什在灯下翻册子，没有问你们猎了多少，只看了一眼你带回来的鹿角。鹿角在灯下泛着浅黄的光，角根还带着血。阿什把它挂在石板上方，说等冬天过去再收起来。你没有问他挂在那里是给谁看的。火边的刀已经擦干净了，鞘口留着一道新磨的亮痕。伊甸把猎台让给你坐，自己靠着树干闭了眼，呼吸很快沉下去。
+<<elseif $mpFest.ForestAutumn is "share">>
+你把镇上的车拦在猎径外，先让狼群吃。伊甸没有反对，只把猎台挪高了一段，免得狼群上来。黑狼带着狼群从坡后绕出来，先闻了闻地上的下水，再抬头看你。你没有退，也没有伸手，只把刀收进鞘里，往旁边让了一步。
+<br><br>
+狼群吃得很安静，幼狼被挤在外圈，黑狼叼了一块放到它们面前。等它们吃完，你才把剩下的肉装上车。收肉人看着空了一半的车斗，咂了咂嘴，到底没说什么。
+<br><br>
+阿什在册子上把这一笔写成「留份」，又在旁边画了一个小小的狼头。他说这不是施舍，是算账：今年给它们留一口，明年它们才不会追着人跑。
+<br><br>
+夜里狼群没有在猎径上久留，吃饱就回了深处。你回林缘时，收肉车已经走了，车辙在霜地上压得很深。伊甸把猎台收下来，木板一块块码好。他说今年狼群不瘦，开春就会有新的幼崽，到时候猎径得往东让一让。你点了头，把最后一根桩拔起来。
+<<else>>
+你追得太急，鹿群在沟口分了岔，你跟着脚印走错了一边。伊甸的哨声从坡上传来时，你已经踩进一片被兽群拱松的泥地，脚下一陷，小腿卡进石缝，膝盖磕在树根上。鹿没有追到，猎台也白搭了半天。
+<br><br>
+回程时收肉车已经走了。阿什在册子上记下今天的空账，没有责怪，只说明天兽群还在，腿伤了就得歇。伊甸把猎台让给你坐，自己蹲在火边烤刀，刀刃上的光一闪一闪。
+<br><br>
+狼群当夜从另一道坡过去了，没有经过你们守的那条径。黑狼在界桩上留了新毛，像是提醒：这条路今天不归你们。
+<br><br>
+你卷起裤腿，膝盖肿得发亮。阿什用湿布替你敷上，说秋猎最怕的不是空手，是带着伤还硬追。火堆烧到半夜，伊甸把一块烤暖的石头挪到你脚边，说夜里霜重，别让伤处受凉。你靠着猎台的木柱，听见坡上传来零星的蹄声，鹿群又在往南走了。第二天早上，泥地上还留着你的脚印和那道滑痕。阿什用树枝把痕划乱，说别让下一个猎人看见，以为这里有条好走的路。
+<</if>>
+<br><br>
+回林缘时，收肉车已经走远，车辙在霜地上留下一道浅沟。阿什把红绳收进怀里，说秋猎的账不在车上，在册子里。他把今天的猎界、兽数和分出去的份数一笔笔记下，写完才把册子合上。
+<br><br>
+伊甸蹲在火边烤手，刀刃上的血迹已经擦净。他没有问结果，只把一块烤热的石头推到你脚边。山脊上还有零星的蹄声，兽群没有走完。你靠着石台坐下，闻到松脂、血和霜混在一起的味道，知道这一季还没有彻底结束，但今天这一页已经可以翻过去了。
+<br><br>
+火堆渐渐矮下去，炭上覆了一层白灰。阿什把册子收进油布，说明天要去看北坡的兽径。伊甸把刀插回鞘里，站起身时膝盖响了一下。你把手上的血和松脂搓掉，指尖还留着一点腥味。坡下的猎径空了出来，霜在脚印里结了一层薄壳。阿什把红绳绕在册子外，打了个活扣，说明天还要用。
+<br><br>
+<<mpcarryicon>><<if $mpFestForestAutumn is ((Time.date.year or 0) + 1)>><<link [[再看秋猎分账 (0:04)|MP Loc Forest Festival Autumn]]>><<pass 4>><</link>><<else>><span class="disabled">再看秋猎分账 (0:04)（今日已收工）</span><</if>><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Winter [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<set $daily to ($daily or {})>>
+<<if $mpFestForestWinter is ((Time.date.year or 0) + 1)>>
+冬雪那一格已经落了笔。黑绳被雪水浸深，结打在石板最下面。阿什说今年的雪比去年厚，路却比去年清楚，因为有人先替它做了决定。
+<br><br>
+<<elseif $daily.mpFestForestWinterFail>>
+你今天在雪脊上陷了半条腿，脚趾到现在还发麻。阿什把锹插在雪里，说雪天开路最忌逞强，等雪小些再来。黑绳还冻在槽里，没有打结。
+<br><br>
+<<else>>
+雪下了三天，林道被埋得只剩一道浅浅的凹痕。北岭的风把雪吹成齐胸高的硬脊，踩上去先陷半尺，再往下就是空的。阿什的七盏灯只露出灯罩顶，像七个埋在雪里的铁蘑菇。他拿锹柄敲了敲最近的一盏，里面的油冻成了浊黄的块。
+<br><br>
+伊甸的小屋在北坡，烟囱里的烟细得像一根线，风一大就断。他三天没下山了。阿什说猎人有存粮，饿不着，可雪再封两天，连烟都看不见的时候，就得有人上去。黑狼的脚印从林缘一直延伸到北坡，笔直，没有绕路，像在雪面上画了一条只有它认得的线。
+<br><br>
+镇上的补给雪橇停在林缘，车夫不肯再往里走，说马腿陷进雪窝会折。车上装着盐、灯油和几包给北岭猎户的干粮。阿什把锹立在雪里，问你：「开径，立标，还是跟狼走？」
+<br><br>
+开径最费力气，要把雪脊一锹锹切断，再用脚把新路踩实；雪下埋着石缝和倒木，铲得太深会闪了腰。立标省力些，沿着旧灯线插上高出雪面的木杆，杆顶系红布，让人隔着雪坡也能认方向；可雪一化，杆子会歪，明年还得重来。跟狼走最省事，也最险：狼走的是兽道，人跟得上就跟，跟不上就会在雪里迷路。还有一条路是什么都不做，让雪把北径彻底封住，等开春再说。
+<br><br>
+风从坡口灌下来，雪粒打在脸上像细砂。你眯着眼，看见北坡的烟又断了。阿什没有催，只把锹柄往你这边递了递。雪橇上的马打了个响鼻，喷出的白气很快被风扯散。你把手套往腕上拉了拉，指尖还是冻得发木。阿什说这种天，走一步算一步，别想着一次开到坡顶。
+<br><br>
+<<mprepairicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[铲雪开北岭径 (0:16)|MP Loc Forest Festival Winter Result]]>><<set $mpFestForestWinter to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestWinter to "clear">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $mpNpcs and $mpNpcs.ash>><<set $mpNpcs.ash.trust to Math.min(100, ($mpNpcs.ash.trust or 0) + 1)>><</if>><<stress -3>><<tiredness 4>><<pass 16>><</link>><<else>><<link [[铲雪开北岭径 (0:16)|MP Loc Forest Festival Winter Result]]>><<set $daily.mpFestForestWinterFail to 1>><<stress 4>><<tiredness 4>><<pass 16>><</link>><</if>>
+<br>
+<<mpwatchicon>><<if ($tending or 0) gte 220 or ($housekeeping or 0) gte 220>><<link [[立雪标杆引路 (0:12)|MP Loc Forest Festival Winter Result]]>><<set $mpFestForestWinter to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestWinter to "mark">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $mpNpcs and $mpNpcs.ash>><<set $mpNpcs.ash.trust to Math.min(100, ($mpNpcs.ash.trust or 0) + 1)>><</if>><<stress -2>><<tiredness 2>><<pass 12>><</link>><<else>><<link [[立雪标杆引路 (0:12)|MP Loc Forest Festival Winter Result]]>><<set $daily.mpFestForestWinterFail to 1>><<stress 3>><<tiredness 2>><<pass 12>><</link>><</if>>
+<br>
+<<mpanimalicon>><<if ($athletics or 0) gte 220 or ($sneak or 0) gte 220>><<link [[循狼踪送柴粮 (0:14)|MP Loc Forest Festival Winter Result]]>><<set $mpFestForestWinter to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestWinter to "trail">><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<tiredness 3>><<pass 14>><</link>><<else>><<link [[循狼踪送柴粮 (0:14)|MP Loc Forest Festival Winter Result]]>><<set $daily.mpFestForestWinterFail to 1>><<pain 2>><<stress 3>><<tiredness 3>><<pass 14>><</link>><</if>><br>
+<<link [[任雪封住北径 (0:08)|MP Loc Forest Festival Winter Result]]>><<set $mpFestForestWinter to ((Time.date.year or 0) + 1)>><<set $mpFest.ForestWinter to "seal">><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<stress -2>><<pass 8>><</link>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Winter Result [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<if $mpFest.ForestWinter is "clear">>
+锹刃切进雪脊时，发出闷闷的断裂声。你和阿什轮流在前面开路，一锹一锹把雪甩到两侧，再用脚把新路踩实。雪下果然有倒木，你的锹尖磕在冻硬的枝干上，虎口震得发麻。开到第五盏灯时，北坡的烟已经看得清了；开到第七盏，伊甸正站在门口，手里拎着一壶热水。
+<br><br>
+伊甸没有说谢，只把热水递过来，又把门开大了一点。屋里的火很旺，墙上挂着风干的肉和几张没硝完的皮。他说雪再封两天他也不会有事，但有人上来，说明路还通着。
+<br><br>
+回程时你们把开出来的路踩得更实，阿什在每一盏灯下插了一根短桩，标出雪深。风还在刮，但路已经能走了。
+<br><br>
+夜里雪停了，天边露出一线冷白。你坐在火边烤鞋，鞋底的雪化成水，滴在石头上。石板上的冬雪那一格落了笔，炭迹很清。伊甸给的那包草药放在膝头，纸包被体温焐得发软。你把它收进内袋，打算回镇上再拆。
+<<elseif $mpFest.ForestWinter is "mark">>
+木杆一根根插进雪里，杆顶系上红布，风一吹，布条就朝同一个方向摆。阿什说这就是雪里的灯，灯不用油，靠的是人记得它的位置。你沿着旧灯线走到第七根，回头看见红布在雪坡上连成一条断断续续的线，够一个人认路了。
+<br><br>
+伊甸是顺着红布下来的。他走到林缘时，肩上背着一只空篓，说北坡的存粮还够，倒是灯油快没了。阿什把最后一罐油给了他，又让他把红布的位置记在心里。
+<br><br>
+雪标立起来容易，守起来难。阿什说明天风一刮，至少有两根会倒，得有人来扶。你没有说话，只把倒下的那根重新插紧。
+<br><br>
+北坡的烟重新直了起来。你站在红布尽头，手冻得握不住杆，心里却比来时稳。回程时风小了些，红布不再啪啪作响，只轻轻抖。阿什走一段就回头数一根，数到第七根才往下走。
+<<elseif $mpFest.ForestWinter is "trail">>
+你跟着狼踪上了北坡。狼走的是雪脊背风的一面，脚下的雪被踩实过，踩上去只陷一寸。黑狼的脚印很大，步幅匀，遇到倒木就绕，遇到石缝就跨，像一张画在雪上的地图。你跟到一半时，风把来时的脚印填平了，退不回去，只能继续往前。
+<br><br>
+黑狼在坡顶的岩背下等着。它没有靠近，只在你经过时偏了偏头，像是确认你跟得上。再往前就是伊甸的屋，烟囱的烟已经看得见了。你从背篓里取出盐和干粮，放在门口的石台上，敲了两下门。
+<br><br>
+伊甸开门时愣了一下，看见你身后的狼踪，又看见坡顶的黑影，什么也没问。他把东西拎进去，出来时塞给你一小包晒干的草药，说雪天走兽道，比走人路稳。
+<br><br>
+回程时黑狼已经走了，雪面上只剩一串往深处去的脚印。你顺着自己的来路下坡，风把脚印盖了一半，但没有全盖住。草药包在怀里散出一点苦香。你摸黑走到林缘时，阿什正提着灯等，灯罩上结了一层白霜。
+<<elseif $mpFest.ForestWinter is "seal">>
+你什么也没做。阿什看了你一会儿，把锹插回雪里，说：「也好。雪封住的路，开春自己会开。」你们把补给留在林缘的石棚下，用油布盖好，又在棚口压了两块石头。北坡的烟还在，细，但没断。
+<br><br>
+黑狼当夜从林缘经过，在石棚外停了一会儿，闻了闻油布，没有动。它的脚印绕着石棚走了半圈，又回到北径上。阿什说狼知道这里有人的东西，但雪天它们不惹事。
+<br><br>
+回程时雪又开始下，细而密，很快把你们的脚印填平。你没有开出一条路，但林子也没有因此变得更坏。伊甸的烟在坡上亮了一夜，第二天清晨还在。
+<br><br>
+开春后，雪水会顺着北径流下来，把冬天没走的路冲出一道浅沟。阿什说那时候再来看，能看出雪底下压着什么。你把油布的四角又压了一遍，才转身离开。石板上的黑绳被雪水浸深了一点，结打得很轻，像是随时可以解开。
+<<else>>
+雪脊比看上去硬。你第一锹下去只削掉一层壳，第二锹才切进雪里，第三锹时脚下一空，整个人陷进雪窝，锹柄横在胸口，喘不上气。阿什把你拽出来时，你的裤腿里灌满了雪，脚趾很快就没了知觉。
+<br><br>
+北坡的烟在天黑前断了一次，又接上了。你们没有再往前开，只把最近的几盏灯重新挖出来，添了油。伊甸第二天自己下了山，说屋里还有柴，不用人上去。
+<br><br>
+回程时你走得很慢，鞋里的雪化成水，又冻成冰。阿什把锹扛在肩上，没有责怪，只说雪天开路，最忌逞强。
+<br><br>
+石板上的冬雪那一格还空着。阿什把炭笔收进怀里，说等雪小些再来。你在火边坐了很久，脚趾慢慢回了血色，又疼又痒。阿什把一盆温水推到你脚边，说别用热水，也别用雪搓，搓坏了更难好。伊甸下山时带了一小袋干柴，放在石棚下，没有进屋。他看了一眼你肿起来的脚踝，说雪天开路的人不少，知道什么时候回头的人不多。
+<</if>>
+<br><br>
+回到林缘时，雪橇还停在原处，车夫已经把马卸下来，裹着毯子蹲在车边。阿什把锹上的雪磕掉，说今天到此为止。北坡的烟还在，细，但没有断。
+<br><br>
+你坐在石棚下烤火，鞋底的雪化成水，滴在石头上。阿什把灯簿摊开，写下今天的风向、雪深和走过的路。他写完把册子合上，没有说哪一笔对、哪一笔不对，只说雪还会下，路也还会变。黑狼的脚印在石棚外绕了半圈，往深处去了。你把冻僵的手指伸到火边，慢慢等它回弯。石板上的黑绳被雪水浸深，槽口积着一小汪水。阿什说等雪化了再看，现在写的字，春天可能会被水冲掉一半。
+<br><br>
+火边的柴烧短了一截，阿什添了一根，火星子往上蹿。他说雪停之后最冷，明天早上别急着出门。你把湿手套翻过来烤，掌心慢慢有了知觉。石棚外的雪面被风抹平，看不出今天有几个人走过。黑狼的脚印在远处拐了个弯，往更深的地方去了。你把石棚口的雪踩实，免得夜里被风灌进来。
+<br><br>
+<<lanternicon>><<if $mpFestForestWinter is ((Time.date.year or 0) + 1)>><<link [[再看冬雪封径 (0:04)|MP Loc Forest Festival Winter]]>><<pass 4>><</link>><<else>><span class="disabled">再看冬雪封径 (0:04)（今日已收工）</span><</if>><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>
+
+:: MP Loc Forest Festival Finale [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>><<set $mpFest to ($mpFest or {})>>
+<<set _spring to ($mpFest.ForestSpring or "")>><<set _summer to ($mpFest.ForestSummer or "")>><<set _autumn to ($mpFest.ForestAutumn or "")>><<set _winter to ($mpFest.ForestWinter or "")>>
+<<set _done to 0>><<if ($mpFestForestSpring or 0) gte 1>><<set _done += 1>><</if>><<if ($mpFestForestSummer or 0) gte 1>><<set _done += 1>><</if>><<if ($mpFestForestAutumn or 0) gte 1>><<set _done += 1>><</if>><<if ($mpFestForestWinter or 0) gte 1>><<set _done += 1>><</if>>
+<<set _w to 0>><<if _spring is "levee" or _spring is "channel">><<set _w += 1>><</if>><<if _summer is "lamp" or _summer is "bell">><<set _w += 1>><</if>><<if _autumn is "boundary">><<set _w += 1>><</if>><<if _winter is "clear" or _winter is "mark">><<set _w += 1>><</if>>
+<<if _done lt 4>>
+石板上的四根布绳还没并成一股，绳头散在槽里。阿什把炭笔递给你，又收了回去：「四季没走完，这页翻了也不算数。」你数了数已经打上的结，知道还差哪一季。界石外的雪还没有化尽，林道上的脚印一深一浅，通向不同的方向。
+<br><br>
+<<else>>
+开春前最后一场雪化得很快。界石背面的石板上，四根布绳已经并成一股，蓝、白、红、黑绞在一起，结打在正中。阿什把绳结按了按，确认不会松，才退开半步。伊甸站在林缘，猎枪横在臂弯里，枪口朝地。黑狼没有走近，只蹲在旧界桩的阴影里，尾巴压在雪上。
+<br><br>
+这一年的事都记在阿什的灯簿里：春水涨到第几道刻，夏雾里点亮了几盏灯，秋猎分出去多少肉，冬雪封了几天路。册子不厚，翻起来却沙沙作响。阿什说，林子不看人说了什么，只看人做了什么。界石那头其实已经有过一个说法，但四季的账是另一本，他把两本摊在一起，让你自己看。
+<br><br>
+四根绳子并在一起，能看出一个偏向：有的结打得更紧，有的结留了活扣。阿什没有替你解，只说：「灯是立在路边，还是收进林子，今天得有个说法。」黑狼在界桩后抬起头，伊甸把枪换了个肩，谁都没有催。
+<br><br>
+石板边缘的苔被雪水泡软了，阿什用指甲刮开一小块，露出底下更深的一行刻痕。刻痕很浅，像是很多年前有人用刀尖匆匆划下的，只能认出「灯」「路」「林」三个字，其余都被石头吃掉了。
+<br><br>
+<<if _w gte 3>>四季里，有几季把路明明白白留给了人：水被引开，灯被点亮，猎界被划清，雪被铲到两边。绳结偏向这一边，石板上的老字也该顺着这一边读。<<elseif _w lte 1>>四季里，有几季把路让给了林子：水归旧道，雾里的人跟着狼走，猎物留了一份，雪封的路不去硬开。绳结偏向那一边，石板上的老字也该顺着那一边读。<<else>>四季里，人和林子各让了一半。绳结不偏不倚，两种读法都还站得住，最后这一笔只能由你来落。<</if>>
+<br><br>
+<div id="fest-finale-choice">
+<<lanternicon>><<if _w gte 2>><<link "立灯守住林径 (0:20)">><<if !$mpWorldForestOutcome>><<set $mpWorldForestOutcome to "warded">><</if>><<set $mpLocProgress_Forest to 5>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<pass 20>><<replace "#fest-finale-choice">><</replace>><<replace "#fest-finale-out">>你把最后一盏灯从灯座上取下来，擦净灯罩，重新添满油，放回界石旁边。阿什把七根杉木桩一根根立起来，桩顶钉铁箍，箍里卡灯，灯与灯之间拉三道麻绳。伊甸没有帮忙，只在旁边看着，等桩立到第五根时才说：「这回，兽道和人道算是分开了。」黑狼在界线外走了一趟，把每一根桩都闻过，最后在离灯线十步远的地方留下记号。它认了这条线，也把自己的位置往后退了十步。<br><br>入夜后灯一盏盏亮起来，风把光从这头推到那头。阿什在灯簿最后一页写下日期，又添了一句：路归人守，林归林走。你把石板上的绳结重新紧了一遍，蓝白红黑四股绳并在一起，没有再分开。<br><br>这一笔写下去，林区总枢的界石、阿什的火塘和深处七盏灯的灯座都会跟着改口。赶夜路的人认着灯线走，岔道再深也骗不了脚；狼群退到灯外的旧界，与人各走一边。<br><br>你在界石边坐到半夜，灯线在雾里断断续续，后来连成一条完整的光。阿什把灯簿收进油布包，说明天还得添油，后天还得修桩。伊甸从北岭下来，看了一眼灯线，说今年冬天他不用再摸黑找路了。黑狼没有再来，界桩外的脚印却比从前整齐。你把最后一截麻绳头收进袋里，留给明年开春再用。<br><br>回程时你走得很慢，脚下是被人踩实的路，头顶是灯。林子还是那座林子，只是从这一夜起，赶路的人知道该把目光落在哪里。<br><br><span class="green">【林区结局·守径】</span><</replace>><</link>><<else>><span class="disabled">立灯守住林径 (0:20)（四季未允）</span><</if>>
+<br>
+<<foresticon>><<if _w lte 2>><<link "撤灯让林自择 (0:20)">><<if !$mpWorldForestOutcome>><<set $mpWorldForestOutcome to "untamed">><</if>><<set $mpLocProgress_Forest to 5>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<pass 20>><<replace "#fest-finale-choice">><</replace>><<replace "#fest-finale-out">>你把灯从杉木桩上一盏盏摘下，灯座留在原地，灯身挪到林子自己空出来的角落：缠藤绕行的石背、老树根旁的凹坑、溪水退后露出的干滩。阿什跟在后头，每挪一盏就退开几步，看光是不是还落在路上。伊甸把猎枪挂回墙上，说这样倒省事，往后不必每年入冬都去补那些被雪压坏的木桩。<br><br>黑狼隔了两天才露面。它停在旧界桩边上，低着头把桩根闻了又闻，喉咙里没有出声，末了抬起前爪在苔面按下一个湿印。跟来的只有它和两只快长成的幼狼，其余的留在坡后；幼狼不敢靠近，绕着圈走几步就停，眼睛一直盯着黑狼的尾巴。黑狼一转身，它们立刻跟上。<br><br>林子并没有因此更安全，只是多了一套能讲通的规矩。雾升起来时，路会自己缩回去；雾落下去时，又慢慢吐出一条能走人的缝。你在林缘守到深夜，看见白气从谷底漫上来，到了原先挂灯的那一带，忽然朝两边分开，像被什么看不见的东西挡了一下。分开的地方留着一道窄口，口子里没有火，只有一点青白的光贴着地面浮。<br><br>这一笔落下去，界石、火塘与深处灯座都会听见同一个说法。灯还给林子，路也还给林子，人只借一条过道；界石这侧的藤蔓会慢慢爬过刻线，旧路会被改上几处，但肯低头看脚下的人，总能找到那条缝。<br><br>你在林缘站到天快亮，雾缝里的青光慢慢淡下去。阿什把最后一盏灯留在石缝里，说这盏不挪了，留给走不出去的人。伊甸把门闩上，屋里的火还亮着。黑狼的脚印在界桩外绕了一圈，往深处去了。<br><br><span class="green">【林区结局·顺林】</span><</replace>><</link>><<else>><span class="disabled">撤灯让林自择 (0:20)（四季未允）</span><</if>>
+</div>
+<div id="fest-finale-out"></div>
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回节令石板 (0:02)|MP Loc Forest Festival Hub]]>><<pass 2>><</link>>

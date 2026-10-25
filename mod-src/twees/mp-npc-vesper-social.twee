@@ -1,0 +1,197 @@
+:: MP NPC Vesper Social Hub [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, axis: 0, annualYear: 0 })>><<set _npc to $mpNpcs.vesper>>
+<<set _nextIn to ($mpBaileyBiweeklyNextDay ? $mpBaileyBiweeklyNextDay - ((window.Time && Time.days) or 0) : -1)>>
+退潮后的三号栈桥像一条被抽走水的鱼脊，湿石阶一层层露出来，缝里的碎贝壳被风灯照得发白。维斯没有先看你，照例从墙钉上取下那根黄铜水尺，凑到灯下读了一遍，才把尺子搁回原处：「水退到第六格，今晚的风是往里推的，推得慢。」他这才抬眼看你，像是先把潮水交代清楚，才轮到人。
+<br><br>
+船屋里一切照旧：潮汐图压着断齿的船钟齿轮，长桌上摊着两份舱单，铁纱夜航灯只点着一豆火。维斯用指节敲了敲桌角三枚铜坠，说码头上的事说到底只有两样——潮水和交货。潮水给脸，人才肯把货交到你手上；话说得再满，货没到，就是没到。他把一份舱单推到你面前，纸角还带着盐霜，像是要你先认一认上面的字，再谈别的。
+<br><br>
+【潮位档】：<<if (_npc.axis or 0) gte 60 and (_npc.love or 0) gte 20>>共掌一舵，底舱的钥匙已经交到你手里<<elseif (_npc.axis or 0) gte 35 or (_npc.trust or 0) gte 12>>同看海图，他肯把压在水尺底下的旧账摊开<<elseif (_npc.axis or 0) gte 15 or (_npc.trust or 0) gte 5>>同船试水，缆绳递过来了，人还没上船<<else>>只递缆绳，他还隔着一臂的距离<</if>>
+<br>
+【同行账簿】：<<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩的暗桩最近常在防波堤下换货，维斯说那小子手脚快，快得让人来不及替他数箱<<else>>还没跟雷恩的人打过照面，防波堤下只有生面孔在探头<</if>>
+<br>
+【院长账期】：<<if _nextIn gt 0>>离贝利下次核账还有 <<print _nextIn>> 天<<elseif _nextIn is 0>>贝利今天就该来核账<<elseif $mpBaileyBiweeklyNextDay>>贝利的账期已经过了 <<print (0 - _nextIn)>> 天<<else>>贝利那边的账期还没排定<</if>>
+<br>
+【节令】：<<if (_npc.annualYear or 0) is (Time.date.year or 0)>>今年的海雾节已经过完，栈桥的雾灯还挂着，灯罩熏出一层灰<<else>>冬至前的海雾节还没到，灯绳和风灯都收在船屋里<</if>>
+<br><br>
+维斯说，雷恩不算坏人，只是把每一票都当成最后一票，所以总想赶在潮水回头之前把货销干净；贝利则相反，他从不赶潮，他只等账期，账期一到，连船屋门缝里的盐味都能折成钱。至于冬至，那是一年里唯一一晚，出海的船不管跑多远都要往回赶，栈桥上的灯亮着，雾里的船才认得出岸。
+<br><br>
+<div id="vesper-social-hub-actions">
+<<mprowicon>><<link "校一遍水尺 (0:06)">><<pass 6>><<replace "#vesper-social-hub-actions">>
+<<if ($science or 0) gte 240 or ($maths or 0) gte 240>>
+你把水尺从钉子上取下来，用袖口擦净铜面，一格一格对过去，发现最下面两格的刻痕被盐霜填平了。维斯递来一根针，让你自己挑。你挑开盐垢，读数重新清楚起来，他看了一眼，说潮水骗过很多人，唯独骗不过肯伏下身子的人。<span class="green">你替维斯校准了今晚的水尺。</span><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>>
+<<else>>
+铜尺上的盐霜结了厚厚一层，你擦了半天，读数还是糊的。维斯把尺子接过去，没有说什么，只让你先去炉边暖手。风从门缝里灌进来，吹得灯焰一歪，你心里也跟着发虚。<span class="red">水尺没校清，你在灯下站得有些局促。</span><<stress 3>><<tiredness 2>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mprepairicon>><<link "替船屋补缆 (0:06)">><<pass 6>><<replace "#vesper-social-hub-actions">>
+<<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>>
+你蹲在船屋门口，把磨损的缆绳一圈圈拆开，挑出还结实的股，重新编成一股。维斯在旁边看着，偶尔用桨柄点一下松掉的接头。补好的缆绳拉紧时发出一声闷响，他伸手拽了拽，说这一盘能再撑一季。<span class="green">你替船屋补好了一盘能用的缆绳。</span><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<stress -3>>
+<<else>>
+缆绳的旧股一拆就散，你编到一半，绳头从指间滑出去，抽在手背上。维斯把绳子捡起来，让你先到屋里坐一会儿。海风还在外面推着栈桥，你听着水声，觉得那点疼一时半会儿散不掉。<span class="red">缆绳散了股，你的手背被抽出一道红痕。</span><<pain 1>><<stress 3>>
+<</if>>
+<</replace>><</link>>
+</div>
+<br><br>
+<<socialiseicon>><<link [[同行分货 (0:10)|MP NPC Vesper Social 1]]>><<pass 10>><</link>>
+<br>
+<<investigateicon>><<link [[替你还账 (0:10)|MP NPC Vesper Social 2]]>><<pass 10>><</link>>
+<br>
+<<link [[海雾节返航 (0:15)|MP NPC Vesper Annual]]>><<pass 15>><</link>>
+<br>
+<<link [[回维斯身边 (0:02)|MP NPC Vesper Hub]]>><<pass 2>><</link>>
+
+:: MP NPC Vesper Social 1 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, axis: 0, annualYear: 0 })>><<set _npc to $mpNpcs.vesper>>
+海雾从外海推过来时，三号沉船的浮标只露出半截，铁链在浪里一下一下地磕。雷恩蹲在一只翻扣的木箱上，把一枚磨得发亮的铜币抛起来又接住，靴尖点着箱板打拍子。他身后码着从沉船里起出来的三只箱子：一只裹着油布，封漆上压着药行的锚印；一只钉得死紧，箱角有接货人的方印；最后一只最轻，箱盖上只画了一道短短的横线。
+<br><br>
+「货到了手，就得趁雾卖。」雷恩把铜币弹进掌心，「灰市那边肯出三倍的价，一个时辰就能清干净。你那位船长非要等接货人，等到潮水回头，箱子就得在礁石上磕散。」他说得轻巧，眼睛却一直瞟着维斯，像在等他接话。
+<br><br>
+维斯没有先答。他蹲下去看水尺，又用指节敲了敲那只最轻的箱子，听里面的回声，才慢慢站起来：「三只箱子，三条路。药要送到药行，方印那只有人等着收货，最轻的这只——」他顿了顿，「里面若有活气，就得先问一声岸上谁来接。」他把舱单摊在箱盖上，纸角被雾水打湿，字迹却一笔一划写得清楚。
+<br><br>
+雷恩笑了一声，说维斯把货当人看，迟早要吃亏；维斯回他，把人不当货看，才不至于半夜听见雾号就睡不着。两个人谁也没提高声音，海风却像被他们夹在中间，吹得浮标上的灯一晃一晃。雷恩用靴尖把最轻的箱子往自己这边勾了半寸，维斯没有去抢，只把舱单往你面前推了推。
+<br><br>
+你可以顺着维斯的规矩，先把该交的交出去，再谈剩下的怎么分；也可以照雷恩的法子，趁着雾厚一次销清，把账留到明天；还可以把三只箱子拆成两票，一只走明路，两只走暗路，让两边都欠你半句人情。潮水在礁石间来回，留给你们的时间只够选一条。
+<br><br>
+<div id="vesper-social1-choice">
+<<mpbargainicon>><<link "先按单交货 (0:14)">><<pass 14>><<replace "#vesper-social1-choice">>
+<<if ($willpower or 0) gte 250 or ($skulduggery or 0) gte 250>>
+你把三只箱子按舱单重新排了序：药先走，方印那只其次，最轻的留在最后。维斯摇船把前两只送到药行后门，接货的老账房点过封漆，才在舱单上按了手印。雷恩在栈桥上等得直跺脚，等最后一只箱子回到脚边时，却蹲下去帮你把绳结解开，说这一票他见过最慢的交法，也见过最稳的交法。维斯没夸你，只把铅笔收进内袋，说下一趟还让你排。<span class="green">维斯把下一趟舱单的次序交给了你。</span><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love -1>><</if>><<stress -2>>
+<<else>>
+药行后门没人应，雾里的潮水却先涨了半尺。你们把箱子在石阶上搬上搬下，封漆磕掉一角，雷恩的耐心也磨没了，甩下一句「早说了」便走。维斯没有怪你，只把磕坏的箱角用油布裹好，让你先坐下喘口气。潮水拍着石阶，一下比一下高，你听着那声音，心里发沉。<span class="red">接货的人没等到，箱子还磕坏了一角。</span><<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love -1>><</if>><<stress 4>><<tiredness 2>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpcarryicon>><<link "折中分两票 (0:14)">><<pass 14>><<replace "#vesper-social1-choice">>
+<<if ($english or 0) gte 240 or ($skulduggery or 0) gte 240>>
+你把药箱交给维斯的接货人，另两只让雷恩走灰雾线；两拨人在栈桥两头同时出发，像一根绳上的两个结。天亮前两边都回来了，雷恩把分成拍在你掌心又收回去一半，说这叫船长的规矩税；维斯听见了，没拆穿，只把舱单上你画的那道线描粗了一点。海雾散开一线，三个人难得都没再争。<span class="green">两边都让了半步，这一票总算交圆了。</span><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 1>><</if>><<stress -2>>
+<<else>>
+两票同时走，谁也没顾上谁。药箱在浅滩搁了底，雷恩那边的暗货被巡夜船追了半条水道，最后空手回来。维斯蹲在船头把湿透的舱单一张张摊开，雷恩靠着木箱不说话。你把两边的话都听了一遍，才知道折中不是把事分成两半，是把自己分成两半。雾水顺着桅杆往下滴，谁也没有先走。<span class="red">两票都没走顺，你在雾里两头落空。</span><<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love -1>><</if>><<stress 4>><<tiredness 2>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpwatchicon>><<link "顺雷恩快销 (0:14)">><<pass 14>><<replace "#vesper-social1-choice">>
+<<if ($skulduggery or 0) gte 250 or ($athletics or 0) gte 250>>
+雾最厚的时候，雷恩带着你把三只箱子一次推上灰市。价钱确实好，铜板在雷恩的袋里撞得叮当响；可最轻的那只箱子被撬开时，里面只有一件叠得整整齐齐的旧外套，没有活人，也没有名字。维斯站在巷口等你们，看见外套，什么也没说，只把它接过去叠好。回船的路上他走在前面，脚步比平时慢。<span class="green">货销得干净，维斯却把一件旧外套收进了舱柜。</span><<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 2>><</if>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<stress -2>>
+<<else>>
+灰市的路比雷恩说的长，雾里又撞上巡夜船的灯。你们把箱子扔进浅水才脱身，最轻的那只顺流漂走，雷恩骂了一句，又笑起来，说至少人没事。维斯在栈桥尽头等到天亮，见你们空手回来，只把水尺重新读了一遍。他没有问你去了哪条路，你也没有先开口。<span class="red">箱子丢在水里，你在栈桥上站到天亮。</span><<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love -1>><</if>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<pain 2>><<stress 4>>
+<</if>>
+<</replace>><</link>>
+</div>
+<br><br>
+<<getouticon>><<link [[回潮位档 (0:03)|MP NPC Vesper Social Hub]]>><<pass 3>><</link>>
+
+:: MP NPC Vesper Social 2 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, axis: 0, annualYear: 0 })>><<set _npc to $mpNpcs.vesper>>
+贝利来的时候没有敲钟，也没有喊人。他站在船屋门口，黑皮账册夹在臂弯里，两名戴黑手套的打手一左一右堵住栈桥。潮水刚退到第五格，维斯正蹲在船头补一截缆绳，听见脚步声，先把手里的绳结打完，才抬头。
+<br><br>
+「第几期了，你自己清楚。」贝利翻开账册，指尖在纸页上停住，「这艘船、这批货，抵得上你欠的那笔。今天拿不出来，我就让人把船拖走。」他没有看你，也没有看维斯，像在念一行早就写好的账。
+<br><br>
+维斯把缆绳放下，先去看了水尺，才回身：「潮水还没退到底，船现在拖不走，拖到半路会搁在礁上。」他语气很平，不像在顶嘴，倒像在说一件水面上的常识。贝利冷笑，说海上的规矩管不到院里的账。维斯没有反驳，只把水尺往门框边挪了挪，让刻度正好对着贝利的眼睛。
+<br><br>
+你被夹在中间。维斯说，他可以把这笔账接过去，记进自己的舱单，代价是下一趟夜航得替贝利的人跑一趟货；贝利说，也行，但货要在冬至前到，晚一天，利息翻一倍。两个人都看着你，一个等你说接，一个等你说不接。栈桥下的水拍着木桩，声音闷得像有人在数拍子。
+<br><br>
+贝利的打手往前挪了半步，黑手套按在船屋门框上。维斯没有动，只把脚边的缆绳往你这边踢了踢，像是提醒你，真到了要动手的时候，先抓稳一样东西。海风把账册的纸页吹得翻了一下，贝利用拇指压住，眼睛始终没有离开你。
+<br><br>
+<div id="vesper-social2-choice">
+<<investigateicon>><<link "让维斯接账 (0:15)">><<pass 15>><<replace "#vesper-social2-choice">>
+<<if ($willpower or 0) gte 260 or ($skulduggery or 0) gte 260>>
+维斯把舱单翻到背面，写下自己的船号和交货的日子，笔尖压得很重。贝利看了一遍，把账册合上，说这一笔从今天起记在船长名下。打手退开时，维斯才低声跟你说，这笔账他会跑完，但跑完之前，你得替他看着潮水。你点头，他却先去看水尺，像是在确认自己还有多少时间。<span class="green">维斯把这笔账接了过去，条件是下一趟夜航。</span><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love -1>><</if>><<stress 2>>
+<<else>>
+你把话说得太满，贝利当场让打手把账册摊在箱盖上，要维斯立刻按手印。维斯按了，指腹在印泥上停了一瞬。贝利走后，他坐在船头很久没说话，只把那张舱单折了又展开。你想开口，他先摆了摆手，说潮水退了还会涨，账接了就慢慢还。<span class="red">手印按下去，船屋里的空气沉了半截。</span><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love -1>><</if>><<stress 4>><<tiredness 2>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpwatchicon>><<link "当面顶回去 (0:15)">><<pass 15>><<replace "#vesper-social2-choice">>
+<<if ($willpower or 0) gte 260 or ($athletics or 0) gte 260>>
+你挡在维斯和账册之间，把每一期的数目重新念了一遍，指出贝利把修船费重复记了两次。贝利盯着你看了很久，最后划掉一行，说下不为例。他走后，维斯把水尺递给你，让你自己读一遍，说敢跟账本较真的人，才配看潮。你接过尺子，掌心还留着刚才攥紧的余温。<span class="green">你从贝利的账册上划掉了一笔重复的数目。</span><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love 1>><</if>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<pain 1>>
+<<else>>
+你顶得太硬，贝利抬手让打手上前，维斯横过一步替你挡住。推搡间你的肩撞在舱门上，账册掉进水里，纸页泡开，数目糊成一片。贝利捡起账册，冷冷说这笔要加利息。维斯没有争，只把你往门里推了推，让你先去坐下。海风从门口灌进来，你半天没缓过劲。<span class="red">账册泡了水，这笔账反而更重了。</span><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love -1>><</if>><<pain 2>><<stress 4>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpcalculateicon>><<link "拆成两笔交 (0:15)">><<pass 15>><<replace "#vesper-social2-choice">>
+<<if ($maths or 0) gte 250 or ($english or 0) gte 250>>
+你让维斯先交一半货抵本金，剩下的写成一张分期字据，利息按潮期算。贝利盯着字据看了半晌，说这种算法他没见过，但还是收了。维斯在旁边没插话，等贝利走远才说，能把账拆开的人，也能把船拆开；他说完自己先笑了一下，像是这句话并不全是夸。<span class="green">你把贝利的账拆成了两笔能交的货。</span><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love 1>><</if>><<tiredness 2>>
+<<else>>
+字据写到一半，你算错了一个数，贝利把纸抽走，说这种账他不收。维斯想把话接过去，被你按住。最后贝利留下一句明天再来，带着人走了。你在船屋里坐了很久，指尖还沾着墨，纸上的错数被灯照得格外清楚。维斯没有催你，只把水尺挂回钉子上。<span class="red">字据算错了，贝利连看都没看完。</span><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love -1>><</if>><<stress 4>><<tiredness 2>>
+<</if>>
+<</replace>><</link>>
+</div>
+<br><br>
+<<getouticon>><<link [[回潮位档 (0:03)|MP NPC Vesper Social Hub]]>><<pass 3>><</link>>
+
+:: MP NPC Vesper Annual [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpInitNpcVesper>>
+<<set $mpNpcs to ($mpNpcs or {})>><<set $mpNpcs.vesper to ($mpNpcs.vesper or { love: 0, trust: 0, axis: 0, annualYear: 0 })>><<set _npc to $mpNpcs.vesper>>
+<<if (_npc.annualYear or 0) is (Time.date.year or 0)>>
+海雾节已经过完，栈桥两侧的雾灯还挂着，灯罩被海风熏出一层灰。维斯把它们一盏盏取下来，用湿布擦净，再收进船屋的木箱。他说灯不能一直挂在外面，雾会钻进灯绳里，来年点起来就不亮了。
+<br><br>
+<<if (_npc.love or 0) gte 15>>收灯的时候他一直让你扶着梯子，自己爬上去解活扣。最后一盏灯取下来，他没用布包，而是递到你手里，说这一盏留着，明年还挂在这个位置。你捧着灯，铜壳上还留着他掌心的温度。海风从栈桥尽头吹过来，灯绳在你腕上轻轻晃。<span class="green">维斯把今年最后一盏雾灯交给了你。</span><<stress -4>>
+<<elseif (_npc.trust or 0) gte 10>>收灯的时候他没让你上梯子，只让你在下面接。灯一盏盏递下来，他偶尔说一句哪盏灯绳该换了，哪盏灯罩该补了。活干完，他把水尺重新读了一遍，说今年的潮水还算给脸。你站在旁边，知道他这话不是随口说的。<span class="green">你们一起把今年的雾灯收进了木箱。</span><<stress -2>>
+<<else>>收灯的时候他一个人上上下下，只让你把木箱挪到门口。灯收完，他在栈桥尽头站了一会儿，才回头说今年到此为止。你应了一声，没有多留，海风把空灯钩吹得轻轻碰着木柱。<</if>>
+<br><br>
+<<else>>
+<div id="vesper-annual-full">
+冬至前一天，旧港的雾比往年厚。海雾节的规矩是先挂灯，再等船：栈桥两侧每隔十步挂一盏蒙布的风灯，灯绳要系成活扣，船回来时一拉就亮；灯亮着，雾里的船才认得出岸。维斯把一捆新搓的灯绳放在船头，又蹲下去看水尺：「冬至夜的水退得早，涨得也急，接人的船得赶在涨潮前回来。」
+<br><br>
+船屋外，几个老船工的家眷已经在栈桥口等着。有人抱着一罐姜茶，有人把旧外套搭在臂弯里。维斯说，今年外海灯船上还有三个老船工，其中一个的眼睛去年就不行了；他答应过要把人接回来，所以这一趟不算跑货，算交货。他说这话时没有看你，只把灯绳一圈圈理开，像在理一件早该交出去的东西。
+<br><br>
+雾从防波堤那边一层层压过来，把远处的灯塔泡成一团模糊的黄。维斯把风灯一盏盏摆上船头，让你先挑一盏提着。灯罩里的火苗被风吹得偏了一下，他伸手护住，掌心在铜壳上留下一小片雾。栈桥口有人低声念着名字，念到第三个时停住了，像是怕念快了，雾里的船会听不清。
+<br><br>
+<div id="vesper-annual-prep-side">
+<<mpdrinkicon>><<link "替家眷分姜茶 (0:08)">><<pass 8>><<replace "#vesper-annual-prep-side">>
+<<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<set _warm to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+你把罐里的姜茶分进几只缺口的搪瓷杯，先递给站在最外面的老人。热气在雾里散得很快，杯壁烫手，你换着手端。维斯在船头看见，没有说什么，只把灯往栈桥口偏了偏。等船的人捧着杯子，低声说了句什么，被风吹散了。<span class="green">你把姜茶分到了等船人的手里。</span><<stress -2>>
+<<else>>
+罐子太沉，你倒茶时手一抖，滚水泼在鞋面上，杯子也摔碎了一只。等船的人摆手说不要紧，你却蹲下去捡碎片，指尖被划了一下。维斯把罐子接过去，让你先到一边站着。<span class="red">姜茶泼了，你的手指被碎瓷划破。</span><<pain 1>><<stress 3>>
+<</if>>
+<</replace>><</link>>
+</div>
+<br><br>
+<div id="vesper-annual-stage">
+<<mprepairicon>><<link "补船头雾灯 (0:10)">><<pass 10>><<replace "#vesper-annual-full">>
+<<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<set _prepLamp to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>>
+你把灯罩的旧裂口用浸过油的薄布一层层糊住，又把灯芯剪齐。火苗重新立起来时，光比先前稳了，风从灯罩外擦过去，只带起一圈很轻的晃。维斯举着灯看了一会儿，说这一盏能撑到天亮。<span class="green">船头的雾灯被你补得稳稳当当。</span><<stress -2>>
+<<else>><<set _prepLamp to 0>>
+灯罩的裂口比看上去深，你糊了两层，火苗还是从缝里往外舔。维斯把灯接过去，重新拆开，没有责怪你，只让你先去把灯绳理齐。你坐在船头理绳，指尖被麻纤维磨得发涩，心里也跟着发紧。<span class="red">灯罩没补严，你只能退到一边理灯绳。</span><<tiredness 2>><<stress 3>>
+<</if>>
+<br><br>
+<div id="vesper-annual-stage">
+<<if _prepLamp>>新补的雾灯挂在船头，火苗稳得几乎不动。<<else>>船头的灯罩还留着一道旧裂，维斯用备用的那盏顶了上去。<</if>><<if _warm>>栈桥口的人还捧着姜茶，杯口的热气在雾里连成一线。<<else>>等船的人把空罐搁在石阶上，手都拢在袖子里。<</if>>雾在傍晚压下来，栈桥上的灯一盏盏亮起，光被雾泡成一团团黄。维斯把船推离栈桥，桨落得很轻。外海的灯船没有靠岸，只在潮窗里漂着等；你们要在雾里找到它，再把三个人接下来。远处有雾号，三短一长，是夜航船回港的调子。维斯让你把手放在舷外，靠水流的凉热辨方向。
+<br><br>
+你们在雾里走了很久，灯船的影子始终没有出现。维斯没有催，只把桨压住，让船顺着暗流慢慢横过去。他说雾里的船不会一直等在原地，得有人先把灯举对地方，它才找得到回来的路。栈桥那边还有人在等，灯绳上的活扣被风吹得一下一下地响。
+<br><br>
+<<mpritualicon>><<link "点亮引航雾灯 (0:15)">><<pass 15>><<set _npc.annualYear to (Time.date.year or 0)>><<replace "#vesper-annual-stage">>
+<<if ($tending or 0) gte 260 or ($willpower or 0) gte 260>>
+你把栈桥上的雾灯一盏盏点亮，灯绳的活扣在风里轻轻作响。维斯把小艇推出湾口，桨声贴着水面走，不快，也不乱。雾里先是浮出一点灯船的光，接着是船头破水的白线；三个老船工裹着毯子坐在舱里，最年长那个眯着眼睛，直到脚踩上栈桥的湿石阶，才低声说了一句回来了。维斯没有多话，只把姜茶递过去，又把最后一盏灯从钩上取下来，交到你手里。那一夜旧港的灯亮到很晚，雾再厚，也没有把岸吞掉。<span class="green">冬至夜，三个老船工循着灯回到了岸上。</span><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -8>>
+<<else>>
+灯绳的活扣不知什么时候松了，第一盏灯歪下去，光被雾压得很低。维斯在湾口来回绕了两趟，雾号响过，却没有船应。天亮前，灯船终于从另一条水道靠了岸，只回来两个人；最年长的那位留在外海，说要把最后一班岗站完。维斯把空出来的那盏灯取下来，没有点，只让你捧着。回程时他走在前面，脚步很慢，说有些船不是没回来，是把回来的路让给了别人。<span class="red">灯歪了一盏，最年长的船工没有回来。</span><<stress 6>><<tiredness 4>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<mpcarryicon>><<link "摇船穿雾接人 (0:15)">><<pass 15>><<set _npc.annualYear to (Time.date.year or 0)>><<replace "#vesper-annual-stage">>
+<<if ($athletics or 0) gte 260 or ($skulduggery or 0) gte 260>>
+你没有等灯船靠过来，和维斯轮流摇桨，循着雾号的间隔往深处切。浪把船头托起来又摔下去，你的掌心被桨柄磨得发烫，终于在第三次雾号响起时看见了灯船低矮的舷边。三个老船工被一个个扶下来，最年长那个抓住你的手腕，力气大得不像这个年纪。回程时维斯让你掌舵，自己坐在船头压重量，桨声一直没停。靠岸后他才说，这一趟算你把船开回来了。<span class="green">你摇船穿过浓雾，把三个人都接了回来。</span><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<pain 2>><<stress -6>>
+<<else>>
+雾比看上去更厚，桨声传不出去，雾号也像从水底冒上来的。你们在暗流里兜了半宿，船头撞上一截浮木，桨脱了手，维斯伸手把你按住，自己探身去够。等灯船终于出现时，天边已经泛白，三个人只接回来两个。维斯没有说什么，只把湿透的桨收进船里，让你先裹上毯子。你坐在船头，手上的水顺着指缝往下滴。<span class="red">船头撞上浮木，有一个人没能接回来。</span><<pain 3>><<stress 6>><<tiredness 3>>
+<</if>>
+<</replace>><</link>>
+<br>
+<<link "守灯不近船 (0:15)">><<pass 15>><<set _npc.annualYear to (Time.date.year or 0)>><<replace "#vesper-annual-stage">>
+<<if ($willpower or 0) gte 250 or ($science or 0) gte 250>>
+你没有去追雾里那道模糊的船影，只守住栈桥的灯，让光留在岸上。维斯站在你旁边，把手里的灯压到最低；雾里传来一声很旧的船钟，三短一长，像很多年前就该响完的那一趟。他没有开船，只把灯举高了一寸，又缓缓放下，算是替那条船回了礼。天亮后，栈桥上的灯一盏盏熄灭，他把断齿的船钟齿轮从墙上取下来，放进你掌心，说今年这盏灯，算是交给该交的人了。<span class="green">你守住了岸上的灯，也送走了雾里那条旧船。</span><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<tiredness 2>><<stress -2>>
+<<else>>
+你守着灯站了半宿，雾里的船影却越来越淡，最后连钟声也听不见了。维斯把灯从钩上取下来，说该来的会来，不该来的，灯再亮也留不住。栈桥口等船的人一个个散去，有人把姜茶留在石阶上，罐口还冒着一点白气。维斯没有催你走，只陪你把剩下的灯一盏盏熄灭。天亮时，海面平得像一块旧铁皮。<span class="red">灯守到天亮，雾里的船始终没有靠岸。</span><<stress 5>><<tiredness 3>>
+<</if>>
+<</replace>><</link>>
+</div>
+<</replace>><</link>>
+</div>
+</div>
+<</if>>
+<br><br>
+<<link [[回潮位档 (0:03)|MP NPC Vesper Social Hub]]>><<pass 3>><</link>>

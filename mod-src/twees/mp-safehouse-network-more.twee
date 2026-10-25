@@ -1,0 +1,149 @@
+:: MP Safehouse Network More Hub [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+<<set _openCount to ($mpSafehouses.docks.unlocked or 0) + ($mpSafehouses.orphanage.unlocked or 0) + ($mpSafehouses.temple.unlocked or 0) + ($mpSafehouses.highstreet.unlocked or 0) + ($mpSafehouses.forest.unlocked or 0) + ($mpSafehouses.school.unlocked or 0)>>
+<<set _riskSum to ($mpSafehouses.docks.risk or 0) + ($mpSafehouses.orphanage.risk or 0) + ($mpSafehouses.temple.risk or 0) + ($mpSafehouses.highstreet.risk or 0) + ($mpSafehouses.forest.risk or 0) + ($mpSafehouses.school.risk or 0)>>
+<<set _highTier to (($mpSafehouses.docks.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.orphanage.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.temple.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.highstreet.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.forest.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.school.tier or 0) gte 2 ? 1 : 0)>>
+退潮后的第三个晚上，旧港四号仓库背后的矮门虚掩着。你侧身钻进去，墙上的铜环还钉在原处，只是环下多了一张被水泡皱的纸。管钥匙的老妇把纸摊在账册上，纸角滴下的水正落在「维护」两个字上，墨迹慢慢洇成一团。她没有抬头，只说这张纸是从六处窝里一张张撕回来的。
+<br><br>
+纸上没有抬头，只有六行歪斜的炭字。第一行记着该补的瓦，第二行记着巡夜人的脚步，第三行记着断掉的梁，第四行记着积水的暗渠，第五行记着巷口新搬来的邻居，最后一行只画了一道向上的水纹。老妇用指甲刮了刮那道水纹：「前五样是人惹的，最后一样是天给的。人惹的还能躲，天给的只能抢在它前面。」
+<br><br>
+六处窝不是六把锁，是六张嘴。能落脚的地方越多，每周要填的窟窿就越厚；哪一处久无人去，门轴先锈，锈到转不动那天，敲门的就不再是你。老妇把算盘往你面前推了推，说账可以先不结，但哪一笔拖到下一场雨，利息就不是铜板能算清的了。
+<br><br>
+<<if _openCount is 0>>账页上还只有空栏和旧指印，六处窝全是空壳，连一张能铺开的褥子都没算进去。老妇说这倒省心，空的窝没人抢，也没人替你守。<<elseif _openCount lte 2>>能落脚的地方只有一两处，账页一半仍是空的，剩下的墨迹被潮气泡得发白。<<else>>能落脚的窝已经连成半圈，账页上的行距越来越密，老妇翻页时得用两根手指按着，生怕风把纸吹乱。<</if>>
+<<if _riskSum gte 110>>风险已经压得纸角往上翘，巡夜人的灯笼只要多拐一个弯，就有一处要露底；老妇把最上面那张纸抽出来，单独压在镇纸底下。<<elseif _riskSum gte 70>>风险不高不低，像屋檐下悬着的一排冰凌，一时不掉，化了却会连着滴；账页边缘因此留着几道反复摩挲的指痕。<<else>>风险还压得住，六处的门都还没有被谁记住；老妇说这是最该趁手的时候，等别人替你记住，就轮不到你安排了。<</if>>
+<<if ($mpFogTide or 0) gte 3>>雾潮的水尺一直在涨，低处的墙根已经泛出盐花，账页最末那道水纹被人用炭笔描粗了两遍。<<elseif ($mpFogTide or 0) gte 1>>雾潮比往常高些，暗渠里的水声隔着砖墙也听得见，靠水的两处要早做打算。<<else>>雾潮眼下还算安分，水纹只画了浅浅一道，但老妇不肯把它擦掉，说留着她才知道该往哪里看。<</if>>
+<br><br>
+她把六张撕下来的纸按顺序排开，纸背朝上，让你自己挑先看哪一张。每一张都带着不同地方的气味：有腌鱼的咸，有阁楼的灰，有树皮的涩，也有街面茶水的甜。<br><br>
+<<getouticon>><<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><</link>><br>
+<<mpcalculateicon>><<link [[核对维护账 (0:02)|MP Safehouse Network Extra 1]]>><<pass 2>><</link>><br>
+<<mpwatchicon>><<link [[应对贝利巡查 (0:02)|MP Safehouse Network Extra 2]]>><<pass 2>><</link>><br>
+<<mprepairicon>><<link [[抢修坏设施 (0:02)|MP Safehouse Network Extra 3]]>><<pass 2>><</link>><br>
+<<link [[走暗渠转移 (0:02)|MP Safehouse Network Extra 4]]>><<pass 2>><</link>><br>
+<<link [[应付邻居窥探 (0:02)|MP Safehouse Network Extra 5]]>><<pass 2>><</link>><br>
+<<link [[抢在雾潮前 (0:02)|MP Safehouse Network Extra 6]]>><<pass 2>><</link>><br>
+<<link [[收束网络定局 (0:03)|MP Safehouse Network Extra Outcome]]>><<pass 3>><</link>>
+
+:: MP Safehouse Network Extra 1 [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+账房后间没有窗，只有一盏罩着铁皮的油灯。老妇把六枚颜色不同的木筹码排在桌沿，每枚底下压着一小截绳头，绳头长短不一。她说这是六处窝这一周耗掉的东西：油、钉子、麻布、给孩子留的面包、给守夜人添的酒。筹码不用钱买，只用东西换，可东西最后都要有人去补。
+<br><br>
+码头那处最先出声。墙根被海风啃了一冬，靠地的那排砖已经酥了，指尖一抠就掉渣；雨季一到，水会顺着砖缝爬到矮床底下。孤儿院的瓦也被风掀了两片，阁楼接了半罐雨水，褥子边角已经发硬。老妇说她可以替你把这两处先记在账上，但记上去的数目下周还在，不会自己变少。
+<br><br>
+她给你三条路。第一条是自己动手：拿灰浆补砖缝，用旧瓦换掉碎的那两片，能省下一笔开销，也能把两处墙脚重新压实。第二条是先拖着：把这一周的开销挪去别处，账面轻了，可墙上的裂缝不会等人，巡夜的人若正好从那道缝里看见灯影，麻烦会翻倍。第三条是索性封掉一处不常去的夹层，把里头的木料拆出来补别处，地方小一点，账也薄一点。
+<br><br>
+<<if ($housekeeping or 0) gte 200 or ($tending or 0) gte 200>>你摸过墙上的灰，知道哪一块是后补的，哪一块是原装的；补起来不算难，难的是补完要等它干透，不能急着刷第二遍。<<else>>你伸手按了按砖面，指腹立刻沾上一层白霜似的粉末。这样的墙不是抹一把灰就能糊住的，得先把酥掉的整层敲下来，再拿新砖垫进去。<</if>>
+<br><br>
+老妇把灰浆桶往你脚边推了推，又把账页翻到空白那面，摆明了两件事都由你定：是花力气把窟窿补上，还是把窟窿记到下一周。桶里的灰浆已经结了一层薄皮，你用木片把它搅开，底下还是湿的；补墙这活不怕慢，怕的是补完就下雨。灯芯烧得短了，火苗忽然矮下去，墙上的影子跟着缩了一圈，老妇说今晚没有雨，明天就说不准了。
+<br><br>
+<<getouticon>><<link [[返回安全屋账页 (0:02)|MP Safehouse Network More Hub]]>><<pass 2>><</link>><br>
+<<mprepairicon>><<if ($housekeeping or 0) gte 200 or ($tending or 0) gte 200>><<link [[亲手补墙缝 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.docks.risk to Math.max(0, ($mpSafehouses.docks.risk or 20) - 5)>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 3)>><<set $mpSafehouses.docks.upkeep to Math.max(5, ($mpSafehouses.docks.upkeep or 10) - 2)>><<tiredness 2>><<stress -1>><</link>><<else>><<link [[亲手补墙缝 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.docks.risk to Math.min(45, ($mpSafehouses.docks.risk or 20) + 4)>><<stress 3>><<tiredness 2>><</link>><</if>><br>
+<<mpcalculateicon>><<link [[暂缓这笔账 (0:06)|MP Safehouse Network More Hub]]>><<pass 6>><<for _loc range ["docks", "orphanage", "temple", "highstreet", "forest", "school"]>><<if $mpSafehouses[_loc].unlocked>><<set $mpSafehouses[_loc].risk to Math.min(50, ($mpSafehouses[_loc].risk or 20) + 3)>><<set $mpSafehouses[_loc].upkeep to ($mpSafehouses[_loc].upkeep or 10) + 2>><</if>><</for>><<stress -2>><</link>><br>
+<<if ($mpSafehouses.orphanage.tier or 0) gte 1>><<link [[封掉一层阁楼 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.orphanage.tier to Math.max(0, ($mpSafehouses.orphanage.tier or 0) - 1)>><<set $mpSafehouses.orphanage.bed to ($mpSafehouses.orphanage.tier gte 1 ? 1 : 0)>><<set $mpSafehouses.orphanage.stash to ($mpSafehouses.orphanage.tier gte 1 ? 1 : 0)>><<set $mpSafehouses.orphanage.bench to ($mpSafehouses.orphanage.tier gte 2 ? 1 : 0)>><<set $mpSafehouses.orphanage.beacon to ($mpSafehouses.orphanage.tier gte 3 ? 1 : 0)>><<set $mpSafehouses.orphanage.upkeep to $mpSafehouses.orphanage.tier * 15>><<set $mpSafehouses.orphanage.risk to Math.min(45, ($mpSafehouses.orphanage.risk or 20) + 5)>><<tiredness 2>><<stress 1>><</link>><<else>><<link [[封掉一层阁楼 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.orphanage.risk to Math.min(45, ($mpSafehouses.orphanage.risk or 20) + 2)>><<stress 2>><<tiredness 1>><</link>><</if>>
+
+:: MP Safehouse Network Extra 2 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+孤儿院的晚祷刚散，楼下还留着孩子们拖椅子的响动。你贴在阁楼门后，听见院门口有人用指节敲了三下铁栅，隔一会儿又敲两下。老妇说过这个节奏：贝利的人来核名册时从不喊门，只敲暗号，让屋里的人自己把门打开，显得整座院子都听话。
+<br><br>
+上来的是个披灰斗篷的抄册人，身后跟着两张陌生面孔。一个在楼下翻柜子，一个堵在楼梯转角清点人数。抄册人把册子摊在走廊的矮桌上，先点孩子的名字，再点铺位的数目；每点完一页，就用铅笔在页脚画一道短短的斜线。斜线画到第几页，就说明他查到第几间屋子。
+<br><br>
+阁楼夹层就在他头顶。你脚下是一层薄板，板上铺着褥子，褥子下面塞着暗匣；只要他在楼梯口多站一会儿，仰头看一眼天花板，木板缝里漏下的灯光就够他把整层看穿。眼下有三条路：把夹层清空，褥子和暗匣都挪走，让他只看见一间堆旧外套的空阁楼；照常留人过夜，赌他不会抬头；或者下楼去，把巡查的人引到码头那边，让他在孤儿院少待一刻钟。
+<br><br>
+<<if ($housekeeping or 0) gte 200>>你叠褥子的手法够快，边角一压就能塞进旧外套底下，木板缝里的灰也能顺手抹平；清空一层夹层，对你来说不过是一刻钟的事。<<else>>你抱起褥子才发现夹层比想象中窄，暗匣又重，挪动时木板吱呀作响；要清得看不出住过人，得来回跑好几趟。<</if>>
+<br><br>
+楼下的铅笔还在纸上沙沙地走。抄册人忽然停下，问了一句：「这层楼板上头，是不是还有一间？」管事的嬷嬷笑着说是堆杂物的地方，门早就钉死了。抄册人没有立刻接话，只把手里的册子合上，抬眼往楼梯这边看。嬷嬷的手在围裙上擦了两下，笑意还挂着，眼神却往楼梯口偏。你听见楼下有个孩子咳了一声，随即被另一个孩子捂住嘴，整座院子安静得能听见铅笔尖在纸上顿住的轻响。
+<br><br>
+<<getouticon>><<link [[返回安全屋账页 (0:02)|MP Safehouse Network More Hub]]>><<pass 2>><</link>><br>
+<<mpcleanicon>><<link [[清空阁楼夹层 (0:14)|MP Safehouse Network More Hub]]>><<pass 14>><<set $mpSafehouses.orphanage.stash to 0>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 8)>><<set $mpSafehouses.orphanage.upkeep to Math.max(5, ($mpSafehouses.orphanage.upkeep or 10) - 1)>><<tiredness 3>><<stress 1>><</link>><br>
+<<mpwatchicon>><<link [[留人照常过夜 (0:06)|MP Safehouse Network More Hub]]>><<pass 6>><<set $mpSafehouses.orphanage.risk to Math.min(50, ($mpSafehouses.orphanage.risk or 20) + 10)>><<mpalert 3>><<stress 5>><</link>><br>
+<<mpeavesdropicon>><<if ($skulduggery or 0) gte 200 or ($sneak or 0) gte 200>><<link [[把巡查引去码头 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.docks.risk to Math.min(50, ($mpSafehouses.docks.risk or 20) + 6)>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 5)>><<mpalert 2>><<tiredness 1>><</link>><<else>><<link [[把巡查引去码头 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.orphanage.risk to Math.min(50, ($mpSafehouses.orphanage.risk or 20) + 4)>><<stress 4>><<pain 1>><</link>><</if>>
+
+:: MP Safehouse Network Extra 3 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+林间的雨下了整夜，绳桥的木板泡得发胀。你踩着树根摸到树屋底下，先看见的是那根主梁：靠西的一头裂开一道斜口，裂缝里渗出深色的水，木屑被雨水冲得满地都是。昨晚的炉子还搁在梁上，工台靠着它，台面已经斜下去，钳子和油壶滑到了屋角。
+<br><br>
+树屋里没人。炉灰是冷的，说明住在这里的人昨夜没回来，或者回来又走了。你把耳朵贴在主梁上，能听见纤维一根根绷紧的细响；雨再下一夜，裂口就会从斜口一路撕到屋脊。工台还能拆，拆下来的硬木正好拿来做两根撑柱；可拆了工台，这一处就再没有能修东西的地方。硬修也不是不行，拿绳子把裂口捆住，再往缝里楔木片，撑得过这一季，撑不过下一场大风。
+<br><br>
+绳桥那头传来一声闷响，像是有谁踩断了一根枯枝。你没有回头，只把带来的短绳在手腕上绕了一圈。树屋的地板离地很高，底下的腐叶接不住人；修梁的时候脚下要稳，手上要慢，任何一样错，都会让这处窝连人带板一起塌下去。
+<br><br>
+<<if ($tending or 0) gte 220 or ($science or 0) gte 220>>你看得出这根梁吃力的方向，也知道该把撑柱顶在哪个节点上；只要木片楔得对，裂口不会再往下走。<<else>>你用手比了比裂口，估算不出它还能撑多久；这样的伤不是缠几圈绳子就能了事的，硬修多半只是把塌的时间往后挪几天。<</if>>
+<br><br>
+雨点打在树叶上，声音密得像有人在头顶翻账本。树屋下方的腐叶被雨水泡得发亮，几只小虫贴着水面爬。你把短绳的一头系在撑柱的位置上，另一头垂到楼下，试了试长度；绳子够长，可绳子接不住一根正在断裂的梁。林子里的潮气顺着裂缝往木头里钻，手指按下去，梁面会渗出一点水。你摸了摸主梁，把决定留在了手心里：拆、修，还是干脆放弃这处树屋，让林子自己把空壳收回去。
+<br><br>
+<<getouticon>><<link [[返回安全屋账页 (0:02)|MP Safehouse Network More Hub]]>><<pass 2>><</link>><br>
+<<mprepairicon>><<link [[拆工台补梁 (0:14)|MP Safehouse Network More Hub]]>><<pass 14>><<set $mpSafehouses.forest.bench to 0>><<set $mpSafehouses.forest.risk to Math.max(0, ($mpSafehouses.forest.risk or 20) - 3)>><<set $mpSafehouses.forest.upkeep to Math.max(5, ($mpSafehouses.forest.upkeep or 10) - 3)>><<tiredness 2>><<stress 1>><</link>><br>
+<<if ($tending or 0) gte 220 or ($science or 0) gte 220>><<link [[用木料硬修 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.forest.risk to Math.max(0, ($mpSafehouses.forest.risk or 20) - 2)>><<set $mpSafehouses.forest.upkeep to ($mpSafehouses.forest.upkeep or 10) + 2>><<tiredness 2>><<stress 1>><</link>><<else>><<link [[用木料硬修 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.forest.tier to Math.max(0, ($mpSafehouses.forest.tier or 0) - 1)>><<set $mpSafehouses.forest.bed to ($mpSafehouses.forest.tier gte 1 ? 1 : 0)>><<set $mpSafehouses.forest.stash to ($mpSafehouses.forest.tier gte 1 ? 1 : 0)>><<set $mpSafehouses.forest.bench to 0>><<set $mpSafehouses.forest.beacon to ($mpSafehouses.forest.tier gte 3 ? 1 : 0)>><<set $mpSafehouses.forest.upkeep to $mpSafehouses.forest.tier * 15>><<set $mpSafehouses.forest.risk to Math.min(50, ($mpSafehouses.forest.risk or 20) + 5)>><<stress 4>><<pain 2>><</link>><</if>><br>
+<<link [[暂时弃掉此窝 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.forest.unlocked to 0>><<set $mpSafehouses.forest.tier to 0>><<set $mpSafehouses.forest.bed to 0>><<set $mpSafehouses.forest.stash to 0>><<set $mpSafehouses.forest.bench to 0>><<set $mpSafehouses.forest.beacon to 0>><<set $mpSafehouses.forest.upkeep to 0>><<set $mpSafehouses.forest.risk to 0>><<stress 3>><<tiredness 1>><</link>>
+
+:: MP Safehouse Network Extra 4 [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+暗渠的入口在码头冷库后面，平时被一排空鱼筐挡着。今夜筐被挪开了半尺，露出底下一块活动的青石。你掀开石头，一股混着铁锈和烂泥的气味涌上来，渠水在黑里反着一点碎光，水面比上个月高了不少，已经漫过第一层砖台。
+<br><br>
+高街那边等着接货。钟楼暗阁的暗匣要换一批东西，而码头这处多出来的两只木箱又不能久留；走街面要绕三个哨卡，走暗渠只要顺着水声一直往前，从钟楼底下的旧排水口钻出去。老妇说过，暗渠不是路，是一条会呼吸的缝：潮水涨时它往里吞，潮水退时它往外吐，人只能挑它换气的那一阵过去。
+<br><br>
+你把裤脚卷到膝盖，先伸一只脚试了试水温。水冷得像刀背，渠底的石板滑得站不住，头顶的砖拱低的地方要弯腰，窄的地方肩膀会蹭到墙。木箱不能沾水，得举过头顶；两只箱子，一个人搬，来回就是两趟。你也可以分几次慢慢运，每次只带一只，多跑两夜，风险小些；或者干脆从街面走，快是快，可街上的灯笼比渠里的水更认人。
+<br><br>
+<<if ($sneak or 0) gte 220 or ($skulduggery or 0) gte 200>>你听得出水声在哪一段变闷，哪一段底下有暗坎；贴着墙走，脚下的石板虽滑，却不会把人带进深水。<<else>>你刚走几步就踩空了一下，膝盖磕在渠壁上，水声把响动放得很大；这样的路，走一趟可以，走两趟未必还能摸回原处。<</if>>
+<br><br>
+渠口的风忽然倒灌，水面浮起一层白色的沫。你退回青石边，把木箱重新捆紧；绳子勒进箱角，发出干涩的摩擦声，水面上浮着的几片碎木转了两圈，又被吸进更深的暗道里。木箱底下的水线又往上爬了一指，箱角已经开始发软；你算了算潮水换气的时辰，知道再拖下去，连渠口那块青石都会被水顶住。远处高街的钟敲了半下，声音顺着排水口落下来，闷闷的，像有人在地底数着你的脚步。
+<br><br>
+<<getouticon>><<link [[返回安全屋账页 (0:02)|MP Safehouse Network More Hub]]>><<pass 2>><</link>><br>
+<<mplockpickicon>><<if ($sneak or 0) gte 220 or ($skulduggery or 0) gte 200>><<link [[连夜走暗渠 (0:16)|MP Safehouse Network More Hub]]>><<pass 16>><<set $mpSafehouses.docks.risk to Math.max(0, ($mpSafehouses.docks.risk or 20) - 4)>><<set $mpSafehouses.highstreet.risk to Math.max(0, ($mpSafehouses.highstreet.risk or 20) - 4)>><<set $mpSafehouses.docks.stash to ($mpSafehouses.docks.tier gte 1 ? 1 : 0)>><<mpalert -3>><<tiredness 2>><</link>><<else>><<link [[连夜走暗渠 (0:16)|MP Safehouse Network More Hub]]>><<pass 16>><<set $mpSafehouses.docks.risk to Math.min(50, ($mpSafehouses.docks.risk or 20) + 7)>><<mpalert 4>><<stress 4>><<pain 2>><</link>><</if>><br>
+<<mpcarryicon>><<link [[分批慢运 (0:20)|MP Safehouse Network More Hub]]>><<pass 20>><<set $mpSafehouses.docks.risk to Math.max(0, ($mpSafehouses.docks.risk or 20) - 2)>><<set $mpSafehouses.highstreet.risk to Math.max(0, ($mpSafehouses.highstreet.risk or 20) - 2)>><<set $mpSafehouses.docks.upkeep to ($mpSafehouses.docks.upkeep or 10) + 2>><<set $mpSafehouses.highstreet.upkeep to ($mpSafehouses.highstreet.upkeep or 10) + 2>><<tiredness 3>><<stress -1>><</link>><br>
+<<walkicon>><<link [[改走街面 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.highstreet.risk to Math.min(50, ($mpSafehouses.highstreet.risk or 20) + 6)>><<mpalert 5>><<tiredness 1>><<stress 1>><</link>>
+
+:: MP Safehouse Network Extra 5 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+高街钟楼对面的巷子里新搬来一户人家。女人带着一个半大的孩子，白天在门口支一张矮凳择菜，眼睛却总往钟楼那边瞟。你从侧巷进出第三次时，她终于开口了，问你是不是在钟楼里做事，问修钟匠是不是还住在塔上，问塔上那间小屋夜里亮不亮灯。
+<br><br>
+她的问题都不重，一句一句地落下来，像往秤盘上加石子。你答得太顺，她会记住你的脸；你一句不答，她又会去问隔壁的店主。钟楼暗阁的优势本来就在高处和安静，可这份安静如今多了一双眼睛盯着；那户人家的窗正对铁梯，黄昏时屋里不开灯，人影却映在窗帘上。
+<br><br>
+老妇听说后，给你出了三个主意。请她进屋喝一碗茶，把话头摊开，能换来一时的安稳，但要搭上茶叶和几句好听话；趁夜把她家门口的记号挪走，让她分不清你从哪一边进塔，这需要手脚干净；再不然，就索性请她替你看门，给她一份常年的补贴，让她替你留意巷口的生人。
+<br><br>
+<<if ($charm or 0) gte 200 or ($housekeeping or 0) gte 200>>你懂得怎么把话说到对方心里去，也知道主妇最在意的是孩子和米价；一碗热茶配几句实在话，比堵她的嘴更有用。<<else>>你站在门口，话到嘴边又觉得生硬；这样的邻居不是哄一句就能打发的，答得不好，反倒让她更想弄清楚钟楼里住了谁。<</if>>
+<br><br>
+孩子蹲在矮凳旁边玩一枚磨旧的铜扣，抬头看了你一眼，又低头继续玩。女人忽然说，她男人去年也是夜里出门做事，后来就没再回来，只在门口留下这枚铜扣。她把话说得很轻，像在说邻家的旧闻，眼睛却没有离开你的脸。她把择好的菜拢进篮子，没有催你回答，只是把择下来的黄叶一片片收进手心。巷口的风把篮底一片黄叶吹到铁梯脚下，她也没有去捡。凳子往门里挪了挪，给你让出一条能走的道。
+<br><br>
+<<getouticon>><<link [[返回安全屋账页 (0:02)|MP Safehouse Network More Hub]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<if ($charm or 0) gte 200 or ($housekeeping or 0) gte 200>><<link [[请她进屋喝茶 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.highstreet.risk to Math.max(0, ($mpSafehouses.highstreet.risk or 20) - 5)>><<set $mpSafehouses.highstreet.upkeep to ($mpSafehouses.highstreet.upkeep or 10) + 3>><<stress -2>><</link>><<else>><<link [[请她进屋喝茶 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.highstreet.risk to Math.min(50, ($mpSafehouses.highstreet.risk or 20) + 5)>><<stress 3>><<tiredness 1>><</link>><</if>><br>
+<<mpsneakicon>><<if ($sneak or 0) gte 200 or ($skulduggery or 0) gte 200>><<link [[半夜挪走标记 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.highstreet.risk to Math.max(0, ($mpSafehouses.highstreet.risk or 20) - 7)>><<mpalert -2>><<tiredness 1>><</link>><<else>><<link [[半夜挪走标记 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.highstreet.risk to Math.min(50, ($mpSafehouses.highstreet.risk or 20) + 3)>><<mpalert 5>><<pain 2>><<stress 3>><</link>><</if>><br>
+<<mpbargainicon>><<link [[请她替你看门 (0:14)|MP Safehouse Network More Hub]]>><<pass 14>><<set $mpSafehouses.highstreet.risk to Math.max(0, ($mpSafehouses.highstreet.risk or 20) - 10)>><<set $mpSafehouses.highstreet.upkeep to ($mpSafehouses.highstreet.upkeep or 10) + 6>><<mpalert -2>><<stress 1>><</link>>
+
+:: MP Safehouse Network Extra 6 [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+雾潮来的时候没有雷，只有水。先是码头栈桥下的水声变了调，接着冷库后面的暗渠开始往上冒泡，最后连四号仓库的门槛都渗出一线发亮的湿痕。你赶到时，靠水那处窝的最低一层已经积了半尺水，腌鱼桶浮起来又撞在墙上，发出空洞的响声。
+<br><br>
+暗匣就在最低那格砖台上，水已经漫到匣底。再往上涨一点，匣子里的干布和纸就会被泡透。林间树屋那边也未必好过，绳桥低处的木板肯定已泡在水里，炉子和柴堆若没垫高，这一夜就白搭。雾潮不看人的账本，它只按水尺办事；你能做的，是在它漫过某一格之前，把那一格的东西搬走，或者把水引去别处。
+<br><br>
+引水需要懂暗渠的走向，知道哪块闸板还能扳动，哪一段旧沟没有被砖头堵死；搬东西则靠腿脚和力气，来回几趟，把能救的先救出来。还有一条最省事也最心疼的路：放弃靠水的最低一层，把上面封好，让水自己灌满下面，地方小了，往后要守的东西也少了。
+<br><br>
+<<if ($mpFogTide or 0) gte 3>>水尺已经高过往常许多，渠口的铁栅被水推得嗡嗡作响；这一夜不是修修补补的天气，能抢回多少算多少。<<elseif ($mpFogTide or 0) gte 1>>水涨得比预想快，但还没到封路的地步；只要动作利落，低处的东西大多来得及搬。<<else>>雾潮比账上记的温和，水线停在砖台下面，你还有工夫挑一挑先救哪一样。<</if>>
+<br><br>
+<<if ($athletics or 0) gte 220 or ($tending or 0) gte 200>>你踩进水里，脚下虽滑，重心却压得住；一匣一匣往外递，比整箱硬拖要稳，也不会把匣底的木板泡散。<<else>>水比看上去更急，你刚弯腰去够暗匣，脚底就被冲得偏了半步；这样的水势，硬搬容易连人带匣一起滑进渠里。<</if>>
+<br><br>
+仓库外传来有人涉水跑过的声音，随即又远了。你把暗匣的提手攥在手里，木柄被水泡得发滑；袖子往上又卷了一圈，你盯着那格还在水面下的砖台。
+<br><br>
+<<getouticon>><<link [[返回安全屋账页 (0:02)|MP Safehouse Network More Hub]]>><<pass 2>><</link>><br>
+<<mpcarryicon>><<if ($athletics or 0) gte 220 or ($tending or 0) gte 200>><<link [[抢搬低处暗匣 (0:14)|MP Safehouse Network More Hub]]>><<pass 14>><<set $mpSafehouses.docks.risk to Math.max(0, ($mpSafehouses.docks.risk or 20) - 4)>><<set $mpSafehouses.docks.stash to ($mpSafehouses.docks.tier gte 1 ? 1 : 0)>><<set $mpSafehouses.docks.upkeep to ($mpSafehouses.docks.upkeep or 10) + 2>><<tiredness 3>><<stress -1>><</link>><<else>><<link [[抢搬低处暗匣 (0:14)|MP Safehouse Network More Hub]]>><<pass 14>><<set $mpSafehouses.docks.stash to 0>><<set $mpSafehouses.docks.risk to Math.min(50, ($mpSafehouses.docks.risk or 20) + 6)>><<pain 2>><<stress 3>><</link>><</if>><br>
+<<mpclockworkicon>><<if ($science or 0) gte 220 or ($skulduggery or 0) gte 200>><<link [[开闸放水 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.docks.risk to Math.max(0, ($mpSafehouses.docks.risk or 20) - 5)>><<set $mpSafehouses.forest.risk to Math.max(0, ($mpSafehouses.forest.risk or 20) - 3)>><<set $mpSafehouses.docks.upkeep to ($mpSafehouses.docks.upkeep or 10) + 4>><<set $mpSafehouses.forest.upkeep to ($mpSafehouses.forest.upkeep or 10) + 3>><<tiredness 2>><<stress -1>><</link>><<else>><<link [[开闸放水 (0:12)|MP Safehouse Network More Hub]]>><<pass 12>><<set $mpSafehouses.docks.risk to Math.min(50, ($mpSafehouses.docks.risk or 20) + 5)>><<set $mpSafehouses.forest.risk to Math.min(50, ($mpSafehouses.forest.risk or 20) + 5)>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<if ($mpSafehouses.docks.tier or 0) gte 1>><<link [[弃低处保高处 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.docks.tier to Math.max(0, ($mpSafehouses.docks.tier or 0) - 1)>><<set $mpSafehouses.docks.bed to ($mpSafehouses.docks.tier gte 1 ? 1 : 0)>><<set $mpSafehouses.docks.stash to 0>><<set $mpSafehouses.docks.bench to ($mpSafehouses.docks.tier gte 2 ? 1 : 0)>><<set $mpSafehouses.docks.beacon to ($mpSafehouses.docks.tier gte 3 ? 1 : 0)>><<set $mpSafehouses.docks.upkeep to $mpSafehouses.docks.tier * 15>><<set $mpSafehouses.docks.risk to Math.max(0, ($mpSafehouses.docks.risk or 20) - 4)>><<stress 2>><<tiredness 2>><</link>><<else>><<link [[弃低处保高处 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.docks.risk to Math.min(50, ($mpSafehouses.docks.risk or 20) + 4)>><<set $mpSafehouses.docks.upkeep to Math.max(5, ($mpSafehouses.docks.upkeep or 10) - 2)>><<stress 3>><<tiredness 2>><</link>><</if>>
+
+:: MP Safehouse Network Extra Outcome [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpSafehouseInit>>
+<<set _openCount to ($mpSafehouses.docks.unlocked or 0) + ($mpSafehouses.orphanage.unlocked or 0) + ($mpSafehouses.temple.unlocked or 0) + ($mpSafehouses.highstreet.unlocked or 0) + ($mpSafehouses.forest.unlocked or 0) + ($mpSafehouses.school.unlocked or 0)>>
+<<set _riskSum to ($mpSafehouses.docks.risk or 0) + ($mpSafehouses.orphanage.risk or 0) + ($mpSafehouses.temple.risk or 0) + ($mpSafehouses.highstreet.risk or 0) + ($mpSafehouses.forest.risk or 0) + ($mpSafehouses.school.risk or 0)>>
+<<set _highTier to (($mpSafehouses.docks.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.orphanage.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.temple.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.highstreet.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.forest.tier or 0) gte 2 ? 1 : 0) + (($mpSafehouses.school.tier or 0) gte 2 ? 1 : 0)>>
+老妇把六张纸重新叠好，压回账册里，只留下最后一页空白。她说这一页不记开销，只记定局；定局一落笔，往后六处窝就照这个法子过下去，改起来要花双倍的工夫。灯芯挑高了，纸面被照得发白，边角的水痕像一圈旧地图。
+<br><br>
+她把笔搁在你面前，笔尖上还沾着上一页没有干透的墨。六处窝的账已经翻到最后一页，能落脚的地方、还能撑多久的墙、谁家的灯夜里亮着，全在纸上摆着，只差一个字。她说字不能乱写：写贯通，往后走的是地底下的路，省时也省脚力，可一条路通了，六处就成了一条绳上的结；写加固，往后守的是各自的墙，门厚了，路却还是地面上的老路。
+<br><br>
+<<if _openCount is 0>>账上还没有一处真正能住人的窝。老妇说这时候落笔最轻，也最没意思：没有路可通，也没有墙可加，只能把几处空壳的门从里头钉死，记一笔「加固」，等哪天有人再回来把钉子起出来。<<elseif _openCount lte 2 and _highTier is 0>>能用的窝太少，彼此离得也远，硬要把它们串成一条暗路，中间得穿过太多别人的地界。她劝你只在已经能住人的那几处上做文章，墙虽不多，至少守得住。<<else>>账上的窝已经够多，彼此的距离也不再是问题。老妇用指尖在纸面上虚划了一条线，从靠水的那处一直连到高处，说这条线画不画，只在你一念之间。<</if>>
+<br><br>
+<<if $mpSafehouses.outcome is "linked">>定局栏里已经写着「暗道贯通」。六处窝被窄道接了起来，夜里的路比白天短，巡夜的岗哨往往要迟一步才察觉；再落一次笔，只会把已经接好的线搅乱。<<elseif $mpSafehouses.outcome is "fortified">>定局栏里已经写着「重装加固」。六处窝各守各的门，墙比路更可靠，代价是每一趟往来都得贴着街面绕远；再落一次笔，只会把已经钉死的板子再撬开。<<else>>定局栏还空着，像账页末尾那道等人落笔的横线，墨迹在灯下泛着一点湿光。<</if>>
+<br><br>
+<<if $mpSafehouses.outcome is "linked">><<getouticon>><<link [[返回安全屋账页 (0:02)|MP Safehouse Network More Hub]]>><<pass 2>><</link>><br>
+<<elseif $mpSafehouses.outcome is "fortified">><<link [[返回安全屋账页 (0:02)|MP Safehouse Network More Hub]]>><<pass 2>><</link>><br>
+<<elseif _openCount gte 4 and _riskSum lte 110>><<walkicon>><<link [[定为暗道贯通 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.outcome to "linked">><<for _loc range ["docks", "orphanage", "temple", "highstreet", "forest", "school"]>><<if $mpSafehouses[_loc].unlocked>><<set $mpSafehouses[_loc].risk to Math.max(0, ($mpSafehouses[_loc].risk or 20) - 3)>><<set $mpSafehouses[_loc].upkeep to ($mpSafehouses[_loc].upkeep or 10) + 2>><</if>><</for>><<mpalert -6>><<stress -2>><</link>><br>
+<<elseif _highTier gte 1>><<mprepairicon>><<link [[定为重装加固 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.outcome to "fortified">><<for _loc range ["docks", "orphanage", "temple", "highstreet", "forest", "school"]>><<if $mpSafehouses[_loc].unlocked and ($mpSafehouses[_loc].tier or 0) gte 1>><<set $mpSafehouses[_loc].risk to Math.max(0, ($mpSafehouses[_loc].risk or 20) - 5)>><<set $mpSafehouses[_loc].upkeep to ($mpSafehouses[_loc].upkeep or 10) + 4>><</if>><</for>><<mpalert -3>><<tiredness 2>><</link>><br>
+<<else>><<mpcalculateicon>><<link [[封账暂守成 (0:10)|MP Safehouse Network More Hub]]>><<pass 10>><<set $mpSafehouses.outcome to "fortified">><<for _loc range ["docks", "orphanage", "temple", "highstreet", "forest", "school"]>><<if $mpSafehouses[_loc].unlocked>><<set $mpSafehouses[_loc].risk to Math.max(0, ($mpSafehouses[_loc].risk or 20) - 2)>><<set $mpSafehouses[_loc].upkeep to Math.max(5, ($mpSafehouses[_loc].upkeep or 10) - 2)>><</if>><</for>><<mpalert -2>><<stress -1>><</link>><br>
+<</if>>
+<<link [[返回安全屋总枢 (0:02)|MP Safehouse Network Hub]]>><<pass 2>><</link>>

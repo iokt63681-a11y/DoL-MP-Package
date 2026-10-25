@@ -25,8 +25,21 @@
 <br>
 <<bedicon>><<link [[去<<his>>房间 (0:03)|MP Companion Room]]>><<pass 3>><</link>>
 <br>
+<<socialiseicon>><<link [[日常闲叙 (0:02)|MP Companion Hub Daily]]>><<pass 2>><</link>>
+<br>
+<<mphearticon>><<link [[亲昵与旧物 (0:02)|MP Companion Hub Close]]>><<pass 2>><</link>>
+<</if>>
+
+:: MP Companion Hub Daily [nobr]
+<<set $outside to 0>><<set $location to "bedroom">><<effects>><<mpAmbient>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek", persona: "meek", love: 0, trust: 0, lust: 0, jealousy: 0, corruption: 0, stage: "stranger" })>>
+<<if !$pronoun>><<generateNPC 1 "a" _comp.pronoun _comp.gender>><<person1>><</if>>
+你坐在<<print _comp.name>>身侧，盘算着是聊聊天、温习功课，还是约<<he>>出去走走。
+<br><br>
+<<getouticon>><<link [[返回同伴身边 (0:01)|MP Companion Hub]]>><<pass 1>><</link>>
+<br>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("companion_talk")>>
-	<<link [[促膝交谈 (0:07)|MP Companion Talk]]>><<pass 7>><<stress -6>><<trauma -3>><</link>>
+	<<socialiseicon>><<link [[促膝交谈 (0:07)|MP Companion Talk]]>><<pass 7>><<stress -6>><<trauma -3>><</link>>
 	<br>
 <</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("companion_study")>>
@@ -39,21 +52,27 @@
 <</if>>
 <<if !window.dolmp || window.dolmp.canDoDailyInteract("companion_walk")>>
 	<<link [[约<<him>>散步 (0:25)|MP Companion Walk]]>><<pass 25>><<stress -10>><<trauma -4>><</link>><<lstress>><<ltrauma>><<glove>>
-	<br>
 <</if>>
+
+:: MP Companion Hub Close [nobr]
+<<set $outside to 0>><<set $location to "bedroom">><<effects>><<mpAmbient>>
+<<set _comp to ($mpCompanion or { name: "艾琳", pronoun: "f", gender: "f", attitude: "meek", persona: "meek", love: 0, trust: 0, lust: 0, jealousy: 0, corruption: 0, stage: "stranger" })>>
+<<if !$pronoun>><<generateNPC 1 "a" _comp.pronoun _comp.gender>><<person1>><</if>>
+你靠近<<print _comp.name>>，目光落在<<his>>唇角与那只旧八音盒上。
+<br><br>
+<<getouticon>><<link [[返回同伴身边 (0:01)|MP Companion Hub]]>><<pass 1>><</link>>
+<br>
 <<if (_comp.love gte 10 or _comp.stage is "crush" or _comp.stage is "lover" or _comp.stage is "soulmate" or $promiscuity gte 15) and (!window.dolmp || window.dolmp.canDoDailyInteract("companion_kiss"))>>
-	<<link [[捧<<his>>脸亲吻 (0:04)|MP Companion Kiss]]>><<pass 4>><<stress -6>><<arousal 800>><</link>><<promiscuous1>><<lstress>><<glove>><<garousal>>
+	<<loveicon>><<link [[捧<<his>>脸亲吻 (0:04)|MP Companion Kiss]]>><<pass 4>><<stress -6>><<arousal 800>><</link>><<promiscuous1>><<lstress>><<glove>><<ggarousal>>
 	<br>
 <</if>>
 <<if (_comp.love gte 18 or _comp.lust gte 15 or _comp.stage is "lover" or _comp.stage is "soulmate" or $promiscuity gte 35) and (!window.dolmp || window.dolmp.canDoDailyInteract("companion_lewd"))>>
-	<<link [[拉进背光处 (0:12)|MP Companion Lewd]]>><<pass 12>><<stress -8>><<arousal 1600>><</link>><<promiscuous2>><<lstress>><<glove>><<ggarousal>>
+	<<brothelicon>><<link [[拉进背光处 (0:12)|MP Companion Lewd]]>><<pass 12>><<stress -8>><<arousal 1600>><</link>><<promiscuous2>><<lstress>><<glove>><<ggarousal>>
 	<br>
 <</if>>
 <<if ($mpCompanionQuest or 0) lt 8 and (!$daily or !$daily.mpCompanionQuest)>>
-	<<link [[追查八音盒 (0:15)|MP Companion Quest Step]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpCompanionQuest to 1>><<pass 15>><</link>>
+	<<mpclockworkicon>><<link [[追查八音盒 (0:15)|MP Companion Quest Step]]>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpCompanionQuest to 1>><<pass 15>><</link>>
 <</if>>
-<</if>>
-
 :: MP Companion Room [nobr]
 <<set $outside to 0>><<set $location to "bedroom">><<effects>><<mpAmbient>>
 <<run window.dolmp && window.dolmp.syncCompanionToVariables && window.dolmp.syncCompanionToVariables()>>
@@ -118,7 +137,7 @@
 <br>
 <<walkicon>><<link [[约<<him>>散步 (0:20)|MP Companion Walk]]>><<pass 20>><<stress -8>><</link>>
 <br>
-<<investigateicon>><<link [[靠<<him>>小憩 (0:15)|MP Companion Cuddle]]>><<pass 15>><<stress -6>><<tiredness -4>><</link>>
+<<loitericon>><<link [[靠<<him>>小憩 (0:15)|MP Companion Cuddle]]>><<pass 15>><<stress -6>><<tiredness -4>><</link>>
 
 :: MP Companion Study [nobr]
 <<set $outside to 0>><<set $location to "bedroom">><<effects>><<mpAmbient>>
@@ -145,7 +164,7 @@
 <<getouticon>><<link [[起身返回 (0:02)|MP Companion Hub]]>><<pass 2>><</link>>
 <br>
 <<if _comp.love gte 10 or _comp.stage is "crush" or _comp.stage is "lover" or _comp.stage is "soulmate">>
-	<<investigateicon>><<link [[仰头亲吻<<his>> (0:04)|MP Companion Kiss]]>><<pass 4>><<arousal 600>><</link>>
+	<<brothelicon>><<link [[仰头亲吻<<his>> (0:04)|MP Companion Kiss]]>><<pass 4>><<arousal 600>><</link>>
 <</if>>
 
 :: MP Companion Walk [nobr]
