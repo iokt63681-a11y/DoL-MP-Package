@@ -18,7 +18,7 @@
 <br><br>
 每块牌子背面都刻着细密的刻度，完成一场，管事的便用铜针添一道浅痕。你把四块牌子依次翻过来，指腹在那些深浅不一的刻痕上停了停。今年的痕迹还少，空着的地方像四扇没关严的窗。管节庆的老修士把铜针搁回盒里，低声说：「节庆不是给神看的，是给人看的。人得有个日子，知道自己还在一块儿。」他顿了顿，又补一句，「你要是肯搭手，四场都办下来，钟塔上那面终局牌就该换字了。」
 <br><br>
-殿外此刻是<<if Time.season is "spring">>春天，风里带着湿土和新叶的气味<<elseif Time.season is "summer">>夏天，彩窗被晒得发烫，石板缝里冒着热气<<elseif Time.season is "autumn">>秋天，狼街的落叶被风卷到门槛边<<elseif Time.season is "winter">>冬天，石阶结着薄冰，门口铺了干草<<else>>个说不清节令的日子，天光灰蒙蒙的<</if>>。雾潮水尺停在 <<print ($mpFogTide or 0)>>，探索进度 <<print $mpLocProgress_Temple>>，已完成事件 <<print $mpLocEvents_Temple>>，恩典 <<print $mpGrace>>。约旦从前殿那头走过来，白袍下摆沾着一点泥，像是刚去过后园；主教则站在回廊的阴影里，手里那串乌木念珠转得很慢。两人都没有催你，只把目光落在木架上。
+殿外此刻是<<if Time.season is "spring">>春天，风里带着湿土和新叶的气味<<elseif Time.season is "summer">>夏天，彩窗被晒得发烫，石板缝里冒着热气<<elseif Time.season is "autumn">>秋天，狼街的落叶被风卷到门槛边<<elseif Time.season is "winter">>冬天，石阶结着薄冰，门口铺了干草<<else>>个说不清节令的日子，天光灰蒙蒙的<</if>>。雾潮水尺<<if ($mpFogTide or 0) gte 4>>已经漫到石阶第二级，槽壁结着细盐<<elseif ($mpFogTide or 0) gte 2>>停在中段，水光发暗<<else>>几乎见底，只剩一线湿痕<</if>>。四块节庆木牌背后，铜针留下的浅痕<<if $mpLocProgress_Temple gte 3>>已经连成半圈<<elseif $mpLocProgress_Temple gte 1>>添了一两道<<else>>还只有旧年的底子<</if>>；香炉里的灰<<if $mpLocEvents_Temple gte 3>>积了厚厚一层，边沿被袖口扫出几道沟<<elseif $mpLocEvents_Temple gte 1>>新落了一层，还带着温度<<else>>薄得能看见炉底的铜色<</if>>。供桌下的铜箱<<if $mpGrace gte 30>>沉得两个人才能挪动<<elseif $mpGrace gte 10>>压得木架微微发响<<else>>还轻，抬起来不费什么力气<</if>>。约旦从前殿那头走过来，白袍下摆沾着一点泥，像是刚去过后园；主教则站在回廊的阴影里，手里那串乌木念珠转得很慢。两人都没有催你，只把目光落在木架上。
 <br><br>
 <<mpherbicon>><<if not $mpFest.TempleSpring>><<if Time.season is "spring">><<link [[春祷巡行 (0:10)|MP Loc Temple Festival Spring]]>><<pass 10>><</link>><<else>><span class="disabled">春祷巡行 (0:10)（只有春季）</span><</if>><<else>><span class="disabled">春祷已毕 (0:00)</span><</if>><br>
 <<mpwatchicon>><<if not $mpFest.TempleSummer>><<if Time.season is "summer">><<link [[夏至守夜 (0:10)|MP Loc Temple Festival Summer]]>><<pass 10>><</link>><<else>><span class="disabled">夏至守夜 (0:10)（只有夏季）</span><</if>><<else>><span class="disabled">夏至已毕 (0:00)</span><</if>><br>
@@ -49,12 +49,12 @@
 <br><br>
 偏殿的铜盘里堆着去年剩下的蜂蜡，颜色发乌，得重新熬过才能灌进新烛。管烛的修女说，若肯添三百枚铜子的蜡，春祷那晚前殿能一直亮到后半夜；若不添，就只能点一半的烛台。你看了看手里能支配的东西，又看了看廊外渐渐聚拢的街坊，心里慢慢有了打算。
 <br><br>
-<<mpcarryicon>><<if ($athletics or 0) gte 260 or ($physique or 0) gte 11000>><<link [[抬圣龛游街 (0:15)|MP Loc Temple Festival Spring Result]]>><<set $mpFest.TempleSpringBranch to "open">><<pass 15>><<tiredness 4>><</link>><<else>><<link [[抬圣龛游街 (0:15)|MP Loc Temple Festival Spring Result]]>><<set $mpFest.TempleSpringBranch to "rough">><<pass 15>><<tiredness 4>><<stress 7>><<pain 2>><</link>><</if>><br>
-<<mpherbicon>><<if ($money or 0) gte 300>><<link [[捐蜂蜡添烛 (0:10)|MP Loc Temple Festival Spring Result]]>><<money -300>><<set $mpFest.TempleSpringBranch to "seal">><<pass 10>><</link>><<else>><span class="disabled">捐蜂蜡添烛 (0:10)（钱不够）</span><</if>><br>
-<<mpsewicon>><<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<link [[编春祷花环 (0:12)|MP Loc Temple Festival Spring Result]]>><<set $mpFest.TempleSpringBranch to "extra">><<pass 12>><<tiredness 3>><</link>><<else>><<link [[编春祷花环 (0:12)|MP Loc Temple Festival Spring Result]]>><<set $mpFest.TempleSpringBranch to "rough">><<pass 12>><<tiredness 3>><<stress 5>><</link>><</if>><br>
+<<mpcarryicon>><<if ($athletics or 0) gte 260 or ($physique or 0) gte 11000>><<link [[抬圣龛游街 (0:15)|MP Loc Temple Festival Spring After]]>><<set $mpFest.TempleSpringBranch to "open">><<pass 15>><<tiredness 4>><</link>><<else>><<link [[抬圣龛游街 (0:15)|MP Loc Temple Festival Spring After]]>><<set $mpFest.TempleSpringBranch to "rough">><<pass 15>><<tiredness 4>><<stress 7>><<pain 2>><</link>><</if>><br>
+<<mpherbicon>><<if ($money or 0) gte 300>><<link [[捐蜂蜡添烛 (0:10)|MP Loc Temple Festival Spring After]]>><<money -300>><<set $mpFest.TempleSpringBranch to "seal">><<pass 10>><</link>><<else>><span class="disabled">捐蜂蜡添烛 (0:10)（钱不够）</span><</if>><br>
+<<mpsewicon>><<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<link [[编春祷花环 (0:12)|MP Loc Temple Festival Spring After]]>><<set $mpFest.TempleSpringBranch to "extra">><<pass 12>><<tiredness 3>><</link>><<else>><<link [[编春祷花环 (0:12)|MP Loc Temple Festival Spring After]]>><<set $mpFest.TempleSpringBranch to "rough">><<pass 12>><<tiredness 3>><<stress 5>><</link>><</if>><br>
 <<getouticon>><<link [[返回节庆水牌 (0:03)|MP Loc Temple Festival Hub]]>><<pass 3>><</link>>
 
-:: MP Loc Temple Festival Spring Result [nobr]
+:: MP Loc Temple Festival Spring After [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
 <<set $mpFest to ($mpFest or {})>><<set $mpGrace to ($mpGrace or 0)>>
@@ -78,7 +78,7 @@
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 3)>>
 		<<else>>
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 5)>>
-			<<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>>
+			<<if $NPCName and mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>>
 		<</if>>
 	<</if>>
 <</if>>
@@ -103,12 +103,12 @@
 <br><br>
 长明灯那排铜壶里，灯油只剩浅浅一层；管灯的修士说，若肯出两百五十枚铜子，能从前街油铺再添两壶，够点到天亮。塔顶的钟绳也确实需要一双手整夜攥着，每逢整点松一松、再稳稳送出去。你抬头看了看逐渐暗下来的天，又低头看了看那张排班表。
 <br><br>
-<<mpwatchicon>><<if ($willpower or 0) gte 420 or ($athletics or 0) gte 260>><<link [[登塔守长夜 (0:18)|MP Loc Temple Festival Summer Result]]>><<set $mpFest.TempleSummerBranch to "open">><<pass 18>><<tiredness 5>><</link>><<else>><<link [[登塔守长夜 (0:18)|MP Loc Temple Festival Summer Result]]>><<set $mpFest.TempleSummerBranch to "rough">><<pass 18>><<tiredness 5>><<stress 8>><<pain 2>><</link>><</if>><br>
-<<mpdrinkicon>><<if ($money or 0) gte 250>><<link [[添守夜灯油 (0:10)|MP Loc Temple Festival Summer Result]]>><<money -250>><<set $mpFest.TempleSummerBranch to "seal">><<pass 10>><</link>><<else>><span class="disabled">添守夜灯油 (0:10)（钱不够）</span><</if>><br>
-<<mpreadicon>><<if ($english or 0) gte 240 or ($history or 0) gte 240>><<link [[校守夜名册 (0:12)|MP Loc Temple Festival Summer Result]]>><<set $mpFest.TempleSummerBranch to "extra">><<pass 12>><<tiredness 3>><</link>><<else>><<link [[校守夜名册 (0:12)|MP Loc Temple Festival Summer Result]]>><<set $mpFest.TempleSummerBranch to "rough">><<pass 12>><<tiredness 3>><<stress 5>><</link>><</if>><br>
+<<mpwatchicon>><<if ($willpower or 0) gte 420 or ($athletics or 0) gte 260>><<link [[登塔守长夜 (0:18)|MP Loc Temple Festival Summer After]]>><<set $mpFest.TempleSummerBranch to "open">><<pass 18>><<tiredness 5>><</link>><<else>><<link [[登塔守长夜 (0:18)|MP Loc Temple Festival Summer After]]>><<set $mpFest.TempleSummerBranch to "rough">><<pass 18>><<tiredness 5>><<stress 8>><<pain 2>><</link>><</if>><br>
+<<mpdrinkicon>><<if ($money or 0) gte 250>><<link [[添守夜灯油 (0:10)|MP Loc Temple Festival Summer After]]>><<money -250>><<set $mpFest.TempleSummerBranch to "seal">><<pass 10>><</link>><<else>><span class="disabled">添守夜灯油 (0:10)（钱不够）</span><</if>><br>
+<<mpreadicon>><<if ($english or 0) gte 240 or ($history or 0) gte 240>><<link [[校守夜名册 (0:12)|MP Loc Temple Festival Summer After]]>><<set $mpFest.TempleSummerBranch to "extra">><<pass 12>><<tiredness 3>><</link>><<else>><<link [[校守夜名册 (0:12)|MP Loc Temple Festival Summer After]]>><<set $mpFest.TempleSummerBranch to "rough">><<pass 12>><<tiredness 3>><<stress 5>><</link>><</if>><br>
 <<getouticon>><<link [[返回节庆水牌 (0:03)|MP Loc Temple Festival Hub]]>><<pass 3>><</link>>
 
-:: MP Loc Temple Festival Summer Result [nobr]
+:: MP Loc Temple Festival Summer After [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
 <<set $mpFest to ($mpFest or {})>><<set $mpGrace to ($mpGrace or 0)>>
@@ -132,10 +132,10 @@
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 3)>>
 		<<elseif _b is "extra">>
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 4)>>
-			<<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>>
+			<<if $NPCName and mpNpcMet("Sydney")>><<npcincr Sydney love 1>><</if>>
 		<<else>>
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 5)>>
-			<<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>>
+			<<if $NPCName and mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>>
 		<</if>>
 	<</if>>
 <</if>>
@@ -160,12 +160,12 @@
 <br><br>
 供桌旁的谷捆需要人抬上去，地窖里的酒坛也要搬出来摆一摆；侧门外的粥锅已经见了底，厨房问能不能把库里的陈麦再舀两斗。三件事都赶在同一个上午，你只能先挑一件做。
 <br><br>
-<<mpfarmicon>><<if ($athletics or 0) gte 260 or ($physique or 0) gte 11000>><<link [[抬谷捆上供 (0:15)|MP Loc Temple Festival Autumn Result]]>><<set $mpFest.TempleAutumnBranch to "open">><<pass 15>><<tiredness 4>><</link>><<else>><<link [[抬谷捆上供 (0:15)|MP Loc Temple Festival Autumn Result]]>><<set $mpFest.TempleAutumnBranch to "rough">><<pass 15>><<tiredness 4>><<stress 7>><<pain 2>><</link>><</if>><br>
-<<mpcalculateicon>><<if ($money or 0) gte 400>><<link [[补什一亏空 (0:12)|MP Loc Temple Festival Autumn Result]]>><<money -400>><<set $mpFest.TempleAutumnBranch to "seal">><<pass 12>><</link>><<else>><span class="disabled">补什一亏空 (0:12)（钱不够）</span><</if>><br>
-<<mpcookicon>><<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<link [[分余粮济贫 (0:15)|MP Loc Temple Festival Autumn Result]]>><<set $mpFest.TempleAutumnBranch to "extra">><<pass 15>><<tiredness 3>><</link>><<else>><<link [[分余粮济贫 (0:15)|MP Loc Temple Festival Autumn Result]]>><<set $mpFest.TempleAutumnBranch to "rough">><<pass 15>><<tiredness 3>><<stress 5>><</link>><</if>><br>
+<<mpfarmicon>><<if ($athletics or 0) gte 260 or ($physique or 0) gte 11000>><<link [[抬谷捆上供 (0:15)|MP Loc Temple Festival Autumn After]]>><<set $mpFest.TempleAutumnBranch to "open">><<pass 15>><<tiredness 4>><</link>><<else>><<link [[抬谷捆上供 (0:15)|MP Loc Temple Festival Autumn After]]>><<set $mpFest.TempleAutumnBranch to "rough">><<pass 15>><<tiredness 4>><<stress 7>><<pain 2>><</link>><</if>><br>
+<<mpcalculateicon>><<if ($money or 0) gte 400>><<link [[补什一亏空 (0:12)|MP Loc Temple Festival Autumn After]]>><<money -400>><<set $mpFest.TempleAutumnBranch to "seal">><<pass 12>><</link>><<else>><span class="disabled">补什一亏空 (0:12)（钱不够）</span><</if>><br>
+<<mpcookicon>><<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<link [[分余粮济贫 (0:15)|MP Loc Temple Festival Autumn After]]>><<set $mpFest.TempleAutumnBranch to "extra">><<pass 15>><<tiredness 3>><</link>><<else>><<link [[分余粮济贫 (0:15)|MP Loc Temple Festival Autumn After]]>><<set $mpFest.TempleAutumnBranch to "rough">><<pass 15>><<tiredness 3>><<stress 5>><</link>><</if>><br>
 <<getouticon>><<link [[返回节庆水牌 (0:03)|MP Loc Temple Festival Hub]]>><<pass 3>><</link>>
 
-:: MP Loc Temple Festival Autumn Result [nobr]
+:: MP Loc Temple Festival Autumn After [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
 <<set $mpFest to ($mpFest or {})>><<set $mpGrace to ($mpGrace or 0)>>
@@ -189,7 +189,7 @@
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 3)>>
 		<<else>>
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 5)>>
-			<<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>>
+			<<if $NPCName and mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>>
 		<</if>>
 	<</if>>
 <</if>>
@@ -216,12 +216,12 @@
 <br><br>
 后厨把热酒和姜汤送到廊下，给守夜的人暖手。杯口冒着白气，很快又在冷风里散掉。你把杯子握在手里，掌心慢慢回温，心里那点犹豫却没有散。
 <br><br>
-<<mpwatchicon>><<if ($willpower or 0) gte 420 or ($athletics or 0) gte 260>><<link [[长夜添明灯 (0:18)|MP Loc Temple Festival Winter Result]]>><<set $mpFest.TempleWinterBranch to "open">><<pass 18>><<tiredness 5>><</link>><<else>><<link [[长夜添明灯 (0:18)|MP Loc Temple Festival Winter Result]]>><<set $mpFest.TempleWinterBranch to "rough">><<pass 18>><<tiredness 5>><<stress 8>><<pain 2>><</link>><</if>><br>
-<<mpherbicon>><<if ($money or 0) gte 350>><<link [[购封坛蜡料 (0:12)|MP Loc Temple Festival Winter Result]]>><<money -350>><<set $mpFest.TempleWinterBranch to "seal">><<pass 12>><</link>><<else>><span class="disabled">购封坛蜡料 (0:12)（钱不够）</span><</if>><br>
-<<mpsewicon>><<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<link [[替修女封坛 (0:15)|MP Loc Temple Festival Winter Result]]>><<set $mpFest.TempleWinterBranch to "extra">><<pass 15>><<tiredness 3>><</link>><<else>><<link [[替修女封坛 (0:15)|MP Loc Temple Festival Winter Result]]>><<set $mpFest.TempleWinterBranch to "rough">><<pass 15>><<tiredness 3>><<stress 5>><<pain 1>><</link>><</if>><br>
+<<mpwatchicon>><<if ($willpower or 0) gte 420 or ($athletics or 0) gte 260>><<link [[长夜添明灯 (0:18)|MP Loc Temple Festival Winter After]]>><<set $mpFest.TempleWinterBranch to "open">><<pass 18>><<tiredness 5>><</link>><<else>><<link [[长夜添明灯 (0:18)|MP Loc Temple Festival Winter After]]>><<set $mpFest.TempleWinterBranch to "rough">><<pass 18>><<tiredness 5>><<stress 8>><<pain 2>><</link>><</if>><br>
+<<mpherbicon>><<if ($money or 0) gte 350>><<link [[购封坛蜡料 (0:12)|MP Loc Temple Festival Winter After]]>><<money -350>><<set $mpFest.TempleWinterBranch to "seal">><<pass 12>><</link>><<else>><span class="disabled">购封坛蜡料 (0:12)（钱不够）</span><</if>><br>
+<<mpsewicon>><<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>><<link [[替修女封坛 (0:15)|MP Loc Temple Festival Winter After]]>><<set $mpFest.TempleWinterBranch to "extra">><<pass 15>><<tiredness 3>><</link>><<else>><<link [[替修女封坛 (0:15)|MP Loc Temple Festival Winter After]]>><<set $mpFest.TempleWinterBranch to "rough">><<pass 15>><<tiredness 3>><<stress 5>><<pain 1>><</link>><</if>><br>
 <<getouticon>><<link [[返回节庆水牌 (0:03)|MP Loc Temple Festival Hub]]>><<pass 3>><</link>>
 
-:: MP Loc Temple Festival Winter Result [nobr]
+:: MP Loc Temple Festival Winter After [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
 <<set $mpFest to ($mpFest or {})>><<set $mpGrace to ($mpGrace or 0)>>
@@ -245,10 +245,10 @@
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 3)>>
 		<<elseif _b is "extra">>
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 4)>>
-			<<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>>
+			<<if $NPCName and mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>>
 		<<else>>
 			<<set $mpGrace to Math.min(100, ($mpGrace or 0) + 5)>>
-			<<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>>
+			<<if $NPCName and mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>>
 		<</if>>
 	<</if>>
 <</if>>
@@ -275,15 +275,15 @@
 你走到牌前，指尖拂过那两行旧字。窗外雾潮正贴着城墙缓慢移动，钟摆一下一下敲在耳膜上。管钟的老匠人站在楼梯口，没有上来，只把一盏灯放在台阶上，像是替谁照着路。
 <br><br>
 <<if _done gte 4>>
-四季的痕迹都齐了；今年你陪着众人走了 <<print ($mpFest.TempleOpen or 0)>> 回，也静守了 <<print ($mpFest.TempleSeal or 0)>> 回。终局牌眼下写着：<<print ($mpWorldTempleOutcome or "未定")>>。约旦把名册合上，主教把念珠绕回腕间，两人都退开半步，把位置让给你。
+四季的痕迹都齐了；四块木牌背后的刻痕深浅不一，铜针在盒里搁了很久。终局牌上那两行旧字被香灰盖着，只等有人擦亮其中一行。约旦把名册合上，主教把念珠绕回腕间，两人都退开半步，把位置让给你。
 <br><br>
 <div id="mp-fest-temple-finale">
-<<mpclockworkicon>><<link "颁布钟律革新 (0:20)">><<pass 20>><<if !$mpWorldTempleOutcome>><<set $mpWorldTempleOutcome to "reformed">><</if>><<set $mpLocProgress_Temple to 5>><<set $mpFest.TempleFinale to 1>><<replace "#mp-fest-temple-finale">>你伸手把「新调」那一行擦亮。主教没有阻拦，约旦也只是把名册合上，轻轻按在胸口。当天午后，枢轮室换上了新校的配重，旧谱室里被刮去的那一小节重新誊回纸上。新钟声第一次响起时，狼街上有人停下脚，仰头听了很久。神殿的门槛被凿低一寸，回廊的灯往外挪了一盏。雾潮退得比往年远，城墙上的灯一盏盏亮起来。约旦站在门口，没有说祝福的话，只对每一个进来的人点了点头。<span class="green">钟律革新已经定下，神殿总枢与深层回廊的终局栏都会读到这个结果。</span><</replace>><</link>>
+<<mpclockworkicon>><<link "颁布钟律革新 (0:20)">><<pass 20>><<if !$mpWorldTempleOutcome>><<set $mpWorldTempleOutcome to "reformed">><</if>><<set $mpLocProgress_Temple to 5>><<set $mpFest.TempleFinale to 1>><<replace "#mp-fest-temple-finale">>你伸手把「新调」那一行擦亮。主教没有阻拦，约旦也只是把名册合上，轻轻按在胸口。当天午后，枢轮室换上了新校的配重，旧谱室里被刮去的那一小节重新誊回纸上。新钟声第一次响起时，狼街上有人停下脚，仰头听了很久。神殿的门槛被凿低一寸，回廊的灯往外挪了一盏。雾潮退得比往年远，城墙上的灯一盏盏亮起来。约旦站在门口，没有说祝福的话，只对每一个进来的人点了点头。<span class="green">钟律革新已经定下，门楣的铜牌与回廊的灯都会记得这个结果。</span><</replace>><</link>>
 <br>
-<<mpritualicon>><<link "维持古礼封存 (0:20)">><<pass 20>><<if !$mpWorldTempleOutcome>><<set $mpWorldTempleOutcome to "orthodox">><</if>><<set $mpLocProgress_Temple to 5>><<set $mpFest.TempleFinale to 1>><<replace "#mp-fest-temple-finale">>你伸手把「旧礼」那一行擦亮。主教把念珠绕回腕上，约旦则把名册重新锁进石匣，钥匙交回主教手中。封坛的蜡被重新烧软，沿着终局牌的边缘浇了一圈。旧钟声照旧响起，沉而慢，像从水底传来。回廊的门重新上锁，门槛没有动。夜里仍有年轻人站在阶下听钟，听一会儿便走了。神殿还是那座神殿，只是碑上多了一行新字。<span class="green">古礼封存已经定下，神殿总枢与深层回廊的终局栏都会读到这个结果。</span><</replace>><</link>>
+<<mpritualicon>><<link "维持古礼封存 (0:20)">><<pass 20>><<if !$mpWorldTempleOutcome>><<set $mpWorldTempleOutcome to "orthodox">><</if>><<set $mpLocProgress_Temple to 5>><<set $mpFest.TempleFinale to 1>><<replace "#mp-fest-temple-finale">>你伸手把「旧礼」那一行擦亮。主教把念珠绕回腕上，约旦则把名册重新锁进石匣，钥匙交回主教手中。封坛的蜡被重新烧软，沿着终局牌的边缘浇了一圈。旧钟声照旧响起，沉而慢，像从水底传来。回廊的门重新上锁，门槛没有动。夜里仍有年轻人站在阶下听钟，听一会儿便走了。神殿还是那座神殿，只是碑上多了一行新字。<span class="green">古礼封存已经定下，门楣的铜牌与回廊的灯都会记得这个结果。</span><</replace>><</link>>
 </div>
 <<else>>
-终局牌还不到换字的时候。四场节庆里尚有 <<print (4 - _done)>> 场没有走完，牌上的旧字被香灰盖着，看不真切。约旦把名册重新抱回胸前，主教则转身走向楼梯，袍角在灯下扫过一级石阶。老匠人把台阶上的灯提起来，替你照着下楼的路。
+终局牌还不到换字的时候。四块木牌背后还有空着的槽口，牌上的旧字被香灰盖着，看不真切。约旦把名册重新抱回胸前，主教则转身走向楼梯，袍角在灯下扫过一级石阶。老匠人把台阶上的灯提起来，替你照着下楼的路。
 <</if>>
 <br><br>
 <<getouticon>><<link [[返回神殿总枢 (0:04)|MP Loc Temple Hub]]>><<pass 4>><</link>>

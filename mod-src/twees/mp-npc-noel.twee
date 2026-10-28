@@ -1,299 +1,393 @@
 :: Widgets MP NPC Noel [widget nobr]
 <<widget "mpInitNpcNoel">>
+<<if !$daily>><<set $daily to {}>><</if>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
-<<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1, axis: 0, axisLabel: "共生", spores: 0, gardenTier: 0, trialType: "none" }>><</if>>
+<<if !$mpNpcs.noel>><<set $mpNpcs.noel to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1, axis: 0, axisLabel: "共生", spores: 0, gardenTier: 0, trialType: "none", deepStage: 0, sporePages: 0, nextStepDay: 0, setback: 0, rep: 50, weekKey: -1, upkeepWeek: -1, relDay: 0 }>><</if>>
 <<if $mpNpcs.noel.axis is undefined>><<set $mpNpcs.noel.axis to 0>><</if>>
 <<if !$mpNpcs.noel.axisLabel>><<set $mpNpcs.noel.axisLabel to "共生">><</if>>
 <<if $mpNpcs.noel.spores is undefined>><<set $mpNpcs.noel.spores to 0>><</if>>
 <<if $mpNpcs.noel.gardenTier is undefined>><<set $mpNpcs.noel.gardenTier to 0>><</if>>
 <<if !$mpNpcs.noel.trialType>><<set $mpNpcs.noel.trialType to "none">><</if>>
+<<if $mpNpcs.noel.deepStage is undefined>><<set $mpNpcs.noel.deepStage to 0>><</if>>
+<<if $mpNpcs.noel.sporePages is undefined>><<set $mpNpcs.noel.sporePages to 0>><</if>>
+<<if $mpNpcs.noel.nextStepDay is undefined>><<set $mpNpcs.noel.nextStepDay to 0>><</if>>
+<<if $mpNpcs.noel.setback is undefined>><<set $mpNpcs.noel.setback to 0>><</if>>
+<<if $mpNpcs.noel.rep is undefined>><<set $mpNpcs.noel.rep to 50>><</if>>
+<<if $mpNpcs.noel.weekKey is undefined>><<set $mpNpcs.noel.weekKey to -1>><</if>>
+<<if $mpNpcs.noel.upkeepWeek is undefined>><<set $mpNpcs.noel.upkeepWeek to -1>><</if>>
+<<if $mpNpcs.noel.relDay is undefined>><<set $mpNpcs.noel.relDay to 0>><</if>>
 <</widget>>
 
 :: MP NPC Noel Deep Hub [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-学园标本室的门没关严，风从走廊尽头灌进来，把梁下那几束倒挂的干花吹得彼此磕碰。屋里先是湿苔、陈醋和某种烘烤过的苦味，然后才是诺艾尔的声音。她背对着门，正用镊子把一片发黑的根须翻过来对着台灯，头也不抬：「先等一下。你走路的落点比上回沉，右肩还吊着劲，是不是又没睡整觉，空着肚子就跑了一早上？把手伸过来。」
+<<if !$mpNoelEnded and $mpWorldNoelEnding>><<set $mpNoelEnded to 1>><</if>>
+<<if $mpWorldNoelEnding is "symbiosis">><<set _wk to Math.floor(Time.days / 7)>><<if (_npc.upkeepWeek or 0) isnot _wk>><<set _npc.upkeepWeek to _wk>><<money -20>><</if>><</if>>
+<<mpInitNpcCross>>
+学园标本室里弥漫着湿苔与甘菊的苦香，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>先搭脉确认你的呼吸，再翻开吊在墙上的厚标本册核对共生刻度 <<print _npc.axis>>、活性孢子 <<print _npc.spores>> 份、药圃 <<print _npc.gardenTier>> 阶与菌株手记 <<print _npc.sporePages>> 页。<<if $mpNpcCrossLast and $mpNpcCrossLast.noel>>标本册夹着「<<print $mpNpcCrossLast.noel>>」。<<else>>荧光菌丝随温气舒展。<</if>><<if $mpWorldNoelEnding is "symbiosis">>温室封锁后每周要单支一笔无烟炭费。<<elseif $mpWorldNoelEnding is "purify">>母株菌群已熬成义诊药，温室孢子结余比从前薄了一成。<</if>>
 <br><br>
-你把手腕递过去。她的指腹压在脉门上，慢慢数到第七下才松开，语气平得像在念一张单子：「脉浮，偏快，是缺觉不是发热。回去三份洋甘菊、一份蜂蜜，温水冲开，睡前半个时辰喝完。——好了，现在说吧，今天来找我做什么？」
+<<getouticon>><<link [[返回身边 (0:02)|MP NPC Noel Hub]]>><<pass 2>><</link>><br>
+<<mpclockworkicon>><<link [[查看作息表 (0:06)|MP NPC Noel Schedule]]>><<pass 6>><</link>><br>
+<<investigateicon>><<link [[查看温室循环 (0:10)|MP NPC Noel Loop]]>><<pass 10>><</link>><br>
+<<mpherbicon>><<link [[查看标本子系统 (0:08)|MP NPC Noel Subsys]]>><<pass 8>><</link>><br>
+<<if Time.days lt (_npc.setback or 0)>>
+<<link [[查看温室休整木牌 (0:04)|MP NPC Noel Quest Closed]]>><<pass 4>><</link>>
+<<elseif $mpNoelEnded>>
+<<if $mpWorldNoelEnding is "symbiosis">><<link [[重温共生终局 (0:08)|MP NPC Noel Ending B]]>><<pass 8>><</link>><<else>><<link [[重温净雾终局 (0:08)|MP NPC Noel Ending A]]>><<pass 8>><</link>><</if>>
+<<else>>
+<<link [[去她现在所在 (0:05)|MP NPC Noel Schedule]]>><<pass 5>><</link>>
+<</if>>
+
+
+:: MP NPC Noel Quest Waiting [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+标本室里间的玻璃门扣着恒温木栓。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>看了一眼温度计，把银镊放回消毒盘：母株切片只在白昼九点至十七点恒温灯最稳时开皿，且每次施药后都要隔天观察排异脉象。<<if (_npc.sporePages or 0) lt 6 and (_npc.deepStage or 0) lt 5>>册里的菌株手记眼下只记了 <<print (_npc.sporePages or 0)>> 页，还得靠每周试药结算一页页补齐。<</if>>
 <br><br>
-这间屋子是她的半个家。三排木架立到天花板，广口瓶里泡着颜色各异的根须、花萼和菌伞，每一只都贴着写满小字的标签；墙上用麻绳吊着一本厚册子，六页硬纸被翻得起了毛边，每页压着一份干制标本和一行行配比记录。靠里的架子后面还隔出一小间温室，玻璃上蒙着水汽，隐约能看见一株比人还高的母株，叶子垂着，边缘泛黄。
+<<getouticon>><<link [[回共生深枢 (0:03)|MP NPC Noel Deep Hub]]>><<pass 3>><</link>><br>
+<<mplettericon>><<link [[明天再来问一次 (0:06)|MP NPC Noel Deep Hub]]>><<pass 6>><</link>>
+
+:: MP NPC Noel Quest Closed [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+温室门把上挂着「熏蒸静养」的白签，玻璃窗内弥漫着石炭酸水雾。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>隔着玻璃轻声叮嘱：上次处置母株失手引发了菌群排异，不仅耗损了活性孢子与标本室声望，这两天温室必须闭门净菌，过两天再来。
 <br><br>
-【共生刻度】：<<print _npc.axis>>/100（<<print _npc.axisLabel>>） ｜ 瓶中活性孢子：<<print _npc.spores>> 份 ｜ 药圃现状：<<if (_npc.gardenTier or 0) gte 3>>母株皿柜<<elseif (_npc.gardenTier or 0) gte 2>>滴灌菌架<<elseif (_npc.gardenTier or 0) gte 1>>恒温苗床<<else>>一排还空着的花架<</if>>
-<br>
-【母株近况】：<<if (_npc.stage or 0) gte 5>>枯萎母株的事已经落定，玻璃间里的空气闻起来不再发苦。<<elseif (_npc.stage or 0) gte 4>>排异最凶的几夜已经熬过去，她仍每隔两个时辰就去量一次温度。<<elseif (_npc.stage or 0) gte 3>>菌群开始认新的营养液，母株抽出两片薄得透光的新叶。<<elseif (_npc.stage or 0) gte 2>>暗渠的水引进了温室，根系坏死的部分正被一点点剥掉。<<elseif (_npc.stage or 0) gte 1>>切开的根系摊在瓷盘里，菌丝的方向指向更深的地方。<<else>>她只说「有点不舒服」，别的怎么问都不肯讲。<</if>>
-<br>
-<<if $mpWorldNoelEnding is "purify">>【已落定的结局】：净雾药剂。<<elseif $mpWorldNoelEnding is "symbiosis">>【已落定的结局】：孢子共生。<<else>>【尚未落定的心事】：母株还在玻璃间里撑着。<</if>><<if $mpWorldTempleOutcome>>神殿那边传来的风声也钻进了这间屋子，她听人提起时，手里的镊子会停一下。<</if>>
-<br><br>
-说到母株，她的手就下意识摸向抽屉，摸出半朵不知什么时候掉下来的干花，一瓣一瓣往下掰。一、二、三……数到第七瓣，她才想起你还站着，把花萼匆匆塞回抽屉，耳根有点红：「这些事不急。你先说你的。」
-<br><br>
-<<getouticon>><<link [[返回诺艾尔处 (0:02)|MP NPC Noel Hub]]>><<pass 2>><</link>><br>
-<<socialiseicon>><<link [[核对关系阶位 (0:06)|MP NPC Noel Tier Action]]>><<pass 6>><</link>><br>
-<<investigateicon>><<link [[参与标本试药 (0:10)|MP NPC Noel Loop]]>><<pass 10>><</link>><br>
-<<shopicon>><<link [[打理温室药圃 (0:08)|MP NPC Noel Subsys]]>><<pass 8>><</link>><br>
-<<link [[追查枯萎母株 (0:12)|MP NPC Noel Deep Quest 1]]>><<pass 12>><</link>>
-<br><br>
+<<getouticon>><<link [[回共生深枢 (0:03)|MP NPC Noel Deep Hub]]>><<pass 3>><</link>><br>
+<<walkicon>><<link [[过两天再来看看 (0:06)|MP NPC Noel Deep Hub]]>><<pass 6>><</link>>
 
 :: MP NPC Noel Tier Action [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-标本室靠窗的位置摆着一张矮桌，桌上那只陶壶里的茶还温着。你在门口站定，诺艾尔抬头时先看的不是你的脸，而是你的手腕——这是她这两年养成的习惯，先把脉，再听话。
-<br><br>
-<<if _npc.axis gte 60 and (_npc.love or 0) gte 20>>
-【深层绑定】她放下手里的活，把椅子往你这边挪了半步，先握住你的手数了一会儿脉，才低声开口：「今天脉象稳，我就放心了。」说完她起身拉开最里面那扇玻璃门，一股温热的湿气涌出来。她指着那株垂着叶子的母株：「学园只剩这一株了。它要是死了，标本室明年就得关门，我也待不下去。这个念头我谁都没说过——包括你，直到今天。」
-<<elseif _npc.axis gte 35 or (_npc.trust or 0) gte 12>>
-【知己共鸣】她把一只小瓷碟推到你面前，碟底是一层淡青色的液体：「新配的，剂量只有三成。你信我的话，就把手腕伸出来，我抹一点在你脉门上，看看皮肤认不认。」她一边等反应，一边在册子上记时辰，笔尖点着纸：「认了就记你一份耐受，往后这味药能按你的分量调。」
-<<elseif _npc.axis gte 15 or (_npc.trust or 0) gte 5>>
-【熟识协作】她没多问，先倒了一杯温茶过来，杯底沉着几片洋甘菊：「你上回说夜里容易醒，我改了配比，把蜂蜜减了半勺，免得你后半夜口渴。」她自己捧着另一杯，靠在架子边看你喝，等你喝到一半才想起正事：「对了，你今天来是为了什么？」
-<<else>>
-【初识试探】她把手里的镊子放下，先问：「最近睡得怎么样？有没有哪里疼？」听你答完，才点点头，把话题转回标本：「我这边只有一些还没归档的干花，你要看可以看，别碰后面那排瓶子。」说话时她一直捏着一朵干枯的小花，拇指在花瓣上一下一下地数。
-<</if>>
-<br><br>
-<<if $mpWorldNoelEnding>>
-母株的事已经有了结果，这间屋子里的空气也随之变了味道。她待你的方式没有变，仍旧是先问身体，再问来意，只是那份小心之中多了一点尘埃落定后的松弛。
-<<else>>
-你们之间还隔着那株一天比一天虚弱的母株。她不肯多说，你也不便多问，只能从她数花瓣的动作里猜她今天心里有多乱。
-<</if>>
-<br><br>
-你可以就这样靠在架子边，陪她把今天采的标本一株株登记完，顺便说几句闲话；也可以把手腕伸到灯下，让她就着你的脉试一滴新配的安神液，听她讲这一滴里各味的分量；若是你们还不够熟，硬要追问母株和她自己的事，她只会把抽屉合上，低头把一整朵干花的花瓣数完，再客客气气地把你送出门。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<socialiseicon>><<link [[日常寒暄交流 (0:08)|MP NPC Noel Deep Hub]]>><<pass 8>><<set _npc.axis to Math.min(100, _npc.axis + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><</link>><br>
-<<investigateicon>><<if _npc.axis gte 15 or (_npc.trust or 0) gte 5>><<link [[知己深度交心 (0:12)|MP NPC Noel Deep Hub]]>><<pass 12>><<set _npc.axis to Math.min(100, _npc.axis + 6)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<stress -4>><</link>><<else>><<link [[冒昧打探底细 (0:12)|MP NPC Noel Deep Hub]]>><<pass 12>><<set _npc.axis to Math.max(0, _npc.axis - 2)>><<stress 3>><</link>><</if>>
-<br><br>
+酒精灯上的药壶冒着洋甘菊白汽，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>合上脉案小册。当前共生刻度停在 <<print _npc.axis>>：<<if _npc.axis gte 60 and (_npc.love or 0) gte 20>>她已经在温室里间为你留了一张铺着艾草垫的竹榻，连最珍贵的母株培养皿也准你亲手开启<<elseif _npc.axis gte 25 or (_npc.trust or 0) gte 10>>她每次见你都会先配好半杯对症的温茶<<else>>她仍像对待寻常试药学徒那样一板一眼地记脉象，但手法温和了许多<</if>>。
+标本室的铜壶冒着细密白汽，玻璃皿里的叶片在恒温灯下泛着微光。<br><br>
+<<getouticon>><<link [[返回深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[坐下搭脉问诊 (0:08)|MP NPC Noel Deep Hub]]>><<pass 8>><<if !$daily.mpNoelTierTalk>><<set $daily.mpNoelTierTalk to 1>><<set _npc.axis to Math.min(100, _npc.axis + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -2>><<else>><<stress -1>><</if>><</link>><br>
+<<investigateicon>><<link [[深谈菌群共生记 (0:12)|MP NPC Noel Deep Hub]]>><<pass 12>><<if _npc.axis gte 15 or (_npc.trust or 0) gte 5>><<if !$daily.mpNoelTierDeep>><<set $daily.mpNoelTierDeep to 1>><<set _npc.axis to Math.min(100, _npc.axis + 6)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<stress -4>><<else>><<stress -1>><</if>><<else>><<stress 2>><</if>><</link>><br>
+<<mpherbicon>><<link [[陪在炉边焙干甘菊 (0:10)|MP NPC Noel Daily 15]]>><<pass 10>><</link>>
 
 :: MP NPC Noel Loop [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-标本室后墙挂着那本六页硬纸装订的图鉴册，纸页被翻得起了毛边，每一页压着一份干制标本，旁边用极小的字写着采集地点、时辰与配比。诺艾尔把册子摊在桌上，先抬眼看你：「昨晚睡了几个时辰？手伸出来。」数过脉，她才指向上面的空白处：「还差三种。这三种凑齐，图鉴就满了，到时候我能配出新的一味茶——不是给客人，是给你。」
+<<if $mpNpcLoopDay_noel isnot Time.days>><<set $mpNpcLoopDay_noel to Time.days>><<set $mpNpcLoopLock_noel to "none">><</if>>
+标本台上排开三只无菌玻璃罐，当前活性孢子存有 <<print _npc.spores>> 份，雾潮水尺 <<print ($mpFogTide or 0)>> 格。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>说同一天只能处理一类活体样本，免得孢子串种污染：要么下暗潮洞穴刮取荧光菌株，要么上瓦沟蒸馏灰雾苔藓，要么留在温室测冷蕨样本；本轮采样<<if $mpNpcLoopLock_noel is "fungi">>已锁定荧光菌，灰雾苔藓皿已封口<<elseif $mpNpcLoopLock_noel is "moss">>已锁定灰雾苔，荧光菌洞口已落锁<<elseif $mpNpcLoopLock_noel is "fern">>已锁定冷蕨样本，菌洞与苔藓台都已封存<<else>>选定一类便会关掉另外两类<</if>>。
 <br><br>
-她取出三只贴好标签的空瓶，一字排开，声音低下去，像在交代一件很要紧的事：
+<<getouticon>><<link [[返回深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
+<<if $mpNpcLoopLock_noel is "none" or $mpNpcLoopLock_noel is "fungi">>
+<<mpmushroomicon>><<link [[下洞采荧光菌 (0:15)|MP NPC Noel Loop Fungi]]>><<pass 15>><</link>><br>
+<</if>>
+<<if $mpNpcLoopLock_noel is "none" or $mpNpcLoopLock_noel is "moss">>
+<<mpherbicon>><<link [[蒸馏提纯灰雾苔 (0:15)|MP NPC Noel Loop Moss]]>><<pass 15>><</link>><br>
+<</if>>
+<<if $mpNpcLoopLock_noel is "none" and !$daily.mpLoopThirdNoel>>
+<<socialiseicon>><<link [[留在温室测冷蕨叶 (0:15)|MP NPC Noel Loop Resolve]]>><<pass 15>><<set $daily.mpLoopThirdNoel to 1>><<set $mpNpcLoopLock_noel to "fern">><</link>>
+<<else>>
+<<link [[温室已收工 (0:06)|MP NPC Noel Loop Lockout]]>><<pass 6>><</link>>
+<</if>>
+
+:: MP NPC Noel Loop Fungi [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if $mpNpcLoopLock_noel is "moss">>
+恒温箱里的培养皿已经全部装满了蒸馏过的灰雾苔藓，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>拦住你说，因为今日先开了苔藓蒸馏器，屋里的酸碱度偏高，此时带入荧光菌株会立刻引发排异枯死。
+<<else>>
+<<if $mpNpcLoopLock_noel is "none">>
+<<set $mpNpcLoopLock_noel to "fungi">><<set _npc.trialType to "fungi">>
+<<else>>
+<<set _already to 1>>
+<</if>>
+你们钻进学园后山阴冷的防空暗洞刮取荧光菌株，同日灰雾苔藓的蒸馏台随之封闭。幽蓝的孢子粉在指尖浮动，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>提醒你屏住呼吸：活体荧光菌能大幅提升共生刻度，但吸入微量孢子也会引起短暂的耳鸣与刺痛。<<if _already>>这一轮荧光菌已经采过，她只把封好的菌瓶举到灯下让你看清瓶底的青灰沉淀。<</if>>
+<</if>>
 <br><br>
-【荧光菌株】旧温室地下蓄水池的石壁上，夜里会浮出一层淡青的光。要下到齐膝深的水里，用镊子连着薄薄一层石皮一起刮下来，动作稍重，菌丝就散了。危险是水底的青苔滑，摔一跤不打紧，只怕把整瓶样品泼进池子。她会在池边替你举灯，但灯举久了手臂会酸，最后仍得你自己稳住。
-<br>
-【灰雾苔藓】玻璃顶棚的瓦沟里，只有雾潮漫上来那几天才结得厚。要踩着木梯翻上屋顶，把苔藓连瓦灰一起铲进布袋。瓦面湿的时候，脚底会打滑；雾大时看不清沟沿，容易踩空。她会在下面扶着梯子，仰着头一直看到你下来为止，脖子酸了也不肯换手。
-<br>
-【深涧冷蕨】后山涧底的背阴石缝，水常年是冰的。得拴好绳子垂下去，贴着水面把整丛冷蕨连根起出来，根上还得带着原来的湿泥。冷水泡久了，手指会僵到握不住刀；涧里起风时，绳子会贴着石壁磨。她会守在崖上拽绳，每隔一会儿喊你一声，听你应了才继续放绳。
+<<getouticon>><<link [[退回总台 (0:02)|MP NPC Noel Loop]]>><<pass 2>><</link>><br>
+<<if $mpNpcLoopLock_noel is "moss">>
+<<walkicon>><<link [[查看封锁代价 (0:06)|MP NPC Noel Loop Lockout]]>><<pass 6>><</link>>
+<<elseif _already>>
+<<link [[今日已走过 (0:06)|MP NPC Noel Loop Lockout]]>><<pass 6>><</link>>
+<<else>>
+<<mpmushroomicon>><<link [[徒手剥取母菌伞 (0:16)|MP NPC Noel Loop Resolve]]>><<pass 16>><<if !$daily.mpNoelFungiAct>><<set $daily.mpNoelFungiAct to 1>><<pain 2>><<tiredness 2>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 6)>><<else>><<stress -1>><</if>><</link>><br>
+<<mpcleanicon>><<link [[用铜镊夹入密封瓶 (0:14)|MP NPC Noel Loop Resolve]]>><<pass 14>><<if !$daily.mpNoelFungiAct>><<set $daily.mpNoelFungiAct to 1>><<tiredness 2>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 4)>><<else>><<stress -1>><</if>><</link>>
+<</if>>
+
+:: MP NPC Noel Loop Moss [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if $mpNpcLoopLock_noel is "fungi">>
+蒸馏台的冷凝管已经拆下浸泡在消毒水里，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>指着暗室里的蓝光说，因为今日先采了活体荧光菌，标本室必须保持避光恒温，没法再点火蒸馏灰雾苔藓。
+<<else>>
+<<if $mpNpcLoopLock_noel is "none">>
+<<set $mpNpcLoopLock_noel to "moss">><<set _npc.trialType to "moss">>
+<<else>>
+<<set _already to 1>>
+<</if>>
+你们将瓦沟刮下的灰雾苔藓放进玻璃曲颈甑慢火蒸馏，同日荧光菌的阴冷培养箱随之锁闭。淡绿色的凝露一滴一滴落进量筒，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>盯着温度计：蒸馏苔藓能多得一份纯净孢子液，但长时间守在蒸腾的苦雾旁极耗心神。<<if _already>>这一轮灰雾苔已经蒸馏完毕，她把冷凝管拆下浸进消毒水，只留量筒底的凝露给你看。<</if>>
+<</if>>
 <br><br>
-【今日雾潮水尺】：<<print ($mpFogTide or 0)>>。雾越浓，瓦沟上的苔藓越厚，可屋顶也越难看清水尺。她把这些都记在册子边上，写完抬头看你，指尖在桌面上敲了两下：「你挑一样。挑完我们就去，别拖到天黑。」
+<<getouticon>><<link [[退回总台 (0:02)|MP NPC Noel Loop]]>><<pass 2>><</link>><br>
+<<if $mpNpcLoopLock_noel is "fungi">>
+<<walkicon>><<link [[查看封锁代价 (0:06)|MP NPC Noel Loop Lockout]]>><<pass 6>><</link>>
+<<elseif _already>>
+<<link [[今日已走过 (0:06)|MP NPC Noel Loop Lockout]]>><<pass 6>><</link>>
+<<else>>
+<<mpcalculateicon>><<link [[守曲颈甑收原液 (0:16)|MP NPC Noel Loop Resolve]]>><<pass 16>><<if !$daily.mpNoelMossAct>><<set $daily.mpNoelMossAct to 1>><<tiredness 3>><<set _npc.spores += 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 3)>><<else>><<stress -1>><</if>><</link>><br>
+<<mpherbicon>><<link [[兑甘菊水调和苦气 (0:14)|MP NPC Noel Loop Resolve]]>><<pass 14>><<if !$daily.mpNoelMossAct>><<set $daily.mpNoelMossAct to 1>><<tiredness 1>><<stress -2>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 3)>><<else>><<stress -1>><</if>><</link>>
+<</if>>
+
+:: MP NPC Noel Loop Lockout [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+空气采样器的浮标停在一格半，玻璃柜的指示灯由绿转红，说明屋里已经浮起孢子尘。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>把两只未封口的培养皿推进消毒柜，又用石炭酸布巾顺纹擦过台面，连缝隙里的孢子囊也一并刮净。墙上那块排班石板被她划掉今日的格，明日的采样名额用粉笔写在最上一行，注明只许开一类活体样本。
 <br><br>
-【瓶中存货】：<<print _npc.spores>> 份。上回取的样：<<if _npc.trialType is "fungi">>荧光菌株，瓶底还留着一层青灰的沉淀<<elseif _npc.trialType is "moss">>灰雾苔藓，袋口沾着洗不掉的绿粉<<elseif _npc.trialType is "fern">>深涧冷蕨，根上的湿泥已经干成硬壳<<else>>还没有，瓶子都是空的<</if>>。她低头看了一眼那些瓶子，又补一句：「取回来的东西放不久，今天采的今天就得配。」
-<br><br>
-说完她先站起来，把三只空瓶一一装进布袋，又蹲下去系鞋带。系到一半，她忽然停住，从口袋摸出干花，掰下一瓣，又掰下一瓣，嘴里轻轻念着数。等系好鞋带、重新站直时，她像是给自己定了决心，把花萼塞回口袋，声音也稳了：「走吧。天黑前要回来。」
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[采集荧光菌株 (0:15)|MP NPC Noel Loop Resolve]]>><<pass 15>><<set _npc.trialType to "fungi">><</link>><br>
-<<shopicon>><<link [[提纯灰雾苔藓 (0:15)|MP NPC Noel Loop Resolve]]>><<pass 15>><<set _npc.trialType to "moss">><</link>><br>
-<<socialiseicon>><<link [[观测深涧冷蕨 (0:15)|MP NPC Noel Loop Resolve]]>><<pass 15>><<set _npc.trialType to "fern">><</link>>
-<br><br>
+<<getouticon>><<link [[回试药总台 (0:02)|MP NPC Noel Loop]]>><<pass 2>><</link>><br>
+<<mpscaleicon>><<link [[收样本回深枢 (0:06)|MP NPC Noel Deep Hub]]>><<pass 6>><</link>>
 
 :: MP NPC Noel Loop Resolve [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-<<if _npc.trialType is "fungi">>
-瓷盘里摊着那层从池壁上刮下来的石皮，青白的菌丝在暗处微微发亮，像有人在里面点了一盏极小的灯。诺艾尔把台灯拧暗，只留一盏罩着蓝布的灯：「荧光的菌怕强光，见光就散。你手稳一点，把它们从石皮上挑进培养液里。」
-<<elseif _npc.trialType is "moss">>
-布袋里的灰雾苔藓带着瓦灰和潮气，摊开时散出一股旧墙的味道。诺艾尔用竹筛一点点筛掉杂质，筛子底下落出细密的绿粉：「这些粉是苔藓的孢子，混进培养液里，成不成看它认不认水。你筛得匀，它就长得齐；筛急了，结块，整瓶都废。」
-<<elseif _npc.trialType is "fern">>
-冷蕨的根还裹着涧底的湿泥，泥里混着细小的石子。她要你一根一根把泥剔掉，不能伤到根毛：「冷蕨娇气，断一根细根，它就缓半个月。可它缓过来的药性最稳，是母株那副营养液里少不得的一味。」水盆里的水已经换到第三遍，仍是凉的。
-<<else>>
-她从架子上取下一只落灰的空瓶，用袖口擦干净，放回你手边：「今天没有新采的。先用旧的练手也行，练到手上不抖为止。」
-<</if>>
+<<set _wk to Math.floor(Time.days / 7)>>
+<<if $mpNpcLoopLock_noel is "fern">><<set _npc.trialType to "fern">><</if>>
+今日采集的是<<if _npc.trialType is "fungi">>幽蓝荧光菌株<<elseif _npc.trialType is "moss">>提纯灰雾苔藓<<else>>深涧耐寒冷蕨<</if>>，当前共生刻度 <<print _npc.axis>>，活性孢子 <<print _npc.spores>> 份，菌株手记 <<print _npc.sporePages>> 页。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>在培养皿边缘贴好浸过蜂蜡的防潮封条并记下今日温湿度刻度，抬头问你要收存孢子还是扩建温室药圃。
 <br><br>
-接下来全看手上功夫：你平时照料花草的熟练、课上记下的那些道理，以及菌群对你身体的接纳程度。诺艾尔不替你动手，只在旁边递工具、报时辰，偶尔提醒一句「别急」。她紧张的时候会退到架子边，捏着一朵干花数花瓣，一瓣一瓣，数到你能稳住手为止。
-<br><br>
-案上摆着三把镊子、两只量杯和一块干净的绒布，每样都擦得发亮。她把这些东西摆得极整齐，摆完还要退后看一眼，才把位置让给你。台灯的光落在她的侧脸上，你才发现她眼下也有一层青影——这些天她陪你熬的夜，一点不比你少。
-<br><br>
-若不顺利，你也能把能收的收进瓶里——只是那样一来，一整天的手忙脚乱换不回几份孢子，反倒落得腰酸背痛，回去还得早睡。她不会责怪，只会把剩下的残液倒进废液桶，说一句「明天再来」，然后催你先去吃东西。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($tending or 0) gte 240 or ($science or 0) gte 220 or _npc.axis gte 25>><<link [[稳妥收拢成果 (0:10)|MP NPC Noel Deep Hub]]>><<pass 10>><<set _npc.spores += 2>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><<stress -2>><</link>><<else>><<link [[勉强收拾残局 (0:10)|MP NPC Noel Deep Hub]]>><<pass 10>><<set _npc.axis to Math.max(0, _npc.axis - 1)>><<tiredness 3>><<stress 4>><</link>><</if>><br>
-<<shopicon>><<link [[转去子系统页 (0:04)|MP NPC Noel Subsys]]>><<pass 4>><</link>>
-<br><br>
+<<getouticon>><<link [[回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
+<<mpmushroomicon>><<link [[封存活性孢子 (0:10)|MP NPC Noel Deep Hub]]>><<pass 10>><<if !$daily.mpLoopSettleNoel>><<set $daily.mpLoopSettleNoel to 1>><<if (_npc.weekKey or -1) isnot _wk>><<set _npc.weekKey to _wk>><<set _npc.sporePages to Math.min(6, (_npc.sporePages or 0) + 1)>><</if>><<if ($tending or 0) gte 220 or ($science or 0) gte 220 or _npc.axis gte 20>><<set _npc.spores += ($mpWorldNoelEnding is "purify" ? 1 : 2)>><<set _npc.axis to Math.min(100, _npc.axis + 4)>><<stress -3>><<else>><<set _npc.spores += 1>><<tiredness 2>><</if>><</if>><</link>><br>
+<<shopicon>><<link [[提孢子瓶去药圃架 (0:06)|MP NPC Noel Subsys]]>><<pass 6>><</link>>
 
 :: MP NPC Noel Subsys [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-玻璃间里那排花架是诺艾尔一点一点搭起来的。最早只有一层空木架，后来添了恒温的苗床，再后来接上滴灌的竹管，最里面那一格才敢放母株的分株。她把这里当成自己的地盘，也当成欠学园的一笔账——每一层架子，都是她拿攒下的材料和你的孢子换来的。
-<br><br>
-【药圃现状】：<<if (_npc.gardenTier or 0) gte 3>>母株皿柜。温控、湿度、光照都分开管，母株的每一片叶子都有记录。<<elseif (_npc.gardenTier or 0) gte 2>>滴灌菌架。竹管把水一滴一滴送进每一只菌瓶，省了每日弯腰浇水，菌丝也长得齐。<<elseif (_npc.gardenTier or 0) gte 1>>恒温苗床。底下垫着温水盘，苗床上的菌瓶不再怕夜里的凉。<<else>>一层空木架。上面只摆着几只洗净的空瓶，等着第一份材料。<</if>>
-<br>
-【瓶中活性孢子】：<<print _npc.spores>> 份。她说这不算钱，是活的，攒着会自己消减，所以要么用掉，要么换成能长东西的架子。
-<br><br>
-她把架子上的标签一张一张抚平，指尖在一处被水泡皱的木纹上停了停：「这层架子是我刚来时钉的，钉子歪了三回。那时候我只想着，能有一格放下自己的空瓶就够了。」说完她忽然想起什么，走过来把你的手翻过来看，掌心有没有搬东西磨出的红痕：「你手怎么这么凉？先搓热了再碰菌瓶，冷手会把菌丝惊着。」她说完就把手在围裙上擦了擦，才去碰下一只瓶子。
-<br><br>
-她领你走到架子尽头，指着一处还空着的位置：「再往上一层，要两份孢子铺底，加上竹管和温盘。不是我要占你便宜，是菌丝只认这个数——少一份，它就在瓶里发霉给你看。」说着她蹲下去，把一只瓶底发黑的旧瓶挑出来，倒掉里面的东西：「这两份，也不一定够。你得先有。」
-<br><br>
-如果你手里的孢子还不够两份，她不会拦你，只是把袖口挽起来，自己去搬那些沉木架。你可以搭把手，但木架和温盘都是照着尺寸做的，硬塞进去装不平，最后只会把手磨出红痕，还得重新拆一遍。她一边拆一边小声数着掉在地上的木屑，数得格外认真。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<shopicon>><<if _npc.gardenTier lt 3 and _npc.spores gte 2>><<link [[投入资源扩建 (0:15)|MP NPC Noel Subsys Upgrade]]>><<pass 15>><<set _npc.spores -= 2>><<set _npc.gardenTier += 1>><<set _npc.axis to Math.min(100, _npc.axis + 8)>><</link>><<else>><<link [[资源不足强修 (0:15)|MP NPC Noel Subsys Upgrade]]>><<pass 15>><<tiredness 2>><<stress 3>><</link>><</if>><br>
-<<investigateicon>><<link [[去筹集新资源 (0:04)|MP NPC Noel Loop]]>><<pass 4>><</link>>
-<br><br>
+玻璃温室里的药圃按层排开：当前为<<if (_npc.gardenTier or 0) gte 3>>三阶母株皿柜，温湿度与光照独立分管<<elseif (_npc.gardenTier or 0) gte 2>>二阶滴灌菌架，竹管将活水一滴不差送入菌瓶<<elseif (_npc.gardenTier or 0) gte 1>>一阶恒温苗床，底层铺着发热的发酵木屑<<else>>零阶空木架，还没铺上保温基质<</if>>。瓶中现有活性孢子 <<print _npc.spores>> 份，每投两份即可扩建一阶。
+标本室的铜壶冒着细密白汽，玻璃皿里的叶片在恒温灯下泛着微光。<br><br>
+<<getouticon>><<link [[回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
+<<mpmushroomicon>><<link [[投入孢子扩建 (0:15)|MP NPC Noel Subsys Upgrade]]>><<pass 15>><<if _npc.gardenTier lt 3 and _npc.spores gte 2>><<set _npc.spores -= 2>><<set _npc.gardenTier += 1>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><<else>><<stress 2>><</if>><</link>><br>
+<<investigateicon>><<link [[去试药台采集孢子 (0:04)|MP NPC Noel Loop]]>><<pass 4>><</link>>
 
 :: MP NPC Noel Subsys Upgrade [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-<<if (_npc.gardenTier or 0) gte 3>>
-架子到这里算是搭满了。母株皿柜占去整面墙，玻璃门里温度恒定，湿度计的红针停在一条细线上不动。诺艾尔把最后一段竹管接好，退后两步看了很久，才轻轻吐出一口气：「我进学园那年，这里只有一张空桌子。」
-<<elseif (_npc.gardenTier or 0) gte 2>>
-滴灌的竹管顺着架子一路接过去，水珠从管口一滴一滴落下，正落在每一只菌瓶的瓶口。她蹲着检查了三个接口，确认不漏，才站起来拍拍膝盖：「这下不用每天弯着腰浇了。省下来的时辰，够我多记两页图鉴。」
-<<elseif (_npc.gardenTier or 0) gte 1>>
-苗床下面垫起了温水盘，手按上去是温的。诺艾尔把一支温度计插进盘边的槽里，看水银慢慢爬上来，嘴角动了动，算是笑：「夜里不怕凉了。菌丝要是长得好，下个月就能分瓶。」
-<<else>>
-木架还是那副空落落的样子。她把手里的工具放下，又拿起来，最后只是把一只空瓶摆正：「还差得远。你先去忙你的，别在这儿陪我耗着。」
-<</if>>
+新换上的竹滴管发出一声轻响，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>仔细校过温度表。如今药圃已升至<<if (_npc.gardenTier or 0) gte 3>>三阶母株皿柜<<elseif (_npc.gardenTier or 0) gte 2>>二阶滴灌菌架<<elseif (_npc.gardenTier or 0) gte 1>>一阶恒温苗床<<else>>初建苗床<</if>>，剩余活性孢子 <<print _npc.spores>> 份。温室角落的藤椅旁飘着清甜的药草香，正好坐下缓一口气。
 <br><br>
-【剩余活性孢子】：<<print _npc.spores>> 份。她把这些数字记在册子上，像记别人的账一样仔细，写完还要念一遍。
-<br><br>
-她合上册子，在封皮上拍了两下，才把灯拨亮一点。屋里比外头暖，玻璃上的水汽一层层往下淌，把窗外的校园糊成一片模糊的绿。她见你站着不动，就问：「你今天是不是又没吃东西？我这儿还有半块凉饼，不好吃，但能垫肚子。」说着从抽屉里摸出油纸包塞到你手里，自己退回架子边，捏着干花数起花瓣来，一瓣一瓣，像在数今天还剩下多少时辰。数到一半她忘了数到哪儿，只好从头再来。
-<br><br>
-架子搭得越高，屋里能歇脚的地方就越多。温盘边的矮凳、菌架旁的干草垫、皿柜前那张她搬来的旧藤椅，都是她特意留出来的。你要是累了，可以在那儿坐一会儿；只是若架子还没搭起来，这里除了硬木凳什么也没有，坐下去反倒更累。她会有点不好意思地别开脸，捏着干花数花瓣，数到你自己站起来为止。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<shopicon>><<link [[返回子系统页 (0:02)|MP NPC Noel Subsys]]>><<pass 2>><</link>><br>
-<<socialiseicon>><<link [[利用设施休整 (0:10)|MP NPC Noel Deep Hub]]>><<pass 10>><<if _npc.gardenTier gte 1>><<stress -4>><<tiredness -2>><<else>><<stress 1>><</if>><</link>>
-<br><br>
+<<getouticon>><<link [[回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
+<<shopicon>><<link [[回药圃页查看 (0:02)|MP NPC Noel Subsys]]>><<pass 2>><</link>><br>
+<<socialiseicon>><<link [[在恒温药圃旁调息 (0:10)|MP NPC Noel Deep Hub]]>><<pass 10>><<if _npc.gardenTier gte 1>><<stress -4>><<tiredness -2>><<else>><<stress 1>><</if>><</link>>
 
-:: MP NPC Noel Deep Quest 1 [nobr]
+:: MP NPC Noel Scene Morning [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-<<if (_npc.stage or 0) gte 1>>瓷盘边上还留着上一轮的粉笔记号，标着菌丝偏去的方向。<<else>>这是她第一次把刀交到你手里。<</if>>玻璃间里那股甜得发闷的味道已经散不掉了。母株最下面的几片叶子垂下，边缘焦黄，用手一碰就碎。诺艾尔把它从盆里连根起出来，放在铺了旧布的桌上，先没动刀，而是抬头看你：「你今天脸色比昨天好一点。昨晚睡了？」得到回答，她才把刀递给你：「那就你来。手稳的人下刀，才看得见里面的门道。」
-<br><br>
-根球比她想的还要坏。外圈一层已经发黑发软，指腹一按就塌下去；里圈却还硬着，切面渗出乳白色的汁。她让你把最外层坏死的那圈削掉，露出一段白生生的芯，再把芯横着切片，薄到能透光。切片搁在玻璃片上，对着灯看，能看见极细的丝线从中心散开，往某个方向偏——不是往下，是斜着，朝温室底下那面墙去。
-<br><br>
-「看见了吗？」她把眼睛凑近，睫毛几乎碰到玻璃片，「它自己知道往哪儿走。这不是病，是它在找东西。找什么，得顺着这些丝走下去才知道。」她说话时手指在桌沿上一下一下地点，点得比平时快。
-<br><br>
-灯下的桌面被刀划出过许多浅痕，每一道都是她这些年练习留下的。她把一块干净纱布铺在你手边，纱布角上绣着一朵小小的白花，针脚很拙：「擦刀用这个。别用袖子——袖子上的线头会掉进切片里，看着像菌丝，最容易骗人。」她说完就闭了嘴，退到灯影外，只在你停顿时轻轻敲一下桌面，催你继续，却始终不伸手来替你做。
-<br><br>
-两条路摆在你面前。一是趁切片还新鲜，立刻在镜下仔细观察菌丝的走向与分叉，把每一步都画下来——这活要一点手上功夫，也需要菌群肯配合你，急不得；二是把根段泡进缓冲液，按册子上记的方法，一格一格测酸碱，慢，但只要有耐心，读数总会告诉你答案。她两样都备好了，只等你选。
-<br><br>
-要是心浮气躁，切片切厚了，或者读数记错了格，她会把废掉的那一片收走，什么也不说，只把灯拧亮一些。那天剩下的时辰就都耗在重来上，回去时肩颈发酸，脑子里还嗡嗡的。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if _npc.axis gte 10 or _npc.gardenTier gte 1 or ($willpower or 0) gte 360>><<link [[切片观察菌丝 (0:15)|MP NPC Noel Deep Quest 2]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 1)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[切片观察菌丝 (0:15)|MP NPC Noel Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[记录酸碱读数 (0:15)|MP NPC Noel Deep Quest 2]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 1)>><<tiredness 2>><</link>>
-<br><br>
+<<if !$daily>><<set $daily to {}>><</if>>
+母株叶背结着细露。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>把喷壶递过来。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<mpherbicon>><<link [[均匀喷雾 (0:10)|MP NPC Noel Schedule]]>><<pass 10>><<set $daily.mpNoeScMorning to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 2)>><<stress -2>><</link>><br>
+<<walkicon>><<link [[先记叶背 (0:08)|MP NPC Noel Schedule]]>><<pass 8>><<set $daily.mpNoeScMorning to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -1>><</link>>
 
-:: MP NPC Noel Deep Quest 2 [nobr]
+:: MP NPC Noel Scene Noon [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-<<if (_npc.stage or 0) gte 2>>暗渠已经下去过一回，鞋底还带着没干透的泥。<<else>>这一回是她第一次带你下到温室底下。<</if>>顺着菌丝偏去的方向，你们在温室底下找到一块活动的石板。掀开时扬起一层灰，底下是条窄得只容一人侧身通过的旧暗渠，水面浮着一层薄薄的白膜，凉气顺着石壁往上爬。诺艾尔把灯举低，先照你的脚下：「站稳，别急。你手上有没有伤？有伤就别下水，脏水见血最麻烦。」确认过，她才让你先下。
-<br><br>
-渠水不深，刚过脚踝，可踩下去才发现底下的淤泥软得厉害，一脚一个坑。石壁上长满滑腻的苔，手没处扶，只能扶着她的灯杆。往里走了约莫二十步，水声忽然变了，从滴答变成细流——侧面有一道石缝，正往外渗清水，水线清亮，落进渠里也不散开。
-<br><br>
-「就是这里。」她把灯杆插在石缝边，腾出手来接了一捧，凑到鼻尖闻，又用指尖蘸了一点抹在手背上：「凉，但不涩。菌丝要找的，多半就是这股水。」她回头看你，眼睛里有一点藏不住的高兴，随即又压下去，从布袋里摸出那只干花，一瓣一瓣地数。
-<br><br>
-往渠里走的时候，她一直走在前面半步，灯杆换来换去，总把亮的那一侧让给你。走到最窄的地方，她忽然停住，没有回头：「我小时候掉进过比这更深的井里，是学园的老园丁把我捞上来的。从那以后我就不太敢一个人下暗的地方。」说完她自己先笑了一下，像是嫌这话太软，「你别记着。就当我在数花瓣。」
-<br><br>
-接下来要做的，是把水引回温室。一是直接用带来的陶罐接满，一趟一趟提上去，路上要稳，洒了就得重来；二是就地滤掉水里的杂质，用带来的细沙和炭块搭一个简易滤器，滤过的水更干净，但蹲在渠里滤水费时辰，膝盖会酸。她两样都带了，只是东西多，得由你决定先搬哪一样。
-<br><br>
-渠里的水汽重，待久了人会发冷，手指也僵。若你手一抖，从石缝接的那罐水洒进淤泥，就只能重新等它渗出来，蹲到腿麻，回去时还得贴着她留下的暖垫坐很久才缓得过来。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if _npc.axis gte 20 or _npc.gardenTier gte 1 or ($willpower or 0) gte 360>><<link [[采集暗渠泉水 (0:15)|MP NPC Noel Deep Quest 3]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 2)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[采集暗渠泉水 (0:15)|MP NPC Noel Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[滤除水体杂质 (0:15)|MP NPC Noel Deep Quest 3]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 2)>><<tiredness 2>><</link>>
-<br><br>
+<<if !$daily>><<set $daily to {}>><</if>>
+标本柜玻璃起雾。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>让你夹稳菌丝，别碰边缘。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<investigateicon>><<link [[夹稳菌丝 (0:12)|MP NPC Noel Schedule]]>><<pass 12>><<set $daily.mpNoeScNoon to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<tiredness 2>><<stress -2>><</link>><br>
+<<shopicon>><<link [[擦净柜玻璃 (0:08)|MP NPC Noel Schedule]]>><<pass 8>><<set $daily.mpNoeScNoon to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<stress -1>><</link>>
 
-:: MP NPC Noel Deep Quest 3 [nobr]
+:: MP NPC Noel Scene Night [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-<<if (_npc.stage or 0) gte 3>>上一缸营养液的残渍还留在缸底，被水冲成一道浅痕。<<else>>陶缸是刚洗过的，内壁还挂着水珠。<</if>>暗渠的水提回温室后，诺艾尔把它倒进一只大陶缸，又按图鉴上的记法，一份一份往里加料。缸里的液体先是浑的，搅过几圈之后慢慢转成淡青色，浮起一层很细的沫。她把一根玻璃棒递给你：「搅的时候顺着一个方向，别来回。菌不喜欢乱。」说着她先替你试了试缸壁的温度，才退开半步。
-<br><br>
-母株的根段泡在缸边的小盆里，等着这缸营养液。她蹲下去翻开你的袖口看你的手腕，那是她的老习惯——先看身体，再看活计：「手背这片红的，是昨天晒的？疼不疼？」听你说不疼，她才把册子推过来，指着其中两行：「这里有个岔子。按老配方，原液直接浇下去，见效快，可耐受会跟着上来，用久了它就不认；也可以往缸里滴镇静草汁，把性子压下去，慢一些，但根不容易烧。」
-<br><br>
-她说到「耐受」两个字时，声音顿了顿。这是她自己一直没解决的问题：药性越好，身体越容易习惯，习惯之后就更要重剂量，最后连重剂量都不管用。她把一只装草汁的小瓶拿在手里转了半圈：「我一直没敢拿自己做这个试验。你要是愿意，这缸就按你的意思调。」
-<br><br>
-她讲这些的时候，手指一直在缸沿上轻轻敲，敲到「耐受」两个字就停一下，像在数拍子。你忽然明白她为什么总要先问你的身体：她见过太多药性压过人的例子，也见过自己试药后连着几夜睡不着的样子。她把那只小瓶放下，抬眼看你：「这一缸配成什么样，我不替你做主。你身体里的反应，只有你自己最清楚。」
-<br><br>
-一是把孢子原液按比例兑进去，趁新鲜一次配足。这要看你对配比的把握，也要看菌群是不是已经认了你；二是先滴镇静草汁，慢慢调，一滴滴试，耗时辰，但稳妥。前者快，失败时整缸都会发浑，只能倒掉；后者慢，可就算不成，也还能留一半。
-<br><br>
-缸边的地上已经摆好了接废液的桶。她没多说什么，只是把两只手在围裙上擦了擦，站到你侧后方，替你挡着门口的风。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if _npc.axis gte 30 or _npc.gardenTier gte 1 or ($willpower or 0) gte 360>><<link [[混合孢子原液 (0:15)|MP NPC Noel Deep Quest 4]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 3)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[混合孢子原液 (0:15)|MP NPC Noel Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[滴入镇静草汁 (0:15)|MP NPC Noel Deep Quest 4]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 3)>><<tiredness 2>><</link>>
-<br><br>
+<<if !$daily>><<set $daily to {}>><</if>>
+暖阁培养皿边白气一缕。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>压低声音，让你守温度。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<socialiseicon>><<link [[守住温度 (0:12)|MP NPC Noel Schedule]]>><<pass 12>><<set $daily.mpNoeScNight to 1>><<if (_npc.trust or 0) gte 15 or (_npc.axis or 0) gte 15>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -2>><<else>><<set $daily.mpNoeScNightFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 4)>><<set _npc.setback to Time.days + 1>><<stress 3>><</if>><</link>><br>
+<<investigateicon>><<link [[记下白气 (0:10)|MP NPC Noel Schedule]]>><<pass 10>><<set $daily.mpNoeScNight to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<stress -1>><</link>>
 
-:: MP NPC Noel Deep Quest 4 [nobr]
+:: MP NPC Noel Scene Rest [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-<<if (_npc.stage or 0) gte 4>>守夜用的旧棉被还搭在椅背上，边角有被火燎过的小洞。<<else>>那床旧棉被是她刚从柜子最底下翻出来的。<</if>>营养液浇下去的第三夜，母株开始排异。新叶的边缘先卷起来，接着整片发暗，盆土表面渗出一层黏滑的膜。诺艾尔把温室的温度调到恒定，用旧棉被把盆围住，自己搬了张矮凳坐在旁边，一步也不肯离开。见你推门进来，她第一句话仍是：「外面夜露重，你穿这么少？先烤烤手。」
-<br><br>
-温度不能高也不能低。高一点，菌丝疯长，把根闷住；低一点，母株缓不过来，叶子会一片片掉。她守到后半夜，眼皮开始打架，还硬撑着每隔两个时辰记一次温度。册子上的字迹从工整变得歪斜，最后几行几乎连成一笔。
-<br><br>
-「它排斥的不是水，是我。」她突然开口，声音很轻，「我调的每一缸，都是拿自己的手试过温度、试过浓淡。它要是不认我，我就不知道还能怎么办了。」说完她低下头，从围裙口袋里摸出那半朵干花，一瓣一瓣地掰。你听见她数到十一，又从头数起。
-<br><br>
-后半夜外面起了风，温室顶上的玻璃被吹得轻响。她起身去把缝隙塞严，回来时顺手把自己的外衣披到你肩上，动作很轻，像是怕惊动盆里的东西。天快亮的时候，母株最外面那片新叶忽然舒开了一点点，她把脸凑近看了很久，才回过头，眼底的血丝还没退，却先伸手来探你的额头：「你也熬了一夜。有没有哪里难受？」
-<br><br>
-能做的有两件。一是留在温室外间守夜，按她标的时辰量温度、记读数，一刻也不能错过，灯油烧完了还得摸黑添；二是在排异最重的那几根枝蔓上动剪子，把已经坏死、正在拖累整株的部分剪掉，让剩下的养分集中。剪子要快，下手要准，剪错了就是白流一地的汁。
-<br><br>
-不管选哪一样，这一夜都不会轻松。守夜的会熬到天亮，眼睛里全是血丝；动剪子的手上可能留下几道细口子，碰水就疼。她不会因为这些夸你，只会在天亮时把一碗热汤推过来，说这是一天的分量，喝完才准走。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if _npc.axis gte 40 or _npc.gardenTier gte 1 or ($willpower or 0) gte 360>><<link [[恒温守夜观测 (0:15)|MP NPC Noel Deep Quest 5]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 4)>><<set _npc.axis to Math.min(100, _npc.axis + 5)>><</link>><<else>><<link [[恒温守夜观测 (0:15)|MP NPC Noel Deep Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[剪除坏死枝蔓 (0:15)|MP NPC Noel Deep Quest 5]]>><<pass 15>><<set _npc.stage to Math.max((_npc.stage or 0), 4)>><<tiredness 2>><</link>>
-<br><br>
+<<if !$daily>><<set $daily to {}>><</if>>
+暖阁草垫还热。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>给你留了半边位置。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<socialiseicon>><<link [[靠草垫歇 (0:08)|MP NPC Noel Schedule]]>><<pass 8>><<set $daily.mpNoeScRest to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<stress -3>><</link>><br>
+<<shopicon>><<link [[听温室滴水 (0:08)|MP NPC Noel Schedule]]>><<pass 8>><<set $daily.mpNoeScRest to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<stress -2>><</link>>
 
-:: MP NPC Noel Deep Quest 5 [nobr]
+:: MP NPC Noel Scene Rel10 [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
 <<set _npc to $mpNpcs.noel>>
-<<if (_npc.stage or 0) gte 5>>册子已经翻到最后一页，纸角被反复摩挲得发亮。<<else>>册子摊在膝上，最后一页还是空的。<</if>>母株撑过了排异，却再也回不到从前的样子。它的主干空了一半，新叶薄得透光，根系里那层菌丝却长得比任何时候都密，顺着盆底一直蔓延到架子脚。诺艾尔把温室的门关上，破例让你坐到母株旁边那张旧藤椅上，自己蹲在盆边，很久没有说话。
-<br><br>
-【共生刻度】：<<print _npc.axis>>/100 ｜ 药圃：<<if (_npc.gardenTier or 0) gte 3>>母株皿柜<<elseif (_npc.gardenTier or 0) gte 2>>滴灌菌架<<elseif (_npc.gardenTier or 0) gte 1>>恒温苗床<<else>>空花架<</if>>。<<if $mpWorldNoelEnding is "purify">>（上一回你们选了炼，药瓶还摆在架子上。）<<elseif $mpWorldNoelEnding is "symbiosis">>（上一回你们选了养，皿柜里的白丝又密了一层。）<<else>>（这一页还没有写下结果。）<</if>>
-<br><br>
-「学园不会留一株不结果的母株。」她终于开口，声音干得像纸，「标本室靠它出药材，出了这季要是还这样，系里就会把它处理掉。处理的办法有两种。一种是炼——把它整株收走，用我配的方子熬成药，药性会很强，能救很多人的急症；另一种是养——把它移进新的皿柜，让菌丝重新铺开，也许它还能活，也许只是拖时间。」
-<br><br>
-她一边说，一边无意识地去摸口袋里的干花，摸到才发现早就掰完了，手指只能空捏着。她抬起眼看你，先问的仍是那句：「你昨晚睡了没有？这几天你陪着我熬，我看得出来。」没等你答，她又低下头：「我知道这话该我自己拿主意。可我拿不了。」
-<br><br>
-两条路，代价都摆在明面上。炼，意味着她要背着擅自处置学园母株的罪名，学籍保不住，人得离开这里；养，意味着她要押上自己全部的记录和脸面，去换一个不一定成的结果，成了她留下，不成就和母株一起被清出去。她把两种可能都写在册子的最后一页，字写得比前面任何一页都慢。
-<br><br>
-她说这话时，手指一直搭在自己的手腕上，像是也在给自己数脉。窗外的天色一点点暗下去，玻璃间的灯成了屋里唯一的光源，把两个人的影子拉得很长。她忽然想起什么，转身从册子里抽出一张折得很小的纸，放到你面前：「这是我这些年记的方子。不管选哪条路，你都留着。要是我以后不在这儿了，至少这个还在。」
-<br><br>
-温室里的温度计还在轻轻响，玻璃上凝着水珠。她把选择交到你手里，自己退开一步，退到灯照不到的边上，安静地等着。
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[提炼净雾药剂 (0:20)|MP NPC Noel Ending A]]>><<pass 20>><<set _npc.stage to 5>><<set $mpWorldNoelEnding to "purify">><<set _npc.axis to Math.min(100, _npc.axis + 10)>><</link>><br>
-<<socialiseicon>><<link [[培育共生菌网 (0:20)|MP NPC Noel Ending B]]>><<pass 20>><<set _npc.stage to 5>><<set $mpWorldNoelEnding to "symbiosis">><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 5)>><</link>>
-<br><br>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>把擦花粉的手帕塞给你，鼻尖还有一点黄粉。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<socialiseicon>><<link [[双手接住 (0:10)|MP NPC Noel Schedule]]>><<pass 10>><<set $daily.mpNoeScRel10 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<stress -3>><</link>><br>
+<<investigateicon>><<link [[低声道谢 (0:08)|MP NPC Noel Schedule]]>><<pass 8>><<set $daily.mpNoeScRel10 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<stress -2>><</link>>
+
+:: MP NPC Noel Scene Rel25 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+苗床边只够两人并肩。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>把额头抵上你肩，呼吸带着土腥。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<socialiseicon>><<link [[靠得更近 (0:12)|MP NPC Noel Schedule]]>><<pass 12>><<set $daily.mpNoeScRel25 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 2)>><<arousal 400>><<stress -4>><</link>><br>
+<<investigateicon>><<link [[握住指尖 (0:10)|MP NPC Noel Schedule]]>><<pass 10>><<set $daily.mpNoeScRel25 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>><<arousal 250>><<stress -3>><</link>>
+
+:: MP NPC Noel Scene Rel40 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+暖阁门帘落下。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>把你按进草垫，腿缠上来，指尖还带着培养液的凉意，却急着探进衣摆。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[穿好衣服 (0:05)|MP NPC Noel Schedule]]>><<pass 5>><<set $daily.mpNoeScRel40 to 1>><</link>><br>
+<<mphearticon>><<link [[让对方没入 (0:20)|MP NPC Noel Schedule]]>><<pass 20>><<set $daily.mpNoeScRel40 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 4)>><<set _npc.lust to Math.max(0, (_npc.lust or 0) - 4)>><<arousal 2000>><<orgasm>><<stress -10>><<tiredness 2>><</link>><br>
+<<socialiseicon>><<link [[先含住前端 (0:15)|MP NPC Noel Schedule]]>><<pass 15>><<set $daily.mpNoeScRel40 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 3)>><<arousal 1200>><<stress -6>><</link>>
+
+:: MP NPC Noel Scene Page2 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+两页菌株手记摊开。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>让你对孢子编号。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<mplettericon>><<link [[逐行核对 (0:12)|MP NPC Noel Schedule]]>><<pass 12>><<set $daily.mpNoeScSp2 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<stress -2>><</link>><br>
+<<investigateicon>><<link [[描下模糊处 (0:10)|MP NPC Noel Schedule]]>><<pass 10>><<set $daily.mpNoeScSp2 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -1>><</link>>
+
+:: MP NPC Noel Scene Page4 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+母株脉案与手记对不上。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>蹲在柜前等你辨。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<investigateicon>><<link [[辨脉案编号 (0:12)|MP NPC Noel Schedule]]>><<pass 12>><<set $daily.mpNoeScSp4 to 1>><<if (_npc.sporePages or 0) gte 4 or (_npc.axis or 0) gte 20>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<stress -2>><<else>><<set $daily.mpNoeScSp4Fail to 1>><<set _npc.sporePages to Math.max(0, (_npc.sporePages or 0) - 1)>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 4)>><<stress 2>><</if>><</link>><br>
+<<walkicon>><<link [[拓下叶脉 (0:12)|MP NPC Noel Schedule]]>><<pass 12>><<set $daily.mpNoeScSp4 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<tiredness 2>><</link>>
+
+:: MP NPC Noel Scene Page6 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+六页手记排齐。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>说再往下就不是观察，是处置。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<mplettericon>><<link [[压平页角 (0:10)|MP NPC Noel Schedule]]>><<pass 10>><<set $daily.mpNoeScSp6 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<stress -3>><</link>><br>
+<<shopicon>><<link [[收进夹层 (0:12)|MP NPC Noel Schedule]]>><<pass 12>><<set $daily.mpNoeScSp6 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>><<stress -2>><</link>>
+
+:: MP NPC Noel Scene RepLow [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+温室管事挡在门外，问培养皿谁开的封。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>站到你身侧。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<socialiseicon>><<link [[稳住回答 (0:10)|MP NPC Noel Schedule]]>><<pass 10>><<set $daily.mpNoeScRepLow to 1>><<if (_npc.trust or 0) gte 20 or (_npc.axis or 0) gte 25>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.rep to Math.min(100, (_npc.rep or 50) + 4)>><<stress -1>><<else>><<set $daily.mpNoeScRepLowFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 6)>><<set _npc.sporePages to Math.max(0, (_npc.sporePages or 0) - 1)>><<stress 3>><</if>><</link>><br>
+<<walkicon>><<link [[低头退开 (0:08)|MP NPC Noel Schedule]]>><<pass 8>><<set $daily.mpNoeScRepLow to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<stress 1>><</link>>
+
+:: MP NPC Noel Scene RepHigh [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+药铺学徒送来一包干菌，说手记传开了。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>看你。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[退回日程 (0:03)|MP NPC Noel Schedule]]>><<pass 3>><</link>><br>
+<<shopicon>><<link [[收下谢礼 (0:08)|MP NPC Noel Schedule]]>><<pass 8>><<set $daily.mpNoeScRepHigh to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.rep to Math.min(100, (_npc.rep or 50) + 2)>><<stress -2>><</link>><br>
+<<mpscaleicon>><<link [[只记下人情 (0:08)|MP NPC Noel Schedule]]>><<pass 8>><<set $daily.mpNoeScRepHigh to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -1>><</link>>
+
+:: MP NPC Noel Scene Finale [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if $mpNoelEnded>><<if $mpWorldNoelEnding is "symbiosis">><<goto "MP NPC Noel Ending B">><<else>><<goto "MP NPC Noel Ending A">><</if>><</if>>
+母株前，只够续养或整株焚净。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>把火折子与培养液都放在石台。选定就不能回头。
+温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香。<br><br>
+<<getouticon>><<link [[先退回去 (0:04)|MP NPC Noel Deep Hub]]>><<pass 4>><</link>><br>
+<<mpherbicon>><<link [[配发净雾药 (0:20)|MP NPC Noel Ending A]]>><<pass 20>><<set $daily.mpNoeScFinale to 1>><<set $mpNoelIrreversibleChoice to "purify">><<set $mpNoelEnded to 1>><<set $mpWorldNoelEnding to "purify">><</link>><br>
+<<mplampicon>><<link [[封锁共生境 (0:20)|MP NPC Noel Ending B]]>><<pass 20>><<set $daily.mpNoeScFinale to 1>><<set $mpNoelIrreversibleChoice to "symbiosis">><<set $mpNoelEnded to 1>><<set $mpWorldNoelEnding to "symbiosis">><</link>>
 
 :: MP NPC Noel Ending A [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
-<<set _npc to $mpNpcs.noel>><<set $mpWorldNoelEnding to "purify">><<set _npc.stage to 5>>
-那缸药熬了整整一夜。母株被整株起出，根、茎、叶分开，按册子上的次序下锅，文火慢煎，煎到汤汁收成深琥珀色，表面浮起一层薄薄的白雾。诺艾尔守着火，一步没离开，脸上被热气熏得发红，眼睛却一直是亮的。
+<<set _npc to $mpNpcs.noel>>
+<<if $mpNoelEnded and $mpWorldNoelEnding is "symbiosis">><<goto "MP NPC Noel Ending B">><</if>>
+<<set _already to ($mpNoelEnded or 0)>>
+<<set $mpNoelEnded to 1>><<set $mpWorldNoelEnding to "purify">><<set $mpNoelIrreversibleChoice to "purify">>
+<<if !_already>>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("noel_ending_purify_v50")>><<money 1600>><<set _npc.spores to (_npc.spores or 0) + 2>><</if>>
+<<stress -10>><<trauma -4>>
+<</if>>
+成排贴着白签的净雾药剂送往孤儿院与神殿义诊台，困扰小镇的雾季咳症应声缓解。虽然学长当年窃取署名的事被她淡然翻过，但全城药师都认准了标本室这味方子。自母株菌群剥离熬药后，每次试药结余的活性孢子比从前少了一截。
 <br><br>
-天亮时，她把药汁滤进几只小瓶，封蜡，贴上标签，才终于坐下来，双手放在膝上，很久没有动。消息传得比药凉得还快——擅自处置学园母株，学籍当场作废。系里的人来收钥匙时，她没有争，只把图鉴册子抱在怀里，把围裙解下来叠好放在桌上。
-<br><br>
-「我早就想好了。」她走出标本室时对你说，声音很平静，「这株母株本来也活不过这一季。它最后能变成几瓶救急的药，比烂在盆里强。」走到门口，她忽然停下来，回头看了一眼那排空下来的架子，又转回来，伸手按了按你的脉：「你这两天心跳得厉害。是替我担心？」
-<br><br>
-得到回答，她笑了一下，那笑很浅，却是这段时间以来第一次没有勉强：「那我跟你走。镇上总有地方能种东西，我带着册子，带着这几瓶药，还有你。」她把一只小瓶塞进你手里，瓶身上写着一行小字，是一种你在学园里从没见过的方子。
-<br><br>
-收钥匙的人走后，屋里只剩下空架子和一地碎叶。她把六页图鉴从麻绳上解下来，用布一层层包好，最后看了一眼那排空瓶，才把门带上。走到走廊尽头时，她没有回头，只是脚步慢了一下，又继续往前走。门外天已经大亮，晨雾贴着地面，被初升的光照得发白——那种白，和她药瓶里浮起的一层很像是同一回事。
-<br><br>
-净雾药剂的名声后来慢慢传开了。夜里咳嗽的人、被雾呛到的人，都来问那种琥珀色的小瓶。她不再提学园，只在有人问起时，低头数一数手里的干花，然后说：是别人教她熬的。
-<br><br>
-<<if (_npc.axis or 0) gte 60>>她偶尔会按住你的脉，什么也不说。菌群在你体内留下的痕迹，她比谁都清楚。<<else>>她仍旧每次见面先问你的睡眠，像在确认那几瓶药没有在你身上留下坏处。<</if>>
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:04)|MP NPC Noel Deep Hub]]>><<pass 4>><<stress -6>><</link>><br>
-<<socialiseicon>><<link [[返回诺艾尔处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
-<br><br>
+<<getouticon>><<link [[回共生深枢 (0:04)|MP NPC Noel Deep Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<socialiseicon>><<link [[回诺艾尔处喝茶 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
 
 :: MP NPC Noel Ending B [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
-<<set _npc to $mpNpcs.noel>><<set $mpWorldNoelEnding to "symbiosis">><<set _npc.stage to 5>>
-新的皿柜是连夜搬进温室的。诺艾尔把母株连盆移进去，铺上新的菌床，把暗渠引来的水一滴一滴渗进基质里，然后关上门，守在玻璃外面。头三天没有任何动静，第四天清晨，盆土表面浮起一层极细的白丝，顺着盆沿一路铺开，像谁在土上织了一张看不见的网。
+<<set _npc to $mpNpcs.noel>>
+<<if $mpNoelEnded and $mpWorldNoelEnding is "purify">><<goto "MP NPC Noel Ending A">><</if>>
+<<set _already to ($mpNoelEnded or 0)>>
+<<set $mpNoelEnded to 1>><<set $mpWorldNoelEnding to "symbiosis">><<set $mpNoelIrreversibleChoice to "symbiosis">>
+<<if !_already>>
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("noel_ending_symbiosis_v50")>><<money 1600>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><</if>>
+<<stress -10>><<trauma -4>>
+<</if>>
+玻璃间成了全城唯一不受寒潮与灰雾侵扰的温润秘境，母株半空的树干里亮着点点荧光。<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>把系着红绳的备用钥匙交到你手里，说你的呼吸早已与这里的菌群融为一脉。温室恒温炉从此每周都要单支一笔无烟炭费。
 <br><br>
-她蹲在皿柜前看了很久，才回头叫你，声音有点发抖：「它认了。它把菌丝铺出来了。」说着她伸手去摸口袋，摸到那半朵干花，却没有掰，只是攥在手里。
+<<getouticon>><<link [[回共生深枢 (0:04)|MP NPC Noel Deep Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<socialiseicon>><<link [[回诺艾尔处喝茶 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+
+:: MP NPC Noel Schedule [nobr]
+<<set $outside to 0>> <<set $location to "town">> <<effects>> <<mpAmbient>> <<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.hour gte 7 and Time.hour lt 12>>晨间温室里，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>在给母株喷雾，叶背结着细露，喷壶嘴还挂着水珠。
+<<elseif Time.hour gte 12 and Time.hour lt 18>>午后标本柜开着，她用镊子夹菌丝，玻璃起雾，柜脚压着一册未合的脉案。
+<<else>>入夜暖阁灯低，培养皿边上还冒着白气，温度计的红线停在她盯过许多次的刻度。
+<</if>>温室滴灌管轻轻作响，培养皿边结着一圈细雾，土腥混着甘菊苦香，草垫还留着白昼的热。
 <br><br>
-系里的人来看过一次，记录、拍照、量了温度和湿度，最后留下话说，这株母株可以继续留在标本室，条件是所有的观察记录都要归档。诺艾尔答应了，答应得很快。后来系里给她单独辟出一间小屋，把母株和她的图鉴一起搬进去——地方不大，但有一扇朝南的窗。
+<<getouticon>><<link [[退回深枢 (0:02)|MP NPC Noel Deep Hub]]>><<pass 2>><</link>><br>
+<<if Time.days lt (_npc.setback or 0)>>
+<<walkicon>><<link [[看休整木牌 (0:04)|MP NPC Noel Quest Closed]]>><<pass 4>><</link>>
+<<elseif $mpNoelEnded>>
+<<if $mpWorldNoelEnding is "symbiosis">><<link [[回终局乙 (0:08)|MP NPC Noel Ending B]]>><<pass 8>><</link>><<else>><<link [[回终局甲 (0:08)|MP NPC Noel Ending A]]>><<pass 8>><</link>><</if>>
+<<else>>温室滴灌轻轻作响，培养皿边结细雾，土腥混着甘菊苦香往上浮。
+<<if Time.hour gte 7 and Time.hour lt 12 and !$daily.mpNoeScMorning>><<mpherbicon>><<link [[帮她喷雾 (0:15)|MP NPC Noel Scene Morning]]>><<pass 15>><</link>><br>
+<<elseif Time.hour gte 12 and Time.hour lt 18 and !$daily.mpNoeScNoon>><<investigateicon>><<link [[夹菌丝入皿 (0:15)|MP NPC Noel Scene Noon]]>><<pass 15>><</link>><br>
+<<elseif (Time.hour gte 18 or Time.hour lt 7) and !$daily.mpNoeScNight>><<socialiseicon>><<link [[守培养皿 (0:15)|MP NPC Noel Scene Night]]>><<pass 15>><</link>><br>
+<<elseif !$daily.mpNoeScRest>><<shopicon>><<link [[暖阁歇脚 (0:10)|MP NPC Noel Scene Rest]]>><<pass 10>><</link>><br>
+<<else>><<walkicon>><<link [[去街口走走 (0:08)|MP NPC Noel Street 5]]>><<pass 8>><</link>><br>
+<</if>>
+<<if (_npc.deepStage or 0) gte 5 and (_npc.sporePages or 0) gte 6 and !$mpNoelEnded and !$daily.mpNoeScFinale and Time.days gte (_npc.nextStepDay or 0)>><<mpscaleicon>><<link [[在母株前决断 (0:16)|MP NPC Noel Scene Finale]]>><<pass 16>><</link>>
+<<elseif (_npc.sporePages or 0) gte 6 and !$daily.mpNoeScSp6 and Time.days gte (_npc.nextStepDay or 0)>><<mplettericon>><<link [[摊齐六页收集 (0:15)|MP NPC Noel Scene Page6]]>><<pass 15>><</link>>
+<<elseif ((_npc.love or 0) gte 40 or (_npc.trust or 0) gte 40) and !$daily.mpNoeScRel40 and Time.days gte (_npc.nextStepDay or 0)>><<mphearticon>><<link [[跟对方进暖阁 (0:20)|MP NPC Noel Scene Rel40]]>><<pass 20>><</link>>
+<<elseif (_npc.rep or 50) lt 30 and !$daily.mpNoeScRepLow and Time.days gte (_npc.nextStepDay or 0)>><<mpeavesdropicon>><<link [[应付学监盘问 (0:12)|MP NPC Noel Scene RepLow]]>><<pass 12>><</link>>
+<<elseif (_npc.rep or 50) gte 70 and !$daily.mpNoeScRepHigh and Time.days gte (_npc.nextStepDay or 0)>><<mphandshakeicon>><<link [[收下花房谢礼 (0:12)|MP NPC Noel Scene RepHigh]]>><<pass 12>><</link>>
+<<elseif (_npc.sporePages or 0) gte 4 and !$daily.mpNoeScSp4 and Time.days gte (_npc.nextStepDay or 0)>><<mplettericon>><<link [[继续辨认收集 (0:15)|MP NPC Noel Scene Page4]]>><<pass 15>><</link>>
+<<elseif ((_npc.love or 0) gte 25 or (_npc.trust or 0) gte 25) and !$daily.mpNoeScRel25 and Time.days gte (_npc.nextStepDay or 0)>><<mphearticon>><<link [[并肩靠培养架 (0:14)|MP NPC Noel Scene Rel25]]>><<pass 14>><</link>>
+<<elseif (_npc.sporePages or 0) gte 2 and !$daily.mpNoeScSp2 and Time.days gte (_npc.nextStepDay or 0)>><<mplettericon>><<link [[对读两页收集 (0:12)|MP NPC Noel Scene Page2]]>><<pass 12>><</link>>
+<<elseif ((_npc.love or 0) gte 10 or (_npc.trust or 0) gte 10) and !$daily.mpNoeScRel10 and Time.days gte (_npc.nextStepDay or 0)>><<mphearticon>><<link [[接过她递的茶 (0:12)|MP NPC Noel Scene Rel10]]>><<pass 12>><</link>>
+<<else>><<mpclockworkicon>><<link [[核对关系阶位 (0:06)|MP NPC Noel Tier Action]]>><<pass 6>><</link>>
+<</if>>
+<</if>>
+
+:: MP NPC Noel Note [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcCross>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+你轻轻推开标本室木门时<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>不在桌前，陶茶壶底座下压着一张带洋甘菊香气的药笺便条：<<if (_npc.axis or 0) gte 60>>『我去暗渠口取一份活水样，壶里温着给你配的少蜜洋甘菊茶，玻璃间钥匙在抽屉花萼下，申时或入夜八点回来把脉。』<<elseif (_npc.axis or 0) gte 25>>『去图书馆查一页旧本草，桌上有烘好的茯苓饼，午后归。』<<else>>『外出采药，勿触碰未封口培养皿，傍晚回室。』<</if>>
+标本室的铜壶冒着细密白汽，玻璃皿里的叶片在恒温灯下泛着微光。<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Noel Schedule]]>><<pass 2>><</link>><br>
+<<mplettericon>><<link [[压好干花笺 (0:06)|MP NPC Noel Deep Hub]]>><<pass 6>><<if !$daily.mpNoelNoteSign>><<set $daily.mpNoelNoteSign to 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 2)>><<stress -1>><<else>><<stress -1>><</if>><</link>><br>
+<<socialiseicon>><<link [[前往同城交集 (0:06)|MP NPC Cross Noel Hub]]>><<pass 6>><</link>>
+
+:: MP NPC Noel Street 5 [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<set _npc to $mpNpcs.noel>>
+牛津街拐角的干货草药摊前，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>正拈起一片晒干的紫苏叶凑在鼻端轻嗅。当前共生刻度为 <<print _npc.axis>>：<<if (_npc.axis or 0) gte 40>>她一转头看见你，立刻放下竹篮先探了探你的脉门，顺手挑了一包安神酸枣仁塞进你怀里<<else>>她仔细挑出掺在药材里的陈年梗枝，示意你帮她拎住布袋口<</if>>。
 <br><br>
-搬完那天，她坐在新屋的窗台上，先拉过你的手数了数脉，才慢慢开口：「以后这里就是我的地方了。图鉴还差最后一页，等菌网铺满整个皿柜，我就把它补上。」她顿了顿，声音低下去：「这株母株的事，我以前谁都没告诉。现在告诉你了，你就得常来。」
+<<getouticon>><<link [[退回上一页 (0:02)|MP NPC Noel Schedule]]>><<pass 2>><</link>><br>
+<<mpherbicon>><<link [[辨认甘菊成色 (0:10)|MP NPC Noel Deep Hub]]>><<pass 10>><<if !$daily.mpNpcStreetNoel>><<set $daily.mpNpcStreetNoel to 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<stress -2>><</if>><</link>><br>
+<<mpcarryicon>><<link [[挎上药篮回标本室 (0:12)|MP NPC Noel Loop]]>><<pass 12>><<if !$daily.mpNpcStreetNoel>><<set $daily.mpNpcStreetNoel to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<tiredness 2>><<stress -2>><</if>><</link>>
+
+:: MP NPC Noel Daily 15 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpInitNpcNoel>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set _npc to $mpNpcs.noel>>
+炭炉上架着一只细竹筛，<<if _npc.hasMet>>诺艾尔<<else>>标本学徒<</if>>正用竹筷拨动刚采下的洋甘菊花冠。微苦回甘的香气在屋里弥漫，当前共生刻度为 <<print _npc.axis>>：<<if (_npc.axis or 0) gte 35>>她依你的脉象添了两味温肺干花，把香囊系在你衣扣内侧<<else>>她教你听花瓣干燥时的轻响，说火候多一分就散了安神气味<</if>>。
 <br><br>
-菌网越长越密，从皿柜一直蔓延到墙角的架子。她开始用它配新的茶，剂量一次比一次轻，说菌群认得人，就不必下重手。夜里你咳嗽，她会从架上取一只小瓶，倒出一点温水冲开，递到你手里：「这是配方，不是关心。喝完再说话。」
-<br><br>
-新屋的窗朝南，下午的太阳会一直照到皿柜的一半。她把图鉴的最后一页留了空白，说等菌网铺满再填，可从那天起，她每天都要去摸一摸那片白丝，像确认什么还活着。你有时坐在窗边看她记温度，她会头也不抬地递过一杯温水：「先喝。你今天嘴唇干。」杯底沉着两片薄薄的叶，是她新配的那一味。
-<br><br>
-<<if (_npc.trust or 0) gte 12>>如今那间小屋的钥匙她给了你一把，用红绳系着，和她自己那把并排挂在门后。<<else>>她还没有把钥匙交给你，但每次你推门进去，她都会先把窗边的椅子挪过来。<</if>>
-<br><br>
-<<getouticon>><<link [[返回共生深枢 (0:04)|MP NPC Noel Deep Hub]]>><<pass 4>><<stress -6>><</link>><br>
-<<socialiseicon>><<link [[返回诺艾尔处 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
-<br><br>
+<<getouticon>><<link [[回关系阶位 (0:02)|MP NPC Noel Tier Action]]>><<pass 2>><</link>><br>
+<<mpherbicon>><<link [[焙花冠入药囊 (0:10)|MP NPC Noel Deep Hub]]>><<pass 10>><<if !$daily.mpNpcDailyNoel15>><<set $daily.mpNpcDailyNoel15 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<stress -2>><<else>><<stress -1>><</if>><</link>><br>
+<<mpwatchicon>><<link [[守着烘炉添炭火 (0:08)|MP NPC Noel Deep Hub]]>><<pass 8>><<if !$daily.mpNpcDailyNoel15>><<set $daily.mpNpcDailyNoel15 to 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 2)>><<tiredness 2>><<stress -2>><<else>><<stress -1>><</if>><</link>>

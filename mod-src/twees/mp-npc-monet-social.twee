@@ -1,5 +1,5 @@
 :: MP NPC Monet Social Hub [nobr]
-<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<set $mpNpcs to ($mpNpcs or {})>>
 <<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0 })>>
 <<set $mpNpcs.monet.love to ($mpNpcs.monet.love or 0)>>
@@ -25,7 +25,7 @@
 <br>
 <<mptailoricon>><<link "陪她绷画布 (0:10)">><<pass 10>><<replace "#monet-social-actions">>
 <<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240 or ($athletics or 0) gte 240>>
-你把木框扶正，顺着经纬把亚麻布拉紧，钉子一枚枚吃进木头里，声音又闷又稳。她抬手在布面上弹了一下，听见那声绷紧的回响，才点头：「这块布肯听话。」<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<tiredness 3>>
+你把木框扶正，顺着经纬把亚麻布拉紧，钉子一枚枚吃进木头里，声音又闷又稳。她抬手在布面上弹了一下，听见那声绷紧的回响，才点头：「这块布肯听话。」<<if !$daily.mpLock_MPNPCMonetSocialHub_1>><<set $daily.mpLock_MPNPCMonetSocialHub_1 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><</if>><<tiredness 3>>
 <<else>>
 你拉偏了一角，布纹斜着走上框边。她没说什么，只把钉子起出来重钉，让你在旁边扶着。两个钟头下来，肩膀像被人拧过，她也没把这一回算进你的手艺里。<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<stress 4>><<pain 1>>
 <</if>>
@@ -35,7 +35,7 @@
 <br>
 <<mpcleanicon>><<link "替她理颜料 (0:08)">><<pass 8>><<replace "#monet-social-actions">>
 <<if ($willpower or 0) gte 360 or (_npc.trust or 0) gte 8>>
-你把结了硬壳的罐口一个个撬开，按她标的次序重新排好：暖色靠窗，冷色避光，灰留在最暗的一格。她走过来看了一眼，把你要用的那罐往前推了半寸，算是默许。<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<tiredness 2>>
+你把结了硬壳的罐口一个个撬开，按她标的次序重新排好：暖色靠窗，冷色避光，灰留在最暗的一格。她走过来看了一眼，把你要用的那罐往前推了半寸，算是默许。<<if !$daily.mpLock_MPNPCMonetSocialHub_2>><<set $daily.mpLock_MPNPCMonetSocialHub_2 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -2>><<tiredness 2>>
 <<else>>
 你把两罐赭石混在了一起，颜色立刻发闷。她伸手把罐子端走，说这罐只能拿去打底，别碰画布。屋里那股松节油味忽然重起来，你站了一会儿，觉得太阳穴发紧。<<stress 3>><<tiredness 1>>
 <</if>>
@@ -45,7 +45,7 @@
 <br>
 <<mpeavesdropicon>><<link "问画里背影 (0:12)">><<pass 12>><<replace "#monet-social-actions">>
 <<if (_npc.trust or 0) gte 10>>
-你没有直接问那是谁，只问那天的窗为什么开在左边。她沉默了一会儿，说因为右边站着人。话到这里就断了，她重新拿起笔，笔尖却停在半空。你陪她站到那盏灯自己暗下去，她才轻声说，有些脸不是画不清，是不肯画清。<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress 2>>
+你没有直接问那是谁，只问那天的窗为什么开在左边。她沉默了一会儿，说因为右边站着人。话到这里就断了，她重新拿起笔，笔尖却停在半空。你陪她站到那盏灯自己暗下去，她才轻声说，有些脸不是画不清，是不肯画清。<<if !$daily.mpLock_MPNPCMonetSocialHub_3>><<set $daily.mpLock_MPNPCMonetSocialHub_3 to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><</if>><<stress 2>>
 <<else>>
 你把话说得太直，她的肩线立刻绷直，转身去洗笔。水声盖过了你的后半句。她回来时只谈颜料价钱，像那面画布从来没有存在过。<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 2)>><<stress 4>>
 <</if>>
@@ -56,13 +56,14 @@
 <br><br>
 有些话得当着外人说。艾弗里的马车还在楼下，塞拉的铜框也还没上墙，画展的雾却已经在路上了。
 <br>
-<<link [[艾弗里登门 (0:04)|MP NPC Monet Social 1]]>><<pass 4>><</link>><br>
-<<link [[塞拉送画框 (0:04)|MP NPC Monet Social 2]]>><<pass 4>><</link>><br>
+<<if mpNpcMet("Avery")>><<link [[艾弗里登门 (0:04)|MP NPC Monet Social 1]]>><<pass 4>><</link>><br><<else>><</if>>
+<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[塞拉送画框 (0:04)|MP NPC Monet Social 2]]>><<pass 4>><</link>><br><<else>><</if>>
 <<link [[海雾画展 (0:04)|MP NPC Monet Annual]]>><<pass 4>><</link>><br>
+<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<if $mpNpcCrossFlags and $mpNpcCrossFlags["monet_sera"]>><<link [[问铜框旧事 (0:04)|MP NPC Cross Monet More]]>><<pass 4>><</link>><<else>><<link [[探铜框现场 (0:04)|MP NPC Cross Monet More]]>><<pass 4>><</link>><</if>><br><</if>>
 <<link [[返回莫奈身边 (0:02)|MP NPC Monet Hub]]>><<pass 2>><</link>>
 
 :: MP NPC Monet Social 1 [nobr]
-<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<set $mpNpcs to ($mpNpcs or {})>>
 <<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0 })>>
 <<set $mpNpcs.monet.love to ($mpNpcs.monet.love or 0)>>
@@ -83,7 +84,7 @@
 <br>
 <<mpbargainicon>><<link "劝她改色 (0:12)">><<pass 12>><<replace "#monet-social1-choices">>
 <<if ($english or 0) gte 240 or ($seductionskill or 0) gte 240 or (_npc.trust or 0) gte 12>>
-你没有说「客人要什么」，只把那方绸举到窗边，让莫奈看暗金在冷光里会变成什么颜色。她盯了一会儿，忽然笑了：「原来是光不对，不是布不对。」她主动把雾调浅半度，又在远岸补了一道赭。艾弗里当场留下定金的口信，走时拍了拍你的肩。莫奈收笔时没看你，只说了一句：「你替他省了半幅画。」<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<set _npc.love to Math.max(0, (_npc.love or 0) - 2)>><<stress 2>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>>
+你没有说「客人要什么」，只把那方绸举到窗边，让莫奈看暗金在冷光里会变成什么颜色。她盯了一会儿，忽然笑了：「原来是光不对，不是布不对。」她主动把雾调浅半度，又在远岸补了一道赭。艾弗里当场留下定金的口信，走时拍了拍你的肩。莫奈收笔时没看你，只说了一句：「你替他省了半幅画。」<<if !$daily.mpLock_MPNPCMonetSocial1_1>><<set $daily.mpLock_MPNPCMonetSocial1_1 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<set _npc.love to Math.max(0, (_npc.love or 0) - 2)>><</if>><<stress 2>><<if mpNpcMet("Avery")>><<npcincr Avery love 1>><</if>>
 <<else>>
 你把艾弗里的话原样搬了过来，连「值不值」都一起搬了。莫奈的笔停在画布上，颜料慢慢洇开一小片脏灰。她没发火，只把防尘布罩下来，说今天的光已经用完了。艾弗里等了两分钟，扣上表盖下楼，楼梯响得比来时慢。<<set _npc.love to Math.max(0, (_npc.love or 0) - 3)>><<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<stress 5>>
 <</if>>
@@ -95,9 +96,9 @@
 <br>
 <<socialiseicon>><<link "替她回绝 (0:12)">><<pass 12>><<replace "#monet-social1-choices">>
 <<if ($willpower or 0) gte 400 or (_npc.love or 0) gte 15>>
-你站到画架与绸料之间，先把「月底」两个字拆开：画布没干透，罩光要等雾退，硬交出去只会让颜色在客厅里裂开。你说得不快，每条都落在具体的天数上。艾弗里的目光冷下来，却没有再逼，只把绸料收回臂弯，临走看了莫奈一眼。门关上后，莫奈用笔杆轻轻碰了碰你的手背：「你刚才站的这个位置，挡住了光，也挡住了他。」<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>><<tiredness 2>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery rage 1>><</if>>
+你站到画架与绸料之间，先把「月底」两个字拆开：画布没干透，罩光要等雾退，硬交出去只会让颜色在客厅里裂开。你说得不快，每条都落在具体的天数上。艾弗里的目光冷下来，却没有再逼，只把绸料收回臂弯，临走看了莫奈一眼。门关上后，莫奈用笔杆轻轻碰了碰你的手背：「你刚才站的这个位置，挡住了光，也挡住了他。」<<if !$daily.mpLock_MPNPCMonetSocial1_2>><<set $daily.mpLock_MPNPCMonetSocial1_2 to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>><</if>><<tiredness 2>><<if mpNpcMet("Avery")>><<npcincr Avery rage 1>><</if>>
 <<else>>
-你开口时声音发虚，理由绕了两圈也没落到地上。艾弗里耐心听完，转向莫奈：「看来你的朋友比你会说话。」莫奈只好自己接过话头，把拒绝说得又短又硬。马车走后，她背对着你洗了很久的笔，水声一直没停。<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<stress 5>><<tiredness 2>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery rage 1>><</if>>
+你开口时声音发虚，理由绕了两圈也没落到地上。艾弗里耐心听完，转向莫奈：「看来你的朋友比你会说话。」莫奈只好自己接过话头，把拒绝说得又短又硬。马车走后，她背对着你洗了很久的笔，水声一直没停。<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<stress 5>><<tiredness 2>><<if mpNpcMet("Avery")>><<npcincr Avery rage 1>><</if>>
 <</if>>
 <br><br>
 <<link [[回到画室 (0:02)|MP NPC Monet Social Hub]]>><<pass 2>><</link>>
@@ -107,9 +108,9 @@
 <br>
 <<mptailoricon>><<link "提出双版本 (0:14)">><<pass 14>><<replace "#monet-social1-choices">>
 <<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240 or ($english or 0) gte 260>>
-你把两幅画的分工摆到桌上：暖调的那幅只画肩以上的光，脸按艾弗里客人的喜好收干净；雾调的原作留下远岸与空窗，不补脸。做工与交期都由你担，莫奈只管两幅画的骨。艾弗里先皱眉，听到「两幅可以分别署名」时才松口。莫奈没有反对，只在绷第二块布时把边角多留了一指宽，说将来改起来方便。<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<tiredness 3>><<stress 1>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>>
+你把两幅画的分工摆到桌上：暖调的那幅只画肩以上的光，脸按艾弗里客人的喜好收干净；雾调的原作留下远岸与空窗，不补脸。做工与交期都由你担，莫奈只管两幅画的骨。艾弗里先皱眉，听到「两幅可以分别署名」时才松口。莫奈没有反对，只在绷第二块布时把边角多留了一指宽，说将来改起来方便。<<if !$daily.mpLock_MPNPCMonetSocial1_3>><<set $daily.mpLock_MPNPCMonetSocial1_3 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><</if>><<tiredness 3>><<stress 1>><<if mpNpcMet("Avery")>><<npcincr Avery love 1>><</if>>
 <<else>>
-第二块布绷到一半就松了，暖调那幅的底色也调脏，怎么补都发灰。艾弗里看完只说「再等」，语气里没有期限；莫奈把两幅画都翻过去扣在墙边，说今天先到这里。你收拾到很晚，手上沾着洗不掉的赭，肩背一阵阵发紧。<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<set _npc.love to Math.max(0, (_npc.love or 0) - 1)>><<stress 4>><<tiredness 2>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery rage 1>><</if>>
+第二块布绷到一半就松了，暖调那幅的底色也调脏，怎么补都发灰。艾弗里看完只说「再等」，语气里没有期限；莫奈把两幅画都翻过去扣在墙边，说今天先到这里。你收拾到很晚，手上沾着洗不掉的赭，肩背一阵阵发紧。<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<set _npc.love to Math.max(0, (_npc.love or 0) - 1)>><<stress 4>><<tiredness 2>><<if mpNpcMet("Avery")>><<npcincr Avery rage 1>><</if>>
 <</if>>
 <br><br>
 <<link [[回到画室 (0:02)|MP NPC Monet Social Hub]]>><<pass 2>><</link>>
@@ -117,7 +118,7 @@
 </div>
 
 :: MP NPC Monet Social 2 [nobr]
-<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<set $mpNpcs to ($mpNpcs or {})>>
 <<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0 })>>
 <<set $mpNpcs.monet.love to ($mpNpcs.monet.love or 0)>>
@@ -140,7 +141,7 @@
 <br>
 <<mpcalculateicon>><<link "按塞拉尺寸 (0:12)">><<pass 12>><<replace "#monet-social2-choices">>
 <<if ($maths or 0) gte 220 or ($science or 0) gte 220 or ($housekeeping or 0) gte 240>>
-你把卡尺接过来，替两个人把数字念了一遍：内径、对角线、榫肩余量，最后停在塞拉说的那一毫米上。莫奈听着，忽然伸手在框内侧抹了一道炭，说：「那就把这一毫米留在暗处。」塞拉点头，合榫时铜锤只敲了三下，声音很轻。框上墙后，画的边果然没有硬线，只是一道更深的灰。<<set $mpNpcs.sera.trust to Math.min(100, ($mpNpcs.sera.trust or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<tiredness 2>>
+你把卡尺接过来，替两个人把数字念了一遍：内径、对角线、榫肩余量，最后停在塞拉说的那一毫米上。莫奈听着，忽然伸手在框内侧抹了一道炭，说：「那就把这一毫米留在暗处。」塞拉点头，合榫时铜锤只敲了三下，声音很轻。框上墙后，画的边果然没有硬线，只是一道更深的灰。<<if !$daily.mpLock_MPNPCMonetSocial2_1>><<set $daily.mpLock_MPNPCMonetSocial2_1 to 1>><<set $mpNpcs.sera.trust to Math.min(100, ($mpNpcs.sera.trust or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<tiredness 2>>
 <<else>>
 合榫时你递错了垫片，榫肩被铜锤压出一道浅痕。塞拉把框翻过来看了很久，说这道痕不影响承重，却会影响她以后每一次看这幅画。莫奈没说话，只把画从框里取出来，重新靠回墙边。屋里静得能听见楼下钟表铺的走时。<<set $mpNpcs.sera.trust to Math.max(0, ($mpNpcs.sera.trust or 0) - 1)>><<stress 4>><<pain 1>>
 <</if>>
@@ -152,7 +153,7 @@
 <br>
 <<mpsewicon>><<link "听莫奈直觉 (0:12)">><<pass 12>><<replace "#monet-social2-choices">>
 <<if (_npc.love or 0) gte 10 or ($willpower or 0) gte 360>>
-你劝塞拉先别合榫，把框抬到窗边，让下午的光从内侧穿过去。那道原本发硬的边在光里果然化成一层薄影，莫奈伸手在影子上方停了停，说：「就是这里。」塞拉看了很久，最后把卡尺收起来，重新画线，削掉她原本坚持的那半毫米。她走时只说：「潮季出了问题，我再来改。」<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set $mpNpcs.sera.trust to Math.max(0, ($mpNpcs.sera.trust or 0) - 2)>><<stress 3>>
+你劝塞拉先别合榫，把框抬到窗边，让下午的光从内侧穿过去。那道原本发硬的边在光里果然化成一层薄影，莫奈伸手在影子上方停了停，说：「就是这里。」塞拉看了很久，最后把卡尺收起来，重新画线，削掉她原本坚持的那半毫米。她走时只说：「潮季出了问题，我再来改。」<<if !$daily.mpLock_MPNPCMonetSocial2_2>><<set $daily.mpLock_MPNPCMonetSocial2_2 to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set $mpNpcs.sera.trust to Math.max(0, ($mpNpcs.sera.trust or 0) - 2)>><</if>><<stress 3>>
 <<else>>
 你说不出那道边到底该薄在哪里，只能重复莫奈的话。塞拉听完，把铜框重新包回绒布：「等你们想清楚尺寸，再来找我。」她下楼时脚步很稳，莫奈站在窗边，一直没有回头。框被带走以后，墙上留下一块比周围干净的方形。<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<set $mpNpcs.sera.trust to Math.max(0, ($mpNpcs.sera.trust or 0) - 2)>><<stress 4>>
 <</if>>
@@ -164,7 +165,7 @@
 <br>
 <<mprepairicon>><<link "亲手改榫接 (0:16)">><<pass 16>><<replace "#monet-social2-choices">>
 <<if ($tending or 0) gte 260 or ($maths or 0) gte 240 or ($science or 0) gte 240>>
-你把榫肩拆开，按塞拉给的余量削去一角，又在莫奈指的那道边上留出一条极窄的斜口。铜屑落在绒布上，像一层细盐。合回去的时候，塞拉用卡尺量了两遍，莫奈用手掌在框内侧挡了一次光，两个人都没挑出毛病。塞拉收工具时说了句「还行」，莫奈则把框直接抱到画前比了比。<<set $mpNpcs.sera.trust to Math.min(100, ($mpNpcs.sera.trust or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<tiredness 4>><<pain 1>>
+你把榫肩拆开，按塞拉给的余量削去一角，又在莫奈指的那道边上留出一条极窄的斜口。铜屑落在绒布上，像一层细盐。合回去的时候，塞拉用卡尺量了两遍，莫奈用手掌在框内侧挡了一次光，两个人都没挑出毛病。塞拉收工具时说了句「还行」，莫奈则把框直接抱到画前比了比。<<if !$daily.mpLock_MPNPCMonetSocial2_3>><<set $daily.mpLock_MPNPCMonetSocial2_3 to 1>><<set $mpNpcs.sera.trust to Math.min(100, ($mpNpcs.sera.trust or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><</if>><<tiredness 4>><<pain 1>>
 <<else>>
 斜口开深了，榫肩一合就咬不住。塞拉接过框，手指在缺口上停了一下，没有责怪，只把整副框拆回零件。莫奈把画挪到远一点的位置，说今天先不配框。你站久了，腰侧一阵发酸，铜屑还嵌在指缝里。<<set $mpNpcs.sera.trust to Math.max(0, ($mpNpcs.sera.trust or 0) - 1)>><<stress 4>><<pain 2>>
 <</if>>
@@ -174,7 +175,7 @@
 </div>
 
 :: MP NPC Monet Annual [nobr]
-<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<set $mpNpcs to ($mpNpcs or {})>>
 <<set $mpNpcs.monet to ($mpNpcs.monet or { love: 0, trust: 0 })>>
 <<set $mpNpcs.monet.love to ($mpNpcs.monet.love or 0)>>
@@ -198,7 +199,7 @@
 <div id="monet-annual-after">
 <<mpcleanicon>><<link "帮她收画 (0:10)">><<pass 10>><<replace "#monet-annual-after">>
 <<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240>>
-你把画一幅幅取下，先用软刷扫掉框沟里的灰，再用干布顺着铜纹擦。莫奈在旁边登记，写到某一幅时停了停，把年份改小了一岁。收完最后一幅，她把空出来的墙看了很久，说空着也好，下一幅才知道该往哪儿挂。<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<tiredness 2>>
+你把画一幅幅取下，先用软刷扫掉框沟里的灰，再用干布顺着铜纹擦。莫奈在旁边登记，写到某一幅时停了停，把年份改小了一岁。收完最后一幅，她把空出来的墙看了很久，说空着也好，下一幅才知道该往哪儿挂。<<if !$daily.mpLock_MPNPCMonetAnnual_1>><<set $daily.mpLock_MPNPCMonetAnnual_1 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><</if>><<tiredness 2>>
 <<else>>
 你取画时手滑了一下，画框磕在墙钉上，掉了一小块漆。莫奈接过画，没让你再碰，只自己把框拆下来补。你站在旁边递工具，递慢了半拍，肩颈一阵阵发紧。<<stress 3>><<pain 1>>
 <</if>>
@@ -208,7 +209,7 @@
 <br>
 <<mpdrinkicon>><<link "清点留言簿 (0:08)">><<pass 8>><<replace "#monet-annual-after">>
 <<if ($english or 0) gte 220 or (_npc.trust or 0) gte 8>>
-你按日期把留言一页页理平，把没署名的几页单独夹出来。莫奈给你倒了半杯冷掉的茶，自己坐在对面看你写编号。她忽然说，有一页是她自己写的，写在开展前一晚，字很小，夹在最后。你没有翻回去找，只把册子合上，放回窗台。<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<tiredness 1>>
+你按日期把留言一页页理平，把没署名的几页单独夹出来。莫奈给你倒了半杯冷掉的茶，自己坐在对面看你写编号。她忽然说，有一页是她自己写的，写在开展前一晚，字很小，夹在最后。你没有翻回去找，只把册子合上，放回窗台。<<if !$daily.mpLock_MPNPCMonetAnnual_2>><<set $daily.mpLock_MPNPCMonetAnnual_2 to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -2>><<tiredness 1>>
 <<else>>
 你把两页粘在一起，撕开时带掉了一角签名。莫奈接过去看了看，说不要紧，反正那人也不会再来。她把册子收进抽屉，动作比平时快。你站了一会儿，觉得屋里比刚才冷。<<stress 3>>
 <</if>>
@@ -228,7 +229,7 @@
 <div id="monet-annual-prep">
 <<mpcarryicon>><<link "陪她挂画 (0:14)">><<pass 14>><<replace "#monet-annual-prep">>
 <<if ($housekeeping or 0) gte 240 or ($athletics or 0) gte 240>>
-你按她说的顺序挂：先雾最薄的，再雾最厚的，最后留一面空墙。钉子打进旧灰里，声音发闷，她就站在你身后看水平，偶尔伸手把框扶正半寸。挂到最后一幅，她退到门口，说这个顺序能让看画的人先走进雾里，再走出来。<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<tiredness 3>>
+你按她说的顺序挂：先雾最薄的，再雾最厚的，最后留一面空墙。钉子打进旧灰里，声音发闷，她就站在你身后看水平，偶尔伸手把框扶正半寸。挂到最后一幅，她退到门口，说这个顺序能让看画的人先走进雾里，再走出来。<<if !$daily.mpLock_MPNPCMonetAnnual_3>><<set $daily.mpLock_MPNPCMonetAnnual_3 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><</if>><<tiredness 3>>
 <<else>>
 你钉偏了一枚钉子，画挂上去以后往左歪。莫奈让你把框取下重来，自己蹲在地上捡落进地毯缝的铜钉。两个钟头过去，最厚的那幅还靠在墙边，你的手臂酸得抬不起来。<<set _npc.trust to Math.max(0, (_npc.trust or 0) - 1)>><<pain 2>><<stress 3>>
 <</if>>
@@ -238,7 +239,7 @@
 <br>
 <<link "去码头送帖 (0:12)">><<pass 12>><<replace "#monet-annual-prep">>
 <<if ($english or 0) gte 240 or ($seductionskill or 0) gte 240>>
-你把请帖按人分好：船工的那份要当面交给领班，钟表铺的那份得压在塞拉的修表台角，免得被风卷走。码头上雾很重，你回来时袖口全湿，但每张帖都送到了该到的人手里。莫奈听完你的回话，把最后一张空白请帖收进抽屉，说那一张留给明年。<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<tiredness 2>><<stress 2>>
+你把请帖按人分好：船工的那份要当面交给领班，钟表铺的那份得压在塞拉的修表台角，免得被风卷走。码头上雾很重，你回来时袖口全湿，但每张帖都送到了该到的人手里。莫奈听完你的回话，把最后一张空白请帖收进抽屉，说那一张留给明年。<<if !$daily.mpLock_MPNPCMonetAnnual_4>><<set $daily.mpLock_MPNPCMonetAnnual_4 to 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<tiredness 2>><<stress 2>>
 <<else>>
 你在码头绕错了路，有两张请帖被潮气打湿，字迹糊成一片。回来时天已经暗了，莫奈把湿帖摊在窗台上晾，没说重话，只把要补写的名字念给你听。你写到最后一个，手已经冻得不听使唤。<<stress 4>><<tiredness 2>>
 <</if>>
@@ -248,7 +249,7 @@
 <br>
 <<link "替她试灯 (0:10)">><<pass 10>><<replace "#monet-annual-prep">>
 <<if ($willpower or 0) gte 360 or ($science or 0) gte 220>>
-你把三盏灯依次点亮，按她说的角度挪：最左边那盏压低，让光贴着画布走；中间那盏往后退半步，免得把雾照透。灯罩上有道旧缺口，光漏出来时在墙上拖出一条细线，莫奈看了很久，说就留着，别补。<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<tiredness 2>>
+你把三盏灯依次点亮，按她说的角度挪：最左边那盏压低，让光贴着画布走；中间那盏往后退半步，免得把雾照透。灯罩上有道旧缺口，光漏出来时在墙上拖出一条细线，莫奈看了很久，说就留着，别补。<<if !$daily.mpLock_MPNPCMonetAnnual_5>><<set $daily.mpLock_MPNPCMonetAnnual_5 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<tiredness 2>>
 <<else>>
 灯试到第二盏就闪了一下，灯芯烧出一股焦味。你手忙脚乱去拧，烫到了指腹。莫奈接过灯罩重新调，让你先去窗边站一会儿。墙上的光歪了半尺，她没再让你碰第三盏。<<stress 3>><<pain 1>>
 <</if>>
@@ -277,7 +278,7 @@
 <br>
 <<link "只开闭门小展 (0:18)">><<pass 18>><<replace "#monet-annual-day">>
 <<set $mpNpcs.monet.annualYear to Time.date.year>>
-你把门掩到只剩一道缝，只留下已经上楼的那几位：塞拉坐在窗边，铜框的那面墙空着；艾弗里的管事站在最后，没有催促。莫奈亲自给每个人倒了一小杯冷茶，然后一幅幅讲画里的光从哪边进来。人不多，话却说得比任何一次都长。艾弗里的人走时留下一句「可以谈」，她没有接，只把门重新掩好。<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<tiredness 2>><<stress 1>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>>
+你把门掩到只剩一道缝，只留下已经上楼的那几位：塞拉坐在窗边，铜框的那面墙空着；艾弗里的管事站在最后，没有催促。莫奈亲自给每个人倒了一小杯冷茶，然后一幅幅讲画里的光从哪边进来。人不多，话却说得比任何一次都长。艾弗里的人走时留下一句「可以谈」，她没有接，只把门重新掩好。<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<tiredness 2>><<stress 1>><<if mpNpcMet("Avery")>><<npcincr Avery love 1>><</if>>
 <br><br>
 【余波】门关小以后，雾反而显得远了。莫奈把剩下的茶倒进窗台的花盆，说小展的好处是每个人都看得清画，坏处是每个人都看得清她。她说完笑了一下，把空杯收进托盘。
 <br><br>

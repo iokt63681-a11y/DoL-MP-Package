@@ -21,7 +21,7 @@
 <br>
 <<mpsneakicon>><<link [[躲在篱笆后观察 (0:08)|MP World Event Loose Cobble Wait]]>><<pass 8>><</link>>
 <br>
-<<investigateicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[向罗宾搭话 (0:04)|MP World Event Loose Cobble Talk]]>><<pass 4>><</link>><<else>><span class="disabled">向罗宾搭话 (0:04)（尚未结识）</span><</if>>
+<<investigateicon>><<if mpNpcMet("Robin")>><<link [[向罗宾搭话 (0:04)|MP World Event Loose Cobble Talk]]>><<pass 4>><</link>><<else>><</if>>
 
 :: MP World Event Loose Cobble Inspect [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -62,18 +62,18 @@
 <br>
 <<mplockpickicon>><<if ($skulduggery or 0) gte 250>><<link [[趁没人撬开石板 (0:05)|MP World Event Loose Cobble Inspect]]>><<set $mpDomusRunnerSeen to 1>><<pass 5>><</link>><<else>><<link [[趁没人撬开石板 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "趁没人撬开石板">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
 <br>
-<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[去找罗宾 (0:04)|MP World Event Loose Cobble Talk]]>><<set $mpDomusRunnerSeen to 1>><<pass 4>><</link>><<else>><span class="disabled">去找罗宾 (0:04)（尚未结识）</span><</if>>
+<<socialiseicon>><<if mpNpcMet("Robin")>><<link [[去找罗宾 (0:04)|MP World Event Loose Cobble Talk]]>><<set $mpDomusRunnerSeen to 1>><<pass 4>><</link>><<else>><</if>>
 
 :: MP World Event Loose Cobble Talk [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>正抱着一摞洗净的亚麻床单从街对面走来，看见你蹲在墙角便停下了脚步。「你也注意到那个白粉笔三角了吗？」<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>左右看了看，压低声音对你说，「前天夜里贝利派人去工业区地下的高压泵站送过一样的账袋。」说完<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>冲你露出关切的微笑，叮嘱你在街上多加小心。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<stress -2>>
+<<set $mpKnown to ($mpKnown or {})>><<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>正抱着一摞洗净的亚麻床单从街对面走来，看见你蹲在墙角便停下了脚步。「你也注意到那个白粉笔三角了吗？」<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>左右看了看，压低声音对你说，「前天夜里贝利派人去工业区地下的高压泵站送过一样的账袋。」说完<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>冲你露出关切的微笑，叮嘱你在街上多加小心。
+<<if $NPCName and mpNpcMet("Robin")>><<npcincr Robin love 1>><</if>><<stress -2>>
 <br><br>
 <<investigateicon>><<link [[回头查探青石板 (0:05)|MP World Event Loose Cobble Inspect]]>><<set $mpKnown["clockwork_vault"] to 1>><<pass 5>><</link>>
 <br>
 <<crimeicon "mark">><<link [[比对底单暗号 (0:06)|MP World Event Loose Cobble Cipher]]>><<set $mpKnown["clockwork_vault"] to 1>><<pass 6>><</link>>
 <br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[离开 (0:08)|Domus Street]]>><<set $outside to 1>><<set $location to "town">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">离开 (0:08)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Robin")>><<link [[离开 (0:08)|Domus Street]]>><<set $outside to 1>><<set $location to "town">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 
 :: MP World Event Loose Cobble Cipher [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
@@ -332,7 +332,7 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<mpalerttext>><<mpalertcheck>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-一名戴着毛线帽的码头水手正靠在粗麻缆绳堆上抽烟，看见你手里的石蜡碎屑便挑了挑眉。「<<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>交代过，这批货要是有人动过就改走雾角水道。」水手吐出一口白烟，把一张画着暗礁航标的草图塞进你手心。他压低声音催促你别在铁栅边久留，因为海关快艇今晚查得很严。
+一名戴着毛线帽的码头水手正靠在粗麻缆绳堆上抽烟，看见你手里的石蜡碎屑便挑了挑眉。「<<if mpNpcMet("Wren")>>雷恩<<else>>走私客<</if>>交代过，这批货要是有人动过就改走雾角水道。」水手吐出一口白烟，把一张画着暗礁航标的草图塞进你手心。他压低声音催促你别在铁栅边久留，因为海关快艇今晚查得很严。
 <<stress -2>>
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|Docks]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
@@ -345,7 +345,7 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
 <<mpalerttext>><<mpalertcheck>>
 尖锐的铜哨声忽然划破码头夜雾，两名提着防风灯的海关稽查员从栈桥另一端包抄过来。你必须趁他们合围前跨过湿滑的系船浮板。
-<<if $mpClues["smuggler_wren_route"]>><span class="teal">你想起<<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>用粉笔标出的系船浮板捷径，踩上湿滑跳板时步点丝毫不乱。</span><</if>>
+<<if $mpClues["smuggler_wren_route"]>><span class="teal">你想起<<if mpNpcMet("Wren")>>雷恩<<else>>走私客<</if>>用粉笔标出的系船浮板捷径，踩上湿滑跳板时步点丝毫不乱。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回码头 (0:02)|Docks]]>><<set $outside to 1>><<set $location to "docks">><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
@@ -447,9 +447,9 @@
 :: MP World Event Driftwood Chest Diver [nobr]
 <<set $outside to 1>><<set $location to "beach">><<effects>><<mpAmbient>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-<<if $NPCNameList and $NPCNameList.includes("Mason")>>梅森<<else>>游泳教练<</if>>正站在防波堤阶梯旁用毛巾擦拭湿发，看见你手里拿着一块带船徽的樟木片便走了过来。「这是早年雾角商船上的徽记，」<<if $NPCNameList and $NPCNameList.includes("Mason")>>梅森<<else>>游泳教练<</if>>指了指远海雾气笼罩的方向，「灯塔岛东侧有片断桅沉船滩，退潮时经常能看到整排的旧船肋木。」<<if $NPCNameList and $NPCNameList.includes("Mason")>>梅森<<else>>游泳教练<</if>>笑着拍了拍你的肩膀，叮嘱你下水时注意暗流。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Mason")>><<npcincr Mason love 1>><</if>><<stress -2>>
-<<if $mpClues["wreck_chart_fragment"]>><span class="teal">你捏着从漂流木箱里起出的商船樟木徽记，与<<if $NPCNameList and $NPCNameList.includes("Mason")>>梅森<<else>>游泳教练<</if>>核对起远海暗礁的旧航道。</span><</if>>
+<<if mpNpcMet("Mason")>>梅森<<else>>游泳教练<</if>>正站在防波堤阶梯旁用毛巾擦拭湿发，看见你手里拿着一块带船徽的樟木片便走了过来。「这是早年雾角商船上的徽记，」<<if mpNpcMet("Mason")>>梅森<<else>>游泳教练<</if>>指了指远海雾气笼罩的方向，「灯塔岛东侧有片断桅沉船滩，退潮时经常能看到整排的旧船肋木。」<<if mpNpcMet("Mason")>>梅森<<else>>游泳教练<</if>>笑着拍了拍你的肩膀，叮嘱你下水时注意暗流。
+<<if $NPCName and mpNpcMet("Mason")>><<npcincr Mason love 1>><</if>><<stress -2>>
+<<if $mpClues["wreck_chart_fragment"]>><span class="teal">你捏着从漂流木箱里起出的商船樟木徽记，与<<if mpNpcMet("Mason")>>梅森<<else>>游泳教练<</if>>核对起远海暗礁的旧航道。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回海滩 (0:02)|Beach]]>><<set $outside to 1>><<set $location to "beach">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -596,7 +596,7 @@
 <br>
 <<mpreadicon>><<link [[翻看封底夹层 (0:05)|MP World Event Park Sketchbook Inspect]]>><<pass 5>><</link>>
 <br>
-<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Kylar")>><<link [[递画页给凯拉尔 (0:04)|MP World Event Park Sketchbook Kylar]]>><<pass 4>><</link>><<else>><span class="disabled">递画页给凯拉尔 (0:04)（尚未结识）</span><</if>>
+<<socialiseicon>><<if mpNpcMet("Kylar")>><<link [[递画页给凯拉尔 (0:04)|MP World Event Park Sketchbook Kylar]]>><<pass 4>><</link>><<else>><</if>>
 <br>
 <<walkicon>><<link [[去凉亭细看 (0:05)|MP World Event Park Sketchbook Pavilion]]>><<pass 5>><</link>>
 
@@ -631,8 +631,8 @@
 :: MP World Event Park Sketchbook Kylar [nobr]
 <<set $outside to 1>><<set $location to "park">><<effects>><<mpAmbient>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpClues to ($mpClues or {})>>
-杜鹃花丛后忽然传出踩碎落叶的轻响，<<if $NPCNameList and $NPCNameList.includes("Kylar")>>凯拉尔<<else>>角落的学生<</if>>捏着半截炭笔从树影里走了出来，目光紧紧盯着你手里的画页。「那是我在长椅边画了一半的速写。」<<if $NPCNameList and $NPCNameList.includes("Kylar")>>凯拉尔<<else>>角落的学生<</if>>接过你递去的画纸，微凉的指尖飞快地碰了一下你的手背。他低声告诉你，多瑙河街那位贵族每周五都会乘黑马车去温室那边。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Kylar")>><<npcincr Kylar love 1>><</if>><<stress -2>>
+杜鹃花丛后忽然传出踩碎落叶的轻响，<<if mpNpcMet("Kylar")>>凯拉尔<<else>>角落的学生<</if>>捏着半截炭笔从树影里走了出来，目光紧紧盯着你手里的画页。「那是我在长椅边画了一半的速写。」<<if mpNpcMet("Kylar")>>凯拉尔<<else>>角落的学生<</if>>接过你递去的画纸，微凉的指尖飞快地碰了一下你的手背。他低声告诉你，多瑙河街那位贵族每周五都会乘黑马车去温室那边。
+<<if $NPCName and mpNpcMet("Kylar")>><<npcincr Kylar love 1>><</if>><<stress -2>>
 <br><br>
 <<getouticon>><<link [[返回公园 (0:02)|Park]]>><<set $outside to 1>><<set $location to "park">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -710,7 +710,7 @@
 <br>
 <<mpcookicon>><<if ($skulduggery or 0) gte 250>><<link [[抽出香炉下拓片 (0:05)|MP World Event Temple Censer Inspect]]>><<pass 5>><</link>><<else>><<link [[抽出香炉下拓片 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "抽出香炉下拓片">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
 <br>
-<<mptranslateicon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[向悉尼请教铭文 (0:05)|MP World Event Temple Censer Sydney]]>><<pass 5>><</link>><<else>><span class="disabled">向悉尼请教铭文 (0:05)（尚未结识）</span><</if>>
+<<mptranslateicon>><<if mpNpcMet("Sydney")>><<link [[向悉尼请教铭文 (0:05)|MP World Event Temple Censer Sydney]]>><<pass 5>><</link>><<else>><</if>>
 <br>
 <<mpritualicon>><<link [[擦拭铜烛台 (0:12)|MP World Event Temple Censer Chore]]>><<pass 12>><</link>>
 
@@ -745,8 +745,8 @@
 </div>
 :: MP World Event Temple Censer Sydney [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>><<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>正捧着一盒白蜂蜡烛从祈祷室走出来，看见你手里的宣纸拓片便好奇地凑近看了看。「这是三百年前旧修会用的圣咏编号，」<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>轻声推了推眼镜，语气认真地告诉你，「城外那座沉没修道院的残破圣堂里，石柱上还留着完全一样的铭文。」<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>冲你温和地笑了笑，抱着蜡烛继续去忙了。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<stress -2>>
+<<set $mpKnown to ($mpKnown or {})>><<if mpNpcMet("Sydney")>>悉尼<<else>>图书馆助手<</if>>正捧着一盒白蜂蜡烛从祈祷室走出来，看见你手里的宣纸拓片便好奇地凑近看了看。「这是三百年前旧修会用的圣咏编号，」<<if mpNpcMet("Sydney")>>悉尼<<else>>图书馆助手<</if>>轻声推了推眼镜，语气认真地告诉你，「城外那座沉没修道院的残破圣堂里，石柱上还留着完全一样的铭文。」<<if mpNpcMet("Sydney")>>悉尼<<else>>图书馆助手<</if>>冲你温和地笑了笑，抱着蜡烛继续去忙了。
+<<if $NPCName and mpNpcMet("Sydney")>><<npcincr Sydney love 1>><</if>><<stress -2>>
 <br><br>
 <<getouticon>><<link [[返回神殿 (0:02)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -936,7 +936,7 @@
 <br>
 <<walkicon>><<link [[闪进公寓楼梯间 (0:08)|MP World Event Barb Patrol Stairwell]]>><<pass 8>><</link>>
 <br>
-<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Whitney")>><<link [[和惠特尼搭话 (0:05)|MP World Event Barb Patrol Whitney]]>><<pass 5>><</link>><<else>><span class="disabled">和惠特尼搭话 (0:05)（尚未结识）</span><</if>>
+<<socialiseicon>><<if mpNpcMet("Whitney")>><<link [[和惠特尼搭话 (0:05)|MP World Event Barb Patrol Whitney]]>><<pass 5>><</link>><<else>><</if>>
 
 :: MP World Event Barb Patrol Inspect [nobr]
 <<set $outside to 1>><<set $location to "barb">><<effects>><<mpAmbient>>
@@ -975,15 +975,15 @@
 <br><br>
 <<getouticon>><<link [[离开 (0:08)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<if $NPCNameList and $NPCNameList.includes("Whitney")>><<link [[上楼找惠特尼 (0:08)|MP World Event Barb Patrol Whitney]]>><<set $outside to 1>><<set $location to "barb">><<if !$mpClues or !$mpClues["barb_patrol_receipt"]>><<set $mpClues["barb_patrol_receipt"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><</link>><<else>><span class="disabled">上楼找惠特尼 (0:08)（尚未结识）</span><</if>>
+<<walkicon>><<if mpNpcMet("Whitney")>><<link [[上楼找惠特尼 (0:08)|MP World Event Barb Patrol Whitney]]>><<set $outside to 1>><<set $location to "barb">><<if !$mpClues or !$mpClues["barb_patrol_receipt"]>><<set $mpClues["barb_patrol_receipt"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><</link>><<else>><</if>>
 <br>
 <<mpcleanicon>><<link [[回排水管查探 (0:08)|MP World Event Barb Patrol Inspect]]>><<set $outside to 1>><<set $location to "barb">><<if !$mpClues or !$mpClues["barb_patrol_receipt"]>><<set $mpClues["barb_patrol_receipt"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><</link>>
 
 :: MP World Event Barb Patrol Whitney [nobr]
 <<set $outside to 1>><<set $location to "barb">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
-<<if $NPCNameList and $NPCNameList.includes("Whitney")>>惠特尼<<else>>领头的学生<</if>>正靠在公寓外侧的铁艺栏杆上抽烟，冷笑着看街口的巡警来回盘查。看见你从阴影里走出来，<<if $NPCNameList and $NPCNameList.includes("Whitney")>>惠特尼<<else>>领头的学生<</if>>吐出一口烟圈挑起眉梢：「算你跑得快，那帮条子今晚是替贝利催黑账的。」你靠在栏杆边替<<if $NPCNameList and $NPCNameList.includes("Whitney")>>惠特尼<<else>>领头的学生<</if>>挡住街风，<<if $NPCNameList and $NPCNameList.includes("Whitney")>>惠特尼<<else>>领头的学生<</if>>哼了一声，没再找你麻烦。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Whitney")>><<npcincr Whitney love 1>><</if>><<stress -2>>
-<<if $mpClues["barb_patrol_receipt"]>><span class="teal">你揣着楼梯间拾到的巡警换岗签收条，迎着<<if $NPCNameList and $NPCNameList.includes("Whitney")>>惠特尼<<else>>领头的学生<</if>>挑起的眉梢从容走出阴影。</span><</if>>
+<<if mpNpcMet("Whitney")>>惠特尼<<else>>领头的学生<</if>>正靠在公寓外侧的铁艺栏杆上抽烟，冷笑着看街口的巡警来回盘查。看见你从阴影里走出来，<<if mpNpcMet("Whitney")>>惠特尼<<else>>领头的学生<</if>>吐出一口烟圈挑起眉梢：「算你跑得快，那帮条子今晚是替贝利催黑账的。」你靠在栏杆边替<<if mpNpcMet("Whitney")>>惠特尼<<else>>领头的学生<</if>>挡住街风，<<if mpNpcMet("Whitney")>>惠特尼<<else>>领头的学生<</if>>哼了一声，没再找你麻烦。
+<<if $NPCName and mpNpcMet("Whitney")>><<npcincr Whitney love 1>><</if>><<stress -2>>
+<<if $mpClues["barb_patrol_receipt"]>><span class="teal">你揣着楼梯间拾到的巡警换岗签收条，迎着<<if mpNpcMet("Whitney")>>惠特尼<<else>>领头的学生<</if>>挑起的眉梢从容走出阴影。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回倒钩街 (0:02)|Barb Street]]>><<set $outside to 1>><<set $location to "barb">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1144,8 +1144,8 @@
 
 :: MP World Event Danube Carriage Guard [nobr]
 <<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-一名身材高大的私人护卫顺着鹅卵石车道走来，按着腰间的警棍询问你在大宅门前做什么。你神态镇定地提到自己是替<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>和<<if $NPCNameList and $NPCNameList.includes("Avery")>>艾弗里<<else>>多瑙河富商<</if>>送请柬的帮工，并指了指刚驶离的马车车辙。护卫上下打量了你一眼，紧绷的神色缓和下来，侧身让开了通往街口的道路。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>><<stress -2>>
+一名身材高大的私人护卫顺着鹅卵石车道走来，按着腰间的警棍询问你在大宅门前做什么。你神态镇定地提到自己是替<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>和<<if mpNpcMet("Avery")>>艾弗里<<else>>多瑙河富商<</if>>送请柬的帮工，并指了指刚驶离的马车车辙。护卫上下打量了你一眼，紧绷的神色缓和下来，侧身让开了通往街口的道路。
+<<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><</if>><<stress -2>>
 <br><br>
 <<getouticon>><<link [[返回多瑙河街 (0:08)|Danube Street]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1161,7 +1161,7 @@
 <br>
 <<mpreadicon>><<link [[研读天文社手札 (0:06)|MP World Event School Corridor Logbook]]>><<pass 6>><</link>>
 <br>
-<<mpcarryicon>><<if $NPCNameList and $NPCNameList.includes("Leighton")>><<link [[帮礼顿搬试卷袋 (0:05)|MP World Event School Corridor Leighton]]>><<pass 5>><</link>><<else>><span class="disabled">帮礼顿搬试卷袋 (0:05)（尚未结识）</span><</if>>
+<<mpcarryicon>><<if mpNpcMet("Leighton")>><<link [[帮礼顿搬试卷袋 (0:05)|MP World Event School Corridor Leighton]]>><<pass 5>><</link>><<else>><</if>>
 
 :: MP World Event School Corridor Inspect [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
@@ -1206,7 +1206,7 @@
 	你顺着游标读数很快算出交点就在断崖观星台的主穹顶，手札末尾还记着观星台备用侧门的开启方式。
 	<<stress -3>>
 	<br><br>
-	<<if $NPCNameList and $NPCNameList.includes("Leighton")>><<link [[帮礼顿搬试卷袋 (0:03)|MP World Event School Corridor Leighton]]>><<pass 3>><</link>><<else>><span class="disabled">帮礼顿搬试卷袋 (0:03)（尚未结识）</span><</if>>
+	<<if mpNpcMet("Leighton")>><<link [[帮礼顿搬试卷袋 (0:03)|MP World Event School Corridor Leighton]]>><<pass 3>><</link>><<else>><</if>>
 <<else>>
 	繁琐的球面三角公式让你算错了好几行数字，看着密密麻麻的星表只觉得脑仁发胀。
 	<<stress 4>>
@@ -1218,9 +1218,9 @@
 
 :: MP World Event School Corridor Leighton [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
-<<if $NPCNameList and $NPCNameList.includes("Leighton")>>礼顿<<else>>值班校官<</if>>正抱着两摞厚重的牛皮纸试卷袋从楼梯口走上来，镜片后的目光扫过储物柜边的你。你主动上前接过上面那摞档案袋，帮<<if $NPCNameList and $NPCNameList.includes("Leighton")>>礼顿<<else>>值班校官<</if>>一路抱到教研室门前。「<<if Time.hour gte 15>>放学后还留在学校倒也难得<<else>>课余还主动在走廊搭把手倒也难得<</if>>，」<<if $NPCNameList and $NPCNameList.includes("Leighton")>>礼顿<<else>>值班校官<</if>>伸手接过试卷袋，语气比平时缓和了几分，叮嘱你整理完储物柜就早点回去。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -2>>
-<<if $mpClues["school_star_log"]>><span class="teal">你记着旧储物柜里那页天文观测日志的编号，帮<<if $NPCNameList and $NPCNameList.includes("Leighton")>>礼顿<<else>>值班校官<</if>>整理试卷袋时顺手对上了目录。</span><</if>>
+<<if mpNpcMet("Leighton")>>礼顿<<else>>值班校官<</if>>正抱着两摞厚重的牛皮纸试卷袋从楼梯口走上来，镜片后的目光扫过储物柜边的你。你主动上前接过上面那摞档案袋，帮<<if mpNpcMet("Leighton")>>礼顿<<else>>值班校官<</if>>一路抱到教研室门前。「<<if Time.hour gte 15>>放学后还留在学校倒也难得<<else>>课余还主动在走廊搭把手倒也难得<</if>>，」<<if mpNpcMet("Leighton")>>礼顿<<else>>值班校官<</if>>伸手接过试卷袋，语气比平时缓和了几分，叮嘱你整理完储物柜就早点回去。
+<<if $NPCName and mpNpcMet("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -2>>
+<<if $mpClues["school_star_log"]>><span class="teal">你记着旧储物柜里那页天文观测日志的编号，帮<<if mpNpcMet("Leighton")>>礼顿<<else>>值班校官<</if>>整理试卷袋时顺手对上了目录。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回教学楼 (0:02)|Hallways]]>><<set $outside to 0>><<set $location to "school">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1263,13 +1263,13 @@
 
 :: MP World Event Pool Steam [nobr]
 <<set $outside to 0>><<set $location to "pool">><<effects>><<mpAmbient>>
-学校泳池更衣室角落的排水木格栅下闪过一抹亮光，温热的水汽正顺着浅蓝瓷砖地面缓缓流淌。空气里弥漫着淡淡的消毒水味，隔壁泳池大厅传来清脆的划水声。你可以蹲下身掀开木格栅看看，或者先去池边和<<if $NPCNameList and $NPCNameList.includes("Mason")>>梅森<<else>>游泳教练<</if>>打个招呼。
+学校泳池更衣室角落的排水木格栅下闪过一抹亮光，温热的水汽正顺着浅蓝瓷砖地面缓缓流淌。空气里弥漫着淡淡的消毒水味，隔壁泳池大厅传来清脆的划水声。你可以蹲下身掀开木格栅看看，或者先去池边和<<if mpNpcMet("Mason")>>梅森<<else>>游泳教练<</if>>打个招呼。
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<mpcleanicon>><<if ($skulduggery or 0) gte 250>><<link [[掀开排水格栅 (0:05)|MP World Event Pool Steam Inspect]]>><<pass 5>><</link>><<else>><<link [[掀开排水格栅 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "掀开排水格栅">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
 <br>
-<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Mason")>><<link [[找梅森聊聊 (0:05)|MP World Event Pool Steam Mason]]>><<pass 5>><</link>><<else>><span class="disabled">找梅森聊聊 (0:05)（尚未结识）</span><</if>>
+<<socialiseicon>><<if mpNpcMet("Mason")>><<link [[找梅森聊聊 (0:05)|MP World Event Pool Steam Mason]]>><<pass 5>><</link>><<else>><</if>>
 <br>
 <<walkicon>><<link [[收拾湿毛巾 (0:10)|MP World Event Pool Steam Clean]]>><<pass 10>><</link>>
 
@@ -1304,8 +1304,8 @@
 </div>
 :: MP World Event Pool Steam Mason [nobr]
 <<set $outside to 0>><<set $location to "pool">><<effects>><<mpAmbient>>
-<<if $NPCNameList and $NPCNameList.includes("Mason")>>梅森<<else>>游泳教练<</if>>正蹲在深水区池畔盘拢蓝白相间的分道浮绳，水珠顺着健硕的肩背滑落。你走上前帮<<if $NPCNameList and $NPCNameList.includes("Mason")>>梅森<<else>>游泳教练<</if>>扶住浮标转轴，顺便问起更衣室旧储物柜的事。「最里面那排器材柜是以前潜水社留下的，」<<if $NPCNameList and $NPCNameList.includes("Mason")>>梅森<<else>>游泳教练<</if>>冲你爽朗一笑，顺便教了你一个在水下耳压平衡时放松胸腔的换气诀窍。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Mason")>><<npcincr Mason love 1>><</if>><<stress -3>>
+<<if mpNpcMet("Mason")>>梅森<<else>>游泳教练<</if>>正蹲在深水区池畔盘拢蓝白相间的分道浮绳，水珠顺着健硕的肩背滑落。你走上前帮<<if mpNpcMet("Mason")>>梅森<<else>>游泳教练<</if>>扶住浮标转轴，顺便问起更衣室旧储物柜的事。「最里面那排器材柜是以前潜水社留下的，」<<if mpNpcMet("Mason")>>梅森<<else>>游泳教练<</if>>冲你爽朗一笑，顺便教了你一个在水下耳压平衡时放松胸腔的换气诀窍。
+<<if $NPCName and mpNpcMet("Mason")>><<npcincr Mason love 1>><</if>><<stress -3>>
 <br><br>
 <<getouticon>><<link [[返回游泳池 (0:02)|School Pool]]>><<set $outside to 0>><<set $location to "pool">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1402,7 +1402,7 @@
 你用掌根在机箱侧板巧劲一磕，错版黄铜币与一卷奖券哗啦落入掌心，折算下来约值 <span class="gold">£<<print Math.floor(_reward / 100)>></span>。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_event_arcade_neon_inspect")>><<money _reward>><</if>><<stress -3>>
 	<br><br>
-	<<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[分游戏币给罗宾 (0:05)|MP World Event Arcade Neon Robin]]>><<pass 5>><</link>><<else>><span class="disabled">分游戏币给罗宾 (0:05)（尚未结识）</span><</if>>
+	<<if mpNpcMet("Robin")>><<link [[分游戏币给罗宾 (0:05)|MP World Event Arcade Neon Robin]]>><<pass 5>><</link>><<else>><</if>>
 	<br>
 	<<link [[识破赌币老千 (0:05)|MP World Event Arcade Neon Hustler]]>><<pass 5>><</link>>
 <<else>>
@@ -1426,7 +1426,7 @@
 <br>
 <<investigateicon>><<link [[帮店员焊好排线 (0:12)|MP World Event Arcade Neon Repair]]>><<pass 12>><</link>>
 <br>
-<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[娃娃机旁找罗宾 (0:05)|MP World Event Arcade Neon Robin]]>><<pass 5>><</link>><<else>><span class="disabled">娃娃机旁找罗宾 (0:05)（尚未结识）</span><</if>>
+<<socialiseicon>><<if mpNpcMet("Robin")>><<link [[娃娃机旁找罗宾 (0:05)|MP World Event Arcade Neon Robin]]>><<pass 5>><</link>><<else>><</if>>
 <<else>>
 你把口袋翻了个底，连两镑零钱也凑不齐。店员耸了耸肩，把铜币收回抽屉。
 <</if>>
@@ -1446,7 +1446,7 @@
 你对照电路板上的编号重新卡好排线卡扣，屏幕瞬间恢复清晰，店员痛快地数出约 <span class="gold">£<<print Math.floor(_reward / 100)>></span> 的维修费给你。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_event_arcade_neon_repair")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
-	<<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[娃娃机旁找罗宾 (0:03)|MP World Event Arcade Neon Robin]]>><<pass 3>><</link>><<else>><span class="disabled">娃娃机旁找罗宾 (0:03)（尚未结识）</span><</if>>
+	<<if mpNpcMet("Robin")>><<link [[娃娃机旁找罗宾 (0:03)|MP World Event Arcade Neon Robin]]>><<pass 3>><</link>><<else>><</if>>
 <<else>>
 狭窄的机箱内部闷热难耐，你不小心碰掉了一根保险管，折腾得满头大汗也没能调稳画面。
 <<tiredness 3>><<stress 4>>
@@ -1458,8 +1458,8 @@
 
 :: MP World Event Arcade Neon Robin [nobr]
 <<set $outside to 0>><<set $location to "arcade">><<effects>><<mpAmbient>>
-<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>正站在门口的抓娃娃机前，眼巴巴地看着玻璃橱窗里的毛绒小熊。你走上前分给<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>两枚刚换来的黄铜游戏币，<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>惊喜地睁大眼睛，小心地投币操纵摇杆。「差一点点就抓到了，不过和你一起玩真的很开心，」<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>转头冲你露出灿烂的笑容，驱散了你心头的阴霾。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<stress -3>>
+<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>正站在门口的抓娃娃机前，眼巴巴地看着玻璃橱窗里的毛绒小熊。你走上前分给<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>两枚刚换来的黄铜游戏币，<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>惊喜地睁大眼睛，小心地投币操纵摇杆。「差一点点就抓到了，不过和你一起玩真的很开心，」<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>转头冲你露出灿烂的笑容，驱散了你心头的阴霾。
+<<if $NPCName and mpNpcMet("Robin")>><<npcincr Robin love 1>><</if>><<stress -3>>
 <br><br>
 <<getouticon>><<link [[返回游戏厅 (0:02)|Arcade]]>><<set $outside to 0>><<set $location to "arcade">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -1713,7 +1713,7 @@
 <br>
 <<mpsneakicon>><<link [[溜进后台化妆廊 (0:08)|MP World Event Brothel Backdoor Dancer]]>><<pass 8>><</link>>
 <br>
-<<mpdrinkicon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[端酒盘给布莱尔 (0:10)|MP World Event Brothel Backdoor Briar]]>><<pass 10>><</link>><<else>><span class="disabled">端酒盘给布莱尔 (0:10)（尚未结识）</span><</if>>
+<<mpdrinkicon>><<if mpNpcMet("Briar")>><<link [[端酒盘给布莱尔 (0:10)|MP World Event Brothel Backdoor Briar]]>><<pass 10>><</link>><<else>><</if>>
 
 :: MP World Event Brothel Backdoor Inspect [nobr]
 <<set $outside to 1>><<set $location to "pub">><<effects>><<mpAmbient>>
@@ -1752,13 +1752,13 @@
 <br><br>
 <<getouticon>><<link [[返回妓院 (0:02)|Brothel]]>><<set $outside to 0>><<set $location to "brothel">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<mpdrinkicon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[端甜酒给布莱尔 (0:10)|MP World Event Brothel Backdoor Briar]]>><<if !$mpClues or !$mpClues["brothel_dancer_cipher"]>><<set $mpClues["brothel_dancer_cipher"] to 1>><span class="blue">线索已记录</span><</if>><<pass 10>><</link>><<else>><span class="disabled">端甜酒给布莱尔 (0:10)（尚未结识）</span><</if>>
+<<mpdrinkicon>><<if mpNpcMet("Briar")>><<link [[端甜酒给布莱尔 (0:10)|MP World Event Brothel Backdoor Briar]]>><<if !$mpClues or !$mpClues["brothel_dancer_cipher"]>><<set $mpClues["brothel_dancer_cipher"] to 1>><span class="blue">线索已记录</span><</if>><<pass 10>><</link>><<else>><</if>>
 <br>
 <<runicon>><<link [[离开 (0:08)|MP World Event Brothel Backdoor Bouncer]]>><<set $outside to 1>><<set $location to "pub">><<if !$mpClues or !$mpClues["brothel_dancer_cipher"]>><<set $mpClues["brothel_dancer_cipher"] to 1>><span class="blue">线索已记录</span><</if>><<pass 8>><</link>>
 
 :: MP World Event Brothel Backdoor Briar [nobr]
 <<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>><<set $mpClues to ($mpClues or {})>>
-<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>正站在后台走廊尽头核对今晚的酒单，听见脚步声便抬起头打量了你一眼。随后<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>指着吧台上一盘盛满樱桃利口酒的水晶杯，让你趁开场前送到二楼包厢。
+<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>正站在后台走廊尽头核对今晚的酒单，听见脚步声便抬起头打量了你一眼。随后<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>指着吧台上一盘盛满樱桃利口酒的水晶杯，让你趁开场前送到二楼包厢。
 <<if $mpClues["brothel_dancer_cipher"]>><span class="teal">你记着后台化妆镜边留下的舞者排班暗码，端起樱桃利口酒托盘时精准避开了眼线。</span><</if>>
 <br><br>
 <<getouticon>><<link [[返回妓院 (0:02)|Brothel]]>><<set $outside to 0>><<set $location to "brothel">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
@@ -1770,12 +1770,12 @@
 	<<set _sk to Math.max(($seductionskill or 0), ($danceskill or 0))>>
 	<<if _sk gte 800>><<set _reward to 1350>><<elseif _sk gte 550>><<set _reward to 1020>><<else>><<set _reward to 700>><</if>>
 你托着银盘步伐轻盈地走上旋转木梯，滴酒未洒地摆上茶几，布莱尔满意地点头赏了你约 <span class="gold">£<<print Math.floor(_reward / 100)>></span>。
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><</if>>
+<<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><</if>>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("world_ev_mp_world_event_brothel_backdoor_briar")>><<money _reward>><</if>><<stress -2>>
 	<br><br>
 	<<link [[离开 (0:08)|MP World Event Brothel Backdoor Bouncer]]>><<pass 8>><</link>>
 <<else>>
-喧闹的音乐让你脚下一绊，酒液溅湿了托盘蕾丝垫布，<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>冷淡地摇了摇头让人把你替了下来。
+喧闹的音乐让你脚下一绊，酒液溅湿了托盘蕾丝垫布，<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>冷淡地摇了摇头让人把你替了下来。
 <<stress 5>>
 	<br><br>
 	<<link [[凝神再托酒二楼 (0:04)|MP World Event Brothel Backdoor Briar]]>><<pass 4>><</link>>

@@ -1,0 +1,143 @@
+:: MP Loc Undertide Hub [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set $mpUndertideLamp to ($mpUndertideLamp or 0)>>
+<<set $mpUndertideRope to ($mpUndertideRope or 0)>>
+<<set $mpUndertideTide to ($mpUndertideTide or 0)>>
+旧港滩涂在退潮后露出一道裂口，咸泥里嵌着半截锈闸。潮下暗渠的风从缝里涌上来，带着鲸油与烂绳的气味。你得趁潮位还低时进去；灯灭了、绳断了，涨潮会把人困在闸门室。
+<<if $mpWorldUndertideOutcome is "sealed">>锈闸外侧被人用炭写过「已封」，字迹被浪舔得发糊。<<elseif $mpWorldUndertideOutcome is "open">>裂口旁多了一截新麻缆，像有人夜里走过捷径。<<else>>潮痕还停在靴面以下，窗口不宽。<</if>>
+<br><br>
+<<getouticon>><<link [[退回码头 (0:05)|MP Deep Docks Hub]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[下滩涂入口 (0:10)|MP Loc Undertide Flats]]>><<pass 10>><</link>><br>
+<<if ($mpUndertideLamp or 0) gte 1 and ($mpUndertideRope or 0) gte 1>><<sneakicon>><<link [[进潮下暗渠 (0:15)|MP Loc Undertide Canal]]>><<pass 15>><</link>><br>
+<<else>><<investigateicon>><<link [[先在滩涂备物 (0:10)|MP Loc Undertide Flats]]>><<pass 10>><</link>><br>
+<</if>>
+
+:: MP Loc Undertide Flats [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+滩涂裂口旁堆着废缆与碎瓶。你可以摸一盏还剩半壶的鲸油灯，或者抽一截还能承力的麻绳。涨潮声已经从远处压过来。
+<br><br>
+<<getouticon>><<link [[回暗渠口 (0:05)|MP Loc Undertide Hub]]>><<pass 5>><</link>><br>
+<<mplampicon>><<link [[捡起鲸油灯 (0:08)|MP Loc Undertide Hub]]>><<pass 8>><<if !$daily.mpUtLamp>><<set $daily.mpUtLamp to 1>><<set $mpUndertideLamp to ($mpUndertideLamp or 0) + 1>><<stress -1>><<else>><<stress 1>><</if>><</link>><br>
+<<mpropeicon>><<link [[抽一截麻绳 (0:08)|MP Loc Undertide Hub]]>><<pass 8>><<if !$daily.mpUtRope>><<set $daily.mpUtRope to 1>><<set $mpUndertideRope to ($mpUndertideRope or 0) + 1>><<tiredness 1>><<else>><<stress 1>><</if>><</link>><br>
+<<investigateicon>><<link [[翻半埋的油壶 (0:10)|MP Loc Undertide Flats Oil]]>><<pass 10>><</link>>
+
+:: MP Loc Undertide Flats Oil [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+泥里半埋着一只瘪油壶，壶嘴塞着烂布。你拧开壶盖，闻到陈鲸油的腥甜。壶底还剩薄薄一层，够把灯芯浸湿；硬摇也倒不出更多。
+<br><br>
+<<getouticon>><<link [[退回滩涂 (0:05)|MP Loc Undertide Flats]]>><<pass 5>><</link>><br>
+<<mplampicon>><<link [[把残油倒进灯里 (0:08)|MP Loc Undertide Flats]]>><<pass 8>><<if !$daily.mpUtOil>><<set $daily.mpUtOil to 1>><<set $mpUndertideLamp to ($mpUndertideLamp or 0) + 1>><<stress -1>><<else>><<stress 1>><</if>><</link>><br>
+<<walkicon>><<link [[把壶踢回泥里 (0:05)|MP Loc Undertide Flats]]>><<pass 5>><<tiredness 1>><</link>>
+
+:: MP Loc Undertide Canal [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if ($mpUndertideLamp or 0) lt 1 or ($mpUndertideRope or 0) lt 1>>
+暗渠口黑得看不见脚。没有灯和绳，你只能退回滩涂。潮声在石壁里回响，像有人在远处数拍子。
+<br><br>
+<<getouticon>><<link [[退回滩涂 (0:05)|MP Loc Undertide Flats]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[回暗渠口 (0:05)|MP Loc Undertide Hub]]>><<pass 5>><</link>>
+<<else>>
+潮下暗渠窄得只容一人侧身。鲸油灯把青苔照成脏绿，脚下石阶被水打滑。你可以系绳前进，或者先测潮位刻度。
+<br><br>
+<<getouticon>><<link [[退回滩涂 (0:05)|MP Loc Undertide Flats]]>><<pass 5>><</link>><br>
+<<mpropeicon>><<link [[系绳往里走 (0:12)|MP Loc Undertide Canal Rope]]>><<pass 12>><<set $mpUndertideTide to ($mpUndertideTide or 0) + 1>><</link>><br>
+<<investigateicon>><<link [[先测潮位 (0:10)|MP Loc Undertide Canal Measure]]>><<pass 10>><</link>>
+<</if>>
+
+:: MP Loc Undertide Canal Measure [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+石壁上的旧潮痕比你靴面高两指。潮位还在涨。记下这一格，再往闸门室走才稳；硬闯的话，回程可能被水封死。
+<br><br>
+<<getouticon>><<link [[退回暗渠 (0:05)|MP Loc Undertide Canal]]>><<pass 5>><</link>><br>
+<<mplettericon>><<link [[记下潮痕 (0:08)|MP Loc Undertide Canal Rope]]>><<pass 8>><<set $mpUndertideTide to Math.max(0, ($mpUndertideTide or 0) - 1)>><<stress -2>><</link>><br>
+<<walkicon>><<link [[仍硬闯闸门 (0:12)|MP Loc Undertide Canal Rope]]>><<pass 12>><<set $mpUndertideTide to ($mpUndertideTide or 0) + 2>><<stress 2>><</link>>
+
+:: MP Loc Undertide Canal Rope [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+你把麻绳系在闸槽凸榫上，绳身贴着石壁往里放。灯火跟着晃，水声从脚边抬高半寸。系得牢，回程有处抓手；系松了，涨潮时只能空手退。
+<br><br>
+<<getouticon>><<link [[退回暗渠口段 (0:08)|MP Loc Undertide Canal]]>><<pass 8>><</link>><br>
+<<mpropeicon>><<link [[收紧绳结再进 (0:10)|MP Loc Undertide Gate]]>><<pass 10>><<set $mpUndertideTide to Math.max(0, ($mpUndertideTide or 0) - 1)>><<tiredness 1>><</link>><br>
+<<sneakicon>><<link [[少停一步直闯 (0:08)|MP Loc Undertide Gate]]>><<pass 8>><<set $mpUndertideTide to ($mpUndertideTide or 0) + 1>><<stress 1>><</link>>
+
+:: MP Loc Undertide Gate [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if ($mpUndertideTide or 0) gte 3 and !$daily.mpUtTideFail>>
+涨潮先到了一步。水漫过脚踝，灯芯被潮气压矮。你得立刻退，否则会被困在闸门室。
+<br><br>
+<<getouticon>><<link [[拽绳退出 (0:15)|MP Loc Undertide Tide Trap]]>><<pass 15>><</link>><br>
+<<walkicon>><<link [[弃灯快跑 (0:10)|MP Loc Undertide Tide Trap]]>><<pass 10>><<set $mpUndertideLamp to 0>><</link>>
+<<elseif $mpUndertideEnded>>
+旧闸门室已经定过局。锈闸旁的世界标志还在，你只是又看了一眼。
+<br><br>
+<<getouticon>><<link [[回暗渠口 (0:05)|MP Loc Undertide Hub]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[回码头总枢 (0:08)|MP Deep Docks Hub]]>><<pass 8>><</link>>
+<<else>>
+旧闸门室比想象中宽。锈闸半开，闸槽里卡着一块刻了港务旧印的铅板。你可以先把铅板看清，再决定撬开还是落闸。
+<br><br>
+<<getouticon>><<link [[先退回去 (0:08)|MP Loc Undertide Canal]]>><<pass 8>><</link>><br>
+<<investigateicon>><<link [[蹲下看铅板 (0:10)|MP Loc Undertide Gate Lead]]>><<pass 10>><</link>><br>
+<<mprepairicon>><<link [[直接落下闸门 (0:20)|MP Loc Undertide Ending]]>><<pass 20>><<set $mpUndertideChoice to "seal">><</link>>
+<</if>>
+
+:: MP Loc Undertide Tide Trap [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set $daily.mpUtTideFail to 1>>
+<<if ($mpUndertideLamp or 0) lt 1>>
+你弃灯往外冲，黑水没到小腿。绳还在，指节勒出白痕。爬回滩涂时，灯已经沉进闸槽，潮声贴着后脊追上来。
+<<set $mpDocksSetback to Time.days + 1>><<tiredness 3>><<stress 5>>
+<<else>>
+你拽着绳退出闸门室，灯火在水面上跳了两下。潮位把来路舔窄，靴里灌满冷水；灯壶里的油少了一截。
+<<set $mpUndertideLamp to Math.max(0, ($mpUndertideLamp or 1) - 1)>><<tiredness 3>><<stress 4>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[爬回暗渠口 (0:10)|MP Loc Undertide Hub]]>><<pass 10>><</link>><br>
+<<walkicon>><<link [[回码头总枢 (0:12)|MP Deep Docks Hub]]>><<pass 12>><</link>>
+
+:: MP Loc Undertide Gate Lead [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$daily>><<set $daily to {}>><</if>>
+铅板边缘锈成锯齿。港务旧印下压着一行潮道坐标，字被盐霜糊住一半。撬开它，捷径会留着；把闸门落下，坐标连同走私口一起封进槽里。
+<br><br>
+<<getouticon>><<link [[退回闸门室 (0:05)|MP Loc Undertide Gate]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[撬开铅板 (0:20)|MP Loc Undertide Ending]]>><<pass 20>><<set $mpUndertideChoice to "open">><</link>><br>
+<<mprepairicon>><<link [[落下闸门封死 (0:20)|MP Loc Undertide Ending]]>><<pass 20>><<set $mpUndertideChoice to "seal">><</link>>
+
+:: MP Loc Undertide Ending [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set _already to ($mpUndertideEnded or 0)>>
+<<set $mpUndertideEnded to 1>>
+<<if $mpUndertideChoice is "seal">>
+<<set $mpWorldUndertideOutcome to "sealed">>
+你把闸门落下，铅板被卡在槽里再也抽不出。潮声被挡在门外，暗渠重新变成死水。码头的人会少一条走私捷径；高街账房则会记下「旧闸已封」。
+<<else>>
+<<set $mpWorldUndertideOutcome to "open">>
+你撬开铅板，港务旧印下压着一行潮道坐标。闸门保持半开，退潮时仍可过人。码头脚夫会多一条夜路；高街巡夜则多一处要盯的口子。
+<</if>>
+<<if !_already>><<stress -6>><<tiredness 2>><</if>>
+<br><br>
+<<getouticon>><<link [[回暗渠口 (0:05)|MP Loc Undertide Hub]]>><<pass 5>><</link>><br>
+<<docksicon>><<link [[回码头总枢 (0:08)|MP Deep Docks Hub]]>><<pass 8>><</link>><br>
+<<walkicon>><<link [[去高街门厅 (0:10)|MP Loc HighStreet Hub]]>><<pass 10>><</link>>
+
+:: MP Loc Undertide Echo Docks [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+栈桥总坪的告示板上多了一行炭字：<<if $mpWorldUndertideOutcome is "sealed">>「旧闸已封，夜航改外港。」<<elseif $mpWorldUndertideOutcome is "open">>「潮下捷径重开，巡夜加岗。」<<else>>潮下暗渠还没有定论。<</if>>脚夫们一边卸货一边看那行字。
+<br><br>
+<<getouticon>><<link [[回码头总枢 (0:03)|MP Deep Docks Hub]]>><<pass 3>><</link>><br>
+<<walkicon>><<link [[再去滩涂看看 (0:08)|MP Loc Undertide Hub]]>><<pass 8>><</link>>
+
+:: MP Loc Undertide Echo High [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+高街门厅长桌角压着一张港务抄件：<<if $mpWorldUndertideOutcome is "sealed">>旧闸封死，铺租核算少了一条走私损耗。<<elseif $mpWorldUndertideOutcome is "open">>潮道重开，巡夜班表多了一格暗渠口。<<else>>潮下暗渠的消息还没送到会馆。<</if>>执事用指节敲了敲纸边。
+<br><br>
+<<getouticon>><<link [[回高街门厅 (0:03)|MP Loc HighStreet Hub]]>><<pass 3>><</link>><br>
+<<walkicon>><<link [[去码头核对 (0:10)|MP Deep Docks Hub]]>><<pass 10>><</link>>

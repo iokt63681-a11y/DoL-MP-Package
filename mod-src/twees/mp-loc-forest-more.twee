@@ -4,7 +4,7 @@
 <br><br>
 六格各管一件事。酸模叶底下压着湿洼的采菌路线，橡叶柄标着猎径上新出现的拖痕；蕨叶记的是雾天走岔的那几条岔口；灯油渣下写着灯线缺口的编号；狼毛那一格画着界桩的位置；最后那片木片，是伊甸小屋门框上掉下来的，阿什把它捡回来，说那屋子也该有人去看看。
 <br><br>
-【林务分册】探索度：<<print $mpLocProgress_Forest>> ｜ 已结林务：<<print $mpLocEvents_Forest>> ｜ 雾潮水尺：<<print ($mpFogTide or 0)>> ｜ 林区终局：<<print ($mpWorldForestOutcome or "未定")>>
+木板上的六格已经压上了几样东西：<<if $mpLocProgress_Forest gte 3>>酸模叶、橡叶柄和蕨叶底下都写了字，灯油渣那格也画了缺口编号。<<elseif $mpLocProgress_Forest gte 1>>酸模叶底下添了采菌路线，其余几格还空着。<<else>>六格都还空着，只有炭条搁在板下沿。<</if>><<if $mpLocEvents_Forest gte 3>>狼毛那格已经画好界桩位置，木片旁边也多了一行柴屋的记号。<<elseif $mpLocEvents_Forest gte 1>>有一两格的叶子被翻动过，边角还留着阿什的指印。<<else>>林务册子还没翻到新的一页。<</if>>雾潮在界石背槽里<<if ($mpFogTide or 0) gte 4>>漫得很高，木板的边角已经返潮<<elseif ($mpFogTide or 0) gte 2>>留着一层薄湿<<else>>几乎看不见水光<</if>>，<<if $mpWorldForestOutcome is "warded">>灯线那头的铁箍在风里碰出细响<<elseif $mpWorldForestOutcome is "untamed">>藤蔓正往刻线这边探<<else>>林子往后怎么走还没有定局<</if>>。
 <br><br>
 <<if $mpWorldForestOutcome is "warded">>灯线已经立成，六格里的活大多围着灯桩转，哪一根歪了、哪一盏缺油，都得当天记上。<<elseif $mpWorldForestOutcome is "untamed">>旧路被林子改了几处，格子里的路线要跟着重画，画错一笔，下一趟就得多绕半天。<<else>>林子还没有定局，六格都空着一半，阿什不催，只把炭条搁在木板下沿。<</if>>
 <br><br>
@@ -19,10 +19,7 @@
 <<runicon>><<link [[循迹看猎径 (0:02)|MP Loc Forest Event 8]]>><<pass 2>><</link>><br>
 <<mpwatchicon>><<link [[雾里找回路 (0:02)|MP Loc Forest Event 9]]>><<pass 2>><</link>><br>
 <<link [[补灯线缺口 (0:02)|MP Loc Forest Event 10]]>><<pass 2>><</link>><br>
-<<link [[重立狼界桩 (0:02)|MP Loc Forest Event 11]]>><<pass 2>><</link>><br>
-<<link [[伊甸的柴屋 (0:02)|MP Loc Forest Event 12]]>><<pass 2>><</link>><br>
-<<link [[查看当季林活 (0:03)|MP Loc Forest Season Extra]]>><<pass 3>><</link>>
-<br><<link [[更多日常 (0:03)|MP Loc Forest More2 Hub]]>><<pass 3>><</link>>
+<<link [[更多日常 (0:03)|MP Loc Forest More2 Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Forest Event 7 [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
@@ -58,7 +55,7 @@
 坡下的溪声时远时近。拖痕在离水还有二十步的地方分成两股，一股进溪，一股钻进倒木底下。你蹲在岔口，闻到一股混着铁锈和湿毛的味道。伊甸没有再说话，只把一根削好的木楔插在你脚边的土里，转身去查看另一棵树。
 <br><br>
 <<getouticon>><<link [[返回林务分册 (0:02)|MP Loc Forest More Hub]]>><<pass 2>><</link>><br>
-<<runicon>><<if ($athletics or 0) gte 240 or ($sneak or 0) gte 220>><<link [[追血迹到溪 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<money 35>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<stress -2>><</link>><<else>><<link [[追血迹到溪 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<stress 3>><<pain 2>><</link>><</if>><br>
+<<runicon>><<if ($athletics or 0) gte 240 or ($sneak or 0) gte 220>><<link [[追血迹到溪 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<money 35>><<if $NPCName and mpNpcMet("Eden")>><<npcincr Eden trust 1>><</if>><<stress -2>><</link>><<else>><<link [[追血迹到溪 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<stress 3>><<pain 2>><</link>><</if>><br>
 <<investigateicon>><<if ($skulduggery or 0) gte 220 or ($athletics or 0) gte 240>><<link [[拆铁丝活套 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<stress -2>><</link>><<else>><<link [[拆铁丝活套 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<stress 3>><<tiredness 2>><<pain 2>><</link>><</if>>
 
 :: MP Loc Forest Event 9 [nobr]
@@ -113,8 +110,8 @@
 坡上的风带着融雪的凉。黑狼把前爪往前挪了半步，又停住。阿什把骨刀和木楔放在你脚边，自己退到上风口，把双手拢在袖子里。林子里没有别的声音，只有雪水从枝上滴下来，一滴一滴砸在苔上。
 <br><br>
 <<getouticon>><<link [[返回林务分册 (0:02)|MP Loc Forest More Hub]]>><<pass 2>><</link>><br>
-<<mpanimalicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[重打界桩入土 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<stress -2>><</link>><<else>><<link [[重打界桩入土 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<stress 3>><<pain 2>><</link>><</if>><br>
-<<sneakicon>><<if ($sneak or 0) gte 220 or ($tending or 0) gte 220>><<link [[补气味线退界 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCNameList and $NPCNameList.includes("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<tiredness 2>><</link>><<else>><<link [[补气味线退界 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<stress 3>><<tiredness 2>><</link>><</if>>
+<<mpanimalicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[重打界桩入土 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if mpNpcMet("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<stress -2>><</link>><<else>><<link [[重打界桩入土 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<stress 3>><<pain 2>><</link>><</if>><br>
+<<sneakicon>><<if ($sneak or 0) gte 220 or ($tending or 0) gte 220>><<link [[补气味线退界 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if mpNpcMet("Black Wolf")>><<npcincr "Black Wolf" love 1>><</if>><<tiredness 2>><</link>><<else>><<link [[补气味线退界 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<stress 3>><<tiredness 2>><</link>><</if>>
 
 :: MP Loc Forest Event 12 [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
@@ -131,9 +128,9 @@
 日头偏西时，屋后的云杉影子拉得很长。伊甸把磨好的斧子立在门边，进屋添了一锅水。他没有说留你吃饭，只把一只缺口的碗放在灶台外侧。屋里的火压得很低，烟从新抹的泥缝里一丝一丝往外走，颜色比先前淡了。
 <br><br>
 <<getouticon>><<link [[返回林务分册 (0:02)|MP Loc Forest More Hub]]>><<pass 2>><</link>><br>
-<<mprepairicon>><<if ($housekeeping or 0) gte 220 or ($tending or 0) gte 220>><<link [[补烟囱裂缝 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<stress -2>><</link>><<else>><<link [[补烟囱裂缝 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<stress 3>><<tiredness 3>><</link>><</if>><br>
-<<mpcarryicon>><<if ($athletics or 0) gte 220>><<link [[劈柴换一顿 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<tiredness 2>><</link>><<else>><<link [[劈柴换一顿 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<stress 2>><<tiredness 2>><<pain 2>><</link>><</if>><br>
-<<mpbargainicon>><<if $money gte 60>><<link [[带盐与灯油 (0:08)|MP Loc Forest More Hub]]>><<pass 8>><<money -60>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><</if>><<tiredness 1>><</link>><<else>><span class="disabled">带盐与灯油 (0:08)（钱不够）</span><</if>>
+<<mprepairicon>><<if ($housekeeping or 0) gte 220 or ($tending or 0) gte 220>><<link [[补烟囱裂缝 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCName and mpNpcMet("Eden")>><<npcincr Eden trust 1>><</if>><<stress -2>><</link>><<else>><<link [[补烟囱裂缝 (0:14)|MP Loc Forest More Hub]]>><<pass 14>><<stress 3>><<tiredness 3>><</link>><</if>><br>
+<<mpcarryicon>><<if ($athletics or 0) gte 220>><<link [[劈柴换一顿 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCName and mpNpcMet("Eden")>><<npcincr Eden trust 1>><</if>><<tiredness 2>><</link>><<else>><<link [[劈柴换一顿 (0:12)|MP Loc Forest More Hub]]>><<pass 12>><<stress 2>><<tiredness 2>><<pain 2>><</link>><</if>><br>
+<<mpbargainicon>><<if $money gte 60>><<link [[带盐与灯油 (0:08)|MP Loc Forest More Hub]]>><<pass 8>><<money -60>><<set $mpLocEvents_Forest to Math.min(99, ($mpLocEvents_Forest or 0) + 1)>><<set $mpLocProgress_Forest to Math.min(5, ($mpLocProgress_Forest or 0) + 1)>><<if $NPCName and mpNpcMet("Eden")>><<npcincr Eden trust 1>><</if>><<tiredness 1>><</link>><<else>><span class="disabled">带盐与灯油 (0:08)（钱不够）</span><</if>>
 
 :: MP Loc Forest Season Extra [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
@@ -143,7 +140,7 @@
 <br><br>
 <<if Weather.precipitation is "rain">>今天有雨，雨水把气味压在地面，也把新断的枝口泡得发亮。湿枝不能直接捆，得先摊在背风的石檐下沥一夜。<<elseif Weather.precipitation is "snow">>今天落雪，雪面会把脚印留得很清楚，也会把枯枝压进雪里。出门得先活动开手指，湿手套贴在皮肤上，比空手更冷。<<else>>今天无雨无雪，日头把林缘照得通透。这样的天气最适合翻晒，菌架、麻绳、油布都该摊开见见光。<</if>>
 <br><br>
-【当季读数】降水：<<if Weather.precipitation is "rain">>有雨<<elseif Weather.precipitation is "snow">>有雪<<elseif Weather.precipitation is "none">>晴好<<else>>薄雾<</if>> ｜ 时令：<<if Time.season is "spring">>春<<elseif Time.season is "summer">>夏<<elseif Time.season is "autumn">>秋<<elseif Time.season is "winter">>冬<<else>>当季<</if>> ｜ 探索度：<<print $mpLocProgress_Forest>> ｜ 已结林务：<<print $mpLocEvents_Forest>>
+薄纸上的四行字已经被炭笔描过几遍，压角的石头也换了一块。<<if $mpLocProgress_Forest gte 3>>木板最后一格底下又添了新划痕，这一季的林活已经摸熟。<<elseif $mpLocProgress_Forest gte 1>>板下多了一道新划痕，另一头还空着。<<else>>板下仍只有阿什原先的四行字。<</if>><<if $mpLocEvents_Forest gte 3>>篮子和麻绳都换过一轮，门后堆着晒干的落枝。<<elseif $mpLocEvents_Forest gte 1>>门后新添了一小捆落枝。<<else>>空篮子还挂在原处，篮底沾着上一回的松针。<</if>>
 <br><br>
 阿什把薄纸折回木板底下，用一片石头压住边角。他说季节给的只是由头，真正落到手里的东西，得靠人弯多少次腰。你把空篮子提起来，掂了掂，篮底还沾着上一次的松针。
 <br><br>

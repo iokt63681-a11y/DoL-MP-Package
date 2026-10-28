@@ -1,7 +1,7 @@
 :: MP Job Spa Encounter 2 [nobr]
 <<set $outside to 0>><<set $location to "spa">><<effects>><<mpAmbient>>
 <<set $daily to ($daily or {})>><<set $daily.mpJobSpaEncounter to 1>>
-私汤隔间的竹帘只放下一半。退休的歌剧女高音塞西莉亚靠在池边，银发用一根象牙簪挽着，指尖一下一下敲着池沿的铜片——那是她试音准的老法子。她说这池水低了将近两度，蒸汽薄得托不住嗓子，今晚小厅里有她的专场，误不得。铜盘上的温度计指着三十八，排班表上她的名字旁边却标着四十一；池面只在墙角卷起一缕白气，热水阀的铜杆上结着一圈白垢。<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>蹲在火房门口，手里拎着通条，朝你使了个眼色。
+私汤隔间的竹帘只放下一半。退休的歌剧女高音塞西莉亚靠在池边，银发用一根象牙簪挽着，指尖一下一下敲着池沿的铜片——那是她试音准的老法子。她说这池水低了将近两度，蒸汽薄得托不住嗓子，今晚小厅里有她的专场，误不得。铜盘上的温度计指着三十八，排班表上她的名字旁边却标着四十一；池面只在墙角卷起一缕白气，热水阀的铜杆上结着一圈白垢。<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>蹲在火房门口，手里拎着通条，朝你使了个眼色。
 <br><br>
 <div id="mp-job-spa-enc2">
 <<getouticon>><<link [[返回池边前厅 (0:02)|MP Job Spa]]>><<pass 2>><</link>>
@@ -12,7 +12,7 @@
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_spa_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 520>><</if>>
 	<<scienceskill 1 "no_star">><<stress -2>><<lstress>>
 <<else>>
-	阀杆锈住了半圈，你使劲一拧，冷水猛地涌进池子，温度又掉了一度。塞西莉亚敲响池边的铜铃，<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>只得放下通条过来重新升火。烫热的铜管在你虎口烙出一道红痕。<span class="red">这一池水今晚是等不到四十一度了。</span>
+	阀杆锈住了半圈，你使劲一拧，冷水猛地涌进池子，温度又掉了一度。塞西莉亚敲响池边的铜铃，<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>只得放下通条过来重新升火。烫热的铜管在你虎口烙出一道红痕。<span class="red">这一池水今晚是等不到四十一度了。</span>
 	<<pain 1>><<gpain>><<stress 3>><<tiredness 1>><<gstress>>
 <</if>>
 <br><br>
@@ -35,9 +35,9 @@
 <</replace>><</link>><<else>><<link [[添草药增雾 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "添草药增雾">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span>（或农场已供草药）">><<pass 6>><</link>><</if>>
 <br>
 <<mpwatchicon>><<link "请当班看火 (0:03)">><<pass 3>><<replace "#mp-job-spa-enc2">>
-你替<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>看住前厅的毛巾篮，让他腾出手去拨火房的第二道风门。他熟这口炉子的脾气，铁门只拉开半掌，蒸汽就顺着石槽涌上来。塞西莉亚没再敲铜片，把三枚银币留在池边，说你的手比嘴快。<span class="teal">火房的活有人接了，池边也稳住了。</span>
+你替<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>看住前厅的毛巾篮，让他腾出手去拨火房的第二道风门。他熟这口炉子的脾气，铁门只拉开半掌，蒸汽就顺着石槽涌上来。塞西莉亚没再敲铜片，把三枚银币留在池边，说你的手比嘴快。<span class="teal">火房的活有人接了，池边也稳住了。</span>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_spa_enc_2_d" + ((window.Time && Time.days) or 0))>><<money 320>><</if>>
-<<if $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>>
+<<if mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>>
 <<tiredness 2>><<stress -1>><<ltiredness>><<lstress>>
 <br><br>
 <<link [[返回池边前厅 (0:02)|MP Job Spa]]>><<pass 2>><</link>>
@@ -48,7 +48,7 @@
 :: MP Job Spa Encounter 3 [nobr]
 <<set $outside to 0>><<set $location to "spa">><<effects>><<mpAmbient>>
 <<set $daily to ($daily or {})>><<set $daily.mpJobSpaEncounter to 1>>
-浆洗房的货车刚拐过街角，<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>在卸货台上一遍遍点着捆数：送货单写着十二捆，台上却只有十一捆半，最上面那捆被割开过，少了一截。四点钟包下整层汤池的婚礼人家已经进了更衣室，新娘的姑母正隔着门问热毛巾，而早上那批客人用剩的毛巾还带着潮气，堆在暖石板上。街角的跑腿男孩还没走远，浆洗房后门的晾布架这个点应该还空着一半。
+浆洗房的货车刚拐过街角，<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>在卸货台上一遍遍点着捆数：送货单写着十二捆，台上却只有十一捆半，最上面那捆被割开过，少了一截。四点钟包下整层汤池的婚礼人家已经进了更衣室，新娘的姑母正隔着门问热毛巾，而早上那批客人用剩的毛巾还带着潮气，堆在暖石板上。街角的跑腿男孩还没走远，浆洗房后门的晾布架这个点应该还空着一半。
 <br><br>
 <div id="mp-job-spa-enc3">
 <<getouticon>><<link [[返回池边前厅 (0:02)|MP Job Spa]]>><<pass 2>><</link>>
@@ -63,7 +63,7 @@
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_spa_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 500>><</if>>
 	<<housekeeping 1>><<tiredness 1>><<ltiredness>>
 <<else>>
-	你手忙脚乱地拆捆，干湿毛巾混作一堆，最上面那卷还滴着水。姑母捏起一角看了看，把毛巾扔回台上，前台只得先向客人赔礼换单。<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>在门口低声叮嘱你先把湿毛巾全抱回烘房。<span class="red">缺的那半捆还是没补上，这单没有分红。</span>
+	你手忙脚乱地拆捆，干湿毛巾混作一堆，最上面那卷还滴着水。姑母捏起一角看了看，把毛巾扔回台上，前台只得先向客人赔礼换单。<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>在门口低声叮嘱你先把湿毛巾全抱回烘房。<span class="red">缺的那半捆还是没补上，这单没有分红。</span>
 	<<stress 3>><<tiredness 2>><<gstress>>
 <</if>>
 <br><br>
@@ -91,7 +91,7 @@
 <</replace>><<replace "#mp-job-spa-enc3">>缺货的事已经处置完了。<</replace>><</link>><<else>><span class="disabled">加钱买急送 (0:04)（钱不够）</span><</if>>
 <br>
 <<link "如实说明缺货 (0:05)">><<pass 5>><<replace "#mp-job-spa-enc3-out">>
-你把送货单摊在姑母面前，说明少的那半捆和已经走远的货车，又把暖石板上烘着的干爽毛巾先送进去应付着。姑母脸色缓了缓，只叮嘱下一轮务必齐整。<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>在旁边补了一句，说余下的布马上烘干。<span class="teal">话说明白了，场面稳稳托住。</span>
+你把送货单摊在姑母面前，说明少的那半捆和已经走远的货车，又把暖石板上烘着的干爽毛巾先送进去应付着。姑母脸色缓了缓，只叮嘱下一轮务必齐整。<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>在旁边补了一句，说余下的布马上烘干。<span class="teal">话说明白了，场面稳稳托住。</span>
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("job_spa_enc_3_d" + ((window.Time && Time.days) or 0))>><<money 300>><</if>><<stress -1>><<lstress>>
 <br><br>
 <<link [[返回池边前厅 (0:02)|MP Job Spa]]>><<pass 2>><</link>>

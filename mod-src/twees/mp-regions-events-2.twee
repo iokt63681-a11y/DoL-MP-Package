@@ -1,194 +1,389 @@
-:: MP Region Clockwork CoolingTowerTube [nobr]
-<<set $outside to 0>><<set $location to "underground">>
-<<effects>>
-蒸汽压力室西侧的副冷却塔排污口卡着一只防水铜筒，四周笼罩着淡淡的白雾。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你旋开排污口的卡箍，铜筒里卷着一张被蒸汽熏软的管线图，筒底还有几枚铜垫片。
-<br><br>
-<<investigateicon>><<link [[拔出铜筒 (0:06)|MP Region Clockwork Steam]]>><<pass 6>><<stress -3>><</link>><<lstress>>
-<br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[拆开底盖 (0:06)|MP Region Clockwork Steam]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_clockwork_coolingtowertube_reward")>><<money 518>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_clockwork_coolingtowertube")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[拆开底盖 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拆开底盖">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<mpclockworkicon>><<link [[返回机括城 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+/* MP Region Abbey — 沉没修道院区域池四条多段短链（16 页）
+   包含回廊与祷告席、地窖水道、抄经室与书压、钟楼与烛台四条短链，
+   完整读写 $mpAbbeyLamp（灯油 0-5）、$mpAbbeyAlert（钟声惊动 0-10）、$mpAbbeyDepth（深度 0-3）。 */
 
-:: MP Region Clockwork BrokenGaugeTin [nobr]
-<<set $outside to 0>><<set $location to "underground">>
-<<effects>>
-压力室仪表墙的第八块圆形温度计玻璃碎了，表盘后面塞着一只扁平的锡烟盒。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你从碎表盘后抽出烟盒，盒里没有烟，只有几枚旧币和一张记着压力的纸片。
+:: MP Region Abbey Cloister Chain [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Abbey Cloister Chain"] to 1>><<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>><<if $mpAbbeyLamp is undefined>><<set $mpAbbeyLamp to 2>><</if>><<set $mpAbbeyLamp to Math.clamp($mpAbbeyLamp, 0, 5)>>
+静默石阶尽头悬着一串缠红线的青铜风铃，胡桃木隔扇半掩着长排祈祷席。值夜修士提纸灯从廊柱后踱出，灰袍扫过湿石，压低声音叮嘱：「子时三刻落侧门闩，钟响三声就别在回音壁下逗留。」说完便拐进内廊。<<if ($mpAbbeyLamp or 0) lte 0>>牛角灯油尽，八角音律石盘埋在暗处。<<else>>灯晕照出无头苦修士石钵与风铃红线。<</if>><<if ($mpAbbeyDepth or 0) gte 2>>内层回廊把呼吸声放大数倍，冷雾贴地游走。<</if>>
 <br><br>
-<<mpsmokeicon>><<link [[抽出烟盒 (0:04)|MP Region Clockwork Steam]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回修道院池 (0:03)|MP Region Pool Abbey]]>><<pass 3>><<set $mpAbbeyDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[掰开内衬 (0:08)|MP Region Clockwork Steam]]>><<pass 8>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_clockwork_brokengaugetin_reward")>><<money 442>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_clockwork_brokengaugetin")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[掰开内衬 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "掰开内衬">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<if ($skulduggery or 0) gte 240 or ($willpower or 0) gte 360>>
+<<templeicon>><<link [[避开风铃进祷告席 (0:06)|MP Region Abbey Cloister Nave]]>><<pass 6>><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpbellicon>><<link [[踩过湿滑石盘闯 (0:06)|MP Region Abbey Cloister Chime]]>><<pass 6>><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 2)>><<pain 2>><<stress 4>><<tiredness 2>><<lowerwet 25>><</link>>
+<</if>>
 <br>
-<<mpclockworkicon>><<link [[返回机括城 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[顺阶回外庭 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><<if ($mpAbbeyAlert or 0) gte 6>><<tiredness 1>><<stress 2>><</if>><</link>>
 
-:: MP Region Clockwork QuartzSandSundial [nobr]
-<<set $outside to 0>><<set $location to "underground">>
-<<effects>>
-停摆天文台南侧的星象沙盘里铺着银白色石英砂，沙层下埋着一枚青铜日晷。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在青铜日晷表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你拨开石英砂，日晷晷针还能转动，底座刻着一圈被沙磨浅的刻度。
+:: MP Region Abbey Cloister Chime [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+脚底湿苔一滑，你肩膀撞上垂落的红丝线，青铜风铃顿时响成一片。清越的颤音顺着回音壁滚进地宫，廊柱后立刻亮起纸灯，值夜修士高声呼喝，两个人影跑去落下侧门的铁闩。退路被封死了。<<if ($mpAbbeyLamp or 0) lte 0>>牛角灯早已熄透，你只能用手掌贴着石壁辨认方向。<<else>>你赶紧捂暗灯罩，缩进石柱投下的阴影里。<</if>><<if ($mpAbbeyAlert or 0) gte 6>>内廊的脚步声越来越近，有人正逐间搜查。<</if>>
 <br><br>
-<<investigateicon>><<link [[拨开沙层 (0:04)|MP Region Clockwork Astro]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[钻壁画暗道撤 (0:05)|MP Region Pool Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 1)>><<stress 2>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[旋动晷针 (0:07)|MP Region Clockwork Astro]]>><<pass 7>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_clockwork_quartzsandsundial_reward")>><<money 816>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_clockwork_quartzsandsundial")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[旋动晷针 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "旋动晷针">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
-<br>
-<<mpclockworkicon>><<link [[返回机括城 (0:02)|MP Region Clockwork Undercity]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<mpsneakicon>><<link [[翻断裂石栏险退 (0:07)|MP Region Sunken Abbey]]>><<pass 7>><<set $mpAbbeyDepth to 0>><<tiredness 2>><<stress 3>><</link>>
 
-:: MP Region Clockwork CometChartWax [nobr]
-<<set $outside to 0>><<set $location to "underground">>
-<<effects>>
-天文台观测椅扶手下方的黄铜记录板夹着一叠手绘彗星轨迹图，末页用红蜡封着。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你剥开末页红蜡，蜡下压着一小片写有彗星周期的薄铜片。
+:: MP Region Abbey Cloister Nave [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>>
+隔扇后飘来没药与旧蜡混合的气味，石龛里搁着一罐添灯圣油，胡桃木门缝夹着银拆信刀，长椅底还塞了张画着水闸的水文帛片。廊外响起值夜修士的咳声，他正一间间推门查看门闩。<<if $mpAbbeyChainDone["cloister"]>>这里早被人翻检过，石像掌心的积水映着灯影。<<else>>趁他尚未走到尽头，你能带走一件合用的东西，只是抽出银刀会碰响木槽铜铃。<</if>>
 <br><br>
-<<investigateicon>><<link [[剥开红蜡 (0:07)|MP Region Clockwork Astro]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回修道院池 (0:04)|MP Region Pool Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[抽出铜片 (0:08)|MP Region Clockwork Astro]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_clockwork_cometchartwax_reward")>><<money 764>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_clockwork_cometchartwax")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[抽出铜片 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "抽出铜片">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<if !$mpAbbeyChainDone["cloister"]>>
+<<mplampicon>><<link [[添没药灯油 (0:06)|MP Region Abbey Cloister Exit]]>><<pass 6>><<set $mpAbbeyCloisterPick to "oil">><<set $mpAbbeyLoot_Oil to 1>><<set $mpAbbeyLamp to Math.min(5, ($mpAbbeyLamp or 0) + 2)>><<stress -2>><<set $mpAbbeyChainDone["cloister"] to 1>><</link>>
 <br>
-<<getouticon>><<link [[离开座椅 (0:03)|MP Region Clockwork Undercity]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpknifeicon>><<link [[拔下隔扇拆信刀 (0:08)|MP Region Abbey Cloister Exit]]>><<pass 8>><<set $mpAbbeyCloisterPick to "knife">><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 2)>><<set $mpAbbeyLetterKnife to 1>><<skulduggery 2>><<stress -2>><<set $mpAbbeyChainDone["cloister"] to 1>><</link>>
+<br>
+<<mpmapicon>><<link [[抽走椅缝水文帛片 (0:06)|MP Region Abbey Cloister Exit]]>><<pass 6>><<set $mpAbbeyCloisterPick to "chart">><<set $mpAbbeySluiceChart to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["abbey_sluice_chart"] to 1>><<stress -2>><<set $mpAbbeyChainDone["cloister"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[回修道院 (0:05)|MP Region Sunken Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Clockwork HalfOpenSafe12 [nobr]
-<<set $outside to 0>><<set $location to "underground">>
-<<effects>>
-档案馆密库东侧的保险柜群中，唯有第十二号黑铁柜的转盘锁停在半开位置。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你拉开半开的柜门，转盘锁后还卡着一小截铁丝，柜内抽屉没有锁。
+:: MP Region Abbey Cloister Exit [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+你合上祈祷席的木隔扇，断柱间涌进的冷雾贴着地面游走。侧门落闩的闷响仍在廊道回荡，值夜修士的灯影沿石阶慢慢挪动。<<if $mpAbbeyCloisterPick is "oil">>牛角灯灌满没药圣油，暖黄光晕散着清香。<<elseif $mpAbbeyCloisterPick is "knife">>袖中藏好锋利银刀，雕花木扇还在轻轻摆动。<<else>>怀中收着那张水闸图，暗河漩涡的方位你已记住。<</if>><<if ($mpAbbeyLamp or 0) lte 0>>灯芯将尽，脚下的路几乎全黑。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>衣摆湿冷，贴着脚踝十分难受。<</if>><<if ($mpAbbeyAlert or 0) gte 6>>阶下两盏风灯晃动，巡夜修士正在拱门处盘问。<</if>>
 <br><br>
-<<investigateicon>><<link [[拉开柜门 (0:04)|MP Region Clockwork Vault]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[沿石阶绕侧廊回 (0:05)|MP Region Pool Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><<if ($mpAbbeyAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpAbbeyAlert to Math.max(0, ($mpAbbeyAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[拨开铁丝 (0:08)|MP Region Clockwork Vault]]>><<pass 8>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_clockwork_halfopensafe12_reward")>><<money 790>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_clockwork_halfopensafe12")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[拨开铁丝 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拨开铁丝">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<mpropeicon>><<link [[钻壁画后暗槽下撤 (0:07)|MP Region Pool Abbey]]>><<pass 7>><<set $mpAbbeyDepth to 0>><<tiredness 2>><<if ($mpAbbeyLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
 <br>
-<<mpclockworkicon>><<link [[返回机括城 (0:03)|MP Region Clockwork Undercity]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[回修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Clockwork LampshadeMicrofilm [nobr]
-<<set $outside to 0>><<set $location to "underground">>
-<<effects>>
-密库阅览桌上的黄铜台灯灯罩内侧贴着一张微缩胶片，底座下压着一把银尺。
-<<mpAmbient>><<if Weather.isFreezing>>薄薄的霜花挂在一把银尺外侧。<<else>>空气里带着微温。<</if>>
-你揭下灯罩内侧的胶片，灯座下压着的银尺刻度里有几道被磨亮的记号。
+:: MP Region Abbey Waterway Chain [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Abbey Waterway Chain"] to 1>><<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>>
+暗河渡口立着几根湿漉漉的石桩，半条烂掉一半的柏木船系在桩上。石拱桥底，水闸绞盘被一截枯木卡死，黑水翻着白沫朝涵洞方向挤。<<if $mpAbbeySluiceChart>>多亏那张从祈祷席带出的水闸图，你认出闸板下的浅滩落脚点，也看出水流只往下游走。<<else>>河底横着许多断碑，水色发黑，贸然下去多半会陷进深涡。<</if>><<if ($mpAbbeyDepth or 0) gte 2>>越往里走，水汽越冷，连自己的心跳都被水声盖住。<</if>>
 <br><br>
-<<investigateicon>><<link [[揭下胶片 (0:04)|MP Region Clockwork Vault]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回修道院池 (0:03)|MP Region Pool Abbey]]>><<pass 3>><<set $mpAbbeyDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[抽出银尺 (0:07)|MP Region Clockwork Vault]]>><<pass 7>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_clockwork_lampshademicrofilm_reward")>><<money 1081>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_clockwork_lampshademicrofilm")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[抽出银尺 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "抽出银尺">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<if ($swimmingskill or 0) gte 260 or ($athletics or 0) gte 280 or $mpAbbeySluiceChart>>
+<<mpswimicon>><<link [[踩浅滩暗阶过闸 (0:07)|MP Region Abbey Waterway Sluice]]>><<pass 7>><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<set $mpAbbeyLamp to Math.max(0, ($mpAbbeyLamp or 0) - 1)>><<lowerwet 20>><<tiredness 1>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[顶暗河漩涡 (0:07)|MP Region Abbey Waterway Eddy]]>><<pass 7>><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<upperwet 40>><<lowerwet 50>><<pain 2>><<stress 5>><<tiredness 3>><</link>>
+<</if>>
 <br>
-<<mpclockworkicon>><<link [[返回机括城 (0:02)|MP Region Clockwork Undercity]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[沿渡口石阶回外庭 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Abbey BrokenWingCoin [nobr]
-<<set $outside to 0>><<set $location to "temple">>
-<<effects>>
-静默石阶第十二级转角处的石壁浮雕画着天使折翼像，羽翼凹槽里卡着一枚银币。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你用指腹顶出银币，浮雕羽翼后还塞着一小片折起的祷文。
+:: MP Region Abbey Waterway Eddy [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+回水漩涡猛地叼住你的脚踝，你一头栽进刺骨黑水，膝盖磕在水下断碑上。等你攀住岸壁铁环爬起，湍流已把你推离渡口，来路的浅滩沉进暗影，只剩下游涵洞泛着微光。<<if ($mpAbbeyLamp or 0) lte 0>>灯已经熄灭，眼前只剩浓黑，你摸着湿壁判断方向。<<else>>水灌进灯罩，橘黄的火舌被暗风扯得东倒西歪。<</if>><<if ($mpAbbeyAlert or 0) gte 6>>渡口上边响起钟声，水面映出一片跳动的火光。<</if>>
 <br><br>
-<<templeicon>><<link [[顶出银币 (0:04)|MP Region Abbey Steps]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[顺暗流钻涵洞 (0:05)|MP Region Pool Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><<stress 2>><</link>>
 <br>
-<<mpcarryicon>><<if ($skulduggery or 0) gte 250>><<link [[取出祷文 (0:08)|MP Region Abbey Steps]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_abbey_brokenwingcoin_reward")>><<money 592>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_abbey_brokenwingcoin")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取出祷文 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取出祷文">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回修道院 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpclimbicon>><<link [[攀生锈铁环爬出 (0:07)|MP Region Sunken Abbey]]>><<pass 7>><<set $mpAbbeyDepth to 0>><<pain 1>><<tiredness 2>><</link>>
 
-:: MP Region Abbey HollowBalusterStove [nobr]
-<<set $outside to 0>><<set $location to "temple">>
-<<effects>>
-石阶下段的扶手石栏断了一截，空心的石柱底座里露出半只紫铜手炉。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你从空心石柱里抽出半只手炉，炉盖还能打开，里面残留着一点香灰。
+:: MP Region Abbey Waterway Sluice [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>>
+踩着闸下浅滩到了对岸，铁链末端吊着一只被水泡胀的圣器铜匣，取下时会扯响链子，搬动也很吃体力；回水湾的石灯笼裂口里，则插着一卷轻巧的羊皮浮球信。闸门已被水压封死，你只能循下游涵洞出去。<<if $mpAbbeyChainDone["waterway"]>>对岸这两样都被动过，唯余暗河不断拍打石桩。<<elseif ($mpAbbeyLamp or 0) lte 0>>灯油见底，闸底一片黑，摸链子格外费劲。<</if>>
 <br><br>
-<<mpcookicon>><<link [[抽出手炉 (0:07)|MP Region Abbey Steps]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[顺涵洞空手退 (0:04)|MP Region Pool Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[打开炉盖 (0:08)|MP Region Abbey Steps]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_abbey_hollowbalusterstove_reward")>><<money 450>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_abbey_hollowbalusterstove")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[打开炉盖 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "打开炉盖">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<if !$mpAbbeyChainDone["waterway"]>>
+<<mpcarryicon>><<link [[解下沉重圣器匣 (0:09)|MP Region Abbey Waterway Exit]]>><<pass 9>><<set $mpAbbeyWaterPick to "heavy">><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 3)>><<tiredness 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("abbey_chain_waterway_heavy")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 350>><<stress -2>><</if>><<set $mpAbbeyChainDone["waterway"] to 1>><</link>>
 <br>
-<<getouticon>><<link [[返回修道院 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpreadicon>><<link [[取浮球羊皮 (0:06)|MP Region Abbey Waterway Exit]]>><<pass 6>><<set $mpAbbeyWaterPick to "light">><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 1)>><<if !$mpAbbeyWaterLog>><<set $mpAbbeyWaterLog to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["abbey_waterway_scroll"] to 1>><<stress -3>><<willpower 1>><</if>><<set $mpAbbeyChainDone["waterway"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[撤出渡口 (0:05)|MP Region Sunken Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Abbey ObsidianRosarySlot [nobr]
-<<set $outside to 0>><<set $location to "temple">>
-<<effects>>
-告解回音壁第一间木隔扇的底座滑槽里卡着一枚黑曜石念珠，周围散落着几粒珍珠。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在几粒珍珠表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你从滑槽里拈出念珠，珠孔穿着旧线，槽底还散着几粒小珍珠。
+:: MP Region Abbey Waterway Exit [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+上游来水正顺着闸缝猛涨，漫过浅滩石墩，渡口已经回不去了，你只能贴着下游涵洞的水线往外挪。<<if $mpAbbeyWaterPick is "heavy">>肩上的圣器铜匣沉得压脚，每迈一步都溅起冷水。<<else>>贴身收好浮球里的羊皮卷，你轻巧地跃上涵洞外干石阶。<</if>><<if ($mpAbbeyLamp or 0) lte 0>>灯灭了，你只能凭水声判断石阶的高低。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>衣裳不断往下淌水，冷气把手指冻得发木。<</if>><<if ($mpAbbeyAlert or 0) gte 6>>涵洞外有火把晃动，巡院僧侣堵在石阶上。<</if>>
 <br><br>
-<<templeicon>><<link [[捻起石珠 (0:07)|MP Region Abbey Confess]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[沿下游浅滩回池 (0:06)|MP Region Pool Abbey]]>><<pass 6>><<set $mpAbbeyDepth to 0>><<if $mpAbbeyWaterPick is "heavy">><<tiredness 2>><<stress 2>><</if>><<if ($mpAbbeyAlert or 0) gte 6>><<stress 3>><<set $mpAbbeyAlert to Math.max(0, ($mpAbbeyAlert or 0) - 1)>><</if>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[收起珍珠 (0:06)|MP Region Abbey Confess]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_abbey_obsidianrosaryslot_reward")>><<money 1171>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_abbey_obsidianrosaryslot")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[收起珍珠 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "收起珍珠">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<mpswimicon>><<link [[踩水闸枯木险路渡 (0:08)|MP Region Pool Abbey]]>><<pass 8>><<set $mpAbbeyDepth to 0>><<if $mpAbbeyWaterPick is "heavy" or ($mpAbbeyLamp or 0) lte 0>><<pain 2>><<stress 4>><<lowerwet 25>><<else>><<stress -1>><</if>><</link>>
 <br>
-<<getouticon>><<link [[返回修道院 (0:02)|MP Region Sunken Abbey]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[撤回修道院 (0:05)|MP Region Sunken Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Abbey SoothingDewVial [nobr]
-<<set $outside to 0>><<set $location to "temple">>
-<<effects>>
-灰烬藏经阁北侧的石砌书龛里摆着一只封蜡完好的琉璃药瓶，标签上写着『安神圣露』。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你拔开蜡封，瓶里药液还剩小半，瓶底标签后压着一张配药方。
+:: MP Region Abbey Scriptorium Chain [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Abbey Scriptorium Chain"] to 1>><<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>>
+藏经阁的橡木门被火燎得焦黑，一推便落下细灰。塌掉的书架横七竖八，残卷铺了一地；屋子正中那台黄铜压书机锈得转不动，墙角的铁梯通往上层断廊。灰堆里露出一角铁箍木匣，机器螺杆底下像压着封套。<<if ($mpAbbeyLamp or 0) lte 0>>灯已熄了，昏暗里辨不清书架会往哪边倒。<<else>>灯光扫过抄经台的银粉圣咏集，也照亮压书机的螺纹。<</if>><<if ($mpAbbeyDepth or 0) gte 2>>再往里，厚石墙把外头的风声全挡住了。<</if>>
 <br><br>
-<<templeicon>><<link [[拔开蜡封 (0:04)|MP Region Abbey Scriptorium]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回修道院池 (0:03)|MP Region Pool Abbey]]>><<pass 3>><<set $mpAbbeyDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[揭下药方 (0:08)|MP Region Abbey Scriptorium]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_abbey_soothingdewvial_reward")>><<money 1107>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_abbey_soothingdewvial")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[揭下药方 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "揭下药方">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<mpclimbicon>><<if (($mpAbbeyLamp or 0) gte 1 and (($history or 0) gte 240 or ($willpower or 0) gte 340)) or (($history or 0) gte 360 and ($willpower or 0) gte 540)>><<link [[翻倒塌书架寻卷 (0:07)|MP Region Abbey Scriptorium Press]]>><<pass 7>><<set $mpAbbeyScriptRoute to "shelf">><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<tiredness 1>><</link>><<else>><<link [[摸黑翻书架 (0:07)|MP Region Abbey Scriptorium Dark]]>><<pass 7>><<set $mpAbbeyScriptRoute to "shelf">><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 2)>><<pain 3>><<stress 5>><<tiredness 2>><</link>><</if>>
 <br>
-<<getouticon>><<link [[返回修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<mplockpickicon>><<link [[直取中央黄铜书压 (0:07)|MP Region Abbey Scriptorium Press]]>><<pass 7>><<set $mpAbbeyScriptRoute to "press">><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<tiredness 1>><</link>>
+<br>
+<<walkicon>><<link [[返修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Abbey BookpressParchment [nobr]
-<<set $outside to 0>><<set $location to "temple">>
-<<effects>>
-藏经阁中央的装帧压书机下夹着一本厚重的羊皮封套，铜螺杆已经锈在了最高位。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你摇动锈住的铜螺杆，压书机松了半圈，羊皮封套里滑出几页手抄残页。
+:: MP Region Abbey Scriptorium Dark [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+你在书架夹道里踩碎腐朽木隔板，斜靠墙的第三排书架轰然滑落。铁箍木匣砸在石地，灰烬扑了满脸，飞溅木刺划破手背。响声顺着石墙传上钟楼，上层立刻响起急促脚步。<<if ($mpAbbeyLamp or 0) lte 0>>没有火光，你被灰呛得直咳，只能朝门口方向慢慢挪。<<else>>你赶紧把牛角灯护到胸前，不敢再往压书机那边走。<</if>><<if ($mpAbbeyAlert or 0) gte 6>>门外已响起钟声与僧侣的脚步。<</if>>
 <br><br>
-<<templeicon>><<link [[摇动螺杆 (0:06)|MP Region Abbey Scriptorium]]>><<pass 6>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[顺书架缝隙退 (0:05)|MP Region Pool Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><<stress 2>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[抽出封套 (0:06)|MP Region Abbey Scriptorium]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_abbey_bookpressparchment_reward")>><<money 970>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_abbey_bookpressparchment")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[抽出封套 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "抽出封套">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回修道院 (0:02)|MP Region Sunken Abbey]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<mpropeicon>><<link [[钻封死壁炉险撤 (0:07)|MP Region Sunken Abbey]]>><<pass 7>><<set $mpAbbeyDepth to 0>><<pain 1>><<tiredness 2>><</link>>
 
-:: MP Region Abbey StoneLanternRoll [nobr]
-<<set $outside to 0>><<set $location to "temple">>
-<<effects>>
-地下暗河渡口的石灯笼底座裂开了一道缝，里面塞着一只防水油皮卷。
-<<mpAmbient>><<if Weather.isFreezing>>薄薄的霜花挂在水油皮卷外侧。<<else>>空气里带着微温。<</if>>
-你从石灯笼裂缝里抽出油皮卷，卷内是一张渡口暗礁图，边角还包着几枚铜钱。
+:: MP Region Abbey Scriptorium Press [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>>
+压书机立在藏经阁正中，铜螺杆咬着一只火漆封口的羊皮套，旁边抄经台上摊着半部银粉圣咏集。<<if $mpAbbeyScriptRoute is "shelf">>你是从塌书架后钻出来的，衣袖全是灰，机器侧面的暗簧被震得松开了一线。<<else>>你从残卷堆里直穿过来，锈红的螺纹在灯下看得很清楚。<</if>><<if $mpAbbeyLetterKnife>>袖里的银拆信刀正好派上用场，刀尖一挑，火漆便整块脱落。<<else>>手边没有薄刃，硬拧锈死的螺杆，声音在空屋里格外刺耳。<</if>><<if $mpAbbeyChainDone["scriptorium"]>>机器下的皮套与桌上圣咏集都已被你处理过，只剩一层浮灰。<<else>>你可以拧开书压取走夹层密信，也可以原样不动，只把圣咏集边注抄下来。<</if>>
 <br><br>
-<<templeicon>><<link [[抽出油皮卷 (0:06)|MP Region Abbey Ferry]]>><<pass 6>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回修道院池 (0:04)|MP Region Pool Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[展开油皮图 (0:06)|MP Region Abbey Ferry]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_abbey_stonelanternroll_reward")>><<money 428>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_abbey_stonelanternroll")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[展开油皮图 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "展开油皮图">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<if !$mpAbbeyChainDone["scriptorium"]>>
+<<mplockpickicon>><<link [[旋开书压取密信 (0:08)|MP Region Abbey Scriptorium Exit]]>><<pass 8>><<set $mpAbbeyScriptPick to "open">><<if !$mpAbbeyLetterKnife>><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 3)>><<else>><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 1)>><</if>><<if !$mpAbbeyPressOpened>><<set $mpAbbeyPressOpened to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["abbey_press_letter"] to 1>><<stress -4>><<willpower 2>><</if>><<set $mpAbbeyChainDone["scriptorium"] to 1>><</link>>
 <br>
-<<getouticon>><<link [[返回修道院 (0:02)|MP Region Sunken Abbey]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<mpsneakicon>><<link [[抄录银粉圣咏边注 (0:08)|MP Region Abbey Scriptorium Exit]]>><<pass 8>><<set $mpAbbeyScriptPick to "notes">><<if !$mpAbbeyPsalterNotes>><<set $mpAbbeyPsalterNotes to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["abbey_psalter_notes"] to 1>><<skulduggery 2>><<stress -3>><</if>><<set $mpAbbeyChainDone["scriptorium"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[出藏经阁 (0:05)|MP Region Sunken Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Glasshouse NurseryWaterValve [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-雾化兰花厅南角的育苗温床下藏着一只恒温铜水箱，阀门旁挂着一把小银匙。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你拧动阀门，水箱侧盖可以卸下，里面的浮球旁挂着一把小银匙。
+:: MP Region Abbey Scriptorium Exit [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+二层断廊灌下冷风，烧焦的纸页被吹得满屋打转，正门与旋转铁梯都能走。<<if $mpAbbeyScriptPick is "open">>你把机器夹层里的旧信贴身放好，铜螺杆似乎还在轻颤。<<else>>圣咏集上那几行钟楼边注已经记牢，火漆套子没动分毫。<</if>><<if ($mpAbbeyLamp or 0) lte 0>>灯油耗干，你扶着歪斜书架往门口摸。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>衣服沾满黑灰，又湿又沉地贴在身上。<</if>><<if ($mpAbbeyAlert or 0) gte 6>>门外有人提灯，守院僧侣正堵在走廊。<</if>>
 <br><br>
-<<tendingicon>><<link [[取出银匙 (0:05)|MP Region Glasshouse Orchid]]>><<pass 5>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[沿正门原路出 (0:05)|MP Region Pool Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><<if ($mpAbbeyAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpAbbeyAlert to Math.max(0, ($mpAbbeyAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
 <br>
-<<mpcarryicon>><<if ($skulduggery or 0) gte 250>><<link [[卸下侧盖 (0:07)|MP Region Glasshouse Orchid]]>><<pass 7>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_glasshouse_nurserywatervalve_reward")>><<money 550>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_glasshouse_nurserywatervalve")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[卸下侧盖 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "卸下侧盖">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<mpropeicon>><<link [[攀二层残廊铁梯下 (0:07)|MP Region Pool Abbey]]>><<pass 7>><<set $mpAbbeyDepth to 0>><<tiredness 2>><<if ($mpAbbeyLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
 <br>
-<<walkicon>><<link [[返回温室 (0:02)|MP Region Glasshouse Manor]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[回修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Glasshouse SpecimenTagNine [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-夜光标本廊第四排立柜的抽屉滑轨卡着一枚银质标本签，签头上刻着数字『IX』。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你抽出抽屉滑轨里的标本签，签背刻着编号，柜底还压着一页标本记录。
+:: MP Region Abbey Belfry Chain [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Abbey Belfry Chain"] to 1>><<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>>
+你沿四十八级石阶爬到钟楼残层，转角那座青铜烛台还能转动，横梁下垂着不响的巨钟和一条长麻绳。高窗破了，夜风灌进来，把绳子吹得来回蹭墙；窗边的木闩已朽掉半截。<<if ($mpAbbeyLamp or 0) lte 0>>灯不亮，脚下哪块木板松动、绳子在哪儿都看不真切。<<else>>灯圈里能看见烛台蜡盘的刻痕，还有壁龛中那只没药徽章盒。<</if>><<if ($mpAbbeyDepth or 0) gte 2>>再往上就是钟楼顶，梯板踩上去吱呀作响。<</if>>
 <br><br>
-<<farmicon "lab">><<link [[抽出标本签 (0:07)|MP Region Glasshouse Specimen]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回修道院池 (0:03)|MP Region Pool Abbey]]>><<pass 3>><<set $mpAbbeyDepth to 0>><</link>>
 <br>
-<<mpreadicon>><<if ($skulduggery or 0) gte 280>><<link [[抽出记录袋 (0:06)|MP Region Glasshouse Specimen]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_glasshouse_specimentagnine_reward")>><<money 995>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_glasshouse_specimentagnine")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[抽出记录袋 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "抽出记录袋">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<if (($mpAbbeyLamp or 0) gte 1 and (($athletics or 0) gte 250 or ($willpower or 0) gte 380)) or (($athletics or 0) gte 380 and ($willpower or 0) gte 520)>>
+<<mpbellicon>><<link [[绕过钟绳近烛台 (0:07)|MP Region Abbey Belfry Altar]]>><<pass 7>><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[摸黑跨钟梁 (0:07)|MP Region Abbey Belfry Toll]]>><<pass 7>><<set $mpAbbeyDepth to Math.min(3, ($mpAbbeyDepth or 0) + 1)>><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 3)>><<pain 2>><<stress 5>><<tiredness 2>><</link>>
+<</if>>
 <br>
-<<walkicon>><<link [[返回温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[下石阶回古修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 
-:: MP Region Glasshouse FunnelGoldRing [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-标本廊北侧的蒸馏架上并排放着三只水晶分液漏斗，最左一只的活塞下坠着一枚金戒指。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在枚金戒指表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你旋开分液漏斗活塞，金戒指落进掌心，漏斗架上还留着一小瓶无色液体。
+:: MP Region Abbey Belfry Toll [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+你在昏暗中绊住垂落的麻绳，整个人扑向腐朽护栏，麻绳带着钟杵撞上青铜巨钟。沉闷钟声震落满梁积灰，也震得你双耳发麻。楼下很快响起甲片碰撞与呼喝，守卫已经堵死旋梯，只剩下钟室侧窗那条窄檐还能落脚。<<if ($mpAbbeyLamp or 0) lte 0>>四周漆黑，你只能贴着石墙摸向侧窗。<<else>>你护住晃动的牛角灯，沿侧窗边框挪动。<</if>><<if ($mpAbbeyAlert or 0) gte 6>>楼梯口火把越聚越多，有人正抬脚踹门。<</if>>
 <br><br>
-<<investigateicon>><<link [[旋开活塞 (0:07)|MP Region Glasshouse Specimen]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[钻钟室侧窗退 (0:05)|MP Region Pool Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><<stress 2>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[取下小瓶 (0:06)|MP Region Glasshouse Specimen]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_glasshouse_funnelgoldring_reward")>><<money 738>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_glasshouse_funnelgoldring")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取下小瓶 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取下小瓶">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<mpclimbicon>><<link [[攀檐沟绕钟楼下 (0:07)|MP Region Sunken Abbey]]>><<pass 7>><<set $mpAbbeyDepth to 0>><<tiredness 2>><<stress 3>><</link>>
+
+:: MP Region Abbey Belfry Altar [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>>
+你转动钟楼转角那座烛台的底座，暗格露了出来：一只带没药香气的银徽章盒、一串黑曜石念珠，还有几枚旧银币。盒盖里侧刻着老院长写给苦修者的戒条。窗外风声忽然一紧，楼梯那边好像有人停下脚步。<<if $mpAbbeyChainDone["belfry"]>>暗格已经空了，钟楼里只剩穿堂风。<</if>>
+<br><br>
+<<getouticon>><<link [[退回修道院池 (0:04)|MP Region Pool Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
 <br>
-<<getouticon>><<link [[返回温室 (0:03)|MP Region Glasshouse Manor]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<if !$mpAbbeyChainDone["belfry"]>>
+<<mphearticon>><<link [[留存圣物记铭文 (0:07)|MP Region Abbey Belfry Exit]]>><<pass 7>><<set $mpAbbeyBelfryPick to "leave">><<set $mpAbbeyAlert to Math.max(0, ($mpAbbeyAlert or 0) - 1)>><<if !$mpAbbeyRelicChoice>><<set $mpAbbeyRelicChoice to "leave">><<set $mpClues to ($mpClues or {})>><<set $mpClues["abbey_belfry_vow"] to 1>><<stress -5>><<willpower 2>><</if>><<set $mpAbbeyChainDone["belfry"] to 1>><</link>>
+<br>
+<<mpcarryicon>><<link [[带走银徽章与银币 (0:07)|MP Region Abbey Belfry Exit]]>><<pass 7>><<set $mpAbbeyBelfryPick to "take">><<set $mpAbbeyAlert to Math.min(10, ($mpAbbeyAlert or 0) + 2)>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("abbey_chain_belfry_relic")>><<set $mpAbbeyRelicChoice to "take">><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 400>><<stress -2>><</if>><<set $mpAbbeyChainDone["belfry"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[回古修道院 (0:05)|MP Region Sunken Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><</link>>
+
+:: MP Region Abbey Belfry Exit [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+夜风从破窗外灌进来，巨钟下的绳子被吹得来回晃。侧窗和外墙飞扶壁都能下去，旋梯那头却似乎有火光。<<if $mpAbbeyBelfryPick is "leave">>你把银盒轻轻推回暗格，心里踏实下来。<<else>>沉甸甸的盒子与旧银币塞进怀里，念珠碰出细响。<</if>><<if ($mpAbbeyLamp or 0) lte 0>>往下走时灯熄了，你只能扶着石壁一点点挪。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>高处冷风一吹，湿衣服冻得你直发抖。<</if>><<if ($mpAbbeyAlert or 0) gte 6>>钟楼底层有人举火把，僧侣把出口守住了。<</if>>
+<br><br>
+<<getouticon>><<link [[顺石阶绕侧窗下 (0:05)|MP Region Pool Abbey]]>><<pass 5>><<set $mpAbbeyDepth to 0>><<if ($mpAbbeyAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpAbbeyAlert to Math.max(0, ($mpAbbeyAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpclimbicon>><<link [[攀外墙飞扶壁险下 (0:07)|MP Region Pool Abbey]]>><<pass 7>><<set $mpAbbeyDepth to 0>><<tiredness 2>><<if ($mpAbbeyLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回古修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><<set $mpAbbeyDepth to 0>><</link>>
+
+:: MP Region Glasshouse Orchid Chain [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Glasshouse Orchid Chain"] to 1>><<set $mpGlassChainDone to ($mpGlassChainDone or {})>><<if $mpGlassLamp is undefined>><<set $mpGlassLamp to 2>><</if>><<set $mpGlassLamp to Math.clamp($mpGlassLamp, 0, 5)>>
+还没进门，兰花的甜香就先扑过来。铜管喷出细密水雾，大理石花槽里那几株夜光银脉兰泛着幽冷的光，铁架上挂着鎏金鸟笼，笼里养着血色猪笼草。园丁拿着剪枝钳从育苗床后直起身，瞟了你一眼，粗声粗气地说：「兰房刚打过药，别往标本廊里钻，撞见我可不好交代。」说罢又弯腰修枝。<<if ($mpGlassLamp or 0) lte 0>>风灯没油了，藤蔓深处看不见捕虫草，也看不清喷淋铜管。<<else>>灯光照出胡桃木标本长柜，还有温床底下那把小银匙。<</if>><<if ($mpGlassDepth or 0) gte 2>>再往里走，湿热的花香浓得让人发闷。<</if>>
+<br><br>
+<<getouticon>><<link [[退回温室池 (0:03)|MP Region Pool Glasshouse]]>><<pass 3>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<if ($tending or 0) gte 240 or ($skulduggery or 0) gte 240>>
+<<gardenicon>><<link [[拨开藤蔓进标本廊 (0:06)|MP Region Glasshouse Orchid Cabinet]]>><<pass 6>><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[踩着湿滑花径闯 (0:06)|MP Region Glasshouse Orchid Thorns]]>><<pass 6>><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<pain 2>><<stress 4>><<tiredness 2>><<lowerwet 30>><</link>>
+<</if>>
+<br>
+<<walkicon>><<link [[顺铁廊回温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Orchid Thorns [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+喷淋水把白砂石地浇得又湿又滑，你脚下一歪，肩膀撞上铁艺花架，带刺的暖房玫瑰立刻勾破手背。头顶的喷淋阀被震开，凉丝丝的营养水当头淋下。园丁的剪枝钳在铜管上敲得当当响，他隔着兰丛喝骂，几步过来把你往外轰。<<if ($mpGlassLamp or 0) lte 0>>灯不亮，你在乱缠的气根间摸索着后退。<<else>>你护住黄铜风灯，被他推得退回花坛外。<</if>><<if ($mpGlassAlert or 0) gte 6>>玻璃门外响起守卫的呵斥和猎犬的低吠。<</if>>
+<br><br>
+<<getouticon>><<link [[退出兰花花厅 (0:05)|MP Region Pool Glasshouse]]>><<pass 5>><<set $mpGlassDepth to 0>><<stress 2>><</link>>
+<br>
+<<mpsneakicon>><<link [[钻排风百叶险撤 (0:07)|MP Region Glasshouse Manor]]>><<pass 7>><<set $mpGlassDepth to 0>><<tiredness 2>><<stress 3>><</link>>
+
+:: MP Region Glasshouse Orchid Cabinet [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $mpGlassChainDone to ($mpGlassChainDone or {})>>
+标本廊里侧有张长操作台，台上放着一罐精炼的植物灯油；第七号琥珀罩下面压着温床银匙，旁边的红木工具匣敞着，露出半本杂交育种日记。园丁的动静还在花厅那边，偶尔有剪枝的脆响传来。<<if $mpGlassChainDone["orchid"]>>台面和罩子都被翻检过，夜光兰依旧发着柔光。<<else>>趁他还没走到这里，你可以拿一件顺手的物件，只是揭开琥珀罩会碰响架上的水晶漏斗。<</if>>
+<br><br>
+<<getouticon>><<link [[回温室池 (0:04)|MP Region Pool Glasshouse]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<if !$mpGlassChainDone["orchid"]>>
+<<mplampicon>><<link [[灌取精炼植物油 (0:06)|MP Region Glasshouse Orchid Exit]]>><<pass 6>><<set $mpGlassOrchidPick to "oil">><<set $mpGlassLoot_Oil to 1>><<set $mpGlassLamp to Math.min(5, ($mpGlassLamp or 0) + 2)>><<stress -2>><<set $mpGlassChainDone["orchid"] to 1>><</link>>
+<br>
+<<mplockpickicon>><<link [[掀罩取走温床银匙 (0:08)|MP Region Glasshouse Orchid Exit]]>><<pass 8>><<set $mpGlassOrchidPick to "key">><<set $mpGlassAlert to Math.min(10, ($mpGlassAlert or 0) + 2)>><<set $mpGlassSilverKey to 1>><<skulduggery 2>><<stress -2>><<set $mpGlassChainDone["orchid"] to 1>><</link>>
+<br>
+<<mpmapicon>><<link [[收好日记本 (0:06)|MP Region Glasshouse Orchid Exit]]>><<pass 6>><<set $mpGlassOrchidPick to "diary">><<set $mpGlassBreedDiary to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["glasshouse_breed_diary"] to 1>><<stress -2>><<set $mpGlassChainDone["orchid"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[退回秘密温室 (0:05)|MP Region Glasshouse Manor]]>><<pass 5>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Orchid Exit [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+你轻轻掩上标本廊雕花玻璃门，恒温铜管的水雾在走廊间弥漫，主花径与假山排水槽都能退。花厅方向传来园丁哼的小调，他像是还没走远。<<if $mpGlassOrchidPick is "oil">>风灯添满植物灯油，火苗安静明亮。<<elseif $mpGlassOrchidPick is "key">>怀里揣着温床银匙，水晶漏斗还在轻晃。<<else>>衣袋收好杂交育种日记，冰窖温控规律已记在心头。<</if>><<if ($mpGlassLamp or 0) lte 0>>灯芯烧尽，花影里黑得伸手不见五指。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>衣服湿漉漉地贴着小腿，百叶窗缝里透进凉风。<</if>><<if ($mpGlassAlert or 0) gte 6>>花径口有人提着灯，庄园护卫正在搜查。<</if>>
+<br><br>
+<<getouticon>><<link [[沿花径原路回 (0:05)|MP Region Pool Glasshouse]]>><<pass 5>><<set $mpGlassDepth to 0>><<if ($mpGlassAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpGlassAlert to Math.max(0, ($mpGlassAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpropeicon>><<link [[顺假山排水槽下撤 (0:07)|MP Region Pool Glasshouse]]>><<pass 7>><<set $mpGlassDepth to 0>><<tiredness 2>><<if ($mpGlassLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[返回温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Cellar Chain [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Glasshouse Cellar Chain"] to 1>><<set $mpGlassChainDone to ($mpGlassChainDone or {})>>
+酿造室的地窖用拱形砖墙撑着，墙下排开十二只法国橡木桶；南边角落的石砌冰窖里，还存着没化完的冰。地上结了一层薄霜，走起来直打滑。<<if $mpGlassBreedDiary>>育种日记里记过融冰的时辰，你绕开了排水沟旁的冰水坑。<<else>>冰水混着酒味在青砖上冻成薄壳，稍不留神就会摔倒。<</if>><<if ($mpGlassDepth or 0) gte 2>>越往冰窖深处走越冷，呼出的气都成了白雾。<</if>>
+<br><br>
+<<getouticon>><<link [[退回温室池 (0:03)|MP Region Pool Glasshouse]]>><<pass 3>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<if ($athletics or 0) gte 260 or ($housekeeping or 0) gte 250 or $mpGlassBreedDiary>>
+<<mpcellaricon>><<link [[踩稳青砖进冰窖 (0:07)|MP Region Glasshouse Cellar Vault]]>><<pass 7>><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<set $mpGlassLamp to Math.max(0, ($mpGlassLamp or 0) - 1)>><<lowerwet 20>><<tiredness 1>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[踩结霜石阶闯 (0:07)|MP Region Glasshouse Cellar Chill]]>><<pass 7>><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<upperwet 35>><<lowerwet 45>><<pain 2>><<stress 5>><<tiredness 3>><</link>>
+<</if>>
+<br>
+<<walkicon>><<link [[顺砖砌暗阶回温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Cellar Chill [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+你刚踏下结霜石阶，脚下的冰面忽然塌裂，半条腿陷进刺骨冷水。碎冰与酒气一起涌上来，你死死扒住橡木桶沿才没整个人滑进冰窟，裤管瞬间冻得发硬。<<if ($mpGlassLamp or 0) lte 0>>风灯一点光也没有，你只好抓着酒架往上撑。<<else>>灯罩被冰水激出细纹，火苗弱得像随时会断。<</if>><<if ($mpGlassAlert or 0) gte 6>>阶梯口传来皮靴声与喝问。<</if>>
+<br><br>
+<<getouticon>><<link [[顺砖阶退回暖处 (0:05)|MP Region Pool Glasshouse]]>><<pass 5>><<set $mpGlassDepth to 0>><<stress 2>><</link>>
+<br>
+<<mpclimbicon>><<link [[攀送酒滑道走 (0:07)|MP Region Glasshouse Manor]]>><<pass 7>><<set $mpGlassDepth to 0>><<pain 1>><<tiredness 2>><</link>>
+
+:: MP Region Glasshouse Cellar Vault [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $mpGlassChainDone to ($mpGlassChainDone or {})>>
+冰窖最里面，坚冰下封着一只沉甸甸的黄铜罐，凿冰搬它既会发出脆响也很费力气；园丁那条皮围裙的暗袋里，塞着一卷轻巧的庄园供货账页。<<if $mpGlassChainDone["cellar"]>>罐子和账页都被人动过，冰窖里只剩滴水声。<<elseif ($mpGlassLamp or 0) lte 0>>灯油耗尽，四下黑得伸手不见五指，你只摸到近处围裙里的账页，冻在深处的铜罐根本看不见。<</if>>
+<br><br>
+<<getouticon>><<link [[返池口空着手 (0:04)|MP Region Pool Glasshouse]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<if !$mpGlassChainDone["cellar"]>>
+<<if ($mpGlassLamp or 0) gte 1>>
+<<mpcarryicon>><<link [[凿出那只密封罐 (0:09)|MP Region Glasshouse Cellar Exit]]>><<pass 9>><<set $mpGlassCellarPick to "heavy">><<set $mpGlassAlert to Math.min(10, ($mpGlassAlert or 0) + 3)>><<tiredness 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("glasshouse_chain_cellar_heavy")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 350>><<stress -2>><</if>><<set $mpGlassChainDone["cellar"] to 1>><</link>>
+<br>
+<</if>>
+<<mpreadicon>><<link [[抽走围裙供货账页 (0:06)|MP Region Glasshouse Cellar Exit]]>><<pass 6>><<set $mpGlassCellarPick to "light">><<set $mpGlassAlert to Math.min(10, ($mpGlassAlert or 0) + 1)>><<if !$mpGlassCellarLog>><<set $mpGlassCellarLog to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["glasshouse_cellar_ledger"] to 1>><<stress -3>><<willpower 1>><</if>><<set $mpGlassChainDone["cellar"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[撤出冰窖 (0:05)|MP Region Glasshouse Manor]]>><<pass 5>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Cellar Exit [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+地下酿造室寒气顺砖墙往上爬，融冰水漫过铁格栅，砖砌主阶已被水浸得打滑。<<if $mpGlassCellarPick is "heavy">>你把冰冷沉重的密封铜罐抱出冰窖，两条胳膊都冻麻了。<<else>>轻巧的供货账页收进怀中，你从橡木桶间绕了过去。<</if>><<if ($mpGlassLamp or 0) lte 0>>风灯灭了，你扶着潮湿的砖壁朝出口摸。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>冰水浸透的衣裤黏在身上，冷气一直往骨缝里钻。<</if>><<if ($mpGlassAlert or 0) gte 6>>地窖台阶顶上有人提灯，庄园护卫守在那里。<</if>>
+<br><br>
+<<getouticon>><<link [[顺砖阶原路回 (0:06)|MP Region Pool Glasshouse]]>><<pass 6>><<set $mpGlassDepth to 0>><<if $mpGlassCellarPick is "heavy">><<tiredness 2>><<stress 2>><</if>><<if ($mpGlassAlert or 0) gte 6>><<stress 3>><<set $mpGlassAlert to Math.max(0, ($mpGlassAlert or 0) - 1)>><</if>><</link>>
+<br>
+<<mpswimicon>><<link [[钻铁格栅排水渠走 (0:08)|MP Region Pool Glasshouse]]>><<pass 8>><<set $mpGlassDepth to 0>><<if $mpGlassCellarPick is "heavy" or ($mpGlassLamp or 0) lte 0>><<pain 2>><<stress 4>><<lowerwet 25>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回秘密温室 (0:05)|MP Region Glasshouse Manor]]>><<pass 5>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Terrace Chain [nobr]
+<<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Glasshouse Terrace Chain"] to 1>><<set $mpGlassChainDone to ($mpGlassChainDone or {})>>
+铸铁门后就是玻璃穹顶露台，雕花栏杆旁搁着藤编茶几，悬空的花槽里垂下一片迷迭香，东边还立着一座晷针能转动的石日晷。花槽外沿是一道矮墙，翻进去不难，想照原路退回来却得再爬一次湿滑的石沿。<<if ($mpGlassLamp or 0) lte 0>>风灯熄了，夜色里看不清晷盘刻度，也看不见旋梯的缺口。<<else>>灯光照出日晷底下的羊皮信封，还有迷迭香后那架望远镜。<</if>><<if ($mpGlassDepth or 0) gte 2>>站到露台高处，雾里的街灯显得很远。<</if>>
+<br><br>
+<<getouticon>><<link [[退回温室池 (0:03)|MP Region Pool Glasshouse]]>><<pass 3>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<if (($mpGlassLamp or 0) gte 1 and (($english or 0) gte 240 or ($willpower or 0) gte 340)) or (($english or 0) gte 360 and ($willpower or 0) gte 540)>>
+<<mpastroicon>><<link [[举灯近石雕日晷 (0:07)|MP Region Glasshouse Terrace Sundial]]>><<pass 7>><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpclimbicon>><<link [[摸黑跨过花槽 (0:07)|MP Region Glasshouse Terrace Dark]]>><<pass 7>><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<set $mpGlassAlert to Math.min(10, ($mpGlassAlert or 0) + 2)>><<pain 3>><<stress 5>><<tiredness 2>><</link>>
+<</if>>
+<br>
+<<walkicon>><<link [[下露台回秘密温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Terrace Dark [nobr]
+<<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+昏暗里你被悬空花槽垂下的铁链绊倒，手肘撞翻藤编茶几上的茶壶，碎瓷声惊得护院犬狂吠。铁门方向随即传来门闩落下的声响，来路被封，只剩花槽下的藤架还能钻。<<if ($mpGlassLamp or 0) lte 0>>没有风灯，你只能扶着铸铁栏杆一点点摸。<<else>>你赶紧稳住晃动的灯，不再往东边日晷靠近。<</if>><<if ($mpGlassAlert or 0) gte 6>>露台下的花园小路上，巡逻火把已经亮起。<</if>>
+<br><br>
+<<getouticon>><<link [[攀花槽藤架退 (0:05)|MP Region Pool Glasshouse]]>><<pass 5>><<set $mpGlassDepth to 0>><<stress 2>><</link>>
+<br>
+<<mpropeicon>><<link [[钻藤架下侧门撤 (0:07)|MP Region Glasshouse Manor]]>><<pass 7>><<set $mpGlassDepth to 0>><<pain 1>><<tiredness 2>><</link>>
+
+:: MP Region Glasshouse Terrace Sundial [nobr]
+<<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $mpGlassChainDone to ($mpGlassChainDone or {})>>
+露台东边的石日晷旁，青铜晷针底下压着一封油布包好的羊皮信；悬空花槽里架着黄铜望远镜，镜筒正对着庄园侧门。来时翻过的花槽石沿已被藤蔓缠死，想退只能从花架底下钻。<<if $mpGlassSilverKey>>温床银匙恰好能拨开日晷底座的暗簧。<<else>>手边没有合适的钥匙，硬掰晷针，金属摩擦声又涩又响。<</if>><<if $mpGlassChainDone["terrace"]>>日晷和望远镜都查过了，夜风里带着迷迭香。<</if>>
+<br><br>
+<<getouticon>><<link [[退回温室池 (0:04)|MP Region Pool Glasshouse]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<if !$mpGlassChainDone["terrace"]>>
+<<mpclockworkicon>><<link [[扳动晷针开天窗栓 (0:08)|MP Region Glasshouse Terrace Exit]]>><<pass 8>><<set $mpGlassTerracePick to "dial">><<set $mpGlassAlert to Math.min(10, ($mpGlassAlert or 0) + 3)>><<if !$mpGlassSkylightOpen>><<set $mpGlassSkylightOpen to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["glasshouse_skylight_open"] to 1>><<stress -4>><<willpower 2>><</if>><<set $mpGlassChainDone["terrace"] to 1>><</link>>
+<br>
+<<mpsneakicon>><<link [[抽走密函原封 (0:08)|MP Region Glasshouse Terrace Exit]]>><<pass 8>><<set $mpGlassTerracePick to "letter">><<if !$mpGlassSilverKey>><<set $mpGlassAlert to Math.min(10, ($mpGlassAlert or 0) + 1)>><</if>><<if !$mpGlassSundialLetter>><<set $mpGlassSundialLetter to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["glasshouse_sundial_letter"] to 1>><<skulduggery 2>><<stress -3>><</if>><<set $mpGlassChainDone["terrace"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[撤下露台回温室 (0:05)|MP Region Glasshouse Manor]]>><<pass 5>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Terrace Exit [nobr]
+<<set $outside to 1>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+夜风拂过悬空花槽里的迷迭香，铁艺排水管与花架藤索都能下到温室下层，铸铁内门却已从里面插死。<<if $mpGlassTerracePick is "dial">>晷针连杆一响，顶棚天窗弹开一条细缝，院里的守卫也被惊动。<<else>>防水羊皮信收进怀里，石日晷还是原来的样子。<</if>><<if ($mpGlassLamp or 0) lte 0>>往下撤时灯油烧完，你抓着雕花铁栏摸下旋梯。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>夜风掠过湿透的袖子，肩膀不由得缩紧。<</if>><<if ($mpGlassAlert or 0) gte 6>>露台门里灯影晃动，护卫正守在旋梯下面。<</if>>
+<br><br>
+<<getouticon>><<link [[钻藤架下回池 (0:05)|MP Region Pool Glasshouse]]>><<pass 5>><<set $mpGlassDepth to 0>><<if ($mpGlassAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpGlassAlert to Math.max(0, ($mpGlassAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpropeicon>><<link [[顺外墙花架滑下 (0:07)|MP Region Pool Glasshouse]]>><<pass 7>><<set $mpGlassDepth to 0>><<tiredness 2>><<if ($mpGlassLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[返回温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Dome Chain [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Glasshouse Dome Chain"] to 1>><<set $mpGlassChainDone to ($mpGlassChainDone or {})>>
+铁旋梯每踩一级都在抖。穹顶高架上，主阀门和铜风向标悬在半空；下面那具深海鲸骨标本的肋骨间，夹着一只丝绒锦盒。检修用的铁梁窄得放不下整只脚。<<if ($mpGlassLamp or 0) lte 0>>风灯灭了，这么高的玻璃穹顶下，铁梁往哪延伸都看不清。<<else>>灯光照见阀门手轮，也照见鲸骨凹槽里那只锦盒。<</if>><<if ($mpGlassDepth or 0) gte 2>>爬到穹顶最高处，脚下的玻璃棚映出一点夜色。<</if>>
+<br><br>
+<<getouticon>><<link [[退回温室池 (0:03)|MP Region Pool Glasshouse]]>><<pass 3>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<mpclockworkicon>><<link [[拧开穹顶主阀 (0:07)|MP Region Glasshouse Dome Valve]]>><<pass 7>><<set $mpGlassDomeRoute to "valve">><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<tiredness 1>><</link>>
+<br>
+<<mpclimbicon>><<if (($mpGlassLamp or 0) gte 1 and (($athletics or 0) gte 250 or ($tending or 0) gte 260)) or (($athletics or 0) gte 380 and ($tending or 0) gte 380)>><<link [[攀梁去取风向标 (0:07)|MP Region Glasshouse Dome Valve]]>><<pass 7>><<set $mpGlassDomeRoute to "vane">><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<tiredness 1>><</link>><<else>><<link [[摸黑踩过湿滑铁梁 (0:07)|MP Region Glasshouse Dome Slip]]>><<pass 7>><<set $mpGlassDomeRoute to "vane">><<set $mpGlassDepth to Math.min(3, ($mpGlassDepth or 0) + 1)>><<set $mpGlassAlert to Math.min(10, ($mpGlassAlert or 0) + 2)>><<lowerwet 25>><<pain 2>><<stress 5>><<tiredness 2>><</link>><</if>>
+<br>
+<<walkicon>><<link [[撤下旋梯 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Dome Slip [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+铁梁上挂满水珠，你脚底一滑，整个人吊在铜风向标的拉索上，靴跟带碎了一块天窗玻璃。碎片哗啦落进花坛，底下马上有人吹响呼哨。<<if ($mpGlassLamp or 0) lte 0>>四周一片黑，你死死抓住铁栏才摸回平台。<<else>>你扶稳摇晃的灯，再不敢往梁外侧伸脚。<</if>><<if ($mpGlassAlert or 0) gte 6>>花厅里亮起几道光柱，有人抬头搜寻。<</if>>
+<br><br>
+<<getouticon>><<link [[顺旋梯急退 (0:05)|MP Region Pool Glasshouse]]>><<pass 5>><<set $mpGlassDepth to 0>><<stress 2>><</link>>
+<br>
+<<mpclimbicon>><<link [[顺顶棚藤索险撤 (0:07)|MP Region Glasshouse Manor]]>><<pass 7>><<set $mpGlassDepth to 0>><<pain 1>><<tiredness 2>><</link>>
+
+:: MP Region Glasshouse Dome Valve [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+<<set $mpGlassChainDone to ($mpGlassChainDone or {})>>
+你沿铁梁爬到主阀门与鲸骨标本相接的地方，凹槽中的丝绒锦盒里放着一枚金子打的标本徽记、一卷画在油画布上的名册，还有几枚金币。名册最后一页，记下了老园丁想育成珍稀兰花的遗愿。<<if $mpGlassDomeRoute is "valve">>主阀门刚被你拧稳，铜管里的低鸣渐渐平下去。<<else>>你是顺着风向标拉索摸过来的，铁梁上还留着一串水痕。<</if>><<if $mpGlassChainDone["dome"]>>锦盒已经处理过，顶棚的水雾无声地流着。<</if>>
+<br><br>
+<<getouticon>><<link [[退回温室池 (0:04)|MP Region Pool Glasshouse]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<if !$mpGlassChainDone["dome"]>>
+<<mphearticon>><<link [[调稳阀门留锦盒 (0:07)|MP Region Glasshouse Dome Exit]]>><<pass 7>><<set $mpGlassDomePick to "leave">><<set $mpGlassAlert to Math.max(0, ($mpGlassAlert or 0) - 1)>><<if !$mpGlassRelicChoice>><<set $mpGlassRelicChoice to "leave">><<set $mpClues to ($mpClues or {})>><<set $mpClues["glasshouse_dome_roster"] to 1>><<stress -5>><<willpower 2>><</if>><<set $mpGlassChainDone["dome"] to 1>><</link>>
+<br>
+<<mpcarryicon>><<link [[带走金徽记与金币 (0:07)|MP Region Glasshouse Dome Exit]]>><<pass 7>><<set $mpGlassDomePick to "take">><<set $mpGlassAlert to Math.min(10, ($mpGlassAlert or 0) + 2)>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("glasshouse_chain_dome_relic")>><<set $mpGlassRelicChoice to "take">><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 400>><<stress -2>><</if>><<set $mpGlassChainDone["dome"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[下穹顶回温室 (0:05)|MP Region Glasshouse Manor]]>><<pass 5>><<set $mpGlassDepth to 0>><</link>>
+
+:: MP Region Glasshouse Dome Exit [nobr]
+<<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
+穹顶上方，恒温铜管低低地响着。铁旋梯和垂下的藤蔓索都能回到花厅，此地不宜久留。<<if $mpGlassDomePick is "leave">>你把主阀门拧紧，又将丝绒锦盒放回原处，只把油画布名册上的名字记在心中。<<else>>金徽记和金币塞进衣袋，铁架轻轻一晃。<</if>><<if ($mpGlassLamp or 0) lte 0>>下去时灯火灭了，你扶着湿滑铁栏一点点摸黑走。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>湿衣服贴着后背，高处的穿堂风冻得手脚发凉。<</if>><<if ($mpGlassAlert or 0) gte 6>>旋梯底部有人提灯，守卫正抬头查看。<</if>>
+<br><br>
+<<getouticon>><<link [[顺旋梯原路下 (0:05)|MP Region Pool Glasshouse]]>><<pass 5>><<set $mpGlassDepth to 0>><<if ($mpGlassAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpGlassAlert to Math.max(0, ($mpGlassAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpclimbicon>><<link [[顺铜管吊索险路下 (0:07)|MP Region Pool Glasshouse]]>><<pass 7>><<set $mpGlassDepth to 0>><<tiredness 2>><<if ($mpGlassLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回秘密温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><<set $mpGlassDepth to 0>><</link>>

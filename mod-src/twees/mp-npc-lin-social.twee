@@ -36,12 +36,13 @@
 <br>
 <<mpwatchicon>><<link [[跟林恩去煤栈 (0:10)|MP NPC Lin Social 1]]>><<pass 10>><<stress 2>><</link>>
 <br>
-<<mpbargainicon>><<link [[听贝利开价 (0:10)|MP NPC Lin Social 2]]>><<pass 10>><<stress 1>><<tiredness 1>><</link>>
+<<mpbargainicon>><<if mpNpcMet("Bailey")>><<link [[听贝利开价 (0:10)|MP NPC Lin Social 2]]>><<pass 10>><<stress 1>><<tiredness 1>><</link>><<else>><</if>>
 <br>
-<<tendingicon>><<link [[守冬夜火盆 (0:20)|MP NPC Lin Annual]]>><<pass 20>><<tiredness 2>><</link>>
+<<tendingicon>><<link [[守冬夜火盆 (0:20)|MP NPC Lin Annual]]>><<pass 20>><<tiredness 2>><</link>><br>
+<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet and $mpNpcs.vesper and $mpNpcs.vesper.hasMet>><<if $mpNpcCrossFlags and $mpNpcCrossFlags["lin_vesper"]>><<link [[问夜闸旧事 (0:04)|MP NPC Cross Lin More]]>><<pass 4>><</link>><<else>><<link [[探夜闸现场 (0:04)|MP NPC Cross Lin More]]>><<pass 4>><</link>><</if>><br><</if>>
 
 :: MP NPC Lin Social 1 [nobr]
-<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<set $mpNpcs to ($mpNpcs or {})>>
 <<set $mpNpcs.lin to ($mpNpcs.lin or {})>>
 <<set $mpNpcs.lin.love to ($mpNpcs.lin.love or 0)>>
@@ -81,7 +82,7 @@
 林恩落笔，写完她的名字，合上簿子：「明晚十八点，砖补好。我来看。」
 <br><br>
 惠特尼踢了一脚煤筐，没再顶嘴。走出巷口时，她把撬棍往墙上一磕，声音很响，人却没有回头。
-<<set _lin.trust to Math.min(100, (_lin.trust or 0) + 3)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Whitney")>><<npcincr Whitney love -1>><</if>><<stress -2>><<lstress>>
+<<if !$daily.mpLock_MPNPCLinSocial1_1>><<set $daily.mpLock_MPNPCLinSocial1_1 to 1>><<set _lin.trust to Math.min(100, (_lin.trust or 0) + 3)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><</if>><<if $NPCName and mpNpcMet("Whitney")>><<npcincr Whitney love -1>><</if>><<stress -2>><<lstress>>
 <<else>>
 你开口时漏了砖缝的新灰。惠特尼立刻接住这道破绽：「照这么说，我还没进去呢。守夜人，你抓的是风？」
 <br><br>
@@ -101,7 +102,7 @@
 写完，他抬眼对惠特尼说：「明晚十八点，你来补砖。不是罚，是换。」
 <br><br>
 她没有道谢，只把撬棍踢回墙根：「你倒会说话。」走出巷口时，她回头看了你一眼。那一眼比刚才任何一句话都实在。
-<<set _lin.trust to Math.max(0, (_lin.trust or 0) - 1)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Whitney")>><<npcincr Whitney love 1>><</if>><<stress -1>><<lstress>>
+<<if !$daily.mpLock_MPNPCLinSocial1_2>><<set $daily.mpLock_MPNPCLinSocial1_2 to 1>><<set _lin.trust to Math.max(0, (_lin.trust or 0) - 1)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><</if>><<if $NPCName and mpNpcMet("Whitney")>><<npcincr Whitney love 1>><</if>><<stress -1>><<lstress>>
 <<else>>
 你说孤儿院今晚缺火，可你忘了昨天送煤的车刚到过。惠特尼立刻笑出声：「锅炉？他们的煤堆得比我还高。」
 <br><br>
@@ -121,12 +122,12 @@
 她眯起眼算了一会儿，忽然笑了：「行。明天十七点，我砌。砌歪了别怪我。」
 <br><br>
 林恩把条件写成三行短句，最后一行是：「砌完，账清。」惠特尼走的时候没踢煤筐，只把撬棍扛在肩上，像扛一件战利品。
-<<set _lin.trust to Math.min(100, (_lin.trust or 0) + 2)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Whitney")>><<npcincr Whitney love 1>><</if>><<stress -2>><<lstress>>
+<<if !$daily.mpLock_MPNPCLinSocial1_3>><<set $daily.mpLock_MPNPCLinSocial1_3 to 1>><<set _lin.trust to Math.min(100, (_lin.trust or 0) + 2)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><</if>><<if $NPCName and mpNpcMet("Whitney")>><<npcincr Whitney love 1>><</if>><<stress -2>><<lstress>>
 <<else>>
 你报的数太低，惠特尼当场笑弯了腰：「三块砖？你当这是买糖？」
 <br><br>
 她把半袋煤往肩上一甩，转身就走，靴跟敲得砖地发响。林恩没有拦。他等你走到灯下，才说：「价钱可以谈，时辰不能拖。下次先把话说满，再留余地。」
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Whitney")>><<npcincr Whitney love -1>><</if>><<stress 3>><<tiredness 2>><<gstress>><<gtiredness>>
+<<if $NPCName and mpNpcMet("Whitney")>><<npcincr Whitney love -1>><</if>><<stress 3>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
 <br><br>
 <<link [[回岗棚复命 (0:04)|MP NPC Lin Social Hub]]>><<pass 4>><</link>>
@@ -136,7 +137,7 @@
 </div>
 
 :: MP NPC Lin Social 2 [nobr]
-<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<set $mpNpcs to ($mpNpcs or {})>>
 <<set $mpNpcs.lin to ($mpNpcs.lin or {})>>
 <<set $mpNpcs.lin.love to ($mpNpcs.lin.love or 0)>>
@@ -180,7 +181,7 @@
 贝利盯着你看了几息，忽然笑了，那笑里没有温度：「你替他担保？好。我记你的名字。」
 <br><br>
 林恩没有拦你。等板车走远，他才把短棍取下来，低声说：「你许的诺，我陪你兑。下次先跟我通个气。」
-<<set _lin.trust to Math.min(100, (_lin.trust or 0) + 3)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love -1>><</if>><<tiredness 2>>
+<<if !$daily.mpLock_MPNPCLinSocial2_1>><<set $daily.mpLock_MPNPCLinSocial2_1 to 1>><<set _lin.trust to Math.min(100, (_lin.trust or 0) + 3)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><</if>><<if $NPCName and mpNpcMet("Bailey")>><<npcincr Bailey love -1>><</if>><<tiredness 2>>
 <<else>>
 你把话说得太满，贝利只问了一句「名单几点交」，你就卡住了。他不再看你，转向林恩：「你的人，话比纸薄。」
 <br><br>
@@ -197,7 +198,7 @@
 林恩没有伸手拦。他看着那张纸离开簿子，很久没有说话。等板车走远，他才把剩下的半本簿子合上：「二十三点二十。后门。我记下了。」
 <br><br>
 他没有责备你，只把「记下了」三个字说得很慢。你忽然明白，有些账记在纸上，有些账记在人心里。
-<<set _lin.trust to Math.max(0, (_lin.trust or 0) - 3)>><<set _lin.love to Math.max(0, (_lin.love or 0) - 2)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love 1>><</if>><<stress 3>><<gstress>>
+<<if !$daily.mpLock_MPNPCLinSocial2_2>><<set $daily.mpLock_MPNPCLinSocial2_2 to 1>><<set _lin.trust to Math.max(0, (_lin.trust or 0) - 3)>><<set _lin.love to Math.max(0, (_lin.love or 0) - 2)>><</if>><<if $NPCName and mpNpcMet("Bailey")>><<npcincr Bailey love 1>><</if>><<stress 3>><<gstress>>
 <br><br>
 <<link [[回岗棚复命 (0:04)|MP NPC Lin Social Hub]]>><<pass 4>><</link>>
 <</replace>><</link>>
@@ -211,7 +212,7 @@
 「找我。」你说。
 <br><br>
 林恩看了你一眼，那一眼比刚才长。等板车走了，他在簿子上写下第一行「门已查」，笔尖顿了顿，才落下去。
-<<set _lin.trust to Math.min(100, (_lin.trust or 0) + 1)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Bailey")>><<npcincr Bailey love 1>><</if>><<stress -1>><<lstress>>
+<<if !$daily.mpLock_MPNPCLinSocial2_3>><<set $daily.mpLock_MPNPCLinSocial2_3 to 1>><<set _lin.trust to Math.min(100, (_lin.trust or 0) + 1)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><</if>><<if $NPCName and mpNpcMet("Bailey")>><<npcincr Bailey love 1>><</if>><<stress -1>><<lstress>>
 <<else>>
 你说只写「门已查」，贝利立刻问：「哪扇门？几点？谁开的？」你答不上来。他摇摇头，把账本收回臂下：「你这不叫折中，叫糊弄。」
 <br><br>
@@ -226,7 +227,7 @@
 </div>
 
 :: MP NPC Lin Annual [nobr]
-<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<set $mpNpcs to ($mpNpcs or {})>>
 <<set $mpNpcs.lin to ($mpNpcs.lin or {})>>
 <<set $mpNpcs.lin.love to ($mpNpcs.lin.love or 0)>>
@@ -346,7 +347,7 @@
 你挪到孩子那一侧，背对巷口站定。风从你肩头分开，火苗稳住了。最小的那个把搪瓷杯举过头顶，让你看杯底化开的雪水。
 <br><br>
 林恩在外圈看见，没说话，只把自己那侧的位置又让开半尺。火光把两边的影子连成一片。
-<<set _warmth to ((_warmth or 0) + 1)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 2)>><<stress -2>><<lstress>>
+<<set _warmth to ((_warmth or 0) + 1)>><<if !$daily.mpLock_MPNPCLinAnnual_7>><<set $daily.mpLock_MPNPCLinAnnual_7 to 1>><<set _lin.love to Math.min(100, (_lin.love or 0) + 2)>><</if>><<stress -2>><<lstress>>
 <<else>>
 你在风口站了没多久，手指就冻得发僵。搪瓷杯从孩子手里滑下来，雪水泼在灰里，腾起一小股白气。
 <br><br>
@@ -360,7 +361,7 @@
 你接过铁钩，把烧塌的柴架空出来，再按林恩教的顺序添新柴：先细后粗，留一道缝。火苗顺着缝钻上去，盆沿的红光扩了一圈。
 <br><br>
 「对。」林恩说，「火要透气，人要留缝。记住这个。」
-<<set _warmth to ((_warmth or 0) + 1)>><<set _lin.trust to Math.min(100, (_lin.trust or 0) + 2)>><<stress -1>><<lstress>>
+<<set _warmth to ((_warmth or 0) + 1)>><<if !$daily.mpLock_MPNPCLinAnnual_8>><<set $daily.mpLock_MPNPCLinAnnual_8 to 1>><<set _lin.trust to Math.min(100, (_lin.trust or 0) + 2)>><</if>><<stress -1>><<lstress>>
 <<else>>
 你添得太急，一根断椅腿压塌了柴架，火星溅出来，落在你手背上。林恩一把拉开你，用雪按住那点红。
 <br><br>
@@ -374,7 +375,7 @@
 街坊一个个散了，孩子被林恩送回院墙。你留在盆边，把最后几块炭拨到中间，听火一点点低下去。
 <br><br>
 林恩回来时，街口的煤气灯只剩一盏。他看见你还坐着，脚步停了一下，然后在你旁边蹲下，把手伸到余温上：「二十三点四十。火还在。」
-<<set _warmth to ((_warmth or 0) + 1)>><<set _lin.trust to Math.min(100, (_lin.trust or 0) + 2)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><<tiredness 2>>
+<<set _warmth to ((_warmth or 0) + 1)>><<if !$daily.mpLock_MPNPCLinAnnual_9>><<set $daily.mpLock_MPNPCLinAnnual_9 to 1>><<set _lin.trust to Math.min(100, (_lin.trust or 0) + 2)>><<set _lin.love to Math.min(100, (_lin.love or 0) + 1)>><</if>><<tiredness 2>>
 <<else>>
 后半夜风大，你打了个盹，醒来时盆里的火已经暗了。林恩正蹲在旁边，用铁钩把剩下的炭拢到一起，没看你。
 <br><br>

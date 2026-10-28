@@ -1,0 +1,411 @@
+:: MP Loc Forest Patrol Shift [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<pass 60>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set $mpForestShifts to ($mpForestShifts or 0) + 1>>
+<<cleareventpool>>
+<<addinlineevent "forest_quiet" 3>>
+这一段林道很静，只有锯木声从远处传来。你跟着界桩把倒木挪开，顺手补了两处褪色的路标布条。松针粘在袖口，风从北岭翻过来。
+<br><br>
+<<getouticon>><<link [[收工回去 (0:05)|MP Loc Forest Hub]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再巡一班 (1:00)|MP Loc Forest Patrol Shift]]>><<pass 60>><</link>>
+<</addinlineevent>>
+<<addinlineevent "forest_boar" 2>>
+灌木里传来一阵急促的拱土声。你抬手停步，野猪的背脊在叶丛里一闪。绕开还是敲树干惊走，都得快。
+<br><br>
+<<getouticon>><<link [[绕开它 (0:05)|MP Loc Forest Hub]]>><<pass 5>><<tiredness 1>><</link>><br>
+<<investigateicon>><<link [[敲树干惊走 (0:05)|MP Loc Forest Hub]]>><<pass 5>><<if !$daily.mpForBoarFail>><<stress -1>><<else>><<stress 2>><</if>><</link>>
+<</addinlineevent>>
+<<addinlineevent "forest_mark" 2>>
+界石上的炭痕被人抹花了半道。你蹲下去辨风向，把布条重新系紧，指腹沾了一点湿炭。
+<br><br>
+<<getouticon>><<link [[记下位置 (0:05)|MP Loc Forest Hub]]>><<pass 5>><</link>><br>
+<<mprepairicon>><<link [[重系布条 (0:05)|MP Loc Forest Hub]]>><<pass 5>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0) + 1>><<stress -2>><</link>>
+<</addinlineevent>>
+<<if Time.season is "winter" and !$daily.mpForestSnow>>
+<<set $daily.mpForestSnow to 1>>
+<<addinlineevent "forest_snow" 2>>
+雪把旧脚印盖住了，只有界桩边有一串新的。深浅不一，像有人夜里刚走过。
+<br><br>
+<<getouticon>><<link [[先记下来 (0:05)|MP Loc Forest Hub]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[跟上去看 (0:05)|MP Loc Forest Hub]]>><<pass 5>><<tiredness 2>><<stress 1>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Loc HighStreet Work [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<pass 60>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set $mpHighStreetShifts to ($mpHighStreetShifts or 0) + 1>>
+<<cleareventpool>>
+<<addinlineevent "hs_corridor" 3>>
+拱廊里铜壶冒着白汽。你帮报童分完一摞早报，掌柜从橱窗里抬眼看你，点了点头。石板上还留着昨夜的潮痕。
+<br><br>
+<<getouticon>><<link [[收工回去 (0:05)|MP Loc HighStreet Hub]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再干一班 (1:00)|MP Loc HighStreet Work]]>><<pass 60>><</link>>
+<</addinlineevent>>
+<<addinlineevent "hs_ledger" 2>>
+行会执事把账册往你面前推了半寸，要你核一行铺租。数字被茶渍洇开，得小心辨。
+<br><br>
+<<getouticon>><<link [[先搁下 (0:05)|MP Loc HighStreet Hub]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[核完这一行 (0:05)|MP Loc HighStreet Hub]]>><<pass 5>><<if ($maths or 0) gte 200 or !$daily.mpHsLedgerFail>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0) + 1>><<stress -2>><<else>><<set $daily.mpHsLedgerFail to 1>><<stress 2>><</if>><</link>>
+<</addinlineevent>>
+<<addinlineevent "hs_alley" 2>>
+后巷铁栅半掩，茶座伙计朝你招手，说有人在长桌下压着一张未拆的茶叶罐。你决定进去还是绕开。
+<br><br>
+<<getouticon>><<link [[绕开后巷 (0:05)|MP Loc HighStreet Hub]]>><<pass 5>><</link>><br>
+<<sneakicon>><<link [[推门进去 (0:05)|MP Loc HighStreet Hub]]>><<pass 5>><<mpalert 2>><<stress 1>><</link>>
+<</addinlineevent>>
+<<if Time.hour gte 18 and !$daily.mpHsNightLamp>>
+<<set $daily.mpHsNightLamp to 1>>
+<<addinlineevent "hs_lamp" 2>>
+入夜后拱廊铜钩上的纸灯有一盏歪了。你得踩着木梯扶正，或者只把灯油添满就走。
+<br><br>
+<<getouticon>><<link [[只添灯油 (0:05)|MP Loc HighStreet Hub]]>><<pass 5>><</link>><br>
+<<mprepairicon>><<link [[扶正纸灯 (0:05)|MP Loc HighStreet Hub]]>><<pass 5>><<tiredness 1>><<stress -2>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Loc Temple Night Shift [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<pass 60>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set $mpTempleShifts to ($mpTempleShifts or 0) + 1>>
+<<cleareventpool>>
+<<addinlineevent "temple_candle" 3>>
+回廊烛台结着一截蜡泪。你剪掉烛芯，把灰扫进铜盘，乳香气味压得很低。石板凉意从靴底上来。
+<br><br>
+<<getouticon>><<link [[守夜结束 (0:05)|MP Loc Temple Hub]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再守一班 (1:00)|MP Loc Temple Night Shift]]>><<pass 60>><</link>>
+<</addinlineevent>>
+<<addinlineevent "temple_channel" 2>>
+暗渠的水声忽然大了一拍。你侧耳去听，门缝里潮气更重，铜环被摸得发亮。
+<br><br>
+<<getouticon>><<link [[先记下来 (0:05)|MP Loc Temple Hub]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[顺着水声看 (0:05)|MP Loc Temple Hub]]>><<pass 5>><<stress 1>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0) + 1>><</link>>
+<</addinlineevent>>
+<<addinlineevent "temple_pray" 2>>
+侧廊有信徒把念珠捻断了一颗。你帮他捡起，或者只把长椅归回原位。
+<br><br>
+<<getouticon>><<link [[归回长椅 (0:05)|MP Loc Temple Hub]]>><<pass 5>><</link>><br>
+<<socialiseicon>><<link [[帮捡念珠 (0:05)|MP Loc Temple Hub]]>><<pass 5>><<stress -3>><</link>>
+<</addinlineevent>>
+<<if Time.hour gte 0 and Time.hour lt 6 and !$daily.mpTempleBell>>
+<<set $daily.mpTempleBell to 1>>
+<<addinlineevent "temple_bell" 2>>
+子夜钟声从塔顶落下来，余韵在拱顶来回撞。你得去枢轮室看一眼配重，或者只在廊下听完这一轮。
+<br><br>
+<<getouticon>><<link [[廊下听完 (0:05)|MP Loc Temple Hub]]>><<pass 5>><</link>><br>
+<<mpbellicon>><<link [[上枢轮室 (0:05)|MP Loc Temple Hub]]>><<pass 5>><<tiredness 2>><<stress -1>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Deep Docks Work [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<pass 60>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<set $mpDocksShifts to ($mpDocksShifts or 0) + 1>>
+<<cleareventpool>>
+<<addinlineevent "docks_unload" 3>>
+栈桥上脚夫正卸一箱樟木。你搭把手稳住绳扣，咸风灌进袖管，灰鸥在桅杆上叫。
+<br><br>
+<<getouticon>><<link [[收工回去 (0:05)|MP Deep Docks Hub]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再干一班 (1:00)|MP Deep Docks Work]]>><<pass 60>><</link>>
+<</addinlineevent>>
+<<addinlineevent "docks_rope" 2>>
+系船柱上的旧缆散了股。你要么重绞，要么只把松扣勒紧，免得下一班潮水把它扯断。
+<br><br>
+<<getouticon>><<link [[只勒紧绳扣 (0:05)|MP Deep Docks Hub]]>><<pass 5>><</link>><br>
+<<mprepairicon>><<link [[重绞缆绳 (0:05)|MP Deep Docks Hub]]>><<pass 5>><<tiredness 2>><<set $mpDockTimber to ($mpDockTimber or 0) + 0>><<stress -2>><</link>>
+<</addinlineevent>>
+<<addinlineevent "docks_gauge" 2>>
+水尺铜面被潮打湿，刻度难辨。你蹲下去擦净，记下这一格，交给船屋的人。
+<br><br>
+<<getouticon>><<link [[先退回去 (0:05)|MP Deep Docks Hub]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[擦净记尺 (0:05)|MP Deep Docks Hub]]>><<pass 5>><<set $mpLocEvents_Docks to ($mpLocEvents_Docks or 0) + 1>><<stress -1>><</link>>
+<</addinlineevent>>
+<<if ($mpFogTide or 0) gte 3 and !$daily.mpDocksFog>>
+<<set $daily.mpDocksFog to 1>>
+<<addinlineevent "docks_fog" 2>>
+海雾吞掉十步外的龙门吊。铜哨声从雾里传来，你得跟着哨音走，或者就地等能见度回来。
+<br><br>
+<<getouticon>><<link [[就地等雾 (0:05)|MP Deep Docks Hub]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[跟着哨音 (0:05)|MP Deep Docks Hub]]>><<pass 5>><<if !$daily.mpDocksFogFail>><<stress 1>><<else>><<set $daily.mpDocksFogFail to 1>><<set $mpDocksSetback to Time.days + 1>><<stress 3>><</if>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Loc Forest Trail Sweep [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<pass 20>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<cleareventpool>>
+<<addinlineevent "trail_mark" 3>>
+猎径边的布条被露水打湿，贴在桦树皮上。你把结重新系紧，靴底踩过一层薄霜。
+<br><br>
+<<getouticon>><<link [[退回林缘 (0:05)|MP Loc Forest Surface]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再走一段 (0:20)|MP Loc Forest Trail Sweep]]>><<pass 20>><</link>>
+<</addinlineevent>>
+<<addinlineevent "trail_trap" 2>>
+枯叶下露出半截旧铁链，不像阿什的活扣。你蹲下去拨开，弹簧已经锈死。
+<br><br>
+<<getouticon>><<link [[先记下来 (0:05)|MP Loc Forest Surface]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[拆掉铁夹 (0:05)|MP Loc Forest Surface]]>><<pass 5>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0) + 1>><<stress -1>><</link>>
+<</addinlineevent>>
+<<addinlineevent "trail_boar" 2>>
+灌木晃了一下，野猪气味从下风飘来。你停步，听蹄声远近。
+<br><br>
+<<getouticon>><<link [[绕开走 (0:05)|MP Loc Forest Surface]]>><<pass 5>><<tiredness 1>><</link>><br>
+<<sneakicon>><<link [[敲树干惊走 (0:05)|MP Loc Forest Surface]]>><<pass 5>><<stress 1>><</link>>
+<</addinlineevent>>
+<<if Time.hour gte 16 and !$daily.mpTrailDusk>>
+<<set $daily.mpTrailDusk to 1>>
+<<addinlineevent "trail_dusk" 2>>
+日头压到树梢，林缘先暗下来。远处有车轴声，像有人要摸黑进岔口。
+<br><br>
+<<getouticon>><<link [[先退回去 (0:05)|MP Loc Forest Surface]]>><<pass 5>><</link>><br>
+<<mplampicon>><<link [[扶正路牌 (0:05)|MP Loc Forest Surface]]>><<pass 5>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0) + 1>><<stress -2>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Loc Forest Lake Watch [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<pass 20>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<cleareventpool>>
+<<addinlineevent "lake_still" 3>>
+湖面平得像蒙灰的镜子。你沿木栈走完一圈，桩脚苔色比昨日深了一层。
+<br><br>
+<<getouticon>><<link [[退回中层 (0:05)|MP Loc Forest Mid]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再守一圈 (0:20)|MP Loc Forest Lake Watch]]>><<pass 20>><</link>>
+<</addinlineevent>>
+<<addinlineevent "lake_ripple" 2>>
+无风处起了一圈细纹。你蹲到岸边，看不清是鱼还是别的什么。
+<br><br>
+<<getouticon>><<link [[先记下来 (0:05)|MP Loc Forest Mid]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[顺着纹看 (0:05)|MP Loc Forest Mid]]>><<pass 5>><<stress 1>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0) + 1>><</link>>
+<</addinlineevent>>
+<<addinlineevent "lake_camp" 2>>
+旧营地油布被风掀起一角。你要么压回去，要么把灰坑重新埋平。
+<br><br>
+<<getouticon>><<link [[埋平灰坑 (0:05)|MP Loc Forest Mid]]>><<pass 5>><</link>><br>
+<<mprepairicon>><<link [[压回油布 (0:05)|MP Loc Forest Mid]]>><<pass 5>><<tiredness 1>><<stress -2>><</link>>
+<</addinlineevent>>
+<<if ($mpFogTide or 0) gte 3 and !$daily.mpLakeFog>>
+<<set $daily.mpLakeFog to 1>>
+<<addinlineevent "lake_fog" 2>>
+雾从湖面往上爬，布条颜色糊成一团。你得退回刻痕，或者摸到下一根桩。
+<br><br>
+<<getouticon>><<link [[退回刻痕 (0:05)|MP Loc Forest Mid]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[摸到下一桩 (0:05)|MP Loc Forest Mid]]>><<pass 5>><<if !$daily.mpLakeFogFail>><<stress 1>><<else>><<set $daily.mpLakeFogFail to 1>><<set $mpForestSetback to Time.days + 1>><<stress 3>><</if>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Loc HighStreet Arch Walk [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<pass 20>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<cleareventpool>>
+<<addinlineevent "arch_quiet" 3>>
+玻璃拱廊下铜壶冒着白汽。你把歪了的灯架扶正，掌柜从橱窗里抬眼点了点头。
+<br><br>
+<<getouticon>><<link [[退回拱廊 (0:05)|MP Loc HighStreet Surface]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再巡一圈 (0:20)|MP Loc HighStreet Arch Walk]]>><<pass 20>><</link>>
+<</addinlineevent>>
+<<addinlineevent "arch_paper" 2>>
+报童把一摞早报压歪了。你帮他码齐，油墨味贴在指腹上。
+<br><br>
+<<getouticon>><<link [[先走开 (0:05)|MP Loc HighStreet Surface]]>><<pass 5>><</link>><br>
+<<shopicon>><<link [[帮他码齐 (0:05)|MP Loc HighStreet Surface]]>><<pass 5>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<stress -1>><</link>>
+<</addinlineevent>>
+<<addinlineevent "arch_salt" 2>>
+杂货行老板用粉笔改盐价，写大了又擦掉一角。他朝你努嘴，像要人替他看着行会价牌。
+<br><br>
+<<getouticon>><<link [[不当回事 (0:05)|MP Loc HighStreet Surface]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[对一眼价牌 (0:05)|MP Loc HighStreet Surface]]>><<pass 5>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0) + 1>><<stress -1>><</link>>
+<</addinlineevent>>
+<<if Time.hour gte 17 and !$daily.mpArchDusk>>
+<<set $daily.mpArchDusk to 1>>
+<<addinlineevent "arch_dusk" 2>>
+黄昏时拱廊灯先亮。有一盏纸灯歪了，木梯靠在柱边。
+<br><br>
+<<getouticon>><<link [[只添灯油 (0:05)|MP Loc HighStreet Surface]]>><<pass 5>><</link>><br>
+<<mprepairicon>><<link [[扶正纸灯 (0:05)|MP Loc HighStreet Surface]]>><<pass 5>><<tiredness 1>><<stress -2>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Loc HighStreet Tea Lane [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<pass 20>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<cleareventpool>>
+<<addinlineevent "tea_steam" 3>>
+后巷茶座的铜壶又沸了一回。你坐到条凳末端，听账房里议价声起落。
+<br><br>
+<<getouticon>><<link [[退回后巷 (0:05)|MP Loc HighStreet Mid]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再听一轮 (0:20)|MP Loc HighStreet Tea Lane]]>><<pass 20>><</link>>
+<</addinlineevent>>
+<<addinlineevent "tea_slip" 2>>
+长桌下压着一张未拆的茶叶罐。伙计朝你眨眼，又立刻把目光挪开。
+<br><br>
+<<getouticon>><<link [[装作没看见 (0:05)|MP Loc HighStreet Mid]]>><<pass 5>><</link>><br>
+<<sneakicon>><<link [[抬脚挪开 (0:05)|MP Loc HighStreet Mid]]>><<pass 5>><<mpalert 1>><<stress 1>><</link>>
+<</addinlineevent>>
+<<addinlineevent "tea_pawn" 2>>
+当铺暗柜窗口亮起绿光。老经纪人咳了一声，像在等人替他把匣盖按牢。
+<br><br>
+<<getouticon>><<link [[先走过去 (0:05)|MP Loc HighStreet Mid]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[按牢匣盖 (0:05)|MP Loc HighStreet Mid]]>><<pass 5>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0) + 1>><<stress -2>><</link>>
+<</addinlineevent>>
+<<if Time.hour gte 20 and !$daily.mpTeaNight>>
+<<set $daily.mpTeaNight to 1>>
+<<addinlineevent "tea_night" 2>>
+入夜后巷灯只剩半截。巡夜岗棚空着，石板上有新的鞋印朝会馆去。
+<br><br>
+<<getouticon>><<link [[记下鞋印 (0:05)|MP Loc HighStreet Mid]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[跟到门环 (0:05)|MP Loc HighStreet Mid]]>><<pass 5>><<tiredness 1>><<stress 1>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Loc Temple Cloister Round [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<pass 20>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<cleareventpool>>
+<<addinlineevent "cloister_ash" 3>>
+前殿侧廊香灰积了一层薄白。你把铜盘擦净，蜡泪刮进布袋。
+<br><br>
+<<getouticon>><<link [[退回前殿 (0:05)|MP Loc Temple Surface]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再巡一圈 (0:20)|MP Loc Temple Cloister Round]]>><<pass 20>><</link>>
+<</addinlineevent>>
+<<addinlineevent "cloister_wick" 2>>
+长明灯芯结了黑炭。你要么剪掉，要么只添一勺油。
+<br><br>
+<<getouticon>><<link [[只添灯油 (0:05)|MP Loc Temple Surface]]>><<pass 5>><</link>><br>
+<<mplampicon>><<link [[剪净灯芯 (0:05)|MP Loc Temple Surface]]>><<pass 5>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0) + 1>><<stress -2>><</link>>
+<</addinlineevent>>
+<<addinlineevent "cloister_bead" 2>>
+长椅旁有人捻断了一颗念珠。你帮他捡起，或者把椅脚归回原位。
+<br><br>
+<<getouticon>><<link [[归回椅脚 (0:05)|MP Loc Temple Surface]]>><<pass 5>><</link>><br>
+<<socialiseicon>><<link [[帮捡念珠 (0:05)|MP Loc Temple Surface]]>><<pass 5>><<stress -3>><</link>>
+<</addinlineevent>>
+<<if Time.hour lt 8 and !$daily.mpCloisterDawn>>
+<<set $daily.mpCloisterDawn to 1>>
+<<addinlineevent "cloister_dawn" 2>>
+晨祷刚散，窗扇支起一条缝。露气把石板打湿，告示板角有一行新墨。
+<br><br>
+<<getouticon>><<link [[先读完 (0:05)|MP Loc Temple Surface]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[抄下新墨 (0:05)|MP Loc Temple Surface]]>><<pass 5>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0) + 1>><<stress -1>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Loc Temple Crypt Sweep [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<pass 20>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<cleareventpool>>
+<<addinlineevent "crypt_score" 3>>
+旧谱室纸页一翻就掉渣。你把散页按谱号压回木匣，指腹沾满灰。
+<br><br>
+<<getouticon>><<link [[退回中层 (0:05)|MP Loc Temple Mid]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再理一轮 (0:20)|MP Loc Temple Crypt Sweep]]>><<pass 20>><</link>>
+<</addinlineevent>>
+<<addinlineevent "crypt_grid" 2>>
+忏悔室隔栅上方木格发黑。你侧耳听了一息，没有声音，只有潮气。
+<br><br>
+<<getouticon>><<link [[先退离开 (0:05)|MP Loc Temple Mid]]>><<pass 5>><</link>><br>
+<<mpveilicon>><<link [[擦净隔栅 (0:05)|MP Loc Temple Mid]]>><<pass 5>><<tiredness 1>><<stress -2>><</link>>
+<</addinlineevent>>
+<<addinlineevent "crypt_key" 2>>
+门钩上的钥匙晃了一下。你把它挂稳，或者只记下缺口朝向。
+<br><br>
+<<getouticon>><<link [[记下朝向 (0:05)|MP Loc Temple Mid]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[挂稳钥匙 (0:05)|MP Loc Temple Mid]]>><<pass 5>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0) + 1>><<stress -1>><</link>>
+<</addinlineevent>>
+<<if Time.hour gte 20 and !$daily.mpCryptNight>>
+<<set $daily.mpCryptNight to 1>>
+<<addinlineevent "crypt_night" 2>>
+入夜后回廊只剩两盏灯。深处铜环被摸得发亮，像刚有人退回去。
+<br><br>
+<<getouticon>><<link [[记下铜环 (0:05)|MP Loc Temple Mid]]>><<pass 5>><</link>><br>
+<<sneakicon>><<link [[跟到石阶 (0:05)|MP Loc Temple Mid]]>><<pass 5>><<stress 2>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Deep Docks Quay Sweep [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<pass 20>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<cleareventpool>>
+<<addinlineevent "quay_tide" 3>>
+栈桥木板缝里潮水一涨一落。你把松了的系船柱扣勒紧，咸风灌进袖管。
+<br><br>
+<<getouticon>><<link [[退回栈桥 (0:05)|MP Deep Docks Surface]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再巡一段 (0:20)|MP Deep Docks Quay Sweep]]>><<pass 20>><</link>>
+<</addinlineevent>>
+<<addinlineevent "quay_crate" 2>>
+樟木箱歪在坡道边。脚夫朝你招手，要人搭一把稳住绳扣。
+<br><br>
+<<getouticon>><<link [[先走过去 (0:05)|MP Deep Docks Surface]]>><<pass 5>><</link>><br>
+<<mpcarryicon>><<link [[稳住绳扣 (0:05)|MP Deep Docks Surface]]>><<pass 5>><<tiredness 2>><<stress -1>><</link>>
+<</addinlineevent>>
+<<addinlineevent "quay_gauge" 2>>
+水尺铜面被潮打湿。你蹲下去擦净，记下这一格。
+<br><br>
+<<getouticon>><<link [[先退回去 (0:05)|MP Deep Docks Surface]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[擦净记尺 (0:05)|MP Deep Docks Surface]]>><<pass 5>><<set $mpLocEvents_Docks to ($mpLocEvents_Docks or 0) + 1>><<stress -1>><</link>>
+<</addinlineevent>>
+<<if ($mpFogTide or 0) gte 2 and !$daily.mpQuayFog>>
+<<set $daily.mpQuayFog to 1>>
+<<addinlineevent "quay_fog" 2>>
+海雾吞掉七号旧仓的轮廓。铜哨从雾里传来，你得跟着走，或者就地等。
+<br><br>
+<<getouticon>><<link [[就地等雾 (0:05)|MP Deep Docks Surface]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[跟着哨音 (0:05)|MP Deep Docks Surface]]>><<pass 5>><<stress 1>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>
+
+:: MP Deep Docks Hold Check [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<pass 20>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<cleareventpool>>
+<<addinlineevent "hold_hatch" 3>>
+中层舱口铁闩有半寸松动。你把它重新扣死，掌心沾上机油。
+<br><br>
+<<getouticon>><<link [[退回工区 (0:05)|MP Deep Docks Mid]]>><<pass 5>><</link>><br>
+<<walkicon>><<link [[再核一处 (0:20)|MP Deep Docks Hold Check]]>><<pass 20>><</link>>
+<</addinlineevent>>
+<<addinlineevent "hold_ice" 2>>
+碎冰机白雾贴地走。冰筐边缘裂了一道，水往铸铁板缝里渗。
+<br><br>
+<<getouticon>><<link [[先记下来 (0:05)|MP Deep Docks Mid]]>><<pass 5>><</link>><br>
+<<mprepairicon>><<link [[堵住裂口 (0:05)|MP Deep Docks Mid]]>><<pass 5>><<tiredness 2>><<set $mpDockTimber to ($mpDockTimber or 0)>><<stress -2>><</link>>
+<</addinlineevent>>
+<<addinlineevent "hold_rope" 2>>
+绞盘旁旧缆散了股。你要么重绞，要么只把松扣勒紧。
+<br><br>
+<<getouticon>><<link [[只勒紧绳扣 (0:05)|MP Deep Docks Mid]]>><<pass 5>><</link>><br>
+<<mpcarryicon>><<link [[重绞缆绳 (0:05)|MP Deep Docks Mid]]>><<pass 5>><<tiredness 2>><<stress -1>><</link>>
+<</addinlineevent>>
+<<if Time.hour gte 18 and !$daily.mpHoldNight>>
+<<set $daily.mpHoldNight to 1>>
+<<addinlineevent "hold_night" 2>>
+换班铃响过一轮。调度台灯还亮着，排班表边角压着一张未盖戳的纸条。
+<br><br>
+<<getouticon>><<link [[先放一边 (0:05)|MP Deep Docks Mid]]>><<pass 5>><</link>><br>
+<<investigateicon>><<link [[看清纸条 (0:05)|MP Deep Docks Mid]]>><<pass 5>><<set $mpLocProgress_Docks to ($mpLocProgress_Docks or 0) + 1>><<stress -1>><</link>>
+<</addinlineevent>>
+<</if>>
+<<runeventpool>>

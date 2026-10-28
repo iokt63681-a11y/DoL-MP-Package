@@ -1,26 +1,45 @@
 :: Widgets MP Ledger Debt [widget nobr]
 <<widget "mpLedgerInit">>
+<<set _today to ((window.Time && Time.days) or 0)>>
 <<if !$mpLedger>>
-	<<set $mpLedger to { week: 1, amount: 1500, protected: [0, 0, 0], overdue: 0, route: "none", paid: 0, outcome: "" }>>
+	<<set $mpLedger to { week: 1, amount: 1500, protected: [0, 0, 0], overdue: 0, route: "none", paid: 0, outcome: "", paidWindow: 0, nextDueDay: _today + 7, childTaken: 0, lastNightDay: -1 }>>
 <</if>>
 <<if !$mpLedger.protected>><<set $mpLedger.protected to [0, 0, 0]>><</if>>
 <<set $mpLedger.week to ($mpLedger.week or 1)>>
 <<set $mpLedger.amount to ($mpLedger.amount or 1500)>>
 <<set $mpLedger.overdue to ($mpLedger.overdue or 0)>>
-<<if !$mpLedger.route>><<set $mpLedger.route to "none">><</if>>
 <<set $mpLedger.paid to ($mpLedger.paid or 0)>>
 <<if $mpLedger.outcome is undefined>><<set $mpLedger.outcome to "">><</if>>
+<<if $mpLedger.nextDueDay is undefined>><<set $mpLedger.nextDueDay to _today + 7>><</if>>
+<<if $mpLedger.paidWindow is undefined>><<set $mpLedger.paidWindow to $mpLedger.amount>><</if>>
+<<if $mpLedger.childTaken is undefined>><<set $mpLedger.childTaken to 0>><</if>>
+<<if $mpLedger.lastNightDay is undefined>><<set $mpLedger.lastNightDay to -1>><</if>>
 <</widget>>
-<<widget "mpLedgerWeekly">>
+<<widget "mpLedgerTick">>
 <<mpLedgerInit>>
-<<set $mpLedger.week += 1>>
-<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
-<<set $mpLedger.amount to Math.min(3000, 1500 + _protCnt * 350)>>
+<<set _today to ((window.Time && Time.days) or 0)>>
+<<if !$mpLedgerEnded and _today gte ($mpLedger.nextDueDay or _today + 7)>>
+	<<set _oldDue to ($mpLedger.amount or 1500)>>
+	<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+	<<set $mpLedger.week to (($mpLedger.week or 1) + 1)>>
+	<<set $mpLedger.amount to Math.min(3000, 1500 + _protCnt * 350)>>
+	<<if ($mpLedger.paidWindow or 0) lt _oldDue>><<set $mpLedger.overdue to (($mpLedger.overdue or 0) + 1)>><</if>>
+	<<set $mpLedger.paidWindow to 0>>
+	<<set $mpLedger.nextDueDay to (($mpLedger.nextDueDay or _today) + 7)>>
+	<<if $mpLedger.nextDueDay lte _today>><<set $mpLedger.nextDueDay to _today + 7>><</if>>
+<</if>>
 <</widget>>
 <<widget "mpLedgerPay">>
 <<mpLedgerInit>>
-<<set $mpLedger.paid += 1>>
-<<set $mpLedger.overdue to 0>>
+<<if !$mpLedgerEnded>>
+	<<set _due to ($mpLedger.amount or 1500)>>
+	<<set _need to Math.max(0, _due - ($mpLedger.paidWindow or 0))>>
+	<<if _need gt 0>>
+	<<set $mpLedger.paid to (($mpLedger.paid or 0) + _need)>>
+	<<set $mpLedger.paidWindow to (($mpLedger.paidWindow or 0) + _need)>>
+	<<set $mpLedger.overdue to 0>>
+	<</if>>
+<</if>>
 <</widget>>
 <<widget "mpLedgerProtect">>
 <<mpLedgerInit>>
@@ -29,179 +48,317 @@
 <<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
 <<set $mpLedger.amount to Math.min(3000, 1500 + _protCnt * 350)>>
 <</widget>>
+<<widget "mpLedgerLoseProtect">>
+<<mpLedgerInit>>
+<<set _lost to -1>>
+<<if $mpLedger.protected[2] is 1>><<set _lost to 2>>
+<<elseif $mpLedger.protected[1] is 1>><<set _lost to 1>>
+<<elseif $mpLedger.protected[0] is 1>><<set _lost to 0>><</if>>
+<<if _lost gte 0>>
+	<<set $mpLedger.protected[_lost] to 0>>
+	<<set $mpWorldLedgerLoss to (($mpWorldLedgerLoss or 0) + 1)>>
+	<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+	<<set $mpLedger.amount to Math.min(3000, 1500 + _protCnt * 350)>>
+<</if>>
+<</widget>>
 
 :: MP Ledger Hub [nobr]
-<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>><<mpLedgerTick>>
 <<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
-<<set _nextIn to ($mpBaileyBiweeklyNextDay ? $mpBaileyBiweeklyNextDay - ((window.Time && Time.days) or 0) : -1)>>
-地下储煤间的尽头有一道被煤灰盖住的暗门，门后是院长室那本从不示人的私账。它不记柴米油盐，只记三样东西：这一周要交多少、谁的名字被划进了保护栏、以及贝利下一次翻账的日期。账页边缘留着许多铅笔小字，有的名字后面添了一道，有的被反复描粗——那是罗宾和几个大孩子趁夜偷偷做的记号。
-<br><br>
-【本周账页】：第 <<print $mpLedger.week>> 周｜账本原额 <<print $mpLedger.amount>>｜本周实付 <<mpWorldPrice $mpLedger.amount>>｜逾期 <<print $mpLedger.overdue>> 笔｜已护 <<print _protCnt>>/3（皮普 <<print $mpLedger.protected[0]>>・克拉拉 <<print $mpLedger.protected[1]>>・托比 <<print $mpLedger.protected[2]>>）｜终局 <<print ($mpLedger.outcome or "未定")>><<if _nextIn gt 0>>｜距贝利核账 <<print _nextIn>> 天<<elseif _nextIn is 0>>｜核账日就在今天<<elseif $mpBaileyBiweeklyNextDay>>｜核账日已过 <<print (0 - _nextIn)>> 天<<else>>｜核账日尚未排定<</if>>
-<br><br>
-这本周债的算法并不复杂：名单上每多护住一个孩子，你替她背下的连坐账就多三百五十钱；三个人都护住时，账额会涨到两千五百五十钱。可名字护得越多，贝利在院里安插的眼线就越急，催账的打手也会来得更勤。逾期一栏每添一笔，下一次核账时他就会先翻到那一页，拿里面的数目说事。
-<br><br>
-这栋房子每周都在同一件事上打转：楼上要吃饭，楼下要交账，院长室要装聋作哑。账页上的三个名字不是三笔数字，而是三条还活着的去处——旧港的冷库、高街的账房、郊外的谷仓。你每划掉一个“抵债”，就等于从贝利的算盘上拨走一颗珠子，也等于让他多记住你一分。
-<br><br>
-你能动的手脚有四样。手头宽裕，就在账期前把现钱数清楚，当面把这周买平；手脚够快，可以照着他那枚旧火漆做一张假收据，让账面上多出一笔从未入过库的款子；若两样都不成，还能在巷口把催账的打手打回去，用一顿拳脚换一周清净；至于最绝的一条，是把整本黑账从院长室偷出来，让上面的名字和暗线一起见光。三条救援分线分别通向旧港冷库、高街账房和郊外农庄，每救回一个，账额与名单都会跟着变，但留给你的时间也会少一刻。
-<br><br>
-【账页边角】：<<if $mpLedger.overdue gt 0>>逾期 <<print $mpLedger.overdue>> 笔已经红得扎眼，贝利的人随时可能提前上门。<<else>>账页还算干净，没有逾期记号，贝利暂时抓不到由头。<</if>><<if _protCnt is 3>>三个名字都已划进保护栏，连坐账堆到最高，打手也盯得最紧。<<elseif _protCnt gt 0>>名单上已经有人被护住，账额开始往上走，剩下的人仍在等。<<else>>保护栏还是空的，账额停在最低一档。<</if>>
+<<set _nextIn to Math.max(0, ($mpLedger.nextDueDay or 0) - ((window.Time && Time.days) or 0))>>
+地下储煤间尽头有一道被煤灰盖住的暗门，门后藏着院长室那本从不示人的私账。灯下摊开的账页只记三件事：第 <<print $mpLedger.week>> 周原额 <<print $mpLedger.amount>> 钱，按今日行价折 <<mpWorldPrice $mpLedger.amount>>；逾期栏<<if $mpLedger.overdue gt 0>>圈着 <<print $mpLedger.overdue>> 笔红墨<<else>>还空着<</if>>，保护栏<<if _protCnt is 3>>三个名字都写定了<<elseif _protCnt gt 0>>写进了 <<print _protCnt>> 个名字<<else>>一格未动<</if>>。距下次翻账还有 <<print _nextIn>> 天，页脚<<if $mpLedger.outcome is "clear">>已经写着「结清」<<elseif $mpLedger.outcome is "seize">>写着「夺账」<<elseif $mpLedger.outcome is "escape">>写着「转移」<<else>>还没有落笔<</if>>。<<if $mpWorldOrphanageOutcome is "mutualaid">>院里已经办起了互助工坊。<<elseif $mpWorldOrphanageOutcome is "sheltered">>院里的门窗都换了新闩。<<else>>院里的木牌还没什么变化。<</if>><<if $mpWorldLedgerLoss>>保护栏里有一个名字被炭条抹掉了。<<elseif $mpLedgerEnded>>这一笔账已经落定，不会再翻。<<else>>贝利的人还没察觉这道暗门。<</if>>
 <br><br>
 <<getouticon>><<link [[返回孤儿院枢 (0:02)|MP Loc Orphanage Hub]]>><<pass 2>><</link>><br>
-<<mpcalculateicon>><<link [[核算交割与终局 (0:06)|MP Ledger Pay]]>><<pass 6>><</link>><br>
-<<walkicon>><<link [[救援皮普分线 (0:10)|MP Ledger Rescue Pip]]>><<pass 10>><</link>><br>
-<<socialiseicon>><<link [[救援克拉拉线 (0:10)|MP Ledger Rescue Clara]]>><<pass 10>><</link>><br>
-<<link [[救援托比分线 (0:10)|MP Ledger Rescue Toby]]>><<pass 10>><</link>>
-<br><<link [[更多事务 (0:03)|MP Ledger Debt More Hub]]>><<pass 3>><</link>>
+<<mpscaleicon>><<link [[核算交割 (0:06)|MP Ledger Pay]]>><<pass 6>><</link>><br>
+<<walkicon>><<link [[查看三条救援线 (0:04)|MP Ledger Rescue Hub]]>><<pass 4>><</link>><br>
+<<mplettericon>><<link [[翻补充账页 (0:04)|MP Ledger Debt More Hub]]>><<pass 4>><</link>><br>
+<<link [[回孤儿院熄灯歇下 (0:06)|MP Loc Orphanage Sleep]]>><<pass 6>><</link>>
+
+:: MP Ledger Rescue Hub [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+三条救援分线各通向一处抵债窝点：旧港冷库、高街账房、郊外谷仓。皮普、克拉拉、托比的名字还没有全进保护栏，救回一个，连坐周债就多三百五十钱，名单也更难从贝利眼皮底下藏住。如今保护栏里<<if _protCnt is 3>>三个名字都写定了<<elseif _protCnt gt 0>>已经写进 <<print _protCnt>> 个名字<<else>>还空着<</if>>，逾期 <<print $mpLedger.overdue>> 笔。每救回一人，名单上就少一处能把孩子随手点走的口子。
+<br><br>
+<<getouticon>><<link [[返回账本总枢 (0:02)|MP Ledger Hub]]>><<pass 2>><</link>><br>
+<<walkicon>><<link [[去救皮普 (0:10)|MP Ledger Rescue Pip]]>><<pass 10>><</link>><br>
+<<mplettericon>><<link [[去高街救克拉拉 (0:10)|MP Ledger Rescue Clara]]>><<pass 10>><</link>><br>
+<<sneakicon>><<link [[去郊外农庄接托比 (0:10)|MP Ledger Rescue Toby]]>><<pass 10>><</link>>
 
 :: MP Ledger Pay [nobr]
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
 <<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
-<<set _due to ($mpLedger.amount or 300)>>
-铜壶里的水汽在窗上凝成一层白雾。你把黑账摊在煤油灯下，旁边摆着三样东西：钱袋、一枚从贝利抽屉里拓下来的火漆印、以及一根藏在袖口的短棍。账期不等人，院子里的人也不等你——今晚把这页账翻过去，明天楼上的孩子才能照常分到那碗麦粥。
+<<set _due to ($mpLedger.amount or 1500)>>
+铜壶水汽在窗上凝成白雾，黑账摊在煤油灯下：前面已核销 <<print $mpLedger.paid>> 钱，本期原额 <<print _due>> 钱，逾期 <<print $mpLedger.overdue>> 笔，已护孤儿 <<print _protCnt>> 人。罗宾替你把算盘珠拨回梁下，你可在此核销本周账期，也可以走阳光清偿、反制夺账，或按保护人数去应付连坐问责。
 <br><br>
-【交割台】：已缴 <<print $mpLedger.paid>> 次｜路线 <<print $mpLedger.route>>｜账面原额 <<print _due>> 钱｜保护 <<print _protCnt>>/3｜逾期 <<print $mpLedger.overdue>> 笔｜手头现钱 <<print ($money or 0)>>
-<br><br>
-核销这一周有三种走法，落到账面上却只有一句“已清”。钱袋够沉，就把铜板一枚枚点给他派来的账房，让他当面在账页上盖戳；钱不够而手够巧，就用火漆印和旧收据拼一张假凭条，赌他不会细看；两样都指望不上，便在巷口截住那个收账的打手，把他手里的账袋夺下来，用身上的淤青换这一周的安宁。三条路都要在账页上留下时间，也都会把下一周的数目重新算过。
-<br><br>
-再往深处走，就是这本账的三种终局。把账目摊到阳光下，用街坊与孩子们的工钱凑一笔自治基金，是为阳光清偿；带人反查封账房，把贝利私吞的底册夺过来，是为反制夺账；把保护名单拆成几份，顺着煤房的暗道送进全城安全屋，是为暗影转移。三条路各有各的代价：阳光要钱，夺账要胆，转移要路。
-<br><br>
-三条终局都不是一句话的事。阳光清偿要把账目摊给街坊看，还得有人愿意在契书上签字作保；反制夺账要先摸清账房的换班与后门，最好再找两个能动手的人；暗影转移则要提前把安全屋的床铺与暗道腾出来，否则名单送出去也没有地方落。你可以在这一页先把路线定下，再回去补齐人手与钥匙。
-<br><br>
-【可选后手】：<<if ($money or 0) gte _due>>钱袋够付这一期，账房挑不出毛病。<<elseif ($skulduggery or 0) gte 240>>现钱不足，但手上的火漆与旧票据够做一张以假乱真的凭条。<<else>>现钱与假账都不成，只能在巷口动武，淤青与喘息是这一周的本钱。<</if>>
-<br><br>
-【终局预备】：<<if $mpLedger.route is "clear">>街道上已经有人在传“阳光账本”的说法。<<elseif $mpLedger.route is "seize">>你已经在清点能召集的人手，准备去封账房。<<elseif $mpLedger.route is "escape">>煤房里的空木箱已经腾出来，等着装名单。<<else>>三条终局路线都还没有定，账页仍停在“待交割”。<</if>>
-<br><br>
-<<getouticon>><<link [[返回账本总枢 (0:02)|MP Ledger Hub]]>><<pass 2>><</link>><br>
-<<mpcalculateicon>><<link [[核销本周账期 (0:10)|MP Ledger Hub]]>><<pass 10>><<if ($money or 0) gte _due>><<set $money to (($money or 0) - _due)>><<mpLedgerPay>><<mpLedgerWeekly>><<stress -2>><<elseif ($skulduggery or 0) gte 240>><<mpLedgerPay>><<mpLedgerWeekly>><<stress 2>><<tiredness 2>><<else>><<mpLedgerPay>><<mpLedgerWeekly>><<pain 6>><<stress 3>><</if>><</link>><br>
-<<socialiseicon>><<link [[阳光账本清偿 (0:15)|MP Ledger Ending Clear]]>><<pass 15>><<set $mpLedger.route to "clear">><</link>><br>
-<<investigateicon>><<link [[反制夺取黑账 (0:15)|MP Ledger Ending Seize]]>><<pass 15>><<set $mpLedger.route to "seize">><</link>><br>
-<<link [[暗道转移名单 (0:15)|MP Ledger Ending Escape]]>><<pass 15>><<set $mpLedger.route to "escape">><</link>>
+<<getouticon>><<link [[返回总枢 (0:02)|MP Ledger Hub]]>><<pass 2>><</link>><br>
+<<set _need to Math.max(0, _due - ($mpLedger.paidWindow or 0))>>
+<<if !$mpLedgerEnded>>
+<<if _need lte 0>><span class="disabled">本期账已结清 (0:10)</span><br>
+<<else>><<mpscaleicon>><<link "核销本周账 (0:10)">><<pass 10>><<if ($money or 0) gte _need>><<set $money to (($money or 0) - _need)>><<mpLedgerPay>><<stress -2>><<else>><<pain 4>><<stress 5>><</if>><<goto "MP Ledger Hub">><</link>><br><</if>>
+<</if>>
+<<mphandshakeicon>><<link [[走阳光账清偿 (0:15)|MP Ledger Ending Clear]]>><<pass 15>><</link>><br>
+<<mpfist2icon>><<link [[反制夺账或转移 (0:15)|MP Ledger Ending Seize]]>><<pass 15>><</link>><br>
+<<link [[应对四档连坐问责 (0:10)|MP Ledger Punish Hub]]>><<pass 10>><</link>>
 
 :: MP Ledger Rescue Pip [nobr]
 <<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpLedgerInit>>
-旧港冷库的排气扇在雾里转得有气无力，铁门缝里漏出一线白霜。皮普缩在鳕鱼箱与盐桶之间，袖口结着冰碴，手指还在机械地翻检冻硬的鱼获。管事把他的工钱直接记进贝利的账，名义是抵债，实际是拿一个孩子的冬天去填另一本账的窟窿。
+旧港冷库的排气扇在雾里慢转，皮普缩在鳕鱼箱与盐桶之间，袖口结满冰碴，手指冻得通红还在翻检冻鱼。管事把他的工钱直接折进贝利的连坐账里，越干越欠。<<if $mpLedger.protected[0] is 1>>如今皮普的名字已经圈进保护栏，冷库只剩空工位。<<else>>趁管事去前厅记秤，可以从排水暗道把皮普悄悄接走。<</if>>
 <br><br>
-皮普看见你时没有立刻站起来，只把冻僵的手往袖子里缩了缩。他说自己还能撑，冷库至少管一顿热汤；可你看见他脚边的木桶里漂着薄冰，就知道这话撑不了多久。管事在账上给他记的是“自愿抵债”，实际上连工钱都被折成了利息，越干越欠。
+<<getouticon>><<link [[回救援分线 (0:02)|MP Ledger Rescue Hub]]>><<pass 2>><</link>><br>
+<<sneakicon>><<link [[从冷库后门接皮普 (0:15)|MP Ledger Rescue Pip After]]>><<pass 15>><<if $mpLedger.protected[0] is 1 or ($skulduggery or 0) gte 220 or ($mpSafehouses and $mpSafehouses.docks and $mpSafehouses.docks.tier gte 1)>><<set $mpLedgerRescueOk to 1>><<else>><<set $mpLedgerRescueOk to 0>><</if>><</link>><br>
+<<walkicon>><<link [[先转去交割台 (0:04)|MP Ledger Pay]]>><<pass 4>><</link>>
+
+:: MP Ledger Rescue Pip After [nobr]
+<<set $outside to 0>><<set $location to "docks">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<if ($mpLedgerRescueOk or 0) is 1>>
+你借着冷库后巷的雾气撬开活扣，把冻得发抖的皮普裹进干大衣，顺着码头安全屋的暗道一路送回孤儿院。罗宾早已备好热姜汤，皮普的名字正式划出抵债栏、写进保护名单。
+<<if $mpLedger.protected[0] isnt 1>><<mpLedgerProtect 0>><<stress -3>><</if>>
+<<else>>
+冷库铁门的挂锁锈死了，管事听见铁链响动提着木棍赶来，你们只能借着鱼箱掩护先行撤退。皮普低声让你别硬拼，等摸清换班空当或是码头安全屋打通后再来接他。
+<<set $mpLedger.overdue += 1>><<set $mpLedger.patrolPending to 1>><<stress 4>><<tiredness 2>>
+<</if>>
 <br><br>
-【皮普现状】：保护栏 <<print $mpLedger.protected[0]>>｜旧港安全屋 <<print (($mpSafehouses and $mpSafehouses.docks and $mpSafehouses.docks.tier) or 0)>> 档｜你的开锁手艺 <<print ($skulduggery or 0)>>
-<br><br>
-冷库后墙有一条废弃的排水沟，涨潮时会被海水灌满；安全屋若已在码头扎下根，沟底那道暗门就能通到栈桥底下。若没有这条路，就只能靠手上功夫：管事的钥匙挂在腰后，每隔一刻钟去一次账房，换班的空当只够你拨开两把锁。无论走哪条路，都不能惊动前厅那个数鱼的人——他认得院里每个孩子的脸，也认得贝利给的赏钱。
-<br><br>
-把皮普带出来只是第一步。他的名字一旦划进保护栏，下周的连坐账就会少一截，可冷库的管事也会立刻发现少了一个抵债的劳力，顺着脚印追到孤儿院门口。你得替皮普想好藏身的地方：码头安全屋的暗匣、煤房的夹层，或者干脆让他跟着夜航船在雾里躲两晚。救得越快，贝利的人反应越慢；拖得越久，逾期那一栏就会多一笔。码头的雾到后半夜会压得更低，栈桥上的巡夜人只认灯不认脸；只要皮普换下那件结霜的围裙，混进卸货的短工里，未必会被拦下。
-<br><br>
-【冷库风声】：<<if $mpLedger.protected[0] is 1>>皮普已经在保护栏里，冷库这边只剩一个空工位和管事骂骂咧咧的声音。<<elseif ($skulduggery or 0) gte 220 or ($mpSafehouses and $mpSafehouses.docks and $mpSafehouses.docks.tier gte 1)>>你摸清了换班的空当，也找到了能退走的暗沟。<<else>>换班的人盯得太紧，硬闯只会把皮普推到更深的仓房里。<</if>>
-<br><br>
-<<getouticon>><<link [[返回账本总枢 (0:02)|MP Ledger Hub]]>><<pass 2>><</link>><br>
-<<sneakicon>><<if $mpLedger.protected[0] is 1 or ($skulduggery or 0) gte 220 or ($mpSafehouses and $mpSafehouses.docks and $mpSafehouses.docks.tier gte 1)>><<link [[接应皮普脱身 (0:15)|MP Ledger Hub]]>><<pass 15>><<if $mpLedger.protected[0] isnt 1>><<mpLedgerProtect 0>><<stress -3>><</if>><</link>><<else>><<link [[接应受阻暂退 (0:15)|MP Ledger Hub]]>><<pass 15>><<set $mpLedger.overdue += 1>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<walkicon>><<link [[转去终局交割 (0:04)|MP Ledger Pay]]>><<pass 4>><</link>>
+<<getouticon>><<link [[返回救援分线 (0:02)|MP Ledger Rescue Hub]]>><<pass 2>><</link>><br>
+<<mpscaleicon>><<link [[回账本总枢核数 (0:04)|MP Ledger Hub]]>><<pass 4>><</link>>
 
 :: MP Ledger Rescue Clara [nobr]
 <<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpLedgerInit>>
-高街账房的百叶窗只落了半边，墨味和旧纸的霉味从门缝里飘出来。克拉拉坐在最里面那张高脚凳上，面前摊着一叠抵债契，手指沾着蓝墨水，正把一个个名字从这页抄到那页。账房先生坐在柜台后拨算盘，偶尔抬眼看看她，像看一件会写字的家什。
+高街典当行二楼的小账房闷得透不过气，克拉拉伏在矮案前抄写抵债契，手腕被桌沿磨出红印。账房先生把她的学徒契压在铁匣底层，拿她的算术手艺白抵院里的利息。<<if $mpLedger.protected[1] is 1>>如今克拉拉的名字已经写进保护栏，矮案前空无一人。<<else>>趁账房先生下楼验银，可以抽走那张抵债原契。<</if>>
 <br><br>
-克拉拉抬头看见你，笔尖在纸上停了一瞬，又很快落回去。她没有求救，只把正在抄的那页往你这边推了推：上面是一串被拆成好几栏的数目，每一栏都能单独拿去催债。她说账房先生每天都要核一遍总页，少一张纸，第二天就会有人来院里问。
+<<getouticon>><<link [[回救援分线 (0:02)|MP Ledger Rescue Hub]]>><<pass 2>><</link>><br>
+<<mplettericon>><<link [[抽换底契接克拉拉 (0:15)|MP Ledger Rescue Clara After]]>><<pass 15>><<if $mpLedger.protected[1] is 1 or ($housekeeping or 0) gte 220 or ($mpStanding and ($mpStanding.guilds or 0) gte 15)>><<set $mpLedgerRescueOk to 1>><<else>><<set $mpLedgerRescueOk to 0>><</if>><</link>><br>
+<<walkicon>><<link [[先转去交割台 (0:04)|MP Ledger Pay]]>><<pass 4>><</link>>
+
+:: MP Ledger Rescue Clara After [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<if ($mpLedgerRescueOk or 0) is 1>>
+你用早备好的废契换出铁匣底层的原纸，将克拉拉的名字改记进百工行会学徒册，护着她从后梯走下高街。回到孤儿院煤房后，克拉拉主动接过了核对周债红杠的差事。
+<<if $mpLedger.protected[1] isnt 1>><<mpLedgerProtect 1>><<stress -3>><</if>>
+<<else>>
+铁匣加了双簧暗锁，楼梯口又传来账房先生上楼的咳嗽声。克拉拉赶紧把账册合拢向你摇了摇头，你只能先退回街面，等理顺账目门路或攒够行会人情再来改契。
+<<set $mpLedger.overdue += 1>><<set $mpLedger.patrolPending to 1>><<stress 4>><<tiredness 2>>
+<</if>>
 <br><br>
-【克拉拉现状】：保护栏 <<print $mpLedger.protected[1]>>｜行会信誉 <<print (($mpStanding and $mpStanding.guilds) or 0)>>｜你的家政手艺 <<print ($housekeeping or 0)>>
-<br><br>
-克拉拉本人并不欠钱，欠钱的是院里那本总账。账房把她的工钱折成利息，利息又滚进本金，契书上的数目永远比上个月多一行。要让她脱身，得从纸面下手：懂行的人能看出哪一栏的墨色新旧不一，哪一枚指印其实是替签；行会里说得上话的人，则可以让账房先生“重核”一遍旧契，把不该记的那几笔抹掉。两条路都不必掏现钱，但要赔上熬夜的眼力与欠下的人情。
-<br><br>
-改写契书之后，克拉拉的名字会从抵债栏转到保护栏，连坐账跟着少三百五十钱。账房先生不会当场发作，他只会把这件事记在心里，等贝利来核账时轻描淡写地提一句；到那时，逾期栏上多半又要添一笔。所以动作要快，改完就把克拉拉送回高街安全屋或孤儿院，别让她再单独走进这间账房。账房的油灯快见底了，她把最后一截烛芯拨亮，让你看清契书背面那行褪色的编号——那编号与孤儿院旧账册上的一页正好对得上。
-<br><br>
-【账房动静】：<<if $mpLedger.protected[1] is 1>>克拉拉的位子已经空了，账房先生还在翻那叠旧契，像是想找出是哪一页出了问题。<<elseif ($housekeeping or 0) gte 220 or ($mpStanding and ($mpStanding.guilds or 0) gte 15)>>你看出契书上的破绽，也能找到愿意替你说话的熟人。<<else>>账房先生把契书压在算盘底下，眼睛一直没离开你的手。<</if>>
-<br><br>
-<<getouticon>><<link [[返回账本总枢 (0:02)|MP Ledger Hub]]>><<pass 2>><</link>><br>
-<<socialiseicon>><<if $mpLedger.protected[1] is 1 or ($housekeeping or 0) gte 220 or ($mpStanding and ($mpStanding.guilds or 0) gte 15)>><<link [[改写克拉拉契 (0:15)|MP Ledger Hub]]>><<pass 15>><<if $mpLedger.protected[1] isnt 1>><<mpLedgerProtect 1>><<stress -3>><</if>><</link>><<else>><<link [[交渉受挫退回 (0:15)|MP Ledger Hub]]>><<pass 15>><<set $mpLedger.overdue += 1>><<stress 4>><<tiredness 1>><</link>><</if>><br>
-<<walkicon>><<link [[转去终局交割 (0:04)|MP Ledger Pay]]>><<pass 4>><</link>>
+<<getouticon>><<link [[返回救援分线 (0:02)|MP Ledger Rescue Hub]]>><<pass 2>><</link>><br>
+<<mpscaleicon>><<link [[回账本总枢核数 (0:04)|MP Ledger Hub]]>><<pass 4>><</link>>
 
 :: MP Ledger Rescue Toby [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>><<mpLedgerInit>>
-郊外的风从麦茬地里刮过来，带着湿土与柴烟的味道。托比躲在农庄最外侧的谷仓里，怀里抱着一只装工具的旧布袋；谷仓外的土路上停着一辆没有徽记的马车，两个戴黑手套的人轮班守在车边。贝利把托比的去向卖给雷米的人，又从雷米那里换回一条盯梢农场的路子，孩子的名字就这样被两头记进了账。
+郊外农庄的谷仓里堆满潮湿草捆，托比拄着铁叉站在通风口下，腿上的旧伤让他每走一步都直冒冷汗。两名黑手套在土路拐角巡看，拿他抵孤儿院欠下的草料运费。<<if $mpLedger.protected[2] is 1>>如今托比已经平安返院，谷仓只剩空草袋。<<else>>只要哄住谷仓外的牧羊犬，就能趁换岗空当背他离开。<</if>>
 <br><br>
-托比听见谷仓门响，先往草堆深处缩了缩，认出是你才松开手里的铁叉。他说黑手套昨晚来过一趟，把农庄的狗牵走了，还问过院里最近有没有陌生面孔。谷仓的横梁上挂着一只旧铃，风一吹就响；他不敢碰，怕铃声把土路上的人引进来。
+<<getouticon>><<link [[回救援分线 (0:02)|MP Ledger Rescue Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<link [[趁换岗背走小托比 (0:15)|MP Ledger Rescue Toby After]]>><<pass 15>><<if $mpLedger.protected[2] is 1 or ($athletics or 0) gte 220 or ($tending or 0) gte 220>><<set $mpLedgerRescueOk to 1>><<else>><<set $mpLedgerRescueOk to 0>><</if>><</link>><br>
+<<walkicon>><<link [[先转去交割台 (0:04)|MP Ledger Pay]]>><<pass 4>><</link>>
+
+:: MP Ledger Rescue Toby After [nobr]
+<<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<if ($mpLedgerRescueOk or 0) is 1>>
+你丢出半块肉干安抚住牧羊犬，背起腿脚不便的托比穿过田埂矮树丛，赶在黑手套折返前上了接应板车。托比的名字稳稳写进保护栏第三格，院里的孩子们围上来替他热敷旧伤。
+<<if $mpLedger.protected[2] isnt 1>><<mpLedgerProtect 2>><<stress -3>><</if>>
+<<else>>
+谷仓外的牧羊犬忽然狂吠起来，黑手套提着风灯快步逼近。你只得把干粮塞进托比手里先行撤离，等练足脚力或备好安抚牲口的手法再来接他返院。
+<<set $mpLedger.overdue += 1>><<set $mpLedger.patrolPending to 1>><<stress 4>><<tiredness 2>>
+<</if>>
 <br><br>
-【托比现状】：保护栏 <<print $mpLedger.protected[2]>>｜你的脚力 <<print ($athletics or 0)>>｜你的照料手艺 <<print ($tending or 0)>>
-<br><br>
-谷仓后头有一条排水浅沟，沟沿长满带刺的野蔷薇，走起来扎手却不容易留脚印。托比腿上有旧伤，跑不快，得有人在前面拨开枝条、在后面替他挡一挡。若不想走沟里，也可以装成来收鸡蛋的短工，用一筐鸡蛋和几句行话把守车的人支开；前者靠脚力，后者靠耐性。无论选哪样，都不能让黑手套看清你的脸。
-<br><br>
-把托比带回院里，保护栏就会添上第三个名字，连坐账压到最低；可贝利也会因此少了一条盯梢农场的线，他不会善罢甘休。下一次雷米夜袭农场时，本该由贝利借出的那组打手会晚到半刻——这是救回托比换来的空隙，也是贝利转头盯紧孤儿院的理由。你得在两者之间选一个更值得守的夜晚。土路上的马车动了动，黑手套似乎准备换班；托比把铁叉放回草堆，低声说谷仓后墙有一块松动的木板，板后是通往麦田的浅沟。
-<br><br>
-【谷仓外】：<<if $mpLedger.protected[2] is 1>>托比已经在保护栏里，谷仓只剩一只空布袋和踩乱的干草。<<elseif ($athletics or 0) gte 220 or ($tending or 0) gte 220>>你看清了换岗的空当，也哄住了那只爱叫的牧羊犬。<<else>>黑手套把土路封得死紧，托比的腿伤也拖不得，贸然冲出去只会两个人都走不掉。<</if>>
-<br><br>
-<<getouticon>><<link [[返回账本总枢 (0:02)|MP Ledger Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if $mpLedger.protected[2] is 1 or ($athletics or 0) gte 220 or ($tending or 0) gte 220>><<link [[护送托比返院 (0:15)|MP Ledger Hub]]>><<pass 15>><<if $mpLedger.protected[2] isnt 1>><<mpLedgerProtect 2>><<stress -3>><</if>><</link>><<else>><<link [[拦截受创暂退 (0:15)|MP Ledger Hub]]>><<pass 15>><<set $mpLedger.overdue += 1>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<walkicon>><<link [[转去终局交割 (0:04)|MP Ledger Pay]]>><<pass 4>><</link>>
+<<getouticon>><<link [[返回救援分线 (0:02)|MP Ledger Rescue Hub]]>><<pass 2>><</link>><br>
+<<mpscaleicon>><<link [[回账本总枢核数 (0:04)|MP Ledger Hub]]>><<pass 4>><</link>>
 
 :: MP Ledger Ending Clear [nobr]
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _canClear to ($mpLedger.outcome is "clear") or ((($mpLedger.overdue or 0) is 0) and ((($mpLedger.amount or 0) is 0) or (($mpLedger.paidWindow or 0) gte ($mpLedger.amount or 0))))>>
+<<set _endLocked to ($mpLedgerEnded and $mpLedger.outcome isnt "clear")>>
+煤油灯下摊着那本从不示人的私账，页脚留着一块空白，等着最后一笔红墨。罗宾把算盘推到一边，孩子们在楼上安静下来，走廊尽头只剩风声。
+<br><br>
+<<if _endLocked>>
+页脚已经被<<if $mpLedger.outcome is "seize">>「夺账」<<elseif $mpLedger.outcome is "escape">>「转移」<<else>>别的结局<</if>>占住，再翻也改不回来。
+<<elseif !_canClear>>
+逾期栏还空不了，核销的钱也抵不上本期原额，贝利不会认这一笔。
+<<else>>
 <<set _firstClear to ($mpLedger.outcome isnt "clear")>>
-<<set $mpLedger.outcome to "clear">><<set $mpLedger.overdue to 0>>
+<<set $mpLedgerEnded to 1>><<set $mpLedger.outcome to "clear">><<set $mpLedger.overdue to 0>>
 <<if _firstClear>>
-<<if !$mpWorldOrphanageOutcome>><<set $mpWorldOrphanageOutcome to "mutualaid">><</if>>
+<<set $mpWorldOrphanageOutcome to "mutualaid">>
 <<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 28>>
 <<set $mpAlert to Math.max(0, ($mpAlert or 0) - 8)>>
 <<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 6)>><</if>>
 <</if>>
-天亮前，你把黑账搬到后院，当着罗宾和几个大孩子的面一页页摊开。账页上的名字被重新抄到一张干净纸上，旁边不再写“抵债”，而是写“基金”。街坊送来的零钱、孩子们修鞋缝补挣下的工钱、还有神殿与行会凑的一份薄礼，一起装进一只上了两道锁的木匣。从这一天起，院里的口粮不再按贝利那本私账的人头来分。
-<br><br>
-【世界回响】：孤儿院 <<if $mpWorldOrphanageOutcome is "mutualaid">>「互助工坊」的灯火亮到很晚，孩子们用自己挣的钱填进自治基金。<<elseif $mpWorldOrphanageOutcome is "sheltered">>「静谧庇护」的门锁换过，名单藏在图书角的灯座底下。<<else>>院里的灯仍亮着，账页第一次没有写满。<</if>>｜贝利下次核账 <<if $mpBaileyBiweeklyNextDay>>已推后到第 <<print $mpBaileyBiweeklyNextDay>> 日<<else>>暂时没有下文<</if>>｜街头警戒 <<print ($mpAlert or 0)>>
-<br><br>
-贝利没有再来收这一期的连坐账。他手下的两个打手在门口站了半晚，见账房当众盖了结清的戳，便悻悻走了。没有这笔外快，他给打手发的赏钱就得往后拖；院里的人第一次看见那几个黑手套在巷口互相埋怨，而不是挺着腰板进门。
-<br><br>
-更远的地方也起了变化。雷米下次夜袭农场时，贝利本该借出的那一组黑手套没有出现——他得先顾自己被当众削掉的面子，也得重新盘算从哪里补上这笔亏空。农场那边的枪声与火光仍旧会来，但少了一组最熟悉孤儿院门路的打手，守夜的人至少能多喘一口气。
-<br><br>
-自治基金的第一笔支出不是买粮，而是给院里最小的几个孩子添了冬衣。罗宾把收据一张张贴在账本背面，说这样以后谁都能查。贝利在门口看过一次，没有进门；他大概明白，这本账再也不是他一个人说了算。
-<br><br>
-你把最后一张账页投进炉火，纸边卷起来，火光在罗宾脸上跳了一下。他没有说话，只把木匣的钥匙穿进绳里，挂到门后的钉子上。院子里有人开始扫地，有人去厨房生火，日子还是那些日子，只是账本上再没有谁的名字被单独圈出来。
+最后一笔周债当众结清，罗宾在页脚写下「结清」，贝利的催账期被推迟了四周，只是人情簿上又添了一笔。
+<</if>>
 <br><br>
 <<getouticon>><<link [[返回账本总枢 (0:04)|MP Ledger Hub]]>><<pass 4>><<stress -6>><</link>><br>
-<<socialiseicon>><<link [[返回孤儿院枢 (0:04)|MP Loc Orphanage Hub]]>><<pass 4>><</link>>
+<<socialiseicon>><<link [[返回孤儿院总枢 (0:04)|MP Loc Orphanage Hub]]>><<pass 4>><</link>>
 
 :: MP Ledger Ending Seize [nobr]
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+<<set _tierMax to 0>>
+<<if $mpSafehouses>><<set _tierMax to Math.max(($mpSafehouses.docks.tier or 0), ($mpSafehouses.orphanage.tier or 0), ($mpSafehouses.temple.tier or 0), ($mpSafehouses.highstreet.tier or 0), ($mpSafehouses.forest.tier or 0), ($mpSafehouses.school.tier or 0))>><</if>>
+<<set _canSeize to ($mpLedger.outcome is "seize") or (_protCnt gte 1) or (_tierMax gte 1)>>
+<<set _endLocked to ($mpLedgerEnded and $mpLedger.outcome isnt "seize")>>
+院长室的门缝里透出一线灯光，那本原始底账就压在写字台抽屉的最底层。罗宾守在楼梯口，替你把风，也替你数着巡夜的梆子声。
+<br><br>
+<<if _endLocked>>
+页脚已经被<<if $mpLedger.outcome is "clear">>「结清」<<elseif $mpLedger.outcome is "escape">>「转移」<<else>>别的结局<</if>>占住，再翻也改不回来。
+<<elseif !_canSeize>>
+保护栏还是空的，也没打通孤儿院安全屋，现在夺不回这本账。
+<<else>>
 <<set _firstSeize to ($mpLedger.outcome isnt "seize")>>
-<<set $mpLedger.outcome to "seize">><<set $mpLedger.overdue to 0>>
+<<set $mpLedgerEnded to 1>><<set $mpLedger.outcome to "seize">><<set $mpLedger.overdue to 0>>
 <<if _firstSeize>>
-<<if !$mpWorldOrphanageOutcome>><<set $mpWorldOrphanageOutcome to "sheltered">><</if>>
+<<set $mpWorldOrphanageOutcome to "sheltered">>
 <<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 21>>
 <<set $mpAlert to Math.min(100, ($mpAlert or 0) + 6)>>
 <<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 4)>><</if>>
 <</if>>
-你没有等贝利来收账。夜里，你带着几个信得过的人堵住账房的后门，把正在誊抄底册的账房先生按在桌前。贝利的两名打手闻声赶来，被你们在狭窄的过道里截住；短棍与椅腿撞在墙上，账袋摔开，里面的收据、汇票和黑皮底册散了一地。你把那本底册揣进怀里，又把打手名册上属于孤儿院的那几页撕下来。
-<br><br>
-【世界回响】：孤儿院 <<if $mpWorldOrphanageOutcome is "mutualaid">>「互助工坊」照常开工，只是门口多了两道暗哨。<<elseif $mpWorldOrphanageOutcome is "sheltered">>「静谧庇护」的门窗整夜锁着，名单被拆成三份藏进不同楼层。<<else>>院里的灯熄得很早，谁也没有多问。<</if>>｜灰雾暗市 <<mpWorldMarketOpen>>｜贝利下次核账 <<if $mpBaileyBiweeklyNextDay>>已推后到第 <<print $mpBaileyBiweeklyNextDay>> 日<<else>>暂时没有下文<</if>>｜街头警戒 <<print ($mpAlert or 0)>>
-<br><br>
-底册上的暗线比你想的更长：哪家当铺替贝利洗钱，哪条船替他运私货，哪几个打手的工钱走的是雷米农场的账。你没有把整本册子公开，只把几页副本送到该看的人手里。第二天，两个领头的黑手套没有出现在孤儿院门口；他们的名字被写在副本上，工钱却再也领不出来。
-<br><br>
-雷米下次夜袭农场时，贝利那一组打手推说人手不够，没有出车。不是他们忽然心软，而是工钱册落在你手里，谁也不想在这种时候替贝利卖命。农场的守夜人因此少面对一组最凶狠的对手；代价是街面上的警戒更紧，贝利把剩下的眼线全撒了出去，想找回那本底册。
-<br><br>
-你把底册里的名字逐个抄给罗宾，让他记住哪些人欠的是贝利的私账，哪些人只是被顺手写进去的。抄到后半夜，他忽然说，原来院里少掉的每一个孩子，在纸上都有一行对应的数目。你们都没有再说话，只把灯芯剪短，让火苗小一点。
-<br><br>
-你把底册藏进煤房最深处的铁匣，又在匣外堆了三层煤块。罗宾问要不要烧掉，你摇头：烧掉只能解一夜的气，留着才能让那些名字在需要的时候开口。楼上的孩子已经睡了，走廊尽头偶尔传来翻身的响动；这一次，门外没有黑手套的脚步声。
+你趁夜把原始底账连同假印信一并夺回，拆成三份藏进夹墙。没了底册，贝利再没法随便给孩子安上连坐利钱，门外却多了几道认得你的暗哨。
+<</if>>
 <br><br>
 <<getouticon>><<link [[返回账本总枢 (0:04)|MP Ledger Hub]]>><<pass 4>><<stress -6>><</link>><br>
-<<investigateicon>><<link [[返回孤儿院枢 (0:04)|MP Loc Orphanage Hub]]>><<pass 4>><</link>>
+<<investigateicon>><<link [[返回孤儿院总枢 (0:04)|MP Loc Orphanage Hub]]>><<pass 4>><</link>>
 
 :: MP Ledger Ending Escape [nobr]
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _tierMax to 0>>
+<<if $mpSafehouses>><<set _tierMax to Math.max(($mpSafehouses.docks.tier or 0), ($mpSafehouses.orphanage.tier or 0), ($mpSafehouses.temple.tier or 0), ($mpSafehouses.highstreet.tier or 0), ($mpSafehouses.forest.tier or 0), ($mpSafehouses.school.tier or 0))>><</if>>
+<<set _canEscape to ($mpLedger.outcome is "escape") or (_tierMax gte 1)>>
+<<set _endLocked to ($mpLedgerEnded and $mpLedger.outcome isnt "escape")>>
+煤房暗门后压着一张手绘的城图，图钉标出六处能过夜的窝，暗渠用炭条连成一条线。罗宾把最小的孩子抱在膝上，等你决定要不要走这条线。
+<br><br>
+<<if _endLocked>>
+页脚已经被<<if $mpLedger.outcome is "clear">>「结清」<<elseif $mpLedger.outcome is "seize">>「夺账」<<else>>别的结局<</if>>占住，再翻也改不回来。
+<<elseif !_canEscape>>
+六处窝还都是空壳，没有一处能关门过夜，孩子们搬不出去。
+<<else>>
 <<set _firstEscape to ($mpLedger.outcome isnt "escape")>>
-<<set $mpLedger.outcome to "escape">><<set $mpLedger.overdue to 0>>
+<<set $mpLedgerEnded to 1>><<set $mpLedger.outcome to "escape">><<set $mpLedger.overdue to 0>>
 <<if _firstEscape>>
-<<if !$mpWorldOrphanageOutcome>><<set $mpWorldOrphanageOutcome to "sheltered">><</if>>
+<<set $mpWorldOrphanageOutcome to "sheltered">>
 <<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 35>>
 <<set $mpAlert to Math.max(0, ($mpAlert or 0) - 6)>>
 <<if $mpSafehouses and $mpSafehouses.orphanage>><<set $mpSafehouses.orphanage.risk to Math.max(0, ($mpSafehouses.orphanage.risk or 20) - 10)>><</if>>
 <</if>>
-天还没亮，煤房的暗门就被推开了。你把黑账拆成三份：一份抄着名字，一份抄着暗线，一份只留空白的账页。孩子们分成三队，跟着熟悉暗道的人往码头、高街与神殿的安全屋走；托比走在中间，皮普背着装干粮的布袋，克拉拉把最后一页名单缝进衣襟。没有人点灯，脚步声被煤渣和湿土吞掉。
+借着暗道，你把名单上的孩子分批转移到旧港与森林的据点，抹去原账上的名字。贝利翻开空栏时无处抓人，只是农庄土路上多了一组黑手套。
+<</if>>
 <br><br>
-【世界回响】：孤儿院 <<if $mpWorldOrphanageOutcome is "mutualaid">>「互助工坊」照常开门，只是名单上少了几个能被贝利随手点到的名字。<<elseif $mpWorldOrphanageOutcome is "sheltered">>「静谧庇护」的窗帘低垂，院里的人按新规矩轮班守夜。<<else>>院里的灯按更次明灭，谁也不再单独出门。<</if>>｜灰雾暗市 <<mpWorldMarketOpen>>｜贝利下次核账 <<if $mpBaileyBiweeklyNextDay>>已推后到第 <<print $mpBaileyBiweeklyNextDay>> 日<<else>>暂时没有下文<</if>>｜街头警戒 <<print ($mpAlert or 0)>>
+<<getouticon>><<link [[回账本总枢 (0:04)|MP Ledger Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<sneakicon>><<link [[前往安全屋总枢 (0:04)|MP Safehouse Network Hub]]>><<pass 4>><</link>>
+
+:: MP Ledger Punish Hub [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+煤房暗门内另有一册连坐问责簿，纸页按保护栏的名字分成四档：零护时来的是催账领班，一护时来搜房的是账房，二护时会在街口截车，三护齐全则由贝利亲自带着总账房上门。如今保护栏<<if _protCnt is 3>>三个名字都写定了<<elseif _protCnt gt 0>>写进了 <<print _protCnt>> 个名字<<else>>还空着<</if>>。<<if $mpWorldLedgerPunishLocked>>总账终裁已落印，不再派人搜门。<<else>>门外脚步声渐近，必须按档应对。<</if>>
 <br><br>
-贝利来核账时，院长室里只剩一本被翻乱的旧册。他挨个楼层点名，点到的孩子都在，可名字背后的保护栏已经空了；他派去打手常去的几处窝点，也只找到冷灶和搬空的木箱。连着扑空两回，他不再把力气花在院里，转头去催郊外的账。
+<<getouticon>><<link [[返回交割 (0:02)|MP Ledger Pay]]>><<pass 2>><</link>><br>
+<<set _punishLabel to "">><<set _punishTarget to "">><<set _punishMin to 0>>
+<<if _protCnt is 0>><<set _punishLabel to "应付逾期催账 (0:10)">><<set _punishTarget to "MP Ledger Punish Overdue 1">><<set _punishMin to 10>><</if>>
+<<if _protCnt is 1>><<set _punishLabel to "应对夺账搜房 (0:10)">><<set _punishTarget to "MP Ledger Punish Seize 1">><<set _punishMin to 10>><</if>>
+<<if _protCnt is 2>><<set _punishLabel to "应对转移截车 (0:10)">><<set _punishTarget to "MP Ledger Punish Transfer 1">><<set _punishMin to 10>><</if>>
+<<if _protCnt gte 3>><<set _punishLabel to "应对总账清算 (0:12)">><<set _punishTarget to "MP Ledger Punish Liquidate 1">><<set _punishMin to 12>><</if>>
+<<if !$mpWorldLedgerPunishLocked>><<mpcalculateicon>><<link _punishLabel>><<pass _punishMin>><<goto _punishTarget>><</link>><br><</if>>
+<<sneakicon>><<link [[转入暗道转移终局 (0:12)|MP Ledger Ending Escape]]>><<pass 12>><</link>>
+:: MP Ledger Punish Overdue 1 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+保护栏还空着，逾期栏又添了红杠，贝利手下的催账领班便带着铁锁闯进后厨，说要先搬走做饭的铁釜和过冬的煤块抵一抵账。他没有带账本，只认你肯不肯当场拿出凭据。<<if $mpGuildStanding and ($mpGuildStanding.wageMod or 100) gte 110>>行会的配给车刚送来一车备用木炭，领班看见门外的车印，说话略微收敛了半分。<<else>>后院空空荡荡，领班把铁锁敲得山响。<</if>>
 <br><br>
-于是农场那边更紧了。雷米下次夜袭时，贝利把从孤儿院撤出来的黑手套塞进了农场的土路，专门堵谷仓与麦田之间的缺口。守夜的人会多面对一组熟悉地形的打手，火光也可能比往年更早亮起。你护住了院里的名字，却把一部分压力推到了郊外；这笔账没有真正消失，只是换了一个地方记。
+<<getouticon>><<link [[退回问责 (0:02)|MP Ledger Punish Hub]]>><<pass 2>><</link>><br>
+<<mpbargainicon>><<link [[据理核对旧收据 (0:12)|MP Ledger Punish Overdue 2]]>><<pass 12>><<if ($maths or 0) gte 200 or ($mpGuildStanding and ($mpGuildStanding.wageMod or 100) gte 110)>><<set $mpLedgerPChoice to "ok">><<else>><<set $mpLedgerPChoice to "fail">><</if>><</link>><br>
+<<walkicon>><<link [[以劳役代抵封灶费 (0:14)|MP Ledger Punish Overdue 2]]>><<pass 14>><<set $mpLedgerPChoice to "labor">><</link>>
+
+:: MP Ledger Punish Overdue 2 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set $mpLedgerPunishDone_overdue to 1>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+<<if $mpLedgerPChoice is "ok">>
+<<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>>
+<<set $mpAlert to Math.min(100, ($mpAlert or 0) + 2)>>
+<<mpalertgain "催账领班记住了你的脸">>
+你把前面核销过的收据拍在灶台上，指出那笔红杠是重记的息钱。领班骂骂咧咧收起铁锁，后厨大锅和煤堆保住了，分文未留。
+<<elseif $mpLedgerPChoice is "labor">>
+<<set $mpLedger.overdue to Math.max(0, ($mpLedger.overdue or 0) - 1)>>
+<<tiredness 4>><<pain 2>><<stress 1>>
+你替后厨扛了整晚的卸煤重活，手掌磨出厚茧，总算让领班松口划掉了这一笔逾期红杠。铁锅留在了灶上，但这趟顶罚没有任何工钱。
+<<else>>
+<<pain 3>><<stress 3>><<tiredness 2>><<mpLedgerLoseProtect>>
+旧收据墨迹洇糊，领班推开你拎走半袋干煤充作滞纳金。你挡在灶前挨了两棍，虽护住了铁釜，名册却被翻走一页。
+<</if>>
+储煤间的煤油灯火苗轻轻跳动，外头走廊的木地板偶尔传来一声轻响。<br><br>
+<<getouticon>><<link [[返回问责 (0:02)|MP Ledger Punish Hub]]>><<pass 2>><</link>><br>
+<<walkicon>><<link [[转入煤房歇息 (0:06)|MP Ledger Punish Soft End]]>><<pass 6>><</link>><br>
+<<if _protCnt gte 1>><<mpfist2icon>><<link [[查一护夺账惩罚线 (0:08)|MP Ledger Punish Seize 1]]>><<pass 8>><</link>><</if>>
+
+:: MP Ledger Punish Seize 1 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+保护栏写进第一个名字后，贝利手下的账房便带着两名黑手套摸进储煤间，想搜走你压在煤堆下的那本连坐副册。他们没有敲门，只把楼梯口的灯吹灭了。<<if $mpSafehouses and $mpSafehouses.orphanage and ($mpSafehouses.orphanage.tier or 0) gte 1>>孤儿院安全屋的暗格早已加固，煤灰下面多了一层假底板。<<else>>煤房还没来得及修暗格，副册就塞在松动的砖缝里。<</if>>
 <br><br>
-安全屋那边传回消息时，天已经亮了：三队人都到了，皮普在码头睡了第一个整觉，克拉拉把名单锁进高街的暗匣，托比在神殿的静室里处理腿上的旧伤。你把这些话一一记下，才发现自己一夜没有坐下。院里的钟敲了七下，厨房的烟囱冒出第一缕白烟。
+<<getouticon>><<link [[退回问责 (0:02)|MP Ledger Punish Hub]]>><<pass 2>><</link>><br>
+<<sneakicon>><<link [[趁黑转移真账册 (0:12)|MP Ledger Punish Seize 2]]>><<pass 12>><<if ($skulduggery or 0) gte 210 or ($mpSafehouses and $mpSafehouses.orphanage and ($mpSafehouses.orphanage.tier or 0) gte 1)>><<set $mpLedgerPChoice to "ok">><<else>><<set $mpLedgerPChoice to "fail">><</if>><</link>><br>
+<<mpfist2icon>><<link [[在窄道硬拦黑手套 (0:14)|MP Ledger Punish Seize 2]]>><<pass 14>><<set $mpLedgerPChoice to "fight">><</link>>
+
+:: MP Ledger Punish Seize 2 [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set $mpLedgerPunishDone_seize to 1>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+<<if $mpLedgerPChoice is "ok">>
+<<set $mpAlert to Math.min(100, ($mpAlert or 0) + 3)>>
+<<mpalertgain "账房听见了烟道里的响动">>
+<<tiredness 2>>
+你摸黑将真副册塞进排烟道，只留一本抄满废柴数目的旧簿子在砖缝里。账房翻了半宿只拿到废纸，保护栏里的名字一个没漏，只是外头的眼线盯得更紧了，这趟周旋分文未得。
+<<else>>
+<<pain 4>><<stress 3>><<tiredness 3>><<mpLedgerLoseProtect>>
+<<set $mpAlert to Math.min(100, ($mpAlert or 0) + 2)>>
+黑手套的木棍在窄道里擦过你的肩头，你死死抵住煤房内门，让罗宾趁乱把真账册递了出去。门板踢裂了，一个名字还是被他们记住了，煤房里只剩冷风。
+<</if>>
 <br><br>
-你把最后一只空木箱推回墙角，拍了拍手上的煤灰。暗道那头的门已经重新砌好，从外面看只是一堵受潮的砖墙。楼上的孩子还在睡，罗宾守在楼梯口，听见你上来才让开半步。你们都没有说话——有些胜利不能敲钟，只能把脚步放轻。
+<<getouticon>><<link [[返回问责 (0:02)|MP Ledger Punish Hub]]>><<pass 2>><</link>><br>
+<<walkicon>><<link [[退入煤房包扎 (0:06)|MP Ledger Punish Soft End]]>><<pass 6>><</link>><br>
+<<if _protCnt gte 2>><<sneakicon>><<link [[转查二护转移支线 (0:08)|MP Ledger Punish Transfer 1]]>><<pass 8>><</link>><</if>>
+
+:: MP Ledger Punish Night [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>>
+<<set _overdue to ($mpLedger.overdue or 0)>>
+<<set _ally to ($mpLedgerNightAlly or 0)>><<set $mpLedgerNightAlly to 0>>
+<<set _takenNow to (_overdue gte 3 and !($mpLedger.childTaken or 0))>>
+<<if _takenNow>><<set $mpLedger.childTaken to 1>><<mpLedgerLoseProtect>><<set $mpWorldLedgerLoss to Math.max(1, ($mpWorldLedgerLoss or 0))>><<set _protCnt to (($mpLedger.protected[0] or 0) + ($mpLedger.protected[1] or 0) + ($mpLedger.protected[2] or 0))>><</if>>
+<<set $mpLedger.patrolPending to 0>>
+<<set $daily to ($daily or {})>><<set $daily.mpLedgerNight to 1>>
+<<set $mpLedger.lastNightDay to ((window.Time && Time.days) or 0)>>
+后半夜，门厅的铜环被叩了三下，不急不缓，像早知屋里的人醒着。罗宾先醒，把最小的孩子往毯子里按了按，没敢点灯。
 <br><br>
-<<getouticon>><<link [[返回账本总枢 (0:04)|MP Ledger Hub]]>><<pass 4>><<stress -6>><</link>><br>
-<<sneakicon>><<link [[前往安全屋网 (0:04)|MP Safehouse Network Hub]]>><<pass 4>><</link>>
+<<if _takenNow>>
+楼下的黑手套已经念到一个名字，孩子被人从床上抱走，只留下一只空枕。你冲下楼时，门已经合上。
+<<else>>
+催账领班站在门槛外，摊开一张红杠密布的账单，说今晚要么见钱，要么见名字。
+<</if>>
+<br><br>
+<<getouticon>><<link [[关门装睡 (0:02)|MP Loc Orphanage Sleep]]>><<pass 2>><<if !_takenNow>><<set $mpLedger.overdue to ($mpLedger.overdue or 0) + 1>><<stress 2>><</if>><</link>><br>
+<<if _takenNow>>
+<<link [[追到巷口去 (0:06)|MP Ledger Punish Night After]]>><<pass 6>><<set $mpLedgerNightResult to "taken">><<stress 3>><</link>>
+<<else>>
+<<mpbargainicon>><<link [[交出随身钱袋 (0:06)|MP Ledger Punish Night After]]>><<pass 6>><<set _cost to Math.min(($money or 0), 150 + _overdue * 100)>><<if ($money or 0) gte 50>><<set $money to Math.max(0, ($money or 0) - _cost)>><<set $mpLedger.overdue to Math.max(0, _overdue - 1)>><<set $mpLedgerNightResult to "paid">><<stress 3>><<else>><<mpLedgerLoseProtect>><<set $mpLedgerNightResult to "lost">><<stress 5>><<trauma 2>><</if>><</link>><br>
+<<sneakicon>><<link [[把名单藏进煤堆 (0:08)|MP Ledger Punish Night After]]>><<pass 8>><<if ($skulduggery or 0) gte (220 - _ally * 40) or ($willpower or 0) gte (320 - _ally * 40)>><<set $mpLedgerNightResult to "hidden">><<set $mpAlert to Math.min(100, ($mpAlert or 0) + 2)>><<stress 3>><<else>><<mpLedgerLoseProtect>><<set $mpLedgerNightResult to "lost">><<stress 5>><<trauma 2>><</if>><</link>><br>
+<<fisticon>><<link [[叫醒大孩子一起挡 (0:10)|MP Ledger Punish Night After]]>><<pass 10>><<if _protCnt gte 1 or _ally is 1>><<set $mpLedgerNightResult to "fight">><<stress 2>><<tiredness 2>><<else>><<mpLedgerLoseProtect>><<set $mpLedgerNightResult to "lost">><<stress 5>><<pain 2>><<trauma 2>><</if>><</link>>
+<</if>>
+
+:: MP Ledger Punish Night After [nobr]
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<mpLedgerInit>>
+<<set _result to ($mpLedgerNightResult or "")>>
+<<set $mpLedgerNightAlly to 0>>
+后半夜的声响终于停了，煤油灯只剩下一点火苗。罗宾把门闩重新插好，孩子们挤在一起，谁也没有再睡，只等天亮。
+<br><br>
+<<if _result is "paid">>
+你把钱袋递出去，领班数了两遍才收手。
+<<elseif _result is "hidden">>
+名单塞进煤堆深处，他们翻了一圈什么也没找到。
+<<elseif _result is "fight">>
+大孩子们堵在楼梯口，领班骂了几句，终究退了出去。
+<<elseif _result is "taken">>
+你追到巷口，只看见一辆板车的影子，孩子没有回来。
+<<else>>
+他们从保护栏里点走一个名字，门在身后合上。
+<</if>>
+<br><br>
+<<getouticon>><<link [[回床铺去 (0:04)|MP Loc Orphanage Sleep]]>><<pass 4>><<stress -2>><</link>><br>
+<<mpscaleicon>><<link [[回账本总枢 (0:04)|MP Ledger Hub]]>><<pass 4>><</link>>

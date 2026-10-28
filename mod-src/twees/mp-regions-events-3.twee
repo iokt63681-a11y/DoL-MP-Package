@@ -1,194 +1,396 @@
-:: MP Region Glasshouse TerraceSundialLetter [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-玻璃穹顶露台东侧的石雕日晷盘下压着一只防水羊皮信封，晷针可以左右扳动。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你扳动晷针，日晷盘下露出信封，封口火漆印着一枚小望远镜。
+:: MP Region Blackiron Platform Chain [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Blackiron Platform Chain"] to 1>><<set $mpIronChainDone to ($mpIronChainDone or {})>><<if $mpIronLamp is undefined>><<set $mpIronLamp to 2>><</if>><<set $mpIronLamp to Math.clamp($mpIronLamp, 0, 5)>>
+废站台的七号道岔结着一层煤油壳，扳道工蹲在扳道器旁，把马灯往地上一搁：「枕木刚洒过油，别踩滑了，巡夜的车马上进站。」说完他拎灯往信号棚去了。信号灯在闷罐车缓冲器间一明一暗，止冲挡下压着半截油麻布。<<if ($mpIronLamp or 0) lte 0>>你手里那盏灯只剩一点暗红火头，道岔夹缝全埋在黑影里。<<else>>灯圈扫过枕木缝，照见一截铁路怀表和股道边的信号旗筒。<</if>><<if ($mpIronDepth or 0) gte 2>>你已绕到站台内侧，两侧车皮把头顶的夜色夹成一条窄缝。<</if>>
 <br><br>
-<<investigateicon>><<link [[抽出信封 (0:05)|MP Region Glasshouse Dome]]>><<pass 5>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回黑铁池 (0:03)|MP Region Pool Blackiron]]>><<pass 3>><<set $mpIronDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[拆开信封 (0:06)|MP Region Glasshouse Dome]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_glasshouse_terracesundialletter_reward")>><<money 1104>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_glasshouse_terracesundialletter")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[拆开信封 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拆开信封">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<if ($athletics or 0) gte 260 or ($skulduggery or 0) gte 240>>
+<<mplampicon>><<link [[跨道岔上站台 (0:06)|MP Region Blackiron Platform Booth]]>><<pass 6>><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[踩湿滑枕木硬闯 (0:06)|MP Region Blackiron Platform Slip]]>><<pass 6>><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<pain 2>><<stress 4>><<tiredness 2>><<lowerwet 30>><</link>>
+<</if>>
 <br>
-<<getouticon>><<link [[返回温室 (0:02)|MP Region Glasshouse Manor]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[顺碎石路撤回货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Glasshouse IceCellarBrassCan [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-地下酿造室南角的石砌冰窖里存着几块未融的坚冰，冰块下方冻着一只密封的黄铜罐。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你凿开罐周的冰，铜罐封盖下压着一圈麻布，罐身刻着酿造批号。
+:: MP Region Blackiron Platform Slip [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+你刚踩上枕木，脚下那层煤油壳就把鞋底带了出去，人朝道碴上一坐。铁皮哨子贴着耳朵炸开，扳道工提着马灯从信号棚冲来，灯罩一掀：「谁让你上股道的？下去！」他拿灯杆往站台外一指，你只能扶着车皮往后退。<<if ($mpIronLamp or 0) lte 0>>灯芯这时彻底暗了，你摸黑踩着道碴，鞋帮里灌进不少碎石子。<<else>>提灯护在胸前没灭，可光柱晃得扳道工更不耐烦。<</if>><<if ($mpIronAlert or 0) gte 6>>信号塔的探照灯横着扫过股道，远处岗哨也吹起了呼应哨。<</if>>
 <br><br>
-<<investigateicon>><<link [[敲薄冰面 (0:05)|MP Region Glasshouse Cellar]]>><<pass 5>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[沿股道原路退 (0:05)|MP Region Pool Blackiron]]>><<pass 5>><<set $mpIronDepth to 0>><<stress 2>><</link>>
 <br>
-<<mplockpickicon>><<if ($skulduggery or 0) gte 250>><<link [[撬开封盖 (0:07)|MP Region Glasshouse Cellar]]>><<pass 7>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_glasshouse_icecellarbrasscan_reward")>><<money 452>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_glasshouse_icecellarbrasscan")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[撬开封盖 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撬开封盖">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
-<br>
-<<walkicon>><<link [[返回温室 (0:03)|MP Region Glasshouse Manor]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpsneakicon>><<link [[钻车底转向架险撤 (0:07)|MP Region Blackiron Yard]]>><<pass 7>><<set $mpIronDepth to 0>><<tiredness 2>><<stress 3>><</link>>
 
-:: MP Region Blackiron WaterTowerToolbag [nobr]
-<<set $outside to 1>><<set $location to "elk">>
-<<effects>>
-废弃调车场西端的给水塔铁梯下拴着一只防水工具包，水塔阀门正一滴滴往下漏水。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在往下漏水表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你解开铁梯下的工具包，扳手间夹着一只油布小袋，袋里是几枚零钱。
+:: MP Region Blackiron Platform Booth [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<set $mpIronChainDone to ($mpIronChainDone or {})>>
+岗亭的铁皮门虚掩着，架上搁一壶信号煤油，记账木牌插着黄铜挂锁钥匙，旗筒里卷着调车时刻表。<<if $mpIronChainDone["platform"]>>岗亭被翻过一遍，木牌歪在钉子上，破窗外只剩铁轨的风声。<<else>>巡道工的脚步还在远处，你只能挑一样带走；可钥匙卡在木牌缝里，硬拔会碰响铁皮警铃。<</if>>
 <br><br>
-<<investigateicon>><<link [[解开工具包 (0:05)|MP Region Blackiron Siding]]>><<pass 5>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回黑铁池 (0:04)|MP Region Pool Blackiron]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[解开油布袋 (0:06)|MP Region Blackiron Siding]]>><<pass 6>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_blackiron_watertowertoolbag_reward")>><<money 544>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_blackiron_watertowertoolbag")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[解开油布袋 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "解开油布袋">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<if !$mpIronChainDone["platform"]>>
+<<mplampicon>><<link [[灌取信号灯煤油 (0:06)|MP Region Blackiron Platform Exit]]>><<pass 6>><<set $mpIronPlatPick to "oil">><<set $mpIronLoot_Oil to 1>><<set $mpIronLamp to Math.min(5, ($mpIronLamp or 0) + 2)>><<stress -2>><<set $mpIronChainDone["platform"] to 1>><</link>>
 <br>
-<<getouticon>><<link [[返回货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<mplockpickicon>><<link [[拔下铜钥 (0:08)|MP Region Blackiron Platform Exit]]>><<pass 8>><<set $mpIronPlatPick to "key">><<set $mpIronAlert to Math.min(10, ($mpIronAlert or 0) + 2)>><<set $mpIronPadlockKey to 1>><<skulduggery 2>><<stress -2>><<set $mpIronChainDone["platform"] to 1>><</link>>
+<br>
+<<mpmapicon>><<link [[抽走旗筒调车图表 (0:06)|MP Region Blackiron Platform Exit]]>><<pass 6>><<set $mpIronPlatPick to "chart">><<set $mpIronSwitchChart to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["blackiron_switch_chart"] to 1>><<stress -2>><<set $mpIronChainDone["platform"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[退回黑铁货站 (0:05)|MP Region Blackiron Yard]]>><<pass 5>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Blackiron PriedWeaponLocker [nobr]
-<<set $outside to 1>><<set $location to "elk">>
-<<effects>>
-三号装甲货车中段的钢铁武器柜锁头已经被砸坏，柜门被一根铁撬棍别住。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你抽出别门的撬棍，柜内枪架已经空了，底层抽屉却还锁着一只铁盒。
+:: MP Region Blackiron Platform Exit [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+你从岗亭侧门闪出，煤灰味的夜风顺着股道灌过来，枕木主道与止冲挡下的排水沟各通向一头。<<if $mpIronPlatPick is "oil">>提灯添满了油，暖黄的光贴着道碴往前铺。<<elseif $mpIronPlatPick is "key">>黄铜钥匙在怀里压出一点凉意，木牌还在身后轻晃。<<else>>调车时刻表折好塞进衣袋，各股道的换岗空当你已记熟。<</if>><<if ($mpIronLamp or 0) lte 0>>灯油见了底，股道之间黑成一片。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>裤脚沾着煤泥，风一吹凉到骨头。<</if>><<if ($mpIronAlert or 0) gte 6>>道岔口晃来两盏风灯，护卫正拦着人盘问。<</if>>
 <br><br>
-<<mplockpickicon>><<link [[撬开柜门 (0:06)|MP Region Blackiron Armored]]>><<pass 6>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[沿股道原路回 (0:05)|MP Region Pool Blackiron]]>><<pass 5>><<set $mpIronDepth to 0>><<if ($mpIronAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpIronAlert to Math.max(0, ($mpIronAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[撬开铁盒 (0:07)|MP Region Blackiron Armored]]>><<pass 7>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_blackiron_priedweaponlocker_reward")>><<money 1023>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_blackiron_priedweaponlocker")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[撬开铁盒 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撬开铁盒">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<mpropeicon>><<link [[顺止冲挡暗沟下撤 (0:07)|MP Region Pool Blackiron]]>><<pass 7>><<set $mpIronDepth to 0>><<tiredness 2>><<if ($mpIronLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
 <br>
-<<getouticon>><<link [[返回货站 (0:03)|MP Region Blackiron Yard]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[走回货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Blackiron LouverAnchorFlask [nobr]
-<<set $outside to 1>><<set $location to "elk">>
-<<effects>>
-装甲货车尾部的通风百叶窗内侧卡着一只锡制扁酒壶，壶身上刻着海锚标记。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你从百叶窗内侧抽出酒壶，壶里还剩一口烈酒，壶底刻着一串船号。
+:: MP Region Blackiron Armored Chain [nobr]
+<<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Blackiron Armored Chain"] to 1>><<set $mpIronChainDone to ($mpIronChainDone or {})>>
+北侧调车场里，脱轨煤车斜顶着三号装甲货车，焦黑的煤堆上盖着积灰的防水布，铆钉钢门被撬开两指宽的缝。<<if $mpIronSwitchChart>>站台抄来的调车时刻表让你掐准了换岗的空档，巡逻队刚拐过车尾。<<else>>两列车皮之间横着防盗铁链，脚下一踩就是松煤，翻过去十有八九要惊动人。<</if>><<if ($mpIronDepth or 0) gte 2>>煤灰呛得人睁不开眼，你已贴到军械车股道深处。<</if>>
 <br><br>
-<<mpdrinkicon>><<link [[抽出酒壶 (0:05)|MP Region Blackiron Armored]]>><<pass 5>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回黑铁池 (0:03)|MP Region Pool Blackiron]]>><<pass 3>><<set $mpIronDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[旋开壶底 (0:07)|MP Region Blackiron Armored]]>><<pass 7>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_blackiron_louveranchorflask_reward")>><<money 415>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_blackiron_louveranchorflask")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[旋开壶底 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "旋开壶底">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<if ($physique or 10000) gte 11000 or ($skulduggery or 0) gte 260 or $mpIronSwitchChart>>
+<<mpcarryicon>><<link [[掀开煤布钻车厢 (0:07)|MP Region Blackiron Armored Hold]]>><<pass 7>><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<set $mpIronLamp to Math.max(0, ($mpIronLamp or 0) - 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[踩松散煤堆爬 (0:07)|MP Region Blackiron Armored Collapse]]>><<pass 7>><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<upperwet 30>><<lowerwet 40>><<pain 2>><<stress 5>><<tiredness 3>><</link>>
+<</if>>
 <br>
-<<getouticon>><<link [[返回货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[顺边道回黑铁货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Blackiron StoppedClockKey [nobr]
-<<set $outside to 1>><<set $location to "elk">>
-<<effects>>
-信号塔值班室的挂钟停在十一点一刻，钟摆后方的木背板上插着一把黄铜小钥匙。
-<<mpAmbient>><<if Weather.isFreezing>>薄薄的霜花挂在铜小钥匙外侧。<<else>>空气里带着微温。<</if>>
-你从钟摆后拔出钥匙，背板上还钉着一张停摆当日的值班签。
+:: MP Region Blackiron Armored Collapse [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+松煤在脚下塌了半边，你整个人滑到车皮与道碴的夹缝里，铁撬棍当啷一声磕在车轴上。还没站稳，巡夜的哨子就从股道尽头尖啸起来，两道马灯飞快逼近，前方道岔已经被横杆封死。你只能伏低身子，从车底的空隙里往外挪。<<if ($mpIronLamp or 0) lte 0>>灯在滑落时灭了，车底黑得只能靠手指摸着钢梁往前。<<else>>你把灯护在身下，火苗缩成豆大一点，勉强照见枕木。<</if>><<if ($mpIronAlert or 0) gte 6>>警哨一声接一声，封道的横杆后已经站上了人。<</if>>
 <br><br>
-<<investigateicon>><<link [[拔出钥匙 (0:07)|MP Region Blackiron Signal]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[钻车底退回池口 (0:05)|MP Region Pool Blackiron]]>><<pass 5>><<set $mpIronDepth to 0>><<stress 2>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[取下值班签 (0:07)|MP Region Blackiron Signal]]>><<pass 7>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_blackiron_stoppedclockkey_reward")>><<money 566>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_blackiron_stoppedclockkey")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取下值班签 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取下值班签">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回货站 (0:03)|MP Region Blackiron Yard]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpsneakicon>><<link [[贴住车轴爬向货站 (0:07)|MP Region Blackiron Yard]]>><<pass 7>><<set $mpIronDepth to 0>><<tiredness 2>><<stress 3>><</link>>
 
-:: MP Region Blackiron LeadSealedOakBarrel [nobr]
-<<set $outside to 1>><<set $location to "elk">>
-<<effects>>
-地下走私月台西侧的起重滑轮下吊着一只密封的橡木桶，桶箍上打着三道铅封。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你转动吊桶，三道铅封中有一道已经裂开，桶缝里透出干燥的纸张气味。
+:: MP Region Blackiron Armored Hold [nobr]
+<<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<set $mpIronChainDone to ($mpIronChainDone or {})>>
+车厢里闷得发潮，车轴铁网篮中卡着一只沉重的军械木匣，往外拖要蹭着钢板使劲；押运员的折叠床下则挂着一只轻便帆布包。<<if $mpIronChainDone["armored"]>>木匣和帆布包都被你动过，只剩铁锈和煤灰的味道。<<elseif ($mpIronLamp or 0) lte 0>>灯油烧干了，封闭的钢厢里伸手不见五指，搬重物全凭摸索。<</if>>
 <br><br>
-<<investigateicon>><<link [[转动木桶 (0:04)|MP Region Blackiron Platform]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回黑铁池 (0:04)|MP Region Pool Blackiron]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 <br>
-<<mplockpickicon>><<if ($skulduggery or 0) gte 250>><<link [[撬开铅封 (0:07)|MP Region Blackiron Platform]]>><<pass 7>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_blackiron_leadsealedoakbarrel_reward")>><<money 871>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_blackiron_leadsealedoakbarrel")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[撬开铅封 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撬开铅封">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<if !$mpIronChainDone["armored"]>>
+<<mpcarryicon>><<link [[拖出沉重军械木匣 (0:09)|MP Region Blackiron Armored Exit]]>><<pass 9>><<set $mpIronArmorPick to "heavy">><<set $mpIronAlert to Math.min(10, ($mpIronAlert or 0) + 3)>><<tiredness 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("blackiron_chain_armored_heavy")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 350>><<stress -2>><</if>><<set $mpIronChainDone["armored"] to 1>><</link>>
 <br>
-<<walkicon>><<link [[返回货站 (0:03)|MP Region Blackiron Yard]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpreadicon>><<link [[取走床下公文包 (0:06)|MP Region Blackiron Armored Exit]]>><<pass 6>><<set $mpIronArmorPick to "light">><<set $mpIronAlert to Math.min(10, ($mpIronAlert or 0) + 1)>><<if !$mpIronArmorLog>><<set $mpIronArmorLog to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["blackiron_armored_manifest"] to 1>><<stress -3>><<willpower 1>><</if>><<set $mpIronChainDone["armored"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[撤出货车 (0:05)|MP Region Blackiron Yard]]>><<pass 5>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Druid CrouchingStoneHilt [nobr]
-<<set $outside to 1>><<set $location to "forest">>
-<<effects>>
-迷雾石柱群西南角的一块卧牛石下压着半截青铜剑柄，剑格上镶着绿松石。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你挪开卧牛石，剑柄下的泥土里还埋着半截剑鞘和一枚绿松石片。
+:: MP Region Blackiron Armored Exit [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+车场外传来机车低沉的远鸣，风卷煤屑往车厢缝里灌。车门主道和车底检修活板各是一条路。<<if $mpIronArmorPick is "heavy">>木匣压在肩上，你跳下踏板时靴跟在道碴上跺出两个深坑。<<else>>押运清单贴身收好，你从钢门缝里侧身翻了出去。<</if>><<if ($mpIronLamp or 0) lte 0>>灯灭了，只能借着铁轨的反光辨路。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>黑泥和雨水把衣裤浸得又冷又沉，磨得皮肤发疼。<</if>><<if ($mpIronAlert or 0) gte 6>>股道口亮起巡逻风灯，护卫正沿着车皮搜过来。<</if>>
 <br><br>
-<<parkicon>><<link [[挪开卧牛石 (0:06)|MP Region Druid Pillars]]>><<pass 6>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[顺边道原路回 (0:06)|MP Region Pool Blackiron]]>><<pass 6>><<set $mpIronDepth to 0>><<if $mpIronArmorPick is "heavy">><<tiredness 2>><<stress 2>><</if>><<if ($mpIronAlert or 0) gte 6>><<stress 3>><<set $mpIronAlert to Math.max(0, ($mpIronAlert or 0) - 1)>><</if>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[挖出剑鞘 (0:06)|MP Region Druid Pillars]]>><<pass 6>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_druid_crouchingstonehilt_reward")>><<money 937>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_druid_crouchingstonehilt")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[挖出剑鞘 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "挖出剑鞘">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<mpsneakicon>><<link [[钻车轴活板门险渡 (0:08)|MP Region Pool Blackiron]]>><<pass 8>><<set $mpIronDepth to 0>><<if $mpIronArmorPick is "heavy" or ($mpIronLamp or 0) lte 0>><<pain 2>><<stress 4>><<lowerwet 25>><<else>><<stress -1>><</if>><</link>>
 <br>
-<<getouticon>><<link [[返回石环 (0:04)|MP Region Druid Circle]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[回黑铁货站 (0:05)|MP Region Blackiron Yard]]>><<pass 5>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Druid JadeCicadaSpout [nobr]
-<<set $outside to 1>><<set $location to "forest">>
-<<effects>>
-月泉祭坛出水口的白石槽里卡着一只小巧的玉蝉，泉水从蝉翼上潺潺流过。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在潺潺流过表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你从白石槽里取出玉蝉，蝉翼下刻着细纹，水底还沉着几粒沙金。
+:: MP Region Blackiron Watertower Chain [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Blackiron Watertower Chain"] to 1>><<set $mpIronChainDone to ($mpIronChainDone or {})>>
+调车场西头的铸铁给水塔扎进夜空，阀门一滴滴漏着水。铁梯贴着塔身往上，顶上是通向信号塔的悬挑铁廊和一盏巨型弧光探照灯。<<if ($mpIronLamp or 0) lte 0>>灯油告罄，铁梯的横档在夜色里分不清哪根锈断了。<<else>>灯光扫过梯顶的防水工具袋和探照灯后盖的搭扣。<</if>><<if ($mpIronDepth or 0) gte 2>>你已攀到给水塔的高架，整片黑铁货场铺在脚下。<</if>>
 <br><br>
-<<parkicon>><<link [[取出玉蝉 (0:05)|MP Region Druid Moonwell]]>><<pass 5>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回黑铁池 (0:03)|MP Region Pool Blackiron]]>><<pass 3>><<set $mpIronDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[淘出沙金 (0:07)|MP Region Druid Moonwell]]>><<pass 7>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_druid_jadecicadaspout_reward")>><<money 826>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_druid_jadecicadaspout")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[淘出沙金 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "淘出沙金">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<if (($mpIronLamp or 0) gte 1 and (($athletics or 0) gte 250 or ($willpower or 0) gte 340)) or (($athletics or 0) gte 360 and ($willpower or 0) gte 540)>>
+<<mprepairicon>><<link [[举灯攀上给水塔 (0:07)|MP Region Blackiron Watertower Catwalk]]>><<pass 7>><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpclimbicon>><<link [[摸黑攀漏水梯 (0:07)|MP Region Blackiron Watertower Dark]]>><<pass 7>><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<set $mpIronAlert to Math.min(10, ($mpIronAlert or 0) + 2)>><<lowerwet 25>><<pain 3>><<stress 5>><<tiredness 2>><</link>>
+<</if>>
 <br>
-<<getouticon>><<link [[返回石环 (0:02)|MP Region Druid Circle]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[绕塔底回黑铁货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Druid WaxSealedGourd [nobr]
-<<set $outside to 1>><<set $location to "forest">>
-<<effects>>
-古根地穴北壁的树根网兜里悬着一只风干的葫芦，葫芦口用红蜡封得严严实实。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你割开葫芦口的红蜡，里面是一小卷草药方和几枚用布包着的铜钱。
+:: MP Region Blackiron Watertower Dark [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+漏下的冰水把横档浇得发滑，你半空一脚踏空，手掌死死扣住锈蚀的给水管才没有坠下去。腰间的铁扳手掉进道碴，脆响在空场里传出很远，冷水顺着袖口灌进前襟。铁梯只能上不能退，你只能另找下塔的路。<<if ($mpIronLamp or 0) lte 0>>没灯照路，你贴着塔壁一点点摸到外梯。<<else>>你把灯咬在嘴里，双手交替着挪向外梯的铁栏。<</if>><<if ($mpIronAlert or 0) gte 6>>信号塔二楼的窗子亮起白光，值班员正探出头来喝问。<</if>>
 <br><br>
-<<caveicon>><<link [[割开红蜡 (0:12)|MP Region Druid Rootcave]]>><<pass 12>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[摸外梯下塔撤回 (0:05)|MP Region Pool Blackiron]]>><<pass 5>><<set $mpIronDepth to 0>><<stress 2>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[倒出药方 (0:08)|MP Region Druid Rootcave]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_druid_waxsealedgourd_reward")>><<money 531>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_druid_waxsealedgourd")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[倒出药方 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "倒出药方">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回石环 (0:04)|MP Region Druid Circle]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<mpropeicon>><<link [[顺着注水皮管滑下 (0:07)|MP Region Blackiron Yard]]>><<pass 7>><<set $mpIronDepth to 0>><<pain 1>><<tiredness 2>><</link>>
 
-:: MP Region Druid FirewoodBiscuitTin [nobr]
-<<set $outside to 1>><<set $location to "forest">>
-<<effects>>
-守林人瞭望台底层的柴火堆后方藏着一只铁皮饼干盒，盒盖用麻绳捆了三道。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你解开麻绳，盒里没有饼干，只有一叠防潮火柴和一张瞭望台排班表。
+:: MP Region Blackiron Watertower Catwalk [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<set $mpIronChainDone to ($mpIronChainDone or {})>>
+沿悬廊跨到给水塔的连接平台，栏杆外挂着一只上了铜锁的防水工具袋，平台边斜插着一根通到地面的滑杆；二楼控制室的窗格里竖着缠红布的四号联锁杆，旁边压着一卷电报纸带。<<if $mpIronPadlockKey>>站台取来的黄铜钥匙一拧，袋锁应声弹开。<<else>>没有钥匙，撬袋锁的铜扣时发出一下轻响。<</if>><<if $mpIronChainDone["watertower"]>>工具袋和探照灯都被你处置过，夜风在空廊里打转。<<else>>你可以扳下联锁杆把探照灯拨开，也可以不碰灯箱，只抽走袋里的电报底稿。<</if>>
 <br><br>
-<<parkicon>><<link [[解开麻绳 (0:07)|MP Region Druid Watchtower]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[顺滑杆溜回池口 (0:04)|MP Region Pool Blackiron]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 <br>
-<<mpclockworkicon>><<if ($skulduggery or 0) gte 250>><<link [[取出排班表 (0:08)|MP Region Druid Watchtower]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_druid_firewoodbiscuittin_reward")>><<money 428>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_druid_firewoodbiscuittin")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取出排班表 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取出排班表">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<if !$mpIronChainDone["watertower"]>>
+<<mplampicon>><<link [[扳拉杆偏转探照灯 (0:08)|MP Region Blackiron Watertower Exit]]>><<pass 8>><<set $mpIronTowerPick to "light">><<set $mpIronAlert to Math.min(10, ($mpIronAlert or 0) + 3)>><<if !$mpIronSearchlightTurned>><<set $mpIronSearchlightTurned to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["blackiron_searchlight_turned"] to 1>><<stress -4>><<willpower 2>><</if>><<set $mpIronChainDone["watertower"] to 1>><</link>>
 <br>
-<<walkicon>><<link [[返回石环 (0:02)|MP Region Druid Circle]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<mpsneakicon>><<link [[取走袋中电报 (0:08)|MP Region Blackiron Watertower Exit]]>><<pass 8>><<set $mpIronTowerPick to "wire">><<if !$mpIronPadlockKey>><<set $mpIronAlert to Math.min(10, ($mpIronAlert or 0) + 1)>><</if>><<if !$mpIronTelegraphTape>><<set $mpIronTelegraphTape to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["blackiron_telegraph_tape"] to 1>><<skulduggery 2>><<stress -3>><</if>><<set $mpIronChainDone["watertower"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[下塔回货站 (0:05)|MP Region Blackiron Yard]]>><<pass 5>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Druid ShutterEagleWhistle [nobr]
-<<set $outside to 1>><<set $location to "forest">>
-<<effects>>
-瞭望台二楼窗框的排水槽里卡着一枚纯银鹰哨，哨链缠在木百叶的合页上。
-<<mpAmbient>><<if Weather.isFreezing>>薄薄的霜花挂在的合页上外侧。<<else>>空气里带着微温。<</if>>
-你解开缠在合页上的哨链，鹰哨还能吹响，哨口里塞着一小团绒布。
+:: MP Region Blackiron Watertower Exit [nobr]
+<<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
+高空的冷风把给水塔的铁链吹得叮当乱响，塔侧的避雷钢索和一段外挂铁梯都能落到地面股道。<<if $mpIronTowerPick is "light">>弧光探照灯转向外围空地，道岔被照得发白，也把护卫的目光引了过来。<<else>>电报底稿塞进内袋，灯柱照旧沿着原路线来回扫。<</if>><<if ($mpIronLamp or 0) lte 0>>下塔时灯已经没油，你扶着冰凉的铁栏摸黑落脚。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>高处的风穿透湿衣，手指冻得几乎扣不住铁档。<</if>><<if ($mpIronAlert or 0) gte 6>>塔底聚起几点提灯光，护卫守在梯脚盘问。<</if>>
 <br><br>
-<<parkicon>><<link [[解开哨链 (0:04)|MP Region Druid Watchtower]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[沿避雷索滑下 (0:05)|MP Region Pool Blackiron]]>><<pass 5>><<set $mpIronDepth to 0>><<if ($mpIronAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpIronAlert to Math.max(0, ($mpIronAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
 <br>
-<<mpcarryicon>><<if ($skulduggery or 0) gte 250>><<link [[取出绒布 (0:08)|MP Region Druid Watchtower]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_druid_shuttereaglewhistle_reward")>><<money 882>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_druid_shuttereaglewhistle")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取出绒布 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取出绒布">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<mpropeicon>><<link [[攀外挂铁梯下塔 (0:07)|MP Region Pool Blackiron]]>><<pass 7>><<set $mpIronDepth to 0>><<tiredness 2>><<if ($mpIronLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
 <br>
-<<getouticon>><<link [[返回石环 (0:02)|MP Region Druid Circle]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[走回货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Velvet CupidQuiverFoil [nobr]
-<<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
-丝绒假面回廊南侧的壁炉架上摆着一尊铜铸爱神像，箭囊里插着一卷金箔纸。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你从箭囊里抽出金箔纸，纸卷内藏着一小撮香粉和一张写着名字的签。
+:: MP Region Blackiron Sluice Chain [nobr]
+<<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Blackiron Sluice Chain"] to 1>><<set $mpIronChainDone to ($mpIronChainDone or {})>>
+走私月台走到头，冷风从铁闸门缝里往外渗，门框边那口铜钟蒙着一层绿锈。墙上的旧挂钟卡在十一点一刻，滑轮底下吊着一只铅封橡木桶。<<if ($mpIronLamp or 0) lte 0>>灯油见底，地砖上的绊发铅丝在暗处根本看不出走向。<<else>>灯圈照出钟背板后的小钥匙和水闸铜钟之间那根细线。<</if>><<if ($mpIronDepth or 0) gte 2>>你已走到月台最深处，头顶铁轨的震动变得又闷又长。<</if>>
 <br><br>
-<<shopicon>><<link [[抽出金箔 (0:07)|MP Region Velvet Masque]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回黑铁池 (0:03)|MP Region Pool Blackiron]]>><<pass 3>><<set $mpIronDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[展开香签 (0:07)|MP Region Velvet Masque]]>><<pass 7>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_velvet_cupidquiverfoil_reward")>><<money 934>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_velvet_cupidquiverfoil")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[展开香签 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "展开香签">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<if (($mpIronLamp or 0) gte 1 and (($skulduggery or 0) gte 250 or ($history or 0) gte 240)) or (($skulduggery or 0) gte 380 and ($history or 0) gte 360)>>
+<<mpwatchicon>><<link [[跨过铅丝近水闸 (0:07)|MP Region Blackiron Sluice Clock]]>><<pass 7>><<set $mpIronSluiceRoute to "water">><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpbellicon>><<link [[摸黑闯水闸道 (0:07)|MP Region Blackiron Sluice Ring]]>><<pass 7>><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<set $mpIronAlert to Math.min(10, ($mpIronAlert or 0) + 2)>><<lowerwet 30>><<pain 1>><<stress 5>><<tiredness 2>><</link>>
+<</if>>
 <br>
-<<getouticon>><<link [[返回天鹅绒厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<mpmapicon>><<link [[拨开钟摆细查暗格 (0:07)|MP Region Blackiron Sluice Clock]]>><<pass 7>><<set $mpIronSluiceRoute to "clock">><<set $mpIronDepth to Math.min(3, ($mpIronDepth or 0) + 1)>><<tiredness 1>><</link>>
+<br>
+<<link [[撤回货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 
-:: MP Region Velvet ChaiseCoralPurse [nobr]
-<<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
-镜面试衣沙龙的丝绒贵妃榻扶手下塞着一只金丝小手包，搭扣嵌着红珊瑚。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你从贵妃榻扶手下勾出手包，搭扣上的红珊瑚松了一颗，包里还有几枚银币。
+:: MP Region Blackiron Sluice Ring [nobr]
+<<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
+脚尖勾住了门边那根细铅丝，铜钟顿时当啷乱响。你猛往后缩，鞋跟踏空，整个人跌进闸门下的排水沟；煤渣和脏水一下淹到腿肚，膝头撞上平板车的铁棱。月台外马上传来哨音。<<if ($mpIronLamp or 0) lte 0>>眼前一片黑，你摸着墙边一摞樟木箱挪出去。<</if>><<if ($mpIronAlert or 0) gte 6>>通道口的皮靴声和呵斥已经压了进来。<</if>>
 <br><br>
-<<socialiseicon>><<link [[勾出金丝包 (0:04)|MP Region Velvet Salon]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[顺月台原路退 (0:05)|MP Region Pool Blackiron]]>><<pass 5>><<set $mpIronDepth to 0>><<stress 2>><</link>>
 <br>
-<<mplockpickicon>><<if ($skulduggery or 0) gte 280>><<link [[撬下珊瑚 (0:08)|MP Region Velvet Salon]]>><<pass 8>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_velvet_chaisecoralpurse_reward")>><<money 764>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_velvet_chaisecoralpurse")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[撬下珊瑚 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撬下珊瑚">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
-<br>
-<<walkicon>><<link [[返回天鹅绒厅 (0:03)|MP Region Velvet Mirage]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpswimicon>><<link [[潜入水闸暗渠撤走 (0:07)|MP Region Blackiron Yard]]>><<pass 7>><<set $mpIronDepth to 0>><<lowerwet 20>><<tiredness 2>><</link>>
 
-:: MP Region Velvet PlanterSilverCase [nobr]
-<<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
-露台观海雅座的大理石花盆下压着半块防水油布，里面裹着一只扁平的银烟盒。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在的银烟盒表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你掀开大理石花盆，油布里的银烟盒还能打开，盒中夹着一张露台座次表。
+:: MP Region Blackiron Sluice Clock [nobr]
+<<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
+<<set $mpIronChainDone to ($mpIronChainDone or {})>>
+<<if $mpIronSluiceRoute is "water">>你从水闸的检修口钻进来，袖口滴着暗河的冷水。拨开停在十一点一刻的钟摆，木背板暗格搁着一只刻海锚的锡扁酒壶、一枚老扳道工怀表和几枚旧银元。<<else>>你贴着墙根凑到挂钟下，钟摆早停了。撬开木背板，抽屉般的暗格里躺着锡酒壶、怀表和几枚磨旧的银元，壶身的海锚还看得清。<</if>>表盖里侧有一行细刻痕，那是老车长留给值夜工友的接头暗号。<<if $mpIronChainDone["sluice"]>>暗格已经空了，闸下只听见暗河流动。<<else>>怀表可以留给值夜的人，自己只记住暗号；也能连表带银元一并收走。<</if>>
 <br><br>
-<<socialiseicon>><<link [[掀开花盆 (0:05)|MP Region Velvet Terrace]]>><<pass 5>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回黑铁池 (0:04)|MP Region Pool Blackiron]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
 <br>
-<<mpsmokeicon>><<if ($skulduggery or 0) gte 280>><<link [[打开烟盒 (0:07)|MP Region Velvet Terrace]]>><<pass 7>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_velvet_plantersilvercase_reward")>><<money 1101>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_velvet_plantersilvercase")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[打开烟盒 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "打开烟盒">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<if !$mpIronChainDone["sluice"]>>
+<<mphearticon>><<link [[留存怀表记暗号 (0:07)|MP Region Blackiron Sluice Exit]]>><<pass 7>><<set $mpIronSluicePick to "leave">><<set $mpIronAlert to Math.max(0, ($mpIronAlert or 0) - 1)>><<if !$mpIronRelicChoice>><<set $mpIronRelicChoice to "leave">><<set $mpClues to ($mpClues or {})>><<set $mpClues["blackiron_sluice_code"] to 1>><<stress -5>><<willpower 2>><</if>><<set $mpIronChainDone["sluice"] to 1>><</link>>
 <br>
-<<walkicon>><<link [[返回天鹅绒厅 (0:03)|MP Region Velvet Mirage]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpcarryicon>><<link [[带走铜怀表与银元 (0:07)|MP Region Blackiron Sluice Exit]]>><<pass 7>><<set $mpIronSluicePick to "take">><<set $mpIronAlert to Math.min(10, ($mpIronAlert or 0) + 2)>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("blackiron_chain_sluice_relic")>><<set $mpIronRelicChoice to "take">><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 400>><<stress -2>><</if>><<set $mpIronChainDone["sluice"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[出月台回货站 (0:05)|MP Region Blackiron Yard]]>><<pass 5>><<set $mpIronDepth to 0>><</link>>
+
+:: MP Region Blackiron Sluice Exit [nobr]
+<<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
+闸门底下的暗河不断拍砖，月台主道与滑轮边的气井梯各能出去。<<if $mpIronSluicePick is "leave">>老扳道工的怀表被放回暗格，水闸交接的暗号你已背熟。<<else>>铜怀表和旧银元裹进货票夹层，挂钟弹簧轻轻一响。<</if>><<if $mpIronSluiceRoute is "water">>衣摆还在滴水，水闸那头的冷风顺着裤脚往上钻。<<else>>你从钟背板一侧绕出，樟木箱的影子压得很低。<</if>><<if ($mpIronLamp or 0) lte 0>>回程没有灯，只能扶着木箱往前摸。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>湿透的裤管沾着煤渣，穿堂风把脚踝吹得发麻。<</if>><<if ($mpIronAlert or 0) gte 6>>闸口那头晃着提灯，护卫挨个拦人盘问。<</if>>
+<br><br>
+<<getouticon>><<link [[顺月台原路回 (0:05)|MP Region Pool Blackiron]]>><<pass 5>><<set $mpIronDepth to 0>><<if ($mpIronAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpIronAlert to Math.max(0, ($mpIronAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpclimbicon>><<link [[攀滑轮旁气井梯出 (0:07)|MP Region Pool Blackiron]]>><<pass 7>><<set $mpIronDepth to 0>><<tiredness 2>><<if ($mpIronLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[走回货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<set $mpIronDepth to 0>><</link>>
+
+:: MP Region Velvet Masque Chain [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Velvet Masque Chain"] to 1>><<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>><<if $mpVelvetLamp is undefined>><<set $mpVelvetLamp to 2>><</if>><<set $mpVelvetLamp to Math.clamp($mpVelvetLamp, 0, 5)>>
+从回廊入口望进去，暗红壁龛沿丝绒假面回廊一字排开，每一格各悬一副威尼斯羽毛假面，整十二副在暖光里层层叠影；镀金香槟推车停在中段，胡桃木衣帽架上搭着貂皮披肩。戴银狐半面具的领班侍者端着银托盘拦在拱廊前，目光扫过你的衣襟：「内廊今晚有私密沙龙，请出示包厢切口或佩戴指定假面。」<<if ($mpVelvetLamp or 0) lte 0>>随身紫晶暗灯已经燃尽，壁龛深处的铭牌埋在阴影里。<<else>>暖昧微光映出银狐假面眼眶后的薄银透镜与冰桶底的洒金请柬。<</if>><<if ($mpVelvetDepth or 0) gte 2>>你已步入回廊深处，大提琴的弦音近在咫尺。<</if>>
+<br><br>
+<<getouticon>><<link [[退回丝绒池 (0:03)|MP Region Pool Velvet]]>><<pass 3>><<set $mpVelvetDepth to 0>><</link>>
+<br>
+<<if ($danceskill or 0) gte 250 or ($skulduggery or 0) gte 240 or ($english or 0) gte 260>>
+<<cosmeticsicon>><<link [[借香槟车入壁龛 (0:06)|MP Region Velvet Masque Niche]]>><<pass 6>><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<socialiseicon>><<link [[上前搭话 (0:06)|MP Region Velvet Masque Rebuke]]>><<pass 6>><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 2)>><<stress 3>><<tiredness 1>><</link>>
+<</if>>
+<br>
+<<walkicon>><<link [[顺波斯毯回天鹅绒 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Masque Rebuke [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+你支吾着报不出今晚的包厢切口，银狐侍者脸上的笑意顿时收起，轻轻叩了两下银托盘边缘：「这位客人走错回廊了，前厅请。」两名守门侍从立刻上前拉起丝绒拦绳，礼貌却强硬地将你请回外廊，连香槟推车与衣帽架的边都没让你沾到。<<if ($mpVelvetLamp or 0) lte 0>>偏廊壁灯昏暗，你只能扶着护墙板往回走。<<else>>侍者顺手替你掩上风灯罩，示意莫在帷幔外张望。<</if>><<if ($mpVelvetAlert or 0) gte 6>>内厅执事已走到拱门边，正冷眼打量往来生客。<</if>>
+<br><br>
+<<getouticon>><<link [[退回丝绒池口 (0:05)|MP Region Pool Velvet]]>><<pass 5>><<set $mpVelvetDepth to 0>><<stress 2>><</link>>
+<br>
+<<mpsneakicon>><<link [[绕屏风道回天鹅绒 (0:07)|MP Region Velvet Mirage]]>><<pass 7>><<set $mpVelvetDepth to 0>><<tiredness 2>><<stress 2>><</link>>
+
+:: MP Region Velvet Masque Niche [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>>
+壁龛内侧的铜铸爱神像箭囊里插着一盒白麝香灯蜡，落地衣帽架的貂皮披肩内袋露出一柄藏有细匙的象牙折扇，香槟推车的冰桶底则压着一张写有暗门切口的洒金请柬。<<if $mpVelvetChainDone["masque"]>>壁龛与衣帽架都已翻检过，只余羽毛假面在柔光下泛着微泽。<<else>>侍者正背身整理酒杯，你能顺手取走一样物件，只是抽折扇时会带响披肩上的银铃扣。<</if>>
+<br><br>
+<<getouticon>><<link [[退回丝绒池 (0:04)|MP Region Pool Velvet]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+<br>
+<<if !$mpVelvetChainDone["masque"]>>
+<<mplampicon>><<link [[添补白麝香灯蜡 (0:06)|MP Region Velvet Masque Exit]]>><<pass 6>><<set $mpVelvetMasquePick to "oil">><<set $mpVelvetLoot_Oil to 1>><<set $mpVelvetLamp to Math.min(5, ($mpVelvetLamp or 0) + 2)>><<stress -2>><<set $mpVelvetChainDone["masque"] to 1>><</link>>
+<br>
+<<mplockpickicon>><<link [[抽出貂皮象牙折扇 (0:08)|MP Region Velvet Masque Exit]]>><<pass 8>><<set $mpVelvetMasquePick to "fan">><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 2)>><<set $mpVelvetFanKey to 1>><<skulduggery 2>><<stress -2>><<set $mpVelvetChainDone["masque"] to 1>><</link>>
+<br>
+<<mplettericon>><<link [[取走洒金请柬 (0:06)|MP Region Velvet Masque Exit]]>><<pass 6>><<set $mpVelvetMasquePick to "invite">><<set $mpVelvetInviteCode to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["velvet_masque_invite"] to 1>><<stress -2>><<set $mpVelvetChainDone["masque"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[返回前厅 (0:05)|MP Region Velvet Mirage]]>><<pass 5>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Masque Exit [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+你借着厚重丝绒帷幔的掩护悄然闪出假面壁龛，波斯地毯主廊与爱神壁炉后的侍者夹道各通向一头。<<if $mpVelvetMasquePick is "oil">>紫晶暗灯添上白麝香蜡，火光柔和且不冒黑烟。<<elseif $mpVelvetMasquePick is "fan">>象牙折扇揣入怀中，扇骨夹层里的细钥匙紧贴胸口。<<else>>洒金请柬折好收进袖袋，内厅包厢的切口已记熟。<</if>><<if ($mpVelvetLamp or 0) lte 0>>夹道里黑得辨不出帷幔花纹，你数着壁布接缝一步步挪回主廊。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>湿冷的衣角蹭过地毯，留下一串浅浅水痕。<</if>><<if ($mpVelvetAlert or 0) gte 6>>回廊拐角站着两名执事，正盘查过往宾客的面具。<</if>>
+<br><br>
+<<getouticon>><<link [[顺主廊退回池 (0:05)|MP Region Pool Velvet]]>><<pass 5>><<set $mpVelvetDepth to 0>><<if ($mpVelvetAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpVelvetAlert to Math.max(0, ($mpVelvetAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpsneakicon>><<link [[钻壁炉后侍者道撤 (0:07)|MP Region Pool Velvet]]>><<pass 7>><<set $mpVelvetDepth to 0>><<tiredness 2>><<if ($mpVelvetLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回天鹅绒厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Salon Chain [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Velvet Salon Chain"] to 1>><<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>><<if $mpVelvetInviteCode>><<set $mpVelvetAlert to Math.max(0, ($mpVelvetAlert or 0) - 1)>><</if>>
+镜面试衣沙龙四壁镶满斜角铜镜，木制人台腰封别着金线，梳妆台摆着紫水晶香水瓶。往里通向私人拍卖暗厅有两条路：转动中央试衣台可滑入后台暗门，虽隐蔽却要耗掉一格灯蜡照看机括；或者掀开东侧壁柱挂帷，钻进运送拍品的黄铜传菜梯，只是滑轮声容易惊动楼上包厢。<<if $mpVelvetInviteCode>>怀里的洒金请柬标明了后台换班的空当。<<else>>铜镜折射出重重人影，稍有不慎便会撞上巡视的执事。<</if>><<if ($mpVelvetDepth or 0) gte 2>>你已进入沙龙内层，香水味浓得令人微醺。<</if>>
+<br><br>
+<<getouticon>><<link [[回丝绒池 (0:03)|MP Region Pool Velvet]]>><<pass 3>><<set $mpVelvetDepth to 0>><</link>>
+<br>
+<<mptailoricon>><<link [[转试衣台入后台 (0:07)|MP Region Velvet Salon Stage]]>><<pass 7>><<set $mpVelvetSalonRoute to "dais">><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<set $mpVelvetLamp to Math.max(0, ($mpVelvetLamp or 0) - 1)>><<tiredness 2>><<stress 2>><</link>>
+<br>
+<<if $mpVelvetInviteCode or ($skulduggery or 0) gte 260 or ($athletics or 0) gte 240>>
+<<mpclimbicon>><<link [[掀丝绒帷乘传菜梯 (0:06)|MP Region Velvet Salon Stage]]>><<pass 6>><<set $mpVelvetSalonRoute to "lift">><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 2)>><<pain 1>><<tiredness 2>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[硬乘传菜梯厢 (0:06)|MP Region Velvet Salon Glare]]>><<pass 6>><<set $mpVelvetSalonRoute to "lift">><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 3)>><<pain 1>><<stress 3>><<tiredness 2>><</link>>
+<</if>>
+<br>
+<<link [[返天鹅绒厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Salon Glare [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+你刚掀开二楼包厢的金线纱帘，四面斜角铜镜便将你的身影映得一清二楚。梳妆台边的紫水晶香水瓶被带落在地，浓郁香气四溢，走廊尽头立刻响起急促的高跟鞋声与执事呵斥，通往拍卖展台的红毯已被封死。<<if ($mpVelvetLamp or 0) lte 0>>你在昏暗屏风间磕碰到裁缝人台，手腕一阵酸麻。<<else>>你慌忙压低灯罩，缩回三折屏风后的阴影里。<</if>><<if ($mpVelvetAlert or 0) gte 6>>两队侍卫已守住沙龙正门，正逐面铜镜搜查。<</if>>
+<br><br>
+<<getouticon>><<link [[钻屏风退回池口 (0:06)|MP Region Pool Velvet]]>><<pass 6>><<set $mpVelvetDepth to 0>><<stress 2>><<tiredness 1>><</link>>
+<br>
+<<mpsneakicon>><<link [[顺衣帽间道回前厅 (0:07)|MP Region Velvet Mirage]]>><<pass 7>><<set $mpVelvetDepth to 0>><<pain 1>><<tiredness 2>><</link>>
+
+:: MP Region Velvet Salon Stage [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>>
+<<if $mpVelvetSalonRoute is "dais">>你顺着旋转试衣台背板滑进拍卖暗厅后台，正好落脚在记账桌旁。<<else>>你从黄铜传菜梯厢钻出，梯厢里就搁着那只红木匣，只是要去拿记账桌上的火漆信还得穿过半个展台。<</if>>紫檀展台的黑丝绒罩布下压着沉甸甸的红木古董拍品匣，后台象牙算盘下则夹着一封火漆委托信与半张烟灰缸密笺。<<if $mpVelvetChainDone["salon"]>>展台与记账桌都已搜过，环形阶梯座空无一人。<<elseif ($mpVelvetLamp or 0) lte 0>>暗灯熄灭，展台下黑漆漆一片，全凭指尖摸索绒布。<</if>>
+<br><br>
+<<getouticon>><<link [[空手退回池 (0:04)|MP Region Pool Velvet]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+<br>
+<<if !$mpVelvetChainDone["salon"]>>
+<<mpcarryicon>><<link [[抱走紫檀台红木匣 (0:09)|MP Region Velvet Salon Exit]]>><<pass 9>><<set $mpVelvetSalonPick to "heavy">><<if $mpVelvetSalonRoute is "dais">><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 3)>><<tiredness 3>><<else>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 2)>><<tiredness 2>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("velvet_chain_salon_heavy")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 350>><<stress -2>><</if>><<set $mpVelvetChainDone["salon"] to 1>><</link>>
+<br>
+<<mpreadicon>><<link [[抽走算盘火漆信 (0:06)|MP Region Velvet Salon Exit]]>><<pass 6>><<set $mpVelvetSalonPick to "light">><<if $mpVelvetSalonRoute is "lift">><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 2)>><<else>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 1)>><</if>><<if !$mpVelvetAuctionNote>><<set $mpVelvetAuctionNote to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["velvet_auction_note"] to 1>><<stress -3>><<willpower 1>><</if>><<set $mpVelvetChainDone["salon"] to 1>><</link>>
+<br>
+<</if>>
+<<walkicon>><<link [[穿侧幕回前厅 (0:05)|MP Region Velvet Mirage]]>><<pass 5>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Salon Exit [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+私人拍卖暗厅的环形看台上传来侍者清点酒具的轻响，三折屏风侧门与传菜梯井都能退回外层。<<if $mpVelvetSalonPick is "heavy">>红木拍品匣沉甸甸地揣在怀里，里面的铜牌偶尔磕出轻响。<<else>>火漆委托信与烟灰缸密笺贴身收妥，紫檀展台上的绒罩依旧平整。<</if>><<if ($mpVelvetLamp or 0) lte 0>>灯尽后铜镜只剩冷光，你抬手贴住镜框，每遇转角便轻叩两下。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>湿冷的衣衫在铜镜上留下一团白雾。<</if>><<if ($mpVelvetAlert or 0) gte 6>>沙龙门口亮着两盏烛台，执事正守在屏风外盘问。<</if>>
+<br><br>
+<<getouticon>><<link [[出屏风门回池 (0:06)|MP Region Pool Velvet]]>><<pass 6>><<set $mpVelvetDepth to 0>><<if $mpVelvetSalonPick is "heavy">><<tiredness 2>><<stress 2>><</if>><<if ($mpVelvetAlert or 0) gte 6>><<stress 3>><<set $mpVelvetAlert to Math.max(0, ($mpVelvetAlert or 0) - 1)>><</if>><</link>>
+<br>
+<<mpropeicon>><<link [[顺传菜梯配重索撤 (0:08)|MP Region Pool Velvet]]>><<pass 8>><<set $mpVelvetDepth to 0>><<if $mpVelvetSalonPick is "heavy" or ($mpVelvetLamp or 0) lte 0>><<pain 2>><<stress 4>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回天鹅绒厅 (0:05)|MP Region Velvet Mirage]]>><<pass 5>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Terrace Chain [nobr]
+<<set $outside to 1>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Velvet Terrace Chain"] to 1>><<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>>
+推开观海露台的雕花铁门，百尺峭壁下的海风猛地灌入，门栏上系着的丝绸领带被风扯紧，黄铜字码锁咔嗒一声自动落栓，回头推门已纹丝不动。汉白玉栏杆边的藤椅下露出一角烫金图录，角落铸铁火盆里燃着银炭，盆座石板刻着排水细槽。<<if ($mpVelvetLamp or 0) lte 0>>海风吹灭了暗灯，只有火盆里的一点银炭映着栏杆。<<else>>灯光照见大理石花盆下的防水油布与扁平银烟盒。<</if>><<if ($mpVelvetDepth or 0) gte 2>>你已贴近峭壁外沿，脚下海浪拍岸声震耳欲聋。<</if>>
+<br><br>
+<<getouticon>><<link [[细看火盆排水槽 (0:09)|MP Region Velvet Terrace Brazier]]>><<pass 9>><<set $mpVelvetLamp to Math.max(0, ($mpVelvetLamp or 0) - 1)>><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 1)>><<set $mpVelvetTerraceSeen to 1>><<tiredness 1>><</link>>
+<br>
+<<if ($athletics or 0) gte 250 or ($skulduggery or 0) gte 250>>
+<<windowicon>><<link [[迎海风跨汉白玉栏 (0:06)|MP Region Velvet Terrace Brazier]]>><<pass 6>><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[踩湿滑露台砖 (0:06)|MP Region Velvet Terrace Gust]]>><<pass 6>><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<pain 2>><<stress 4>><<tiredness 2>><<lowerwet 30>><</link>>
+<</if>>
+
+:: MP Region Velvet Terrace Gust [nobr]
+<<set $outside to 1>><<set $location to "brothel">><<effects>><<mpAmbient>>
+峭壁下掀起的狂风裹着浪沫扑上露台，你脚下一滑撞翻了藤茶几上的酒杯，银炭火盆溅起一串火星。身后的黄铜字码锁早已咬死，正门退路断绝；内廊窗户瞬间亮起灯光，你只能贴着外侧排水石槽或花架往外撤。<<if ($mpVelvetLamp or 0) lte 0>>暗灯早被海风吹熄，你摸着冰冷的汉白玉柱头辨认方向。<<else>>你死死护住灯罩，火苗被海风吹得几乎贴底。<</if>><<if ($mpVelvetAlert or 0) gte 6>>露台门内传来执事拧动锁芯的声响。<</if>>
+<br><br>
+<<getouticon>><<link [[顺峭壁栈道回前厅 (0:07)|MP Region Velvet Mirage]]>><<pass 7>><<set $mpVelvetDepth to 0>><<tiredness 2>><<stress 3>><<lowerwet 25>><</link>>
+<br>
+<<mpsneakicon>><<link [[攀外侧花架撤离 (0:06)|MP Region Velvet Mirage]]>><<pass 6>><<set $mpVelvetDepth to 0>><<tiredness 3>><<stress 2>><<lowerwet 20>><</link>>
+
+:: MP Region Velvet Terrace Brazier [nobr]
+<<set $outside to 1>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>>
+铸铁火盆下方的石板排水槽可以横向推开，里面藏着一只防火铁匣；大理石花盆的防水油布里裹着扁平银烟盒与露台座次表，西侧铁门的丝绸领带内衬则缝着字码布条。<<if $mpVelvetFanKey>>象牙折扇夹层里的细钥匙正好能拨开西侧铁门的字码副锁。<<else>>手头没有细匙，拨动火盆石板时铁环擦出一串脆响。<</if>><<if $mpVelvetChainDone["terrace"]>>火盆石板与花盆底都已查过，只余海风吹拂轻纱帷幔。<<elseif $mpVelvetTerraceSeen>>你先前摸清了排水槽的滑轨走向，下手毫不费力。<</if>>
+<br><br>
+<<getouticon>><<link [[退回天鹅绒厅 (0:05)|MP Region Velvet Mirage]]>><<pass 5>><<set $mpVelvetDepth to 0>><</link>>
+<br>
+<<if !$mpVelvetChainDone["terrace"]>>
+<<mpcleanicon>><<link [[推火盆石板取铁匣 (0:08)|MP Region Velvet Terrace Exit]]>><<pass 8>><<set $mpVelvetTerracePick to "brazier">><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 3)>><<if !$mpVelvetBrazierOpen>><<set $mpVelvetBrazierOpen to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["velvet_brazier_box"] to 1>><<stress -4>><<willpower 2>><</if>><<set $mpVelvetChainDone["terrace"] to 1>><</link>>
+<br>
+<<mpsneakicon>><<link [[抽走花盆银烟盒 (0:08)|MP Region Velvet Terrace Exit]]>><<pass 8>><<set $mpVelvetTerracePick to "case">><<if !$mpVelvetFanKey>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 1)>><</if>><<if !$mpVelvetSilverCase>><<set $mpVelvetSilverCase to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["velvet_terrace_seating"] to 1>><<skulduggery 2>><<stress -3>><</if>><<set $mpVelvetChainDone["terrace"] to 1>><</link>>
+<br>
+<<else>>
+<<link [[翻栈道回厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+<</if>>
+
+:: MP Region Velvet Terrace Exit [nobr]
+<<set $outside to 1>><<set $location to "brothel">><<effects>><<mpAmbient>>
+你解开西侧铁门栏杆上的丝绸领带，峭壁栈道侧门与露台外沿的排水石槽都能绕回暗层内部。<<if $mpVelvetTerracePick is "brazier">>防火铁匣里的密档已收妥，银炭火盆重又归于原位。<<else>>扁平银烟盒与座次表揣入内袋，大理石花盆不露半点挪痕。<</if>><<if ($mpVelvetLamp or 0) lte 0>>海雾吞掉星光，你半蹲下去，沿汉白玉栏杆的立柱一节节换手退回。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>海浪水汽打湿了衣摆，夜风吹得人肩头发冷。<</if>><<if ($mpVelvetAlert or 0) gte 6>>侧门内廊晃动着烛光，执事正守在台阶口盘查。<</if>>
+<br><br>
+<<getouticon>><<link [[走栈道侧门回池 (0:05)|MP Region Pool Velvet]]>><<pass 5>><<set $mpVelvetDepth to 0>><<if ($mpVelvetAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpVelvetAlert to Math.max(0, ($mpVelvetAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpropeicon>><<link [[顺露台排水槽滑下 (0:07)|MP Region Pool Velvet]]>><<pass 7>><<set $mpVelvetDepth to 0>><<tiredness 2>><<if ($mpVelvetLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回天鹅绒厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Cellar Chain [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Velvet Cellar Chain"] to 1>><<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>>
+回廊尽头的紫晶壁灯垂下成串空心流苏，拐角厚重波斯地毯微微翘起，露出嵌在大理石地面上的黄铜旋转地锁，锁下直通天鹅绒暗窖，铜面被无数鞋底磨出温润的弧光。<<if $mpVelvetFanKey>>你摸到怀里折扇的扇骨，那枚细匙正合地锁暗孔。<<elseif ($mpVelvetAlert or 0) gte 6>>走廊两头宾客与执事往来不绝，你根本没法趴在地毯上细拨铜环，只能设法硬撬地锁。<<elseif ($mpVelvetLamp or 0) lte 0>>暗灯蜡尽，地锁铜环上的细微刻痕埋在阴影里。<</if>><<if ($mpVelvetDepth or 0) gte 2>>你已潜至暗层最深处，头顶舞池的乐声闷得像隔了一层水。<</if>>
+<br><br>
+<<getouticon>><<link [[退回丝绒池 (0:03)|MP Region Pool Velvet]]>><<pass 3>><<set $mpVelvetDepth to 0>><</link>>
+<br>
+<<if ($mpVelvetAlert or 0) lt 6 or $mpVelvetFanKey>>
+<<if $mpVelvetFanKey or (($mpVelvetLamp or 0) gte 1 and (($skulduggery or 0) gte 250 or ($danceskill or 0) gte 240)) or (($skulduggery or 0) gte 380 and ($danceskill or 0) gte 360)>>
+<<mplockpickicon>><<link [[轻旋开黄铜地锁 (0:07)|MP Region Velvet Cellar Vault]]>><<pass 7>><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpsneakicon>><<link [[拨错地锁铜环 (0:07)|MP Region Velvet Cellar Chime]]>><<pass 7>><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 2)>><<stress 3>><<tiredness 1>><</link>>
+<</if>>
+<br>
+<</if>>
+<<mpbellicon>><<link [[用铁钎硬撬地锁门 (0:07)|MP Region Velvet Cellar Vault]]>><<pass 7>><<set $mpVelvetDepth to Math.min(3, ($mpVelvetDepth or 0) + 1)>><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 3)>><<pain 1>><<stress 2>><<tiredness 2>><</link>>
+<br>
+<<link [[返回前厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Cellar Chime [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+黄铜地锁的弹簧卡死反弹，连带扯动了壁灯座下的紫水晶流苏，清脆的碰撞声在静谧走廊里传出老远。二楼贵宾包厢的纱帘随即掀开，两名手持软鞭的执事快步下楼，将地毯暗门堵在了身后。<<if ($mpVelvetLamp or 0) lte 0>>暗处看不清台阶，你退后时脚踝磕在铜花盆座上。<<else>>你吹暗火苗，贴着丝绒壁帷往侧廊退去。<</if>><<if ($mpVelvetAlert or 0) gte 6>>主廊方向已落下防盗铜栅，执事正持灯搜查。<</if>>
+<br><br>
+<<getouticon>><<link [[顺侧廊退回天鹅绒 (0:07)|MP Region Velvet Mirage]]>><<pass 7>><<set $mpVelvetDepth to 0>><<stress 3>><<tiredness 2>><</link>>
+<br>
+<<mpsneakicon>><<link [[钻帷幔缝回池口 (0:06)|MP Region Pool Velvet]]>><<pass 6>><<set $mpVelvetDepth to 0>><<stress 2>><<tiredness 2>><</link>>
+
+:: MP Region Velvet Cellar Vault [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+<<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>>
+黄铜地锁下方的秘密暗窖里摆着一张暗红丝绒贵妃榻，扶手下塞着嵌红珊瑚的金丝手包与不记名筹码，壁龛里的空心紫水晶流苏内则卷着一份寄售名流底单。<<if $mpVelvetChainDone["cellar"]>>暗窖里的手包与水晶流苏都已处理妥当，只余淡淡的甜香。<<elseif ($mpVelvetLamp or 0) lte 0>>暗灯燃尽，空心水晶里的细字糊成一团，只能摸索着取走手包。<</if>><<if ($mpVelvetLamp or 0) gte 1 and !$mpVelvetChainDone["cellar"]>>借着微光，你看清了薄纸上的寄售人姓名与暗账编号。<</if>>
+<br><br>
+<<getouticon>><<link [[退回丝绒池 (0:04)|MP Region Pool Velvet]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>
+<br>
+<<if !$mpVelvetChainDone["cellar"]>>
+<<if ($mpVelvetLamp or 0) gte 1>>
+<<mphearticon>><<link [[封回水晶记底单 (0:07)|MP Region Velvet Cellar Exit]]>><<pass 7>><<set $mpVelvetCellarPick to "leave">><<set $mpVelvetAlert to Math.max(0, ($mpVelvetAlert or 0) - 1)>><<if !$mpVelvetCellarChoice>><<set $mpVelvetCellarChoice to "leave">><<set $mpClues to ($mpClues or {})>><<set $mpClues["velvet_cellar_consign"] to 1>><<stress -5>><<willpower 2>><</if>><<set $mpVelvetChainDone["cellar"] to 1>><</link>>
+<br>
+<</if>>
+<<mpcarryicon>><<link [[带走珊瑚包与金券 (0:07)|MP Region Velvet Cellar Exit]]>><<pass 7>><<set $mpVelvetCellarPick to "take">><<set $mpVelvetAlert to Math.min(10, ($mpVelvetAlert or 0) + 2)>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("velvet_chain_cellar_relic")>><<set $mpVelvetCellarChoice to "take">><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 400>><<stress -2>><</if>><<set $mpVelvetChainDone["cellar"] to 1>><</link>>
+<br>
+<</if>>
+<<walkicon>><<link [[出暗窖回前厅 (0:05)|MP Region Velvet Mirage]]>><<pass 5>><<set $mpVelvetDepth to 0>><</link>>
+
+:: MP Region Velvet Cellar Exit [nobr]
+<<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
+暗窖上方的波斯地毯被脚步声压得微微下陷，地锁石阶与酒窖排风暗道各通向一处出口。<<if $mpVelvetCellarPick is "leave">>你将空心紫水晶原样旋回灯座，寄售人名单已牢记在心。<<else>>嵌红珊瑚的金丝手包与金券收进怀里，地锁铜环发出一声轻响。<</if>><<if ($mpVelvetLamp or 0) lte 0>>回程漆黑，你侧肩抵着石壁，用脚尖先探出台阶再落下脚跟。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>湿冷的衣衫贴在背上，暗道里的穿堂风吹得人直打哆嗦。<</if>><<if ($mpVelvetAlert or 0) gte 6>>地毯暗门外站着提灯的执事，正俯身查看地锁痕迹。<</if>>
+<br><br>
+<<getouticon>><<link [[推地毯门回池 (0:05)|MP Region Pool Velvet]]>><<pass 5>><<set $mpVelvetDepth to 0>><<if ($mpVelvetAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpVelvetAlert to Math.max(0, ($mpVelvetAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpclimbicon>><<link [[攀酒窖排风道撤出 (0:07)|MP Region Pool Velvet]]>><<pass 7>><<set $mpVelvetDepth to 0>><<tiredness 2>><<if ($mpVelvetLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回天鹅绒厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<set $mpVelvetDepth to 0>><</link>>

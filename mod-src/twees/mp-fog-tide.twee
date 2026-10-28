@@ -9,64 +9,73 @@
 <</if>>
 <<set $mpFogStage to ($mpFogStage or 0)>>
 <<set $mpFogPressure to ($mpFogPressure or 0)>>
+<<set $mpFogNextStageDay to ($mpFogNextStageDay or 0)>>
 <<set $mpLanternOil to ($mpLanternOil or 1)>>
 <<set $mpTideChart to ($mpTideChart or 0)>>
-<<set _baseOil to (300 + ($mpFogTide or 0) * 150 + ($mpFogPressure or 0) * 50)>>
-<<set _oilPrice to Math.round(_baseOil * ($mpWorldPriceMod or 100) / 100)>>
-<<set _curfewHour to ($mpWorldScheduleShortened ? 18 : 21)>>
-<<set _nextTick to Math.max(1, 6 - ((Time.days - ($mpFogLastTickDay or Time.days)) % 6))>>
-<<set _exitPas to ($mpReturnPassage or "High Street")>>
-<<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "High Street">><</if>>
-高街与旧港交界的石砌拱门下立着一根铸铁水尺，铜牌上镌刻着历年海雾漫过堤岸的刻度。咸腥而阴冷的雾气正顺着排水暗渠的铁格栅往上翻涌，在煤气路灯周围晕开一圈圈惨白的光晕。守夜人留下的粉笔字迹在潮湿的砖墙上洇开，记录着近期雾潮向内城推进的势头，路过的商贩与水手无不加快脚步，连沿街杂货铺的木板门都比往常更早挂上了防潮铁链。
+<<set _fogSurveyed to (($mpFogStage or 0) gte 1 or ($mpFogSurvey or 0) gte 1)>>
+<<set _fogBudget to (_fogSurveyed or ($mpLanternOil or 0) gt 1 or $mpWorldFogMarketOpen or $mpWorldFogOutcome)>>
+高街与旧港交界的石砌拱门下立着一根铸铁水尺，铜牌上镌刻着历年海雾漫过堤岸的刻度。咸腥而阴冷的雾气正顺着排水暗渠的铁格栅往上翻涌，在煤气路灯周围晕开一圈圈惨白的光晕。守夜人留下的粉笔字迹在潮湿的砖墙上洇开，路过的商贩与水手无不加快脚步。
 <br><br>
-你走近铸铁水尺，借着防风灯的微光端详刻度盘上的水银浮标与旁侧悬挂的铜牌记录：
-<br>
-【雾潮水尺读数】：<<if $mpFogTide gte 7>><span class="red">满潮临渊（雾锁全城，必须在防波堤做出最终决断）</span><<elseif $mpFogTide gte 5>><span class="pink">浓障封街（码头能见度骤降，沿街商铺提前打烊，林间小径封闭）</span><<elseif $mpFogTide gte 3>><span class="purple">栈桥漫雾（灰雾漫过外栈桥，夜间巡逻警戒上升，灯油价格上浮）</span><<elseif $mpFogTide gte 1>><span class="blue">微澜初起（晨昏薄雾萦绕港湾，潮汐周期每六日推进一格）</span><<else>><span class="green">海晏风清（海面能见度极佳，商路与林道畅通无阻）</span><</if>>（当前潮位刻度：<<print $mpFogTide>>，距下一次自然涨潮还有 <<print _nextTick>> 天）
-<br>
-【调查进展与随身物资】：<<if $mpFogStage gte 3>><span class="teal">已查明雾角主塔折射镜与暗流脉络</span><<elseif $mpFogStage is 2>><span class="lblue">已摸清林间雾障与街巷封锁规律</span><<elseif $mpFogStage is 1>><span class="blue">已完成外礁水尺与凝露初探</span><<else>><span class="purple">尚未开展系统勘查</span><</if>> ｜ 防风鲸油：<<print $mpLanternOil>> 罐（当前市价 £<<print (_oilPrice / 100).toFixed(2)>>）｜ 潮汐表：<<print $mpTideChart>> 份
-<br>
-【反噬压力累积】：<<if $mpFogPressure gte 4>><span class="red">极高（灯油紧缺、港务戒备森严、神殿恩典透支、行会物价飞涨）</span><<elseif $mpFogPressure gte 2>><span class="purple">显著（强压潮位已引起灯油商与港务哨兵警觉）</span><<elseif $mpFogPressure is 1>><span class="blue">轻微（周边物价与警戒出现小幅波动）</span><<else>><span class="green">平稳（尚未触发反噬）</span><</if>>
-<br>
-【封港·撤离·议价后的世界差异】：<<if ($mpWorldPriceMod or 100) gt 100>><span class="gold">铁链封港生效（外海航线断绝，全城燃料与进口补给按 <<print $mpWorldPriceMod>>% 结算，夜间治安稳固）</span><<elseif $mpWorldScheduleShortened>><span class="teal">钟声撤离生效（低洼街区与港区提前至 <<print _curfewHour>>:00 收班歇业，内城互助配给站常驻开放）</span><<elseif $mpWorldFogMarketOpen>><span class="purple">与潮议价生效（三号防波堤灰雾暗市常年开埠，暗货交割与秘境采购全天开放）</span><<else>><span class="blue">雾潮终局尚未敲定（物价、营业时辰与暗市摊位维持常态）</span><</if>>
+【水尺】<<if $mpFogTide gte 7>><span class="red">满潮临渊：雾锁全城，水尺顶在最高一格。</span><<elseif $mpFogTide gte 5>><span class="pink">浓障封街：码头能见度骤降，沿街商铺提前打烊，林间小径封闭。</span><<elseif $mpFogTide gte 3>><span class="purple">栈桥漫雾：灰雾漫过外栈桥，夜间巡逻警戒上升，灯油价格上浮。</span><<elseif $mpFogTide gte 1>><span class="blue">微澜初起：晨昏薄雾萦绕港湾，潮汐周期每六日推进一格。</span><<else>><span class="green">海晏风清：海面能见度极佳，商路与林道畅通无阻。</span><</if>>
 <br><br>
-你在湿冷的石阶旁拢了拢衣领。主水尺旁设有通往雾潮调查分枢、信标燃灯台、铅锤测潮台以及余波集市哨站的四条通道；若想深入勘查外礁、疏导反噬压力或直面满潮决断，可步入雾潮调查分枢统筹安排。
+<<if _fogSurveyed>>
+【勘查册】<<if $mpFogStage gte 3>>第三阶已经合龙：主塔折射镜检修完毕，满潮时有了可用的手段。<<elseif $mpFogStage is 2>>第二阶已经走完：林间雾障与低洼街巷的封锁线摸清了，下一步是防波堤主塔的折射镜。<<elseif $mpFogStage is 1>>第一阶刚起步：外礁水尺与暗礁凝露取了样，林道与街巷还没走完。<<else>>观测册刚翻开，外礁水尺还没下。<</if>>
+<br><br>
+<</if>>
+<<if _fogBudget>>
+【随身】防风鲸油 <<print $mpLanternOil>> 罐<<if _fogSurveyed>>，潮汐表 <<print $mpTideChart>> 份<</if>>。<<if $mpLanternOil lte 1>>油罐已经见底，信标台的火撑不了太久。<<else>>油还够点一轮信标，但得省着用。<</if>>
+<br><br>
+<</if>>
+<<if ($mpFogPressure or 0) gte 1>>
+【反噬】<<if $mpFogPressure gte 4>>灯油紧缺、港务戒备、神殿恩典透支，几头一起紧。<<elseif $mpFogPressure gte 2>>灯油商与港务哨兵都开始留意你的动静。<<else>>镇上只有一点细小的波动，还压得住。<</if>>
+<br><br>
+<</if>>
+<<if $mpWorldFogOutcome or ($mpFogStage or 0) gte 2 or $mpFogTide gte 5>>
+【定局】<<if ($mpWorldPriceMod or 100) gt 100>>铁链封港已经生效：外海航线断绝，全城燃料与进口补给按封港价结算，夜里治安反倒稳。<<elseif $mpWorldScheduleShortened>>钟声撤离已经生效：低洼街区提前收班，内城互助配给站常开。<<elseif $mpWorldFogMarketOpen>>与潮议价已经生效：三号防波堤的灰雾暗市开埠，暗货交割与秘境采购全天有门。<<else>>雾潮还没定局；水尺每爬一格，码头争执就多一分。<</if>>
+<br><br>
+<</if>>
+你在湿冷的石阶旁拢了拢衣领。主水尺旁只有一条通往观测室的石阶；再往港区深处走，才有信标炉、测潮台与余波集市。眼下的水尺还不需要你立刻做决断。
 <br><br>
 <<getouticon>><<link [[返回高街布告 (0:03)|MP Town Side Stories Hub]]>><<pass 3>><</link>>
 <br>
 <<investigateicon>><<link [[进入雾潮调查 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>>
-<br>
+<<if _fogSurveyed>><br>
 <<caveicon "torch">><<link [[信标燃灯压潮 (0:12)|MP Fog Tide Lever Beacon]]>><<pass 12>><</link>>
 <br>
-<<mpclockworkicon>><<link [[铅锤测算暗涌 (0:14)|MP Fog Tide Lever Sounding]]>><<pass 14>><</link>>
+<<mptideicon>><<link [[铅锤测算暗涌 (0:14)|MP Fog Tide Lever Sounding]]>><<pass 14>><</link>>
 <br>
 <<link [[走访余波集市 (0:12)|MP Fog Tide Aftermath Market]]>><<pass 12>><</link>>
+<</if>>
 
 :: MP Fog Tide Survey Hub [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
-<<set $mpFogStage to ($mpFogStage or 0)>>
-<<set $mpFogPressure to ($mpFogPressure or 0)>>
-<<set _curfewHour to ($mpWorldScheduleShortened ? 18 : 21)>>
-你步入高街水尺拱门内侧的「雾潮调查分枢」。这间由旧港务观测室改建的石屋四壁挂满了历年海雾漫灌图、地下暗渠走向图以及防波堤折射镜的机械剖面图。桌案中央摆着一盏长明鲸油灯，旁边压着守林人阿什、修表师塞拉、守夜人林恩与夜航船长维斯各自送来的勘查简报。
+<<set $mpFogStage to ($mpFogStage or 0)>><<set $mpFogPressure to ($mpFogPressure or 0)>><<set $mpFogSurvey to 1>><<set $mpFogS2Counter to ($mpFogS2Counter or 0)>><<set $mpFogNextStageDay to ($mpFogNextStageDay or 0)>>
+<<if !$daily>><<set $daily to {}>><</if>>
+你步入高街水尺拱门内侧的石屋。四壁挂着海雾漫灌图与折射镜剖面，桌案上摊开观测册：外礁与林道走了多少，暗涌记了几点，水尺停在哪一格，都写在边角。
+<<if $mpFogEnded or $mpWorldFogS2Locked>>雾潮终局已定，海底回流眼与防波堤水尺均已归档，册页不再改写。<<elseif Time.days lt ($mpFogNextStageDay or 0)>>水尺浮标还在回稳，下一处勘查要等到第 <<print $mpFogNextStageDay>> 日退潮窗。<<else>>窗外海雾顺风流转，册上该走的地方都敞着。<</if>>
 <br><br>
-你翻开桌上的观测总册，核对当前三阶段调查与四方反噬的具体态势：
-<br>
-【三阶勘查进度】：<<if $mpFogStage gte 3>><span class="teal">第三阶已完成（防波堤雾角主塔折射镜已检修完毕，随时可应对满潮决断）</span><<elseif $mpFogStage is 2>><span class="lblue">第二阶已完成（森林石桥雾障与低洼街巷封锁线已摸清，亟待登塔检修主折射镜）</span><<elseif $mpFogStage is 1>><span class="blue">第一阶已完成（外栈桥青铜水尺与暗礁凝露已取样，下一步需排查林道与街巷）</span><<else>><span class="purple">尚未启动（需先前往外礁水尺采集凝露与基准刻度）</span><</if>>
-<br>
-【世界状态联动】：<<if $mpWorldScheduleShortened>>由于低洼街区已执行钟声撤离，外街铺面每晚 <<print _curfewHour>>:00 便提前落锁，夜间巡视封锁街巷时可额外领受行会互助津贴；<<elseif $mpWorldFogMarketOpen>>由于防波堤灰雾暗市已开埠，暗渠水路常年有走私快艇接应，疏导反噬压力时可获维斯暗桩协助；<<elseif ($mpWorldPriceMod or 100) gt 100>>由于铁链封港已生效，港务与神殿联合接管防波堤，反噬压力更易平息但燃料成本高企；<<else>>目前终局未定，每一次强行压低潮位都会累积反噬压力，需及时周旋疏导。<</if>>
-<br><br>
-石屋窗外的海雾正顺着风向缓缓流转。你可以从这里出发，按部就班地推进外礁水尺、林间雾障与防波堤主镜的三阶勘查；也可以前往街巷巡视浓雾对商铺的冲击、出面平抑四方反噬压力，或是在七级满潮临渊时奔赴防波堤做出最终决断。
-<br><br>
-灰白色的海雾顺着防波堤的石缝悄无声息地漫漶开来，在沿街的铸铁煤气灯下晕出一圈圈湿冷的光晕。无论是水尺上跳动的浮标刻度，还是暗渠深处传来的回水闷响，都在提醒着你这场寒潮与小镇日常生计之间丝丝入扣的拉锯。
-<br><br>
-<<getouticon>><<link [[返回雾潮总枢 (0:03)|MP Fog Tide Hub]]>><<pass 3>><</link>>
-<br>
-<<investigateicon>><<link [[推进外礁勘查 (0:15)|MP Fog Tide Stage 1]]>><<pass 15>><<tiredness 2>><</link>>
-<br>
-<<mpwatchicon>><<link [[巡视封锁街巷 (0:15)|MP Fog Tide Impact Patrol]]>><<pass 15>><</link>>
-<br>
-<<shopicon>><<link [[疏导反噬压力 (0:15)|MP Fog Tide Pressure Relief]]>><<pass 15>><</link>>
-<br>
-<<link [[直面满潮决断 (0:15)|MP Fog Tide Crisis 7]]>><<pass 15>><</link>>
+<<getouticon>><<link [[返回总枢 (0:03)|MP Fog Tide Hub]]>><<pass 3>><</link>><br>
+<<if Time.days lt ($mpFogNextStageDay or 0)>>
+<<walkicon>><<link [[等退潮后再来 (0:02)|MP Fog Tide Hub]]>><<pass 2>><</link>><br>
+<<elseif ($mpFogStage or 0) is 0>>
+<<mpmap2icon>><<link [[下外礁查水尺 (0:15)|MP Fog Tide Stage 1]]>><<pass 15>><<tiredness 2>><</link>><br>
+<<elseif $mpFogStage is 1>>
+<<mplampicon>><<link [[去石桥看林雾 (0:15)|MP Fog Tide Stage 2]]>><<pass 15>><<tiredness 2>><</link>><br>
+<<elseif $mpFogStage is 2>>
+<<mpgearicon>><<link [[上副塔修透镜 (0:15)|MP Fog Tide Stage 3]]>><<pass 15>><<tiredness 2>><</link>><br>
+<<elseif ($mpFogStage or 0) gte 3 and !$mpWorldFogS2Locked and ($mpFogStage or 0) lt 4>>
+<<mptideicon>><<link [[查防波堤暗闸 (0:15)|MP Fog Tide Stage 4]]>><<pass 15>><</link>><br>
+<<elseif ($mpFogStage or 0) is 4 and !$mpWorldFogS2Locked>>
+<<investigateicon>><<link [[下孤儿院暗渠 (0:15)|MP Fog Tide Stage 5]]>><<pass 15>><</link>><br>
+<<elseif ($mpFogStage or 0) is 5 and !$mpWorldFogS2Locked>>
+<<templeicon>><<link [[进神殿导流槽 (0:15)|MP Fog Tide Stage 6]]>><<pass 15>><</link>><br>
+<<elseif ($mpFogStage or 0) is 6 and !$mpWorldFogS2Locked>>
+<<mptideicon>><<link [[上海渊总堰口 (0:15)|MP Fog Tide Stage 7]]>><<pass 15>><</link>><br>
+<<else>>
+<<mplettericon>><<link [[翻看旧观测簿 (0:06)|MP Fog Tide Hub]]>><<pass 6>><</link>><br>
+<</if>>
+<<if $mpFogStage gte 1>><<mpwatchicon>><<link [[巡查封锁巷 (0:15)|MP Fog Tide Impact Patrol]]>><<pass 15>><</link>><br><<else>><span class="disabled">勘查册还空着</span><br><</if>>
+<<if ($mpFogPressure or 0) gte 1>><<mphandshakeicon>><<link [[疏导反噬或决断 (0:15)|MP Fog Tide Pressure Relief]]>><<pass 15>><</link>><<else>><span class="disabled">镇上还没有反噬要疏导</span><</if>>
 
 :: MP Fog Tide Stage 1 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -80,81 +89,107 @@
 <br><br>
 <<getouticon>><<link [[返回调查分枢 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>>
 <br>
-<<mpcalculateicon>><<link [[测绘水尺潮表 (0:18)|MP Fog Tide Stage 2]]>><<pass 18>>
-	<<if ($maths or 0) gte 200 or ($science or 0) gte 200>>
+<<mpmap2icon>><<link [[测绘水尺潮表 (0:18)|MP Fog Tide Survey Hub]]>><<pass 18>>
+	<<if !$daily>><<set $daily to {}>><</if>>
+	<<if $daily.mpFogSc1Fail>>
+		<<stress 2>>
+	<<elseif (($maths or 0) gte 200 or ($science or 0) gte 200)>>
 		<<set $mpFogStage to Math.max($mpFogStage or 0, 1)>>
+		<<set $mpFogNextStageDay to Time.days + 3>>
 		<<set $mpTideChart to ($mpTideChart or 0) + 1>>
 		<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
 		<<stress -3>><<tiredness 2>>
 	<<else>>
-		<<set $mpFogStage to Math.max($mpFogStage or 0, 1)>>
+		<<set $daily.mpFogSc1Fail to 1>>
+		<<set $mpFogNextStageDay to Time.days + 3>>
+		<<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
 		<<stress 5>><<pain 3>><<tiredness 3>>
 	<</if>>
 <</link>>
 <br>
-<<sneakicon>><<link [[打捞暗礁铜管 (0:16)|MP Fog Tide Lever Sounding]]>><<pass 16>>
-	<<if ($skulduggery or 0) gte 220 or ($swimmingskill or 0) gte 220>>
+<<sneakicon>><<link [[打捞暗礁铜管 (0:16)|MP Fog Tide Survey Hub]]>><<pass 16>>
+	<<if !$daily>><<set $daily to {}>><</if>>
+	<<if $daily.mpFogSc1Fail>>
+		<<stress 2>>
+	<<elseif (($skulduggery or 0) gte 220 or ($swimmingskill or 0) gte 220)>>
 		<<set $mpFogStage to Math.max($mpFogStage or 0, 1)>>
+		<<set $mpFogNextStageDay to Time.days + 3>>
 		<<set $mpTideChart to ($mpTideChart or 0) + 1>>
 		<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_stage1_chart_tube_v39")>>
 			<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
 		<</if>>
 		<<stress -2>><<tiredness 2>>
 	<<else>>
-		<<set $mpFogStage to Math.max($mpFogStage or 0, 1)>>
+		<<set $daily.mpFogSc1Fail to 1>>
+		<<set $mpFogNextStageDay to Time.days + 3>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
 		<<mpalert 6>><<pain 4>><<stress 6>>
 	<</if>>
 <</link>>
 <br>
-<<walkicon>><<link [[收拢残油赴塔 (0:14)|MP Fog Tide Lever Beacon]]>><<pass 14>><<set $mpFogStage to Math.max($mpFogStage or 0, 1)>><<set $mpLanternOil to ($mpLanternOil or 0) + 1>><<tiredness 2>><</link>>
+<<walkicon>><<link [[收拢残油回册 (0:14)|MP Fog Tide Survey Hub]]>><<pass 14>><<set $mpFogStage to Math.max($mpFogStage or 0, 1)>><<set $mpFogNextStageDay to Time.days + 3>><<set $mpLanternOil to ($mpLanternOil or 0) + 1>><<tiredness 2>><</link>>
 
 :: MP Fog Tide Stage 2 [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
-<<if !$mpNpcs.ash>><<set $mpNpcs.ash to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-离开海边栈桥后，你沿着灰雾蔓延的轨迹一路追查到狼街与森林交界的石拱桥。这里的雾气比港区更加浓稠，连十步之外的冷杉树冠都化作了模糊的黑影。原本通往深林采集区的两条岔路已被守林人拉起了编满干枯槲寄生的警戒麻绳，绳结上挂着两盏火苗微弱的黄铜风灯。披着灰绿斗篷的阿什正蹲在桥头石碑旁添补松脂，而高街钟表铺的塞拉也拎着一只密封气压匣站在廊檐下，眉头紧锁地核对着怀表秒针。
+<<if !$mpNpcs.ash>><<set $mpNpcs.ash to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>><<set $mpNpcs.ash.hasMet to 1>>
+<<if !$mpNpcs.sera>><<set $mpNpcs.sera to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>><<set $mpNpcs.sera.hasMet to 1>>
+离开海边栈桥后，你沿着灰雾蔓延的轨迹一路追查到狼街与森林交界的石拱桥。这里的雾气比港区更加浓稠，连十步之外的冷杉树冠都化作了模糊的黑影。原本通往深林采集区的两条岔路已被守林人拉起了编满干枯槲寄生的警戒麻绳，绳结上挂着两盏火苗微弱的黄铜风灯。披着灰绿斗篷的<<mpNpcRef "阿什" "ash" "守林人">>正蹲在桥头石碑旁添补松脂，而高街钟表铺的<<mpNpcRef "塞拉" "sera" "修表匠">>也拎着一只密封气压匣站在廊檐下，眉头紧锁地核对着怀表秒针。
 <br><br>
-「北坡的冷泉眼昨晚开始往外冒白瘴，气压计的指针比平时慢了整整四格。」塞拉指了指气压匣内侧凝结的盐霜，声音轻得像怕惊动雾里的东西，「只要海面潮位再往上涨，高街的裁缝铺和杂货行就得提前两个时辰落锁，连送奶马车都不敢在清晨进巷子。」阿什没有多话，只是用骨刀柄敲了敲石碑底部一道不断渗出寒气的地缝：「雾是从地下暗河和旧港防波堤两头顶上来的。不把林道上的引路灯网接通，夜里进林子的人一个也走不出来。」
+「北坡的冷泉眼昨晚开始往外冒白瘴，气压计的指针比平时慢了整整四格。」<<mpNpcRef "塞拉" "sera" "修表匠">>指了指气压匣内侧凝结的盐霜，声音轻得像怕惊动雾里的东西，「只要海面潮位再往上涨，高街的裁缝铺和杂货行就得提前两个时辰落锁，连送奶马车都不敢在清晨进巷子。」<<mpNpcRef "阿什" "ash" "守林人">>没有多话，只是用骨刀柄敲了敲石碑底部一道不断渗出寒气的地缝：「雾是从地下暗河和旧港防波堤两头顶上来的。不把林道上的引路灯网接通，夜里进林子的人一个也走不出来。」
 <br><br>
-你低头查看两人摊在青石板上的手绘路线图。要想打通第二阶段的观测网，要么协助阿什冒着寒雾把三盏备用风灯挂上北坡古树，强行撑开林间视野；要么协助塞拉在石桥暗渠口校准气压与水尺的联动误差，为后续在防波堤顶层合龙主折射镜提供精确参数。
+你低头查看两人摊在青石板上的手绘路线图。要想打通第二阶段的观测网，要么协助<<mpNpcRef "阿什" "ash" "守林人">>冒着寒雾把三盏备用风灯挂上北坡古树，强行撑开林间视野；要么协助<<mpNpcRef "塞拉" "sera" "修表匠">>在石桥暗渠口校准气压与水尺的联动误差，为后续在防波堤顶层合龙主折射镜提供精确参数。
 <br><br>
-冷杉林间飘落的松针沾满了冰凉的雾水，踩在脚下几乎听不见声响。石拱桥下方的排水暗渠正源源不断地往外冒着白气，将桥栏上的青苔浸得滑腻无比。无论是守林人阿什手里的松脂火把，还是修表师塞拉怀中滴答作响的精密怀表，都在这片步步紧逼的浓雾中成了维系城镇秩序的微弱支点，等待着你去将分散在林道与街巷之间的防线串联起来。
+冷杉林间飘落的松针沾满了冰凉的雾水，踩在脚下几乎听不见声响。石拱桥下方的排水暗渠正源源不断地往外冒着白气，将桥栏上的青苔浸得滑腻无比。无论是<<mpNpcRef "阿什" "ash" "守林人">>手里的松脂火把，还是<<mpNpcRef "塞拉" "sera" "修表匠">>怀中滴答作响的精密怀表，都在这片步步紧逼的浓雾中成了维系城镇秩序的微弱支点，等待着你去将分散在林道与街巷之间的防线串联起来。
 <br><br>
 <<getouticon>><<link [[返回调查分枢 (0:06)|MP Fog Tide Survey Hub]]>><<pass 6>><</link>>
 <br>
-<<caveicon "torch">><<link [[随阿什挂风灯 (0:20)|MP Fog Tide Stage 3]]>><<pass 20>>
-	<<if ($athletics or 0) gte 240 or ($tending or 0) gte 240>>
+<<mplampicon>><<link [[协力挂起林道风灯 (0:20)|MP Fog Tide Survey Hub]]>><<pass 20>>
+	<<if !$daily>><<set $daily to {}>><</if>>
+	<<if $daily.mpFogSc2Fail>>
+		<<stress 2>>
+	<<elseif (($athletics or 0) gte 240 or ($tending or 0) gte 240) and ($mpLanternOil or 0) gte 1>>
 		<<set $mpFogStage to Math.max($mpFogStage or 0, 2)>>
+		<<set $mpFogNextStageDay to Time.days + 4>>
 		<<set $mpNpcs.ash.trust to Math.min(100, ($mpNpcs.ash.trust or 0) + 2)>>
 		<<mplight 15>><<stress -4>><<tiredness 3>>
 	<<else>>
-		<<set $mpFogStage to Math.max($mpFogStage or 0, 2)>>
+		<<set $daily.mpFogSc2Fail to 1>>
+		<<set $mpFogNextStageDay to Time.days + 4>>
+		<<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
 		<<mplight -10>><<pain 4>><<stress 6>><<tiredness 4>>
 	<</if>>
 <</link>>
 <br>
-<<mpclockworkicon>><<link [[帮塞拉校气压 (0:18)|MP Fog Tide Stage 3]]>><<pass 18>>
-	<<if ($science or 0) gte 240 or ($maths or 0) gte 240>>
+<<mpgearicon>><<link [[校准石桥气压水尺 (0:18)|MP Fog Tide Survey Hub]]>><<pass 18>>
+	<<if !$daily>><<set $daily to {}>><</if>>
+	<<if $daily.mpFogSc2Fail>>
+		<<stress 2>>
+	<<elseif ($science or 0) gte 240 or ($maths or 0) gte 240>>
 		<<set $mpFogStage to Math.max($mpFogStage or 0, 2)>>
+		<<set $mpFogNextStageDay to Time.days + 4>>
 		<<set $mpNpcs.sera.trust to Math.min(100, ($mpNpcs.sera.trust or 0) + 2)>>
 		<<set $mpTideChart to ($mpTideChart or 0) + 1>>
 		<<stress -4>><<tiredness 2>>
 	<<else>>
-		<<set $mpFogStage to Math.max($mpFogStage or 0, 2)>>
+		<<set $daily.mpFogSc2Fail to 1>>
+		<<set $mpFogNextStageDay to Time.days + 4>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
 		<<stress 6>><<tiredness 3>>
 	<</if>>
 <</link>>
 <br>
-<<walkicon>><<link [[安抚歇业商贩 (0:15)|MP Fog Tide Impact Patrol]]>><<pass 15>><<set $mpFogStage to Math.max($mpFogStage or 0, 2)>><<stress -2>><</link>>
+<<walkicon>><<link [[安抚歇业商贩 (0:15)|MP Fog Tide Impact Patrol]]>><<pass 15>><<stress -2>><</link>>
 
 :: MP Fog Tide Stage 3 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
-<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-你踩着防波堤尽头陡峭的铸铁旋梯一路攀上雾角副塔的顶层平台。狂暴的海风裹挟着咸涩的浓雾扑面而来，脚下百尺深处的暗礁间翻滚着铅灰色的浪沫。平台正中央立着一座一人多高的八角黄铜折射灯笼，三面厚重的水晶菲涅尔透镜已有两面被盐霜与焦油糊死，底座的配重发条也卡在了死角里。夜航船长维斯正按着被风吹得猎猎作响的黑风衣站在护栏边，手里攥着一把加长铜扳手。
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>><<set $mpNpcs.vesper.hasMet to 1>>
+你踩着防波堤尽头陡峭的铸铁旋梯一路攀上雾角副塔的顶层平台。狂暴的海风裹挟着咸涩的浓雾扑面而来，脚下百尺深处的暗礁间翻滚着铅灰色的浪沫。平台正中央立着一座一人多高的八角黄铜折射灯笼，三面厚重的水晶菲涅尔透镜已有两面被盐霜与焦油糊死，底座的配重发条也卡在了死角里。<<mpNpcRef "维斯" "vesper" "夜航船长">>正按着被风吹得猎猎作响的黑风衣站在护栏边，手里攥着一把加长铜扳手。
 <br><br>
-「港务局那帮老爷只顾着在议事厅吵架，根本没人敢在涨潮夜爬上这鬼地方。」维斯吐掉嘴里的烟蒂，抬手指了指外海那道如同高墙般缓缓压向港湾的乳白雾线，「看见那道主雾墙了吗？等水尺漫到最高格，整个旧港、高街和森林都会被扣进锅底。你手里要是有塞拉校过的潮汐表和足够的鲸油，我们现在就能把主折射镜转回外航道，至少在满潮拍岸前争出喘息的余地。」
+「港务局那帮老爷只顾着在议事厅吵架，根本没人敢在涨潮夜爬上这鬼地方。」<<mpNpcRef "维斯" "vesper" "夜航船长">>吐掉嘴里的烟蒂，抬手指了指外海那道如同高墙般缓缓压向港湾的乳白雾线，「看见那道主雾墙了吗？等水尺漫到最高格，整个旧港、高街和森林都会被扣进锅底。你手里要是有<<mpNpcRef "塞拉" "sera" "修表匠">>校过的潮汐表和足够的鲸油，我们现在就能把主折射镜转回外航道，至少在满潮拍岸前争出喘息的余地。」
 <br><br>
 铜灯笼内部的齿轮在寒风中发出干涩的呻吟。此时无论是顶着强风扳正沉重的配重主轴，还是点燃高纯度鲸油烘化镜面盐霜，都需要极大魄力。一旦主折射镜重新运转，不仅第三阶段勘查彻底合龙，你也获得了在满潮时刻决定整座小镇命运的资格。
 <br><br>
@@ -162,9 +197,13 @@
 <br><br>
 <<getouticon>><<link [[返回调查分枢 (0:06)|MP Fog Tide Survey Hub]]>><<pass 6>><</link>>
 <br>
-<<mprepairicon>><<link [[扳正折射主镜 (0:22)|MP Fog Tide Crisis 7]]>><<pass 22>>
-	<<if ($physique or 0) gte 9000 or ($willpower or 0) gte 450>>
+<<mpgearicon>><<link [[扳正折射主镜 (0:22)|MP Fog Tide Survey Hub]]>><<pass 22>>
+	<<if !$daily>><<set $daily to {}>><</if>>
+	<<if $daily.mpFogSc3Fail>>
+		<<stress 2>>
+	<<elseif ($physique or 0) gte 9000 or ($willpower or 0) gte 450>>
 		<<set $mpFogStage to 3>>
+		<<set $mpFogNextStageDay to Time.days + 5>>
 		<<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 1)>>
 		<<set $mpNpcs.vesper.trust to Math.min(100, ($mpNpcs.vesper.trust or 0) + 3)>>
 		<<mplight 20>>
@@ -173,14 +212,18 @@
 		<</if>>
 		<<stress -5>><<tiredness 3>>
 	<<else>>
-		<<set $mpFogStage to 3>>
+		<<set $daily.mpFogSc3Fail to 1>>
+		<<set $mpFogNextStageDay to Time.days + 5>>
+		<<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>>
+		<<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+		<<if ($mpLanternOil or 0) gte 1>><<set $mpLanternOil -= 1>><</if>>
 		<<pain 5>><<stress 7>><<tiredness 4>>
 	<</if>>
 <</link>>
 <br>
-<<caveicon "torch">><<link [[转赴信标燃灯 (0:14)|MP Fog Tide Lever Beacon]]>><<pass 14>><<set $mpFogStage to 3>><<mplight 10>><</link>>
+<<caveicon "torch">><<link [[烘化镜面盐霜 (0:14)|MP Fog Tide Survey Hub]]>><<pass 14>><<if !$daily>><<set $daily to {}>><</if>><<if ($mpLanternOil or 0) gte 1>><<set $mpLanternOil -= 1>><<set $mpFogStage to 3>><<set $mpFogNextStageDay to Time.days + 5>><<mplight 10>><<stress -2>><<else>><<set $daily.mpFogSc3Fail to 1>><<set $mpFogNextStageDay to Time.days + 5>><<set $mpFogPressure to ($mpFogPressure or 0) + 1>><<stress 3>><</if>><</link>>
 <br>
-<<mpclockworkicon>><<link [[复核暗涌周期 (0:14)|MP Fog Tide Lever Sounding]]>><<pass 14>><<set $mpFogStage to 3>><</link>>
+<<mptideicon>><<link [[复核暗涌周期 (0:14)|MP Fog Tide Survey Hub]]>><<pass 14>><<set $mpFogStage to 3>><<set $mpFogNextStageDay to Time.days + 5>><<set $mpTideChart to ($mpTideChart or 0) + 1>><<tiredness 2>><</link>>
 
 :: MP Fog Tide Lever Beacon [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
@@ -231,7 +274,7 @@
 	<</if>>
 <</link>>
 <br>
-<<mprepairicon>><<link [[刮除焦油提炼 (0:20)|MP Fog Tide Hub]]>><<pass 20>>
+<<mpknifeicon>><<link [[刮除焦油提炼 (0:20)|MP Fog Tide Hub]]>><<pass 20>>
 	<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
 	<<tiredness 4>><<stress 3>><<pain 2>>
 <</link>>
@@ -241,7 +284,7 @@
 <<set _isWindow to (Time.hour is 6 or Time.hour is 12 or Time.hour is 18 or (Time.hour gte 5 and Time.hour lte 7) or (Time.hour gte 17 and Time.hour lte 19))>>
 栈桥北侧的测潮伸出平台上架设着一台带刻度的黄铜绞车，绞车钢丝绳末端拴着一枚十二磅重的空心测深铅锤。不同于靠蛮力驱散雾气的信标炉，测潮讲究顺应海底暗渠的涨落节律：只有在破晓、正午或暮色交接的整点潮汐窗口，对照手绘潮汐表将铅锤精准送入海沟回流眼，扳动水下分流闸板，才能将涌向内城的灰雾悄无声息地导回外海。
 <br><br>
-你低头核对手中的器物：当前持有手绘潮汐表 <<print ($mpTideChart or 0)>> 份，现在时刻为 <<print String(Time.hour).padStart(2, "0")>>:<<print String(Time.minute).padStart(2, "0")>>（<<if _isWindow>><span class="teal">正处于潮汐平流窗口</span><<else>><span class="purple">非平流整点窗口，暗流湍急</span><</if>>）。塞拉曾提醒过你，若在非窗口时段或没有潮汐表参照的情况下贸然下放铅锤，不仅难以校准水下闸板，湍急的回流还会顺着排水道反扑上岸，令雾潮刻度不降反升，并惊动码头上的巡逻哨兵。
+你低头核对手中的器物：当前持有手绘潮汐表 <<print ($mpTideChart or 0)>> 份，现在时刻为 <<print String(Time.hour).padStart(2, "0")>>:<<print String(Time.minute).padStart(2, "0")>>（<<if _isWindow>><span class="teal">正处于潮汐平流窗口</span><<else>><span class="purple">非平流整点窗口，暗流湍急</span><</if>>）。<<mpNpcRef "塞拉" "sera" "修表匠">>曾提醒过你，若在非窗口时段或没有潮汐表参照的情况下贸然下放铅锤，不仅难以校准水下闸板，湍急的回流还会顺着排水道反扑上岸，令雾潮刻度不降反升，并惊动码头上的巡逻哨兵。
 <br><br>
 海风吹得黄铜绞车的棘轮咔哒直响。你可以趁潮水换向时消耗一份潮汐表精准下锤引流，也可以凭算术与科学功底强行测算水下暗流；若是手头缺少潮汐表，还可以先在观测棚内誊抄老领航员留下的旧海图补齐备件。
 <br><br>
@@ -251,7 +294,7 @@
 <br><br>
 <<getouticon>><<link [[返回雾潮总枢 (0:04)|MP Fog Tide Hub]]>><<pass 4>><</link>>
 <br>
-<<mpclockworkicon>><<link [[按潮汐表下锤 (0:16)|MP Fog Tide Pressure Relief]]>><<pass 16>>
+<<mptideicon>><<link [[按潮汐表下锤 (0:16)|MP Fog Tide Pressure Relief]]>><<pass 16>>
 	<<if ($mpTideChart or 0) gte 1 and (_isWindow or ($science or 0) gte 220 or ($maths or 0) gte 220)>>
 		<<set $mpTideChart to ($mpTideChart or 1) - 1>>
 		<<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 1)>>
@@ -275,7 +318,7 @@
 	<</if>>
 <</link>>
 <br>
-<<mpreadicon>><<link [[誊抄旧水尺表 (0:20)|MP Fog Tide Hub]]>><<pass 20>>
+<<mpmap2icon>><<link [[誊抄旧水尺表 (0:20)|MP Fog Tide Hub]]>><<pass 20>>
 	<<set $mpTideChart to ($mpTideChart or 0) + 1>>
 	<<tiredness 3>><<stress 2>>
 <</link>>
@@ -291,12 +334,12 @@
 <<elseif $mpWorldScheduleShortened>>
 	在钟声撤离后的短工时格局下，内城互助车队傍晚提前收班，疏通排水渠与搬运备用油桶更为紧迫；
 <<elseif $mpWorldFogMarketOpen>>
-	在灰雾暗市开埠的格局下，维斯的夜航暗桩随时可在栈桥外围配合引开巡哨；
+	在灰雾暗市开埠的格局下，<<mpNpcRef "维斯" "vesper" "夜航船长">>的夜航暗桩随时可在栈桥外围配合引开巡哨；
 <<else>>
 	若放任反噬压力居高不下，不仅后续购买灯油与补给的开销会成倍增加，在码头与街巷活动时的初始警戒值也会节节攀升。
 <</if>>
 <br><br>
-你可以掏出 £<<print (_subsidyCost / 100).toFixed(2)>> 补贴商队运费、替油商从黑铁调车场搬运备用煤油桶来平抑物价；也可以趁着夜色在栈桥外围吹响引开巡哨的暗哨，帮维斯的人马把堆积在暗渠口的货箱疏散干净，从而把紧绷的警戒与反噬压力彻底降下来。
+你可以掏出 £<<print (_subsidyCost / 100).toFixed(2)>> 补贴商队运费、替油商从黑铁调车场搬运备用煤油桶来平抑物价；也可以趁着夜色在栈桥外围吹响引开巡哨的暗哨，帮<<mpNpcRef "维斯" "vesper" "夜航船长">>的人马把堆积在暗渠口的货箱疏散干净，从而把紧绷的警戒与反噬压力彻底降下来。
 <br><br>
 高街钟楼下的布告牌前围满了打听燃料与船期的街坊，油铺伙计正满头大汗地向排队的马车夫解释鲸油限购的缘由，而几名佩戴港务袖章的巡检员则在街角支起了临时路障，逐一核验进出港区的货箱封条。唯有拿出真金白银或实打实的力气活去疏通关节，才能让紧绷的四方势力重归平稳。
 <br><br>
@@ -304,7 +347,7 @@
 <br><br>
 <<getouticon>><<link [[返回调查分枢 (0:04)|MP Fog Tide Survey Hub]]>><<pass 4>><</link>>
 <br>
-<<shopicon>><<link [[垫资补贴油商 (0:15)|MP Fog Tide Hub]]>><<pass 15>>
+<<mpscaleicon>><<link [[垫资补贴油商 (0:15)|MP Fog Tide Hub]]>><<pass 15>>
 	<<if ($money or 0) gte _subsidyCost>>
 		<<set $money to ($money or 0) - _subsidyCost>>
 		<<set $mpFogPressure to Math.max(0, ($mpFogPressure or 0) - 2)>>
@@ -339,14 +382,14 @@
 :: MP Fog Tide Impact Patrol [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
-<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
+<<if !$mpNpcs.lin>><<set $mpNpcs.lin to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>><<set $mpNpcs.lin.hasMet to 1>>
 <<set _closeHour to ($mpWorldScheduleShortened ? 17 : 21)>>
 <<set _isAfterClose to (Time.hour gte _closeHour or Time.hour lt 7)>>
-灰白色的雾流像融化的铅水一般漫过商业街与森林边缘的鹅卵石路。由于当前雾潮刻度达到 <<print ($mpFogTide or 0)>>，加之<<if $mpWorldScheduleShortened>>钟声撤离后全镇低洼商铺已将打烊时辰提前至每日 <<print _closeHour>>:00（当前<<if _isAfterClose>>已进入撤离宵禁时段，街面铺门紧锁<<else>>尚在日间互助营业窗口<</if>>）<<else>>沿街铺面以 <<print _closeHour>>:00 为常规收摊界限<</if>>，平时叫卖热松饼与针线杂货的伙计们正忙着往门槛缝隙里塞防潮麻布袋。街角岗棚下，扎着高马尾的守夜人林恩正拿着记事板清点晚归的孤儿院学徒，神情比平日严肃得多。
+灰白色的雾流像融化的铅水一般漫过商业街与森林边缘的鹅卵石路。由于当前雾潮刻度达到 <<print ($mpFogTide or 0)>>，加之<<if $mpWorldScheduleShortened>>钟声撤离后全镇低洼商铺已将打烊时辰提前至每日 <<print _closeHour>>:00（当前<<if _isAfterClose>>已进入撤离宵禁时段，街面铺门紧锁<<else>>尚在日间互助营业窗口<</if>>）<<else>>沿街铺面以 <<print _closeHour>>:00 为常规收摊界限<</if>>，平时叫卖热松饼与针线杂货的伙计们正忙着往门槛缝隙里塞防潮麻布袋。街角岗棚下，扎着高马尾的<<mpNpcRef "林恩" "lin" "守夜人">>正拿着记事板清点晚归的孤儿院学徒，神情比平日严肃得多。
 <br><br>
-「雾气里混了海底沼气，钟楼的报时声传不出两条街。」林恩见到你走近，抬手把一面备用铜锣递到你手里，「刚才有两辆从河湾农场送麦粉过来的板车在森林石桥口迷了方向，高街裁缝铺也有一名送货学徒没按点回孤儿院。你是打算跟我去街口维持秩序，还是去林道边把迷路的板车引出来？」
+「雾气里混了海底沼气，钟楼的报时声传不出两条街。」<<mpNpcRef "林恩" "lin" "守夜人">>见到你走近，抬手把一面备用铜锣递到你手里，「刚才有两辆从河湾农场送麦粉过来的板车在森林石桥口迷了方向，高街裁缝铺也有一名送货学徒没按点回孤儿院。你是打算跟我去街口维持秩序，还是去林道边把迷路的板车引出来？」
 <br><br>
-浓雾中不时传来马匹不安的响鼻与木轮碾过碎石的声响。协助林恩安抚商铺并找回迷途学徒，不仅能获得林恩的敬重与店家凑出的谢礼（若处于撤离后的提前打烊时段，行会互助站还会额外拨付津贴），还能顺带收集散落的防风物资；但若在浓雾中判断失误，你同样会被困在湿冷的死巷里消耗大量体力。
+浓雾中不时传来马匹不安的响鼻与木轮碾过碎石的声响。协助<<mpNpcRef "林恩" "lin" "守夜人">>安抚商铺并找回迷途学徒，不仅能获得<<mpNpcRef "林恩" "lin" "守夜人">>的敬重与店家凑出的谢礼（若处于撤离后的提前打烊时段，行会互助站还会额外拨付津贴），还能顺带收集散落的防风物资；但若在浓雾中判断失误，你同样会被困在湿冷的死巷里消耗大量体力。
 <br><br>
 沿着被浓雾笼罩的排水明渠往里走，道路两侧的煤气路灯在湿冷空气中只剩下豆粒大小的昏黄光斑。守夜人吹响的巡街竹哨声在雾墙之间来回折射，唯有熟悉街巷肌理与林道走向的人，才能在这片白茫茫的迷障中替滞留的商贩与孤儿院学徒劈开一条安全的归途。
 <br><br>
@@ -354,7 +397,7 @@
 <br><br>
 <<getouticon>><<link [[返回调查分枢 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>>
 <br>
-<<mpwatchicon>><<link [[随林恩引板车 (0:20)|MP Fog Tide Hub]]>><<pass 20>>
+<<set _linRef to ((($mpNpcs and $mpNpcs.lin and ($mpNpcs.lin.hasMet or 0)) ? "林恩" : "守夜人"))>><<mpwatchicon>><<set _linLabel to "随" + _linRef + "引板车 (0:20)">><<link _linLabel>><<pass 20>>
 	<<if ($athletics or 0) gte 220 or ($willpower or 0) gte 400 or $mpWorldScheduleShortened>>
 		<<set $mpNpcs.lin.trust to Math.min(100, ($mpNpcs.lin.trust or 0) + 2)>>
 		<<set $mpLanternOil to ($mpLanternOil or 0) + 1>>
@@ -383,18 +426,29 @@
 
 :: MP Fog Tide Crisis 7 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
-防波堤外侧的警报铜钟在浓得化不开的灰雾中连续敲响了七下。海水夹杂着乳白色的寒瘴漫过外栈桥最顶层石阶，铸铁水尺上的浮标已经顶死在最高刻度。港务局执事、神殿净火修士、十二行会代表以及夜航船长维斯齐聚在雾角主塔下方的分流闸口前，火把的光芒在狂风中剧烈摇晃，照出一张张或紧绷或精于算计的脸庞。
+防波堤外侧的警报铜钟在浓得化不开的灰雾中连续敲响了七下。海水夹杂着乳白色的寒瘴漫过外栈桥最顶层石阶，铸铁水尺上的浮标已经顶死在最高刻度。港务局执事、神殿净火修士、十二行会代表以及<<mpNpcRef "维斯" "vesper" "夜航船长">>齐聚在雾角主塔下方的分流闸口前，火把的光芒在狂风中剧烈摇晃，照出一张张或紧绷或精于算计的脸庞。
 <br><br>
 「不能再犹豫了！」神殿修士高举纯银圣徽，声音嘶哑地喝道，「必须立刻拉起防波堤的三道生铁锁链彻底封港，并点燃全部净火池！哪怕断绝外海商路、让全城物价上涨，也绝不能放任灰雾漫进内城！」行会代表却连连摇头，主张敲响撤离钟声，将低洼街区的铺面与居民有序迁往高地，缩短每日营业时辰以保全元气。
 <br><br>
-而在人群外围的阴影里，维斯朝你递来一个意味深长的眼神：「封港会把所有穷苦船工活活饿死，撤离则会让半条街烂在泥水里。只要你肯帮我稳住水下分流闸，我们完全可以与这股雾潮议价——留出一条受控的灰雾航道，在旧港外围开辟雾中暗市。」三方目光同时落在了掌握水尺与折射镜核心参数的你身上，你的决断将永久改写这座城镇的格局。
+而在人群外围的阴影里，<<mpNpcRef "维斯" "vesper" "夜航船长">>朝你递来一个意味深长的眼神：「封港会把所有穷苦船工活活饿死，撤离则会让半条街烂在泥水里。只要你肯帮我稳住水下分流闸，我们完全可以与这股雾潮议价——留出一条受控的灰雾航道，在旧港外围开辟雾中暗市。」三方目光同时落在了掌握水尺与折射镜核心参数的你身上，你的决断将永久改写这座城镇的格局。
 <br><br>
 狂风卷起的海浪一次次拍打在防波堤最高处的铜环上，飞溅的咸水将火把浇得滋滋作响。站在分流闸左侧的神殿修士们已经抬出了装满净火石脂的铜釜，准备随时封闭内港水道；站在右侧的行会账房与马车夫们则牵着驮满账册的挽马，焦急地等待着撤离钟声；而船坞暗渠方向，几艘涂着黑漆的快艇正随着暗流起伏。三股截然不同的力量在此交汇，每一次呼吸都能感受到满潮前夕山雨欲来的压迫感。
 <br><br>
 <<getouticon>><<link [[返回调查分枢 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>>
 <br>
-<<caveicon "torch">><<link [[拉起铁链封港 (0:25)|MP Fog Tide Ending Lockdown]]>><<pass 25>>
-	<<set $mpWorldFogOutcome to "lockdown">>
+<<if $mpFogEnded>>
+<<if $mpWorldFogOutcome is "lockdown">>
+<<mpcraneicon>><<link [[重温铁链封港定局 (0:06)|MP Fog Tide Ending Lockdown]]>><<pass 6>><</link>>
+<<elseif $mpWorldFogOutcome is "evacuate">>
+<<mpbellicon>><<link [[重温钟声撤离定局 (0:06)|MP Fog Tide Ending Evacuate]]>><<pass 6>><</link>>
+<<elseif $mpWorldFogOutcome is "bargain">>
+<<mphandshakeicon>><<link [[重温与潮议价定局 (0:06)|MP Fog Tide Ending Bargain]]>><<pass 6>><</link>>
+<<else>>
+<<mplampicon>><<link [[重温信标长网定局 (0:06)|MP Fog Tide Ending BeaconNet]]>><<pass 6>><</link>>
+<</if>>
+<<else>>
+<<mpcraneicon>><<link [[拉起铁链封港 (0:25)|MP Fog Tide Ending Lockdown]]>><<pass 25>>
+	<<set $mpFogEnded to 1>><<set $mpWorldFogOutcome to "lockdown">>
 	<<set $mpWorldPriceMod to 135>>
 	<<set $mpWorldScheduleShortened to 0>>
 	<<set $mpWorldFogMarketOpen to 0>>
@@ -404,8 +458,8 @@
 	<<mpalertclear>>
 <</link>>
 <br>
-<<walkicon>><<link [[敲钟组织撤离 (0:25)|MP Fog Tide Ending Evacuate]]>><<pass 25>>
-	<<set $mpWorldFogOutcome to "evacuate">>
+<<mpbellicon>><<link [[敲钟组织撤离 (0:25)|MP Fog Tide Ending Evacuate]]>><<pass 25>>
+	<<set $mpFogEnded to 1>><<set $mpWorldFogOutcome to "evacuate">>
 	<<set $mpWorldScheduleShortened to 1>>
 	<<set $mpWorldPriceMod to 100>>
 	<<set $mpWorldFogMarketOpen to 0>>
@@ -414,22 +468,23 @@
 	<<stress -6>>
 <</link>>
 <br>
-<<sneakicon>><<link [[调控水闸议价 (0:25)|MP Fog Tide Ending Bargain]]>><<pass 25>>
-	<<set $mpWorldFogOutcome to "bargain">>
+<<mphandshakeicon>><<link [[调控水闸议价 (0:25)|MP Fog Tide Ending Bargain]]>><<pass 25>>
+	<<set $mpFogEnded to 1>><<set $mpWorldFogOutcome to "bargain">>
 	<<set $mpWorldFogMarketOpen to 1>>
 	<<set $mpWorldPriceMod to 100>>
 	<<set $mpWorldScheduleShortened to 0>>
 	<<set $mpFogTide to 4>>
 	<<set $mpFogPressure to 1>>
 <</link>>
+<</if>>
 
 :: MP Fog Tide Ending Lockdown [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 随着你扳下防波堤主绞盘的制动铁栓，三条碗口粗的生铁拦海链在震耳欲聋的金属轰鸣声中横贯整座港湾入口，将外海翻涌的灰雾巨浪死死挡在防波堤之外。神殿修士们齐声吟唱着古礼拜词，将整桶整桶的高纯度鲸油倾入沿岸的十二座青铜净火池。冲天而起的金色火墙照亮了半边夜空，盘踞在栈桥与高街排水渠里的乳白寒瘴在炙热气流烘烤下迅速消散。
 <br><br>
-当黎明的第一缕阳光重新刺破云层照在青石板路上时，持续多日的浓雾危机终于宣告解除。然而铁链封港的不可逆后果也随之浮现：所有外海商船与夜间驳船一律不得进出内港，城内杂货、船材与防风鲸油的日常售价自此永久上浮三成半（`$mpWorldPriceMod` 设为 135%）；但与此同时，港务巡逻队与神殿守卫彻底接管了防波堤，夜间街巷与码头的治安大幅改善，再无迷途野兽或暗潮怪影敢靠近内城半步。
+当黎明的第一缕阳光重新刺破云层照在青石板路上时，持续多日的浓雾危机终于宣告解除。然而铁链封港的代价也随之浮现：所有外海商船与夜间驳船一律不得进出内港，城内杂货、船材与防风鲸油的日常售价自此永久上浮三成半，价牌由港务与神殿合署重写；但与此同时，港务巡逻队与神殿守卫彻底接管了防波堤，夜间街巷与码头的治安大幅改善，再无迷途野兽或暗潮怪影敢靠近内城半步。
 <br><br>
-神殿执事郑重地向你颔首致意，将一枚镌刻着净火纹章的纯银纪念章与教会补贴交到你手中；不远处的维斯则无奈地摇了摇头，收起航海图退入了暗巷深处。
+神殿执事郑重地向你颔首致意，将一枚镌刻着净火纹章的纯银纪念章与教会补贴交到你手中；不远处的<<mpNpcRef "维斯" "vesper" "夜航船长">>则无奈地摇了摇头，收起航海图退入了暗巷深处。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_tide_ending_lockdown_v39")>>
 	<<money 1500>>
 	<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>>
@@ -448,11 +503,11 @@
 
 :: MP Fog Tide Ending Evacuate [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
-你接过行会执事递来的黄铜信号槌，登上海岸钟楼用力敲响了三长两短的避险钟声。低沉而急促的钟鸣穿透层层叠叠的灰雾传遍全镇，早有准备的守夜人林恩与马厩车夫们立刻赶着敞篷大马车驶入梅尔街、康努达图斯街等低洼街区，协助沿街商铺掌柜将珍贵布匹、面粉与药材装车转移，并护送孤儿院的年幼院童退往地势高耸的宅邸街与神殿回廊。
+你接过行会执事递来的黄铜信号槌，登上海岸钟楼用力敲响了三长两短的避险钟声。低沉而急促的钟鸣穿透层层叠叠的灰雾传遍全镇，早有准备的<<mpNpcRef "林恩" "lin" "守夜人">>与马厩车夫们立刻赶着敞篷大马车驶入梅尔街、康努达图斯街等低洼街区，协助沿街商铺掌柜将珍贵布匹、面粉与药材装车转移，并护送孤儿院的年幼院童退往地势高耸的宅邸街与神殿回廊。
 <br><br>
-在随后的几个昼夜里，失去了人气与炉火扰动的低洼外港任由灰雾自由漫过又自然退去，没有造成任何人员伤亡。但这场大规模内迁也永久改变了城镇的日常作息（`$mpWorldScheduleShortened` 已生效）：从今往后，临海与低洼街区的商铺及港区白班每逢傍晚便会提前歇业落锁，镇民与NPC的外出日程普遍缩短，入夜后的外街显得格外空旷冷清；作为补偿，行会与神殿在孤儿院及高街设立了常驻的互助配给站，日间向留守者提供平价热食与防寒草药。
+在随后的几个昼夜里，失去了人气与炉火扰动的低洼外港任由灰雾自由漫过又自然退去，没有造成任何人员伤亡。但这场大规模内迁也永久改变了城镇的日常作息：从今往后，临海与低洼街区的商铺及港区白班每逢傍晚便会提前歇业落锁，镇民与NPC的外出日程普遍缩短，入夜后的外街显得格外空旷冷清；作为补偿，行会与神殿在孤儿院及高街设立了常驻的互助配给站，日间向留守者提供平价热食与防寒草药。
 <br><br>
-林恩与行会代表在钟楼石阶前向你郑重道谢，将一份装有行会互助金的皮囊与备用防风灯油塞进你怀中。
+<<mpNpcRef "林恩" "lin" "守夜人">>与行会代表在钟楼石阶前向你郑重道谢，将一份装有行会互助金的皮囊与备用防风灯油塞进你怀中。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_tide_ending_evacuate_v39")>>
 	<<money 1200>>
 	<<set $mpLanternOil to ($mpLanternOil or 0) + 2>>
@@ -472,12 +527,12 @@
 :: MP Fog Tide Ending Bargain [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
-<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>>
-你没有理会神殿修士封港的呵斥，而是按照塞拉测算的潮汐谐振刻度，与维斯一左一右扳动了水下分流闸的半开齿轮。防波堤下方的三道暗渠同时激起巨大的漩涡，原本即将漫上高街的失控浓雾像是被无形的河床束缚住了一般，沿着外栈桥与海蚀回音廊之间形成了一条常年不散却边界分明的“灰雾航道”。
+<<if !$mpNpcs.vesper>><<set $mpNpcs.vesper to { love: 0, trust: 0, lust: 0, dom: 0, corruption: 0, stage: 0, hasMet: 1 }>><</if>><<set $mpNpcs.vesper.hasMet to 1>>
+你没有理会神殿修士封港的呵斥，而是按照<<mpNpcRef "塞拉" "sera" "修表匠">>测算的潮汐谐振刻度，与<<mpNpcRef "维斯" "vesper" "夜航船长">>一左一右扳动了水下分流闸的半开齿轮。防波堤下方的三道暗渠同时激起巨大的漩涡，原本即将漫上高街的失控浓雾像是被无形的河床束缚住了一般，沿着外栈桥与海蚀回音廊之间形成了一条常年不散却边界分明的“灰雾航道”。
 <br><br>
-这一大胆的举动彻底改写了旧港的生存法则（`$mpWorldFogMarketOpen` 已生效）。浓雾既未吞没内城，也没有完全消散，而是成为了天然的隐蔽屏障：每当暮色降临，悬挂着牛角风灯的走私快艇、深林采药人与异域货商便会借着灰雾掩护在三号防波堤下聚拢，形成了一座不受港务税吏与贝利眼线管辖的“雾中暗市”。虽然夜间外港的诡秘奇遇与警戒风险随之升高，但无论是可重复出手封存暗货、搜集海外古物，还是在码头深区承接高薪夜航，都迎来了前所未有的丰厚回报。
+这一大胆的举动彻底改写了旧港的生存法则。浓雾既未吞没内城，也没有完全消散，而是成为了天然的隐蔽屏障：每当暮色降临，悬挂着牛角风灯的走私快艇、深林采药人与异域货商便会借着灰雾掩护在三号防波堤下聚拢，形成了一座不受港务税吏与贝利眼线管辖的“雾中暗市”。虽然夜间外港的诡秘奇遇与警戒风险随之升高，但无论是可重复出手封存暗货、搜集海外古物，还是在码头深区承接高薪夜航，都迎来了前所未有的丰厚回报。
 <br><br>
-维斯站在雾气缭绕的船头向你抛来一枚刻着双锚纹章的黄铜通行币，眼底满是赞许。
+<<mpNpcRef "维斯" "vesper" "夜航船长">>站在雾气缭绕的船头向你抛来一枚刻着双锚纹章的黄铜通行币，眼底满是赞许。
 <<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_tide_ending_bargain_v39")>>
 	<<money 1800>>
 	<<set $mpContrabandSealed to ($mpContrabandSealed or 0) + 1>>
@@ -547,9 +602,122 @@
 	<</if>>
 <</link>>
 <br>
-<<mpreadicon>><<link [[核对海图换表 (0:16)|MP Fog Tide Lever Sounding]]>><<pass 16>>
+<<mpmap2icon>><<link [[核对海图换表 (0:16)|MP Fog Tide Lever Sounding]]>><<pass 16>>
 	<<set $mpTideChart to ($mpTideChart or 0) + 1>>
 	<<tiredness 2>><<stress -2>>
 <</link>>
 <br>
 <<link [[直抵码头深区 (0:08)|MP Deep Locations Directory]]>><<pass 8>><</link>>
+:: MP Fog Tide Stage 4 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set $mpFogStage to Math.max($mpFogStage or 0, 4)>><<set $mpFogS2Counter to ($mpFogS2Counter or 0)>>
+<<set _toll to (($mpGuildStanding and $mpGuildStanding.tollMod) or 0)>>
+防波堤外侧的海蚀暗槽在退潮后露出第四道青铜水闸，闸门连接着行会管辖的过闸税道。册页边用炭笔标着【第四阶｜暗涌已记 <<print $mpFogS2Counter>> 点｜行会闸税较常例 <<print _toll>> 点】。
+<<if _toll lte -4>>得益于行会减免港税，夜间驳船已替你备齐了撬闸铜钎。<<else>>由于行会闸口盘查严密，你没借到撬闸铜钎，只能等退潮徒手刮除暗槽牡蛎壳。<</if>>
+<br><br>
+<<getouticon>><<link [[退回分枢 (0:04)|MP Fog Tide Survey Hub]]>><<pass 4>><</link>><br>
+<<if _toll lte -4>><<mpgearicon>><<link [[借行会钎撬闸 (0:16)|MP Fog Tide Stage 4 After]]>><<pass 16>><<set $mpFogS2Choice to "lever">><<set $mpFogS2Counter += 2>><<stress -2>><</link>><<else>><span class="disabled">行会未备撬闸铜钎</span><</if>><br>
+<<mptideicon>><<link [[顺退潮下潜清槽 (0:18)|MP Fog Tide Stage 4 After]]>><<pass 18>><<if ($swimmingskill or 0) gte 200 or ($athletics or 0) gte 200>><<set $mpFogS2Choice to "dive_ok">><<set $mpFogS2Counter += 2>><<else>><<set $mpFogS2Choice to "dive_fail">><</if>><</link>><br>
+水闸外侧还剩一条通向满潮闸口的旧石阶，潮声从老闸门底下传上来。<br>
+<<walkicon>><<link [[走旧道回闸 (0:15)|MP Fog Tide Crisis 7]]>><<pass 15>><</link>>
+
+:: MP Fog Tide Stage 4 After [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if $mpFogS2Choice is "dive_fail">><<set $mpFogNextStageDay to Time.days + 4>><<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>><<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+你在冰冷湍急的暗槽回流里呛了一口咸水，手里的刮刀被浪头拍进石缝，没能扳动第四道青铜副闸，倒灌寒流反令水尺抬升一格。暗涌计数停在 <<print ($mpFogS2Counter or 0)>> 点，你未获半分财物，只能先退上石阶喘息。
+<<else>>
+<<set $mpFogNextStageDay to Time.days + 4>>
+随着第四道青铜副闸轰然落槽，外礁倒灌进港务税道的第一股深海寒流被成功截断。观测册记下暗涌计数 <<print ($mpFogS2Counter or 0)>> 点，水尺浮标随之回落半格，通往孤儿院暗渠的铁梯已露出水面。
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回分枢 (0:04)|MP Fog Tide Survey Hub]]>><<pass 4>><</link>><br>
+<<walkicon>><<link [[暂退休整喘息 (0:08)|MP Fog Tide Soft End]]>><<pass 8>><<if $mpFogS2Choice is "dive_fail">><<stress 3>><<pain 2>><</if>><</link>>
+
+:: MP Fog Tide Stage 5 [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $mpFogStage to Math.max($mpFogStage or 0, 5)>>
+你顺着防波堤内侧铁梯下到连通孤儿院煤房的第五阶市政暗渠。浓白盐雾正从砖缝往孤儿院地基渗漏，册页显示【当前第五阶｜暗涌计数 <<print ($mpFogS2Counter or 0)>> 点｜周债逾期 <<print ($mpLedger and $mpLedger.overdue) or 0>> 笔】。
+<<if $mpLedger and ($mpLedger.overdue or 0) is 0>>孤儿院账目清白，孩子们提前用煤灰袋替你堵住了侧支渗水口。<<else>>由于周债逾期吃紧，煤房暗门无人看守，寒雾正大股倒灌进走廊。<</if>>
+<br><br>
+<<getouticon>><<link [[返回上阶 (0:04)|MP Fog Tide Stage 4]]>><<pass 4>><</link>><br>
+<<mpcarryicon>><<link [[垒砌煤灰袋封漏 (0:16)|MP Fog Tide Stage 5 After]]>><<pass 16>><<if ($physique or 0) gte 7500 or ($mpLedger and ($mpLedger.overdue or 0) is 0)>><<set $mpFogS2Choice to "bag_ok">><<set $mpFogS2Counter += 2>><<else>><<set $mpFogS2Choice to "bag_fail">><</if>><</link>><br>
+<<mpcalculateicon>><<link [[拨转暗渠分流铁阀 (0:16)|MP Fog Tide Stage 5 After]]>><<pass 16>><<set $mpFogS2Choice to "valve_ok">><<set $mpFogS2Counter += 1>><<tiredness 2>><</link>>
+
+:: MP Fog Tide Stage 5 After [nobr]
+<<set $outside to 0>><<set $location to "town">><<effects>><<mpAmbient>>
+<<if $mpFogS2Choice is "bag_fail">><<set $mpFogNextStageDay to Time.days + 4>><<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>><<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+湿透的麻袋在暗渠水压冲击下崩开一道缺口，冰冷盐水漫过你的靴筒，盐霜仍在往墙根蔓延。暗涌计数停在 <<print ($mpFogS2Counter or 0)>> 点，你分文未得且双臂酸麻，只能暂且收手。
+<<else>>
+<<set $mpFogNextStageDay to Time.days + 4>>
+煤灰袋与分流铁阀严丝合缝地咬紧渠壁，原本倒灌向孤儿院与低洼街区的盐雾被逼回主排海道。观测册记下暗涌计数 <<print ($mpFogS2Counter or 0)>> 点，狼街神殿下方的净火导流槽已经清晰可见。
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回分枢 (0:04)|MP Fog Tide Survey Hub]]>><<pass 4>><</link>><br>
+<<walkicon>><<link [[退回拱门歇脚 (0:08)|MP Fog Tide Soft End]]>><<pass 8>><<if $mpFogS2Choice is "bag_fail">><<stress 4>><<pain 2>><</if>><</link>>
+
+:: MP Fog Tide Stage 6 [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $mpFogStage to Math.max($mpFogStage or 0, 6)>>
+<<set _orderName to ($mpTempleOrder is "orthodox" ? "守旧古礼" : ($mpTempleOrder is "reform" ? "济世革新" : ($mpTempleOrder is "concord" ? "钟律调和" : "尚未定调")))>>
+第六阶勘查点设在神殿回廊地下的净火导流槽。这里的石壁刻满导热铜纹，册页边写着【第六阶｜暗涌已记 <<print ($mpFogS2Counter or 0)>> 点｜神殿这一栏：<<print _orderName>>】。
+<<if $mpTempleOrder is "orthodox">>净火正统已拨出石脂助你烘干暗槽。<<elseif $mpTempleOrder is "reform">>慈悲圣所的修士送来防寒草药替你驱散湿瘴。<<else>>神殿两派尚未为你特批石脂，你得靠随身鲸油引燃导热槽。<</if>>
+<br><br>
+<<getouticon>><<link [[返回上阶 (0:04)|MP Fog Tide Stage 5]]>><<pass 4>><</link>><br>
+<<mplampicon>><<link [[引燃净火导热槽 (0:16)|MP Fog Tide Stage 6 After]]>><<pass 16>><<if ($mpLanternOil or 0) gte 1 or $mpTempleOrder is "orthodox">><<set $mpFogS2Choice to "fire_ok">><<set $mpFogS2Counter += 2>><<else>><<set $mpFogS2Choice to "fire_fail">><</if>><</link>><br>
+<<mpritualicon>><<link [[借钟律谐振排寒雾 (0:16)|MP Fog Tide Stage 6 After]]>><<pass 16>><<set $mpFogS2Choice to "bell_ok">><<set $mpFogS2Counter += 1>><<stress -2>><</link>>
+
+:: MP Fog Tide Stage 6 After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if $mpFogS2Choice is "fire_fail">><<set $mpFogNextStageDay to Time.days + 5>><<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>><<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+由于手头缺乏高纯度鲸油与神殿石脂，导热铜纹只跳起几簇微弱火苗便被寒气扑灭。暗涌计数停在 <<print ($mpFogS2Counter or 0)>> 点，你在湿冷石槽边空手受寒、分文未得，只能先退回水尺拱门。
+<<else>>
+<<set $mpFogNextStageDay to Time.days + 5>>
+赤红的热流顺着神殿地下铜纹一路贯通至海边防波堤，盘踞在暗渠深处的浓白瘴气发出一阵低沉轰鸣后节节败退。观测册记下暗涌计数 <<print ($mpFogS2Counter or 0)>> 点，海渊总堰的主阀门已可开启。
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回分枢 (0:04)|MP Fog Tide Survey Hub]]>><<pass 4>><</link>><br>
+<<walkicon>><<link [[退回石阶缓气 (0:08)|MP Fog Tide Soft End]]>><<pass 8>><<if $mpFogS2Choice is "fire_fail">><<stress 3>><<tiredness 2>><</if>><</link>>
+
+:: MP Fog Tide Stage 7 [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<set $mpFogStage to 7>>
+你立在防波堤最外端的第七阶海渊总堰上。脚下是翻涌的海底冷泉回流眼，册页显示【第七阶终局｜暗涌计数 <<print ($mpFogS2Counter or 0)>> 点｜水尺 <<print ($mpFogTide or 0)>> 格】。
+行会闸口、孤儿院暗渠与神殿导流槽三方管线在此交汇：<<if ($mpFogS2Counter or 0) gte 5>>你的二季暗涌计数已攒足五点，随时可合拢全城信标联防网<<else>>暗涌计数尚不足五点，强行合闸恐怕会被暗流顶回<</if>>。
+<br><br>
+<<getouticon>><<link [[返回上阶 (0:04)|MP Fog Tide Stage 6]]>><<pass 4>><</link>><br>
+<<mpgearicon>><<link [[合拢三方总堰 (0:20)|MP Fog Tide Stage 7 After]]>><<pass 20>><<if ($mpFogS2Counter or 0) gte 5>><<set $mpFogS2Choice to "lock_ok">><<else>><<set $mpFogS2Choice to "lock_fail">><</if>><</link>><br>
+<<mptideicon>><<link [[保留半开泄压水门 (0:18)|MP Fog Tide Stage 7 After]]>><<pass 18>><<if ($mpFogS2Counter or 0) gte 4>><<set $mpFogS2Choice to "lock_ok">><<set $mpFogS2Counter += 1>><<else>><<set $mpFogS2Choice to "lock_fail">><</if>><</link>>
+
+:: MP Fog Tide Stage 7 After [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if $mpFogS2Choice is "lock_fail">><<set $mpFogNextStageDay to Time.days + 5>><<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>><<set $mpFogPressure to ($mpFogPressure or 0) + 1>>
+由于前期暗涌计数积累不足，海渊冷泉的巨大水压将总堰齿轮猛地顶回原位，飞溅的冰冷浪沫打湿了你的衣襟。暗涌计数停在 <<print ($mpFogS2Counter or 0)>> 点，这一轮未能锁死总堰且分文未得。
+<<else>>
+<<set $mpFogNextStageDay to Time.days + 3>>
+三方管线的铜栓在海渊总堰上同时咬死，防波堤主折射镜、内城暗渠与神殿净火槽连成了一座完整的环城屏障。观测册记下暗涌计数 <<print ($mpFogS2Counter or 0)>> 点，你已可铸定雾潮终局。
+<</if>>
+<br><br>
+<<getouticon>><<link [[返回分枢 (0:04)|MP Fog Tide Survey Hub]]>><<pass 4>><</link>><br>
+<<walkicon>><<link [[转回拱门歇脚 (0:08)|MP Fog Tide Soft End]]>><<pass 8>><</link>>
+<<if $mpFogS2Choice isnt "lock_fail" and ($mpFogS2Counter or 0) gte 5>><br>
+<<mplampicon>><<link [[铸定环城信标长网 (0:20)|MP Fog Tide Ending BeaconNet]]>><<pass 20>><</link>>
+<</if>>
+
+:: MP Fog Tide Ending BeaconNet [nobr]
+<<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
+<<if !$mpFogEnded>><<set $mpFogEnded to 1>><<set $mpLanternOil to Math.max(0, ($mpLanternOil or 0) - 1)>><<set $money to Math.max(0, ($money or 0) - 300)>><</if>><<set $mpWorldFogS2Locked to 1>><<set $mpWorldFogOutcome to "beaconnet">><<set $mpFogTide to 1>><<set $mpFogPressure to 0>>
+随着你按下海渊总堰的最后一道黄铜母栓，册页边用炭笔添了一行小字：环城信标长明网，落印之后不再回退。防波堤折射镜、行会夜闸、孤儿院暗渠与神殿净火槽彻底并网：外海寒瘴被导入深海回流眼，内城既不必承受封港高物价，也无需提前打烊撤离。
+<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("fog_tide_s2_ending_beaconnet_v47")>><<money 1600>><</if>><<stress -10>>
+<br><br>
+<<getouticon>><<link [[返回总枢 (0:04)|MP Fog Tide Hub]]>><<pass 4>><</link>><br>
+<<shopicon>><<link [[走访余波集市 (0:10)|MP Fog Tide Aftermath Market]]>><<pass 10>><</link>><br>
+<<mpmap2icon>><<link [[回看雾潮调查分枢 (0:06)|MP Fog Tide Survey Hub]]>><<pass 6>><</link>>
+
+:: MP Fog Tide Soft End [nobr]
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $mpFogPressure to Math.max(0, ($mpFogPressure or 0) - 1)>>
+你带着一身湿冷的雾气退回高街水尺拱门下的避风石廊。虽然这一轮深海暗槽或暗渠合闸未能一次功成，也未换来分毫赏银，但先前勘查记下的【第 <<print ($mpFogStage or 4)>> 阶｜暗涌计数 <<print ($mpFogS2Counter or 0)>> 点】依然留在观测册上。喝过半壶热姜水后，你随时可以重整工具再度出发。
+<br><br>
+<<getouticon>><<link [[返回总枢 (0:03)|MP Fog Tide Hub]]>><<pass 3>><</link>><br>
+<<mpmap2icon>><<link [[重返调查分枢 (0:05)|MP Fog Tide Survey Hub]]>><<pass 5>><</link>><br>
+<<if $mpWorldFogS2Locked>><span class="disabled">长明网已落定，四阶无须再探</span><<else>><<walkicon>><<link [[再次挑战第四阶勘 (0:12)|MP Fog Tide Stage 4]]>><<pass 12>><</link>><</if>>

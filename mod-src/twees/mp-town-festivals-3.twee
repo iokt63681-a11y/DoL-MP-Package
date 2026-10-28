@@ -36,14 +36,14 @@
 :: MP Festival Candle 1 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpFestScore to 0>>
 <<set $mpFestival3Clues to ($mpFestival3Clues or {})>>
-二月初的寒气仍未褪尽，狼街神殿下方的储藏地窖里点起了一排铜火盆。按照烛光暖窖日的旧例，<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>正带着年轻修士清点过冬剩下的蜂蜡块，准备重铸成新烛分给孤儿院与守夜岗棚。
+二月初的寒气仍未褪尽，狼街神殿下方的储藏地窖里点起了一排铜火盆。按照烛光暖窖日的旧例，<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>正带着年轻修士清点过冬剩下的蜂蜡块，准备重铸成新烛分给孤儿院与守夜岗棚。
 <br><br>
 <<getouticon>><<link [[返回神殿前庭 (0:02)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<mpherbicon>><<if $NPCNameList and $NPCNameList.includes("Jordan")>><<link [[刮净蜂蜡炭灰 (0:08)|MP Festival Candle 2]]>>
+<<mpherbicon>><<if mpNpcMet("Jordan")>><<link [[刮净蜂蜡炭灰 (0:08)|MP Festival Candle 2]]>>
 	<<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240>><<set $mpFestival3Clues["candle_wax"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["candle_wax"] to 0>><<stress 3>><<tiredness 1>><</if>>
 	<<pass 8>>
-<</link>><<else>><span class="disabled">刮净蜂蜡炭灰 (0:08)（尚未结识）</span><</if>>
+<</link>><<else>><</if>>
 <br>
 <<templeicon>><<if ($science or 0) gte 260 or ($skulduggery or 0) gte 250>><<link [[裁齐烛芯线 (0:07)|MP Festival Candle 2]]>>
 	<<if ($science or 0) gte 240 or ($skulduggery or 0) gte 240>><<set $mpFestival3Clues["candle_wax"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["candle_wax"] to 0>><<stress 3>><</if>>
@@ -87,7 +87,7 @@
 :: MP Festival Candle 4 [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
 <<set $mpFestival3Clues to ($mpFestival3Clues or {})>>
-暮色初临时，你与<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>、<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>一起给宅邸街和孤儿院走廊的风灯换上新铸的蜂蜡烛。
+暮色初临时，你与<<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩<<else>>守夜人<</if>>、<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>一起给宅邸街和孤儿院走廊的风灯换上新铸的蜂蜡烛。
 <<if $mpFestival3Clues["candle_wax"] is 1 and $mpFestival3Clues["candle_mold"] is 1>>
 新烛烛芯笔直，点亮后火苗明亮温和，连一滴多余的蜡泪都没有流下。<span class="green">整条街巷的防风灯都换上了耐烧的新烛。</span>
 <<else>>
@@ -101,7 +101,7 @@
 :: MP Festival Candle 5 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
 <<set $mpFestival3Clues to ($mpFestival3Clues or {})>>
-孤儿院饭堂里点起了暖黄的蜂蜡烛，孩子们围坐着分食香甜的蜂蜜燕麦饼。<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>把神殿结余的铸烛劳务补贴交到你手里，<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>也替你留了一块最酥脆的麦饼。
+孤儿院饭堂里点起了暖黄的蜂蜡烛，孩子们围坐着分食香甜的蜂蜜燕麦饼。<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>把神殿结余的铸烛劳务补贴交到你手里，<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>也替你留了一块最酥脆的麦饼。
 <<if ($mpFestScore or 0) lte 0>>
 	<span class="teal">暖窖日几桩活计都出了岔子，你只领到一碗热麦粥果腹。</span>
 <<elseif window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_candle_reward")>>
@@ -212,7 +212,7 @@
 :: MP Festival Firstsheaf 1 [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>><<set $mpFestScore to 0>>
 <<set $mpFestival3Clues to ($mpFestival3Clues or {})>>
-八月一日清晨，向阳坡地的头茬春麦刚满金黄。按照初穗尝新会的规矩，<<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>正准备割下第一束麦穗试磨新面，却发现打谷场边的石磨转轴干涩卡顿，还没筛完头斗麦粒就停了。
+八月一日清晨，向阳坡地的头茬春麦刚满金黄。按照初穗尝新会的规矩，<<if mpNpcMet("Alex")>>亚历克斯<<else>>年轻农夫<</if>>正准备割下第一束麦穗试磨新面，却发现打谷场边的石磨转轴干涩卡顿，还没筛完头斗麦粒就停了。
 <br><br>
 <<getouticon>><<link [[返回农田 (0:02)|Farmland]]>><<set $outside to 1>><<set $location to "farm">><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -221,10 +221,10 @@
 	<<pass 7>>
 <<mpfarmicon>><</link>><<else>><<link [[给石磨轴抹油 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "给石磨轴抹油">><<set $mpInsuffReq to "照料等级：<span class='purple'>D</span> 或 科学等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
 <br>
-<<mpcarryicon>><<if $NPCNameList and $NPCNameList.includes("Alex")>><<link [[合力抬磨盘 (0:07)|MP Festival Firstsheaf 2]]>>
+<<mpcarryicon>><<if mpNpcMet("Alex")>><<link [[合力抬磨盘 (0:07)|MP Festival Firstsheaf 2]]>>
 	<<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>><<set $mpFestival3Clues["sheaf_mill"] to 1>><<set $mpFestScore to ($mpFestScore or 0) + 1>><<stress -2>><<else>><<set $mpFestival3Clues["sheaf_mill"] to 0>><<stress 3>><<pain 1>><</if>>
 	<<pass 7>>
-<</link>><<else>><span class="disabled">合力抬磨盘 (0:07)（尚未结识）</span><</if>>
+<</link>><<else>><</if>>
 
 :: MP Festival Firstsheaf 2 [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
@@ -272,12 +272,12 @@
 <br><br>
 <<getouticon>><<link [[返回成街 (0:08)|Harvest Street]]>><<set $outside to 1>><<set $location to "pub">><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<mpfarmicon>><<if $NPCNameList and $NPCNameList.includes("Alex")>><<link [[清点结余新麦 (0:12)|MP Festival Firstsheaf 5]]>><<pass 12>><</link>><<else>><span class="disabled">清点结余新麦 (0:12)（尚未结识）</span><</if>>
+<<mpfarmicon>><<if mpNpcMet("Alex")>><<link [[清点结余新麦 (0:12)|MP Festival Firstsheaf 5]]>><<pass 12>><</link>><<else>><</if>>
 
 :: MP Festival Firstsheaf 5 [nobr]
 <<set $outside to 1>><<set $location to "farm">><<effects>><<mpAmbient>>
 <<set $mpFestival3Clues to ($mpFestival3Clues or {})>>
-傍晚微风吹过麦浪，<<if $NPCNameList and $NPCNameList.includes("Alex")>>亚历克斯<<else>>年轻农夫<</if>>把一束编成平安结的金黄初穗别在你衣襟上，又将磨坊与酒馆凑出的尝新红封塞进你手心。
+傍晚微风吹过麦浪，<<if mpNpcMet("Alex")>>亚历克斯<<else>>年轻农夫<</if>>把一束编成平安结的金黄初穗别在你衣襟上，又将磨坊与酒馆凑出的尝新红封塞进你手心。
 <<if ($mpFestScore or 0) lte 0>>
 	<span class="teal">尝新会几桩活计都出了岔子，你只拿到了几块烘干的苹果片。</span>
 <<elseif window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("festival_firstsheaf_reward")>>

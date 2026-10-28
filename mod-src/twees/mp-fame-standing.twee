@@ -35,42 +35,46 @@
 
 :: MP Fame Standing Hub [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
-高街与旧港交界的转角立着一面钉满木格的布告墙。左边是深蓝布封的《名声册》，中间挂四栏包铁边的《信誉簿》，右边一块每日擦写的物价牌。墙脚下积着被鞋底磨亮的纸屑，海风一过便贴着砖缝打旋。管墙的老书记官很少抬头，只在你翻页时敲一敲铜铃，提醒你哪一栏又添了新墨。
+<<set _fameAny to ($mpFame.kind gte 20 or $mpFame.combat gte 20 or $mpFame.trade gte 20 or $mpFame.underworld gte 20 or $mpFame.charm gte 20 or $mpFame.infamy gte 20)>>
+<<set _standAny to ($mpStanding.docks gte 20 or $mpStanding.guilds gte 20 or $mpStanding.temple gte 20 or $mpStanding.underworld gte 20)>>
+高街与旧港交界的转角立着一面钉满木格的布告墙。左边是深蓝布封的《名声册》，中间挂四栏包铁边的《信誉簿》，右边一块每日擦写的物价牌。墙脚下积着被鞋底磨亮的纸屑，海风一过便贴着砖缝打旋。管墙的老书记官很少抬头，只在你翻页时敲一敲铜铃。
 <br><br>
-名声册把一个人被这座镇子记住的方式拆成六栏，每栏从零记到一百。二十以下只是生面孔，过了二十才有人肯在茶桌上提你的名字，四十五以上开始拿你当例子讲，七十五以后连外港来的船工都能报出你的绰号。林恩的旧案、塞拉的钟楼、阿什的林灯、莫奈的咖啡馆、诺艾尔的学园名册、维斯的夜航，都会以各自的方式在这六栏里留下痕迹；镇上的节日一到，书记官还会把册子抄成大字贴上集市口。
+名声册不写分数，只写别人怎么叫你。<<if _fameAny>>册子上已经有人叫得响的名号：<<if $mpFame.kind gte 20>>街坊叫你「善人」；<</if>><<if $mpFame.combat gte 20>>水手叫你「硬手」；<</if>><<if $mpFame.trade gte 20>>老主顾叫你「信户」；<</if>><<if $mpFame.underworld gte 20>>灰雾里的人叫你「熟客」；<</if>><<if $mpFame.charm gte 20>>酒馆常客叫你「座上宾」；<</if>><<if $mpFame.infamy gte 20>>巡夜的册子上记着「祸头」；<</if>>名号一旦叫顺口，茶桌上就有人提，外港来的船工也会跟着学。<<else>>册子上还没有叫得响的名号。书记官把笔尖在纸边刮了两下，说生面孔的名字只值一声「喂」，等哪件事被人记住了，才轮得到墨迹落在这一页。<</if>>
 <br><br>
-【六栏名声】善名 <<print $mpFame.kind>>（<<mpFameTier "kind">>）｜武名 <<print $mpFame.combat>>（<<mpFameTier "combat">>）｜商誉 <<print $mpFame.trade>>（<<mpFameTier "trade">>）｜暗名 <<print $mpFame.underworld>>（<<mpFameTier "underworld">>）｜魅名 <<print $mpFame.charm>>（<<mpFameTier "charm">>）｜恶名 <<print $mpFame.infamy>>（<<mpFameTier "infamy">>）。
+<<mpNpcRef "林恩" "lin" "守夜人">>的旧案、<<mpNpcRef "塞拉" "sera" "修表匠">>的钟楼、<<mpNpcRef "阿什" "ash" "守林人">>的林灯、<<mpNpcRef "莫奈" "monet" "画师">>的咖啡馆、<<mpNpcRef "诺艾尔" "noel" "标本学徒">>的学园名册、<<mpNpcRef "维斯" "vesper" "夜航船长">>的夜航，都会以各自的方式在册子上留下痕迹；可痕迹不等于名号，得厚到有人肯在街上叫出来。
 <br><br>
-善名靠替人扛事、公开旧案、在神殿添香，厚到二十就能把义名做成招牌，也让行会账房愿意先听你把话说完。武名靠拳脚、护船和在暗巷里不退，它不写进巡夜的册子，却写在水手掂量你时的眼神里，夜里走堤岸会少几道拦问；攒到二十，水手背后会叫你「硬手」。商誉靠准时交货、不短秤、不在雾天抬价，港区肯把栈桥调度交到你手上，看的就是这一栏；攒到二十，老主顾们会称你「信户」。暗名靠闭嘴、认暗号、把不该问的咽回去，它让你在灰雾里借得到路，也让你在告解隔栅前被多看两眼。魅名靠仪态、话头与记性，酒馆伙计会替你留座，神殿执事愿意多解释一句礼数；攒到二十，熟客会叫你「座上宾」。恶名与善名像一架跷跷板，你往一头压，另一头就翘起来；它能替你在暗巷省下口舌，也会让巡夜的灯笼在你身上多停一停，攒到二十，街面上会叫你「祸头」。
+【四方信誉】四栏各记各的，读的不是数字，是别人肯替你做到哪一步。
+<br>
+旧港码头：<<if $mpStanding.docks gte 20>>安全屋的看守肯给你留后门，鱼贩报的价比生客低一档。<<elseif $mpStanding.docks gte 10>>调度员见你会点头，泊位仍旧要按潮水抢。<<else>>码头的人只把你当路过的生面孔，问路也未必有人应。<</if>>
+<br>
+十二行会：<<if $mpStanding.guilds gte 20>>账房肯把急单先递到你手上，料钱也少算一笔。<<elseif $mpStanding.guilds gte 10>>掌柜愿意听你把话说完，红绳捆的急单还轮不到你。<<else>>行会的门照开，账房只按生客的价目算。<</if>>
+<br>
+狼街神殿：<<if $mpStanding.temple gte 20>>晨钟执事允你在香案前多站一炷香，香油钱按熟客算。<<elseif $mpStanding.temple gte 10>>老修士记得你的脸，告解隔栅后仍不肯多留一句。<<else>>殿里的执事只当你第一次来，礼数一分不少，话一句不多。<</if>>
+<br>
+灰雾地下：<<if $mpStanding.underworld gte 20>>暗巷里有人肯替你留门，暗货按熟客价。<<elseif $mpStanding.underworld gte 10>>门缝里递出的绳头你认得，里面的人还不肯让你进。<<else>>灰雾里的门只开给认得脸的人，你敲两下，里面没有回声。<</if>>
 <br><br>
-【街头称号】<<if $mpFame.kind gte 20>>义名在外，街坊叫你「善人」；<</if>><<if $mpFame.combat gte 20>>水手叫你「硬手」；<</if>><<if $mpFame.trade gte 20>>老主顾叫你「信户」；<</if>><<if $mpFame.underworld gte 20>>灰雾里的人叫你「熟客」；<</if>><<if $mpFame.charm gte 20>>酒馆常客叫你「座上宾」；<</if>><<if $mpFame.infamy gte 20>>巡夜的册子上给你记着「祸头」；<</if>><<if $mpFame.kind lt 20 and $mpFame.combat lt 20 and $mpFame.trade lt 20 and $mpFame.underworld lt 20 and $mpFame.charm lt 20 and $mpFame.infamy lt 20>>六栏都还没过二十，街面上还没有叫得响的名号。<</if>>
+四栏彼此拉扯：你在港区多接一单，行会账房就晚半天回话；替神殿添一炷香，地下那本暗账就把你的名字往后挪。先让谁信你，要自己拿主意。
 <br><br>
-【四方信誉】旧港码头 <<print $mpStanding.docks>>（<<print ($mpStanding.docks >= 75 ? "入幕" : ($mpStanding.docks >= 45 ? "倚重" : ($mpStanding.docks >= 20 ? "有交情" : "生面孔")))>>）｜十二行会 <<print $mpStanding.guilds>>（<<print ($mpStanding.guilds >= 75 ? "入幕" : ($mpStanding.guilds >= 45 ? "倚重" : ($mpStanding.guilds >= 20 ? "有交情" : "生面孔")))>>）｜狼街神殿 <<print $mpStanding.temple>>（<<print ($mpStanding.temple >= 75 ? "入幕" : ($mpStanding.temple >= 45 ? "倚重" : ($mpStanding.temple >= 20 ? "有交情" : "生面孔")))>>）｜灰雾地下 <<print $mpStanding.underworld>>（<<print ($mpStanding.underworld >= 75 ? "入幕" : ($mpStanding.underworld >= 45 ? "倚重" : ($mpStanding.underworld >= 20 ? "有交情" : "生面孔")))>>）。
-<br><br>
-四栏各记各的，谁也不替谁担保。码头看你肯不肯下水，行会看你交不交货，神殿看你守不守礼，地下只看你嘴严不严。它们彼此拉扯：你在港区多接一单，行会账房就少记你一笔；替神殿添一炷香，地下那本暗账就把你的名字往后挪。四条线没有一条能靠讨好所有人同时拉满，先让谁信你，是要自己拿主意的。
-<br><br>
-物价牌上写着今日的百钱折算：<<mpWorldPrice 100>>。行会的港税、雾潮的涨落与季节的更替都会动这块牌子，你替人跑腿的脚力钱因此时厚时薄；商誉厚的人未必能压下物价，却总能先知道哪家铺子要涨。册子末页还留着一枚空白印章：等哪一天你攒够了本钱，可以把「义名典范」盖上去，也可以让「凶名立威」在纸上烧出焦痕。
+物价牌上写着今日的百钱折算：<<mpWorldPrice 100>>。商誉厚的人未必能压下物价，却总能先知道哪家铺子要涨。册子末页还留着一枚空白印章，等哪一天你攒够了本钱，再把一个名号盖上去。
 <br><br>
 <<getouticon>><<link [[返回高街布告 (0:02)|MP Town Side Stories Hub]]>><<pass 2>><</link>><br>
-<<socialiseicon>><<link [[查看六维名声 (0:04)|MP Fame Board]]>><<pass 4>><</link>><br>
+<<socialiseicon>><<link [[查看名声册 (0:04)|MP Fame Board]]>><<pass 4>><</link>><br>
 <<investigateicon>><<link [[查看四方信誉 (0:04)|MP Standing Board]]>><<pass 4>><</link>><br>
-<<docksicon>><<link [[走访港区派系 (0:06)|MP Standing Docks]]>><<pass 6>><</link>><br>
-<<link [[走访行会派系 (0:06)|MP Standing Guilds]]>><<pass 6>><</link>>
-<br><<link [[更多事务 (0:03)|MP Fame Standing More Hub]]>><<pass 3>><</link>>
+<<if _fameAny or _standAny>><<link [[更多事务 (0:03)|MP Fame Standing More Hub]]>><<pass 3>><</link>><</if>>
 
 :: MP Fame Board [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
 布告墙背后有一间只容两人转身的窄室，墙上钉着六把黄铜尺，每把尺下压着一叠旧账。老书记官把册子摊在桌上，笔尖蘸的不是墨，是兑了胶的烟灰；落纸之后擦不掉，只能被新的一笔盖住。窗缝里漏进一线街光，照见纸页上层层叠叠的旧名。
 <br><br>
-【名声定盘】善名 <<print $mpFame.kind>>（<<mpFameTier "kind">>）｜武名 <<print $mpFame.combat>>（<<mpFameTier "combat">>）｜商誉 <<print $mpFame.trade>>（<<mpFameTier "trade">>）｜暗名 <<print $mpFame.underworld>>（<<mpFameTier "underworld">>）｜魅名 <<print $mpFame.charm>>（<<mpFameTier "charm">>）｜恶名 <<print $mpFame.infamy>>（<<mpFameTier "infamy">>）。当前定性：<<if $mpFame.outcome is "paragon">>义名典范<<elseif $mpFame.outcome is "infamous">>凶名立威<<else>>尚未落印<</if>>。
+【名声定盘】<<if $mpFame.kind gte 20 or $mpFame.combat gte 20 or $mpFame.trade gte 20 or $mpFame.underworld gte 20 or $mpFame.charm gte 20 or $mpFame.infamy gte 20>>册上已经叫响的名号：<<if $mpFame.kind gte 20>>「善人」；<</if>><<if $mpFame.combat gte 20>>「硬手」；<</if>><<if $mpFame.trade gte 20>>「信户」；<</if>><<if $mpFame.underworld gte 20>>「熟客」；<</if>><<if $mpFame.charm gte 20>>「座上宾」；<</if>><<if $mpFame.infamy gte 20>>「祸头」；<</if>>其余的尺还空着，等下一个被人叫顺口的名字。<<else>>六把铜尺都还空着，只有生面孔的短注。<</if>>当前定性：<<if $mpFame.outcome is "paragon">>义名典范<<elseif $mpFame.outcome is "infamous">>凶名立威<<else>>尚未落印<</if>>。
 <br><br>
-义名这条路不看你喊得多响，只看善名或商誉有没有到二十，或者你早年在镇上积下的好名声够不够厚。够格时，书记官会把册子摊平，让你在午后的市集当众替一桩旧纠纷作保：善名再添八分，魅名添四分，恶名被压回去四分，连日的紧绷也松下三分。铜印落下后，孤儿院的门房会先给你让路，行会账房再谈急单时也肯把价目表往你这边推；代价是暗巷里的人从此笑你心软，地下那本账不会替你保密。
+义名这条路不看你喊得多响，只看善名或商誉有没有厚到有人肯替你作保，或者你早年在镇上积下的好名声够不够用。够格时，书记官会把册子摊平，让你在午后的市集当众替一桩旧纠纷作保：善名再添一笔，魅名跟着涨，恶名被压回去，连日的紧绷也松下几分。铜印落下后，孤儿院的门房会先给你让路，行会账房再谈急单时也肯把价目表往你这边推；代价是暗巷里的人从此笑你心软，地下那本账不会替你保密。
 <br><br>
-另一条路短得多。你只要在暗巷尽头站定，让几个惯于拦路的家伙记住你的脸：武名添六分，恶名添六分，灰雾地下也会把你记成可用的人，暗名添两分；代价是善名被削去三分，行会与神殿的门槛跟着抬高。这一夜之后，堤岸上的拦问会少，巡夜的灯笼却会多停一停，码头的私活也更容易找上你。
+另一条路短得多。你只要在暗巷尽头站定，让几个惯于拦路的家伙记住你的脸：武名与恶名一起往上走，灰雾地下也会把你记成可用的人，暗名跟着添一笔；代价是善名被削去一截，行会与神殿的门槛跟着抬高。这一夜之后，堤岸上的拦问会少，巡夜的灯笼却会多停一停，码头的私活也更容易找上你。
 <br><br>
 若两样本钱都不够，硬要站到市集中央讨一个义名，热闹是有的，响应却零零落落。旁人的目光从你身上滑过去，像避开一件摆错位置的货。你赔进去的是半日精神与一整晚的疲惫，钱袋一分未动，名声册上也不会多出任何一笔。
 <br><br>
-册子末页只认两种印：义名典范与凶名立威。先盖的印不会自己消失，后盖的只能压在上面；镇上人的记性比铜印慢，改口要花更久。至于六栏里那些还没到二十的数字，书记官只把它们当作还没被人叫顺口的名字。
+册子末页只认两种印：义名典范与凶名立威。先盖的印不会自己消失，后盖的只能压在上面；镇上人的记性比铜印慢，改口要花更久。至于六栏里那些还没被人叫顺口的名字，书记官只把它们当作还没长成的纸页。
 <br><br>
 <<getouticon>><<link [[返回名声总枢 (0:02)|MP Fame Standing Hub]]>><<pass 2>><</link>><br>
 <<socialiseicon>><<if $mpFame.kind gte 20 or $mpFame.trade gte 20 or ($fame and ($fame.good or 0) gte 100)>><<link [[树立义名典范 (0:10)|MP Fame Standing Hub]]>><<pass 10>><<mpFameAdd "kind" 8>><<mpFameAdd "charm" 4>><<mpFameAdd "infamy" -4>><<set $mpFame.outcome to "paragon">><<stress -3>><</link>><<else>><<link [[强求义名受挫 (0:10)|MP Fame Standing Hub]]>><<pass 10>><<stress 3>><<tiredness 1>><</link>><</if>><br>
@@ -80,11 +84,17 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
 行会厅外的长廊尽头并排立着四块包铜边的木牌，牌面被无数只手摸得发亮。港区的牌子沾着盐霜，行会的牌子边角贴着货签，神殿的牌子熏出一圈烛烟，地下的牌子则总像蒙着一层擦不掉的灰。四块牌下面各挂一只窄口木箱，投进去的不是钱，是各派系记账人写下的字条。
 <br><br>
-【四方信誉】旧港码头 <<print $mpStanding.docks>>（<<print ($mpStanding.docks >= 75 ? "入幕" : ($mpStanding.docks >= 45 ? "倚重" : ($mpStanding.docks >= 20 ? "有交情" : "生面孔")))>>）｜十二行会 <<print $mpStanding.guilds>>（<<print ($mpStanding.guilds >= 75 ? "入幕" : ($mpStanding.guilds >= 45 ? "倚重" : ($mpStanding.guilds >= 20 ? "有交情" : "生面孔")))>>）｜狼街神殿 <<print $mpStanding.temple>>（<<print ($mpStanding.temple >= 75 ? "入幕" : ($mpStanding.temple >= 45 ? "倚重" : ($mpStanding.temple >= 20 ? "有交情" : "生面孔")))>>）｜灰雾地下 <<print $mpStanding.underworld>>（<<print ($mpStanding.underworld >= 75 ? "入幕" : ($mpStanding.underworld >= 45 ? "倚重" : ($mpStanding.underworld >= 20 ? "有交情" : "生面孔")))>>）。
+【四方信誉】旧港码头：<<if $mpStanding.docks gte 20>>安全屋的看守肯给你留后门，鱼贩报的价比生客低一档。<<elseif $mpStanding.docks gte 10>>调度员见你会点头，泊位仍旧要按潮水抢。<<else>>码头的人只把你当路过的生面孔。<</if>>
+<br>
+十二行会：<<if $mpStanding.guilds gte 20>>账房肯把急单先递到你手上，料钱也少算一笔。<<elseif $mpStanding.guilds gte 10>>掌柜愿意听你把话说完，红绳捆的急单还轮不到你。<<else>>行会的门照开，账房只按生客的价目算。<</if>>
+<br>
+狼街神殿：<<if $mpStanding.temple gte 20>>晨钟执事允你在香案前多站一炷香，香油钱按熟客算。<<elseif $mpStanding.temple gte 10>>老修士记得你的脸，告解隔栅后仍不肯多留一句。<<else>>殿里的执事只当你第一次来。<</if>>
+<br>
+灰雾地下：<<if $mpStanding.underworld gte 20>>暗巷里有人肯替你留门，暗货按熟客价。<<elseif $mpStanding.underworld gte 10>>门缝里递出的绳头你认得，里面的人还不肯让你进。<<else>>灰雾里的门只开给认得脸的人。<</if>>
 <br><br>
-港区的数字到十五，码头安全屋的看守才肯把后门的钥匙交给你；再往上，栈桥与夜航的活会先送到你手上，水手背地里叫你「码头熟人」。行会的数字到十五，账房愿意坐下来听你谈克拉拉的契约；到二十五，你在联席上说话才有分量，能推动平抑物价的那一档，布商见了你会称一声「信户」。神殿不设硬门槛，但信誉越厚，晨钟执事越肯让你在香案前多站一会儿，告解隔栅后的老修士也愿意替你留一句好话，香客私下称你「执香人」。地下到十五，灰雾里的人肯把密信递到你手里；到二十五，暗市联络肯为你开门；到三十，暗市闸门会在你走近时自己落闩，摊主叫你「灰雾熟客」。
+港区的人先肯把后门的钥匙交给你；再往上，栈桥与夜航的活会先送到你手上，水手背地里叫你「码头熟人」。行会的门先得有人替你引见，账房才肯坐下来听你谈一笔大单；等你在联席上有了分量，才能推动平抑物价的那一档。神殿不设硬门槛，但信誉越厚，晨钟执事越肯让你在香案前多站一会儿，香客私下称你「执香人」。地下的人先肯把密信递到你手里；再往上，暗市联络肯为你开门，摊主叫你「灰雾熟客」。
 <br><br>
-四条线彼此拉扯，不是简单的加法。港区多接一单，行会账房就晚半天回你的话；行会压下一笔港价，码头的水手就少分一口汤；神殿多添一炷香，地下的暗账就把你往后挪；地下多走一趟货，神殿的门槛就抬高一分。每一边涨八分，对面总要薄两分，账本上没有白拿的面子。你可以同时同所有人点头，却没法同时让所有人替你担保。
+四条线彼此拉扯，不是简单的加法。港区多接一单，行会账房就晚半天回你的话；行会压下一笔港价，码头的水手就少分一口汤；神殿多添一炷香，地下的暗账就把你往后挪；地下多走一趟货，神殿的门槛就抬高一分。每一边多要一分，对面总要薄一分，账本上没有白拿的面子。你可以同时同所有人点头，却没法同时让所有人替你担保。
 <br><br>
 作息窗眼下是 <<mpWorldScheduleOpen 8 21>>。行会的宵禁议案能把窗子往两头推，港税议案会改写百钱折算，地下的信誉决定暗市开不开，神殿的礼制则左右全城的香油价。四块牌不是给人看的装饰，它们决定了你今天能进哪扇门、几点之前必须离街，以及明天买一袋面粉要付多少。
 <br><br>
@@ -98,13 +108,13 @@
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>><<mpFameInit>>
 三号栈桥的木板被潮气浸得发黑，缆桩上缠着新旧不一的麻绳。雾从外海一层层推来，把吊臂、货箱和排队等泊的驳船泡成模糊的影子。港务处的调度员站在一只倒扣的木箱上，手里攥着半截粉笔，往舱单背面记泊位；写错一笔就用袖子抹掉，袖口早已蹭成灰白。
 <br><br>
-【港区账面】码头信誉 <<print $mpStanding.docks>>（<<print ($mpStanding.docks >= 75 ? "入幕" : ($mpStanding.docks >= 45 ? "倚重" : ($mpStanding.docks >= 20 ? "有交情" : "生面孔")))>>）｜商誉 <<print $mpFame.trade>>（<<mpFameTier "trade">>）｜你这些日子练出的脚力 <<print ($athletics or 0)>>。<<if $mpWorldDocksOutcome is "charter">>旧港已经签下自由船工公约，四道工序的班次按新章程排，调度员说话时底气足了些。<<elseif $mpWorldDocksOutcome is "syndicate">>暗潮船东联保接了手，夜里不点灯的泊位多了几个，调度员报数前会先看一眼水面。<<else>>码头公约还没落定，泊位按老规矩抢，谁嗓门大谁先靠。<</if>><<if $mpWorldVesperEnding is "freeport">>维斯那条自由航线已经挂牌，报关的窗口排到了堤外。<<elseif $mpWorldVesperEnding is "shadowfleet">>暗影船队的泊位不挂灯，巡夜船绕着走。<</if>>
+【港区账面】码头的人<<if $mpStanding.docks gte 20>>肯给你留后门，鱼贩报的价比生客低一档<<elseif $mpStanding.docks gte 10>>见你会点头，泊位仍旧要按潮水抢<<else>>只把你当路过的生面孔<</if>>｜商誉<<if $mpFame.trade gte 20>>已经有人叫你「信户」<<else>>还没叫顺口<</if>>｜脚力<<if ($athletics or 0) gte 220>>够你在雾里抢一趟活<<else>>还撑不住整班卸货<</if>>。<<if $mpWorldDocksOutcome is "charter">>旧港已经签下自由船工公约，四道工序的班次按新章程排，调度员说话时底气足了些。<<elseif $mpWorldDocksOutcome is "syndicate">>暗潮船东联保接了手，夜里不点灯的泊位多了几个，调度员报数前会先看一眼水面。<<else>>码头公约还没落定，泊位按老规矩抢，谁嗓门大谁先靠。<</if>><<if $mpWorldVesperEnding is "freeport">><<mpNpcRef "维斯" "vesper" "夜航船长">>那条自由航线已经挂牌，报关的窗口排到了堤外。<<elseif $mpWorldVesperEnding is "shadowfleet">>暗影船队的泊位不挂灯，巡夜船绕着走。<</if>>
 <br><br>
 调度员把粉笔往你手里一塞，让你替三艘驳船排进港次序：先看吃水，再看潮窗，最后才轮到大副递来的烟。你得在雾里分辨缆绳的松紧，在吊臂转过来之前把闲人轰开，还得记住哪条船昨夜欠了港务处的号子钱。脚力够，或者商誉够，这活就能顺顺当当接下来：港区信誉添八分，商誉添四分，跟船扛缆也让你的武名添两分；行会账房那边则要少记你两分，他们不喜欢港区把活都揽过去。事成之后你会松下一口气，肩膀的酸胀反而轻了些。
 <br><br>
 要是脚力不济、商誉又薄，粉笔在舱单上打滑，泊位排错，吊臂空转半刻，码头的骂声便从三个方向同时压过来。调度员不罚钱，只把舱单卷起来敲你手背，让你在雾里站到下一班潮水。你落下一身疲惫，心里那根弦也绷得更紧。
 <br><br>
-港区信誉过十五，安全屋的看守才会给你留后门；再往上，夜航的私活、湿货的押运都会先想到你。可这份熟络是拿行会的冷脸换的，账本两头从来不会同时好看。雾再厚一点，栈桥就会提前收灯，到那时能把你从潮里拽回来的，只有平日里攒下的这几笔面子。
+码头的人先肯把后门的钥匙交给你；再往上，夜航的私活、湿货的押运都会先想到你。可这份熟络是拿行会的冷脸换的，账本两头从来不会同时好看。雾再厚一点，栈桥就会提前收灯，到那时能把你从潮里拽回来的，只有平日里攒下的这几笔面子。
 <br><br>
 <<getouticon>><<link [[返回信誉总表 (0:02)|MP Standing Board]]>><<pass 2>><</link>><br>
 <<docksicon>><<if ($athletics or 0) gte 220 or $mpFame.trade gte 15>><<link [[协助栈桥调度 (0:12)|MP Standing Board]]>><<pass 12>><<mpStandingAdd "docks" 8>><<mpFameAdd "trade" 4>><<mpFameAdd "combat" 2>><<mpStandingAdd "guilds" -2>><<stress -2>><</link>><<else>><<link [[调度失误受责 (0:12)|MP Standing Board]]>><<pass 12>><<stress 3>><<tiredness 2>><</link>><</if>><br>
@@ -114,13 +124,13 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
 十二行会厅外的过道比港区干燥，墙上挂着一排黄铜货签，从面包房到绳索铺，每一枚都磨得能照见人影。账房设在过道尽头，窗子开得很小，算盘声却密得像雨。急单用红绳捆着，堆在柜台一角，绳结上别着交货的时辰。
 <br><br>
-【行会账面】行会信誉 <<print $mpStanding.guilds>>（<<print ($mpStanding.guilds >= 75 ? "入幕" : ($mpStanding.guilds >= 45 ? "倚重" : ($mpStanding.guilds >= 20 ? "有交情" : "生面孔")))>>）｜善名 <<print $mpFame.kind>>（<<mpFameTier "kind">>）｜今日百钱折算 <<mpWorldPrice 100>>｜你的家政手艺 <<print ($housekeeping or 0)>>。
+【行会账面】行会账房<<if $mpStanding.guilds gte 20>>肯把急单先递到你手上<<elseif $mpStanding.guilds gte 10>>愿意听你把话说完<<else>>只按生客的价目算<</if>>｜善名<<if $mpFame.kind gte 20>>街坊已经叫你「善人」<<else>>还没叫顺口<</if>>｜今日百钱折算 <<mpWorldPrice 100>>｜家政手艺<<if ($housekeeping or 0) gte 220>>够你接整单<<else>>还得多练<</if>>。
 <br><br>
 行会的规矩直白：急单不等人。布匹要在雾涨之前送进高街的裁缝铺，面粉要在夜市开张前分到六个摊子，少一趟，账房就在你的名字后面画一道。你若手脚麻利，或者善名厚到让掌柜愿意替你担保，这单就接得下来：行会信誉添八分，商誉添五分，港区那边则要少记你两分——行会压价压得狠，码头的水手跟着少赚。交付之后账房会给你倒一杯温茶，算是对准时的人的优待。
 <br><br>
 手艺不精、善名又不够，红绳解到一半就乱了套：布匹受了潮，面粉袋在台阶上裂了口，账房把算盘一推，罚你站在柜台前听完一整段关于信誉的训话。钱袋不动，精神却被磨掉一层，等走出过道时，天已经暗了。几个等货的掌柜摇着头把单子收回袖里，下一趟急单不会再送到你手上。
 <br><br>
-行会信誉到十五，账房才肯听你谈克拉拉的契约；到二十五，你在联席上的话有了分量，能推动平抑物价的那一档。行会与港区像两只拉扯同一根缆绳的手，你帮这边多拽一寸，那边就松一寸。掌柜们叫你「信户」的时候，码头上的人可能正把你看成替行会跑腿的。
+行会的门先得有人替你引见，账房才肯听你谈一笔大单；等你在联席上有了分量，才能推动平抑物价的那一档。行会与港区像两只拉扯同一根缆绳的手，你帮这边多拽一寸，那边就松一寸。掌柜们叫你「信户」的时候，码头上的人可能正把你看成替行会跑腿的。
 <br><br>
 今日百钱折算挂在柜台后头，随着港税、雾潮与季节的价签一同挪动。行会的急单不按这个数给你开钱，却按它来算料钱与损耗；物价一涨，同样的活就要多跑两趟才填得平。会算的人先看牌子再签字，不会算的人签完才发现自己白忙。
 <br><br>
@@ -132,7 +142,7 @@
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpFameInit>>
 狼街尽头的神殿在清晨最像一座还在呼吸的房子。晨钟从塔顶落下来，一声压着一声，把廊下的烛火震得齐齐一矮。乳香、蜂蜡和石缝里的潮气混在一起，顺着长椅的缝隙往人衣领里钻。执事抱着一摞铜灯从侧廊走过，鞋底在石板上几乎没有声音。
 <br><br>
-【神殿账面】神殿信誉 <<print $mpStanding.temple>>（<<print ($mpStanding.temple >= 75 ? "入幕" : ($mpStanding.temple >= 45 ? "倚重" : ($mpStanding.temple >= 20 ? "有交情" : "生面孔")))>>）｜魅名 <<print $mpFame.charm>>（<<mpFameTier "charm">>）｜恩典 <<print ($mpGrace or 0)>>｜意志 <<print ($willpower or 0)>>。<<if $mpWorldTempleOutcome is "orthodox">>殿里按净火戒律那一册行事，回廊上锁，香案前的队伍排得很直。<<elseif $mpWorldTempleOutcome is "reformed">>殿里按慈悲圣所那一册行事，侧廊的长椅向所有人敞开，粥桶从早守到晚。<<elseif $mpTempleOrder is "neutral">>两派各持一把钥匙，仪轨分成上下半夜，谁也不肯先低头。<<else>>礼制还没有落定，两派的执事见面只点头，不多说话。<</if>>
+【神殿账面】神殿<<if $mpStanding.temple gte 20>>执事允你在香案前多站一炷香<<elseif $mpStanding.temple gte 10>>执事记得你的脸<<else>>只当你第一次来<</if>>｜魅名<<if $mpFame.charm gte 20>>酒馆常客叫你「座上宾」<<else>>还没叫顺口<</if>>｜恩典 <<print ($mpGrace or 0)>>｜意志 <<print ($willpower or 0)>>。<<if $mpWorldTempleOutcome is "orthodox">>殿里按净火戒律那一册行事，回廊上锁，香案前的队伍排得很直。<<elseif $mpWorldTempleOutcome is "reformed">>殿里按慈悲圣所那一册行事，侧廊的长椅向所有人敞开，粥桶从早守到晚。<<elseif $mpTempleOrder is "neutral">>两派各持一把钥匙，仪轨分成上下半夜，谁也不肯先低头。<<else>>礼制还没有落定，两派的执事见面只点头，不多说话。<</if>>
 <br><br>
 你被分到香案前添香。铜炉里的灰要拨松，香要立直，火头不能高过炉沿；添完一轮，还得把散在石阶上的香脚扫净，免得老修士踩滑。站得住、心又静的人，执事才肯让你碰那只装圣物的锦盒；恩典够厚，或是意志撑得住整段晨祷，这炷香就添得漂亮：神殿信誉添八分，善名添四分，魅名也添两分——仪态端正的人，连烛光都显得亲近。地下那本暗账则要薄两分，灰雾里的人不喜欢身上带香味的熟客。事毕之后，殿里的静会把你肩上的紧箍松掉一些。
 <br><br>
@@ -148,13 +158,13 @@
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<mpFameInit>>
 灰雾最浓的时候，旧港水闸旁的暗巷反而最热闹。没有招牌，没有灯，只有门板后一声短促的叩击，和门缝里递出来的一截绳头。墙上用炭灰画着只有常客才认得的记认，隔夜就会被雨水冲淡，第二天又有人补上。你踩过一滩发亮的水，鞋底带起的气味像铁锈，也像放久了的鱼。
 <br><br>
-【地下账面】地下信誉 <<print $mpStanding.underworld>>（<<print ($mpStanding.underworld >= 75 ? "入幕" : ($mpStanding.underworld >= 45 ? "倚重" : ($mpStanding.underworld >= 20 ? "有交情" : "生面孔")))>>）｜暗名 <<print $mpFame.underworld>>（<<mpFameTier "underworld">>）｜恶名 <<print $mpFame.infamy>>（<<mpFameTier "infamy">>）｜暗市 <<mpWorldMarketOpen>>｜诡术 <<print ($skulduggery or 0)>>。
+【地下账面】地下<<if $mpStanding.underworld gte 20>>有人肯替你留门，暗货按熟客价<<elseif $mpStanding.underworld gte 10>>门缝里递出的绳头你认得<<else>>门只开给认得脸的人<</if>>｜暗名<<if $mpFame.underworld gte 20>>灰雾里的人叫你「熟客」<<else>>还没叫顺口<</if>>｜恶名<<if $mpFame.infamy gte 20>>巡夜的册子上记着「祸头」<<else>>还没人拿你当回事<</if>>｜暗市 <<mpWorldMarketOpen>>｜诡术<<if ($skulduggery or 0) gte 240>>够你在雾里走一趟<<else>>还差些火候<</if>>。
 <br><br>
 今晚的活是送一封没有落款的密信。接头的人只认暗号，不认脸；你得在第三个岔口敲两下、停一息、再敲一下，把信压在约定那块松动的砖下，然后头也不回地走开。诡术够老练，或者暗名已经让灰雾里的人肯卖你一个面子，这趟就送得干净：地下信誉添八分，暗名添五分，恶名也添两分——敢在雾里走夜路的人，身上总带一点让人退让的东西。神殿那边则要少记你两分，香火与暗货本就不是一路。信脱手之后，巷子里的水声会重新变得清楚，像有人在你背后把一扇门轻轻合上。
 <br><br>
 暗号记错、脚步又乱，门后的人不开门，巷口却多了两道影子。你退到水闸边，听见自己的呼吸在雾里被放得很大。这一夜没有钱货交割，只有绷紧的神经和一身的冷汗，回程的每一步都像踩在别人的耳朵上。等雾稍微散开，你才发现手里的密信被攥出了褶，信封边角已经洇软。
 <br><br>
-地下信誉到十五，接头人才肯把密信递到你手里；到二十五，暗市的联络肯为你开门；到三十，闸门会在你走近时自己落闩，摊主叫你「灰雾熟客」。可这份熟络同样要拿神殿的冷脸来换。灰雾里的人不问你对不对，只问你敢不敢；等你身上香味重了，他们连门缝都不会给你留。
+地下的人先肯把密信递到你手里；再往上，暗市的联络肯为你开门，闸门会在你走近时自己落闩，摊主叫你「灰雾熟客」。可这份熟络同样要拿神殿的冷脸来换。灰雾里的人不问你对不对，只问你敢不敢；等你身上香味重了，他们连门缝都不会给你留。
 <br><br>
 暗市此刻 <<mpWorldMarketOpen>>，闸门后的摊位按各自的消息定价，不受高街物价牌的直接约束，却会被行会政策与账本终局牵动。你在这里多走一趟，灰雾就多记住你一分；被记住既是通行证，也是别人随时可以找上门的理由。
 <br><br>

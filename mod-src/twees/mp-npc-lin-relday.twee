@@ -12,10 +12,14 @@
 <br><br>
 门闩补好时，他拧开铁皮保温壶，倒出半碗姜汤，自己只抿了一口便盖紧：「剩下的留给后半夜。」你捧着碗，热气糊住睫毛。林恩已经蹲下去收工具，背对着你，把值班表上你名字旁边那格空白也填了：『同行。』两个字写得很小，像是怕被谁看见。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_1 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第1幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_1 is 1>>
 这一夜的路线已经并作一条，雪地里两行脚印并排着回了岗棚。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 2]]>><<pass 4>><</link>>
@@ -23,13 +27,13 @@
 <div id="relday-lin-1">
 <<mpwatchicon>><<link "跟他钻排水巷 (0:08)">><<pass 8>><<replace "#relday-lin-1">>
 <<if ($athletics or 0) gte 250 or ($skulduggery or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_1 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_1 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你贴着结冰的墙根侧身过去，脚步压得比雪落还轻。林恩在巷口等你，短棍往回收了半寸，给你让出通行的空当。<span class="green">他没夸你，只把这条路又走了一遍，确认每一块松动的石板。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 2]]>><<pass 5>><</link>>
 <<else>>
-	你踩碎一块薄冰，膝盖磕在排水管上，闷响在巷里荡开。林恩一把按住你的肩，把你带回灯下。<span class="red">冰水渗进裤脚，他蹲下替你卷起湿透的裤边，没让你再走第二趟。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你踩碎一块薄冰，膝盖磕在排水管上，闷响在巷里荡开。林恩一把按住你的肩，把你带回灯下。<span class="red">冰水渗进裤脚，他蹲下替你卷起湿透的裤边，没让你再走第二趟。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -37,13 +41,13 @@
 <br>
 <<mpreadicon>><<link "留在灯下记档 (0:08)">><<pass 8>><<replace "#relday-lin-1">>
 <<if ($housekeeping or 0) gte 240 or ($english or 0) gte 230>>
-	<<set $daily.mpRelDay_mp_relday_lin_1 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_1 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你把这一排门锁逐户核对，门牌、时辰、锁舌松紧都记成整齐的短行。林恩巡完回来，翻了两页，手指在其中一行停住：「这户的锁，明晚我带新簧片来。」他把簿子合上，递还给你时没有松手。<span class="green">灯下的字迹让他把后背交给了你。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 2]]>><<pass 5>><</link>>
 <<else>>
-	风从檐下灌进来，吹翻了你刚写满的一页。墨迹被雪水洇开，门牌号糊成一团。林恩弯腰把纸捡起来，没说重话，只把自己的手套摘给你垫着写。<span class="red">你重新誊了一遍，指节冻得发僵。</span><<stress 3>><<tiredness 1>><<gstress>>
+	风从檐下灌进来，吹翻了你刚写满的一页。墨迹被雪水洇开，门牌号糊成一团。林恩弯腰把纸捡起来，没说重话，只把自己的手套摘给你垫着写。<span class="red">你重新誊了一遍，指节冻得发僵。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -65,10 +69,14 @@
 <br><br>
 你开口的时候，他始终看着街口，像在替你挡着掌柜的视线。等你说完，他才转回来，把短棍重新挂回腰间，动作不快，却比刚才松了一分。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_2 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第2幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_2 is 1>>
 煤栈后墙的脚印已经被新雪盖住，案件板上那一格也钉上了销案的红签。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 3]]>><<pass 4>><</link>>
@@ -76,13 +84,13 @@
 <div id="relday-lin-2">
 <<mpwatchicon>><<link "按章扣下煤筐 (0:08)">><<pass 8>><<replace "#relday-lin-2">>
 <<if ($willpower or 0) gte 400 or ($english or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_2 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_2 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把条例一条条说给掌柜听，也把孩子的姓名和孤儿院的门牌记进簿子。林恩拷人时留了半寸松，没勒疼那截细手腕。移交前，他自掏腰包把煤钱压在柜台上：「账清了，人我带走。」<span class="green">他当街给你立了规矩，也替你留了余地。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 3]]>><<pass 5>><</link>>
 <<else>>
-	掌柜越说越急，围观的人挤到巷口，你的话被压成零碎的几个字。林恩抬手示意双方都停下，自己把手续接过去办完。<span class="red">你退到灯影里，嗓子发干，觉得自己刚才那番话谁也没听清。</span><<stress 3>><<tiredness 1>><<gstress>>
+	掌柜越说越急，围观的人挤到巷口，你的话被压成零碎的几个字。林恩抬手示意双方都停下，自己把手续接过去办完。<span class="red">你退到灯影里，嗓子发干，觉得自己刚才那番话谁也没听清。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -90,13 +98,13 @@
 <br>
 <<mpcookicon>><<link "让他补墙抵账 (0:08)">><<pass 8>><<replace "#relday-lin-2">>
 <<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_2 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_2 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你让掌柜把欠账折成工钱，又替孩子把碎煤码回筐里。林恩在旁边和灰泥，袖子卷到手肘，没插一句嘴。墙补平后，他抬手在砖面上按了按，回头看你：「明天我来看它裂不裂。」<span class="green">这句话是说给掌柜听的，也是说给你听的。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 3]]>><<pass 5>><</link>>
 <<else>>
-	灰泥调得太稀，抹上墙就往下淌，孩子的袖口也糊了一片。林恩接过抹子重新收面，让你先去把孩子手上的灰洗掉。<span class="red">冷水一激，你的指节又酸又胀。</span><<stress 3>><<tiredness 1>><<gstress>>
+	灰泥调得太稀，抹上墙就往下淌，孩子的袖口也糊了一片。林恩接过抹子重新收面，让你先去把孩子手上的灰洗掉。<span class="red">冷水一激，你的指节又酸又胀。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -118,10 +126,14 @@
 <br><br>
 灯碗终于被敲平，光重新聚成一束，落在铁柜上，照亮那道没有灰的锁孔。林恩伸手把灯转开，让光落回门口：「行了。今晚够用。」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_3 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第3幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_3 is 1>>
 提灯已经挂回门边，光束笔直地铺在雪地上，铁柜仍锁着。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 4]]>><<pass 4>><</link>>
@@ -129,13 +141,13 @@
 <div id="relday-lin-3">
 <<mprepairicon>><<link "低头修反光碗 (0:08)">><<pass 8>><<replace "#relday-lin-3">>
 <<if ($science or 0) gte 250 or ($housekeeping or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_3 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_3 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你顺着凹痕的弧度一点点回敲，铜皮没有裂，光斑重新收拢。林恩把灯举起来照向巷口，又照回你脸上，停了一息才移开：「手很稳。」<span class="green">他把灯留给你提着，自己空手走在前面。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 4]]>><<pass 5>><</link>>
 <<else>>
-	铜皮吃不住力，凹痕旁边又翘起一小道裂口。林恩伸手按住你的锤柄，摇了摇头，把灯接回去。<span class="red">灯光暗了一截，他摸黑把裂口磨平，指腹被毛边划出一道白痕。</span><<stress 3>><<tiredness 1>><<gstress>>
+	铜皮吃不住力，凹痕旁边又翘起一小道裂口。林恩伸手按住你的锤柄，摇了摇头，把灯接回去。<span class="red">灯光暗了一截，他摸黑把裂口磨平，指腹被毛边划出一道白痕。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -143,13 +155,13 @@
 <br>
 <<mpreadicon>><<link "问铁柜旧事 (0:08)">><<pass 8>><<replace "#relday-lin-3">>
 <<if ($willpower or 0) gte 420 or ($english or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_3 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_3 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	林恩沉默了很久，久到灯芯爆了个小火花。然后他说：「里面是霍克的东西。三年前的值班簿、半截哨子。钥匙在我身上，但我还没想好怎么开。」他把手按在柜门上，没有回头，「你问到这儿，我不生气。」<span class="green">他第一次把一扇没开的门指给你看。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 4]]>><<pass 5>><</link>>
 <<else>>
-	你把话说得太直，林恩的手在灯架上收紧了一瞬。他没有斥你，只把提灯拎起来，往门口走：「一点四十了。运冰车该过了。」<span class="red">铁柜的锁孔在灯影里闪了一下，随即被门外的黑吞掉。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你把话说得太直，林恩的手在灯架上收紧了一瞬。他没有斥你，只把提灯拎起来，往门口走：「一点四十了。运冰车该过了。」<span class="red">铁柜的锁孔在灯影里闪了一下，随即被门外的黑吞掉。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -171,10 +183,14 @@
 <br><br>
 男孩没有跑，抱着纸袋站在雪里，看看他，又看看你。远处面包房的灯还亮着，掌柜的影子在窗后晃了一下，又缩回去。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_4 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第4幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_4 is 1>>
 后巷的雪被踩乱了一片，面包纸袋最后还是跟着男孩回了孤儿院。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 5]]>><<pass 4>><</link>>
@@ -182,13 +198,13 @@
 <div id="relday-lin-4">
 <<mpwatchicon>><<link "按他的规矩办 (0:09)">><<pass 9>><<replace "#relday-lin-4">>
 <<if ($willpower or 0) gte 400 or ($english or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_4 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_4 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把男孩带回岗棚，记下姓名、住址和欠账，又让面包房掌柜把扣掉的工钱折成明早的短工。林恩在旁边看着，等人都走了，才低声说：「刚才我以为你会跟我吵。」他停了停，「这样也好。规矩立住了，他才还有明天。」<span class="green">他把你的记录又看了一遍，折好，收进内袋。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 5]]>><<pass 5>><</link>>
 <<else>>
-	掌柜不肯认账，男孩又说不清工钱的数目，案子卡在中间。林恩把面包钱先垫了，让你先送孩子回去，自己留下和掌柜磨。<span class="red">你走到巷口回头，看见他一个人站在灯下，肩背比平时更沉。</span><<stress 3>><<tiredness 1>><<gstress>>
+	掌柜不肯认账，男孩又说不清工钱的数目，案子卡在中间。林恩把面包钱先垫了，让你先送孩子回去，自己留下和掌柜磨。<span class="red">你走到巷口回头，看见他一个人站在灯下，肩背比平时更沉。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -196,13 +212,13 @@
 <br>
 <<mpsneakicon>><<link "坚持放走少年 (0:09)">><<pass 9>><<replace "#relday-lin-4">>
 <<if ($tending or 0) gte 250 or ($skulduggery or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_4 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_4 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你把男孩护到身后，替他把话说完，又把掌柜扣工钱的事一条条摆出来。林恩没有拦你，只在最后问了一句：「你担保？」你点头。他看了你很久，把短棍挂回腰间，侧身让开巷口：「今晚我记你名下。出了事，我陪你担。」<span class="green">男孩跑远后，他仍站在原地，替你挡着掌柜的目光。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 5]]>><<pass 5>><</link>>
 <<else>>
-	你说得太急，掌柜抓住其中一句反复追问，男孩吓得往后退，撞翻了墙边的空奶罐。林恩横过手臂隔开两边，先把人散了。<span class="red">回岗棚的路上，他一句话也没说，只把脚步放得很慢。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你说得太急，掌柜抓住其中一句反复追问，男孩吓得往后退，撞翻了墙边的空奶罐。林恩横过手臂隔开两边，先把人散了。<span class="red">回岗棚的路上，他一句话也没说，只把脚步放得很慢。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -224,10 +240,14 @@
 <br><br>
 「高街后巷，二十三点五十。」他头也不抬，「以后两个人一起过。你走里侧。」停了停，又补一句，「昨晚我不该把霍克的事压在你身上。那是我的债，不是你的。你怎么定，我都认。」他说完便继续上油，好像刚才只是报了个巡逻时辰。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_5 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第5幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_5 is 1>>
 新值班表已经钉上墙，两个名字并排，红铅笔的批注在灯下很清楚。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 6]]>><<pass 4>><</link>>
@@ -235,13 +255,13 @@
 <div id="relday-lin-5">
 <<mpdrinkicon>><<link "先喝那碗姜汤 (0:08)">><<pass 8>><<replace "#relday-lin-5">>
 <<if ($housekeeping or 0) gte 240 or ($willpower or 0) gte 400>>
-	<<set $daily.mpRelDay_mp_relday_lin_5 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_5 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	姜汤还烫，辛辣气从喉咙一路暖到胃里。你喝完把碗放下，林恩才开口：「锅里还有。」他把值班表挪到你面前，指尖压着那行「二人同行」，「以后这条巷，不用你一个人记。」<span class="green">他说得像在交代勤务，耳根却红了一点。</span><<stress -3>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 6]]>><<pass 5>><</link>>
 <<else>>
-	你喝得太急，姜汤呛进气管，咳得眼圈发红。林恩放下油布，替你拍背，力道放得很轻。<span class="red">碗沿磕在牙上，舌尖麻了一阵，他默默把剩下的半碗接过去搁远。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你喝得太急，姜汤呛进气管，咳得眼圈发红。林恩放下油布，替你拍背，力道放得很轻。<span class="red">碗沿磕在牙上，舌尖麻了一阵，他默默把剩下的半碗接过去搁远。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -249,13 +269,13 @@
 <br>
 <<mpmapicon>><<link "问他为何改线 (0:08)">><<pass 8>><<replace "#relday-lin-5">>
 <<if ($english or 0) gte 240 or ($tending or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_5 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_5 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	林恩把油布叠好，想了很久才答：「那条巷我一个人走过三年。昨晚你站在那儿，我才发现，两个人走，灯照得到的地方会多一倍。」他抬眼看你，「以后你走里侧。外侧有我。」<span class="green">他说完便低头继续上油，像是不习惯把话讲这么长。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 6]]>><<pass 5>><</link>>
 <<else>>
-	你问得太紧，林恩手上的动作停了一拍，油刷在皮套上拖出一道多余的痕。他没有答，只把值班表合上，往墙边一靠：「先巡完今晚。话，路上说。」<span class="red">那道油痕后来一直没擦掉，像句没说完的话。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你问得太紧，林恩手上的动作停了一拍，油刷在皮套上拖出一道多余的痕。他没有答，只把值班表合上，往墙边一靠：「先巡完今晚。话，路上说。」<span class="red">那道油痕后来一直没擦掉，像句没说完的话。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -277,10 +297,14 @@
 <br><br>
 「这个位置，」他忽然抬手指向桥心，「霍克倒下去的地方。我每个月来一次，站一会儿。」他转头看你，「今晚多了一个人。你要是不想站，可以先回。」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_6 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第6幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_6 is 1>>
 断哨已经收回贴身内袋，桥栏上的提灯还亮着，灯下站着两个人。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 7]]>><<pass 4>><</link>>
@@ -288,13 +312,13 @@
 <div id="relday-lin-6">
 <<mpreadicon>><<link "接过断哨细看 (0:08)">><<pass 8>><<replace "#relday-lin-6">>
 <<if ($science or 0) gte 240 or ($skulduggery or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_6 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_6 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把哨子凑近灯下，断口不是锈蚀，是硬物从正面劈进去的压痕，边缘有一道很窄的棱。林恩看你指出来，呼吸沉了一拍：「警局的报告里没写这个。」他把哨子放回你掌心，「你留着看一晚。明早还我。」<span class="green">这是三年来，他第一次把霍克的东西交给别人。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 7]]>><<pass 5>><</link>>
 <<else>>
-	灯太暗，你看了半天也没看出名堂，指尖还被断口的毛边划了一下。林恩把哨子接回去，用袖口替你按住伤口：「不急。它等了三年，不差这一晚。」<span class="red">血珠渗进袖布，他低头看了一眼，眉头皱得很紧。</span><<stress 3>><<tiredness 1>><<gstress>>
+	灯太暗，你看了半天也没看出名堂，指尖还被断口的毛边划了一下。林恩把哨子接回去，用袖口替你按住伤口：「不急。它等了三年，不差这一晚。」<span class="red">血珠渗进袖布，他低头看了一眼，眉头皱得很紧。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -302,13 +326,13 @@
 <br>
 <<mphearticon>><<link "陪他站一会儿 (0:08)">><<pass 8>><<replace "#relday-lin-6">>
 <<if ($willpower or 0) gte 420 or ($tending or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_6 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_6 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你没有说话，只往他身边挪了半步，肩膀挨着肩膀。林恩僵了一下，没有躲开。风从桥洞里穿上来，他把提灯往你脚边挪了挪，让光多照着你一些。过了很久，他低声说：「霍克以前也这么站。不说话，就站着。」<span class="green">桥下的水声忽然不那么闷了。</span><<stress -4>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 7]]>><<pass 5>><</link>>
 <<else>>
-	你站得太靠边，鞋底在湿石上一滑，林恩一把拽住你的手腕。提灯晃了晃，光斑在桥面上乱转。<span class="red">他把你拉到里侧，手没有立刻松开，指节冰凉。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你站得太靠边，鞋底在湿石上一滑，林恩一把拽住你的手腕。提灯晃了晃，光斑在桥面上乱转。<span class="red">他把你拉到里侧，手没有立刻松开，指节冰凉。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -330,10 +354,14 @@
 <br><br>
 雨声里，他忽然说：「这段巷子，霍克以前也疏过。他总说，水堵了，人心就堵。」说完便不再开口，只把淤泥一铲一铲往边上推。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_7 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第7幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_7 is 1>>
 排水沟通了，铁栅靠墙立着，两点十分的马车声由远及近，平稳地驶了过去。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 8]]>><<pass 4>><</link>>
@@ -341,13 +369,13 @@
 <div id="relday-lin-7">
 <<mpcarryicon>><<link "合力抬开铁栅 (0:08)">><<pass 8>><<replace "#relday-lin-7">>
 <<if ($physique or 10000) gte 11500 or ($athletics or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_7 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_7 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你们同时沉腰，铁栅离水，翻过石沿，稳稳靠在墙根。林恩直起腰，雨水从睫毛上往下淌，他看了你一眼，嘴角很轻地动了一下：「力气不小。」他把湿外套往你肩上又按了按，「两点十分之前，收工。」<span class="green">巷口的灯把两个人的影子拉得很长。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 8]]>><<pass 5>><</link>>
 <<else>>
-	铁栅脱手，一角砸回水里，溅起的泥浆糊了你半张脸。林恩一把把你往后带，自己小腿被栅条刮出一道口子。<span class="red">他先问你有没有事，才低头去看自己的伤。</span><<stress 3>><<tiredness 1>><<gstress>>
+	铁栅脱手，一角砸回水里，溅起的泥浆糊了你半张脸。林恩一把把你往后带，自己小腿被栅条刮出一道口子。<span class="red">他先问你有没有事，才低头去看自己的伤。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -355,13 +383,13 @@
 <br>
 <<mpcleanicon>><<link "先疏通排水沟 (0:08)">><<pass 8>><<replace "#relday-lin-7">>
 <<if ($housekeeping or 0) gte 250 or ($science or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_7 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_7 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你先清掉下游的落叶和碎砖，水位降了一截，铁栅自己松了半寸。林恩在旁边看着，等水退稳了才伸手，把栅栏抽出来靠墙放好。他甩了甩手上的水：「先看水，再动手。这法子比我快。」<span class="green">他把这句话记进了值班簿的边角。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 8]]>><<pass 5>><</link>>
 <<else>>
-	你探身太深，脚下一滑，半条小腿陷进排水沟，冰水灌进靴筒。林恩拽住你的后领把你提回来，自己蹲下去替你清沟。<span class="red">水退得很慢，你的牙齿一直打颤。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你探身太深，脚下一滑，半条小腿陷进排水沟，冰水灌进靴筒。林恩拽住你的后领把你提回来，自己蹲下去替你清沟。<span class="red">水退得很慢，你的牙齿一直打颤。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -383,10 +411,14 @@
 <br><br>
 岗棚的灯在街尾亮着，隔着两条巷子，确实看得见。他把短棍换到外侧的手，等你回答。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_8 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第8幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_8 is 1>>
 值班表上后半夜那一栏已经改好，岗棚的灯一直亮到你交哨。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 9]]>><<pass 4>><</link>>
@@ -394,13 +426,13 @@
 <div id="relday-lin-8">
 <<mpreadicon>><<link "接下值岗簿 (0:08)">><<pass 8>><<replace "#relday-lin-8">>
 <<if ($housekeeping or 0) gte 250 or ($english or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_8 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_8 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你接过值岗簿，把后半夜的哨位、时辰、交接人都理成三列，写得比平时更清楚。林恩巡到一半回来换灯油，站在门口看了你一会儿，没进来，只把一壶热水放在门槛边。<span class="green">他走的时候，脚步声比平时轻。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 9]]>><<pass 5>><</link>>
 <<else>>
-	你心里憋着气，登记时把两户门牌写串了行。林恩回来核对，指出来，没有责怪，只把笔递回给你重写。<span class="red">他站在旁边等你改完，夜风把纸页吹得哗哗响。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你心里憋着气，登记时把两户门牌写串了行。林恩回来核对，指出来，没有责怪，只把笔递回给你重写。<span class="red">他站在旁边等你改完，夜风把纸页吹得哗哗响。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -408,13 +440,13 @@
 <br>
 <<fisticon>><<link "要求并肩巡完 (0:08)">><<pass 8>><<replace "#relday-lin-8">>
 <<if ($athletics or 0) gte 260 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_lin_8 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_8 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你按住值班表，没有松手：「你怕的不是我守不住岗棚，是你又要一个人走前面。」林恩看着你，很久没有说话。最后他把值班表折好收回去，短棍换到靠你那一侧：「跟上。落后半步，我就停下来。」<span class="green">那一夜他每过一个巷口都会停一息，等你踩到他的影子里。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 9]]>><<pass 5>><</link>>
 <<else>>
-	你的话撞在他绷紧的肩线上，他转过身，声音比夜风还硬：「我说了，你守岗棚。」说完便大步往前走，没有等你。<span class="red">你跟到街角，只看见他拐进巷子的背影，短棍在灯下晃了一下就不见了。</span><<stress 4>><<tiredness 1>><<gstress>>
+	你的话撞在他绷紧的肩线上，他转过身，声音比夜风还硬：「我说了，你守岗棚。」说完便大步往前走，没有等你。<span class="red">你跟到街角，只看见他拐进巷子的背影，短棍在灯下晃了一下就不见了。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -436,10 +468,14 @@
 <br><br>
 「以后不用等我叫。」他说，「两点，我在这儿。」夜风把纸页吹得轻轻翻动，他伸手压住，指尖停在你的手边。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_9 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第9幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_9 is 1>>
 钟楼下的两只搪瓷杯已经空了，新路线的页脚多了一行两个人的名字。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 10]]>><<pass 4>><</link>>
@@ -447,13 +483,13 @@
 <div id="relday-lin-9">
 <<mpclockworkicon>><<link "陪他等到钟响 (0:08)">><<pass 8>><<replace "#relday-lin-9">>
 <<if ($willpower or 0) gte 420 or ($english or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_9 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_9 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你没有看表，也没有先走。钟声敲到第二下，林恩从巷口出现，看见你还站在原地，脚步明显快了半拍。他把杯子递过来时，手指在你手背上停了一瞬：「等久了？」你摇头。他低下头，把新路线往你那边推了推：「那以后，都这个点。」<span class="green">钟楼的齿轮在头顶轻轻咬合，像一句答应下来的话。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 10]]>><<pass 5>><</link>>
 <<else>>
-	霜气顺着鞋底往上爬，你站得腿脚发麻，忍不住在石阶上来回跺脚。林恩到时看见，把杯子塞进你手里，又蹲下去替你揉了揉脚踝。<span class="red">他的手很凉，力道却很稳。</span><<stress 3>><<tiredness 1>><<gstress>>
+	霜气顺着鞋底往上爬，你站得腿脚发麻，忍不住在石阶上来回跺脚。林恩到时看见，把杯子塞进你手里，又蹲下去替你揉了揉脚踝。<span class="red">他的手很凉，力道却很稳。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -461,13 +497,13 @@
 <br>
 <<mpdrinkicon>><<link "问他为何守时 (0:08)">><<pass 8>><<replace "#relday-lin-9">>
 <<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_9 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_9 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	林恩捧着杯子想了一会儿：「霍克教我的。他说守夜人答应几点，就得几点。晚一刻，别人就可能多走一段黑路。」他抬眼看你，「我答应你的事，也一样。」<span class="green">说完他把杯子往你那边倾了倾，让最后一点热气飘到你面前。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 10]]>><<pass 5>><</link>>
 <<else>>
-	你问得太轻，正好被钟声盖过去。林恩侧过头：「什么？」你重复了一遍，他却只是摇头，把新路线摊开，像不打算再谈。<span class="red">钟声散尽后，街面又空了，只剩两只杯子冒着越来越淡的白气。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你问得太轻，正好被钟声盖过去。林恩侧过头：「什么？」你重复了一遍，他却只是摇头，把新路线摊开，像不打算再谈。<span class="red">钟声散尽后，街面又空了，只剩两只杯子冒着越来越淡的白气。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -489,10 +525,14 @@
 <br><br>
 林恩转身时，你退进了墙角。他没有看见你，脚步很快，径直往多姆斯街去了。巷口的灯把他的影子拉长，又收短，最后消失在拐角。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_10 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第10幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_10 is 1>>
 汇兑所后门的灯已经灭了，巷子里只剩一只被踩扁的纸角。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 11]]>><<pass 4>><</link>>
@@ -500,13 +540,13 @@
 <div id="relday-lin-10">
 <<mpwatchicon>><<link "当面问他 (0:08)">><<pass 8>><<replace "#relday-lin-10">>
 <<if ($willpower or 0) gte 420 or ($english or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_10 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_10 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你在钟楼下拦住他，把看见的直接说了。林恩听完，没有辩解，也没有发火。他把手伸进内袋，捏着什么东西，沉默了很久才开口：「这儿不方便说。今晚两点，还在这儿。我把账本带来。」他看着你，「你问，我就答。」<span class="green">钟声响起时，他的手还按在内袋上，像按着一句没说完的话。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 11]]>><<pass 5>><</link>>
 <<else>>
-	你把质问说成了指责，声音在空巷里显得很硬。林恩的肩线绷紧，过了很久才说：「你不信我。」他没有再多解释，转身走了。<span class="red">钟楼的齿轮声在背后响了一下，像什么东西轻轻合上。</span><<stress 4>><<tiredness 1>><<gstress>>
+	你把质问说成了指责，声音在空巷里显得很硬。林恩的肩线绷紧，过了很久才说：「你不信我。」他没有再多解释，转身走了。<span class="red">钟楼的齿轮声在背后响了一下，像什么东西轻轻合上。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -514,13 +554,13 @@
 <br>
 <<mpsneakicon>><<link "悄悄跟上去 (0:08)">><<pass 8>><<replace "#relday-lin-10">>
 <<if ($skulduggery or 0) gte 250 or ($athletics or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_10 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_10 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你贴着墙根跟到多姆斯街，看见他停在一扇亮着灯的矮门前，把一只小纸包放在门槛上，敲了两下门便退开。门里有人探出头，是个跛脚老人，拿起纸包，朝林恩的方向低了低头。林恩没有进去，转身时却朝你藏身的巷口看了一眼。他没有拆穿，只抬了抬下巴，示意你跟上来。<span class="green">那一眼让你明白，他早就知道你在。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 11]]>><<pass 5>><</link>>
 <<else>>
-	你踩到一块松动的石板，响声在夜里格外清楚。林恩猛地回头，短棍已经出鞘半寸。看清是你之后，他慢慢把棍收回去，脸上的表情比被人撞破更难受。<span class="red">他没有说话，只从你身边走过去，脚步没有停。</span><<stress 4>><<tiredness 1>><<gstress>>
+	你踩到一块松动的石板，响声在夜里格外清楚。林恩猛地回头，短棍已经出鞘半寸。看清是你之后，他慢慢把棍收回去，脸上的表情比被人撞破更难受。<span class="red">他没有说话，只从你身边走过去，脚步没有停。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -542,10 +582,14 @@
 <br><br>
 「你不该跟。」林恩说。停了一会儿，他又说，「换我，我也会跟。」他把账本往你面前推了推，「现在你知道了。接下来，你打算怎么办？」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_11 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第11幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_11 is 1>>
 账本已经收回铁柜，票根和铜扣各归各位，岗棚里只剩灯芯的轻响。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 12]]>><<pass 4>><</link>>
@@ -553,13 +597,13 @@
 <div id="relday-lin-11">
 <<mpreadicon>><<link "把账本推回去 (0:08)">><<pass 8>><<replace "#relday-lin-11">>
 <<if ($willpower or 0) gte 430 or ($english or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_11 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_11 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把账本合上，推回他手边：「下次带我去。线人见两张脸，总比见一张稳。」林恩看着你，肩膀慢慢松下来。他把照片抽出来，递给你：「这张你收着。什么时候想还，再还我。」<span class="green">灯下的两个人影挨得很近，谁也没有先退开。</span><<stress -4>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 12]]>><<pass 5>><</link>>
 <<else>>
-	你想说些缓和的话，开口却先带了刺。林恩把账本收回铁柜，动作很轻：「今晚先这样。」他没有赶你，也没有再看你。<span class="red">灯芯爆了一下，棚里暗了半截，你站了一会儿，才听见自己鞋底挪动的声音。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你想说些缓和的话，开口却先带了刺。林恩把账本收回铁柜，动作很轻：「今晚先这样。」他没有赶你，也没有再看你。<span class="red">灯芯爆了一下，棚里暗了半截，你站了一会儿，才听见自己鞋底挪动的声音。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -567,13 +611,13 @@
 <br>
 <<mpcalculateicon>><<link "替他补记账目 (0:08)">><<pass 8>><<replace "#relday-lin-11">>
 <<if ($housekeeping or 0) gte 250 or ($maths or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_lin_11 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_11 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把船票钱、巡防津贴和旧账逐笔对上，在页脚补了两列：日期、去向。林恩看着那些整齐的短行，很久才说：「霍克记的账，也是这个样子。」他伸手把账本翻回第一页，让你把名字写在经手人那一栏。<span class="green">你落笔时，他的手一直按在纸边。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 12]]>><<pass 5>><</link>>
 <<else>>
-	旧账的记法和你习惯的不一样，有两笔怎么也对不上。林恩把算盘接过去，一颗一颗重拨，拨到一半停了：「算了。这几页我自己来。」<span class="red">他把账本合上，语气不重，你却听出那点失望。</span><<stress 3>><<tiredness 1>><<gstress>>
+	旧账的记法和你习惯的不一样，有两笔怎么也对不上。林恩把算盘接过去，一颗一颗重拨，拨到一半停了：「算了。这几页我自己来。」<span class="red">他把账本合上，语气不重，你却听出那点失望。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -595,10 +639,14 @@
 <br><br>
 岗棚外的风把铜铃吹得很急。他站在桌边，没有催你，也没有把笔往前推，只是把手按在表沿，等你自己伸手。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_12 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第12幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_12 is 1>>
 值班表上「旧案同行人」那一行已经签好，案件板的红线又多牵了一截。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 13]]>><<pass 4>><</link>>
@@ -606,13 +654,13 @@
 <div id="relday-lin-12">
 <<mpwatchicon>><<link "在值班表签名 (0:08)">><<pass 8>><<replace "#relday-lin-12">>
 <<if ($english or 0) gte 240 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_lin_12 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_12 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你写下名字，笔画压得很实。林恩看了那行字很久，才把值班表收进内袋，贴着胸口。他伸手把案件板上松掉的一枚图钉按紧，声音比平时低：「从今晚起，这条线上有我，也有你。」<span class="green">铜铃在檐角响了一声，像替谁应了句话。</span><<stress -4>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 13]]>><<pass 5>><</link>>
 <<else>>
-	你落笔时手有些抖，名字的最后一笔拖出了格。林恩没有说什么，只把表转过去，用橡皮轻轻擦了擦，递回给你：「不急。想清楚再签。」<span class="red">笔搁回桌上，墨在笔尖凝成一小颗黑点。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你落笔时手有些抖，名字的最后一笔拖出了格。林恩没有说什么，只把表转过去，用橡皮轻轻擦了擦，递回给你：「不急。想清楚再签。」<span class="red">笔搁回桌上，墨在笔尖凝成一小颗黑点。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -620,13 +668,13 @@
 <br>
 <<mpreadicon>><<link "先核对铅封拓片 (0:08)">><<pass 8>><<replace "#relday-lin-12">>
 <<if ($science or 0) gte 250 or ($skulduggery or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_12 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_12 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把拓片和旧案车辙图并排比对，缺损的缺口正好能对上。林恩俯身看了很久，伸手在两张纸之间拉直了一根红线：「对得上。不是巧合。」他转头看你，「签名的事，等这条线钉死再说。你先看清楚了，再决定。」<span class="green">他把笔收回抽屉，却把拓片往你那边推了推。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 13]]>><<pass 5>><</link>>
 <<else>>
-	拓片太薄，灯下反光，你比对了半天也没看出缺口的方向。林恩把灯挪近，自己看了一遍，没有下结论，只把拓片重新钉回板上。<span class="red">「明晚再看。」他说，声音里听不出是失望还是谨慎。</span><<stress 3>><<tiredness 1>><<gstress>>
+	拓片太薄，灯下反光，你比对了半天也没看出缺口的方向。林恩把灯挪近，自己看了一遍，没有下结论，只把拓片重新钉回板上。<span class="red">「明晚再看。」他说，声音里听不出是失望还是谨慎。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -648,10 +696,14 @@
 <br><br>
 修车库的卷帘门拉下来，铁皮震得直响。林恩靠着墙坐下，左肋的衣料洇开一片深色。他抬手摸到腰间的铜哨，塞进你手里：「两短一长。吹。」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_13 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第13幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_13 is 1>>
 暗渠边的脚印已经被夜潮抹平，修车库的灯亮到天快亮。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Lin 14]]>><<pass 4>><</link>>
@@ -659,13 +711,13 @@
 <div id="relday-lin-13">
 <<mpwatchicon>><<link "吹哨唤援 (0:09)">><<pass 9>><<replace "#relday-lin-13">>
 <<if ($willpower or 0) gte 430 or ($athletics or 0) gte 260>>
-	<<set $daily.mpRelDay_mp_relday_lin_13 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_13 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你冲到巷口，两短一长，哨声在石墙之间撞了几个来回。不到半刻，街尾的岗哨灯一盏接一盏亮起来，脚步声从三条巷子同时压过来。那三个人对视一眼，退进渠壁的阴影里。林恩靠着卷帘门听完整段哨音，才松开一直按着肋侧的手：「吹对了。」<span class="green">他说话时嘴角有一点很浅的弧度。</span><<stress -4>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 14]]>><<pass 5>><</link>>
 <<else>>
-	哨子在手里打滑，第一声吹得又短又哑。你深吸一口气重来，第二遍才勉强凑齐。援兵来得比预想的晚，那三个人已经退走，巷子里只剩你和林恩的呼吸声。<span class="red">他一直没有催你，只在哨声响起时闭了闭眼。</span><<stress 4>><<tiredness 2>><<gstress>>
+	哨子在手里打滑，第一声吹得又短又哑。你深吸一口气重来，第二遍才勉强凑齐。援兵来得比预想的晚，那三个人已经退走，巷子里只剩你和林恩的呼吸声。<span class="red">他一直没有催你，只在哨声响起时闭了闭眼。</span><<stress 4>><<tiredness 2>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -673,13 +725,13 @@
 <br>
 <<mpfirstaidicon>><<link "先替他止血 (0:09)">><<pass 9>><<replace "#relday-lin-13">>
 <<if ($tending or 0) gte 260 or ($science or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_13 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_13 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你剪开他肋侧的衣料，用干净布条压住伤口，又拿铁皮柜里的烈酒冲了手。林恩咬着牙没出声，只在你打结时伸手按了按你的手背：「稳。」血止住后，他才让你去吹哨。援兵到时，他已经能自己站起来。<span class="green">他站起来的第一件事，是把你往自己身后带。</span><<stress -4>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Lin 14]]>><<pass 5>><</link>>
 <<else>>
-	布条缠得太松，血很快渗出来。你手忙脚乱地重来，林恩接过布条，自己压住伤口，声音有些哑：「先吹哨。这个我自己来。」<span class="red">你握着哨子站起来，指尖全是温热的血。</span><<stress 4>><<tiredness 2>><<gstress>>
+	布条缠得太松，血很快渗出来。你手忙脚乱地重来，林恩接过布条，自己压住伤口，声音有些哑：「先吹哨。这个我自己来。」<span class="red">你握着哨子站起来，指尖全是温热的血。</span><<stress 4>><<tiredness 2>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -701,10 +753,14 @@
 <br><br>
 窗外天色一点点泛白，第一批送奶车从街尾过去，轮声很轻。林恩把值班表钉回墙上，退后半步看了看，两个名字并排，中间一道细线。他伸手把线抚平，像在抚平一段走了很久的路。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回林恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[回林恩身边 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_lin_14 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第14幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_lin_14 is 1>>
 值班表钉在墙上，两只铜哨并排挂在钉子下面，天已经亮了。
 <br>
 <<investigateicon>><<link [[回岗棚歇脚 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
@@ -712,13 +768,13 @@
 <div id="relday-lin-14">
 <<keepsakeicon>><<link "收下黄铜哨 (0:09)">><<pass 9>><<replace "#relday-lin-14">>
 <<if ($willpower or 0) gte 430 or ($english or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_14 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_14 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>>
 	你把铜哨挂到颈间，哨口贴着锁骨，凉了一瞬就焐热了。林恩看着那两道横纹，说：「刻的是三条街。以后你吹，我就知道你在哪一段。」他抬手替你把绳结理正，指腹在你颈侧停了一下，「二十三点。别迟到。」<span class="green">他说完便转回去收表，耳根却一直红到天亮。</span><<stress -4>><<lstress>>
 	<br><br>
 	<<link [[回岗棚歇脚 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
 <<else>>
-	绳结太紧，铜哨卡在领口，你抬手去解，反而越扯越死。林恩伸手替你松开，重新打了一个活结，力道放得很轻：「不急。它跑不了。」<span class="red">他低头时，绷带边缘渗出一小点血色，你伸手扶住他的肩。</span><<stress 3>><<tiredness 1>><<gstress>>
+	绳结太紧，铜哨卡在领口，你抬手去解，反而越扯越死。林恩伸手替你松开，重新打了一个活结，力道放得很轻：「不急。它跑不了。」<span class="red">他低头时，绷带边缘渗出一小点血色，你伸手扶住他的肩。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -726,13 +782,13 @@
 <br>
 <<mpdrinkicon>><<link "把姜汤推回 (0:09)">><<pass 9>><<replace "#relday-lin-14">>
 <<if ($tending or 0) gte 250 or ($housekeeping or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_lin_14 to 1>>
+	<<set $daily.mpRelDay_mp_relday_lin_14 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>>
 	你把保温壶里最后半碗姜汤倒进他那只杯子，推回去：「你后半夜走，风更硬。」林恩愣了一下，低头把汤喝完，把空杯放回桌上，杯底磕出一声轻响。他抬起眼：「二十三点，我烧水。」<span class="green">这句话说得很平，却像把往后的许多个夜晚都安排好了。</span><<stress -4>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[回岗棚歇脚 (0:04)|MP NPC Lin Hub]]>><<pass 4>><</link>>
 <<else>>
-	壶里只剩一个底，你倒得太急，姜汤溅在他绷带上。林恩先看你有没有烫到，才低头去擦。<span class="red">他擦得很慢，你握著壶，忽然不知道该把手往哪儿放。</span><<stress 3>><<tiredness 1>><<gstress>>
+	壶里只剩一个底，你倒得太急，姜汤溅在他绷带上。林恩先看你有没有烫到，才低头去擦。<span class="red">他擦得很慢，你握著壶，忽然不知道该把手往哪儿放。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回岗棚待命 (0:03)|MP NPC Lin Hub]]>><<pass 3>><</link>>
 <</if>>

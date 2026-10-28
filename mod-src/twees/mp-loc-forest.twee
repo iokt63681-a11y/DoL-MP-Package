@@ -4,9 +4,10 @@
 <br><br>
 铜牌下方用炭笔写着当日的林务记录，字迹被露水洇开又晒干，留下毛边：
 <br>
-【林区态势】探索进度：<<print $mpLocProgress_Forest>> ｜ 已结林务：<<print $mpLocEvents_Forest>> ｜ 雾潮水尺：<<print ($mpFogTide or 0)>>
+牌面空处，阿什又添了几道新痕。<<if $mpLocProgress_Forest gte 4>>三道刻线已经连到界石背面，旁边压着几片当日采回的菌叶。<<elseif $mpLocProgress_Forest gte 2>>两道刻线并排，末一道还没收尾，炭粉被露水洇成一团。<<elseif $mpLocProgress_Forest gte 1>>第一道刻线刚落下，笔尾还留着指腹抹过的印子。<<else>>牌面只有旧年的浅痕，新的一笔还没人动。<</if>><<if $mpLocEvents_Forest gte 4>>铜环下挂着四截磨旧的布条，末梢都打了结。<<elseif $mpLocEvents_Forest gte 2>>铜环下有两根布条已经打结，还有一根垂着。<<elseif $mpLocEvents_Forest gte 1>>一根布条被重新系紧，结打在离铜环一指远的地方。<<else>>铜环上的布条仍是阿什早晨系的原样。<</if>>雾潮水尺藏在界石背槽里，水面<<if ($mpFogTide or 0) gte 5>>漫过第三道刻线，槽壁的苔色发暗<<elseif ($mpFogTide or 0) gte 3>>停在中段，结着一层细盐<<elseif ($mpFogTide or 0) gte 1>>刚没到最下一道，水光很薄<<else>>几乎见底，只剩一线湿痕<</if>>。
 <br>
-<<if $mpWorldForestOutcome is "warded">>林道那一侧已经立起新削的杉木桩，桩顶挂着防风灯，灯光连成一条不弯的线。走夜路的人只要顺着灯走，就不会再被岔道骗进雾谷。<<elseif $mpWorldForestOutcome is "untamed">>界石这一侧的藤蔓已经越过了刻线，去年还空着的地方如今长出一人高的蕨。林子接受了那份约定，也顺手把旧路改了几处，阿什的灯簿上因此多了好些划掉重画的线。<<else>>林道还没有定局。界石往里的每一段路都还等着人去走、去记，去决定要把它挡住，还是让开。<</if>>
+<<if $mpForestEnded>><<if $mpWorldForestOutcome is "warded">>林道哨障已定局：新削的杉木桩挂起防风灯连成直线，每次添油虽耗鲸油，却护住了夜路。<<else>>古林共生已定局：藤蔓越过旧刻线，林道随雾势自然开合，不再强立木桩。<</if>><<else>>林道还没有定局。界石往里的每一段路都还等着人去走、去记，去决定要把它挡住，还是让开。<</if>><<if Time.days lt ($mpForestSetback or 0)>> <span class="red">（你在林间受挫扭伤未愈，第 <<print $mpForestSetback>> 日前不宜强闯险处）</span><</if>>
+<<mpForestEventRoll>>
 <br>
 <<if $mpWorldAshEnding is "beacon">>北岭方向有一线细而稳的光，风怎么刮都不散——那是阿什把第七盏灯点亮之后留下的。<<elseif $mpWorldAshEnding is "hidden">>林子里看不见一盏明火，哨位藏在树影里，只有走到跟前才会听见一声压低的「这边」。<<else>>阿什的第七盏灯还没有着落，他的灯簿上仍留着几处空白。<</if>>
 <br><br>
@@ -16,14 +17,13 @@
 <br><br>
 风从树冠上翻过去，带着松脂和湿土的气味。界石后面没有路标了，往哪走、走多远，得由你自己定。
 <br><br>
-<<getouticon>><<link [[返回木牌告示 (0:04)|MP Town Side Notices Hub]]>><<pass 4>><</link>><br>
-<<walkicon>><<link [[探索森林表层 (0:06)|MP Loc Forest Surface]]>><<pass 6>><</link>><br>
-<<investigateicon>><<link [[深入森林中层 (0:08)|MP Loc Forest Mid]]>><<pass 8>><</link>><br>
-<<sneakicon>><<link [[潜入森林深层 (0:10)|MP Loc Forest Deep]]>><<pass 10>><</link>><br>
-<<link [[观测季节异象 (0:06)|MP Loc Forest Season]]>><<pass 6>><</link>>
-<br><<link [[查看四季活动 (0:03)|MP Loc Forest Festival Hub]]>><<pass 3>><</link>>
-<br><<link [[查看季节转化钩子 (0:04)|MP Season Hooks Hub]]>><<pass 4>><</link>>
-<br><<link [[更多日常 (0:03)|MP Loc Forest More Hub]]>><<pass 3>><</link>>
+<<getouticon>><<link [[返回林缘入口 (0:04)|Forest]]>><<pass 4>><</link>><br>
+<<walkicon>><<link [[沿猎径走 (0:10)|MP Loc Forest Surface]]>><<pass 10>><</link>><br>
+<<investigateicon>><<link [[跟巡林一班 (1:00)|MP Loc Forest Patrol Shift]]>><</link>><br>
+<<if Time.hour gte 18 or Time.hour lt 6>><<sneakicon>><<link [[摸黑进雾谷 (0:15)|MP Loc Forest Mid]]>><<pass 15>><</link>><br>
+<<elseif $mpLocProgress_Forest gte 2 or $mpLocEvents_Forest gte 2>><<sneakicon>><<link [[往深谷走 (0:10)|MP Loc Forest Deep]]>><<pass 10>><</link>><br>
+<<else>><<socialiseicon>><<link [[去火塘找阿什 (0:05)|MP NPC Ash Schedule]]>><<pass 5>><</link>><br>
+<</if>>
 
 :: MP Loc Forest Surface [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
@@ -35,22 +35,24 @@
 <br><br>
 林缘的活计零碎，回报也零碎：一把能入药的草、几枚能换针线的野果、一句从赶车人嘴里听来的消息。真正值钱的东西都压在更深处，可要在这一层站稳，靠的恰恰是这些不起眼的小事——哪棵树下的土松、哪段路雨后必塌、哪丛荆棘后头藏着兽径，记熟了，往里走才不至于两眼一抹黑。
 <br><br>
-【表层进度】：探索度 <<print $mpLocProgress_Forest>> ｜ 已结林务 <<print $mpLocEvents_Forest>>
+土径边的界桩上，阿什用骨刀新刻的浅痕朝北，末梢被鞋底蹭得发亮。<<if $mpLocProgress_Forest gte 3>>再往里的岔口也削了树皮标记，这一层已经摸得差不多。<<elseif $mpLocProgress_Forest gte 1>>往里的岔口只标了一半，树皮上的刀口还白着。<<else>>界桩后面的岔口没有新标记，你还没把这一层走透。<</if>><<if $mpLocEvents_Forest gte 2>>桩脚压着两枚打结的布条，活已经有人收过尾。<<elseif $mpLocEvents_Forest gte 1>>桩脚压着一枚布条，剩下的还等着人。<<else>>桩脚只有旧年的刻痕，今天的活还没人动。<</if>>
 <br><br>
 路口那根木牌已经歪了半边，牌上的刻痕被雨水泡得发胀；再往里几步的猎径边，枯叶下隐约反出一道铁器的冷光。阿什的原话是：「表层不算林子，只能算林子的门槛。门槛上出的错，多半还改得回来。」他说的改得回来，前提是你得在天黑前把它们找出来。
 <br><br>
 太阳压到树梢时，林缘的光会先暗下来，比镇上的天色早小半个时辰。再往里，树冠一层压一层，白天也带着黄昏的味道，那里就不是随手能进出的地方了。你把手里的活收个尾，还来得及赶在天光耗尽前挑一条路。走之前记得把衣摆掖进腰带，枝条勾住衣角的声音，在林子里传得很远。
 <br><br>
+<<set _forSurfOpen to (Time.hour gte 6 and Time.hour lt 19 and Time.days gte ($mpForestSetback or 0))>>
 <<getouticon>><<link [[返回森林总枢 (0:02)|MP Loc Forest Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[林缘路标修补 (0:10)|MP Loc Forest Event 1]]>><<pass 10>><</link>><br>
-<<shopicon>><<link [[猎径兽夹排查 (0:10)|MP Loc Forest Event 2]]>><<pass 10>><</link>><br>
+<<if _forSurfOpen>><<investigateicon>><<link [[林缘路标修补 (0:10)|MP Loc Forest Event 1]]>><<pass 10>><</link>><br><<else>><span class="disabled">林缘路标修补（需白昼 06:00–19:00 且无伤病整顿）</span><br><</if>>
+<<if _forSurfOpen>><<shopicon>><<link [[猎径兽夹排查 (0:10)|MP Loc Forest Event 2]]>><<pass 10>><</link>><br><<else>><span class="disabled">猎径兽夹排查（需白昼 06:00–19:00 且无伤病整顿）</span><br><</if>>
+<<if _forSurfOpen>><<walkicon>><<link [[猎径短巡 (0:20)|MP Loc Forest Trail Sweep]]>><</link>><br><</if>>
 <<walkicon>><<link [[前往森林中层 (0:06)|MP Loc Forest Mid]]>><<pass 6>><<set $mpLocProgress_Forest to Math.max($mpLocProgress_Forest, 1)>><</link>>
 
 :: MP Loc Forest Mid [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
 树冠在这里合拢了。光被筛成一层薄薄的绿雾，落在肩上不烫，脚下的腐叶却厚得踩不出声。往北是一道石梁，梁下的雾谷常年积着化不开的白气；往东是废弃的伐木道，枕木缝里钻出成片的红菇；湖泊在西边低处，水面平得像一块蒙了灰的镜子，偶尔有鱼尾一翻，涟漪推到岸边就散了。
 <br><br>
-【中层进度】：探索度 <<print $mpLocProgress_Forest>> ｜ 已结林务 <<print $mpLocEvents_Forest>>
+红蓝黑三根布条在岔口的枝上换了新结，<<if $mpLocProgress_Forest gte 3>>沿湖那一段也系上了回程的浅痕，雾再起时不至于摸错方向。<<elseif $mpLocProgress_Forest gte 1>>布条只重系了一半，往雾谷去的岔口还空着一道刻痕。<<else>>枝上的布条被露水打得发沉，旧刻痕还没人重描。<</if>><<if $mpLocEvents_Forest gte 3>>旧营地那边飘来烧过湿柴的气味，说明有人刚把火塘重新垒过。<<elseif $mpLocEvents_Forest gte 1>>湖畔的木栈上留着新鲜的鞋印，活已经开过头。<<else>>腐叶下没有新的脚印，这一层的活还没怎么动。<</if>>
 <br><br>
 阿什把巡林分作三条线：红线走北岭，蓝线过断桥，黑线进深谷。三条线他都用布条系在岔口的枝上，布条下方还有一道用骨刀刻的浅痕，痕口朝哪边，哪边就是回程。雾一起，布条会被打湿贴在枝上，颜色反而更清楚；可要是谁贪近路把布条挪了位置，后面的人就得在雾里多绕半天。
 <br><br>
@@ -62,16 +64,18 @@
 <br><br>
 雾谷前那段坡最会骗人。看着是一条直路，走进去二十步就会分岔，岔口两边长得一模一样。手上没有布条、脚下没有刻痕的人，多半会在里面兜一圈，从原路退回界石，还白白耗掉半天的力气和心神。阿什在后面把被风吹歪的布条一根根重新系紧，动作很慢，系完还要退开两步看一眼。
 <br><br>
+<<set _forMidOpen to (Time.hour gte 6 and Time.hour lt 20 and Time.days gte ($mpForestSetback or 0))>>
 <<getouticon>><<link [[返回森林总枢 (0:02)|MP Loc Forest Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[断桥雾谷渡口 (0:12)|MP Loc Forest Event 3]]>><<pass 12>><</link>><br>
-<<socialiseicon>><<link [[废弃伐木旧营 (0:12)|MP Loc Forest Event 4]]>><<pass 12>><</link>><br>
+<<if _forMidOpen>><<investigateicon>><<link [[断桥雾谷渡口 (0:12)|MP Loc Forest Event 3]]>><<pass 12>><</link>><br><<else>><span class="disabled">断桥雾谷渡口（需 06:00–20:00 且无伤病整顿）</span><br><</if>>
+<<if _forMidOpen>><<socialiseicon>><<link [[废弃伐木旧营 (0:12)|MP Loc Forest Event 4]]>><<pass 12>><</link>><br><<else>><span class="disabled">废弃伐木旧营（需 06:00–20:00 且无伤病整顿）</span><br><</if>>
+<<if _forMidOpen>><<mplampicon>><<link [[湖畔守望 (0:20)|MP Loc Forest Lake Watch]]>><</link>><br><</if>>
 <<sneakicon>><<if $mpLocProgress_Forest gte 2 or $mpLocEvents_Forest gte 2>><<link [[进入森林深层 (0:08)|MP Loc Forest Deep]]>><<pass 8>><<set $mpLocProgress_Forest to Math.max($mpLocProgress_Forest, 3)>><</link>><<else>><<link [[贸然硬闯深层 (0:08)|MP Loc Forest Hub]]>><<pass 8>><<stress 4>><<tiredness 2>><</link>><</if>>
 
 :: MP Loc Forest Deep [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
 树高得望不见顶，枝杈在头顶绞成一片密不透光的穹顶。这里没有风，也没有鸟叫，只有你自己的呼吸，和远处某根枯枝偶尔的断裂声。光从叶缝里漏下来，一小束一小束，落在苔上像落了一层薄霜。
 <br><br>
-【深层态势】：探索度 <<print $mpLocProgress_Forest>> ｜ 林中终局：<<print ($mpWorldForestOutcome or "未定")>>
+七盏灯的铜盖被烟熏得发黑，<<if ($mpFogTide or 0) gte 5>>雾从地缝里往上冒，把最近一盏的光晕压成一小团。<<elseif ($mpFogTide or 0) gte 3>>苔面泛着一层湿白，灯线在雾里断断续续。<<else>>灯座之间的苔还是干的，林道暂时看得清。<</if>><<if $mpWorldForestOutcome is "warded">>新削的杉木桩已经钉进土里，桩顶的防风灯连成一条不弯的线。<<elseif $mpWorldForestOutcome is "untamed">>藤蔓越过旧刻线，往林道这边爬了半人高，路随林子改了几处。<<else>>灯簿的最后一格还空着，这林子往后归谁守，还没有人落笔。<</if>>
 <br><br>
 七盏灯的灯座散在这一带：有的嵌在石缝里，有的架在削平的树桩上，铜盖被烟熏得发黑。阿什说灯不是用来照路的，是用来告诉走夜路的人「这一段有人走过，而且活着出去了」。灯座之间的连线，就是他灯簿上那些红蓝黑的布条。灯油够不够、灯罩有没有裂、哪一盏该挪个位置，都是到了深层才谈得上的事。
 <br><br>
@@ -83,17 +87,22 @@
 <br><br>
 雾潮漫上来的时候，最先湿的是这一层的苔。雾从地缝里往外冒，把灯座的光晕压成一小团。要不要在林道上立桩设障，把林子挡在界外，还是索性认下这份共生、让路随林子改，这个决定只能在这里做。阿什不会替你选，他只把骨刀插回腰间，等你说。
 <br><br>
+<<set _forDeepOpen to (Time.days gte ($mpForestSetback or 0) and ((Time.hour gte 7 and Time.hour lt 18) or ($mpLanternOil or 0) gte 1))>>
 <<getouticon>><<link [[返回森林总枢 (0:02)|MP Loc Forest Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[古石环苔藓坛 (0:15)|MP Loc Forest Event 5]]>><<pass 15>><</link>><br>
-<<sneakicon>><<link [[深林地脉裂隙 (0:15)|MP Loc Forest Event 6]]>><<pass 15>><</link>><br>
-<<socialiseicon>><<link [[加固林道哨障 (0:20)|MP Loc Forest Ending A]]>><<pass 20>><<set $mpWorldForestOutcome to "warded">><<set $mpLocProgress_Forest to 5>><</link>><br>
-<<link [[缔结古林共生 (0:20)|MP Loc Forest Ending B]]>><<pass 20>><<set $mpWorldForestOutcome to "untamed">><<set $mpLocProgress_Forest to 5>><</link>>
+<<if _forDeepOpen>><<investigateicon>><<link [[古石苔藓坛 (0:15)|MP Loc Forest Event 5]]>><<pass 15>><</link>><br><<else>><<link [[回中层去 (0:04)|MP Loc Forest Mid]]>><<pass 4>><</link>><br><</if>>
+<<if _forDeepOpen>><<sneakicon>><<link [[深林地脉裂隙 (0:15)|MP Loc Forest Event 6]]>><<pass 15>><</link>><br><<else>><<link [[看林间天色 (0:04)|MP Loc Forest Season]]>><<pass 4>><</link>><br><</if>>
+<<if $mpForestEnded>>
+<<if $mpWorldForestOutcome is "warded">><<socialiseicon>><<link [[重温林道哨障志 (0:06)|MP Loc Forest Ending A]]>><<pass 6>><</link>><<else>><<socialiseicon>><<link [[重温古林共生约 (0:06)|MP Loc Forest Ending B]]>><<pass 6>><</link>><</if>>
+<<elseif ($mpForestShifts or 0) gte 5 and Time.days gte ($mpForestSetback or 0)>>
+<<socialiseicon>><<link [[加固林道上的哨障 (0:20)|MP Loc Forest Ending A]]>><<pass 20>><<set $mpForestEnded to 1>><<set $mpWorldForestOutcome to "warded">><<set $mpLocProgress_Forest to 5>><</link>><br>
+<<link [[缔结共生 (0:20)|MP Loc Forest Ending B]]>><<pass 20>><<set $mpForestEnded to 1>><<set $mpWorldForestOutcome to "untamed">><<set $mpLocProgress_Forest to 5>><</link>>
+<<else>><span class="disabled">加固林道哨障 / 缔结古林共生 (0:20)（需巡林满五班且无整顿期）</span><</if>>
 
 :: MP Loc Forest Season [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
 雾潮水尺涨到哪一格，林子总是先知道。石缝里的苔会提前一天泛白，湖面在无风的清晨也会起细纹，阿什把这种天气叫「林子在换气」。
 <br><br>
-【天象读数】当前季节：<<if Time.season is "spring">>春<<elseif Time.season is "summer">>夏<<elseif Time.season is "autumn">>秋<<elseif Time.season is "winter">>冬<<else>>当季<</if>> ｜ 降水：<<if Weather.precipitation is "rain">>有雨<<elseif Weather.precipitation is "snow">>有雪<<elseif Weather.precipitation is "none">>晴好<<else>>薄雾<</if>> ｜ 雾潮水尺：<<print ($mpFogTide or 0)>> ｜ 探索度：<<print $mpLocProgress_Forest>>
+石缝里的苔色<<if ($mpFogTide or 0) gte 5>>已经泛出深青，水汽贴着地面走，林子在换一场重雾<<elseif ($mpFogTide or 0) gte 3>>比平日深了一层，湖面在无风的清晨也起了细纹<<elseif ($mpFogTide or 0) gte 1>>微微发暗，石槽里积着一线薄水<<else>>还是干的，风从树梢上翻过去，带着松脂味<</if>>。<<if Time.season is "spring">>春汛刚过，腐叶下的土还软<<elseif Time.season is "summer">>夏雾闷在树冠底下，蝉声一停就说明有东西靠近<<elseif Time.season is "autumn">>秋猎的兽群正顺着山脊往南挪<<else>>雪季的林道最诚实，脚印留得清楚，走错一步也最难回头<</if>>；<<if Weather.precipitation is "rain">>雨点正打在叶面上<<elseif Weather.precipitation is "snow">>雪粒混在雾里，打在脸上像细砂<<else>>日头把苔照得发亮<</if>>。
 <br><br>
 <<if Time.season is "winter">>雪季的林子安静得能听见雪落。枝上的积雪会在午后被日头晒松，走到背阴处就整片塌下来；野兽的脚印在雪面上连成串，是最好认路、也最容易被引开的时候。雾潮若在此时上涨，雪粒会混进雾里，打在脸上像细砂。<<elseif Time.season is "autumn">>秋深时兽群南迁，山脊上的灌木被拱出一道道沟，浆果落在地上发了酵，空气里带一点甜酸。这是林子里吃食最多、也最容易撞上觅食野兽的时节。<<elseif Time.season is "summer">>夏天闷得厉害，正午的林子像扣着一口锅，蝉声一停就说明有东西在附近。午后骤雨来得急，雨点砸在叶面上像撒豆子，林道转眼就成了泥沟。<<else>>春天地气回升，腐叶下的土松得厉害，走着走着脚下就塌一块。新芽和毒蕈一起冒头，认不准的菌子碰都不要碰。<</if>>
 <br><br>
@@ -124,7 +133,7 @@
 林子边缘的风把铜牌吹得轻响。远处传来车轴吱呀的声音，又一辆车正往这边来，赶车人显然还没看见这块歪掉的牌子。你把袖子卷到肘上，蹲下去先清桩底的碎石。
 <br><br>
 <<getouticon>><<link [[返回森林表层 (0:02)|MP Loc Forest Surface]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($tending or 0) gte 220 or ($willpower or 0) gte 420>><<link [[扶正歪斜路牌 (0:12)|MP Loc Forest Surface]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[扶正歪斜路牌 (0:12)|MP Loc Forest Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($tending or 0) gte 220 or ($willpower or 0) gte 420>><<link [[扶正歪斜路牌 (0:12)|MP Loc Forest Surface]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[扶正歪斜路牌 (0:12)|MP Loc Forest Surface]]>><<pass 12>><<set $mpForestSetback to Time.days + 1>><<set $mpLocProgress_Forest to Math.max(0, ($mpLocProgress_Forest or 0) - 1)>><<pain 3>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[清理缠绕荆棘 (0:12)|MP Loc Forest Hub]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Forest Event 2 [nobr]
@@ -146,7 +155,7 @@
 日头偏西时，猎径上已经清出一条干净的道。落叶被扫到两边，露出底下的湿土；再往前走，脚印会重新盖上来，但至少今晚，没有谁会踩上那排铁齿。远处林缘传来一声短促的鸟叫。
 <br><br>
 <<getouticon>><<link [[返回森林表层 (0:02)|MP Loc Forest Surface]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($athletics or 0) gte 220 or ($willpower or 0) gte 420>><<link [[拆除生锈兽夹 (0:12)|MP Loc Forest Surface]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[拆除生锈兽夹 (0:12)|MP Loc Forest Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($athletics or 0) gte 220 or ($willpower or 0) gte 420>><<link [[拆除生锈兽夹 (0:12)|MP Loc Forest Surface]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[拆除生锈兽夹 (0:12)|MP Loc Forest Surface]]>><<pass 12>><<set $mpForestSetback to Time.days + 1>><<set $mpLocProgress_Forest to Math.max(0, ($mpLocProgress_Forest or 0) - 1)>><<pain 3>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[标记安全小径 (0:12)|MP Loc Forest Hub]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Forest Event 3 [nobr]
@@ -168,7 +177,7 @@
 谷底的雾漫上来，把桥板的下半截吞掉。水声在雾里显得更近，像贴着脚踝流过。渡口对面那片林子静得出奇，连鸟都不叫。你把绳头在手里掂了掂，湿的，比看上去沉。伊甸已经走了，坡上只剩一串往北去的脚印。
 <br><br>
 <<getouticon>><<link [[返回森林中层 (0:02)|MP Loc Forest Mid]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[加固渡口麻绳 (0:12)|MP Loc Forest Mid]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[加固渡口麻绳 (0:12)|MP Loc Forest Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[加固渡口麻绳 (0:12)|MP Loc Forest Mid]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[加固渡口麻绳 (0:12)|MP Loc Forest Mid]]>><<pass 12>><<set $mpForestSetback to Time.days + 1>><<set $mpLocProgress_Forest to Math.max(0, ($mpLocProgress_Forest or 0) - 1)>><<pain 3>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[测量溪流涨势 (0:12)|MP Loc Forest Hub]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Forest Event 4 [nobr]
@@ -188,7 +197,7 @@
 暮色从坡下漫上来，旧营的木料散发出一股被雨水泡透又晒干的酸味。风从坡口灌进来，把松针吹得打旋。阿什把油布抖开，抖落一层灰，布面在暮色里泛出旧蜡的光。远处谷底的溪声忽然停了一瞬，随即又响起来。
 <br><br>
 <<getouticon>><<link [[返回森林中层 (0:02)|MP Loc Forest Mid]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($housekeeping or 0) gte 220 or ($willpower or 0) gte 420>><<link [[搜寻遗留工具 (0:12)|MP Loc Forest Mid]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[搜寻遗留工具 (0:12)|MP Loc Forest Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($housekeeping or 0) gte 220 or ($willpower or 0) gte 420>><<link [[搜寻遗留工具 (0:12)|MP Loc Forest Mid]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[搜寻遗留工具 (0:12)|MP Loc Forest Mid]]>><<pass 12>><<set $mpForestSetback to Time.days + 1>><<set $mpLocProgress_Forest to Math.max(0, ($mpLocProgress_Forest or 0) - 1)>><<pain 3>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[修补防雨油布 (0:12)|MP Loc Forest Hub]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Forest Event 5 [nobr]
@@ -210,7 +219,7 @@
 天色暗下来，石根那圈青苔果然亮了一点，不是火，也不是月光，像石头自己憋着一口气。你没有伸手去碰，只把掌心贴在旁边的石面上，隔着苔也能觉出一点温。
 <br><br>
 <<getouticon>><<link [[返回森林深层 (0:02)|MP Loc Forest Deep]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($tending or 0) gte 260 or ($willpower or 0) gte 420>><<link [[辨认石环星纹 (0:12)|MP Loc Forest Deep]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[辨认石环星纹 (0:12)|MP Loc Forest Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($tending or 0) gte 260 or ($willpower or 0) gte 420>><<link [[辨认石环星纹 (0:12)|MP Loc Forest Deep]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[辨认石环星纹 (0:12)|MP Loc Forest Deep]]>><<pass 12>><<set $mpForestSetback to Time.days + 1>><<set $mpLocProgress_Forest to Math.max(0, ($mpLocProgress_Forest or 0) - 1)>><<pain 3>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[采集夜光苔藓 (0:12)|MP Loc Forest Hub]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Forest Event 6 [nobr]
@@ -230,12 +239,12 @@
 雾头又往上抬了一指。缝底深处传来极轻的嗡鸣，像有什么在下面翻了个身。你把耳朵贴到石面上，能听见深处有规律的一起一伏，慢，但一直没停。阿什说过，地脉是活的，活的东西只能顺着来。你退开半步，鞋底下的碎石是温的，隔着鞋底也感觉得到。
 <br><br>
 <<getouticon>><<link [[返回森林深层 (0:02)|MP Loc Forest Deep]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($willpower or 0) gte 400 or ($willpower or 0) gte 420>><<link [[探测地脉暖雾 (0:12)|MP Loc Forest Deep]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[探测地脉暖雾 (0:12)|MP Loc Forest Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($willpower or 0) gte 400 or ($willpower or 0) gte 420>><<link [[探测地脉暖雾 (0:12)|MP Loc Forest Deep]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<set $mpLocProgress_Forest to Math.min(5, $mpLocProgress_Forest + 1)>><<stress -3>><</link>><<else>><<link [[探测地脉暖雾 (0:12)|MP Loc Forest Deep]]>><<pass 12>><<set $mpForestSetback to Time.days + 1>><<set $mpLocProgress_Forest to Math.max(0, ($mpLocProgress_Forest or 0) - 1)>><<pain 3>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[封堵外溢瘴气 (0:12)|MP Loc Forest Hub]]>><<pass 12>><<set $mpLocEvents_Forest += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Forest Ending A [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
-<<set $mpWorldForestOutcome to "warded">><<set $mpLocProgress_Forest to 5>>
+<<if !$mpForestEnded>><<set $mpForestEnded to 1>><<if ($mpLanternOil or 0) gte 1>><<set $mpLanternOil -= 1>><</if>><<tiredness 3>><</if>><<set $mpWorldForestOutcome to "warded">><<set $mpLocProgress_Forest to 5>>
 天没亮你们就上了林道。阿什选了七处最容易被雾吞掉的位置，每一处立一根削尖的杉木桩，桩顶钉铁箍，箍里卡住防风灯；桩与桩之间拉三道麻绳，绳上系红布条。转角的地方加密，岔口的地方用两根桩夹住，让人一眼就知道该往哪边走。
 <br><br>
 麻绳是从旧营地里翻出来的，泡过水又晒干，硬得能割手。阿什在前头走，每立一根桩就用脚把土踩实，再蹲下去看影子正不正；他不看灯，只看桩。
@@ -257,7 +266,7 @@
 
 :: MP Loc Forest Ending B [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<set $mpLocProgress_Forest to ($mpLocProgress_Forest or 0)>><<set $mpLocEvents_Forest to ($mpLocEvents_Forest or 0)>>
-<<set $mpWorldForestOutcome to "untamed">><<set $mpLocProgress_Forest to 5>>
+<<if !$mpForestEnded>><<set $mpForestEnded to 1>><<stress 3>><<pain 2>><</if>><<set $mpWorldForestOutcome to "untamed">><<set $mpLocProgress_Forest to 5>>
 你们没有立桩。阿什把最后一根削好的杉木放回肩上，看了很久的树冠，才说：「不挡了？」
 <br><br>
 不挡了。你们把灯座从原来的位置一个个拆下来，挪到林子自己让出来的空隙里：藤蔓绕开的那块石头，树根拱起的那个凹槽，溪水改道后留下的浅滩。灯不再是划界的桩，而是借光的地方——人从这儿过，得按林子的走向走，而不是让林子让路。
@@ -278,3 +287,21 @@
 <br><br>
 <<getouticon>><<link [[返回森林总枢 (0:04)|MP Loc Forest Hub]]>><<pass 4>><<stress -6>><</link>><br>
 <<walkicon>><<link [[返回森林深层 (0:04)|MP Loc Forest Deep]]>><<pass 4>><</link>>
+
+:: Widgets MP Forest Event [widget nobr]
+<<widget "mpForestEventRoll">>
+	<<set _day to (window.Time ? Time.days : 0)>>
+	<<if not ($daily and $daily.mpForestEnter is _day)>>
+		<<set $daily to ($daily or {})>><<set $daily.mpForestEnter to _day>>
+		<<set _roll to random(1, 100)>>
+		<<if _roll lte 25>>
+			<br><span class="blue">【谷底起雾】</span>北坡冷泉忽然涌出一股白雾，将界石前的土径漫去半截。<<if ($tending or 0) gte 200 or ($mpLocProgress_Forest or 0) gte 2>>你顺着树皮浅痕稳步绕开洼地。<<stress -1>><<else>>湿冷草叶打湿了裤脚，你在原地多辨了一会儿方向。<<tiredness 1>><<stress 2>><</if>>
+		<<elseif _roll lte 50>>
+			<br><span class="blue">【腐叶陷坑】</span>猎径旁一处被雨水掏空的树根塌了半寸。<<if ($athletics or 0) gte 200>>你及时借树干稳住身形。<<stress -1>><<else>>脚踝在湿泥里崴了一下，沾了一鞋腐叶。<<pain 1>><<stress 2>><</if>>
+		<<elseif _roll lte 75>>
+			<br><span class="blue">【林影窥视】</span>灌木丛后闪过一双黄澄澄的狼眼，随即隐没在冷杉影里。<<if ($willpower or 0) gte 340>>你放缓呼吸没有乱动，对方很快转身离去。<<stress -1>><<else>>背脊窜起一阵凉意，脚步不由得加快了几分。<<stress 2>><</if>>
+		<<else>>
+			<br><span class="blue">【守林留记】</span><<if $mpNpcs and $mpNpcs.ash and $mpNpcs.ash.hasMet>>阿什在界石铜环下塞了一小包干松针，替你标出了今日干燥的猎径。<<stress -2>><<else>>你在界石背槽捡到半截还能用的防风火绒。<<stress -1>><</if>>
+		<</if>>
+	<</if>>
+<</widget>>

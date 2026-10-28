@@ -1,8 +1,8 @@
 :: MP Daily Robin 4 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.weekDay is 1 or Time.weekDay is 7>>周末傍晚，<<else>>傍晚收摊后，<</if>><<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>在孤儿院卧室门外支起小木桌清点零钱罐。几个小孤儿围在旁边看画片，<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>见你回来，忙把留着棉花糖的热可可递给你：「今天卖出了二十杯，先尝尝。」
+<<set $daily to ($daily or {})>><<if Time.weekDay is 1 or Time.weekDay is 7>>周末傍晚，<<else>>傍晚收摊后，<</if>><<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>在孤儿院卧室门外支起小木桌清点零钱罐。几个小孤儿围在旁边看画片，<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>见你回来，忙把留着棉花糖的热可可递给你：「今天卖出了二十杯，先尝尝。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[回罗宾身边 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回罗宾身边 (0:02)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Robin")>><<link [[回罗宾身边 (0:02)|Orphanage]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_robin_4 is 1>>
 今日已帮过忙，先回去歇着。
@@ -10,29 +10,29 @@
 <<investigateicon>><<link [[去下一处 (0:04)|MP Daily Robin 5]]>><<pass 4>><</link>>
 <<else>>
 <div id="act-mp-daily-robin-4">
-<<mpcalculateicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link "把零钱码齐 (0:06)">><<pass 6>><<replace "#act-mp-daily-robin-4">>
+<<mpcalculateicon>><<if mpNpcMet("Robin")>><<link "把零钱码齐 (0:06)">><<pass 6>><<replace "#act-mp-daily-robin-4">>
 <<if ($maths or 0) gte 230 or ($housekeeping or 0) gte 230>>
 	<<set $daily.mpDaily_robin_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><<glove>><</if>>账目一分不差，罗宾开心地把多出的几枚铜币塞进共同储蓄盒。<span class="green">罗宾的笑容让整个走廊都暖了起来。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Robin")>><<npcincr Robin love 1>><<glove>><</if>>账目一分不差，罗宾开心地把多出的几枚铜币塞进共同储蓄盒。<span class="green">罗宾的笑容让整个走廊都暖了起来。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Robin 5]]>><<pass 4>><</link>>
 <<else>>
-	硬币从桌沿滑落两枚滚进床底，你弯腰去摸时磕到了膝盖。<span class="red"><<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>连忙蹲下来替你揉了揉膝头。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
+	硬币从桌沿滑落两枚滚进床底，你弯腰去摸时磕到了膝盖。<span class="red"><<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>连忙蹲下来替你揉了揉膝头。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
 	<<link [[弯腰再把零钱码齐 (0:04)|MP Daily Robin 4]]>><<pass 4>><</link>>
 	<br>
 	<<link [[离开 (0:03)|Orphanage]]>><<pass 3>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">把零钱码齐 (0:06)（尚未结识）</span><</if>>
+<</replace>><</link>><<else>><</if>>
 <br>
 <<mpreadicon>><<link "陪小孤儿读书 (0:07)">><<pass 7>><<replace "#act-mp-daily-robin-4">>
 <<if ($english or 0) gte 230 or ($tending or 0) gte 230>>
 	<<set $daily.mpDaily_robin_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><<glove>><</if>>孩子们听得入神，乖巧地排着队回房睡觉，罗宾感激地牵住你的衣角。<span class="green">你们并肩收拾好木桌准备歇息。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Robin")>><<npcincr Robin love 1>><<glove>><</if>>孩子们听得入神，乖巧地排着队回房睡觉，罗宾感激地牵住你的衣角。<span class="green">你们并肩收拾好木桌准备歇息。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Orphanage]]>><<pass 4>><</link>>
 <<else>>
-	你念错了两个生僻词，小家伙们叽叽喳喳地缠着你追问。<span class="red"><<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>笑着接过书本替你解了围。</span><<stress 3>><<tiredness 1>><<gtiredness>><<gstress>>
+	你念错了两个生僻词，小家伙们叽叽喳喳地缠着你追问。<span class="red"><<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>笑着接过书本替你解了围。</span><<stress 3>><<tiredness 1>><<gtiredness>><<gstress>>
 	<br><br>
 	<<link [[蹲身再陪小读书 (0:04)|MP Daily Robin 4]]>><<pass 4>><</link>>
 	<br>
@@ -44,9 +44,9 @@
 
 :: MP Daily Robin 5 [nobr]
 <<set $outside to 0>><<set $location to "orphanage">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.dayState is "night" or Time.hour gte 20>>夜深后走廊只留一盏壁灯，<<else>>晚间走廊安静下来后，<</if>><<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>抱着刚缝补好的旧羊毛毯轻轻敲开你的房门。他的耳尖泛红，小声问道：「外头风大，我能把备用木箱搬过来靠着你那边整理吗？」
+<<set $daily to ($daily or {})>><<if Time.dayState is "night" or Time.hour gte 20>>夜深后走廊只留一盏壁灯，<<else>>晚间走廊安静下来后，<</if>><<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>抱着刚缝补好的旧羊毛毯轻轻敲开你的房门。他的耳尖泛红，小声问道：「外头风大，我能把备用木箱搬过来靠着你那边整理吗？」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[回罗宾身边 (0:03)|Orphanage]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回罗宾身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Robin")>><<link [[回罗宾身边 (0:03)|Orphanage]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_robin_5 is 1>>
 茶已饮过，改日再来叙话。
@@ -57,7 +57,7 @@
 <<mptailoricon>><<link "把毛衣折好 (0:07)">><<pass 7>><<replace "#act-mp-daily-robin-5">>
 <<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 240>>
 	<<set $daily.mpDaily_robin_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_robin_5")>><<money 450>><span class="gold">你收下了对方备好的贴心馈赠。</span><</if>>羊毛衫叠得方方正正，罗宾安心地靠在你肩头打了个小哈欠。<span class="green">气氛温馨宁静。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Robin")>><<npcincr Robin love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_robin_5")>><<money 450>><span class="gold">你收下了对方备好的贴心馈赠。</span><</if>>羊毛衫叠得方方正正，罗宾安心地靠在你肩头打了个小哈欠。<span class="green">气氛温馨宁静。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Robin 6]]>><<pass 4>><</link>>
 <<else>>
@@ -72,11 +72,11 @@
 <<walkicon>><<link "替他敷冻手 (0:08)">><<pass 8>><<replace "#act-mp-daily-robin-5">>
 <<if ($willpower or 0) gte 400 or ($tending or 0) gte 240>>
 	<<set $daily.mpDaily_robin_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_robin_5_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><span class="gold">你将对方递来的小礼收入囊中。</span><</if>>温热的水汽让罗宾手背恢复红润，他羞赧地反手握住了你的指尖。<span class="green">两人相视一笑。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Robin")>><<npcincr Robin love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_robin_5_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><span class="gold">你将对方递来的小礼收入囊中。</span><</if>>温热的水汽让罗宾手背恢复红润，他羞赧地反手握住了你的指尖。<span class="green">两人相视一笑。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Orphanage]]>><<pass 4>><</link>>
 <<else>>
-	水温稍烫了一点，<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>缩了缩手指又怕你担心。<span class="red">准备调整好姿势再来。</span><<stress 3>><<tiredness 1>><<gtiredness>><<gstress>>
+	水温稍烫了一点，<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>缩了缩手指又怕你担心。<span class="red">准备调整好姿势再来。</span><<stress 3>><<tiredness 1>><<gtiredness>><<gstress>>
 	<br><br>
 	<<link [[擦手再替他敷冻手 (0:04)|MP Daily Robin 5]]>><<pass 4>><</link>>
 	<br>
@@ -88,9 +88,9 @@
 
 :: MP Daily Eden 4 [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.season is "autumn" or Time.season is "winter">>深林木屋外的寒风吹过晾肉架，<<else>>深林木屋外的晾肉架下堆着新劈的松木柴，<</if>><<if $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>林间猎人<</if>>正坐在壁炉边用油石打磨猎刀。听见你进门，他朝炉上的铜锅努了努嘴：「鹿肉炖蘑菇好了，先把门口的柴抱进来。」
+<<set $daily to ($daily or {})>><<if Time.season is "autumn" or Time.season is "winter">>深林木屋外的寒风吹过晾肉架，<<else>>深林木屋外的晾肉架下堆着新劈的松木柴，<</if>><<if mpNpcMet("Eden")>>伊甸<<else>>林间猎人<</if>>正坐在壁炉边用油石打磨猎刀。听见你进门，他朝炉上的铜锅努了努嘴：「鹿肉炖蘑菇好了，先把门口的柴抱进来。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[回伊甸身边 (0:02)|Forest Cabin]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回伊甸身边 (0:02)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Eden")>><<link [[回伊甸身边 (0:02)|Forest Cabin]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_eden_4 is 1>>
 今日已收拾停当，明日再来。
@@ -101,7 +101,7 @@
 <<mpfarmicon>><<link "码好松柴 (0:06)">><<pass 6>><<replace "#act-mp-daily-eden-4">>
 <<if ($physique or 10000) gte 11200 or ($housekeeping or 0) gte 240>>
 	<<set $daily.mpDaily_eden_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><<gtrust>><</if>>柴火码得严实稳当，伊甸收起油石，把盛满浓汤的木碗推到你手边。<span class="green">两人相视一笑。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Eden")>><<npcincr Eden trust 1>><<gtrust>><</if>>柴火码得严实稳当，伊甸收起油石，把盛满浓汤的木碗推到你手边。<span class="green">两人相视一笑。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Eden 5]]>><<pass 4>><</link>>
 <<else>>
@@ -116,7 +116,7 @@
 <<mpreadicon>><<link "查看晾晒药草 (0:07)">><<pass 7>><<replace "#act-mp-daily-eden-4">>
 <<if ($tending or 0) gte 240 or ($science or 0) gte 240>>
 	<<set $daily.mpDaily_eden_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><<gtrust>><</if>>你将受潮的火绒挑出来烘在炉石边，伊甸眼底闪过一丝满意的神色。<span class="green">疲惫一扫而空。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Eden")>><<npcincr Eden trust 1>><<gtrust>><</if>>你将受潮的火绒挑出来烘在炉石边，伊甸眼底闪过一丝满意的神色。<span class="green">疲惫一扫而空。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Forest Cabin]]>><<pass 4>><</link>>
 <<else>>
@@ -132,9 +132,9 @@
 
 :: MP Daily Eden 5 [nobr]
 <<set $outside to 0>><<set $location to "cabin">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Weather.precipitation is "rain" or Time.dayState is "night">>风雨夜拍打着林间木屋的木板窗，<<else>>暮色山风拍打着林间木屋的木板窗，<</if>><<if $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>林间猎人<</if>>巡视完外围陷阱回来，斗篷下摆沾着草屑。他把猎枪挂上墙架，走到火炉边将你拉到近前：「狼群在北坡活动，别离火炉太远。」
+<<set $daily to ($daily or {})>><<if Weather.precipitation is "rain" or Time.dayState is "night">>风雨夜拍打着林间木屋的木板窗，<<else>>暮色山风拍打着林间木屋的木板窗，<</if>><<if mpNpcMet("Eden")>>伊甸<<else>>林间猎人<</if>>巡视完外围陷阱回来，斗篷下摆沾着草屑。他把猎枪挂上墙架，走到火炉边将你拉到近前：「狼群在北坡活动，别离火炉太远。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Eden")>><<link [[回伊甸身边 (0:03)|Forest Cabin]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回伊甸身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Eden")>><<link [[回伊甸身边 (0:03)|Forest Cabin]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_eden_5 is 1>>
 今天已陪跑一趟，先回吧。
@@ -145,11 +145,11 @@
 <<mptailoricon>><<link "挂起湿斗篷 (0:07)">><<pass 7>><<replace "#act-mp-daily-eden-5">>
 <<if ($housekeeping or 0) gte 250 or ($tending or 0) gte 240>>
 	<<set $daily.mpDaily_eden_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><<gtrust>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_eden_5")>><<money 450>><</if>>斗篷烘出干燥的松烟味，伊甸顺势坐到兽皮毯上把你揽进怀里。<span class="green">狂风暴雨被厚实的圆木墙彻底挡在屋外。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Eden")>><<npcincr Eden trust 1>><<gtrust>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_eden_5")>><<money 450>><</if>>斗篷烘出干燥的松烟味，伊甸顺势坐到兽皮毯上把你揽进怀里。<span class="green">狂风暴雨被厚实的圆木墙彻底挡在屋外。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Eden 6]]>><<pass 4>><</link>>
 <<else>>
-	湿斗篷太沉，挂上木钩时震落了一块炉灰。<span class="red"><<if $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>林间猎人<</if>>伸手扶稳木钩，拉你在兽皮垫上坐好。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
+	湿斗篷太沉，挂上木钩时震落了一块炉灰。<span class="red"><<if mpNpcMet("Eden")>>伊甸<<else>>林间猎人<</if>>伸手扶稳木钩，拉你在兽皮垫上坐好。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
 	<<link [[回手再挂起湿斗篷 (0:04)|MP Daily Eden 5]]>><<pass 4>><</link>>
 	<br>
@@ -160,11 +160,11 @@
 <<windowicon>><<link "给弹壳涂蜡 (0:08)">><<pass 8>><<replace "#act-mp-daily-eden-5">>
 <<if ($skulduggery or 0) gte 250 or ($science or 0) gte 240>>
 	<<set $daily.mpDaily_eden_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Eden")>><<npcincr Eden trust 1>><<gtrust>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_eden_5_keepsake")>><<set $mpHerbsCollected to ($mpHerbsCollected or 0) + 1>><span class="blue">获得草药 ×1</span><</if>>弹壳底座封蜡均匀严密，伊甸难得夸了你一句手巧。<span class="green">他把自己的厚羊毛披肩裹在了你身上。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Eden")>><<npcincr Eden trust 1>><<gtrust>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_eden_5_keepsake")>><<set $mpHerbsCollected to ($mpHerbsCollected or 0) + 1>><span class="blue">获得草药 ×1</span><</if>>弹壳底座封蜡均匀严密，伊甸难得夸了你一句手巧。<span class="green">他把自己的厚羊毛披肩裹在了你身上。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Forest Cabin]]>><<pass 4>><</link>>
 <<else>>
-	蜂蜡还没化透，涂抹时在铜壳上凝成了硬块。<span class="red"><<if $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>林间猎人<</if>>接过铜壳在火边烘软，手把手教你涂匀。</span><<stress 3>><<tiredness 1>><<gtiredness>><<gstress>>
+	蜂蜡还没化透，涂抹时在铜壳上凝成了硬块。<span class="red"><<if mpNpcMet("Eden")>>伊甸<<else>>林间猎人<</if>>接过铜壳在火边烘软，手把手教你涂匀。</span><<stress 3>><<tiredness 1>><<gtiredness>><<gstress>>
 	<br><br>
 	<<link [[扶墙再给弹壳涂蜡 (0:04)|MP Daily Eden 5]]>><<pass 4>><</link>>
 	<br>
@@ -176,9 +176,9 @@
 
 :: MP Daily Wren 4 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.dayState is "dusk" or Time.dayState is "night">>暮色下的旧港栈桥亮起防风马灯，<<else>>旧港栈桥背风的货箱上摆着防风马灯，<</if>><<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>正洗着一副旧纸牌。见你走近，他把一只苹果抛进你怀里，挑眉笑道：「来得正好，帮我盯着点东边岗哨的换班哨。」
+<<set $daily to ($daily or {})>><<if Time.dayState is "dusk" or Time.dayState is "night">>暮色下的旧港栈桥亮起防风马灯，<<else>>旧港栈桥背风的货箱上摆着防风马灯，<</if>><<if mpNpcMet("Wren")>>雷恩<<else>>走私客<</if>>正洗着一副旧纸牌。见你走近，他把一只苹果抛进你怀里，挑眉笑道：「来得正好，帮我盯着点东边岗哨的换班哨。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Wren")>><<link [[回雷恩身边 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回雷恩身边 (0:02)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Wren")>><<link [[回雷恩身边 (0:02)|Docks]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_wren_4 is 1>>
 今日已核对无误，改天再来。
@@ -189,7 +189,7 @@
 <<mpwatchicon>><<link "借阴影看换班 (0:06)">><<pass 6>><<replace "#act-mp-daily-wren-4">>
 <<if ($skulduggery or 0) gte 250 or ($athletics or 0) gte 240>>
 	<<set $daily.mpDaily_wren_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 1>><<glove>><</if>>你用两声轻叩报出巡哨转弯的时机，雷恩利落地招呼水手搬完暗箱。<span class="green">眉眼间满是笑意。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Wren")>><<npcincr Wren love 1>><<glove>><</if>>你用两声轻叩报出巡哨转弯的时机，雷恩利落地招呼水手搬完暗箱。<span class="green">眉眼间满是笑意。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Wren 5]]>><<pass 4>><</link>>
 <<else>>
@@ -204,7 +204,7 @@
 <<mpcarryicon>><<link "把货签理顺 (0:07)">><<pass 7>><<replace "#act-mp-daily-wren-4">>
 <<if ($maths or 0) gte 240 or ($english or 0) gte 240>>
 	<<set $daily.mpDaily_wren_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 1>><<glove>><</if>>二十张货签按船期排得清清楚楚，雷恩满意地拍了拍你的肩膀。<span class="green">心头暖意融融。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Wren")>><<npcincr Wren love 1>><<glove>><</if>>二十张货签按船期排得清清楚楚，雷恩满意地拍了拍你的肩膀。<span class="green">心头暖意融融。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Docks]]>><<pass 4>><</link>>
 <<else>>
@@ -220,9 +220,9 @@
 
 :: MP Daily Wren 5 [nobr]
 <<set $outside to 1>><<set $location to "docks">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.dayState is "night" or Time.hour gte 20>>夜班货轮靠岸后，<<else>>傍晚货轮靠岸后，<</if>><<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>在走私栈房里开了一瓶热甜酒。他靠在樟木箱上擦着短匕首，把一枚打着船锚印记的铜牌抛给你：「以后这片船坞的值夜兄弟都认这枚牌子。」
+<<set $daily to ($daily or {})>><<if Time.dayState is "night" or Time.hour gte 20>>夜班货轮靠岸后，<<else>>傍晚货轮靠岸后，<</if>><<if mpNpcMet("Wren")>>雷恩<<else>>走私客<</if>>在走私栈房里开了一瓶热甜酒。他靠在樟木箱上擦着短匕首，把一枚打着船锚印记的铜牌抛给你：「以后这片船坞的值夜兄弟都认这枚牌子。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Wren")>><<link [[回雷恩身边 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回雷恩身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Wren")>><<link [[回雷恩身边 (0:03)|Docks]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_wren_5 is 1>>
 今天已照料周全，先回前头。
@@ -233,11 +233,11 @@
 <<mpcleanicon>><<link "擦亮短匕首 (0:07)">><<pass 7>><<replace "#act-mp-daily-wren-5">>
 <<if ($housekeeping or 0) gte 250 or ($skulduggery or 0) gte 250>>
 	<<set $daily.mpDaily_wren_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_wren_5")>><<money 450>><</if>>刀柄铜护手映出暖黄灯火，雷恩把铜牌系在你腰侧，与你碰了一杯。<span class="green">旧港夜色里你们算得上真正过命的交情。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Wren")>><<npcincr Wren love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_wren_5")>><<money 450>><</if>>刀柄铜护手映出暖黄灯火，雷恩把铜牌系在你腰侧，与你碰了一杯。<span class="green">旧港夜色里你们算得上真正过命的交情。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Wren 6]]>><<pass 4>><</link>>
 <<else>>
-	刀背的寒气让你指尖一缩，鹿皮布滑落在箱面上。<span class="red"><<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>收刀入鞘，倒了半杯热甜酒让你暖手。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
+	刀背的寒气让你指尖一缩，鹿皮布滑落在箱面上。<span class="red"><<if mpNpcMet("Wren")>>雷恩<<else>>走私客<</if>>收刀入鞘，倒了半杯热甜酒让你暖手。</span><<pain 1>><<stress 3>><<gpain>><<gstress>>
 	<br><br>
 	<<link [[放轻再擦亮短匕首 (0:04)|MP Daily Wren 5]]>><<pass 4>><</link>>
 	<br>
@@ -248,11 +248,11 @@
 <<mpcalculateicon>><<link "清点栈房烟草 (0:08)">><<pass 8>><<replace "#act-mp-daily-wren-5">>
 <<if ($maths or 0) gte 250 or ($tending or 0) gte 240>>
 	<<set $daily.mpDaily_wren_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Wren")>><<npcincr Wren love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_wren_5_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>你查出一箱包装受潮并及时换上油布，雷恩爽快地塞给你一卷零钞。<span class="green">他拍着箱盖留你常来船坞坐坐。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Wren")>><<npcincr Wren love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_wren_5_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>你查出一箱包装受潮并及时换上油布，雷恩爽快地塞给你一卷零钞。<span class="green">他拍着箱盖留你常来船坞坐坐。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Docks]]>><<pass 4>><</link>>
 <<else>>
-	箱扣的铁皮毛刺刮破了指腹，血珠沁了出来。<span class="red"><<if $NPCNameList and $NPCNameList.includes("Wren")>>雷恩<<else>>走私客<</if>>掏出随身创可贴利落地替你包好手指。</span><<stress 3>><<tiredness 1>><<gtiredness>><<gstress>>
+	箱扣的铁皮毛刺刮破了指腹，血珠沁了出来。<span class="red"><<if mpNpcMet("Wren")>>雷恩<<else>>走私客<</if>>掏出随身创可贴利落地替你包好手指。</span><<stress 3>><<tiredness 1>><<gtiredness>><<gstress>>
 	<br><br>
 	<<link [[搭手再清点烟草 (0:04)|MP Daily Wren 5]]>><<pass 4>><</link>>
 	<br>
@@ -264,9 +264,9 @@
 
 :: MP Daily Briar 4 [nobr]
 <<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.dayState is "dusk" or Time.dayState is "night">>晚场开演前的后台化妆间里，<<else>>开场前的后台化妆间里，<</if>><<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>正在镜前调试紫水晶壁灯。见你进来，他拈起一枚银胸针递给你：「帮我看看西侧丝绒幕布卡住没有。」
+<<set $daily to ($daily or {})>><<if Time.dayState is "dusk" or Time.dayState is "night">>晚场开演前的后台化妆间里，<<else>>开场前的后台化妆间里，<</if>><<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>正在镜前调试紫水晶壁灯。见你进来，他拈起一枚银胸针递给你：「帮我看看西侧丝绒幕布卡住没有。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[回布莱尔身边 (0:02)|Brothel]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回布莱尔身边 (0:02)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Briar")>><<link [[回布莱尔身边 (0:02)|Brothel]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_briar_4 is 1>>
 今日已清点完毕，明日再见。
@@ -277,7 +277,7 @@
 <<mptailoricon>><<link "解下幕布穗 (0:06)">><<pass 6>><<replace "#act-mp-daily-briar-4">>
 <<if ($athletics or 0) gte 250 or ($danceskill or 0) gte 240>>
 	<<set $daily.mpDaily_briar_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>沉重的暗红丝绒幕布顺滑垂落，布莱尔抚掌轻笑，把银胸针别在你领口。<span class="green">彼此默契更深。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><<glove>><</if>>沉重的暗红丝绒幕布顺滑垂落，布莱尔抚掌轻笑，把银胸针别在你领口。<span class="green">彼此默契更深。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Briar 5]]>><<pass 4>><</link>>
 <<else>>
@@ -292,7 +292,7 @@
 <<mpcalculateicon>><<link "核对香槟单 (0:07)">><<pass 7>><<replace "#act-mp-daily-briar-4">>
 <<if ($english or 0) gte 240 or ($maths or 0) gte 240>>
 	<<set $daily.mpDaily_briar_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>你挑出两处年份标错的酒标，布莱尔挑眉赞许，请你在吧台喝了一杯无醇果饮。<span class="green">气氛温馨宁静。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><<glove>><</if>>你挑出两处年份标错的酒标，布莱尔挑眉赞许，请你在吧台喝了一杯无醇果饮。<span class="green">气氛温馨宁静。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Brothel]]>><<pass 4>><</link>>
 <<else>>
@@ -308,9 +308,9 @@
 
 :: MP Daily Briar 5 [nobr]
 <<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.dayState is "night" or Time.hour gte 21>>夜场散去后的二楼办公室飘着雪茄香，<<else>>散场后的二楼办公室飘着淡淡雪茄香，<</if>><<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>合上账册揉了揉眉心。见你还没走，他指了指茶几上的银托盘：「场子顺当，这几枚纪念金筹码归你保管。」
+<<set $daily to ($daily or {})>><<if Time.dayState is "night" or Time.hour gte 21>>夜场散去后的二楼办公室飘着雪茄香，<<else>>散场后的二楼办公室飘着淡淡雪茄香，<</if>><<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>合上账册揉了揉眉心。见你还没走，他指了指茶几上的银托盘：「场子顺当，这几枚纪念金筹码归你保管。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[回布莱尔身边 (0:03)|Brothel]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回布莱尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Briar")>><<link [[回布莱尔身边 (0:03)|Brothel]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_briar_5 is 1>>
 今天已散过心，先回去歇息。
@@ -321,7 +321,7 @@
 <<mpcalculateicon>><<link "把筹码归匣 (0:07)">><<pass 7>><<replace "#act-mp-daily-briar-5">>
 <<if ($skulduggery or 0) gte 250 or ($maths or 0) gte 250>>
 	<<set $daily.mpDaily_briar_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_briar_5")>><<money 450>><span class="gold">你把这份带着余温的谢礼贴身藏好。</span><</if>>筹码清脆落匣，布莱尔将最上面两枚直接推入你掌心。<span class="green">气氛温馨宁静。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_briar_5")>><<money 450>><span class="gold">你把这份带着余温的谢礼贴身藏好。</span><</if>>筹码清脆落匣，布莱尔将最上面两枚直接推入你掌心。<span class="green">气氛温馨宁静。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Briar 6]]>><<pass 4>><</link>>
 <<else>>
@@ -336,7 +336,7 @@
 <<mpcleanicon>><<link "端蜂蜜水润嗓 (0:08)">><<pass 8>><<replace "#act-mp-daily-briar-5">>
 <<if ($tending or 0) gte 250 or ($seductionskill or 0) gte 240>>
 	<<set $daily.mpDaily_briar_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_briar_5_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><span class="gold">你欣然接过了对方特意留给你的心意。</span><</if>>布莱尔接过玻璃杯慢条斯理地饮尽，目光柔和地停在你脸上。<span class="green">两人相视一笑。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_briar_5_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><span class="gold">你欣然接过了对方特意留给你的心意。</span><</if>>布莱尔接过玻璃杯慢条斯理地饮尽，目光柔和地停在你脸上。<span class="green">两人相视一笑。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Brothel]]>><<pass 4>><</link>>
 <<else>>
@@ -352,9 +352,9 @@
 
 :: MP Daily Avery 4 [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.dayState is "day" or Time.dayState is "dusk">>午后的多瑙河街宅邸偏厅点着白檀香，<<else>>多瑙河街宅邸的小偏厅里点着白檀香，<</if>><<if $NPCNameList and $NPCNameList.includes("Avery")>>艾弗里<<else>>多瑙河富商<</if>>正翻看慈善晚宴的座位卡。见你站在门边，他把一盒蓝宝石领扣推过来：「过来替我选一对配深灰礼服的。」
+<<set $daily to ($daily or {})>><<if Time.dayState is "day" or Time.dayState is "dusk">>午后的多瑙河街宅邸偏厅点着白檀香，<<else>>多瑙河街宅邸的小偏厅里点着白檀香，<</if>><<if mpNpcMet("Avery")>>艾弗里<<else>>多瑙河富商<</if>>正翻看慈善晚宴的座位卡。见你站在门边，他把一盒蓝宝石领扣推过来：「过来替我选一对配深灰礼服的。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<link [[回艾弗里身边 (0:08)|Danube Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回艾弗里身边 (0:08)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Avery")>><<link [[回艾弗里身边 (0:08)|Danube Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_avery_4 is 1>>
 今日已整理妥帖，改日再来。
@@ -365,7 +365,7 @@
 <<mptailoricon>><<link "替他扣袖扣 (0:06)">><<pass 6>><<replace "#act-mp-daily-avery-4">>
 <<if ($english or 0) gte 250 or ($danceskill or 0) gte 240>>
 	<<set $daily.mpDaily_avery_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>袖扣与银灰暗纹衬衣相得益彰，艾弗里满意地揽过你的腰际。<span class="green">两人相视一笑。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><<glove>><</if>>袖扣与银灰暗纹衬衣相得益彰，艾弗里满意地揽过你的腰际。<span class="green">两人相视一笑。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Avery 5]]>><<pass 4>><</link>>
 <<else>>
@@ -380,7 +380,7 @@
 <<mpherbicon>><<link "排主桌名牌 (0:07)">><<pass 7>><<replace "#act-mp-daily-avery-4">>
 <<if ($history or 0) gte 250 or ($maths or 0) gte 240>>
 	<<set $daily.mpDaily_avery_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>你将两家不对付的商会代表巧妙隔开，艾弗里赞许地拍了拍你的手背。<span class="green">疲惫一扫而空。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><<glove>><</if>>你将两家不对付的商会代表巧妙隔开，艾弗里赞许地拍了拍你的手背。<span class="green">疲惫一扫而空。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:08)|Danube Street]]>><<pass 8>><</link>>
 <<else>>
@@ -396,9 +396,9 @@
 
 :: MP Daily Avery 5 [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.dayState is "night" or Time.dayState is "dusk">>晚宴散去后的宅邸露台夜风微凉，<<else>>宴席歇场后的宅邸露台微风轻拂，<</if>><<if $NPCNameList and $NPCNameList.includes("Avery")>>艾弗里<<else>>多瑙河富商<</if>>脱下礼服外套披在你肩上。楼下喷泉泛着银光，他端着半杯威士忌靠在栏杆边：「那些无聊的应酬，全靠想到你还在等我才熬过去。」
+<<set $daily to ($daily or {})>><<if Time.dayState is "night" or Time.dayState is "dusk">>晚宴散去后的宅邸露台夜风微凉，<<else>>宴席歇场后的宅邸露台微风轻拂，<</if>><<if mpNpcMet("Avery")>>艾弗里<<else>>多瑙河富商<</if>>脱下礼服外套披在你肩上。楼下喷泉泛着银光，他端着半杯威士忌靠在栏杆边：「那些无聊的应酬，全靠想到你还在等我才熬过去。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<link [[回艾弗里身边 (0:08)|Danube Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回艾弗里身边 (0:08)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Avery")>><<link [[回艾弗里身边 (0:08)|Danube Street]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_avery_5 is 1>>
 今天已切磋过，先回屋歇脚。
@@ -409,7 +409,7 @@
 <<mpeavesdropicon>><<link "陪他凭栏听水 (0:07)">><<pass 7>><<replace "#act-mp-daily-avery-5">>
 <<if ($willpower or 0) gte 420 or ($seductionskill or 0) gte 240>>
 	<<set $daily.mpDaily_avery_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_avery_5")>><<money 450>><</if>>艾弗里将手臂搭在你肩头，往日凌厉的控制欲化作了难得的平静。<span class="green">疲惫一扫而空。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_avery_5")>><<money 450>><</if>>艾弗里将手臂搭在你肩头，往日凌厉的控制欲化作了难得的平静。<span class="green">疲惫一扫而空。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:04)|MP Daily Avery 6]]>><<pass 4>><</link>>
 <<else>>
@@ -424,7 +424,7 @@
 <<mpdrinkicon>><<link "替他换热红茶 (0:08)">><<pass 8>><<replace "#act-mp-daily-avery-5">>
 <<if ($tending or 0) gte 250 or ($housekeeping or 0) gte 250>>
 	<<set $daily.mpDaily_avery_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_avery_5_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>温热红茶驱散了酒意，艾弗里低头在你发顶落下一吻。<span class="green">眉眼间满是笑意。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_avery_5_keepsake")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>>温热红茶驱散了酒意，艾弗里低头在你发顶落下一吻。<span class="green">眉眼间满是笑意。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:08)|Danube Street]]>><<pass 8>><</link>>
 <<else>>
@@ -440,9 +440,9 @@
 
 :: MP Daily Sydney 4 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.dayState is "dusk" or Time.dayState is "night">>晚课后的神殿侧廊静谧无声，<<else>>祈祷课后的神殿侧廊静谧无声，<</if>><<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>正跪坐在长明灯架旁用铜剪修剪灯芯。看见你走过来，他绽开乖巧的笑容，递来一只干玫瑰花瓣香盒：「帮我给东侧香炉添一勺好不好？」
+<<set $daily to ($daily or {})>><<if Time.dayState is "dusk" or Time.dayState is "night">>晚课后的神殿侧廊静谧无声，<<else>>祈祷课后的神殿侧廊静谧无声，<</if>><<if mpNpcMet("Sydney")>>悉尼<<else>>图书馆助手<</if>>正跪坐在长明灯架旁用铜剪修剪灯芯。看见你走过来，他绽开乖巧的笑容，递来一只干玫瑰花瓣香盒：「帮我给东侧香炉添一勺好不好？」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[回悉尼身边 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回悉尼身边 (0:02)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Sydney")>><<link [[回悉尼身边 (0:02)|Temple]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_sydney_4 is 1>>
 今日已巡看过，明日再来吧。
@@ -453,7 +453,7 @@
 <<mpherbicon>><<link "用银匙铺香料 (0:06)">><<pass 6>><<replace "#act-mp-daily-sydney-4">>
 <<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>>
 	<<set $daily.mpDaily_sydney_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><<glove>><</if>>清雅的玫瑰檀香袅袅升起，悉尼凑过来与你并肩跪坐在蒲团上。<span class="green">眉眼间满是笑意。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Sydney")>><<npcincr Sydney love 1>><<glove>><</if>>清雅的玫瑰檀香袅袅升起，悉尼凑过来与你并肩跪坐在蒲团上。<span class="green">眉眼间满是笑意。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:08)|MP Daily Sydney 5]]>><<pass 8>><</link>>
 <<else>>
@@ -468,7 +468,7 @@
 <<mpritualicon>><<link "把抄本归匣 (0:07)">><<pass 7>><<replace "#act-mp-daily-sydney-4">>
 <<if ($history or 0) gte 240 or ($english or 0) gte 240>>
 	<<set $daily.mpDaily_sydney_4 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><<glove>><</if>>泛黄抄本整整齐齐收入樟木匣，悉尼把一枚祈福银书签塞进你手心。<span class="green">心头暖意融融。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Sydney")>><<npcincr Sydney love 1>><<glove>><</if>>泛黄抄本整整齐齐收入樟木匣，悉尼把一枚祈福银书签塞进你手心。<span class="green">心头暖意融融。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|Temple]]>><<pass 4>><</link>>
 <<else>>
@@ -484,9 +484,9 @@
 
 :: MP Daily Sydney 5 [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
-<<set $daily to ($daily or {})>><<if Time.hour gte 16 or Time.dayState is "dusk">>学校图书馆闭馆前的最后十分钟，<<else>>学校图书馆安静的阅览时段里，<</if>><<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>在靠窗的古籍长桌边替你留好了座位。他把一杯温热的蜂蜜牛奶推到你面前，借着书架遮挡轻声说：「这会儿不背教义了，我就想安静挨着你坐一会儿。」
+<<set $daily to ($daily or {})>><<if Time.hour gte 16 or Time.dayState is "dusk">>学校图书馆闭馆前的最后十分钟，<<else>>学校图书馆安静的阅览时段里，<</if>><<if mpNpcMet("Sydney")>>悉尼<<else>>图书馆助手<</if>>在靠窗的古籍长桌边替你留好了座位。他把一杯温热的蜂蜜牛奶推到你面前，借着书架遮挡轻声说：「这会儿不背教义了，我就想安静挨着你坐一会儿。」
 <br><br>
-<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[回悉尼身边 (0:03)|School Library]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><span class="disabled">回悉尼身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if mpNpcMet("Sydney")>><<link [[回悉尼身边 (0:03)|School Library]]>><<pass 3>><<set $eventskip to 1>><<endevent>><</link>><<else>><</if>>
 <br>
 <<if $daily.mpDaily_sydney_5 is 1>>
 今天已忙完这一摊，先回吧。
@@ -497,7 +497,7 @@
 <<mpreadicon>><<link "核对笔记重点 (0:07)">><<pass 7>><<replace "#act-mp-daily-sydney-5">>
 <<if ($science or 0) gte 250 or ($maths or 0) gte 250>>
 	<<set $daily.mpDaily_sydney_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_sydney_5")>><<money 450>><</if>>悉尼认认真真在你的笔记本页脚画满工整的批注与小星星。<span class="green">心头暖意融融。</span><<stress -3>><<lstress>>
+	<<if $NPCName and mpNpcMet("Sydney")>><<npcincr Sydney love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_sydney_5")>><<money 450>><</if>>悉尼认认真真在你的笔记本页脚画满工整的批注与小星星。<span class="green">心头暖意融融。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:08)|MP Daily Sydney 6]]>><<pass 8>><</link>>
 <<else>>
@@ -512,7 +512,7 @@
 <<mpclockworkicon>><<link "把借书卡归盒 (0:08)">><<pass 8>><<replace "#act-mp-daily-sydney-5">>
 <<if ($english or 0) gte 250 or ($housekeeping or 0) gte 250>>
 	<<set $daily.mpDaily_sydney_5 to 1>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_sydney_5_keepsake")>><<set $mpHerbsCollected to ($mpHerbsCollected or 0) + 1>><span class="blue">获得草药 ×1</span><</if>>厚厚一摞借书卡转眼归置妥当，悉尼鼓起勇气在你手背快速亲了一下。<span class="green">彼此默契更深。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
+	<<if $NPCName and mpNpcMet("Sydney")>><<npcincr Sydney love 1>><<glove>><</if>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("daily_sydney_5_keepsake")>><<set $mpHerbsCollected to ($mpHerbsCollected or 0) + 1>><span class="blue">获得草药 ×1</span><</if>>厚厚一摞借书卡转眼归置妥当，悉尼鼓起勇气在你手背快速亲了一下。<span class="green">彼此默契更深。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:04)|School Library]]>><<pass 4>><</link>>
 <<else>>

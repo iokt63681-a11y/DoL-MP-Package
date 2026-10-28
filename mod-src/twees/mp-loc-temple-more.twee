@@ -1,145 +1,185 @@
-/* MP Loc Temple More — 神殿杂役廊增量内容
-   8 页：More Hub / Event 7-12 / Season Extra。
-   只读取已有变量 $mpLocProgress_Temple、$mpLocEvents_Temple、$money、$mpFogTide 与各技能值，
-   不新增顶层变量，不改 boot。 */
+/* MP Loc Temple More — 神殿杂役廊增量内容（18 页）
+   More Hub + 3 个二级入口（杂役廊 / 库房与账 / 旧档与节令）+ Event 7-12 与 Season Extra 的「接近 → 结果」两页结构。
+   含完成旗标 $mpDone_Temple_7 .. $mpDone_Temple_12，失败 0 钱 0 线索，不打印计数面板。 */
 
 :: MP Loc Temple More Hub [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
-北耳堂背后有条窄过道，尽头那间小屋原先是撞钟人烘手的地方，如今门上钉了块褪色的木牌，写着「杂役廊」。屋里容不下第三个人转身，一条长凳抵着墙，炭盆里埋着几块半熄的炭，铁壶嘴缺了一角，正嘶嘶地吐白气。墙上挂着一块石板，石板上钉了六枚铜钩，每枚钩子下垂一块木牌，牌面被烟火熏得发黑，只余刀刻的字口还清楚。管杂役的老修士说，祭坛上记的是神殿的脸面，这面石板记的是神殿的骨头；脸面可以补，骨头断了就站不住。
+北耳堂背后有条窄过道，尽头小屋门上钉着褪色木牌，写着「杂役廊」。炭盆里埋着半熄的木炭，铁壶嘴嘶嘶吐着白气。墙上的石板钉着铜钩，将殿内的差事按去向分成三路：前头杂役廊管晨祷执灯与告解代听，侧翼库房管香灰与旧谱，北廊尽头则管圣骨廊守夜、净火池与四季节令。管杂役的老修士把新削的炭条搁在石槽里：「祭坛记的是神殿脸面，这面石板记的是神殿骨头，挑一处去办吧。」
 <br><br>
-铜钩上的差事按晨昏排开：天亮前有人要提灯引路，告解室的隔栅后头缺一双耳朵，祭坛的香灰要分筛，旧谱室的水渍谱本等着补，圣骨廊的夜要有人守，后院的净火池也得有人看火。第七枚钩子空着，老修士说那是留给节令的，到了什么时令，就挂什么牌。约旦偶尔来这屋里坐一会儿，把冻僵的手指凑到炭盆上；主教从不到这儿来，只让侍从把盖了印的纸条送到门口；悉尼来送谱本时，总要把石板上的字从左到右读一遍，像在核对什么。
+<<getouticon>><<link [[返回神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
+<br>
+<<mplampicon>><<link [[去杂役廊 (0:02)|MP Loc Temple More Corridor]]>><<pass 2>><</link>>
+<br>
+<<mpscaleicon>><<link [[查库房与账 (0:02)|MP Loc Temple More Store]]>><<pass 2>><</link>>
+<br>
+<<mpcellaricon>><<link [[翻看旧档与节令 (0:02)|MP Loc Temple More Archive]]>><<pass 2>><</link>>
+
+:: MP Loc Temple More Corridor [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
+杂役廊内侧的长凳抵着石墙，墙角挂着牛角行灯与告解室的备用黑布帘，后墙那扇包铁皮的小门通往更窄的补记房。<<if $mpDone_Temple_7>>祭坛侧阶的牛角行灯已准时送达，第一声晨钟落得很稳。<<else>>天亮前需要有人提着牛角行灯绕过北廊，赶在第一声晨钟前送到祭坛侧阶。<</if>><<if $mpDone_Temple_8>>告解室松动的木栅已经钉牢，黑布帘后恢复了安静。<<else>>告解室的常任神父发了热，修女正找人去隔栅后头替一个时辰。<</if>>
 <br><br>
-你抬手把铜牌上的灰抹掉，读出眼下的数目：探索进度 <<print $mpLocProgress_Temple>>，已完成事件 <<print $mpLocEvents_Temple>>。石板靠墙的边角另有几行小字，是历年来杂役们留下的名字，有的深，有的浅，最底下那行几乎被磨平了。老修士顺着你的目光看了一眼，说：「名字磨没了不要紧，事情有人做就行。」他把一根新削的炭条搁在石槽里，往门外努了努嘴，「挑一样吧。挑中了，就别半途撒手。」
+<<getouticon>><<link [[退回水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<br>
+<<if !$mpDone_Temple_7>><<mplampicon>><<link [[去晨祷执灯 (0:04)|MP Loc Temple Event 7]]>><<pass 4>><</link>><br><</if>>
+<<if !$mpDone_Temple_8>><<mpeavesdropicon>><<link [[替告解室代听 (0:04)|MP Loc Temple Event 8]]>><<pass 4>><</link>><br><</if>>
+<<mpdooricon>><<link [[推开后墙铁皮门 (0:03)|MP Loc Temple More2 Hub]]>><<pass 3>><</link>>
+
+:: MP Loc Temple More Store [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
+偏殿侧面的库房与谱案挨在一起，铜筛、蓝釉罐和待补的旧谱并排摆在木架上，空气里混着香灰与米浆的气味。<<if $mpDone_Temple_9>>祭坛下的香灰已按粗细筛进蓝釉罐，偏殿墙缝也抹平了。<<else>>管祭器的修女摆开三只铜筛，等着人把祭坛香灰按粗细筛分入罐。<</if>><<if $mpDone_Temple_10>>泡水的对经谱已经用米浆补好压平，唱诗班补上了缺掉的那一拍。<<else>>桌上摊着一本被水泡开的旧对经谱，管谱的老修士正愁没人揭页补边。<</if>>
 <br><br>
-石板的右下角用炭条记着今日的天气，字迹被袖子蹭得有点糊：檐口有风，后园土软，井台结露。老修士说，这些都是给杂役看的，不是给神看的。他把炭条收回石槽，又从钩子上取下最小的那块木牌，在手里掂了掂：「事情不分大小，做完了才算数。」门外忽然飘进几句练唱，调子起得参差，唱到高处又齐齐断掉；管谱的修士拿木尺在案上敲了两下，那几个声音才重新凑到一起。
+<<getouticon>><<link [[退回水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<br>
+<<if !$mpDone_Temple_9>><<mpscaleicon>><<link [[筛分祭坛香灰 (0:04)|MP Loc Temple Event 9]]>><<pass 4>><</link>><br><</if>>
+<<if !$mpDone_Temple_10>><<mpreadicon>><<link [[去补缀旧谱残页 (0:04)|MP Loc Temple Event 10]]>><<pass 4>><</link>><br><</if>>
+<<walkicon>><<link [[回神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
+
+:: MP Loc Temple More Archive [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
+北廊尽头连着圣骨廊的暗阶与后院净火池，门边第七枚铜钩上挂着随四季更替的节令木牌。<<if $mpDone_Temple_11>>圣骨廊的守夜灯已经添满油，整点的钟绳也重新归位。<<else>>圣骨廊入夜后阴冷幽暗，老修女正找人去廊口矮凳守上半夜。<</if>><<if $mpDone_Temple_12>>后院净火池的炭床已经耙平，朝圣者平安走过了石槽。<<else>>后院净火池的炭床被风吹塌了一角，管火修女等着人去铺炭试步。<</if>>
 <br><br>
-<<walkicon>><<link [[晨祷执灯 (0:10)|MP Loc Temple Event 7]]>><<pass 10>><</link>><br>
-<<socialiseicon>><<link [[告解室代听 (0:12)|MP Loc Temple Event 8]]>><<pass 12>><</link>><br>
-<<investigateicon>><<link [[筛分祭坛香灰 (0:10)|MP Loc Temple Event 9]]>><<pass 10>><</link>><br>
-<<link [[补缀旧谱残页 (0:12)|MP Loc Temple Event 10]]>><<pass 12>><</link>><br>
-<<sneakicon>><<link [[圣骨廊守夜 (0:14)|MP Loc Temple Event 11]]>><<pass 14>><</link>><br>
-<<link [[净火池试步 (0:12)|MP Loc Temple Event 12]]>><<pass 12>><</link>><br>
-<<link [[节令杂役 (0:08)|MP Loc Temple Season Extra]]>><<pass 8>><</link>>
-<br><br>
-<<link [[返回神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
-<br><<link [[更多日常 (0:03)|MP Loc Temple More2 Hub]]>><<pass 3>><</link>>
+<<getouticon>><<link [[退回水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<br>
+<<if !$mpDone_Temple_11>><<mpbellicon>><<link [[去圣骨廊守夜 (0:04)|MP Loc Temple Event 11]]>><<pass 4>><</link>><br><</if>>
+<<if !$mpDone_Temple_12>><<mplampicon>><<link [[去净火池铺炭试步 (0:04)|MP Loc Temple Event 12]]>><<pass 4>><</link>><br><</if>>
+<<mpspringicon>><<link [[应节令杂役 (0:04)|MP Loc Temple Season Extra]]>><<pass 4>><</link>>
 
 :: MP Loc Temple Event 7 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
-晨祷在钟响之前就开始了。天还黑着，前殿只点了三盏灯，长椅的影子拖得很长。管灯的老修士把一盏带罩的行灯塞到你手里，灯罩是牛角磨的，透出的光像一块温黄的玉。他说灯芯昨夜修得太短，走快了容易灭，得用手护着；这盏灯要从前殿绕到北廊，再穿过菜园的小门，送到祭坛侧阶，钟楼上的执事看见灯到了才敲第一声。少一步、晚一刻，钟就会哑。
+晨祷在钟响之前就开始了。天还黑着，北廊的窗缝贴地扫来冷风，管灯老修士把一盏牛角罩行灯塞进你手里，火苗在罩内轻轻发抖。祭坛前传来<<if mpNpcMet("Jordan")>>约旦<<else>>值晨修士<</if>>低沉的叮嘱：「灯别灭，钟楼上的执事看见灯到侧阶才敲第一声。」行灯的油只够烧一刻钟，你要么护着灯罩稳步绕廊，要么先在门房添油换芯再走。
 <br><br>
-约旦已经跪在祭坛前，听见脚步声也没有回头，只低声说：「灯别灭。灯一灭，今晚守夜的人就不知道该往哪儿看了。」北廊的窗子昨夜被风掀开一条缝，冷气贴着地皮扫过来，火苗立刻矮了半截。你侧过身去挡风，灯油的气味混着草叶上的露水味钻进鼻子。廊柱后头有个见习生抱着铜灯座打瞌睡，脑袋一点一点，眼看要磕在石台上。主教的身影在上层回廊的栏杆后停了一瞬，没有出声，也没有下来。
+<<getouticon>><<link [[退回杂役廊 (0:02)|MP Loc Temple More Corridor]]>><<pass 2>><</link>>
+<br>
+<<mplampicon>><<link [[护住行灯绕廊 (0:10)|MP Loc Temple Event 7 After]]>><<pass 10>><<if ($willpower or 0) gte 420 or ($athletics or 0) gte 260>><<set $mpTempleEv7 to "ok">><<set $mpDone_Temple_7 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><<else>><<set $mpTempleEv7 to "fail">><<stress 5>><<tiredness 3>><<pain 1>><</if>><</link>>
+<br>
+<<shopicon>><<if ($money or 0) gte 160>><<link [[添满灯油再送灯 (0:08)|MP Loc Temple Event 7 After]]>><<pass 8>><<money -160>><<set $mpTempleEv7 to "ok">><<set $mpDone_Temple_7 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">添满灯油再送灯 (0:08)（钱不够）</span><</if>>
+
+:: MP Loc Temple Event 7 After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if $mpTempleEv7 is "fail">>穿堂冷风从菜园小门猛地灌进来，牛角灯罩里的火苗噗地熄灭。你摸黑折回廊下重新点火，脚踝在湿石阶上磕得生疼，等赶到侧阶时第一声晨钟已经迟了半拍。<<else>>你用身体挡住菜园篱笆掠来的斜风，将温黄的行灯稳稳送到祭坛侧阶。钟楼上随即落下清越的第一声晨钟，祭坛前的烛火一盏接一盏亮起，掌心的微汗也渐渐散去。<</if>>
 <br><br>
-灯要走过三段路：石板、泥地、石阶。石板上的风是斜的，泥地上有积水，石阶最窄，两个人错身都得侧着。行灯里的油只够烧一刻钟，若中途灭了，得回杂役廊重新点，来回就赶不上第一声钟。老修士在门后补了一句：「别跑。跑起来风更大。」你把灯提到胸前，听见罩里的火苗轻轻抖了一下，像在等一个决定。
-<br><br>
-菜园的小门只开了一条缝，门后堆着过冬剩下的干草。你从草堆旁侧身挤过去，鞋底带起几根草屑；远处钟楼的木梯有人在上面走动，脚步一顿一顿，像在数你的步子。约旦不知什么时候已经站在侧阶尽头，手里多了一件叠好的披肩。他/她没有伸手来接灯，只说：「到了这里就算数。坐下来缓一缓，晨祷还有很久。」风从菜园的篱笆上掠过去，把灯罩里的火苗压得很低，却始终没有灭。你把灯放在石阶上，才发觉掌心全是汗。灯罩上凝了一层水汽，你用手指抹开一条缝，看见祭坛前的烛火正一盏盏亮起来。
-<br><br>
-<<walkicon>><<if ($willpower or 0) gte 420 or ($athletics or 0) gte 260>><<link [[护灯绕廊 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[护灯绕廊 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 5>><<tiredness 3>><<pain 1>><</link>><</if>><br>
-<<shopicon>><<if ($money or 0) gte 160>><<link [[添油换芯 (0:08)|MP Loc Temple More Hub]]>><<money -160>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">添油换芯 (0:08)（钱不够）</span><</if>><br>
-<<getouticon>><<link [[返回杂役水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回杂役廊 (0:02)|MP Loc Temple More Corridor]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[返回杂役总水牌 (0:03)|MP Loc Temple More Hub]]>><<pass 3>><</link>>
+<br>
+<<templeicon>><<link [[回到神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Temple Event 8 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
-告解室的常任神父发了热，修女把黑布帘挂好，让你在隔栅后头坐一个时辰。她说只听着，不必给判词，也不许把听见的话带出门；若有人哭，就等哭声停了再念一句短经。小屋里只有一张窄凳、一只脚炉和半罐清水，木栅上的漆被无数人的手摸得发亮，缝隙里嵌着经年的蜡屑。
+告解室的常任神父发了热，修女把黑布帘挂好，让你在木栅后坐一个时辰。狭小的隔间里只有一只半冷的脚炉，木栅横档的铁钉松了半截。隔栅另一头传来压低的嗓音：「我把回廊尽头那扇门的钥匙还错了钩子，现在挂的是灯绳。」帘外换班铃声轻响，你可以静心听完细节，或趁空当把松动的木栅钉牢。
 <br><br>
-前几个声音都很轻：一个说自己偷了邻家的鸡，一个说梦见死去的丈夫站在床边。到第四个，栅格后沉默了很久，才有人开口。那声音不老，也不年轻，像是刻意压着：「我把钥匙还错了钩子。回廊尽头那扇门，现在挂的是灯绳。」停一停，又说，「我不是故意的。我只是忘了哪一把才是真的。」你听见布料摩擦的声音，像有人把什么东西塞回袖口。
+<<getouticon>><<link [[退回杂役廊 (0:02)|MP Loc Temple More Corridor]]>><<pass 2>><</link>>
+<br>
+<<mpeavesdropicon>><<link [[隔着木栅静听 (0:12)|MP Loc Temple Event 8 After]]>><<pass 12>><<if ($willpower or 0) gte 380 or ($skulduggery or 0) gte 240>><<set $mpTempleEv8 to "ok">><<set $mpDone_Temple_8 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><<else>><<set $mpTempleEv8 to "fail">><<stress 5>><<tiredness 2>><</if>><</link>>
+<br>
+<<mprepairicon>><<if ($money or 0) gte 200 or ($housekeeping or 0) gte 240>><<link [[换钉修栅 (0:10)|MP Loc Temple Event 8 After]]>><<pass 10>><<if ($money or 0) gte 200>><<money -200>><<else>><<tiredness 1>><</if>><<set $mpTempleEv8 to "ok">><<set $mpDone_Temple_8 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">换钉修栅 (0:10)（钱和手艺都不够）</span><</if>>
+
+:: MP Loc Temple Event 8 After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if $mpTempleEv8 is "fail">>窄凳在石地上刮出一声脆响，隔栅后的人立刻屏住呼吸，匆匆掀帘离去。你在昏暗里摸索着收拾残局，指尖被木刺与旧钉扎得生疼，只落得满屋冷风。<<else>>你屏息料理好隔间里的活计，离帘时又把松动的木栅横档重新扶正。修女回来收拾水罐时朝你微微颔首，窗外吹进的冷风总算不再震得木格乱晃。<</if>>
 <br><br>
-修女在门外轻轻敲了一下木板，提醒你时辰。她先前说过，告解室里最要紧的不是听出谁有罪，而是听出哪句话是真的。隔栅另一头的人还在等，呼吸一下一下，贴着木格传过来。屋角的木栅有一根横档松了，钉子退出来半截，若有人从外侧用力，整块格子都会歪。你可以继续听下去，也可以趁换班的空当，去把那根横档重新钉牢。
-<br><br>
-帘子外头传来换班的铃声，很短，像有人用指甲弹了一下铜片。你起身时，窄凳在石地上刮出一声轻响；栅格后的人立刻停了呼吸。等你把帘子掀开一条缝，外头只剩空廊和一盏将熄的灯，脚炉里的炭已经白了。修女回来收拾水罐，见你站着不动，便问：「听见了？」你没有立刻答。她也没有追问，只把松动的横档指给你看，说这扇栅栏比告解室本身还老，钉子换过几回，木头上全是旧孔。有些孔里还塞着断掉的钉尖，摸上去扎手。她说完便去开窗，放进来一阵带着雨味的冷风。你把水罐提到窗边，看见罐底沉着几粒黑色的香灰；修女说脚炉里的炭是昨夜剩下的，别倒，还能暖一阵。
-<br><br>
-<<socialiseicon>><<if ($willpower or 0) gte 380 or ($skulduggery or 0) gte 240>><<link [[隔栅静听 (0:12)|MP Loc Temple More Hub]]>><<pass 12>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[隔栅静听 (0:12)|MP Loc Temple More Hub]]>><<pass 12>><<stress 5>><<tiredness 2>><</link>><</if>><br>
-<<shopicon>><<if ($money or 0) gte 200>><<link [[换修木栅 (0:10)|MP Loc Temple More Hub]]>><<money -200>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">换修木栅 (0:10)（钱不够）</span><</if>><br>
-<<getouticon>><<link [[返回杂役水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回杂役廊 (0:02)|MP Loc Temple More Corridor]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[返回杂役总水牌 (0:03)|MP Loc Temple More Hub]]>><<pass 3>><</link>>
+<br>
+<<templeicon>><<link [[回到神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Temple Event 9 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
-晨祷散场后，祭坛四周落了一层灰。香灰、烛泪和烧剩的纸角混在一起，颜色从灰白到焦黑，扫帚一碰就腾起来。管祭器的修女把三只铜筛并排摆开，说粗的留给厨房滤碱水，细的留给铜器抛光，最细的那层要装进蓝釉罐，遇到有人烫伤或起疹子，就拿温水调开敷上。混了等级的灰会让铜面发乌，也会让药性变杂。
+晨祷散场后，祭坛四周积着厚厚一层香灰与烛泪，管祭器的修女把三只铜筛并排摆开。后门外有个玻璃作坊的学徒背着碎玻璃袋探头低语：「最细的那层银白灰能擦亮模具，我拿铜子跟你们换。」偏殿墙根的细缝还在渗水，你要么稳住手腕筛出细灰，要么调好灰浆把渗水的墙缝抹平。
 <br><br>
-后门外有个玻璃作坊的学徒，背着半袋碎玻璃等在那儿，想收最细的那层灰去擦模具。他说作坊的炉子最近总起雾，擦不亮的模子做出来的瓶子全是花脸。学徒数出几枚铜子放在门槛上，又把袋子往门里推了推。修女没接话，只把筛子往你这边挪了一寸，意思很清楚：先分，再谈卖不卖。
+<<getouticon>><<link [[退回库房区 (0:02)|MP Loc Temple More Store]]>><<pass 2>><</link>>
+<br>
+<<mpscaleicon>><<link [[稳住手腕筛灰 (0:10)|MP Loc Temple Event 9 After]]>><<pass 10>><<if ($housekeeping or 0) gte 220 or ($science or 0) gte 220>><<set $mpTempleEv9 to "ok">><<set $mpDone_Temple_9 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("temple_more_ev9_ash")>><<money 60>><</if>><<stress -2>><<else>><<set $mpTempleEv9 to "fail">><<stress 4>><<tiredness 2>><<pain 1>><</if>><</link>>
+<br>
+<<mprepairicon>><<if ($money or 0) gte 140 or ($housekeeping or 0) gte 260>><<link [[调好灰浆抹墙缝 (0:10)|MP Loc Temple Event 9 After]]>><<pass 10>><<if ($money or 0) gte 140>><<money -140>><<else>><<tiredness 1>><</if>><<set $mpTempleEv9 to "ok">><<set $mpDone_Temple_9 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">调好灰浆抹墙缝 (0:10)（钱和手艺都不够）</span><</if>>
+
+:: MP Loc Temple Event 9 After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if $mpTempleEv9 is "fail">>穿堂风猛地灌进后门，手边的灰料被吹得四散，呛得你连连咳嗽。受潮的灰粉结成了硬块，活儿做到一半便再也接不下去，偏殿墙角的水痕还在一道道往下淌。<<else>>你把香灰按粗细分装妥当，又调好灰浆抹平了偏殿墙根的渗水细缝。管祭器的修女把麻袋扎紧收好，玻璃作坊的学徒也满意地背起沉甸甸的模具袋离去。<</if>>
 <br><br>
-筛灰不能用蛮力。手腕要稳，筛面要斜，风从门口灌进来时得用身子挡一挡。祭坛背后的石缝里还积着陈灰，得用小铲一点点剔，剔重了会刮伤石面，剔轻了又留根。老修士说，灰是神殿里最不值钱的东西，可它记得每一场火。你若肯做，他能从灰的颜色里看出昨夜哪几盏灯烧得太急。偏殿的墙根还有一道细缝，雨气一重就渗水，拿调好的灰浆抹上去，干透了比新石还硬。
-<br><br>
-蓝釉罐在架子上排成一列，罐口蒙着薄布，布上用炭写着日期。你揭开其中一只，里面的灰细得像面粉，指尖一碰就沾上一层银白。修女说，这种灰不能见铁器，见了会发黑；也不能受潮，受了潮就结成硬块，只能砸碎重筛。玻璃作坊的学徒在门外咳了一声，把铜子又往前推了推。你听见炭盆里的火轻轻爆了一下，像在提醒什么。偏殿墙上的细缝从供桌后面一直爬到窗台，缝里渗出淡黄的印子，指甲一刮就掉粉。你把筛子端平，先让最粗的那层滚到一边；粗灰装进麻袋，袋口用麻绳扎紧，免得风一吹又散回殿里。
-<br><br>
-<<investigateicon>><<if ($housekeeping or 0) gte 220 or ($science or 0) gte 220>><<link [[细筛祭坛灰 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<money 60>><<stress -2>><</link>><<else>><<link [[细筛祭坛灰 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><<pain 1>><</link>><</if>><br>
-<<shopicon>><<if ($money or 0) gte 140>><<link [[调灰浆补壁 (0:10)|MP Loc Temple More Hub]]>><<money -140>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">调灰浆补壁 (0:10)（钱不够）</span><</if>><br>
-<<getouticon>><<link [[返回杂役水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回库房区 (0:02)|MP Loc Temple More Store]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[返回杂役总水牌 (0:03)|MP Loc Temple More Hub]]>><<pass 3>><</link>>
+<br>
+<<templeicon>><<link [[回到神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Temple Event 10 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
-悉尼把一本泡过水的对经谱抱进杂役廊时，袖子还在滴水。谱本的下半截黏成一整块，纸页像被糨糊粘住的翅膀，稍一用力就会撕下整片字。管谱的老修士耳背，问他什么都要凑到耳边喊；他只看了一眼，便摆手说：「别烘。烘急了纸会卷，卷了就再也压不平。」
+一本泡过水的对经谱摊在木案上，下半截纸页粘成一团，旁边研着稀米浆。<<if mpNpcMet("Sydney")>>悉尼<<else>>管谱的见习生<</if>>摘下眼镜擦了擦，压低声音说：「缺的是午钟前那段应答，唱诗班唱到那里总会少一口气。」旧谱匣的边角已被虫蛀空，你要么借炭盆温气揭页补缀，要么添置一只防潮新谱匣。
 <br><br>
-悉尼把眼镜摘下来擦了擦，声音比平时更低：「缺的是午钟前那段应答。唱诗班唱到那里会少一口气，钟就提前响。最近已经错过两回了，主教以为是人手不够，其实是谱子少了一页。」他/她翻开一本更旧的抄本，指着页边一行褪色的小字，「这里记着那段旋律的第一句。剩下的，可能得靠耳朵拼。」
+<<getouticon>><<link [[退回库房区 (0:02)|MP Loc Temple More Store]]>><<pass 2>><</link>>
+<br>
+<<mpreadicon>><<link [[研浆补缀残页 (0:12)|MP Loc Temple Event 10 After]]>><<pass 12>><<if ($tending or 0) gte 240 or ($english or 0) gte 240>><<set $mpTempleEv10 to "ok">><<set $mpDone_Temple_10 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><<else>><<set $mpTempleEv10 to "fail">><<stress 4>><<tiredness 3>><<pain 1>><</if>><</link>>
+<br>
+<<shopicon>><<if ($money or 0) gte 220>><<link [[添钱换防潮谱匣 (0:08)|MP Loc Temple Event 10 After]]>><<pass 8>><<money -220>><<set $mpTempleEv10 to "ok">><<set $mpDone_Temple_10 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">添钱换防潮谱匣 (0:08)（钱不够）</span><</if>>
+
+:: MP Loc Temple Event 10 After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if $mpTempleEv10 is "fail">>炭盆离得太近，受潮的纸页边缘忽然卷曲发脆，一碰便裂开一道细口。窗外练唱的木尺声再次错了一拍，你只能先把半干的谱本合上，免得字迹彻底损毁。<<else>>你借着炭盆的温气把受潮的谱页一张张理开，缺字处补齐，松散的页角也重新压平，最后稳稳收进干爽的谱匣。窗外唱诗班的歌声重新合在一处，午钟前的应答终于不再少那一拍。<</if>>
 <br><br>
-杂役廊的炭盆正好能温一壶水。若把谱本架在离火一臂远的地方，让湿气慢慢散，纸页就能一层层揭开；揭开之后还要用米浆补边、用重物压平。谱匣也朽了，角上被虫蛀出几个洞，若不用新匣换掉，下一次潮气还是会进去。悉尼说管谱的老修士不肯换匣，说旧匣跟着谱本走了几十年，换了怕调子也变。你可以劝，也可以自己想办法。
-<br><br>
-谱本揭到第三层时，纸页上显出一行被水泡开的字，墨迹散成一小片淡蓝。悉尼凑过来看，呼吸喷在纸面上，又赶紧退开：「别对着它说话。纸太薄了。」他/她把手掌悬在纸页上方，像在试温度，然后慢慢把那一页翻过去。窗外有修士在敲木尺，一下一下，和谱子里缺的那一拍正好错开。你忽然明白，唱诗班不是不会唱，是每次唱到那里都在等一个不存在的声音。新谱匣的木头味很冲，得先放在廊下吹两天；旧匣子则被老修士抱在膝上，像抱一只不肯挪窝的猫。悉尼把米浆调得很稀，说宁可多补两回，也别一次糊死。窗外的光慢慢移过谱台，照见纸页边缘一排细小的虫眼；悉尼把镊子递给你，自己退到旁边去研米浆，研得很慢。
-<br><br>
-<<investigateicon>><<if ($tending or 0) gte 240 or ($english or 0) gte 240>><<link [[补缀残页 (0:12)|MP Loc Temple More Hub]]>><<pass 12>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[补缀残页 (0:12)|MP Loc Temple More Hub]]>><<pass 12>><<stress 4>><<tiredness 3>><<pain 1>><</link>><</if>><br>
-<<shopicon>><<if ($money or 0) gte 220>><<link [[买新谱匣 (0:08)|MP Loc Temple More Hub]]>><<money -220>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">买新谱匣 (0:08)（钱不够）</span><</if>><br>
-<<getouticon>><<link [[返回杂役水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回库房区 (0:02)|MP Loc Temple More Store]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[返回杂役总水牌 (0:03)|MP Loc Temple More Hub]]>><<pass 3>><</link>>
+<br>
+<<templeicon>><<link [[回到神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Temple Event 11 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
-圣骨廊的夜来得比别处早。太阳一落到城墙后头，那条夹在回廊与地窖之间的窄道就暗了下来，两盏灯挂在石壁上，灯油只够烧到半夜。守夜的人要坐在廊口的矮凳上，不能靠骨龛，不能出声，也不能让灯灭。管这片的老修女把一段打好的灯芯交给你：「若灯焰发甜，别闻，先去叫门房。那是油里混了东西。」
+圣骨廊夹在回廊与地窖之间，石壁上的两盏油灯只够烧到半夜，地窖深处不时传来暗水拍岸的轻响。老修女把一段新灯芯交给你，低声叮嘱：「若灯焰发甜，别闻，那是油里混了东西；整点钟不响就去拉钟绳。」廊顶传来极轻的脚步声，你可以持灯守在廊口，或先把守夜灯续满净油。
 <br><br>
-约旦在廊另一头跪着，膝下垫了一块旧毡。他/她今夜不诵经，只把手拢在袖子里，像在听墙里的水声。过了子时，廊顶传来极轻的脚步，走几步，停一停，又走几步，像有人在上面找一块松动的石板。灯焰被不知哪儿来的风拉得歪了一下，又直起来。你听见地窖深处有绳子摩擦石沿的声响，一慢一快，最后停了。
+<<getouticon>><<link [[退回旧档区 (0:02)|MP Loc Temple More Archive]]>><<pass 2>><</link>>
+<br>
+<<mpbellicon>><<link [[持灯守住廊口 (0:14)|MP Loc Temple Event 11 After]]>><<pass 14>><<if ($willpower or 0) gte 420 or ($athletics or 0) gte 260>><<set $mpTempleEv11 to "ok">><<set $mpDone_Temple_11 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><<else>><<set $mpTempleEv11 to "fail">><<stress 6>><<tiredness 4>><<pain 1>><</if>><</link>>
+<br>
+<<mplampicon>><<if ($money or 0) gte 180 or ($housekeeping or 0) gte 240>><<link [[换净油续满壁灯 (0:08)|MP Loc Temple Event 11 After]]>><<pass 8>><<if ($money or 0) gte 180>><<money -180>><<else>><<tiredness 1>><</if>><<set $mpTempleEv11 to "ok">><<set $mpDone_Temple_11 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">换净油续满壁灯 (0:08)（钱和手艺都不够）</span><</if>>
+
+:: MP Loc Temple Event 11 After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if $mpTempleEv11 is "fail">>半夜里守夜灯忽然黯淡下去，你被呛人的油烟熏得头脑发沉，起身去料理时又一脚踩空了半级窄梯。廊顶的脚步声在黑暗里远去，你揉着发酸的脚踝熬到了换班。<<else>>你及时拨正灯芯、续上净油，又在整点时稳稳拉响了窄梯尽头的钟绳。廊顶窥探的动静被钟声惊退，圣骨廊整夜安稳无事，直到晨光透进高窗，你才轻轻松了口气。<</if>>
 <br><br>
-按规矩，整点的钟若没有响，守夜的人要自己去拉钟绳。钟绳在廊尾的窄梯上，梯级很陡，摸黑走容易踩空。你也可以先把灯添满，再回去坐着——灯油够，至少能看清脚下的路。老修女临走前又回头说：「守夜不是熬时间。你得让该睡的人睡得着，让不该醒的东西以为这里没人。」
-<br><br>
-地窖里的水声一直没有停，只是有时近，有时远。你把灯芯挑高了一点，光晕扩到骨龛边缘，照见石板上被人用指甲划出的几道浅痕，横着三道，竖着一道，像是某种计数。约旦在廊那头轻轻咳了一声，提醒你别盯着墙看。廊顶的脚步又响起来，这次走到你头顶就停了；隔了很久，才有一粒碎石从缝里落下来，掉在灯罩上，叮的一声。你抬头，只看见一片黑。灯油的气味变得有点甜，你想起老修女的话，立刻把灯挪远，又用袖子扇了扇。钟绳在窄梯尽头垂着，绳结被手汗浸得发亮，像一条等了很多年的蛇。你没有伸手。廊下的风一阵紧一阵松，灯焰跟着矮下去又立起来；你把披肩裹紧，听见自己的呼吸在石壁之间来回碰，像另一个人坐在暗处。
-<br><br>
-<<sneakicon>><<if ($willpower or 0) gte 420 or ($athletics or 0) gte 260>><<link [[持灯守夜 (0:14)|MP Loc Temple More Hub]]>><<pass 14>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[持灯守夜 (0:14)|MP Loc Temple More Hub]]>><<pass 14>><<stress 6>><<tiredness 4>><<pain 1>><</link>><</if>><br>
-<<shopicon>><<if ($money or 0) gte 180>><<link [[续满守夜灯 (0:08)|MP Loc Temple More Hub]]>><<money -180>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">续满守夜灯 (0:08)（钱不够）</span><</if>><br>
-<<getouticon>><<link [[返回杂役水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回旧档区 (0:02)|MP Loc Temple More Archive]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[返回杂役总水牌 (0:03)|MP Loc Temple More Hub]]>><<pass 3>><</link>>
+<br>
+<<templeicon>><<link [[回到神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Temple Event 12 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
-后院的净火池是一口浅底石槽，平时盖着铁栅，月初和节前才开。天刚亮，炭床已经被烧得发白，热气把空气顶得微微发颤。想求一个明白的人会脱了鞋，从池子这头走到那头，再由守在旁边的修士记下姓名。管火的修女说，火不认人，认的是炭床铺得平不平；铺得平，走过去只是烫，铺得偏，脚一陷就会留疤。
+后院的净火池是一口浅底石槽，炭床烧得发白，靠里的炭堆却被夜风吹塌了一角。一名年轻朝圣者攥着石片站在池边犹豫，铁栅旁的<<if mpNpcMet("Jordan")>>约旦<<else>>神殿修士<</if>>轻声提醒：「想清楚再走，半途回头比不走更伤。」管火修女把长柄铁耙递给你，你可以亲自赤足试步，或先替池子把炭床铺平。
 <br><br>
-今天来的是一个年轻的朝圣者，裤脚卷到膝盖，手里攥着一块磨圆的石片。他/她站在池边，先伸一只脚试了试，又缩回去。约旦站在铁栅旁，没有催促，只说：「想清楚再走。走到一半回头，比不走更伤。」主教的人在廊下远远看着，手里拿着名册，像是只等一个结果。
+<<getouticon>><<link [[退回旧档区 (0:02)|MP Loc Temple More Archive]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[赤足踏过炭床 (0:12)|MP Loc Temple Event 12 After]]>><<pass 12>><<if ($athletics or 0) gte 260 or ($physique or 0) gte 11000>><<set $mpTempleEv12 to "ok">><<set $mpDone_Temple_12 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><<pain 1>><<else>><<set $mpTempleEv12 to "fail">><<stress 7>><<pain 4>><<tiredness 3>><</if>><</link>>
+<br>
+<<mprepairicon>><<link [[持铁耙铺平炭床 (0:10)|MP Loc Temple Event 12 After]]>><<pass 10>><<if ($housekeeping or 0) gte 220 or ($science or 0) gte 220>><<set $mpTempleEv12 to "ok">><<set $mpDone_Temple_12 to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><<else>><<set $mpTempleEv12 to "fail">><<stress 4>><<tiredness 3>><<pain 1>><</if>><</link>>
+
+:: MP Loc Temple Event 12 After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if $mpTempleEv12 is "fail">>迎风一侧的炭床没有压实，火舌猛地从缝隙里窜起，滚烫的火星灼得你手背与脚背生疼。管火修女连忙递来湿布让你退到池边冷敷，朝圣者见状也暂时收起了石片。<<else>>你顺着风向把炭床理得均匀扎实，迎风的缺口也重新堵好。朝圣者踩着平顺的炭面稳步走过石槽，廊下执事在名册上记下一笔，朝你投来赞许的目光。<</if>>
 <br><br>
-炭床昨夜被风吹塌了一角，靠里的炭堆得高，靠外的又太薄。若就这么让人走，重心一偏，脚背会陷进火里。修女把铁耙递给你，说铺炭要看风向，也要看炭块的大小；大块垫底，小块盖面，耙齿不能拖得太快，不然火星会飞。池边的石板上还留着一圈深色的水渍，是上一场雨后没有擦干的。你若自己不敢踩火，把炭床铺稳，也算替人挡了一半的险。
-<br><br>
-铁耙在炭床上拖过时，火星从齿缝里跳出来，落在石槽边缘就灭了。修女让你先试风向：把手背贴在池边，哪一边烫得厉害，炭就往哪一边堆。朝圣者一直没说话，只把石片在掌心里翻来覆去；约旦看了他/她一眼，又看向你，像是在等一个比火更稳的答案。廊下的名册被风翻过一页，纸角啪地合上。远处钟楼响了，声音落进池子里，被热气顶得有些发闷。你把大块炭挑到迎风的一侧，小块铺在中间，耙齿压着炭面慢慢抹平。修女蹲下来看了看，说还差一层细灰，脚踩上去才不会陷。你把铁耙靠在池边，手掌被木柄磨得发红；修女递来一块湿布，说先把脚底擦干，再踩上去才不会打滑。朝圣者终于把石片收进怀里，朝你点了点头。
-<br><br>
-<<walkicon>><<if ($athletics or 0) gte 260 or ($physique or 0) gte 11000>><<link [[赤足过火 (0:12)|MP Loc Temple More Hub]]>><<pass 12>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><<pain 2>><</link>><<else>><<link [[赤足过火 (0:12)|MP Loc Temple More Hub]]>><<pass 12>><<stress 7>><<pain 4>><<tiredness 3>><</link>><</if>><br>
-<<investigateicon>><<if ($housekeeping or 0) gte 220 or ($science or 0) gte 220>><<link [[铺平炭床 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[铺平炭床 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 3>><<pain 1>><</link>><</if>><br>
-<<shopicon>><<if ($money or 0) gte 160>><<link [[添炭备池 (0:08)|MP Loc Temple More Hub]]>><<money -160>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">添炭备池 (0:08)（钱不够）</span><</if>><br>
-<<getouticon>><<link [[返回杂役水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回旧档区 (0:02)|MP Loc Temple More Archive]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[返回杂役总水牌 (0:03)|MP Loc Temple More Hub]]>><<pass 3>><</link>>
+<br>
+<<templeicon>><<link [[回到神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Temple Season Extra [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<set $mpLocProgress_Temple to ($mpLocProgress_Temple or 0)>><<set $mpLocEvents_Temple to ($mpLocEvents_Temple or 0)>>
-杂役廊石板上的第七枚铜钩，今天挂了一块新牌。牌上没有刻字，只用炭条写了「节令」两个字，底下画着一道随季节弯折的线。老修士说，这块牌每年换四回，春天挂藤，夏天挂水，秋天挂谷，冬天挂冰；挂上什么，杂役廊就补什么。窗外的天色已经变了，屋里能听见风从檐角绕过去的声音，炭盆里的火也跟着忽明忽暗。
+杂役廊的第七枚铜钩挂着随四季更替的节令木牌。<<if Time.season is "spring">>开春后园化冻，修女正挑拣留种的麦粒，葡萄架下的麻绳也待重捆。<<elseif Time.season is "summer">>入夏前殿闷热，彩窗晒得发白，井台边急需汲水兑薄荷镇暑。<<elseif Time.season is "autumn">>秋风卷落叶入阶，祭坛换上了深色帷布，供桌正等着头捆新谷。<<else>>入冬石阶覆满薄冰，殿内烧起炭盆，铅条窗缝急待糊纸挡风。<</if>>管事的老修士敲了敲木牌：「节令活计看天行事，挑一件做妥当便算数。」
 <br><br>
-此刻是 <<if Time.season is "spring">>春天，墙根的苔藓吸饱了水，后园的土一踩一个浅坑<<elseif Time.season is "summer">>夏天，彩窗把日头烤得发白，长椅的木头摸上去黏手<<elseif Time.season is "autumn">>秋天，狼街的落叶贴着门槛打旋，风里有葡萄发酵的酸气<<elseif Time.season is "winter">>冬天，阶前的薄冰亮得像一层釉，进门的人都要扶一把墙<<else>>个节令含混的日子，云压得低，殿里殿外一个颜色<</if>>。门外的天色<<if Weather.precipitation is "rain">>阴沉，雨丝斜斜打在廊柱上，汇成细流往阶下淌<<elseif Weather.precipitation is "snow">>发白，雪片落在石阶上，踩过的地方很快又平了<<elseif Weather.precipitation is "none">>亮得刺眼，钟塔的尖顶像被人擦过一遍<<else>>发灰，雾气贴着墙根游走，几步外就看不清了<</if>>。雾潮水尺停在 <<print ($mpFogTide or 0)>>；铜牌上另有两行旧刻，写着进度 <<print $mpLocProgress_Temple>>，经手之事 <<print $mpLocEvents_Temple>>。节令差事都有一样的规矩：办妥了在牌背添一道刻痕，办砸了不扣工钱，只把疲累留给自己。
+<<getouticon>><<link [[退回旧档区 (0:02)|MP Loc Temple More Archive]]>><<pass 2>><</link>>
+<br>
+<<mpspringicon>><<link [[顺应时令护殿 (0:10)|MP Loc Temple Season Extra After]]>><<pass 10>><<if ($housekeeping or 0) gte 220 or ($tending or 0) gte 240 or ($athletics or 0) gte 260>><<set $mpTempleSeasonOk to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><<else>><<set $mpTempleSeasonOk to 0>><<stress 4>><<tiredness 2>><</if>><</link>>
+<br>
+<<shopicon>><<if ($money or 0) gte 150>><<link [[出钱添置节令物 (0:08)|MP Loc Temple Season Extra After]]>><<pass 8>><<money -150>><<set $mpTempleSeasonOk to 1>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">出钱添置节令物 (0:08)（钱不够）</span><</if>>
+
+:: MP Loc Temple Season Extra After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if $mpTempleSeasonOk is 1>>你按着当季的规矩把后园与前殿的节令活计一一料理妥当，老修士在节令牌背面添上一道浅痕。殿内外的器物各归其位，连穿堂风吹过廊柱的声音都显得格外安宁。<<else>>天色突生变化，手头的节令杂活做到一半便被风雨打乱了章法。你忙活了半晌也没能把差事收尾，只能拍掉袖口沾上的灰土，将疲累留在自己身上。<</if>>
 <br><br>
-<<if Time.season is "spring">>
-开春的差事在后园。土刚化冻，踩下去会陷进半个指节。修女把留种的麦粒摊在竹匾里，瘪粒、草籽和碎壳混作一团；葡萄架下的麻绳被雪水沤烂，风一吹，整排架子都在晃。<<if Weather.precipitation is "rain">>雨点打在瓦檐上，汇成一股细流，顺着裂开的陶管往廊下灌，接水的缸已经满了大半，再不管就要漫过门槛。<<else>>日头不烈，正适合把受潮的谱本搬到廊下摊开，也适合把藤架底下的旧土翻一遍。<</if>>
-<br><br>
-<<if Weather.precipitation is "rain">><<mpcarryicon>><<if ($athletics or 0) gte 260 or ($housekeeping or 0) gte 220>><<link [[接檐水入缸 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[接檐水入缸 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><</link>><</if>><<else>><<mpherbicon>><<if ($housekeeping or 0) gte 220 or ($tending or 0) gte 240>><<link [[挑拣春播麦种 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[挑拣春播麦种 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><</link>><</if>><</if>><br>
-<<shopicon>><<if ($money or 0) gte 150>><<link [[添买麻绳修架 (0:08)|MP Loc Temple More Hub]]>><<money -150>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">添买麻绳修架 (0:08)（钱不够）</span><</if>>
-<<elseif Time.season is "summer">>
-入夏后，前殿像一口扣住的热锅。彩窗把日头滤成一片晃眼的白，长椅的接缝被晒得发黏，手肘一压就留下一道浅印，水罐一天要添好几回。<<if Weather.precipitation is "rain">>雨来得急，彩窗上的积灰被水一泡，正好擦；可檐口也在漏，得拿木盆接住，别让水淌到长椅上。<<else>>井台边的石板上晒得发烫，井绳却还是凉的；把水汲上来，兑一点薄荷，能救回半个前殿的人。<</if>>
-<br><br>
-<<if Weather.precipitation is "rain">><<investigateicon>><<if ($housekeeping or 0) gte 220 or ($tending or 0) gte 240>><<link [[趁雨擦彩窗 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[趁雨擦彩窗 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><</link>><</if>><<else>><<if ($athletics or 0) gte 260 or ($physique or 0) gte 11000>><<link [[汲井水镇殿 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[汲井水镇殿 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 3>><</link>><</if>><</if>><br>
-<<if ($money or 0) gte 150>><<link [[添买井绳水桶 (0:08)|MP Loc Temple More Hub]]>><<money -150>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">添买井绳水桶 (0:08)（钱不够）</span><</if>>
-<<elseif Time.season is "autumn">>
-秋风一起，狼街的落叶就往门槛里卷。祭坛换上了深色帷布，供桌要摆第一捆不脱粒的谷子；后园的葡萄摘完了，藤上只剩几片发黄的叶子。<<if Weather.precipitation is "rain">>雨来得不是时候，帷布刚挂上去就被打湿，得赶在霉斑生出来之前收进来烘着。<<else>>天高风干，谷捆在场上晒得正好，抬上供桌时不能掉穗。<</if>>
-<br><br>
-<<if Weather.precipitation is "rain">><<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 220>><<link [[抢收祭坛帷布 (0:08)|MP Loc Temple More Hub]]>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[抢收祭坛帷布 (0:08)|MP Loc Temple More Hub]]>><<pass 8>><<stress 4>><<tiredness 2>><</link>><</if>><<else>><<if ($athletics or 0) gte 260 or ($physique or 0) gte 11000>><<link [[抬谷捆上供桌 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[抬谷捆上供桌 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 3>><</link>><</if>><</if>><br>
-<<if ($money or 0) gte 180>><<link [[添买新帷布 (0:08)|MP Loc Temple More Hub]]>><<money -180>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">添买新帷布 (0:08)（钱不够）</span><</if>>
-<<elseif Time.season is "winter">>
-入冬后，门前的石阶覆着一层薄冰，来望晨祷的人得贴着墙根，脚底蹭着地往前移。殿里烧起了炭盆，窗缝却还没封严，风从彩窗的铅条缝里钻进来，把烛火吹得东倒西歪。<<if Weather.precipitation is "snow">>积雪压了一整夜，冰面藏在雪底下，脚踩上去最难提防；先撒炉灰，再顺着石阶一级级往下刮。<<else>>天干冷，窗纸被风扯出细口，若不及早糊上，夜里的寒气会把水罐冻裂。<</if>>
-<br><br>
-<<if Weather.precipitation is "snow">><<if ($athletics or 0) gte 260 or ($willpower or 0) gte 380>><<link [[铲阶前薄冰 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[铲阶前薄冰 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 5>><<tiredness 3>><<pain 1>><</link>><</if>><<else>><<if ($housekeeping or 0) gte 220 or ($tending or 0) gte 240>><<link [[封窗缝挡风 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[封窗缝挡风 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><</link>><</if>><</if>><br>
-<<if ($money or 0) gte 160>><<link [[添买炭盆 (0:08)|MP Loc Temple More Hub]]>><<money -160>><<pass 8>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -1>><</link>><<else>><span class="disabled">添买炭盆 (0:08)（钱不够）</span><</if>>
-<<else>>
-节令牌上的炭条被湿气洇花了，老修士说今天挂哪一块都行，只看你手上有什么。后园、井台、供桌和石阶都等着人，炭盆里的火却只剩一点红。
-<br><br>
-<<if ($housekeeping or 0) gte 220 or ($willpower or 0) gte 380>><<link [[替杂役廊打杂 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<set $mpLocEvents_Temple += 1>><<set $mpLocProgress_Temple to Math.min(5, ($mpLocProgress_Temple or 0) + 1)>><<stress -2>><</link>><<else>><<link [[替杂役廊打杂 (0:10)|MP Loc Temple More Hub]]>><<pass 10>><<stress 4>><<tiredness 2>><</link>><</if>>
-<</if>>
-<br><br>
-<<link [[返回杂役水牌 (0:02)|MP Loc Temple More Hub]]>><<pass 2>><</link>><br>
-<<link [[返回神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>
+<<getouticon>><<link [[返回旧档区 (0:02)|MP Loc Temple More Archive]]>><<pass 2>><</link>>
+<br>
+<<walkicon>><<link [[返回杂役总水牌 (0:03)|MP Loc Temple More Hub]]>><<pass 3>><</link>>
+<br>
+<<templeicon>><<link [[回到神殿总枢 (0:03)|MP Loc Temple Hub]]>><<pass 3>><</link>>

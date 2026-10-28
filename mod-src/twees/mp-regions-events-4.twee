@@ -1,194 +1,214 @@
-:: MP Region Velvet AbacusWaxLetter [nobr]
-<<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
-私人拍卖暗厅后台的记账桌抽屉半开着，一把象牙算盘下压着一封火漆信。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你从算盘下抽出信，火漆已经开裂，信里夹着一张拍卖委托单。
+:: MP Region Observatory Dome Chain [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Observatory Dome Chain"] to 1>><<set $mpObsChainDone to ($mpObsChainDone or {})>><<if $mpObsLamp is undefined>><<set $mpObsLamp to 2>><</if>><<set $mpObsLamp to Math.clamp($mpObsLamp, 0, 5)>>
+折光穹顶室中央架着巨型黄铜赤道仪，通往目镜观测台有两条路：顺着地面滑轨推开配重铁箱，能平步走到目镜桌前，只是滑轨积灰重、需耗一格灯光照看卡槽；或者攀上二层环形步道的小铁桌，从上方俯探星盘，虽省灯油却容易踩响悬空铁板。<<if $mpObsDeclinationNote>>你手里的赤纬数据正好对应赤道仪的仰角刻度。<<else>>天窗外夜云低垂，穹顶下的齿轮阴影交错难辨。<</if>><<if ($mpObsDepth or 0) gte 2>>你已进入穹顶内圈，空旷厅堂把细微脚步声放大数倍。<</if>>
 <br><br>
-<<shopicon>><<link [[抽出火漆信 (0:07)|MP Region Velvet Auction]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[回天文池 (0:03)|MP Region Pool Observatory]]>><<pass 3>><<set $mpObsDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[拆开信封 (0:07)|MP Region Velvet Auction]]>><<pass 7>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_velvet_abacuswaxletter_reward")>><<money 932>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_velvet_abacuswaxletter")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[拆开信封 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拆开信封">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
+<<mprepairicon>><<link [[顺滑轨推配重箱 (0:07)|MP Region Observatory Dome Eyepiece]]>><<pass 7>><<set $mpObsDomeRoute to "rail">><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<set $mpObsLamp to Math.max(0, ($mpObsLamp or 0) - 1)>><<tiredness 1>><</link>>
 <br>
-<<getouticon>><<link [[返回天鹅绒厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<mpclimbicon>><<link [[攀二层环形步道桌 (0:06)|MP Region Observatory Dome Eyepiece]]>><<pass 6>><<set $mpObsDomeRoute to "walkway">><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 2)>><<pain 1>><<tiredness 2>><</link>>
+<br>
+<<mpdiveicon>><<link [[硬跨配重滑轨 (0:07)|MP Region Observatory Dome Jam]]>><<pass 7>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<upperwet 30>><<lowerwet 40>><<pain 2>><<stress 5>><<tiredness 3>><</link>>
+<br>
+<<link [[返天文翼楼 (0:04)|MP Region Observatory Wing]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
 
-:: MP Region Velvet DumbwaiterRosewoodBox [nobr]
-<<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
-拍卖暗厅东侧壁柱的丝绒挂帷后方藏着一只黄铜传菜梯，梯厢里放着一只红木匣。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你拉开传菜梯厢，红木匣盖没有锁，里面铺着绒布，放着一枚铜牌。
+:: MP Region Observatory Dome Jam [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+配重铁箱的松脱锁扣突然崩开，悬空铁板被震得一翘，滑轨齿轮咬死，发出刺耳的金属刮擦声。头顶天窗的导水槽被震歪，积攒的冷雨哗啦泼落下来，将你浇得半湿，走廊外立刻响起守夜教工的脚步声。<<if ($mpObsLamp or 0) lte 0>>阅读灯被雨水浇灭，你只能扶着冰冷的旋转控制盘往后退。<<else>>你慌忙护住灯罩，火苗在冷风里缩成一点。<</if>><<if ($mpObsAlert or 0) gte 6>>穹顶室大门外已有手电光柱扫过门缝。<</if>>
 <br><br>
-<<shopicon>><<link [[取出红木匣 (0:04)|MP Region Velvet Auction]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[顺控制盘退回池 (0:06)|MP Region Pool Observatory]]>><<pass 6>><<set $mpObsDepth to 0>><<stress 2>><<tiredness 1>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[打开匣盖 (0:07)|MP Region Velvet Auction]]>><<pass 7>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_velvet_dumbwaiterrosewoodbox_reward")>><<money 873>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_velvet_dumbwaiterrosewoodbox")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[打开匣盖 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "打开匣盖">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回天鹅绒厅 (0:03)|MP Region Velvet Mirage]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<mpclimbicon>><<link [[翻侧窗回天文翼楼 (0:07)|MP Region Observatory Wing]]>><<pass 7>><<set $mpObsDepth to 0>><<pain 1>><<tiredness 2>><</link>>
 
-:: MP Region Observatory CounterweightStarMap [nobr]
-<<set $outside to 0>><<set $location to "school">>
-<<effects>>
-折光穹顶室北侧的配重铁箱下压着一卷铜版星图，铁箱侧面的锁扣已经松脱。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在已经松脱表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你移开配重铁箱，星图卷轴下压着一枚黄铜夹，图面标注着几处旧观测点。
+:: MP Region Observatory Dome Eyepiece [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<if $mpObsDomeRoute is "walkway" and not (($athletics or 0) gte 240 or ($science or 0) gte 240)>><<goto "MP Region Observatory Dome Jam">><</if>>
+<<set $mpObsChainDone to ($mpObsChainDone or {})>>
+<<if $mpObsDomeRoute is "rail">>你顺着地面滑轨移开配重铁箱，稳稳站在赤道仪目镜与绘图斜桌前。<<else>>你从二层环形步道翻下观测椅，小铁桌上的黄铜星盘与火漆盒就在手边，只是去够地面滑轨里的物件还得弯腰探身。<</if>>实验架上放着一瓶酒精灯精馏油，月相蚀变图压着的铜尺旁搁了一枚小钥匙，观测簿里则夹着刻有赤纬数据的黄铜书签。<<if $mpObsChainDone["dome"]>>观测台上的器物都已搜过，赤道仪静静指向北方夜空。<</if>>
 <br><br>
-<<investigateicon>><<link [[移开铁箱 (0:04)|MP Region Observatory Dome]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回天文池 (0:04)|MP Region Pool Observatory]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
 <br>
-<<mpastroicon>><<if ($skulduggery or 0) gte 280>><<link [[展开星图 (0:08)|MP Region Observatory Dome]]>><<pass 8>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_observatory_counterweightstarmap_reward")>><<money 764>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_observatory_counterweightstarmap")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[展开星图 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "展开星图">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<if !$mpObsChainDone["dome"]>>
+<<mplampicon>><<link [[添酒精灯精馏油 (0:06)|MP Region Observatory Dome Exit]]>><<pass 6>><<set $mpObsDomePick to "oil">><<set $mpObsLoot_Oil to 1>><<set $mpObsLamp to Math.min(5, ($mpObsLamp or 0) + 2)>><<stress -2>><<set $mpObsChainDone["dome"] to 1>><</link>>
 <br>
-<<walkicon>><<link [[返回天文翼楼 (0:04)|MP Region Observatory Wing]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<mplockpickicon>><<link [[取走压纸铜尺小钥 (0:08)|MP Region Observatory Dome Exit]]>><<pass 8>><<set $mpObsDomePick to "key">><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 2)>><<set $mpObsRulerKey to 1>><<skulduggery 2>><<stress -2>><<set $mpObsChainDone["dome"] to 1>><</link>>
+<br>
+<<mpmapicon>><<link [[收起赤纬书签 (0:06)|MP Region Observatory Dome Exit]]>><<pass 6>><<set $mpObsDomePick to "note">><<set $mpObsDeclinationNote to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["obs_declination_note"] to 1>><<stress -2>><<set $mpObsChainDone["dome"] to 1>><</link>>
+<br>
+<</if>>
+<<link [[回旧翼楼 (0:05)|MP Region Observatory Wing]]>><<pass 5>><<set $mpObsDepth to 0>><</link>>
 
-:: MP Region Observatory FoghornIndexCard [nobr]
-<<set $outside to 0>><<set $location to "school">>
-<<effects>>
-星图档案室南窗下的长排卡片柜里，写着『雾角海域』的索引卡比别的卡片高出半寸。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你抽出高出的卡片，卡背写着几艘旧船名，卡柜底层还压着一张海图编号。
+:: MP Region Observatory Dome Exit [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+微凉的夜风穿过折光穹顶半开的弧形采光天窗，吹动悬垂的铜链，西侧旋转控制盘阶梯与北侧配重滑轮槽都能通回翼楼外廊。<<if $mpObsDomePick is "oil">>阅读灯添满精馏油，灯焰澄澈明亮。<<elseif $mpObsDomePick is "key">>压纸铜尺下的小钥匙收进衣袋，齿形恰好对应翼楼的旧铜锁。<<else>>黄铜书签与赤纬数据贴身收好，星图画筒的编号已了然于胸。<</if>><<if ($mpObsLamp or 0) lte 0>>灯油耗尽，你俯身沿滑轨一路数着接缝往下挪。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>天窗漏下的雨水浸湿了肩头，夜里格外阴冷。<</if>><<if ($mpObsAlert or 0) gte 6>>穹顶室门外晃着手电光，值夜教工正在走廊巡查。<</if>>
 <br><br>
-<<beachicon>><<link [[抽出索引卡 (0:08)|MP Region Observatory Star]]>><<pass 8>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[下控制盘回池 (0:05)|MP Region Pool Observatory]]>><<pass 5>><<set $mpObsDepth to 0>><<if ($mpObsAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpObsAlert to Math.max(0, ($mpObsAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[掏出暗袋 (0:08)|MP Region Observatory Star]]>><<pass 8>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_observatory_foghornindexcard_reward")>><<money 496>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_observatory_foghornindexcard")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[掏出暗袋 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "掏出暗袋">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<mpropeicon>><<link [[顺配重滑轮槽滑下 (0:07)|MP Region Pool Observatory]]>><<pass 7>><<set $mpObsDepth to 0>><<tiredness 2>><<if ($mpObsLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
 <br>
-<<getouticon>><<link [[返回天文翼楼 (0:08)|MP Region Observatory Wing]]>><<pass 8>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[回旧翼楼 (0:04)|MP Region Observatory Wing]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
 
-:: MP Region Observatory NautilusVelvetPlug [nobr]
-<<set $outside to 0>><<set $location to "school">>
-<<effects>>
-标本陈列暗阁中央的旋转玻璃架上放着一只海螺化石，螺口里塞着一团绒布。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你抽出螺口绒布，里面塞着一枚小铜钥匙和一张写着柜号的纸条。
+:: MP Region Observatory Starmap Chain [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Observatory Starmap Chain"] to 1>><<set $mpObsChainDone to ($mpObsChainDone or {})>>
+星图档案室的樟木画筒架一直顶到天花板，北壁立着裂开细纹的地球仪，角落里那台缩微胶片阅读机仍亮着待机的红光。长排卡片柜前坐着一名戴眼镜的值夜学长，听见开门声便抬起头：「封存画筒只对课题组开放，报一下赤纬检索号，不然请回图书馆去。」<<if ($mpObsLamp or 0) lte 0>>手里的阅读灯已经断油，高架顶层的画筒编号一片漆黑。<<else>>灯光照出『1894』铜管画筒松脱的封盖与高出半寸的『雾角海域』索引卡。<</if>><<if ($mpObsDepth or 0) gte 2>>你已走入档案室深处，樟木香气掩去了窗外风声。<</if>>
 <br><br>
-<<socialiseicon>><<link [[抽出绒布 (0:08)|MP Region Observatory Cabinet]]>><<pass 8>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[回天文池 (0:03)|MP Region Pool Observatory]]>><<pass 3>><<set $mpObsDepth to 0>><</link>>
 <br>
-<<mpreadicon>><<if ($skulduggery or 0) gte 250>><<link [[取出纸条 (0:08)|MP Region Observatory Cabinet]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_observatory_nautilusvelvetplug_reward")>><<money 898>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_observatory_nautilusvelvetplug")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取出纸条 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取出纸条">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<if $mpObsDeclinationNote or (($mpObsLamp or 0) gte 1 and (($science or 0) gte 240 or ($english or 0) gte 250)) or (($science or 0) gte 360 and ($english or 0) gte 360)>>
+<<mpreadicon>><<link [[报出赤纬号入内 (0:07)|MP Region Observatory Starmap Rack]]>><<pass 7>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<set $mpObsStarEntry to "pass">><<tiredness 1>><</link>>
+<<else>>
+<<link [[推说找旧书求通融 (0:07)|MP Region Observatory Starmap Rebuke]]>><<pass 7>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 1)>><<stress 3>><<tiredness 1>><</link>>
+<</if>>
 <br>
-<<getouticon>><<link [[返回天文翼楼 (0:08)|MP Region Observatory Wing]]>><<pass 8>><<stress -1>><</link>><<lstress>>
+<<mpsneakicon>><<link [[借画架阴影绕 (0:08)|MP Region Observatory Starmap Rack]]>><<pass 8>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 3)>><<set $mpObsStarEntry to "sneak">><<stress 2>><<tiredness 2>><</link>>
+<br>
+<<walkicon>><<link [[返天文翼楼 (0:04)|MP Region Observatory Wing]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
 
-:: MP Region Observatory BottomShelfLeadBox [nobr]
-<<set $outside to 0>><<set $location to "school">>
-<<effects>>
-陈列暗阁北角的药水柜最底层放着一只铅制标本盒，盒盖上压着一把铜镊子。
-<<mpAmbient>><<if Weather.isFreezing>>薄薄的霜花挂在把铜镊子外侧。<<else>>空气里带着微温。<</if>>
-你移开盒盖上的铜镊子，盒里装着几枚矿石标签，底层还有一小袋碎晶。
+:: MP Region Observatory Starmap Rebuke [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+你支吾着报不出正确的赤纬检索号，值夜学长立刻合上卡片柜抽屉，起身走到过道中间：「非课题人员夜里不准翻阅旧星图，请出去吧。」他一路盯着你退到樟木门外，咔嗒一声从里面扣上了门闩，『1894』画筒与地球仪连碰都没能碰一下。<<if ($mpObsLamp or 0) lte 0>>门外走廊没有灯，你只能扶着护墙板往回摸。<<else>>你提着微弱的阅读灯，被关在了档案室门外。<</if>>><<if ($mpObsAlert or 0) gte 6>>楼下楼梯口传来教工的咳嗽声与钥匙串响。<</if>>
 <br><br>
-<<investigateicon>><<link [[移开铜镊 (0:06)|MP Region Observatory Cabinet]]>><<pass 6>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[顺走廊退回池 (0:05)|MP Region Pool Observatory]]>><<pass 5>><<set $mpObsDepth to 0>><<stress 2>><<tiredness 1>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[夹出碎晶 (0:08)|MP Region Observatory Cabinet]]>><<pass 8>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_observatory_bottomshelfleadbox_reward")>><<money 529>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_observatory_bottomshelfleadbox")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[夹出碎晶 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "夹出碎晶">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回天文翼楼 (0:02)|MP Region Observatory Wing]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<mpsneakicon>><<link [[绕书架门返旧翼楼 (0:07)|MP Region Observatory Wing]]>><<pass 7>><<set $mpObsDepth to 0>><<stress 2>><<tiredness 2>><</link>>
 
-:: MP Region Observatory AnemometerLeatherCase [nobr]
-<<set $outside to 0>><<set $location to "school">>
-<<effects>>
-钟楼连廊西侧的石柱壁龛里立着一座铜制风速计，风杯下方卡着一只小皮匣。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你从风杯下解下皮匣，匣里是一小卷风速记录和一枚铜制风标。
+:: MP Region Observatory Starmap Rack [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<set $mpObsChainDone to ($mpObsChainDone or {})>>
+樟木画架底层塞着编号『1894』的沉重铜版星图筒，地球仪赤道裂缝与阅读机镜头槽里则藏着『雾角海域』索引卡和未归档的金属胶片盒。<<if $mpObsStarEntry is "sneak">>前排传来学长翻书的沙沙声，他没察觉有人绕到了北壁画架后。<<else>>学长点点头重又埋首核对目录，任由你在里侧查阅。<</if>><<if $mpObsChainDone["starmap"]>>画筒与阅读机胶片都已取过，待机红灯静静亮着。<<elseif ($mpObsLamp or 0) lte 0>>灯油已尽，你只能借着阅读机那一点微弱红光摸索画架。<</if>>
 <br><br>
-<<mpcarryicon>><<link [[取出皮匣 (0:07)|MP Region Observatory Bridge]]>><<pass 7>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[退回天文池 (0:04)|MP Region Pool Observatory]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[挑开内衬 (0:06)|MP Region Observatory Bridge]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_observatory_anemometerleathercase_reward")>><<money 548>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_observatory_anemometerleathercase")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[挑开内衬 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "挑开内衬">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<if !$mpObsChainDone["starmap"]>>
+<<mpcarryicon>><<link [[抱走铜版星图重筒 (0:09)|MP Region Observatory Starmap Exit]]>><<pass 9>><<set $mpObsStarPick to "heavy">><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 3)>><<tiredness 3>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("obs_chain_starmap_heavy")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 350>><<stress -2>><</if>><<set $mpObsChainDone["starmap"] to 1>><</link>>
 <br>
-<<getouticon>><<link [[返回天文翼楼 (0:02)|MP Region Observatory Wing]]>><<pass 2>><<stress -1>><</link>><<lstress>>
+<<mpastroicon>><<link [[抽走雾角索引卡 (0:06)|MP Region Observatory Starmap Exit]]>><<pass 6>><<set $mpObsStarPick to "light">><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 1)>><<if !$mpObsFoghornCard>><<set $mpObsFoghornCard to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["obs_foghorn_index"] to 1>><<stress -3>><<willpower 1>><</if>><<set $mpObsChainDone["starmap"] to 1>><</link>>
+<br>
+<</if>>
+<<walkicon>><<link [[出室回旧翼楼 (0:05)|MP Region Observatory Wing]]>><<pass 5>><<set $mpObsDepth to 0>><</link>>
 
-:: MP Region Observatory LooseStepRedRibbon [nobr]
-<<set $outside to 0>><<set $location to "school">>
-<<effects>>
-连廊通往钟楼侧门的石阶下垫着一块松动的青石砖，砖缝里露出一截红绸带。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你掀起松动青砖，红绸带下包着一小串铜钥匙和一张钟楼侧门图。
+:: MP Region Observatory Starmap Exit [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+你从高耸的樟木画筒架后方退到侧廊，档案室正门与南窗外的采光窄檐各通向一头。<<if $mpObsStarPick is "heavy">>『1894』铜版星图重筒沉甸甸地压在肩上，筒底的旧银币随步伐轻响。<<else>>『雾角海域』索引卡与缩微胶片贴身收好，阅读机依旧亮着待机红灯。<</if>><<if ($mpObsLamp or 0) lte 0>>阅读灯灭了，你摸黑贴住星图柜的铜包边探路。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>湿冷的裤脚擦过木地板，留下一道水印。<</if>><<if ($mpObsAlert or 0) gte 6>>档案室门外晃着手电光，值夜学长正与教工低声交谈。<</if>>
 <br><br>
-<<mpcarryicon>><<link [[抬起石砖 (0:04)|MP Region Observatory Bridge]]>><<pass 4>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[出木门退回池 (0:06)|MP Region Pool Observatory]]>><<pass 6>><<set $mpObsDepth to 0>><<if $mpObsStarPick is "heavy">><<tiredness 2>><<stress 2>><</if>><<if ($mpObsAlert or 0) gte 6>><<stress 3>><<set $mpObsAlert to Math.max(0, ($mpObsAlert or 0) - 1)>><</if>><</link>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[解开布包 (0:06)|MP Region Observatory Bridge]]>><<pass 6>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_observatory_loosestepredribbon_reward")>><<money 370>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_observatory_loosestepredribbon")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[解开布包 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "解开布包">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
+<<mpclimbicon>><<link [[攀南窗采光檐险撤 (0:08)|MP Region Pool Observatory]]>><<pass 8>><<set $mpObsDepth to 0>><<if $mpObsStarPick is "heavy" or ($mpObsLamp or 0) lte 0>><<pain 2>><<stress 4>><<else>><<stress -1>><</if>><</link>>
 <br>
-<<getouticon>><<link [[返回天文翼楼 (0:03)|MP Region Observatory Wing]]>><<pass 3>><<stress -1>><</link>><<lstress>>
+<<walkicon>><<link [[回旧翼楼 (0:05)|MP Region Observatory Wing]]>><<pass 5>><<set $mpObsDepth to 0>><</link>>
+
+:: MP Region Observatory Pendulum Chain [nobr]
+<<set $outside to 1>><<set $location to "school">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Observatory Pendulum Chain"] to 1>><<set $mpObsChainDone to ($mpObsChainDone or {})>>
+钻过连廊中段的天花板检修活门，一阵穿堂狂风猛地将活门合拢，打结的麻绳缩回高处暗槽，原路已无法够及。半露天石砌连廊架在学园屋顶飞扶壁之间，石柱壁龛里立着嗡嗡急转的铜风速计，拱窗外的排水石兽背上卡着铁皮盒，下方垂着连通地动仪的长钟摆。<<if ($mpObsLamp or 0) lte 0>>阅读灯被穿堂风吹灭，只能听见风杯与钟摆的金属颤音。<<else>>灯光映出钟楼侧门石阶下露出的半截红绸带。<</if>><<if ($mpObsDepth or 0) gte 2>>你已站在屋顶连廊最高处，牛津街的夜雾就在脚下翻涌。<</if>>
+<br><br>
+<<getouticon>><<link [[默数风杯与钟摆拍 (0:09)|MP Region Observatory Pendulum Bridge]]>><<pass 9>><<set $mpObsLamp to Math.max(0, ($mpObsLamp or 0) - 1)>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 1)>><<set $mpObsPendulumSeen to 1>><<tiredness 1>><</link>>
+<br>
+<<if ($athletics or 0) gte 260 or ($science or 0) gte 250>>
+<<mpwatchicon>><<link [[贴着石柱穿连廊 (0:06)|MP Region Observatory Pendulum Bridge]]>><<pass 6>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpdiveicon>><<link [[顶穿堂冷风闯 (0:06)|MP Region Observatory Pendulum Draft]]>><<pass 6>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<pain 2>><<stress 4>><<tiredness 2>><<lowerwet 30>><</link>>
+<</if>>
+
+:: MP Region Observatory Pendulum Draft [nobr]
+<<set $outside to 1>><<set $location to "school">><<effects>><<mpAmbient>>
+飞扶壁间的穿堂狂风猛地掀翻了你的重心，手肘撞在铜风速计的支架上，风杯发出尖利啸叫，拱窗外的积水顺着石兽凹槽泼了你一身。身后的天花板活门早已死死扣合，退不回池口；钟楼下方很快传来守夜人的喝问声，你只能从侧门石阶或屋脊撤离。<<if ($mpObsLamp or 0) lte 0>>灯火全灭，你在湿滑的青石屋顶边缘摸索着挪步。<<else>>你把灯揣进怀里挡风，火苗晃得几乎熄灭。<</if>><<if ($mpObsAlert or 0) gte 6>>连廊两头的气窗同时亮起了巡逻手电光。<</if>>
+<br><br>
+<<getouticon>><<link [[下侧门石阶脱身 (0:07)|MP Region Observatory Wing]]>><<pass 7>><<set $mpObsDepth to 0>><<tiredness 2>><<stress 3>><<lowerwet 25>><</link>>
+<br>
+<<mpsneakicon>><<link [[顺飞扶壁槽回翼楼 (0:06)|MP Region Observatory Wing]]>><<pass 6>><<set $mpObsDepth to 0>><<tiredness 3>><<stress 2>><<lowerwet 20>><</link>>
+
+:: MP Region Observatory Pendulum Bridge [nobr]
+<<set $outside to 1>><<set $location to "school">><<effects>><<mpAmbient>>
+<<set $mpObsChainDone to ($mpObsChainDone or {})>>
+连廊拱窗外的排水石兽背上卡着生锈铁皮盒，石柱壁龛的风速计下塞着小皮匣，侧门松动的青石砖缝里则露出一截包着侧门图纸的红绸带。<<if $mpObsRulerKey>>压纸铜尺下的小钥匙正好能无声旋开石兽铁皮盒与皮匣铜扣。<<else>>手头没有匹配钥匙，撬动铁皮盒盖时带起一串金属颤音。<</if>><<if $mpObsChainDone["pendulum"]>>风速计皮匣与青砖暗格都已翻看，只余长钟摆随风轻晃。<<elseif $mpObsPendulumSeen>>你先前算准了阵风与钟摆的间隙，伸手探取时稳稳当当。<</if>>
+<br><br>
+<<getouticon>><<link [[退回旧翼楼 (0:05)|MP Region Observatory Wing]]>><<pass 5>><<set $mpObsDepth to 0>><</link>>
+<br>
+<<if !$mpObsChainDone["pendulum"]>>
+<<mpclockworkicon>><<link [[校准钟摆配重栓 (0:08)|MP Region Observatory Pendulum Exit]]>><<pass 8>><<set $mpObsPendulumPick to "align">><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 3)>><<if !$mpObsPendulumAligned>><<set $mpObsPendulumAligned to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["obs_pendulum_aligned"] to 1>><<stress -4>><<willpower 2>><</if>><<set $mpObsChainDone["pendulum"] to 1>><</link>>
+<br>
+<<mpsneakicon>><<link [[抽走红绸带侧门图 (0:08)|MP Region Observatory Pendulum Exit]]>><<pass 8>><<set $mpObsPendulumPick to "ribbon">><<if !$mpObsRulerKey>><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 1)>><</if>><<if !$mpObsBridgeMap>><<set $mpObsBridgeMap to 1>><<set $mpClues to ($mpClues or {})>><<set $mpClues["obs_bridge_map"] to 1>><<skulduggery 2>><<stress -3>><</if>><<set $mpObsChainDone["pendulum"] to 1>><</link>>
+<br>
+<<else>>
+<<link [[顺石阶回翼楼 (0:04)|MP Region Observatory Wing]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
+<</if>>
+
+:: MP Region Observatory Pendulum Exit [nobr]
+<<set $outside to 1>><<set $location to "school">><<effects>><<mpAmbient>>
+你退到钟楼连廊西端，侧门石阶与飞扶壁排水石槽都能绕回天文翼楼内层，来时的天花板活门仍旧紧闭。<<if $mpObsPendulumPick is "align">>地动钟摆的配重栓已校准，低沉的共振传向暗阁底座，也惊动了楼下巡查。<<else>>红绸带里的侧门图纸与风速记录折好揣入怀中，青石砖原样垫平。<</if>><<if ($mpObsLamp or 0) lte 0>>灯火被风吹熄，你靠着石栏听钟摆余响辨别下行的台阶。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>屋顶冷雨打湿了衣袖，高处寒风吹得人手脚冰凉。<</if>><<if ($mpObsAlert or 0) gte 6>>侧门石阶下亮起手电光，守夜教工正守在拐角。<</if>>
+<br><br>
+<<getouticon>><<link [[下侧门石阶回池 (0:05)|MP Region Pool Observatory]]>><<pass 5>><<set $mpObsDepth to 0>><<if ($mpObsAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpObsAlert to Math.max(0, ($mpObsAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpropeicon>><<link [[顺飞扶壁水槽滑下 (0:07)|MP Region Pool Observatory]]>><<pass 7>><<set $mpObsDepth to 0>><<tiredness 2>><<if ($mpObsLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回旧翼楼 (0:04)|MP Region Observatory Wing]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
+
+:: MP Region Observatory Meteorite Chain [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpSeenScenes["MP Region Observatory Meteorite Chain"] to 1>><<set $mpObsChainDone to ($mpObsChainDone or {})>>
+标本陈列暗阁里摆着三排矿石晶簇，旋转玻璃架上搁着塞绒布的海螺化石，北角药水柜底层放着铅制陨石标本盒，实验桌下还沉着一只泡有金光古印戒的棕色广口瓶。<<if ($mpObsAlert or 0) gte 6>>走廊外教工的脚步声近在咫尺，你已没法静下心细转紫水晶簇底座，只能强行撬开铅盒。<<elseif ($mpObsLamp or 0) lte 0>>阅读灯断油，矿石标签背面的坐标刻字在暗处难以辨认。<</if>><<if ($mpObsDepth or 0) gte 2>>你已潜入暗阁最里层，四周满是矿石与防腐药水的冷冽气味。<</if>>
+<br><br>
+<<getouticon>><<link [[退回天文池 (0:03)|MP Region Pool Observatory]]>><<pass 3>><<set $mpObsDepth to 0>><</link>>
+<br>
+<<if ($mpObsAlert or 0) lt 6>>
+<<if (($mpObsLamp or 0) gte 1 and (($science or 0) gte 250 or ($history or 0) gte 240)) or (($science or 0) gte 380 and ($history or 0) gte 360)>>
+<<mplockpickicon>><<link [[旋开紫晶簇底座 (0:07)|MP Region Observatory Meteorite Vault]]>><<pass 7>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<tiredness 1>><</link>>
+<<else>>
+<<mpsneakicon>><<link [[碰翻桌下药瓶 (0:07)|MP Region Observatory Meteorite Spill]]>><<pass 7>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 2)>><<stress 3>><<tiredness 1>><</link>>
+<</if>>
+<br>
+<</if>>
+<<mpbellicon>><<link [[用铜镊硬撬标本盒 (0:07)|MP Region Observatory Meteorite Vault]]>><<pass 7>><<set $mpObsDepth to Math.min(3, ($mpObsDepth or 0) + 1)>><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 3)>><<pain 1>><<stress 2>><<tiredness 2>><</link>>
+<br>
+<<link [[回旧翼楼 (0:04)|MP Region Observatory Wing]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
+
+:: MP Region Observatory Meteorite Spill [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+你的靴尖在暗处踢翻了实验桌下的棕色广口瓶，玻璃碎裂声混着刺鼻的防腐液漫过石板地，裤脚顿时湿了一片。走廊尽头立刻响起急促的皮鞋声与哨响，暗阁正门已被教工从外头堵住，只能走标本柜后的排风道撤离。<<if ($mpObsLamp or 0) lte 0>>黑暗里你被歪斜的化石石板磕破了手背。<<else>>你赶紧捂住灯罩，退向药水柜后的夹缝。<</if>><<if ($mpObsAlert or 0) gte 6>>门锁哗啦一响，有人正在外头插钥匙开门。<</if>>
+<br><br>
+<<getouticon>><<link [[钻标本柜回旧翼楼 (0:07)|MP Region Observatory Wing]]>><<pass 7>><<set $mpObsDepth to 0>><<stress 3>><<tiredness 2>><</link>>
+<br>
+<<mpsneakicon>><<link [[顺通风槽回池口 (0:06)|MP Region Pool Observatory]]>><<pass 6>><<set $mpObsDepth to 0>><<stress 2>><<tiredness 2>><<lowerwet 15>><</link>>
+
+:: MP Region Observatory Meteorite Vault [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+<<set $mpObsChainDone to ($mpObsChainDone or {})>>
+药水柜底层的铅制标本盒里躺着几枚陨石碎晶与古印戒，海螺化石的绒布塞里裹着一张写有雾角坐标的矿石标签，古生物化石铭牌后还压着几枚旧银币。<<if $mpObsChainDone["meteorite"]>>铅盒与海螺化石都已检视完毕，夜光萤石在玻璃柜里泛着微光。<<elseif ($mpObsLamp or 0) lte 0>>灯油告罄，矿石标签背面的细小坐标看不真切，只能凭手感摸索。<</if>><<if ($mpObsLamp or 0) gte 1 and !$mpObsChainDone["meteorite"]>>借着灯光，你看清了标签背面的旧港与雾角经纬坐标。<</if>>
+<br><br>
+<<getouticon>><<link [[退回天文池 (0:04)|MP Region Pool Observatory]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
+<br>
+<<if !$mpObsChainDone["meteorite"]>>
+<<if ($mpObsLamp or 0) gte 1>>
+<<mphearticon>><<link [[留存标本记坐标 (0:07)|MP Region Observatory Meteorite Exit]]>><<pass 7>><<set $mpObsMeteorPick to "leave">><<set $mpObsAlert to Math.max(0, ($mpObsAlert or 0) - 1)>><<if !$mpObsMeteorChoice>><<set $mpObsMeteorChoice to "leave">><<set $mpClues to ($mpClues or {})>><<set $mpClues["obs_meteorite_coord"] to 1>><<stress -5>><<willpower 2>><</if>><<set $mpObsChainDone["meteorite"] to 1>><</link>>
+<br>
+<</if>>
+<<mpcarryicon>><<link [[带走印戒与陨石盒 (0:07)|MP Region Observatory Meteorite Exit]]>><<pass 7>><<set $mpObsMeteorPick to "take">><<set $mpObsAlert to Math.min(10, ($mpObsAlert or 0) + 2)>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("obs_chain_meteorite_relic")>><<set $mpObsMeteorChoice to "take">><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><<money 400>><<stress -2>><</if>><<set $mpObsChainDone["meteorite"] to 1>><</link>>
+<br>
+<</if>>
+<<walkicon>><<link [[出阁回旧翼楼 (0:05)|MP Region Observatory Wing]]>><<pass 5>><<set $mpObsDepth to 0>><</link>>
+
+:: MP Region Observatory Meteorite Exit [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
+标本陈列暗阁门外的木走廊冷清幽暗，正门过道与药水柜后的排风竖井各通向一头。<<if $mpObsMeteorPick is "leave">>你将铅制标本盒与海螺绒布塞原样放回展柜，只把陨石标签上的经纬坐标记在心里。<<else>>古印戒与陨石碎晶盒揣进衣袋，你反手把那扇玻璃柜门轻轻带上。<</if>><<if ($mpObsLamp or 0) lte 0>>黑地里没有一丝光，你扶着标本柜侧身倒退，慢慢挪向门口。<<elseif ($upperwet or 0) gte 30 or ($lowerwet or 0) gte 30>>湿冷的裤管沾着药水味，穿堂风吹得脚踝发麻。<</if>><<if ($mpObsAlert or 0) gte 6>>走廊尽头站着提手电的教工，正挨个检查展柜锁头。<</if>>
+<br><br>
+<<getouticon>><<link [[出暗阁门回池 (0:05)|MP Region Pool Observatory]]>><<pass 5>><<set $mpObsDepth to 0>><<if ($mpObsAlert or 0) gte 6>><<stress 3>><<tiredness 1>><<set $mpObsAlert to Math.max(0, ($mpObsAlert or 0) - 1)>><<else>><<stress -1>><</if>><</link>>
+<br>
+<<mpclimbicon>><<link [[攀药柜后排风井撤 (0:07)|MP Region Pool Observatory]]>><<pass 7>><<set $mpObsDepth to 0>><<tiredness 2>><<if ($mpObsLamp or 0) lte 0>><<pain 2>><<stress 3>><</if>><</link>>
+<br>
+<<walkicon>><<link [[回旧翼楼 (0:04)|MP Region Observatory Wing]]>><<pass 4>><<set $mpObsDepth to 0>><</link>>
 
 :: MP Region Foghorn StarfishBronzeKey [nobr]
 <<set $outside to 1>><<set $location to "sea">>
 <<effects>>
 海蚀回音廊北壁的气孔下挂着一只风干的海星标本，背面粘着一枚古铜钥匙。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在古铜钥匙表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你从海星标本背面揭下钥匙，标本下还粘着一小片写着坐标的羊皮。
+<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在古铜钥匙表面结了薄霜，盐晶在暗光下泛着冷冽的微芒。<<else>>空气里带着海洞微温，潮声在石拱深处低沉回荡。<</if>>
+你从海星标本背面揭下钥匙，标本下还粘着一小片写着暗礁坐标的羊皮残卷。
 <br><br>
-<<beachicon>><<link [[揭下铜钥 (0:06)|MP Region Foghorn Echo]]>><<pass 6>><<stress -3>><</link>><<lstress>>
+<<getouticon>><<link [[回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><<stress -1>><</link>><<lstress>>
 <br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[取下坐标 (0:08)|MP Region Foghorn Echo]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_foghorn_starfishbronzekey_reward")>><<money 1087>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_foghorn_starfishbronzekey")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取下坐标 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取下坐标">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
+<<beachicon>><<link [[揭下铜钥匙 (0:06)|MP Region Foghorn Echo]]>><<pass 6>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_foghorn_starfishbronzekey_reward")>><<money 350>><</if>><<stress -3>><</link>><<lstress>>
 <br>
-<<getouticon>><<link [[返回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><<stress -1>><</link>><<lstress>>
-
-:: MP Region Clockwork DatedLeadSealBox [nobr]
-<<set $outside to 0>><<set $location to "underground">>
-<<effects>>
-青铜齿轮回廊南端的仪表箱门虚掩着，里面挂着一串标有年份的黄铜铅封牌。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你拉开仪表箱门，铅封牌按年份排着，最末一枚背面刻着一串编号。
-<br><br>
-<<investigateicon>><<link [[拉开箱门 (0:05)|MP Region Clockwork Corridor]]>><<pass 5>><<stress -3>><</link>><<lstress>>
-<br>
-<<mplockpickicon>><<if ($skulduggery or 0) gte 280>><<link [[起出铅封 (0:08)|MP Region Clockwork Corridor]]>><<pass 8>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_clockwork_datedleadsealbox_reward")>><<money 390>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_clockwork_datedleadsealbox")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[起出铅封 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "起出铅封">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
-<br>
-<<mpclockworkicon>><<link [[返回机括城 (0:03)|MP Region Clockwork Undercity]]>><<pass 3>><<stress -1>><</link>><<lstress>>
-
-:: MP Region Abbey RotatableCandelabra [nobr]
-<<set $outside to 0>><<set $location to "temple">>
-<<effects>>
-静默石阶第四十八级拐角的烛台底座可以旋动，蜡盘下压着一张古羊皮纸条。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你旋动烛台底座，蜡盘下压着羊皮纸条，底座里还藏着一小截蜡烛。
-<br><br>
-<<templeicon>><<link [[旋动底座 (0:06)|MP Region Abbey Steps]]>><<pass 6>><<stress -3>><</link>><<lstress>>
-<br>
-<<mpreadicon>><<if ($skulduggery or 0) gte 280>><<link [[抽出纸条 (0:06)|MP Region Abbey Steps]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_abbey_rotatablecandelabra_reward")>><<money 477>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_abbey_rotatablecandelabra")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[抽出纸条 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "抽出纸条">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回修道院 (0:02)|MP Region Sunken Abbey]]>><<pass 2>><<stress -1>><</link>><<lstress>>
-
-:: MP Region Abbey MyrrhBadgeCase [nobr]
-<<set $outside to 0>><<set $location to "temple">>
-<<effects>>
-告解回音壁南侧的石雕烛台座下压着一只生锈的银质徽章盒，盒缝里渗出淡淡的没药味。
-<<mpAmbient>><<if Weather.isFreezing>>薄薄的霜花挂在的没药味外侧。<<else>>空气里带着微温。<</if>>
-你撬开盒缝，没药气味散出，盒里是一枚旧徽章和一小块包着蜡纸的树脂。
-<br><br>
-<<mpsewicon>><<link [[撬开盒缝 (0:05)|MP Region Abbey Confess]]>><<pass 5>><<stress -3>><</link>><<lstress>>
-<br>
-<<mpcarryicon>><<if ($skulduggery or 0) gte 280>><<link [[取出树脂 (0:07)|MP Region Abbey Confess]]>><<pass 7>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_abbey_myrrhbadgecase_reward")>><<money 819>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_abbey_myrrhbadgecase")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取出树脂 (0:07)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取出树脂">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 7>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回修道院 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><<stress -1>><</link>><<lstress>>
-
-:: MP Region Glasshouse HygrometerHiddenBox [nobr]
-<<set $outside to 0>><<set $location to "avery_mansion">>
-<<effects>>
-雾化兰花厅西墙的自动排风百叶下挂着一只铜制湿度表，表盘后方藏着一格小木匣。
-<<mpAmbient>><<if Weather.precipitation is "rain">>雨声掩去了响动。<<else>>四周静谧无声。<</if>>
-你摘下湿度表，表盘后的小木匣里放着一小瓶营养液和一张温控记录。
-<br><br>
-<<mpclockworkicon>><<link [[摘下湿度表 (0:07)|MP Region Glasshouse Orchid]]>><<pass 7>><<stress -3>><</link>><<lstress>>
-<br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[打开木匣 (0:08)|MP Region Glasshouse Orchid]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_glasshouse_hygrometerhiddenbox_reward")>><<money 527>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_glasshouse_hygrometerhiddenbox")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[打开木匣 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "打开木匣">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回温室 (0:03)|MP Region Glasshouse Manor]]>><<pass 3>><<stress -1>><</link>><<lstress>>
-
-:: MP Region Blackiron DeadEndFlagTube [nobr]
-<<set $outside to 1>><<set $location to "elk">>
-<<effects>>
-废弃调车场三号股道的枕木尽头埋着一只铁皮信号旗筒，筒盖用铅丝拧成了死扣。
-<<mpAmbient>><<if Time.dayState is "night">>夜深无人察觉。<<else>>光线照亮了纹理。<</if>>
-你拧开铅丝死扣，筒里没有旗，只有一卷防水纸和几枚被油布包着的硬币。
-<br><br>
-<<mprepairicon>><<link [[拧开铅丝 (0:07)|MP Region Blackiron Siding]]>><<pass 7>><<stress -3>><</link>><<lstress>>
-<br>
-<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[倒出油布卷 (0:08)|MP Region Blackiron Siding]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_blackiron_deadendflagtube_reward")>><<money 396>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_blackiron_deadendflagtube")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[倒出油布卷 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "倒出油布卷">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><<stress -1>><</link>><<lstress>>
-
-:: MP Region Velvet HollowCrystalTassel [nobr]
-<<set $outside to 0>><<set $location to "brothel">>
-<<effects>>
-丝绒假面回廊东端的水晶壁灯座下垂着一串紫水晶流苏，最中间的一颗水晶是空心的。
-<<mpAmbient>><<if Weather.isFreezing>>微凉水雾在是空心的表面结了薄霜。<<else>>空气里带着微温。<</if>>
-你旋下空心水晶，里面卷着一小片写着寄售人姓名的薄纸。
-<br><br>
-<<mpswimicon>><<link [[旋下水晶 (0:07)|MP Region Velvet Masque]]>><<pass 7>><<stress -3>><</link>><<lstress>>
-<br>
-<<sneakicon>><<if ($skulduggery or 0) gte 280>><<link [[抽出纸卷 (0:06)|MP Region Velvet Masque]]>><<pass 6>><<if ($skulduggery or 0) gte 280>><<skulduggery 2>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_velvet_hollowcrystaltassel_reward")>><<money 748>><</if>><<stress -4>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_velvet_hollowcrystaltassel")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[抽出纸卷 (0:06)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "抽出纸卷">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 6>><</link>><</if>>
-<br>
-<<getouticon>><<link [[返回天鹅绒厅 (0:04)|MP Region Velvet Mirage]]>><<pass 4>><<stress -1>><</link>><<lstress>>
+<<sneakicon>><<if ($skulduggery or 0) gte 250>><<link [[取下坐标羊皮卷 (0:08)|MP Region Foghorn Echo]]>><<pass 8>><<if ($skulduggery or 0) gte 250>><<skulduggery 2>><<stress -4>><<set $mpClues to ($mpClues or {})>><<set $mpClues["foghorn_starfish_coord"] to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mp_region_ev_foghorn_starfishbronzekey")>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<else>><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>><</if>><</link>><<else>><<link [[取下坐标羊皮 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "取下坐标羊皮">><<set $mpInsuffReq to "诡术等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>

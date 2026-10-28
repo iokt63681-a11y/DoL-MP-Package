@@ -1,266 +1,223 @@
 :: MP Loc Orphanage Hub [nobr]
-<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-暮色从宅邸街尽头漫过来时，孤儿院那扇掉了漆的橡木大门照例虚掩着。门厅只点着一盏罩子熏黑的煤油灯，光晕勉强照亮墙上的木牌——住户名单、每周应付的数目，以及几条用红铅笔圈出的禁令，字迹被潮气浸得发毛。楼梯扶手被几十双小手磨得发亮，二楼传来孩童压低的嬉闹，三楼阁楼的地板随脚步发出细碎的呻吟；再往下，是通往地下储煤间的窄门，和院长室那扇永远上锁的厚木门。这栋房子把白昼的杂务、夜里的账目与见不得光的东西，分门别类地藏进不同的楼层。
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>><<mpLedgerInit>><<mpLedgerTick>>
+暮色漫过宅邸街时，孤儿院那扇掉漆的橡木门照例虚掩着。门厅只点一盏熏黑的煤油灯，墙上的木牌记着名单、周债与几条红铅笔禁令。
 <br><br>
-【院舍近况】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 雾潮水尺 <<print ($mpFogTide or 0)>> ｜ <<if $mpWorldOrphanageOutcome is "mutualaid">>区域终局：互助工坊的灯火已经点亮。<<elseif $mpWorldOrphanageOutcome is "sheltered">>区域终局：静谧庇护的窗帘低垂。<<else>>区域终局：尚未定局。<</if>><<if $mpWorldLinGym or $mpWorldLinCaptain>>林恩的旧案余波仍在这片街区回响。<</if>>
+牌子背后另钉着一颗新钉。<<if $mpWorldOrphanageOutcome is "mutualaid">>后院传来刨木头的钝响。<<elseif $mpWorldOrphanageOutcome is "sheltered">>门后钥匙串挂成一排。<<else>>木牌上的数目还是老样子。<</if>><<if $mpWorldLinGym or $mpWorldLinCaptain>>巷口有人守着。<</if>><<if $mpLocProgress_Orphanage gte 3>>边角划痕一道压着一道。<<elseif $mpLocProgress_Orphanage gte 1>>边角新添了一道划痕。<</if>><<if $mpWorldLedgerLoss>>靠窗的床空着，名字被炭条抹掉了。<<elseif $mpLedgerEnded>>账已经落定，夜里没人敲门。<<elseif $mpLedger.overdue gt 0>>红杠又添了几道。<</if>>
 <br><br>
-罗宾抱着一摞刚叠好的旧床单从楼梯口探出半个身子，声音轻得像怕惊动灰尘：「你回来啦。贝利先生在办公室里，今天脸色不太好。要是在后院或厨房帮忙，动静小一点，别让他抓到由头。」话音未落，院长室里传来一声不紧不慢的咳嗽，接着是钢笔搁在桌面的轻响——那既是提醒，也是催促。
+<<print _robin>>抱着旧床单从楼梯口探头，低声说<<print _bailey>>今天脸色不好，干活时动静小些。
 <br><br>
-你可以在门厅里理一理今天该从哪一层入手：表层的卧室、后院与厨房是日常的落脚处；中层要靠阁楼与图书角攒下足够的手脚与人情，才摸得到通往深处的门路；至于地下储煤间与院长室，那里藏着这栋房子真正的账——一边是压得人喘不过气的欠款，一边是几个名字写得歪歪扭扭的保护名单。
-<br><br>
-走廊尽头，浴室的搪瓷缸沿缺了一块，客厅的沙发塌着半边；每一处破败都被人反复擦洗、缝补、将就着用下来。你在这里长大，闭着眼也数得出哪块地板会响。如今雾潮一年比一年高，街上的风声也一年比一年紧，这栋旧房子既是牢笼，也是少数还能遮风挡雨的地方。
-<br><br>
+<<if !$mpLedgerEnded>>煤房尽头那道暗门后藏着院长的私账，距下次翻账还有 <<print Math.max(0, ($mpLedger.nextDueDay or 0) - Time.days)>> 天<<if $mpLedger.overdue gt 0>>，已经逾期 <<print $mpLedger.overdue>> 笔<</if>>。中段的旧欠条堆能翻到它。
+<br><br><</if>>
 <<getouticon>><<link [[返回木牌告示 (0:04)|MP Town Side Notices Hub]]>><<pass 4>><</link>><br>
 <<walkicon>><<link [[探索孤儿院表层 (0:06)|MP Loc Orphanage Surface]]>><<pass 6>><</link>><br>
-<<investigateicon>><<link [[深入孤儿院中层 (0:08)|MP Loc Orphanage Mid]]>><<pass 8>><</link>><br>
-<<sneakicon>><<link [[潜入孤儿院深层 (0:10)|MP Loc Orphanage Deep]]>><<pass 10>><</link>><br>
-<<link [[观测季节异象 (0:06)|MP Loc Orphanage Season]]>><<pass 6>><</link>>
-<br><<link [[查看四季活动 (0:03)|MP Loc Orphanage Festival Hub]]>><<pass 3>><</link>>
-<br><<link [[核查孤儿院账本 (0:04)|MP Ledger Hub]]>><<pass 4>><</link>>
-<br><<link [[更多日常 (0:03)|MP Loc Orphanage More Hub]]>><<pass 3>><</link>>
+<<investigateicon>><<link [[深入院中段 (0:08)|MP Loc Orphanage Mid]]>><<pass 8>><</link>><br>
+<<if $mpLocProgress_Orphanage gte 2 or $mpLocEvents_Orphanage gte 2>><<sneakicon>><<link [[潜入孤儿院最深层 (0:10)|MP Loc Orphanage Deep]]>><<pass 10>><</link>><br><</if>>
+<<link [[更多日常 (0:03)|MP Loc Orphanage More Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Orphanage Surface [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-白昼的孤儿院难得有一点松快的气息。后院的晾衣绳从砖墙这头牵到那头，湿床单在风里鼓成一面面柔软的帆；厨房的小窗半开着，麦粥的热气混着肥皂水的碱味一起飘出来。罗宾踩在木凳上够晾衣绳，脚边的木盆里还泡着最后几件衬裙；两个年纪更小的孩子蹲在墙根数蚂蚁，见你过来便仰起脸，把沾泥的手往衣襟上胡乱一抹。
+白昼的孤儿院难得松快。后院晾衣绳上挂着湿床单，厨房小窗飘出麦粥的热气。<<print _robin>>踩着木凳收衣服，几个小的蹲在墙根数蚂蚁。
 <br><br>
-【今日院务】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 后院与厨房都还有活没做完。
+门边小木板用粉笔划着今日份数，划到一半停住。<<print _bailey>>办公室的窗帘掀开一角，又放下。院里没有真正的清闲，做慢了都会变成账本上的一笔。
 <br><br>
-贝利办公室的窗帘掀开一角，又放下了。你很清楚，这栋房子里没有真正的清闲——晾衣绳上的床单要赶在落雨前收拢，厨房的夜宵要按人头分匀，哪一样做慢了，都会变成账本上的一笔。走廊尽头的浴室门开着，搪瓷浴缸边缘磕掉一块，露出底下的黑铁；客厅的长沙发塌了一角，靠垫上补着颜色不一的布片。
-<br><br>
-后院晾衣绳架旁，风把最后一只木夹子吹得直打转，几件半干的衣服已经蹭到了墙灰；厨房那边，分餐用的铝锅架上了炉子，罗宾正按名单数人头。你可以先挑一件顺手的事做起来，把手脚活动开，也可以往楼上走，去看看阁楼与图书角今天有什么动静。无论先做哪一样，今天总得给这栋房子留下一点实实在在的进展。
-<br><br>
-院子角落那棵老树把影子铺过半个后院，树皮上留着几道深浅不一的刻痕，是历年来孩子们量身高的记号。你路过时伸手比了比，最新的那道几乎与你齐肩——又有一批孩子悄悄长高了，也又有一批孩子不知去了哪里。
-<br><br>
-厨房后窗下堆着一摞待洗的碗，皂角水已经浑了。罗宾说今天的分餐名单又添了一个名字，是从街口捡回来的孩子，瘦得颧骨都突出来。贝利不肯多给一份口粮，只说要按老规矩来——老规矩究竟是什么，谁也说不清，反正总是让孩子们少吃一口。你把袖子挽起来，先把手边这盆水换掉，再想想今晚该怎么匀。
+厨房后窗下堆着待洗的碗。<<print _robin>>说分餐名单又添了一个从街口捡回来的孩子，<<print _bailey>>却不肯多给一份口粮。你挽起袖子，先换掉手边这盆水。
 <br><br>
 <<getouticon>><<link [[返回孤儿院总枢 (0:02)|MP Loc Orphanage Hub]]>><<pass 2>><</link>><br>
 <<investigateicon>><<link [[后院晾衣绳架 (0:10)|MP Loc Orphanage Event 1]]>><<pass 10>><</link>><br>
-<<shopicon>><<link [[厨房夜宵分餐 (0:10)|MP Loc Orphanage Event 2]]>><<pass 10>><</link>><br>
-<<walkicon>><<link [[前往孤儿院中层 (0:06)|MP Loc Orphanage Mid]]>><<pass 6>><<set $mpLocProgress_Orphanage to Math.max($mpLocProgress_Orphanage, 1)>><</link>>
+<<shopicon>><<link [[夜宵分餐处 (0:10)|MP Loc Orphanage Event 2]]>><<pass 10>><</link>><br>
+<<walkicon>><<link [[去院中段 (0:06)|MP Loc Orphanage Mid]]>><<pass 6>><<set $mpLocProgress_Orphanage to Math.max($mpLocProgress_Orphanage, 1)>><</link>>
+<br><<link [[到院子里看看天色 (0:06)|MP Loc Orphanage Season]]>><<pass 6>><</link>>
 
 :: MP Loc Orphanage Mid [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-入夜后，阁楼的木梯比白天更响。旧木箱一只只摞在斜屋顶下，箱盖积着薄灰，铜锁多半锈死；再往里，图书角那盏煤油灯把半面墙照成暖黄，几个孩子挤在旧毯子里，等你把书页翻开。中层的活计从来不是一个人能做完的：箱子里的旧衣物要分拣，灯盏要添油，孩子们要有人看着，而贝利每隔一阵就会上楼来，看看有没有人躲懒。
+入夜后，阁楼的木梯比白天更响。旧木箱摞在斜屋顶下，图书角的煤油灯照着一角暖黄，几个孩子挤在旧毯子里等你翻书。
 <br><br>
-【中层近况】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 已完成事件 <<print $mpLocEvents_Orphanage>> ｜ 阁楼与图书角都还亮着。
+<<print _robin>>把一摞旧毛衣搬下阁楼，压低声音说<<print _bailey>>上个月给里门换了新锁，想下去得先把这层的事做熟，别一个人去。
 <br><br>
-罗宾帮我把一摞旧毛衣搬下阁楼，压着嗓子说：「再往里那道门，贝利上个月换了新锁。你要真想下去，得先把这层的事做熟——不然黑灯瞎火地撞进去，只会被他当成想偷东西的。」他说完又补了一句，「我不是拦你。只是……别一个人去。」
-<br><br>
-阁楼旧木箱群里或许压着谁的旧物，图书角的灯下或许坐着等故事的孩子。这两处都是通往深处之前的台阶：一处在暗，考的是手眼与分寸；一处在明，考的是耐性与心力。你若把这里的人情与门路都摸顺了，那道新锁背后的事，才有资格去碰。
-<br><br>
-斜屋顶下的天窗蒙着一层灰，月光透进来，在箱盖上划出几道淡白的格子。远处街上有马车驶过，车轮碾过石板的声响一直传到阁楼，又被木梁吞掉。孩子们的笑声从图书角飘过来，很轻，像怕把这座旧房子吵醒。
-<br><br>
-你把阁楼的门帘掀开一半，让楼道的灯光照进来。箱群投下的影子层层叠叠，像一排沉默的人。罗宾忽然压低声音说，他记得自己小时候也有一只这样的箱子，后来被贝利拿走了，说是抵欠款。他说这话时没有抱怨的意思，只是把手里的蜡烛挪远了一点，怕蜡油滴到箱盖上。你忽然明白，中层这些活计之所以重要，并不只是因为它们能换来通往深处的资格，还因为做这些事的人，是这栋房子里少数还愿意彼此照看的人。
-<br><br>
-罗宾把蜡烛交到你手里，说今晚你拿主意，他跟着做就是。你接过蜡烛，烛泪滴在手背上，有点烫。
+箱群里或许压着谁的旧物，灯下或许坐着等故事的孩子。一暗一明，都是通往深处之前的台阶。<<print _robin>>把蜡烛交到你手里，说今晚你拿主意。
 <br><br>
 <<getouticon>><<link [[返回孤儿院总枢 (0:02)|MP Loc Orphanage Hub]]>><<pass 2>><</link>><br>
 <<investigateicon>><<link [[阁楼旧木箱群 (0:12)|MP Loc Orphanage Event 3]]>><<pass 12>><</link>><br>
-<<socialiseicon>><<link [[图书角夜读灯 (0:12)|MP Loc Orphanage Event 4]]>><<pass 12>><</link>><br>
-<<sneakicon>><<if $mpLocProgress_Orphanage gte 2 or $mpLocEvents_Orphanage gte 2>><<link [[进入孤儿院深层 (0:08)|MP Loc Orphanage Deep]]>><<pass 8>><<set $mpLocProgress_Orphanage to Math.max($mpLocProgress_Orphanage, 3)>><</link>><<else>><<link [[贸然硬闯深层 (0:08)|MP Loc Orphanage Hub]]>><<pass 8>><<stress 4>><<tiredness 2>><</link>><</if>>
+<<mplampicon>><<link [[图书角的灯 (0:12)|MP Loc Orphanage Event 4]]>><<pass 12>><</link>><br>
+<<if $mpLocProgress_Orphanage gte 2 or $mpLocEvents_Orphanage gte 2>><<sneakicon>><<link [[进入孤儿院的深层 (0:08)|MP Loc Orphanage Deep]]>><<pass 8>><<set $mpLocProgress_Orphanage to Math.max($mpLocProgress_Orphanage, 3)>><</link>><br><</if>>
+<<link [[翻旧欠条 (0:04)|MP Ledger Hub]]>><<pass 4>><</link>>
 
 :: MP Loc Orphanage Deep [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-地下储煤间的空气又冷又潮，煤块堆在墙角，像一群蜷着的黑兽。头顶的木板缝里漏下厨房的响动，偶尔有煤渣簌簌落下。从这里再往里，是院长室那扇厚木门；门后有一张写字台，抽屉里锁着历年账册，账册上写着每个孩子应付的数目、每个名字后面的勾与叉。雾潮高的夜里，收容的压力会把整栋房子压得吱呀作响：多一个床位，就多一张要填的嘴，也多一笔贝利不肯认的亏空。
+地下储煤间又冷又潮，煤块堆在墙角，头顶木板缝里漏下厨房的响动。再往里是院长室的厚木门，抽屉里锁着历年账册。
 <br><br>
-【深层态势】：探索进度 <<print $mpLocProgress_Orphanage>> ｜ 终局状态：<<print ($mpWorldOrphanageOutcome or "未定")>> ｜ 雾潮水尺 <<print ($mpFogTide or 0)>>
+墙上粉笔正字被煤灰盖住一半。<<print _robin>>悄悄下来，把半块冷面包塞给你，说<<print _bailey>>今晚不在，院长室的门只是虚掩着。
 <br><br>
-你在煤堆旁捡起一截粉笔，在墙上划了一道浅浅的记号。罗宾悄悄下来过一次，把半块冷面包塞给你，说上面的孩子都睡了，又说贝利今晚不在，院长室的门只是虚掩着。他临走前回头看了一眼那扇门，欲言又止。
-<br><br>
-地下储煤暗室撑着这栋房子的骨架，院长室的旧账册记着它的良心。煤梁若塌，楼上的孩子就要挨冻；账册若被翻出来，保护名单上的名字就会暴露在光里。雾潮、供暖、门禁、伙食，这四件事在这里拧成一股绳，你每动一处，别处都会跟着响。
-<br><br>
-你吹熄了手里的灯，让眼睛适应黑暗。楼梯上方传来贝利拖鞋擦过地板的声音，停了一停，又远了。地下只剩下煤块的凉气和纸页的霉味，等着你决定先伸手去够哪一样。
-<br><br>
-你把额头顶在冰凉的煤堆上，听见自己的呼吸在狭窄的空间里回响。院长室的锁并不难开，难的是打开之后要拿什么去面对账本上的那些名字。保护名单藏在哪一页，你还没有完全摸清；可你已经知道，有几个孩子的名字后面被人用铅笔轻轻添了一道，像是有人在替他们求情。贝利不会无缘无故心软，那道铅笔痕多半是罗宾偷偷添的。想到这里，你伸手拍了拍身上的煤灰，心里有了计较。
-<br><br>
-煤灰落在手背上，凉得像一层薄雪。你忽然想起白天在院子里看见的那只麻雀，翅膀伤了，还是扑腾着往屋檐下钻。
+煤梁若塌，楼上的孩子就要挨冻；账册若被翻出来，保护名单就会暴露。你吹熄灯，听见<<print _bailey>>的拖鞋声停了一停，又远了。
 <br><br>
 <<getouticon>><<link [[返回孤儿院总枢 (0:02)|MP Loc Orphanage Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[地下储煤暗室 (0:15)|MP Loc Orphanage Event 5]]>><<pass 15>><</link>><br>
-<<sneakicon>><<link [[院长室旧账册 (0:15)|MP Loc Orphanage Event 6]]>><<pass 15>><</link>><br>
-<<socialiseicon>><<link [[建立互助工坊 (0:20)|MP Loc Orphanage Ending A]]>><<pass 20>><<set $mpWorldOrphanageOutcome to "mutualaid">><<set $mpLocProgress_Orphanage to 5>><</link>><br>
-<<link [[维持静谧庇护 (0:20)|MP Loc Orphanage Ending B]]>><<pass 20>><<set $mpWorldOrphanageOutcome to "sheltered">><<set $mpLocProgress_Orphanage to 5>><</link>>
+<<mpcellaricon>><<link [[地下储煤暗室 (0:15)|MP Loc Orphanage Event 5]]>><<pass 15>><</link>><br>
+<<mpscaleicon>><<link [[看旧账册 (0:15)|MP Loc Orphanage Event 6]]>><<pass 15>><</link>><br>
+<<if !$mpLedgerEnded>><<mphandshakeicon>><<link [[建互助工坊 (0:20)|MP Loc Orphanage Ending A]]>><<pass 20>><<set $mpWorldOrphanageOutcome to "mutualaid">><<set $mpLocProgress_Orphanage to 5>><</link>><br>
+<<link [[继续维持静谧庇护 (0:20)|MP Loc Orphanage Ending B]]>><<pass 20>><<set $mpWorldOrphanageOutcome to "sheltered">><<set $mpLocProgress_Orphanage to 5>><</link>><</if>>
 
 :: MP Loc Orphanage Season [nobr]
+<<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-季节一变，孤儿院的难处就换一副面孔。同一扇窗、同一条晾衣绳、同一座煤房，在不同的天光下会变成完全不同的战场。你在门厅站了一会儿，听着屋顶传来的动静，判断今天该怎样安排这栋房子里的人手。
+季节一变，孤儿院的难处就换一副面孔。你在门厅听了一会儿屋顶的动静，判断今天该怎么安排人手。
 <br><br>
-<<if Time.season is "winter">>寒冬的清晨，窗玻璃内侧结着羽毛状的冰花，供暖的煤要一筐一筐往楼上搬。孩子们把所有旧毛衣都套在身上，仍缩在毯子里不肯下床。贝利把煤房的钥匙挂在腰上，谁想多要一铲煤，都得先看他的脸色。
-<<elseif Time.season is "autumn">>秋雨一连下了几天，后院晾衣绳上的床单三天不干，墙根渗出深色的水痕。煤仓得提前备足，否则第一场寒潮就能把整栋房子冻透，到时候贝利只会把账算到每个人头上。
-<<elseif Time.season is "summer">>暑气闷在阁楼里散不出去，孩子们半夜爬下床，挤在门厅的石板地上乘凉。厨房的麦粥放半天就发酸，分餐时得格外小心，稍不留神就会有人吃坏肚子。
-<<else>>春日返潮，墙皮一块块鼓起，木地板踩上去发软。晾不干的衣物堆在浴室里，散着一股闷味，得赶在贝利发火前处理掉。<</if>>
+<<if Time.season is "winter">>寒冬的煤要一筐筐往楼上搬，<<print _bailey>>把煤房钥匙挂在腰上。
+<<elseif Time.season is "autumn">>秋雨下个不停，床单三天不干，煤仓得提前备足。
+<<elseif Time.season is "summer">>暑气闷在阁楼里，麦粥放半天就发酸。
+<<else>>春日返潮，墙皮鼓起，晾不干的衣物堆在浴室里。<</if>>
 <br><br>
-<<if Weather.precipitation is "rain" or ($mpFogTide or 0) gte 3>>雨雾顺着屋檐往下淌，后院的泥地被踩出一串深脚印。雾潮高的时候，墙外的街道白茫茫一片，连对面屋脊都看不清。这样的天气里，屋里的人容易走神，屋外的人却容易留下痕迹——暗处的脚印、潮气浸出的水线、谁在夜里开过门，都比晴天更藏不住。
-<<else>>今天倒是难得的晴日，阳光把后院的砖墙晒得发暖。孩子们被允许在院里多待一会儿，晾衣绳上的床单干得很快。只是日头一落，潮气又会从地底泛上来，得趁天光把该收的收好。<</if>>
+<<if Weather.precipitation is "rain" or ($mpFogTide or 0) gte 3>>雨雾顺着屋檐往下淌，院里容易留下脚印。
+<<else>>晴日把砖墙晒暖，日头一落潮气又泛上来。<</if>>
 <br><br>
-无论晴雨，门厅木牌上那几行字都不会变。你可以顺着天时去查一查平常不容易发现的痕迹，也可以转到表层，把日常的活计先做起来。季节给的从来不是答案，只是不同的出手时机。
-<br><br>
-门前石阶上落着几片被风卷来的叶子，扫过又落满。孩子们进进出出，鞋底把泥水带进走廊，门厅的地板一天要擦上好几遍。这些琐碎的活计看似与深处的账目无关，却是一整个院子还能维持体面的原因。你把门帘掀起来透气，顺手替靠在墙边打盹的孩子掖了掖领口。
+无论晴雨，木牌上的字都不会变。你可以顺着天时查暗迹，也可以转入表层做活计。
 <br><br>
 <<getouticon>><<link [[返回孤儿院总枢 (0:02)|MP Loc Orphanage Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if Weather.precipitation is "rain" or ($mpFogTide or 0) gte 3>><<link [[趁雨雾查暗迹 (0:12)|MP Loc Orphanage Event 4]]>><<pass 12>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -2>><</link>><<else>><<link [[晴日巡视外围 (0:12)|MP Loc Orphanage Event 1]]>><<pass 12>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -2>><</link>><</if>><br>
-<<walkicon>><<link [[转入孤儿院表层 (0:04)|MP Loc Orphanage Surface]]>><<pass 4>><</link>>
+<<mpcloudicon>><<if Weather.precipitation is "rain" or ($mpFogTide or 0) gte 3>><<link [[趁雾查暗迹 (0:12)|MP Loc Orphanage Event 4]]>><<pass 12>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -2>><</link>><<else>><<link [[晴日巡外围 (0:12)|MP Loc Orphanage Event 1]]>><<pass 12>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -2>><</link>><</if>><br>
+<<walkicon>><<link [[转入表层院区 (0:04)|MP Loc Orphanage Surface]]>><<pass 4>><</link>>
+<br><<link [[翻节庆牌 (0:03)|MP Loc Orphanage Festival Hub]]>><<pass 3>><</link>>
 
 :: MP Loc Orphanage Event 1 [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-午后起了风，后院的晾衣绳被吹成一道弧。床单鼓起来又瘪下去，木夹子噼啪地打在绳上。罗宾抱着最后一只湿床单从洗衣盆边直起腰，头发被风吹得贴在脸上：「要下雨了，这几张还没干透……可要是收晚了，今晚就没有干净床单给小的们换。」墙头那边，邻家的树枝刮着瓦片，沙沙作响。
+午后起了风，后院的晾衣绳被吹成一道弧。<<print _robin>>抱着最后一只湿床单直起腰：「要下雨了，这几张还没干透，收晚了今晚就没有干净床单。」
 <br><br>
-你走到绳子下，仰头看那一排被风扯得猎猎作响的床单。有几只夹子已经松了，再拖下去，布料会蹭到墙上的煤灰。罗宾踮脚去够高处的绳结，木凳却晃了一下，他慌忙扶住墙，回头冲你笑了笑，那笑里带着点不好意思。
+几只夹子已经松了。收拢床单要手脚麻利，也得看清风向；腾不出手，就坐在廊下把孩子们磨破的袖口缝好。
 <br><br>
-收拢床单要手脚麻利，也得看清风向，别让湿布扫翻木盆；若是实在腾不出手，还可以坐在廊下，把孩子们磨破的袖口一针一线缝好——那活儿慢，却稳妥，缝好了也能让小的们少挨几句骂。
-<br><br>
-风里夹着远处河面的潮气。你听见厨房的窗子被吹得磕了一下，又听见贝利在屋里咳嗽。晾衣绳上的白布一起一伏，像一排正在呼吸的东西。罗宾把木盆往墙边挪了挪，给你腾出地方。
-<br><br>
-这几张床单是这个月仅剩的干净铺盖。孩子们夜里挤在一起睡，谁尿了床，第二天就得裹着半干的被子挨一天。你比谁都清楚，一件小事拖延半天，落到最小的那个孩子身上，就是实实在在的难受。
-<br><br>
-你伸手试了试绳子的张力，粗麻绳被风扯得发紧，掌心能感到细小的震动。罗宾说他去屋里再找几只夹子，转身时又回头叮嘱了一句，别站得太靠边，屋檐上的瓦片松了，前几天下雨时掉下来过一块。院子里的老树被风吹得哗哗响，几片叶子落在湿床单上，很快洇出小小的绿痕。你估量着风势，也估量着自己的手上功夫。
-<br><br>
-罗宾回来时怀里抱着一捧夹子，走得太急，差点绊在门槛上。他喘着气说够用了，又把散开的几个重新别好。他把夹子分给你一半，自己留了一半，说这样两边都快。
+<<print _bailey>>在屋里咳嗽。这几张床单是本月仅剩的干净铺盖，拖延半天，落到最小的孩子身上就是实实在在的难受。
 <br><br>
 <<getouticon>><<link [[返回孤儿院表层 (0:02)|MP Loc Orphanage Surface]]>><<pass 2>><</link>><br>
 <<investigateicon>><<if ($housekeeping or 0) gte 220 or ($willpower or 0) gte 420>><<link [[收拢干爽床单 (0:12)|MP Loc Orphanage Surface]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[收拢干爽床单 (0:12)|MP Loc Orphanage Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[缝补开线袖口 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
+<<socialiseicon>><<link [[缝开线袖口 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Orphanage Event 2 [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-夜里的厨房只剩灶膛一点余火。铝锅里的麦粥咕嘟着，表面结了一层薄皮。罗宾按着贝利留下的名单数人头，数到第三遍时叹了口气：「今天少了两个人，可锅里的量还是照旧。要是分得匀，每人能多两勺；要是让贝利看见剩粥，明天准要减份。」
+夜里的厨房只剩灶膛一点余火，麦粥结了薄皮。<<print _robin>>按<<print _bailey>>留下的名单数人头，叹气说今天少了两个人，可锅里的量还是照旧。
 <br><br>
-门外传来孩子们压低的脚步声。有人把碗敲得叮当响，有人小声问今晚有没有面包边。你揭开锅盖，热气扑在脸上；粮柜里的面粉袋已经瘪下去大半，靠墙的土豆筐也见了底。这个冬天比往年难熬，贝利嘴上不说，账本上却记得清清楚楚。
+粮柜里的面粉袋瘪下去大半，土豆筐也见了底。分餐要手稳心细，先算还能撑几顿；不想动心思，就把粥一碗碗盛好递到孩子手里。
 <br><br>
-分餐这件事，讲究的是手稳心细：先清点粮柜，算出还能撑几顿，再决定今晚的勺该满还是该浅。若是不想动这些心思，也可以把粥一碗碗盛好，热乎乎地递到孩子们手里——至少今晚，他们能吃饱。
-<br><br>
-罗宾把最后一只豁口碗摆正，小声说：「你先吃一口吧，你也没吃。」灶膛里的余烬轻轻塌了一下，火星映在他眼睛里。窗外的风把厨房门吹得吱呀响，楼上传来贝利翻动纸页的声音。
-<br><br>
-你想起刚来这栋房子的时候，也是这样一个晚上，有人把仅剩的半碗粥推到你面前。那时你还不懂，为什么分饭的人总是最后一个吃。现在你懂了，却还是把勺子往锅底探了探，想再刮出一点稠的。
-<br><br>
-锅底传来轻微的焦味，你赶紧把火拨小。罗宾翻开名单，手指在一个个名字上点过去，点到某个名字时停住了，说这孩子今天发烧，没下来吃饭。你把那只碗单独放在灶台边温着，打算分完再送上去。楼上很安静，安静得能听见贝利翻身的动静。你忽然觉得，这一锅粥分下去的不只是饭，还有这栋房子里一点点还没冷透的人气。
-<br><br>
-罗宾把温着的那只碗端起来，说你送去吧，我看着她喝完。你点点头，把碗沿擦干净，才往楼上走。楼道里的灯没点，你摸着扶手一级级上去，碗里的热气一直扑到脸上。
+<<print _robin>>把最后一只豁口碗摆正，让你先吃一口。锅底传来焦味，你赶紧把火拨小，又把发烧孩子的那碗单独温在灶台边。
 <br><br>
 <<getouticon>><<link [[返回孤儿院表层 (0:02)|MP Loc Orphanage Surface]]>><<pass 2>><</link>><br>
 <<investigateicon>><<if ($tending or 0) gte 220 or ($willpower or 0) gte 420>><<link [[清点储藏面粉 (0:12)|MP Loc Orphanage Surface]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[清点储藏面粉 (0:12)|MP Loc Orphanage Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[分装温热麦粥 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
+<<socialiseicon>><<link [[分装热麦粥 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>><br>
+<<link [[回房熄灯 (0:06)|MP Loc Orphanage Sleep]]>><<pass 6>><</link>>
 
 :: MP Loc Orphanage Event 3 [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-阁楼的斜屋顶压得很低，旧木箱从墙根一直堆到天窗底下。箱盖上落着灰，有的锁扣已经锈成一团。罗宾举着蜡烛跟在你身后：「这些箱子……好像是贝利不让碰的。可里面有孩子们过冬的衣物，总得有人清出来。要不，趁着今晚他不在，我们快点弄？」
+阁楼的斜屋顶压得很低，旧木箱从墙根堆到天窗下。<<print _robin>>举着蜡烛跟在你身后：「这些箱子<<print _bailey>>不让碰，可里面有孩子们过冬的衣物，趁他不在快点清吧。」
 <br><br>
-最底下那只箱子的锁是新的，木缝里却透出一股旧纸的霉味。你把手按在箱盖上，能感觉到楼下的说话声顺着木梁传上来。箱群深处还有一块松动的木板，上面像是有人用指甲刻过什么，痕迹很浅，得凑近才看得清。
+最底下那只箱子的锁是新的，木缝里透出旧纸的霉味。箱群深处还有一块松动的木板，上面像是有人用指甲刻过什么。
 <br><br>
-整理这些箱子，要懂得哪些该翻、哪些该原样放回，稍有不慎就会把贝利留下的记号弄乱；若只是蹲下来辨认那块木板上的刻痕，倒不必冒太大的险，只是费些眼力和时间。
-<br><br>
-蜡烛的火焰被阁楼的风吹得偏向一边。罗宾把外套裹紧了些，小声说：「我小时候好像见过这块木板……那时候上面还没这么多字。」他的声音在斜屋顶下显得格外轻，像怕惊动了箱子里装着的东西。
-<br><br>
-你数了数箱子，一共十一只。有几只贴着褪色的名字，墨水晕开，只认得出半边。这栋房子送走过很多人，也留下过很多人；箱子里的旧物，大概就是那些没被带走的部分。
-<br><br>
-你蹲下来，用指腹抹去箱盖上的灰，露出一行用粉笔写的旧编号。编号已经模糊，却还能看出是贝利记账时用的格式。罗宾说这些箱子从前是给每个孩子分一只的，后来不知怎么就成了堆放杂物的去处。他没有再说下去，只是把蜡烛放低，让光贴着箱缝照进去。箱子里除了衣物，似乎还压着些更硬的东西，晃一晃，会发出沉闷的响声。
-<br><br>
-阁楼的窗户只有巴掌大，外面的天已经黑透。远处教堂的钟敲了一下，声音闷闷地传进来。你直起腰，膝盖有些发酸，才意识到自己在这里蹲了很久。箱群深处那块松动的木板在烛光下泛着一点不同的颜色，像是被人反复摸过，磨得发亮。
+整理箱子要懂得哪些该翻、哪些该原样放回；只辨认木板刻痕，倒不必冒太大的险。<<print _robin>>说这些箱子从前每个孩子分一只，后来成了堆杂物的地方。
 <br><br>
 <<getouticon>><<link [[返回孤儿院中层 (0:02)|MP Loc Orphanage Mid]]>><<pass 2>><</link>><br>
 <<investigateicon>><<if ($skulduggery or 0) gte 230 or ($willpower or 0) gte 420>><<link [[整理旧衣物箱 (0:12)|MP Loc Orphanage Mid]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[整理旧衣物箱 (0:12)|MP Loc Orphanage Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[发现木板刻字 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
+<<mpveilicon>><<link [[发现木刻字 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Orphanage Event 4 [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-图书角缩在阁楼西头，一盏煤油灯挂在梁下，灯芯已经烧得发黑。几个孩子裹着同一条旧毯子，等你把书翻开。罗宾把灯盏往中间挪了挪：「油不多了。添满的话能撑到后半夜，可煤油得从贝利的柜子里取……你要是能想办法，孩子们就能多听一会儿。」
+图书角缩在阁楼西头，煤油灯的灯芯已经烧黑。几个孩子裹着旧毯子等你翻书。<<print _robin>>把灯盏挪到中间：「油不多了，添满能撑到后半夜，可煤油得从<<print _bailey>>的柜子里取。」
 <br><br>
-灯焰忽然跳了一下，最小的那个孩子伸手去护，被烫得缩回去。窗外的风从缝里钻进来，把书页吹得哗啦响。你按住书角，借着昏黄的光看见几个孩子努力睁大的眼睛——他们白天干活，晚上才有一点时间识字。
+添灯油要等他睡熟，还得记住煤油罐的位置；不想冒险，就坐下来就着半明半暗的灯教孩子们认字。
 <br><br>
-添灯油是件需要定力的事：贝利的柜子上了锁，钥匙挂在他腰上，你得等他睡熟，还得记住煤油罐原来的位置。若是不想冒这个险，也可以坐下来，就着这盏半明半暗的灯，一个字一个字地教孩子们认——慢是慢，却没人会被惊动。
-<br><br>
-罗宾从毯子底下摸出半截铅笔和一张旧报纸，说可以拿来练字。孩子们立刻围拢过来，有人把手指按在报纸上，跟着你念出声。灯光把他们的影子投在斜屋顶上，晃晃悠悠的，像一群刚学会飞的东西。
-<br><br>
-你忽然想起自己第一次在这盏灯下认字的样子。那时教你的人也是这样，把手指按在纸上，耐心地等一个音节一个音节地拼出来。如今轮到你坐在这盏灯下了。
-<br><br>
-你翻开那本旧书，纸页已经发黄，边角卷起。孩子们安静下来，连最小的那个也把手指从嘴里拿了出来。罗宾靠着墙坐下，眼睛里映着灯焰。你念了一段，停下来问他们听懂了没有，几颗脑袋一齐点，又有人小声说想再听一遍。灯光把书页照得暖融融的，窗外的风声好像也远了一些。
-<br><br>
-有个孩子伸手去指书上的插图，指尖在纸面上轻轻点着，生怕弄坏。你放慢语速，把那一页又念了一遍。罗宾在旁边跟着默念，嘴唇一张一合，念到不认识的词就抬头看你。那孩子把手指收回去，认真地点了点头。
+<<print _robin>>摸出半截铅笔和旧报纸，孩子们围拢过来跟着念。你翻开那本发黄的旧书，念一段，几颗脑袋一齐点。
 <br><br>
 <<getouticon>><<link [[返回孤儿院中层 (0:02)|MP Loc Orphanage Mid]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($willpower or 0) gte 360 or ($willpower or 0) gte 420>><<link [[添满煤油灯盏 (0:12)|MP Loc Orphanage Mid]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[添满煤油灯盏 (0:12)|MP Loc Orphanage Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[辅导孩童识字 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
+<<mplampicon>><<if ($willpower or 0) gte 360 or ($willpower or 0) gte 420>><<link [[添满煤油灯盏 (0:12)|MP Loc Orphanage Mid]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[添满煤油灯盏 (0:12)|MP Loc Orphanage Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<mplettericon>><<link [[教孩童识字 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Orphanage Event 5 [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-地下储煤间的门一推开，冷气就顺着台阶涌上来。煤堆靠着墙，木梁被潮气浸得发黑，其中一根已经裂了缝。你举起灯照过去，裂缝里渗出细小的煤粉，落进墙角的积水。要是这根梁塌了，上面就是厨房的地板。
+地下储煤间的冷气顺着台阶涌上来。木梁被潮气浸黑，其中一根裂了缝；要是塌了，上面就是厨房的地板。
 <br><br>
-罗宾在楼梯口探出半个身子：「贝利说煤房不用管……可昨晚我听见这里响了一声。」他手里攥着一截麻绳，显然是想帮忙又怕挨骂。楼上传来孩子们跑动的脚步声，每一下都让头顶的木梁落下些灰尘。
+<<print _robin>>在楼梯口探头：「<<print _bailey>>说煤房不用管，可昨晚我听见这里响了一声。」他手里攥着一截麻绳。
 <br><br>
-加固木梁是力气活，得先把松动的楔子敲紧，再用麻绳和短木撑住裂缝；若是力气不够，也可以蹲下来，顺着墙角的水痕查一查渗水的来路——那活儿不重，却能弄清这栋房子的骨头到底朽到了什么地步。
+加固木梁要先把楔子敲紧，再用麻绳和短木撑住裂缝；力气不够，就顺着墙角的水痕查渗水的来路。
 <br><br>
-灯光在湿漉漉的墙上晃。煤堆深处有什么东西轻轻滑了一下，又归于安静。罗宾屏住呼吸，把蜡烛举高了些，照见梁上密密麻麻的裂纹，像一张被反复折过的旧纸。
-<br><br>
-这间煤房是整个院子的地基，也是最没人愿意来的地方。贝利把钥匙挂在腰上，却从不下来看一眼。你蹲在煤灰里，能听见头顶的厨房、楼上的卧室、门厅里的说话声，一层一层压在这根裂开的木梁上。
-<br><br>
-你把手按在裂开的木梁上，能感到潮气透过木纹渗出来。罗宾说，贝利上个月来看过一次，只在门口站了站就走了，说这房子结实得很。你抬头看那道裂缝，觉得所谓结实，大概只是没人愿意花钱去修。煤堆旁边扔着几根旧木料，长度不够做梁，却能拿来当撑木。你把它们一根根拖出来，煤灰扬起，呛得人直咳嗽。
-<br><br>
-楼梯口传来孩子的哭声，很快又被谁哄住了。罗宾侧耳听了听，说是最小的那个做噩梦。你想上去看看，又看了看手边的活，最终还是决定先把这根梁撑住——楼上的人能不能睡安稳，多半就系在这根木头上。你把麻绳在掌心绕了两圈，试了试松紧，才发觉自己的手心已经全是汗。
+楼梯口传来孩子的哭声，<<print _robin>>说是最小的那个做噩梦。你决定先把这根梁撑住。
 <br><br>
 <<getouticon>><<link [[返回孤儿院深层 (0:02)|MP Loc Orphanage Deep]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[加固支撑木梁 (0:12)|MP Loc Orphanage Deep]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[加固支撑木梁 (0:12)|MP Loc Orphanage Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[排查墙角渗水 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
+<<mpgearicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[加固支撑木梁 (0:12)|MP Loc Orphanage Deep]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[加固支撑木梁 (0:12)|MP Loc Orphanage Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<mptideicon>><<link [[查墙角渗水 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Orphanage Event 6 [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
-院长室里有一股旧纸、墨水和廉价烟草混在一起的味道。写字台的抽屉没锁严，露出一角硬壳账册。你把它抽出来，纸页脆得发响，上面是历年来的名字、数目与日期：有些名字后面画着勾，有些被红笔划掉，旁边还注了小小的字母。
+院长室里混着旧纸、墨水和廉价烟草的味道。写字台抽屉没锁严，露出一角硬壳账册，上面记着历年的名字、数目与日期。
 <br><br>
-窗外的雾贴着玻璃。楼梯上传来脚步声，停了一下，又往回走了。你翻到最近一页，发现有几笔资助的数目对不上——钱明明进了账，却没有对应的孩子。账页边缘还夹着几张未拆的信，火漆印记陌生，收件人一栏空着。
+你翻到最近一页，发现几笔资助对不上：钱进了账，却没有对应的孩子。账页边缘还夹着几张未拆的信，火漆陌生，收件人空着。
 <br><br>
-核对历年资助需要一点耐心和算学：把入账、支出与人头一笔笔对应起来，才能看出缺口在哪里；若不想久留，也可以先把那些隐秘寄件的封皮与日期抄下来，带出去再慢慢琢磨。
-<br><br>
-院子里的灯影从窗帘缝里漏进来，在账页上晃动。你听见贝利在楼下和人说话，语气比平时客气，像是面对什么不好得罪的人。写字台的抽屉里还有一把小钥匙，压在一叠收据下面。
-<br><br>
-你把账册往回推了推，又停住。纸页上那些被划掉的名字，有些你还记得他们的脸。账本记的是钱，可每一行后面，都是一段被折算成数目的日子。窗外雾里传来巡夜人的梆子声，一下，两下，慢慢远了。
-<br><br>
-账册的封皮已经磨破，露出里面硬纸的毛边。你借着窗缝的光一页页翻过去，指尖沾了陈年的灰。有几页被水浸过，字迹晕成一片，只看得清几个数目。楼下贝利的声音停了一会儿，又响起来，这回像是在送客。你合上账册，把它放回原处，却把夹在里面的一张便条抽了出来——上面只写了日期和一个人名，字迹是罗宾的。
-<br><br>
-你把便条折好收进衣襟，重新理了理抽屉里的收据，让它们看起来和原来一样。窗外的雾更浓了，连院子里那棵树都只剩一个模糊的轮廓。你退到门边，听见自己的心跳，一下一下，和远处巡夜的梆子声叠在一起。
+核对资助要把入账、支出与人头一笔笔对应；不想久留，就抄下寄件的封皮与日期。你合上账册，抽走夹在里面的一张便条——上面是日期和一个人名，字迹出自<<print _robin>>。
 <br><br>
 <<getouticon>><<link [[返回孤儿院深层 (0:02)|MP Loc Orphanage Deep]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($science or 0) gte 240 or ($willpower or 0) gte 420>><<link [[核对历年资助 (0:12)|MP Loc Orphanage Deep]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[核对历年资助 (0:12)|MP Loc Orphanage Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[抄录隐秘寄件 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
+<<mpscaleicon>><<if ($science or 0) gte 240 or ($willpower or 0) gte 420>><<link [[核对历年资助 (0:12)|MP Loc Orphanage Deep]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<set $mpLocProgress_Orphanage to Math.min(5, $mpLocProgress_Orphanage + 1)>><<stress -3>><</link>><<else>><<link [[核对历年资助 (0:12)|MP Loc Orphanage Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<mplettericon>><<link [[抄隐秘寄件 (0:12)|MP Loc Orphanage Hub]]>><<pass 12>><<set $mpLocEvents_Orphanage += 1>><<tiredness 2>><</link>>
 
 :: MP Loc Orphanage Ending A [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
 <<set $mpWorldOrphanageOutcome to "mutualaid">><<set $mpLocProgress_Orphanage to 5>>
-你把孩子们召集到后院，把晾衣绳解下来，重新拉成工作台的界线。罗宾翻出旧木板，钉成几张矮桌；大一点的孩子学着补鞋、缝纫、修理小物件，小的在旁边递工具。厨房的余火用来熬胶，煤房的角落清出来堆材料。第一天结束时，院子里摆满了歪歪扭扭却结实耐用的成品。
+你把孩子们召集到后院，把晾衣绳解下来拉成工作台的界线。<<print _robin>>翻出旧木板钉成矮桌，大孩子学着补鞋、缝纫、修小物件，小的递工具。
 <br><br>
-贝利站在门廊下看了很久，最后什么也没说。保护名单上多出来的名字，让他没法再像从前那样随意支使这些人；而孩子们第一次拿到自己挣的零钱时，眼睛里的光，比阁楼那盏煤油灯亮得多。
+<<print _bailey>>站在门廊下看了很久，最终什么也没说。孩子们第一次拿到自己挣的零钱，眼睛里的光比阁楼的煤油灯还亮。
 <br><br>
-【世界回响】：<<if $mpWorldOrphanageOutcome is "mutualaid">>孤儿院终局已落定为「互助工坊」。院舍以手艺与互助维系，账本上的数目再不能完全决定一个人的去留。<<else>>孤儿院终局已落定。<</if>>
-<br><br>
-之后的日子，后院总有人来人往。邻居拿旧衣来换修补，街角的小贩愿意用边角料换一双补好的鞋。互助工坊的名声一点点传开，连贝利收租时，语气都客气了几分。你知道这远远算不上安稳，但至少，这栋房子里的孩子不再只是账本上的数目。
-<br><br>
-傍晚收工时，罗宾把当天的进项记在一张干净的纸上，字写得比从前工整。他抬头冲你笑：「明天还开吗？」你点点头。院子里的木屑被风吹起来，在夕阳里打着旋，像一群终于能飞的东西。
-<br><br>
-你把工具一件件收进木箱，锁好。门廊的灯亮着，孩子们三三两两地回屋，有人还在小声商量明天要做的东西。这栋旧房子第一次不像牢笼，倒像一个能让人留下来的地方。
-<br><br>
-工坊的牌子是孩子们自己做的，歪歪扭扭写着几个字，挂在后院的门框上。罗宾说字太丑，想重做一块，被大家拦住了，说这样才有样子。你看着那块木板，忽然觉得，这栋房子里终于有了一样不是贝利说了算的东西。傍晚的风穿过院子，把晾着的布片吹得轻轻摆动，也把新刨的木屑吹到墙角。
-<br><br>
-你把门框上的钉子敲紧，退后两步看了看，觉得这样正好。
+之后，邻居拿旧衣来换修补，小贩用边角料换补好的鞋，互助工坊的名声一点点传开。傍晚收工，<<print _robin>>问「明天还开吗」，你点点头。
 <br><br>
 <<getouticon>><<link [[返回孤儿院总枢 (0:04)|MP Loc Orphanage Hub]]>><<pass 4>><<stress -6>><</link>><br>
-<<walkicon>><<link [[返回孤儿院深层 (0:04)|MP Loc Orphanage Deep]]>><<pass 4>><</link>>
+<<walkicon>><<link [[回孤儿院深层 (0:04)|MP Loc Orphanage Deep]]>><<pass 4>><</link>>
 
 :: MP Loc Orphanage Ending B [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>><<set _bailey to (mpNpcMet("Bailey") ? "贝利" : "院长")>>
 <<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>>
 <<set $mpWorldOrphanageOutcome to "sheltered">><<set $mpLocProgress_Orphanage to 5>>
-你没有惊动任何人。煤房的裂缝补上了，供暖的管道一节节疏通，门厅的锁换了新的，钥匙只交给罗宾和两个年纪最大的孩子。账册还留在原处，只是保护名单被抄了一份，藏在图书角那盏灯底下。
+你没有惊动任何人。煤房的裂缝补上了，供暖管道疏通，门厅换了新锁，钥匙只交给<<print _robin>>和两个半大的孩子。
 <br><br>
-夜里有人敲门时，屋里的人先看灯，再看人——这是你们商量好的规矩。贝利问起，你只说院舍一切照旧；他盯着你看了半晌，终究没有再追问。有些改变不必写在脸上，能让孩子睡个整觉，就已经足够。
+夜里有人敲门时，屋里的人先看灯，再看人。<<print _bailey>>问起，你只说院舍一切照旧；他盯了你半晌，终究没有再追问。
 <br><br>
-【世界回响】：<<if $mpWorldOrphanageOutcome is "sheltered">>孤儿院终局已落定为「静谧庇护」。院舍不声不响地护住了名单上的人，把风雨挡在门外。<<else>>孤儿院终局已落定。<</if>>
+冬天来时，煤房的火没有断过，厨房锅里总有热的东西。孩子们学会轮班守夜、修门窗、把多出的一碗粥留给生病的人。
 <br><br>
-冬天来的时候，煤房的火没有断过，厨房的锅里也总有热的东西。孩子们学会了自己轮班守夜、自己修门窗、自己把多出来的一碗粥留给生病的人。这栋房子仍旧破旧，仍旧漏风，却比从前任何时候都更像一个可以藏身的地方。
-<br><br>
-罗宾把新配的钥匙串在绳上，挂到门后的钉子上。他轻声说：「谢谢你没有把事情闹大。」你望着门厅那盏昏黄的灯，听着楼上均匀的呼吸声，觉得这样也很好——不是所有的胜利都需要被人看见。
-<br><br>
-窗外的雾依旧浓，街上的风声也依旧紧。但门是锁好的，灯是亮着的，名单上的人一个不少。你把最后一块松动的窗闩按紧，转身走进屋里的暖意中。这栋房子教过你一件事：有时候，护住一个人，比扳倒一个敌人更难，也更值得。
-<br><br>
-你把剩下的煤一块块码好，算着还能烧几天。罗宾在楼上给孩子们掖被角，脚步声轻得几乎听不见。门后的钥匙串在昏暗中泛着一点微光，像一枚小小的定心丸。你没有告诉任何人今晚会有多冷，也没有提明天贝利要来的事。有些事情，等天亮了再说也不迟。至少这一夜，屋里的人是暖的。
-<br><br>
-你把灯芯拨亮了一点，屋里便又暖了一分。楼上传来翻身的声音，很快又静下去。
+<<print _robin>>把新配的钥匙挂到门后，轻声说：「谢谢你没有把事情闹大。」你望着门厅的灯，觉得这样也很好。
 <br><br>
 <<getouticon>><<link [[返回孤儿院总枢 (0:04)|MP Loc Orphanage Hub]]>><<pass 4>><<stress -6>><</link>><br>
-<<walkicon>><<link [[返回孤儿院深层 (0:04)|MP Loc Orphanage Deep]]>><<pass 4>><</link>>
+<<walkicon>><<link [[回孤儿院深层 (0:04)|MP Loc Orphanage Deep]]>><<pass 4>><</link>>
+
+:: MP Loc Orphanage Sleep [nobr]
+<<set _robin to (mpNpcMet("Robin") ? "罗宾" : "院里的孩子")>>
+<<set $outside to 0>><<set $location to "home">><<effects>><<mpAmbient>><<set $mpLocProgress_Orphanage to ($mpLocProgress_Orphanage or 0)>><<set $mpLocEvents_Orphanage to ($mpLocEvents_Orphanage or 0)>><<mpLedgerInit>><<mpLedgerTick>>
+<<set _today to ((window.Time && Time.days) or 0)>>
+<<set _overdue to ($mpLedger.overdue or 0)>>
+<<set _forced to ((($mpLedger.patrolPending or 0) gte 1) or (_overdue gte 3 and !($mpLedger.childTaken or 0)))>>
+<<set _nightUsed to ($mpLedger.lastNightDay is _today)>>
+<<if !_nightUsed and $daily and $daily.mpLedgerNight>><<set $daily.mpLedgerNight to 0>><</if>>
+<<set _rolled to false>>
+<<if !_nightUsed and (_overdue gt 0 or _forced)>>
+	<<set $daily to ($daily or {})>><<set $daily.mpLedgerNight to 1>><<set $mpLedger.lastNightDay to _today>>
+	<<if _forced>><<set _rolled to true>>
+	<<elseif random(1, 100) lte Math.min(75, _overdue * 25)>><<set _rolled to true>><</if>>
+<</if>>
+楼上的走廊只剩一盏罩子熏黑的夜灯，孩子们挤在旧毯子里，呼吸声一层压着一层。你把门闩摸了一遍，才在靠墙的床铺上坐下。
+<br><br>
+<<if $mpWorldLedgerLoss>>靠窗那张床空着，谁也不再提那个名字。<<elseif $mpLedgerEnded>>账已经落定，这一夜难得没人来敲门。<<else>>街面上偶尔有车轮碾过，你听了一会儿才躺下。<</if>>
+<br><br>
+<<if _rolled>>
+刚合眼，门厅的铜环就响了。<<print _robin>>先坐起来，把你的袖子拽了一下。
+<<else>>
+这一夜没有多余的脚步声，风从窗缝里钻进来，把灯焰压低。
+<</if>>
+<br><br>
+<<getouticon>><<link [[回门厅去 (0:02)|MP Loc Orphanage Hub]]>><<pass 2>><</link>><br>
+<<if _rolled>>
+<<mpbargainicon>><<link [[应付夜里的敲门 (0:08)|MP Ledger Punish Night]]>><<pass 8>><</link>><br>
+<<socialiseicon>><<link [[先把罗宾叫醒帮忙 (0:08)|MP Ledger Punish Night]]>><<pass 8>><<set $mpLedgerNightAlly to 1>><</link>>
+<<else>>
+<<walkicon>><<link [[睡到天亮吧 (0:20)|MP Loc Orphanage Hub]]>><<pass 20>><<if ($mpLocOrphanageRestDay or -1) isnt _today>><<set $mpLocOrphanageRestDay to _today>><<stress -3>><</if>><</link>><br>
+<<link [[再守一会儿夜 (0:10)|MP Loc Orphanage Deep]]>><<pass 10>><<tiredness 1>><</link>>
+<</if>>

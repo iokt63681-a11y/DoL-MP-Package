@@ -10,10 +10,14 @@
 <br><br>
 画架上的炭稿只画到肩，脸的位置空着。墙角堆着绷好的画布，一截被剪掉名字的旧布角从箱底露出来。她说这些话时眼睛没离开画面，像在跟光商量，而不是跟你。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_1 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第1幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_1 is 1>>
 今日的光已经落定，画布上的柠檬黄也暗下去了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Monet 2]]>><<pass 4>><</link>>
@@ -21,13 +25,13 @@
 <div id="relday-monet-1">
 <<mpcalculateicon>><<link "举镜引光 (0:08)">><<pass 8>><<replace "#relday-monet-1">>
 <<if ($athletics or 0) gte 240 or ($housekeeping or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_monet_1 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_1 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你把旧镜挪到西窗斜角，薄柠檬黄被折进来，正好铺在画架空着的脸位上。莫奈的笔尖停了一瞬，没回头，只低声说：「对，就是这个温度。别退。」她最终没画脸，只在炭稿角落添了一道肩线，撕下来塞进你手里。纸边还带着她掌心的温度，楼下传来收摊的铃声，她像没听见。<span class="green">你替她接住了今天最后一段北光。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 2]]>><<pass 5>><</link>>
 <<else>>
-	镜框比看上去沉，你手一滑，光柱偏到墙上，把整幅底稿照得发白。莫奈放下笔，没说什么重话，只把窗帘拉回一半：「光走了就是走了，明天它还会来。」你揉着发酸的手腕，觉得心里比手腕更沉。<span class="red">你没能稳住那面旧镜。</span><<stress 3>><<tiredness 1>><<gstress>>
+	镜框比看上去沉，你手一滑，光柱偏到墙上，把整幅底稿照得发白。莫奈放下笔，没说什么重话，只把窗帘拉回一半：「光走了就是走了，明天它还会来。」你揉着发酸的手腕，觉得心里比手腕更沉。<span class="red">你没能稳住那面旧镜。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 2]]>><<pass 5>><</link>>
 	<br>
@@ -37,13 +41,13 @@
 <br>
 <<mptailoricon>><<link "绷平画布 (0:08)">><<pass 8>><<replace "#relday-monet-1">>
 <<if ($housekeeping or 0) gte 250 or ($athletics or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_monet_1 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_1 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把亚麻浸湿、上胶、四角对钉，木槌落下去时声音像鼓点。莫奈伸手按了按布面，指腹停在一处几乎看不见的细纹上：「平了。你手上有分寸。」她取过炭笔，在布角写下日期，又划掉，改成你的名字缩写。写完她看了看，说：「这样，这块布就不是空的。」<span class="green">画布绷得平整，她第一次把名字和你并排留在一起。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	铜钉歪进木框，布面留下一道斜褶。你拆了重来，指甲缝里塞满亚麻纤维。莫奈没有接手，只把一盏灯挪近：「褶子会在光里放大，人也是。」你盯着那道褶，越看越明显，手里的木槌也越发不听使唤。<span class="red">你绷坏了一块上好的亚麻。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	铜钉歪进木框，布面留下一道斜褶。你拆了重来，指甲缝里塞满亚麻纤维。莫奈没有接手，只把一盏灯挪近：「褶子会在光里放大，人也是。」你盯着那道褶，越看越明显，手里的木槌也越发不听使唤。<span class="red">你绷坏了一块上好的亚麻。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 2]]>><<pass 5>><</link>>
 	<br>
@@ -65,10 +69,14 @@
 <br><br>
 说完她把围裙递给你，带子还留着上一个用的人的折痕。<<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>>莫奈<<else>>画师<</if>>看着你的手，不像看客人，像看一件还没干透的底料。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_2 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第2幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_2 is 1>>
 颜料柜已经合上，窗台上的赭石也干了一层。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Monet 3]]>><<pass 4>><</link>>
@@ -76,13 +84,13 @@
 <div id="relday-monet-2">
 <<mpcookicon>><<link "研磨赭石 (0:08)">><<pass 8>><<replace "#relday-monet-2">>
 <<if ($tending or 0) gte 250 or ($housekeeping or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_monet_2 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_2 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你往研钵里加了一点亚麻油，手腕压稳，赭石在石杵下慢慢化成稠厚的暖浆。莫奈凑近闻了闻，又用笔尖挑了一点抹在窗框上，对着光看：「火生起来了。」她说，「门刚开，人还没进来。」她把那罐颜料推到你面前，让你自己收进柜子最上层——那里只放她信得过的颜色。<span class="green">你替她调出了炉火边那面墙要的暖赭。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 3]]>><<pass 5>><</link>>
 <<else>>
-	你磨得太急，石杵一滑，赭石浆溅到她的围裙上。莫奈低头看了看那块污迹，没发火，只用指尖抹开：「颜色没错，就是太急了。急出来的暖，挂不住。」她把研钵接过去，让你先去窗边洗手。水很凉，你搓了很久才把那点赭色洗淡。<span class="red">你磨坏了半钵赭石。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你磨得太急，石杵一滑，赭石浆溅到她的围裙上。莫奈低头看了看那块污迹，没发火，只用指尖抹开：「颜色没错，就是太急了。急出来的暖，挂不住。」她把研钵接过去，让你先去窗边洗手。水很凉，你搓了很久才把那点赭色洗淡。<span class="red">你磨坏了半钵赭石。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 3]]>><<pass 5>><</link>>
 	<br>
@@ -92,13 +100,13 @@
 <br>
 <<mpcalculateicon>><<link "分色辨层 (0:08)">><<pass 8>><<replace "#relday-monet-2">>
 <<if ($science or 0) gte 250 or ($history or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_2 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_2 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把青金石粉按颗粒沉积分成三层，最上面那层蓝得发亮，最下面沉得像夜。莫奈用刮刀各挑一点，并排抹在旧色卡上，看了很久：「冷的那层会咬人，你说对了。」她把中间那层刮进小罐，递给你收着，说这是画海要用的。<span class="green">你替她分开了会咬人的冷蓝和能托住光的暖蓝。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	你分色时分了神，最细的那层蓝粉被窗外一阵风吹散，落在她的袖口和地毯上。莫奈没恼，只拿软刷一点点扫：「细的东西都怕风。下次把窗关上。」你闻着满屋矿粉味，喉咙发干，袖口也沾了一层洗不掉的蓝。<span class="red">你浪费了一小撮青金石粉。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你分色时分了神，最细的那层蓝粉被窗外一阵风吹散，落在她的袖口和地毯上。莫奈没恼，只拿软刷一点点扫：「细的东西都怕风。下次把窗关上。」你闻着满屋矿粉味，喉咙发干，袖口也沾了一层洗不掉的蓝。<span class="red">你浪费了一小撮青金石粉。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 3]]>><<pass 5>><</link>>
 	<br>
@@ -118,10 +126,14 @@
 <br><br>
 「画室有画室的规矩。」莫奈说得很轻，「光从哪边来，人就朝哪边坐。改不了。」商人把帽子往桌上一放，等着看你们谁敢接这句话。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_3 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第3幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_3 is 1>>
 画室的门重新锁好，那幅肖像还是原来的样子。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Monet 4]]>><<pass 4>><</link>>
@@ -129,13 +141,13 @@
 <div id="relday-monet-3">
 <<mpbargainicon>><<link "替她挡话 (0:08)">><<pass 8>><<replace "#relday-monet-3">>
 <<if ($english or 0) gte 260 or ($seductionskill or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_3 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_3 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把话接过去，先说交期，再说画室规矩，最后才提那句「阴影也是她的一部分」。商人被你绕得停了两拍，莫奈在旁边慢慢擦手，没插嘴。人走后，她关上门，背靠着门板笑了一下：「你刚才站的位置，正好补上画面左边那块空。构图稳了。」<span class="green">你替她挡住了那笔会改坏整幅画的委托。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 4]]>><<pass 5>><</link>>
 <<else>>
-	商人根本不听你的话，反而把声音提得更高，说画室不懂规矩。莫奈把你往身后让了半步，自己把话接了回去。人走后，她没看你，只把画布翻过去：「少一笔钱，不少一笔颜色。」你站在门口，脸上发烫，楼梯间的水还在滴。<span class="red">你没挡住那场争执。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	商人根本不听你的话，反而把声音提得更高，说画室不懂规矩。莫奈把你往身后让了半步，自己把话接了回去。人走后，她没看你，只把画布翻过去：「少一笔钱，不少一笔颜色。」你站在门口，脸上发烫，楼梯间的水还在滴。<span class="red">你没挡住那场争执。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 4]]>><<pass 5>><</link>>
 	<br>
@@ -145,13 +157,13 @@
 <br>
 <<mpreadicon>><<link "改稿周旋 (0:08)">><<pass 8>><<replace "#relday-monet-3">>
 <<if ($maths or 0) gte 250 or ($english or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_monet_3 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_3 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你没跟商人硬顶，只把画稿转了个角度，让窗外的光落在少女脸上，问他是不是这个效果。他看了半天，说好像也可以。莫奈在桌下轻轻碰了碰你的鞋尖。等门关上，她把改稿的炭笔折成两截，扔进炉子：「你比我更会让人以为自己赢了。」<span class="green">委托保住了，画也没有被改坏。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	你绕着弯子周旋，商人却听出你在拖，冷笑一声走了，定金也没留下。莫奈把画稿收进柜子，说：「你尽力了。他只是想买一个听话的画家。」她语气很轻，你却觉得那面墙上的光暗了一层。画里的少女仍低着头，阴影落在她鼻梁上。<span class="red">委托黄了，画也没能挂出去。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你绕着弯子周旋，商人却听出你在拖，冷笑一声走了，定金也没留下。莫奈把画稿收进柜子，说：「你尽力了。他只是想买一个听话的画家。」她语气很轻，你却觉得那面墙上的光暗了一层。画里的少女仍低着头，阴影落在她鼻梁上。<span class="red">委托黄了，画也没能挂出去。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 4]]>><<pass 5>><</link>>
 	<br>
@@ -173,10 +185,14 @@
 <br><br>
 侧厅里有旧纸、石灰和潮气的味道。她的声音压得很低，像怕惊动墙里的人。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_4 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第4幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_4 is 1>>
 侧厅的防尘布重新罩好，墙里的码头又沉回灰白里。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Monet 5]]>><<pass 4>><</link>>
@@ -184,13 +200,13 @@
 <div id="relday-monet-4">
 <<mpclimbicon>><<link "刮去旧灰 (0:08)">><<pass 8>><<replace "#relday-monet-4">>
 <<if ($athletics or 0) gte 260 or ($housekeeping or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_4 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_4 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你握着刮刀，从墙脚往上推，白灰一片片卷起来，像旧雪。莫奈站在你身后半步，没催。灰下露出线稿：码头的木桩、缆绳，还有那个人垂着的手。她忽然说：「慢一点。他的手，我画了三天。」你停住，刀尖悬在离那只手一指宽的地方。<span class="green">你替她刮开了壁画最要紧的一段旧灰。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 5]]>><<pass 5>><</link>>
 <<else>>
-	刮刀碰上墙里一颗硬石，手腕一震，刀尖在灰下划出一道白痕。莫奈快步过来，按住你的手：「停下。」她盯着那道痕看了很久，才说：「不深，能补。」可你看见她的指节发白，白灰落在她的睫毛上，她也没眨。<span class="red">你在壁画的旧灰上划出了一道痕。</span><<stress 4>><<pain 1>><<gstress>><<gpain>>
+	刮刀碰上墙里一颗硬石，手腕一震，刀尖在灰下划出一道白痕。莫奈快步过来，按住你的手：「停下。」她盯着那道痕看了很久，才说：「不深，能补。」可你看见她的指节发白，白灰落在她的睫毛上，她也没眨。<span class="red">你在壁画的旧灰上划出了一道痕。</span><<stress 4>><<pain 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gpain>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 5]]>><<pass 5>><</link>>
 	<br>
@@ -200,13 +216,13 @@
 <br>
 <<mpcalculateicon>><<link "拓下底稿 (0:08)">><<pass 8>><<replace "#relday-monet-4">>
 <<if ($science or 0) gte 250 or ($history or 0) gte 260>>
-	<<set $daily.mpRelDay_mp_relday_monet_4 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_4 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把薄纸覆在线稿上，用炭条侧锋轻轻扫，木桩和缆绳的轮廓一点点浮出来。莫奈蹲在旁边看，呼吸很轻。拓到那只手时，她伸手按住纸角：「这里多扫一层。他手里原来握着东西，后来我擦掉了。」纸上的手因此比墙上多了一点重量。<span class="green">你替她留下了线稿里被擦掉的那点重量。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	炭条扫得太重，薄纸破了一角，正落在那个人的手上。莫奈把纸接过去，对着高窗看了很久，最后折起来收进围裙：「没事。手我记着。」她再抬头时，眼里的光已经收回去了，侧厅又暗了一层。<span class="red">你拓破了线稿最要紧的地方。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	炭条扫得太重，薄纸破了一角，正落在那个人的手上。莫奈把纸接过去，对着高窗看了很久，最后折起来收进围裙：「没事。手我记着。」她再抬头时，眼里的光已经收回去了，侧厅又暗了一层。<span class="red">你拓破了线稿最要紧的地方。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 5]]>><<pass 5>><</link>>
 	<br>
@@ -228,10 +244,14 @@
 <br><br>
 你听见楼下有人在收招牌，铁钩刮过石墙。调色板上的夜蓝映着灯，像一小块被舀起来的海。她没动，你也没动。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_5 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第5幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_5 is 1>>
 夜蓝已经干在调色板上，灯也熄了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Monet 6]]>><<pass 4>><</link>>
@@ -239,13 +259,13 @@
 <div id="relday-monet-5">
 <<mpcleanicon>><<link "陪她调夜蓝 (0:08)">><<pass 8>><<replace "#relday-monet-5">>
 <<if ($tending or 0) gte 250 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_monet_5 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_5 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把灯芯挑亮一点，替她递笔、洗刷、刮掉干在调色板边缘的旧色。她调了很久，忽然把笔递给你：「加一点红。别多。」你只蘸了针尖那么一点，夜蓝立刻沉下去，像海有了底。她看着调色板，轻声说：「你听得见颜色。」<span class="green">你陪她把一整片夜色调成了海。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 6]]>><<pass 5>><</link>>
 <<else>>
-	你加红时手一抖，多了半滴，整片夜蓝泛出一点脏紫。莫奈盯着调色板看了一会儿，把笔放下：「今晚的光不站在我们这边。」她没让你赔，也没再说话，只把窗推开一条缝。海风进来，吹得你眼睛发酸。<span class="red">你调坏了一整片夜蓝。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你加红时手一抖，多了半滴，整片夜蓝泛出一点脏紫。莫奈盯着调色板看了一会儿，把笔放下：「今晚的光不站在我们这边。」她没让你赔，也没再说话，只把窗推开一条缝。海风进来，吹得你眼睛发酸。<span class="red">你调坏了一整片夜蓝。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 6]]>><<pass 5>><</link>>
 	<br>
@@ -255,13 +275,13 @@
 <br>
 <<mpreadicon>><<link "读那封旧信 (0:08)">><<pass 8>><<replace "#relday-monet-5">>
 <<if ($english or 0) gte 250 or ($history or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_5 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_5 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你从旧木箱底翻出一封没写完的信，纸角被剪掉，只剩半句话。你念出来，莫奈没有阻止。念到「等画完这面墙」时，她伸手把信接过去，折好，压在调色板下面：「后面的不用念了。后面我知道。」灯芯响了一声，她把夜蓝又调深了一度。<span class="green">你替她念完了那封没写完的信。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	你念到一半，纸角在指间裂开。莫奈伸手接过去，动作很轻，却把信纸按在了桌上，不再让你碰。「后面的我自己知道。」她说。灯芯又爆了一下，她坐回画架前，一晚上没有再开口。<span class="red">你把那封旧信弄破了。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	你念到一半，纸角在指间裂开。莫奈伸手接过去，动作很轻，却把信纸按在了桌上，不再让你碰。「后面的我自己知道。」她说。灯芯又爆了一下，她坐回画架前，一晚上没有再开口。<span class="red">你把那封旧信弄破了。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 6]]>><<pass 5>><</link>>
 	<br>
@@ -283,10 +303,14 @@
 <br><br>
 侧厅里只有水声和松节油的气味。你知道自己错了，却也觉得她的话像刀。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_6 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第6幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_6 is 1>>
 侧厅里的空气还没缓过来，今天不适合再动笔。
 <br>
 <<walkicon>><<link [[去下一处 (0:04)|MP RelDay Monet 7]]>><<pass 4>><</link>>
@@ -294,13 +318,13 @@
 <div id="relday-monet-6">
 <<mpbargainicon>><<link "据理力争 (0:08)">><<pass 8>><<replace "#relday-monet-6">>
 <<if ($willpower or 0) gte 440 or ($english or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_6 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_6 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你说她三天没合眼，颜色已经发浑，再守下去只会把整面墙拖垮。她盯着你，很久没说话。然后她把笔塞进你手里：「那你画给我看。画坏了，你赔我三年。」你补完那处角落，手一直在抖。她站在旁边看，最后把灯往你这边挪了挪，说：「还行。光接住了。」<span class="green">你们把一场争吵画成了同一笔颜色。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 7]]>><<pass 5>><</link>>
 <<else>>
-	你越说越急，话里带上了刺。她听完，把笔放回笔筒，声音冷下来：「你和我谈光，可你连它在哪儿都没看清。」她抓起外套走出去，门在身后合上。你一个人守着那面墙，松节油味呛得眼睛发酸。<span class="red">你们不欢而散。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	你越说越急，话里带上了刺。她听完，把笔放回笔筒，声音冷下来：「你和我谈光，可你连它在哪儿都没看清。」她抓起外套走出去，门在身后合上。你一个人守着那面墙，松节油味呛得眼睛发酸。<span class="red">你们不欢而散。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 7]]>><<pass 5>><</link>>
 	<br>
@@ -310,13 +334,13 @@
 <br>
 <<mprepairicon>><<link "收拾残局 (0:08)">><<pass 8>><<replace "#relday-monet-6">>
 <<if ($housekeeping or 0) gte 250 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_monet_6 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_6 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你一声不响把布重新罩好，把调色盘上的颜色一格格刮净，脏洗笔水倒进桶里。她坐在窗边看你收拾，看到天黑。最后她说：「我不是气你动笔。我是气你没叫我。」你停下手。她继续说：「这面墙，我一个人守了三年。你来了，我还是习惯一个人。」<span class="green">你替她把侧厅收拾回原样，也把话听完了。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	你收拾到一半，手一滑，洗笔水泼在地毯上，洇开一大片灰蓝。莫奈看了一眼，什么也没说，起身去拿拖布。你想帮忙，她却绕过你，像绕过一件挡路的家具。那一晚你们谁也没提壁画。<span class="red">你把侧厅弄得更乱了。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你收拾到一半，手一滑，洗笔水泼在地毯上，洇开一大片灰蓝。莫奈看了一眼，什么也没说，起身去拿拖布。你想帮忙，她却绕过你，像绕过一件挡路的家具。那一晚你们谁也没提壁画。<span class="red">你把侧厅弄得更乱了。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 7]]>><<pass 5>><</link>>
 	<br>
@@ -336,10 +360,14 @@
 <br><br>
 颜料行的伙计探头看了一眼，又缩回去。街上有人推着车经过，木轮压过水洼。街角的面包房在收摊，木架上只剩几只冷掉的面包。她看了一眼，说那家的纸袋颜色太黄，衬得人脸发灰。你接过颜料时，她没有松手，像是还有半句话卡在指节里。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_7 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第7幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_7 is 1>>
 颜料行的雨迹干了，她的话也留在了街上。
 <br>
 <<socialiseicon>><<link [[去下一处 (0:04)|MP RelDay Monet 8]]>><<pass 4>><</link>>
@@ -347,13 +375,13 @@
 <div id="relday-monet-7">
 <<mpbargainicon>><<link "接过颜料 (0:08)">><<pass 8>><<replace "#relday-monet-7">>
 <<if ($tending or 0) gte 240 or ($seductionskill or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_monet_7 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_7 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你接过颜料，指尖碰到她冰凉的手背。她没有立刻收手，只低声说：「那天我把布掀开又罩上，掀开又罩上。」你等她说下去。她却把话咽回去，替你理了理围巾：「走吧。光不等人。」颜料管在你掌心慢慢暖起来。<span class="green">她把道歉藏在一管颜料里，你收下了。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 8]]>><<pass 5>><</link>>
 <<else>>
-	颜料管从你手里滑出去，掉进街边的水洼。她弯腰捡起来，用袖子擦干，什么也没说。你想解释，她已经转过身，先走了。雨后的街很亮，你看着她的背影拐过街角，手里的水还没干。<span class="red">你们没能把那句话接上。</span><<stress 3>><<tiredness 1>><<gstress>>
+	颜料管从你手里滑出去，掉进街边的水洼。她弯腰捡起来，用袖子擦干，什么也没说。你想解释，她已经转过身，先走了。雨后的街很亮，你看着她的背影拐过街角，手里的水还没干。<span class="red">你们没能把那句话接上。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 8]]>><<pass 5>><</link>>
 	<br>
@@ -363,13 +391,13 @@
 <br>
 <<mpcarryicon>><<link "陪她走回 (0:08)">><<pass 8>><<replace "#relday-monet-7">>
 <<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_monet_7 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_7 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你们一路走回阁楼，雨把街石洗得发亮。她抱着那管颜料，像抱着一件易碎的东西。走到楼梯口，她忽然说：「我昨天把布掀开又罩上，掀开又罩上。」你没接话，只把伞往她那边偏了偏。她低头笑了一下，先上了楼。<span class="green">你们用一段路，把前几天的事走过去了。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	走到半路她停住，说还是想一个人待着。你站在屋檐下看她上楼，阁楼的窗亮了很久才暗。第二天画室的门照常开着，只是她背对着门，没回头。<span class="red">她还需要一点时间。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	走到半路她停住，说还是想一个人待着。你站在屋檐下看她上楼，阁楼的窗亮了很久才暗。第二天画室的门照常开着，只是她背对着门，没回头。<span class="red">她还需要一点时间。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 8]]>><<pass 5>><</link>>
 	<br>
@@ -389,10 +417,14 @@
 <br><br>
 窗外天一点点发青。她的影子投在墙上，和工作中的壁画叠在一起。你听见她小声数着拍子，像在给一段看不见的音乐打拍子。墙角堆着的防尘布被风掀起一角，又落下。莫奈把袖子又往上卷了一层，手腕内侧沾着一点洗不掉的群青，像一小块夜。她说，等墙画完，这块颜色就该洗掉了。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_8 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第8幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_8 is 1>>
 墙已经干透，炉子也冷了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Monet 9]]>><<pass 4>><</link>>
@@ -400,13 +432,13 @@
 <div id="relday-monet-8">
 <<mpwatchicon>><<link "守夜看火 (0:08)">><<pass 8>><<replace "#relday-monet-8">>
 <<if ($tending or 0) gte 260 or ($willpower or 0) gte 430>>
-	<<set $daily.mpRelDay_mp_relday_monet_8 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_8 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你守着炉子，把火压到只剩一层暗红。莫奈在旁边调胶，偶尔伸手试墙面的温度。后半夜她靠在你肩上睡着了，呼吸很浅。天亮时底料干得刚好，她用指节敲了敲墙，声音清脆：「听见没有？墙在答应。」<span class="green">你们守到了墙干透的那一刻。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 9]]>><<pass 5>><</link>>
 <<else>>
-	火候没压住，底料表面烤出一层硬壳，边角裂了细纹。莫奈蹲下去看了很久，说：「没关系，裂纹也能画成水路。」可你看见她把那处裂纹圈了起来，像在记一笔账。天亮时她的手一直没停。<span class="red">你把壁画底料烤裂了。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	火候没压住，底料表面烤出一层硬壳，边角裂了细纹。莫奈蹲下去看了很久，说：「没关系，裂纹也能画成水路。」可你看见她把那处裂纹圈了起来，像在记一笔账。天亮时她的手一直没停。<span class="red">你把壁画底料烤裂了。</span><<stress 4>><<tiredness 2>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 9]]>><<pass 5>><</link>>
 	<br>
@@ -416,13 +448,13 @@
 <br>
 <<mpclockworkicon>><<link "重调胶粉 (0:08)">><<pass 8>><<replace "#relday-monet-8">>
 <<if ($science or 0) gte 260 or ($maths or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_8 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_8 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你按她的说法把胶粉一点点筛进温水，搅到像刚化开的蜜。莫奈用刷子挑起一点，看它往下淌的速度，点了点头。你们把整面墙重刷了一遍，天亮时她的手酸得抬不起来，却笑着说：「这次光能站住了。」<span class="green">你替她调出了能托住光的底料。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	胶粉筛得太快，结成一粒粒硬块，刷上墙后留下细小的凸起。莫奈用手背蹭了蹭，没说话，只把整桶胶搬到一边，重新烧水。你听见她轻轻叹了一口气，那口气比骂人更重。<span class="red">你调坏了一整桶胶粉。</span><<stress 3>><<tiredness 2>><<gstress>><<gtiredness>>
+	胶粉筛得太快，结成一粒粒硬块，刷上墙后留下细小的凸起。莫奈用手背蹭了蹭，没说话，只把整桶胶搬到一边，重新烧水。你听见她轻轻叹了一口气，那口气比骂人更重。<span class="red">你调坏了一整桶胶粉。</span><<stress 3>><<tiredness 2>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 9]]>><<pass 5>><</link>>
 	<br>
@@ -444,10 +476,14 @@
 <br><br>
 她忽然说：「你眨眼的时候，肩会往下沉一点。记住那个感觉。以后我画等船的人，就用这个姿势。」你照她说的放松肩膀，光果然稳了一点。她在下面轻轻嗯了一声，像确认了一个调子。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_9 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第9幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_9 is 1>>
 脚手架拆了一半，墙上的那个人已经站定。
 <br>
 <<walkicon>><<link [[去下一处 (0:04)|MP RelDay Monet 10]]>><<pass 4>><</link>>
@@ -455,13 +491,13 @@
 <div id="relday-monet-9">
 <<mpclimbicon>><<link "站上脚手架 (0:08)">><<pass 8>><<replace "#relday-monet-9">>
 <<if ($athletics or 0) gte 260 or ($danceskill or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_9 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_9 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你站到腿发麻也没动。莫奈在下面画了很久，偶尔退开看整体，再走上前添几笔。收工时她仰头说：「刚才你眨眼那一下，我画进去了。」你爬下梯子，腿一软，她伸手扶住你的手臂，掌心全是炭灰。<span class="green">你把自己站进了她的壁画里。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 10]]>><<pass 5>><</link>>
 <<else>>
-	你站得太久，眼前发黑，扶住墙才没有摔下来。莫奈立刻扔下笔，踩着梯子把你扶下去，嘴上却说：「今天的光太硬，不怪你。」她给你倒了水，手一直在抖。脚手架上的位置空着，像画里缺了一块。<span class="red">你没能撑到她画完。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
+	你站得太久，眼前发黑，扶住墙才没有摔下来。莫奈立刻扔下笔，踩着梯子把你扶下去，嘴上却说：「今天的光太硬，不怪你。」她给你倒了水，手一直在抖。脚手架上的位置空着，像画里缺了一块。<span class="red">你没能撑到她画完。</span><<stress 4>><<tiredness 2>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 10]]>><<pass 5>><</link>>
 	<br>
@@ -471,13 +507,13 @@
 <br>
 <<mpcarryicon>><<link "替她扶梯 (0:08)">><<pass 8>><<replace "#relday-monet-9">>
 <<if ($housekeeping or 0) gte 250 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_monet_9 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_9 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你扶着木梯，她在高处勾线。梯脚在石地上滑了一下，你用肩膀顶住。她低头看你，笔尖停在半空：「别松手。松了，构图就散。」你就一直顶着，直到她画完那只垂着的手。收工时她踩下最后一级，手在你肩上停了一瞬。<span class="green">你替她稳住了整面墙的构图。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	梯脚在石地上又滑了一下，你没能完全顶住。莫奈在高处扶住画架，笔却掉了下来，在底稿上砸出一个小坑。她下来看了看，说没事，可以补。你捡起笔，笔杆上还留着她的指温。<span class="red">你没能稳住那架梯子。</span><<stress 3>><<pain 1>><<gstress>><<gpain>>
+	梯脚在石地上又滑了一下，你没能完全顶住。莫奈在高处扶住画架，笔却掉了下来，在底稿上砸出一个小坑。她下来看了看，说没事，可以补。你捡起笔，笔杆上还留着她的指温。<span class="red">你没能稳住那架梯子。</span><<stress 3>><<pain 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gpain>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 10]]>><<pass 5>><</link>>
 	<br>
@@ -499,10 +535,14 @@
 <br><br>
 侧厅外有人咳嗽，回声在石墙之间转了一圈。她侧过脸看你，没说求助，也没说别管。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_10 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第10幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_10 is 1>>
 验收的人走了，壁画还留在原处。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Monet 11]]>><<pass 4>><</link>>
@@ -510,13 +550,13 @@
 <div id="relday-monet-10">
 <<mpbargainicon>><<link "陪她谈判 (0:08)">><<pass 8>><<replace "#relday-monet-10">>
 <<if ($english or 0) gte 270 or ($seductionskill or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_10 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_10 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把「希望」拆成他们听得懂的话：不是把脸转过来，是让那盏灯一直亮着；不是把码头画亮，是让人看见等的人还在等。书记官改了两处措辞，商盟的人收起手套。莫奈送他们下楼，回来时说：「你刚才那句话，比我的笔稳。」<span class="green">你们保住了壁画原本的样子。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 11]]>><<pass 5>><</link>>
 <<else>>
-	你说得越多，对方越不耐烦。书记官合上文件夹，说再给三天，改不好就换人画。莫奈一直没开口，等人走光了才走到墙前，抬手摸了摸那盏灯。你听见她说：「没关系，墙还在。」声音很轻，像说给你听，也像说给自己。<span class="red">谈判没有谈成。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	你说得越多，对方越不耐烦。书记官合上文件夹，说再给三天，改不好就换人画。莫奈一直没开口，等人走光了才走到墙前，抬手摸了摸那盏灯。你听见她说：「没关系，墙还在。」声音很轻，像说给你听，也像说给自己。<span class="red">谈判没有谈成。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 11]]>><<pass 5>><</link>>
 	<br>
@@ -526,13 +566,13 @@
 <br>
 <<mpsneakicon>><<link "守住画稿 (0:08)">><<pass 8>><<replace "#relday-monet-10">>
 <<if ($willpower or 0) gte 450 or ($skulduggery or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_10 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_10 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你连夜把底稿拓了一份，藏进画室的地板下面。第二天莫奈发现少了一张纸，问你。你说信她，只是不信他们。她看了你很久，从抽屉里摸出一把钥匙，放在你手心：「侧厅后门的。以后你比我先进得去。」<span class="green">你替她留住了壁画的一条退路。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	你藏底稿时被侧厅的守夜人撞见，盘问了半宿。第二天莫奈知道了，没夸你，只说：「下次别一个人扛。」她把钥匙收了回去，放回抽屉。你看着抽屉合上，知道她不是不信你，只是怕你再出事。<span class="red">你惹上了麻烦，也让她担了心。</span><<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	你藏底稿时被侧厅的守夜人撞见，盘问了半宿。第二天莫奈知道了，没夸你，只说：「下次别一个人扛。」她把钥匙收了回去，放回抽屉。你看着抽屉合上，知道她不是不信你，只是怕你再出事。<span class="red">你惹上了麻烦，也让她担了心。</span><<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 11]]>><<pass 5>><</link>>
 	<br>
@@ -554,10 +594,14 @@
 <br><br>
 墙上那盏灯还没点。所有人都以为那是画里的一部分，只有你知道，她原本打算空着。你想起她说过，灯要小，才像有人在里面。此刻那点空白比周围所有颜色都亮。她伸手替你挡开一个端酒的服务生，指尖在你袖口停了一下。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_11 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第11幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_11 is 1>>
 侧厅的灯一盏盏灭了，画里的雾还亮着。
 <br>
 <<socialiseicon>><<link [[去下一处 (0:04)|MP RelDay Monet 12]]>><<pass 4>><</link>>
@@ -565,13 +609,13 @@
 <div id="relday-monet-11">
 <<mphearticon>><<link "人前牵手 (0:08)">><<pass 8>><<replace "#relday-monet-11">>
 <<if ($seductionskill or 0) gte 250 or ($danceskill or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_11 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_11 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你在人群里握住她的手。她愣了一下，没有抽回，指尖慢慢收拢。后来有人高声问，画里等船的人是谁。莫奈看着墙，说：「一个会回来的人。」人群鼓起掌来，她的手一直没松。<span class="green">你们在所有人面前，把彼此留在了画里。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 12]]>><<pass 5>><</link>>
 <<else>>
-	人群把你们挤散。你伸手时只碰到她的袖口，她被人流带向另一边。等你挤到墙边，抬头看见画里的码头，忽然觉得那个等船的人离你很远。后来你在天台找到她，她说想一个人待一会儿。<span class="red">你们没能站在一起看完揭幕。</span><<stress 3>><<tiredness 1>><<gstress>>
+	人群把你们挤散。你伸手时只碰到她的袖口，她被人流带向另一边。等你挤到墙边，抬头看见画里的码头，忽然觉得那个等船的人离你很远。后来你在天台找到她，她说想一个人待一会儿。<span class="red">你们没能站在一起看完揭幕。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 12]]>><<pass 5>><</link>>
 	<br>
@@ -581,13 +625,13 @@
 <br>
 <<mpsneakicon>><<link "躲去天台 (0:08)">><<pass 8>><<replace "#relday-monet-11">>
 <<if ($athletics or 0) gte 250 or ($skulduggery or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_11 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_11 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你们从侧门溜上天台。海风把她的头发吹乱，远处的钟楼敲了四下。她靠着栏杆说：「画完了，墙就不是我的了。可你还在，我还想画下一面。」你说好。她笑了一下，伸手替你把被风吹乱的领口压平。<span class="green">你们在揭幕日给自己留了一小块安静的地方。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	天台的门锁着，你们在楼梯间站了很久。楼下传来掌声，一声接一声。莫奈靠着墙，说：「画完了，反倒不知道下一步画什么。」你想接话，却听见有人上楼找她。她理了理袖子，先走了。<span class="red">揭幕日就这么过去了。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	天台的门锁着，你们在楼梯间站了很久。楼下传来掌声，一声接一声。莫奈靠着墙，说：「画完了，反倒不知道下一步画什么。」你想接话，却听见有人上楼找她。她理了理袖子，先走了。<span class="red">揭幕日就这么过去了。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 12]]>><<pass 5>><</link>>
 	<br>
@@ -609,10 +653,14 @@
 <br><br>
 画室墙上挂着揭幕那天的速写。画里的你站在人群边上，只占很小一块，她却用最亮的铅白点了你的肩。她没提那幅画，只在你翻到某一页时，忽然说：「停。就这个角度。」你停住，她却没有落笔，只是看着，像在记住什么。楼下的钟敲了八下，她这才动笔。笔尖落在纸上，声音很轻，像雨落在窗沿。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_12 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第12幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_12 is 1>>
 咖啡凉了，画架上的速写也收好了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Monet 13]]>><<pass 4>><</link>>
@@ -620,13 +668,13 @@
 <div id="relday-monet-12">
 <<mpcookicon>><<link "替她煮咖啡 (0:08)">><<pass 8>><<replace "#relday-monet-12">>
 <<if ($tending or 0) gte 240 or ($housekeeping or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_monet_12 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_12 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把咖啡煮得比平时浓一点。她喝了一口，皱眉，又喝第二口：「太苦。但颜色对。」她把杯子放在窗台上，杯口的热气在光里散开。你继续翻书，她继续画，一上午谁也没再说话。<span class="green">你们把一整个上午过成了同一种颜色。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 13]]>><<pass 5>><</link>>
 <<else>>
-	咖啡溢出来，浇在炉火上，腾起一股白烟。你们一起咳着去开窗。莫奈把烧焦的壶拎到水槽，说：「颜色对，味道不对。」她想笑，没笑出来。那天上午她没再动笔，只把窗开着，让风把烟吹散。<span class="red">你把一壶咖啡煮坏了。</span><<stress 3>><<tiredness 1>><<gstress>>
+	咖啡溢出来，浇在炉火上，腾起一股白烟。你们一起咳着去开窗。莫奈把烧焦的壶拎到水槽，说：「颜色对，味道不对。」她想笑，没笑出来。那天上午她没再动笔，只把窗开着，让风把烟吹散。<span class="red">你把一壶咖啡煮坏了。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 13]]>><<pass 5>><</link>>
 	<br>
@@ -636,13 +684,13 @@
 <br>
 <<mpwatchicon>><<link "做她模特 (0:08)">><<pass 8>><<replace "#relday-monet-12">>
 <<if ($danceskill or 0) gte 250 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_monet_12 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_12 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你坐了很久，书页没翻。她画完才说：「你刚才没动，光在睫毛上停了很久。」你问画好了吗。她说没有，光每天都在变，画不完。她把速写撕下来给你，纸上的你低着眼，像在听什么。<span class="green">她把你最安静的样子留在了纸上。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	你坐了不到一刻钟就换了三次姿势。莫奈放下笔，说：「你今天的线条是散的。」她没生气，只把速写撕下来揉成团，扔进废纸篓。你听见纸团落进去的声音，很轻。<span class="red">你没能安静地坐完这一上午。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	你坐了不到一刻钟就换了三次姿势。莫奈放下笔，说：「你今天的线条是散的。」她没生气，只把速写撕下来揉成团，扔进废纸篓。你听见纸团落进去的声音，很轻。<span class="red">你没能安静地坐完这一上午。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 13]]>><<pass 5>><</link>>
 	<br>
@@ -664,10 +712,14 @@
 <br><br>
 她没有催你回答，只把群青罐子挪了挪，让信露出一角。你想起她说过南方的光没有影子。可这间阁楼里，每一件东西都拖着长长的影子，连她的手指也是。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_13 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第13幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_13 is 1>>
 窗台上的信还压在那罐群青下面。
 <br>
 <<walkicon>><<link [[去下一处 (0:04)|MP RelDay Monet 14]]>><<pass 4>><</link>>
@@ -675,13 +727,13 @@
 <div id="relday-monet-13">
 <<mpreadicon>><<link "劝她留下 (0:08)">><<pass 8>><<replace "#relday-monet-13">>
 <<if ($english or 0) gte 260 or ($seductionskill or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_13 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_13 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你说，这里的墙还没画完，这里的人还没学会看雾。她听完笑了，把信折起来，夹进那本旧色卡里，压平：「你倒会替墙说话。」那天下午她重新支起画架，调的颜色比平时暖。你知道她暂时不走了。<span class="green">你让她留在了还没画完的墙前。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 14]]>><<pass 5>><</link>>
 <<else>>
-	你说得太多，她听出你在替她做决定。她把信重新拿起来，说：「我再想想。」那天下午她没支画架，只坐在窗边看屋顶，一根接一根地削炭笔。你走的时候，那罐群青还压在信上。<span class="red">你没劝动她，也让她更犹豫了。</span><<stress 3>><<tiredness 1>><<gstress>>
+	你说得太多，她听出你在替她做决定。她把信重新拿起来，说：「我再想想。」那天下午她没支画架，只坐在窗边看屋顶，一根接一根地削炭笔。你走的时候，那罐群青还压在信上。<span class="red">你没劝动她，也让她更犹豫了。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 14]]>><<pass 5>><</link>>
 	<br>
@@ -691,13 +743,13 @@
 <br>
 <<mpcarryicon>><<link "替她打包 (0:08)">><<pass 8>><<replace "#relday-monet-13">>
 <<if ($housekeeping or 0) gte 250 or ($maths or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_monet_13 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_13 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你替她把画布卷好，用麻绳捆紧，一句话没劝。她看着你手上的绳结，忽然问：「你捆得这么整齐，是希望我走？」你说不是，是希望你随时能回来。她沉默了很久，把信从窗台上拿下来，放进行李箱，又拿出来，压在群青下面。<span class="green">你替她留好了随时能回来的路。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[道别离开 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	你捆画布时绳子勒得太紧，边角压出一道折痕。莫奈看见了，把绳子解开重来，说：「画布不能这么捆，会记住的。」她没提信，也没提走不走。晚上阁楼的灯亮到很晚，你在街上看见那扇窗，站了一会儿。<span class="red">你把画布捆出了折痕。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	你捆画布时绳子勒得太紧，边角压出一道折痕。莫奈看见了，把绳子解开重来，说：「画布不能这么捆，会记住的。」她没提信，也没提走不走。晚上阁楼的灯亮到很晚，你在街上看见那扇窗，站了一会儿。<span class="red">你把画布捆出了折痕。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[继续同行 (0:05)|MP RelDay Monet 14]]>><<pass 5>><</link>>
 	<br>
@@ -719,10 +771,14 @@
 <br><br>
 你忽然想起第一次见她时，她也说过「别动」，说门口那一下把墙上的灰蓝压暗了半个调。原来从那时候起，你就已经站进她的构图里了。她把画笔往你手心里又推了推，笔杆上有一道旧裂痕，被她用细麻绳缠过。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回莫奈身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.monet and $mpNpcs.monet.hasMet>><<link [[回莫奈身边 (0:03)|MP NPC Monet Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_monet_14 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第14幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_monet_14 is 1>>
 墙角的空白已经有了着落，今天不必再添什么。
 <br>
 <<investigateicon>><<link [[回画室品茶 (0:04)|MP NPC Monet Hub]]>><<pass 4>><</link>>
@@ -730,13 +786,13 @@
 <div id="relday-monet-14">
 <<mpreadicon>><<link "墙角签名 (0:08)">><<pass 8>><<replace "#relday-monet-14">>
 <<if ($english or 0) gte 250 or ($willpower or 0) gte 430>>
-	<<set $daily.mpRelDay_mp_relday_monet_14 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_14 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你在墙角签下名字。莫奈看了很久，把自己的名字签在旁边，两个名字之间隔着一指宽的光。「这样，」她说，「谁先走，另一个都能找到位置。」侧厅外有人叫她，她没应，只把画笔上的最后一滴颜色蹭在你名字的末笔上。<span class="green">你们的名字并排留在了那面墙上。</span><<stress -3>><<lstress>>
 	<br><br>
 	<<link [[回画室品茶 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	笔尖在墙上留下一个不圆的点。莫奈拿湿布轻轻擦掉，说：「墙会记得，但可以重来。」她把笔递回你手里，你却一时不敢再接。侧厅很静，那盏灯在远处亮着，像在等你。<span class="red">你的名字没能留在墙上。</span><<stress 3>><<tiredness 1>><<gstress>>
+	笔尖在墙上留下一个不圆的点。莫奈拿湿布轻轻擦掉，说：「墙会记得，但可以重来。」她把笔递回你手里，你却一时不敢再接。侧厅很静，那盏灯在远处亮着，像在等你。<span class="red">你的名字没能留在墙上。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[回画室品茶 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <</if>>
@@ -744,13 +800,13 @@
 <br>
 <<mpcleanicon>><<link "补最后一笔 (0:08)">><<pass 8>><<replace "#relday-monet-14">>
 <<if ($tending or 0) gte 260 or ($housekeeping or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_monet_14 to 1>>
+	<<set $daily.mpRelDay_mp_relday_monet_14 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你在空白处补了一盏很小的灯，灯芯是一点镉黄，和远处那盏遥相呼应。莫奈看了很久，说：「我画了三年雾，原来只差这一盏。」她把手伸进围裙口袋，摸出阁楼的钥匙，放进你手心，钥匙还是温的。<span class="green">你替这面墙补上了最后一盏灯。</span><<tiredness -2>><<stress -2>><<ltiredness>><<lstress>>
 	<br><br>
 	<<link [[回画室品茶 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <<else>>
-	你补的那盏灯画得太大，镉黄在灰蓝里显得刺眼。莫奈看了很久，拿刮刀轻轻刮掉一半，说：「灯要小，才像有人在里面。」她没有怪你，只把画笔收进围裙。你站在墙前，觉得那点黄色还在发烫。<span class="red">你补的灯太亮了。</span><<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	你补的那盏灯画得太大，镉黄在灰蓝里显得刺眼。莫奈看了很久，拿刮刀轻轻刮掉一半，说：「灯要小，才像有人在里面。」她没有怪你，只把画笔收进围裙。你站在墙前，觉得那点黄色还在发烫。<span class="red">你补的灯太亮了。</span><<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[回画室品茶 (0:05)|MP NPC Monet Hub]]>><<pass 5>><</link>>
 <</if>>

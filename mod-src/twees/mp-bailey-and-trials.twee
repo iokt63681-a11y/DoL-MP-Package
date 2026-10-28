@@ -19,9 +19,9 @@
 <<if _rebStg gte 8>>
 	你们早已将贝利勾结地下钱庄的原件备份交予全镇各方势力。贝利盯着你手里的铜钥匙扣看了两秒，冷哼一声合上账册，挥手带着打手径直上了楼。
 	<br><br>
-	<<getouticon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[离开 (0:03)|_exitPas]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 3>><<stress -10>><<endevent>><</link>><<else>><span class="disabled">离开 (0:03)（尚未结识）</span><</if>><<lstress>>
+	<<getouticon>><<if mpNpcMet("Bailey")>><<link [[离开 (0:03)|_exitPas]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<pass 3>><<stress -10>><<endevent>><</link>><<else>><</if>><<lstress>>
 <<else>>
-	<<mpcalculateicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<if ($willpower or 0) gte 250>><<link [[交涉账目 (0:02)|MP Bailey Biweekly Negotiate]]>><<stress 1>><<pass 2>><</link>><<else>><<link [[交涉账目 (0:02)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "交涉账目">><<set $mpInsuffReq to "意志等级：<span class='purple'>D</span>">><<pass 2>><</link>><</if>><<else>><span class="disabled">交涉账目 (0:02)（尚未结识）</span><</if>>
+	<<mpcalculateicon>><<if mpNpcMet("Bailey")>><<if ($willpower or 0) gte 250>><<link [[交涉账目 (0:02)|MP Bailey Biweekly Negotiate]]>><<stress 1>><<pass 2>><</link>><<else>><<link [[交涉账目 (0:02)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "交涉账目">><<set $mpInsuffReq to "意志等级：<span class='purple'>D</span>">><<pass 2>><</link>><</if>><<else>><</if>>
 	<br>
 	<<fisticon>><<if ($physique or 0) gte 250>><<link [[护住同伴 (0:02)|MP Bailey Biweekly Confront]]>><<pass 2>><</link>><<else>><<link [[护住同伴 (0:02)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "护住同伴">><<set $mpInsuffReq to "体魄：250">><<pass 2>><</link>><</if>>
 	<br>
@@ -156,9 +156,9 @@
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <<if _stg is 2>>
-	<<mplockpickicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<if ($physique or 0) gte 12500>><<link [[撬开货车 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 3>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_3")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<physique 3>><<willpower 2>><</link>><<else>><<link [[撬开货车 (0:20)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撬开货车">><<set $mpInsuffReq to "体魄：12500">><<pass 20>><</link>><</if>><<else>><span class="disabled">撬开货车 (0:20)（尚未结识）</span><</if>>
+	<<mplockpickicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<if ($physique or 0) gte 12500>><<link [[撬开货车 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 3>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_3")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<physique 3>><<willpower 2>><</link>><<else>><<link [[撬开货车 (0:20)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撬开货车">><<set $mpInsuffReq to "体魄：12500">><<pass 20>><</link>><</if>><<else>><</if>>
 <<else>>
-	<<mptranslateicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<if ($history or 0) gte 450 or ($skulduggery or 0) gte 450>><<link [[拓下火漆印 (0:16)|MP Quest Bailey Rebellion Resolve]]>><<pass 16>><<set $mpQuestBaileyRebellion to 4>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_4")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><</link>><<else>><<link [[拓下火漆印 (0:16)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拓下火漆印">><<set $mpInsuffReq to "历史等级：<span class='blue'>C</span> 或 诡术等级：<span class='blue'>C</span>">><<pass 16>><</link>><</if>><<else>><span class="disabled">拓下火漆印 (0:16)（尚未结识）</span><</if>>
+	<<mptranslateicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<if ($history or 0) gte 450 or ($skulduggery or 0) gte 450>><<link [[拓下火漆印 (0:16)|MP Quest Bailey Rebellion Resolve]]>><<pass 16>><<set $mpQuestBaileyRebellion to 4>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_4")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><</link>><<else>><<link [[拓下火漆印 (0:16)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拓下火漆印">><<set $mpInsuffReq to "历史等级：<span class='blue'>C</span> 或 诡术等级：<span class='blue'>C</span>">><<pass 16>><</link>><</if>><<else>><</if>>
 <</if>>
 
 :: MP Quest Bailey Rebellion Late [nobr]
@@ -202,10 +202,10 @@
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <<if _stg is 6>>
 	<br>
-	<<crimeicon "safe">><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($skulduggery or 0) gte 820>><<link [[开启地下金库 (0:25)|MP Quest Bailey Rebellion Resolve]]>><<pass 25>><<set $mpQuestBaileyRebellion to 7>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_7")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<willpower 4>><<control 15>><</link>><<else>><<link [[开启地下金库 (0:25)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "开启地下金库">><<set $mpInsuffReq to "诡术等级：<span class='teal'>A</span>">><<pass 25>><</link>><</if>><<else>><<link [[开启地下金库 (0:25)|MP NotNow]]>><<set $mpNotNowRet to (State.passage)>><<set $mpNotNowLabel to "开启地下金库">><<set $mpNotNowReq to "夜晚 或 黄昏">><<pass 25>><</link>><</if>><<else>><span class="disabled">开启地下金库 (0:25)（尚未结识）</span><</if>>
+	<<crimeicon "safe">><<if mpNpcMet("Bailey")>><<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($skulduggery or 0) gte 820>><<link [[开启地下金库 (0:25)|MP Quest Bailey Rebellion Resolve]]>><<pass 25>><<set $mpQuestBaileyRebellion to 7>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_7")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<willpower 4>><<control 15>><</link>><<else>><<link [[开启地下金库 (0:25)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "开启地下金库">><<set $mpInsuffReq to "诡术等级：<span class='teal'>A</span>">><<pass 25>><</link>><</if>><<else>><<link [[开启地下金库 (0:25)|MP NotNow]]>><<set $mpNotNowRet to (State.passage)>><<set $mpNotNowLabel to "开启地下金库">><<set $mpNotNowReq to "夜晚 或 黄昏">><<pass 25>><</link>><</if>><<else>><</if>>
 <<elseif _stg is 7>>
 	<br>
-	<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<if ($willpower or 0) gte 860>><<link [[摊出铁证 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 8>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_8")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<control 25>><<trauma -12>><<stress -15>><</link>><<else>><<link [[摊出铁证 (0:20)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "摊出铁证">><<set $mpInsuffReq to "意志等级：<span class='teal'>A</span>">><<pass 20>><</link>><</if>><<else>><span class="disabled">摊出铁证 (0:20)（尚未结识）</span><</if>>
+	<<socialiseicon>><<if mpNpcMet("Bailey")>><<if ($willpower or 0) gte 860>><<link [[摊出铁证 (0:20)|MP Quest Bailey Rebellion Resolve]]>><<pass 20>><<set $mpQuestBaileyRebellion to 8>><<set $daily.mpQuestBaileyRebellion to 1>><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("bailey_rebellion_stg_8")>><<money 6000>><<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span><</if>><<control 25>><<trauma -12>><<stress -15>><</link>><<else>><<link [[摊出铁证 (0:20)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "摊出铁证">><<set $mpInsuffReq to "意志等级：<span class='teal'>A</span>">><<pass 20>><</link>><</if>><<else>><</if>>
 <</if>>
 
 :: MP Quest Bailey Rebellion Resolve [nobr]
@@ -527,7 +527,7 @@
 <br><br>
 <<fisticon>><<if ($physique or 0) gte 280>><<link [[推倒高柜 (0:12)|MP Elite Encounter Bailey Enforcers Barricade]]>><<pass 12>><<physique 4>><</link>><<else>><<link [[推倒高柜 (0:12)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "推倒高柜">><<set $mpInsuffReq to "体魄：280">><<pass 12>><</link>><</if>>
 <br>
-<<socialiseicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[吹哨唤林恩 (0:14)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 14>><</link>><<else>><span class="disabled">吹哨唤林恩 (0:14)（尚未结识）</span><</if>>
+<<socialiseicon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[吹哨唤林恩 (0:14)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 14>><</link>><<else>><</if>>
 <br>
 <<runicon>><<link [[拉闸退回阁楼 (0:05)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 5>><<tiredness 1>><</link>>
 
@@ -538,7 +538,7 @@
 <<if $physique gte 12500 or $willpower gte 600>>你们趁势夺过被压打手手中的橡胶棍，两棍敲落了后方打手的武器，连同贝利的黑金收款箱一并截获。<<include "MP Elite Encounter Bailey Enforcers Win">>
 <<else>>后方的打手踩着柜顶跃过障碍，但已成了孤军奋战之势。
 	<br><br>
-	<<fisticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[合围打手 (0:10)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 10>><</link>><<else>><span class="disabled">合围打手 (0:10)（尚未结识）</span><</if>>
+	<<fisticon>><<if $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>><<link [[合围打手 (0:10)|MP Elite Encounter Bailey Enforcers Ambush]]>><<pass 10>><</link>><<else>><</if>>
 	<br>
 	<<runicon>><<link [[退入卧室 (0:04)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 4>><<tiredness 1>><</link>>
 <</if>>
@@ -552,7 +552,7 @@
 <<else>>
 	橡胶棍重重砸在你的肩头，剧痛令你眼前一黑失去平衡，被两名打手直接拖进了孤儿院地底的训诫室。<<pain 20>><<stress 12>>
 	<br><br>
-	<<walkicon>><<if $NPCNameList and $NPCNameList.includes("Bailey")>><<link [[跟上押送队伍 (0:10)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>><<else>><span class="disabled">跟上押送队伍 (0:10)（尚未结识）</span><</if>>
+	<<walkicon>><<if mpNpcMet("Bailey")>><<link [[跟上押送队伍 (0:10)|MP BadEnd Bailey Basement]]>><<set $mpBaileyBiweeklyNextDay to ((window.Time && Time.days) or 0) + 14>><<set $mpBadEndProgress to 0>><<set $mpBadEndDays to 1>><<pass 10>><</link>><<else>><</if>>
 	<br>
 	<<mpclimbicon>><<link [[滑下绳梯 (0:06)|MP Elite Encounter Bailey Enforcers Escape]]>><<pass 6>><<pain 10>><</link>><<gpain>>
 <</if>>

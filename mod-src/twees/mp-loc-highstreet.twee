@@ -1,28 +1,29 @@
 :: MP Loc HighStreet Hub [nobr]
-<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>>
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>><<set $mpDeepSeen to ($mpDeepSeen or {})>><<set $mpDeepSeen.highstreet to 1>>
 高街的深处藏在一道旧行会拱门里。门楣上那排铜字被几十年的煤烟熏得发乌，只有正中一枚齿轮与麦穗交缠的徽记还被人擦得发亮。跨过门槛，石板路把街面的叫卖滤薄了一层，只剩钟楼每隔一刻投下来的钝响，和账房里翻纸的窸窣声。
 <br><br>
 门厅正中立着一张桃花心木斜面长桌，桌面压着一整幅手绘的高街剖面。最外一层是玻璃拱廊、钟表铺、裁缝铺与杂货行；往里是商会后巷的茶座、当铺的侧门和挂在墙上的当日行情；再往里，墨色骤然加重，行会会馆的议事厅、市政厅地下的旧档案室与钟楼拱顶被同一支炭笔圈在一处。图角用红蜡封着一枚小铜钉，钉下压着刚换下来的巡夜班表。
 <br><br>
 行会执事从柜台后抬起头，黄铜边眼镜滑到鼻梁中段。他把蘸水笔横搁在墨水瓶口，指节在账册上敲了两下：「你来得正好。拱廊的橱窗、街角的报摊、后巷的茶座，还有楼上的议事厅——哪一处松动，整条街的价码都要跟着晃一晃。」他顿了顿，把账册往你面前推了半寸，「先说清楚，今天是想在明面上走动，还是打算从背阴的地方进去。」
 <br><br>
-门外传来卸货板车碾过石板的闷响。报童抱着一摞早报从拱门下跑过，塞拉提着工具箱从钟表铺方向走来，看见你，只略微点了一下头，脚步没停。街面一切如常，可只要在镇上住得久些就知道，高街的平静从来是算出来的，不是长出来的。
+门外传来卸货板车碾过石板的闷响。报童抱着一摞早报从拱门下跑过，<<if $mpWorldSeraEnding is "depart">>钟表铺的卷帘门半落，塞拉出海后，柜台上只剩代管的账册。<<elseif $mpWorldSeraEnding is "stay">>钟表铺二层的灯亮到很晚，天文工坊偶尔透出星盘的反光。<<else>>塞拉提着工具箱从钟表铺方向走来，看见你，只略微点了一下头，脚步没停。<</if>>街面一切如常，可只要在镇上住得久些就知道，高街的平静从来是算出来的，不是长出来的。
 <br>
-【高街态势】探索进度：<<print $mpLocProgress_HighStreet>> ｜ 已结事件：<<print $mpLocEvents_HighStreet>> ｜ 雾潮水尺：<<print ($mpFogTide or 0)>>
+图角的红蜡旁边压着几叠巡夜班表，<<if $mpLocProgress_HighStreet gte 4>>最上面那张已经换过三回，边角卷得发亮，拱廊和后巷的路线都用炭笔重描过。<<elseif $mpLocProgress_HighStreet gte 2>>班表换过一回，剖面图上多了几处圈注。<<elseif $mpLocProgress_HighStreet gte 1>>班表还是新的，图角只添了一小道铅笔痕。<<else>>班表压在铜钉下，纸面平展，还没人动过。<</if>><<if $mpLocEvents_HighStreet gte 3>>桌沿堆着几张摊主递来的收据，纸角被茶渍粘住。<<elseif $mpLocEvents_HighStreet gte 1>>桌沿压着一两张回执，墨迹还没干透。<<else>>桌沿干净，只有一截削短的铅笔。<</if>>
 <br>
 <<if ($mpFogTide or 0) gte 4>>雾气顺着门缝钻进来，在长桌边缘凝成一层细盐似的白霜，执事不得不把账册往里挪了挪。<<elseif ($mpFogTide or 0) gte 2>>街面浮着薄雾，拱廊的灯亮得比平时早，灯芯烧出一股焦味。<<else>>今日天光清透，从门厅能一直望见钟楼那两根磨白的铜针。<</if>>
 <br>
-【街区归属】<<if $mpWorldHighStreetOutcome is "guildpact">>商盟自治：会馆的铜印压在门楣上，巡夜人的灯按时辰走，各铺的价牌每日清晨更换一次，旧账月底当众复核。<<elseif $mpWorldHighStreetOutcome is "nightmarket">>夜市放开：入夜后拱廊灯火不熄，行会账房通宵点算，街面上多了许多陌生的口音和不肯留名的买主。<<else>>尚未定局：会馆的议案还压在铜盘里，等着有人去投第一票。<</if>><<if $mpWorldMonetEnding>> 会馆东墙那幅未完成的壁画也跟着醒了色，莫奈的名字被写进了议事录的附页。<</if>>
+【街区归属】<<if $mpHighStreetEnded>><<if $mpWorldHighStreetOutcome is "guildpact">>商盟自治已定局：会馆铜印压在门楣上，巡夜按班表走，行会抽成使街面百货略涨。<<else>>夜市开埠已定局：入夜后拱廊灯火不熄，地租压低但旧派掌柜颇有微词。<</if>><<else>>尚未定局：会馆的议案还压在铜盘里，等着有人去投第一票。<</if>><<if $mpWorldMonetEnding>> 会馆东墙那幅未完成的壁画也跟着醒了色，莫奈的名字被写进了议事录的附页。<</if>><<if $mpWorldLinEnding is "public">> 街角布告栏贴着林恩旧案重审的抄件，巡夜哨位挪到了明处。<<elseif $mpWorldLinEnding is "private">> 林恩的夜巡暗格已经封存，后巷夜里少有人敢喧哗。<</if>><<if $mpWorldUndertideOutcome is "sealed">> 长桌角压着港务抄件：旧闸封死，铺租核算少了一条走私损耗。<<elseif $mpWorldUndertideOutcome is "open">> 长桌角压着港务抄件：潮道重开，巡夜班表多了一格暗渠口。<</if>><<if Time.days lt ($mpHighStreetSetback or 0)>> <span class="red">（会馆门房记下了你昨日的失手，第 <<print $mpHighStreetSetback>> 日前暂不派急活）</span><</if>>
+<<mpHighStreetEventRoll>>
 <br><br>
 门厅尽头分作四条路：往左是敞亮的拱廊，往右是商会后巷那道永远半掩的铁栅，正前方是通往会馆的窄梯，而侧门外的石阶通向钟楼与街面的缝隙。你把手按在剖面图边缘，指腹沾了一点炭灰。
 <br><br>
-<<getouticon>><<link [[返回深区名录 (0:04)|MP Deep Locations Directory]]>><<pass 4>><</link>><br>
-<<walkicon>><<link [[探索高街表层 (0:06)|MP Loc HighStreet Surface]]>><<pass 6>><</link>><br>
-<<investigateicon>><<link [[深入高街中层 (0:08)|MP Loc HighStreet Mid]]>><<pass 8>><</link>><br>
-<<sneakicon>><<link [[潜入高街深层 (0:10)|MP Loc HighStreet Deep]]>><<pass 10>><</link>><br>
-<<link [[观测季节异象 (0:06)|MP Loc HighStreet Season]]>><<pass 6>><</link>>
-<br><<link [[查看四季活动 (0:03)|MP Loc HighStreet Festival Hub]]>><<pass 3>><</link>>
-<br><<link [[更多日常 (0:03)|MP Loc HighStreet More Hub]]>><<pass 3>><</link>>
+<<getouticon>><<link [[返回街面 (0:03)|High Street]]>><<pass 3>><</link>><br>
+<<walkicon>><<link [[进玻璃拱廊 (0:10)|MP Loc HighStreet Surface]]>><<pass 10>><</link>><br>
+<<shopicon>><<link [[接一班街务 (1:00)|MP Loc HighStreet Work]]>><</link>><br>
+<<investigateicon>><<link [[进商会后巷 (0:08)|MP Loc HighStreet Mid]]>><<pass 8>><</link>><br>
+<<if $mpWorldUndertideOutcome>><<mplettericon>><<link [[读港务抄件 (0:05)|MP Loc Undertide Echo High]]>><<pass 5>><</link>><br>
+<<elseif ($mpHighStreetShifts or 0) gte 5 and !$mpHighStreetEnded>><<mpscaleicon>><<link [[在长桌前定局 (0:20)|MP Loc HighStreet Deep]]>><<pass 20>><</link>><br>
+<</if>>
 
 :: MP Loc HighStreet Surface [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>>
@@ -34,15 +35,17 @@
 <br><br>
 拱廊之外，银行的铜门还没开，两个穿深色外套的人站在台阶下低声说话，见你望过去便住了口。街角的巡夜岗棚空着，白天的这条街归掌柜们管，夜里的账要等林恩来算。
 <br>
-【今日街面】探索进度：<<print $mpLocProgress_HighStreet>> ｜ 已结事件：<<print $mpLocEvents_HighStreet>>
+橱窗边的铜压条上留着指腹抹开的灰痕，<<if $mpLocProgress_HighStreet gte 3>>几家掌柜见你走过会点头，杂货行把新到的盐袋往你这边挪了半尺。<<elseif $mpLocProgress_HighStreet gte 1>>只有钟表铺的塞拉抬眼看你一下，别的铺子还当你是生客。<<else>>玻璃上映着你自己的影子，铺子里的人只顾低头理货。<</if>><<if $mpLocEvents_HighStreet gte 2>>报摊的木板下压着两张你经手过的回执。<<elseif $mpLocEvents_HighStreet gte 1>>报童把一张找零的纸票塞进你手里。<<else>>报摊上还没有你经手的单子。<</if>>
 <br>
 <<if $mpLocProgress_HighStreet gte 3>>拱廊里的人已经认得你，后巷茶座的伙计见你路过会多添一只杯子；橱窗的事、报摊的事，老板们愿意先同你商量。<<elseif $mpLocProgress_HighStreet gte 1>>你在这条街上刚站住脚，掌柜们还只把你当生面孔，肯交给你的都是些不伤筋动骨的零活。<<else>>你还在橱窗外面打转，玻璃上映着自己的影子，铺子里的人只当你是个过路的。<</if>>
 <br><br>
 午后的光从拱廊顶上漏下来，一格一格地移过石板。你可以留在橱窗前替老板撑一天门面，也可以去街角帮报童跑一趟早报；再往里走，后巷那道铁栅已经开着一条缝。
 <br><br>
+<<set _hsSurfOpen to (Time.hour gte 7 and Time.hour lt 19 and Time.days gte ($mpHighStreetSetback or 0))>>
 <<getouticon>><<link [[返回高街总枢 (0:02)|MP Loc HighStreet Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[拱廊橱窗布置 (0:10)|MP Loc HighStreet Event 1]]>><<pass 10>><</link>><br>
-<<shopicon>><<link [[报童街角分报 (0:10)|MP Loc HighStreet Event 2]]>><<pass 10>><</link>><br>
+<<if _hsSurfOpen>><<investigateicon>><<link [[拱廊橱窗布置 (0:10)|MP Loc HighStreet Event 1]]>><<pass 10>><</link>><br><<else>><span class="disabled">拱廊橱窗布置（营业窗 07:00–19:00 且无整顿期）</span><br><</if>>
+<<if _hsSurfOpen>><<shopicon>><<link [[报童街角分报 (0:10)|MP Loc HighStreet Event 2]]>><<pass 10>><</link>><br><<else>><span class="disabled">报童街角分报（营业窗 07:00–19:00 且无整顿期）</span><br><</if>>
+<<if _hsSurfOpen>><<walkicon>><<link [[拱廊巡一圈 (0:20)|MP Loc HighStreet Arch Walk]]>><</link>><br><</if>>
 <<walkicon>><<link [[前往高街中层 (0:06)|MP Loc HighStreet Mid]]>><<pass 6>><<set $mpLocProgress_HighStreet to Math.max($mpLocProgress_HighStreet, 1)>><</link>>
 
 :: MP Loc HighStreet Mid [nobr]
@@ -55,15 +58,17 @@
 <br><br>
 巷口的灯柱下站着巡夜人林恩，高马尾被风吹得偏向一侧，手腕上缠着旧护带。他没有回头：「这条巷子白天也不干净。偷钱包的、递暗条的、替人望风的，都挑光线好的时候动手。」说着侧过半步，让出一个能同时盯住茶座和当铺门口的位置。
 <br>
-【中层门禁】探索进度：<<print $mpLocProgress_HighStreet>> ｜ 已结事件：<<print $mpLocEvents_HighStreet>>
+包铁门环上缠的麻绳换过一回，门房的手仍搭在环边。<<if $mpLocProgress_HighStreet gte 3 or $mpLocEvents_HighStreet gte 3>>他没再拦你，只把侧梯的铜链往旁边挪了半寸。<<elseif $mpLocProgress_HighStreet gte 1 or $mpLocEvents_HighStreet gte 1>>他看了你一眼，门环没有松开。<<else>>他把抹布搭回门环上，意思很清楚。<</if>>茶座的铜壶沸着，当铺暗柜那边透出一线绿灯光。
 <br>
 <<if $mpLocProgress_HighStreet gte 2 or $mpLocEvents_HighStreet gte 2>>门房认得你的脸，会馆侧梯的铜链没有再挂上。你在这条后巷已经算半个自己人，往里走一步，没人会拦。<<else>>门房的手一直搭在门环上。此刻硬闯，只会被请回街面，还要在这些掌柜眼皮底下赔一路冷眼。<</if>>
 <br><br>
 茶座的铜壶又沸了一回。你可以坐到条凳上听一耳朵账房里的议价，也可以绕到当铺暗柜前替人掌一次眼；再往深处，会馆的窄梯就在那扇包铁门后。
 <br><br>
+<<set _hsMidOpen to (Time.hour gte 10 and Time.hour lt 22 and Time.days gte ($mpHighStreetSetback or 0))>>
 <<getouticon>><<link [[返回高街总枢 (0:02)|MP Loc HighStreet Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[商会后巷茶座 (0:12)|MP Loc HighStreet Event 3]]>><<pass 12>><</link>><br>
-<<socialiseicon>><<link [[当铺暗柜掌眼 (0:12)|MP Loc HighStreet Event 4]]>><<pass 12>><</link>><br>
+<<if _hsMidOpen>><<investigateicon>><<link [[商会后巷茶座 (0:12)|MP Loc HighStreet Event 3]]>><<pass 12>><</link>><br><<else>><span class="disabled">商会后巷茶座（开放窗 10:00–22:00 且无整顿期）</span><br><</if>>
+<<if _hsMidOpen>><<socialiseicon>><<link [[当铺暗柜掌眼 (0:12)|MP Loc HighStreet Event 4]]>><<pass 12>><</link>><br><<else>><span class="disabled">当铺暗柜掌眼（开放窗 10:00–22:00 且无整顿期）</span><br><</if>>
+<<if _hsMidOpen>><<shopicon>><<link [[茶座旁听 (0:20)|MP Loc HighStreet Tea Lane]]>><</link>><br><</if>>
 <<sneakicon>><<if $mpLocProgress_HighStreet gte 2 or $mpLocEvents_HighStreet gte 2>><<link [[进入高街深层 (0:08)|MP Loc HighStreet Deep]]>><<pass 8>><<set $mpLocProgress_HighStreet to Math.max($mpLocProgress_HighStreet, 3)>><</link>><<else>><<link [[贸然硬闯深层 (0:08)|MP Loc HighStreet Hub]]>><<pass 8>><<stress 4>><<tiredness 2>><</link>><</if>>
 
 :: MP Loc HighStreet Deep [nobr]
@@ -76,17 +81,22 @@
 <br><br>
 林恩倚在门边，没有进来。他听完两个方案，只说了一句：「巡夜的班表要是没人认，给我多少人都不够用。」说完把短棍换到另一只手，目光落在楼下的天井。
 <br>
-【会馆议题】当前归属：<<print ($mpWorldHighStreetOutcome or "未定")>> ｜ 探索进度：<<print $mpLocProgress_HighStreet>>
+长桌中央的三样东西还摊着，<<if $mpWorldHighStreetOutcome is "guildpact">>草约边角压着行会的铜印，椅子按次序排好，墙上多了一面记满巡查日期的黑板。<<elseif $mpWorldHighStreetOutcome is "nightmarket">>夜市地界图被钉在门后，红线圈出的三条街入夜后归摊主自己照看。<<else>>草约和地界图并排放着，谁也没有先落印。<</if>>壁炉上方的议案铜牌<<if $mpLocProgress_HighStreet gte 3>>新添的粉笔痕已经擦过两回<<elseif $mpLocProgress_HighStreet gte 1>>留着一行没擦净的粉笔<<else>>还是去年的旧字<</if>>。
 <br>
 <<if $mpWorldHighStreetOutcome is "guildpact">>草约已经生效，议事厅的椅子按行会次序排好，墙上多了一面记满巡查日期的黑板。<<elseif $mpWorldHighStreetOutcome is "nightmarket">>夜市地界图被钉在门后，红线圈出的三条街入夜后归摊主们自己照看。<</if>>
 <br><br>
-厅外的天井里，市政厅地下金库的通风口正往外吐着湿冷的气；钟楼的木梯贴着外墙往上，尽头是一圈被风磨白的铜栏杆。你可以先下楼去看金库外的旧档案室，也可以沿木梯登上钟楼拱顶；至于这条街往后归谁管，终究要在议事厅这张长桌上落定。
+厅外的天井里，市政厅地下金库的通风口正往外吐着湿冷的气；钟楼的木梯贴着外墙往上，尽头是一圈被风磨白的铜栏杆。你可以先下楼去看金库外的旧档案室，也可以沿木梯登上钟楼拱顶；至于这条街往后归谁管，终究要在议事厅这张长桌上落定——执事只认你在门厅接过的街务班次，满五班才肯把铜印和地界图一并摊开。
 <br><br>
+<<set _hsDeepOpen to (Time.hour gte 9 and Time.hour lt 23 and Time.days gte ($mpHighStreetSetback or 0))>>
 <<getouticon>><<link [[返回高街总枢 (0:02)|MP Loc HighStreet Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[市政厅地下金库 (0:15)|MP Loc HighStreet Event 5]]>><<pass 15>><</link>><br>
-<<sneakicon>><<link [[钟楼拱顶天台 (0:15)|MP Loc HighStreet Event 6]]>><<pass 15>><</link>><br>
-<<socialiseicon>><<link [[促成商盟自治 (0:20)|MP Loc HighStreet Ending A]]>><<pass 20>><<set $mpWorldHighStreetOutcome to "guildpact">><<set $mpLocProgress_HighStreet to 5>><</link>><br>
-<<link [[开放高街夜市 (0:20)|MP Loc HighStreet Ending B]]>><<pass 20>><<set $mpWorldHighStreetOutcome to "nightmarket">><<set $mpLocProgress_HighStreet to 5>><</link>>
+<<if _hsDeepOpen>><<investigateicon>><<link [[市政厅地下金库 (0:15)|MP Loc HighStreet Event 5]]>><<pass 15>><</link>><br><<else>><<link [[回中层廊下 (0:04)|MP Loc HighStreet Mid]]>><<pass 4>><</link>><br><</if>>
+<<if _hsDeepOpen>><<sneakicon>><<link [[上钟楼拱顶 (0:15)|MP Loc HighStreet Event 6]]>><<pass 15>><</link>><br><<else>><<link [[看季候天色 (0:04)|MP Loc HighStreet Season]]>><<pass 4>><</link>><br><</if>>
+<<if $mpHighStreetEnded>>
+<<if $mpWorldHighStreetOutcome is "guildpact">><<socialiseicon>><<link [[重温商盟自治草约 (0:06)|MP Loc HighStreet Ending A]]>><<pass 6>><</link>><<else>><<socialiseicon>><<link [[重温夜市 (0:06)|MP Loc HighStreet Ending B]]>><<pass 6>><</link>><</if>>
+<<elseif ($mpHighStreetShifts or 0) gte 5 and Time.days gte ($mpHighStreetSetback or 0)>>
+<<socialiseicon>><<link [[促成商盟 (0:20)|MP Loc HighStreet Ending A]]>><<pass 20>><<set $mpHighStreetEnded to 1>><<set $mpWorldHighStreetOutcome to "guildpact">><<set $mpLocProgress_HighStreet to 5>><</link>><br>
+<<link [[开放整条夜市街 (0:20)|MP Loc HighStreet Ending B]]>><<pass 20>><<set $mpHighStreetEnded to 1>><<set $mpWorldHighStreetOutcome to "nightmarket">><<set $mpLocProgress_HighStreet to 5>><</link>>
+<<else>><span class="disabled">促成商盟自治 / 开放高街夜市 (0:20)（需街务满五班且无整顿期）</span><</if>>
 
 :: MP Loc HighStreet Season [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>>
@@ -110,7 +120,7 @@
 <br>
 铺子的门轴、拱廊的排水口、巡夜的灯油，全在这一天里被重新安排过一遍。掌柜们看天定价，行会看天排班，连报童都改了口径：雨天少跑两条巷，晴天多带一摞报。你站在拱廊的柱子旁，把这些细碎的规矩在心里过了一遍。
 <br>
-【今日天象】雾潮水尺：<<print ($mpFogTide or 0)>> ｜ 探索进度：<<print $mpLocProgress_HighStreet>>
+拱廊柱脚的水线<<if ($mpFogTide or 0) gte 4>>已经爬到第二道砖缝，檐沟的水来不及排，铺子门槛上垫起防潮麻袋<<elseif ($mpFogTide or 0) gte 2>>洇出一圈深色，街面浮着薄雾<<else>>还是干的，日头把石板照得发白<</if>>。<<if $mpLocProgress_HighStreet gte 3>>巡夜的班表上已经排到后半夜，掌柜们肯把急单先递到你手上。<<elseif $mpLocProgress_HighStreet gte 1>>你在街面刚站住脚，接到的仍是些零活。<<else>>铺子里的人只当你是过路的。<</if>>
 <br><br>
 接下来的一日如何安排，全看你想从这条街的哪一头入手：是循着水汽去后巷看那些不愿见光的买卖，还是在敞亮的拱廊里替掌柜们撑一天门面。你把袖口拢紧，闻见风里那股熟悉的气味——煤烟、灯油和石板被踩热后的尘土味。
 <br><br>
@@ -131,7 +141,7 @@
 你可以踩上人字梯，从最高一级探身去够窗框顶端的铜压条，把每一道水痕都擦净，再调好灯架的角度；也可以蹲到柜台后面，替老板核对那叠还没写完的价签——暗码记在纸背，点错了数，明早整排货都要标错价。前者体面，做成了整条拱廊都看得见；后者稳妥，只是挣不到那份脸面。
 <br><br>
 <<getouticon>><<link [[返回高街表层 (0:02)|MP Loc HighStreet Surface]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($housekeeping or 0) gte 220 or ($willpower or 0) gte 420>><<link [[擦拭拱廊橱窗 (0:12)|MP Loc HighStreet Surface]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[擦拭拱廊橱窗 (0:12)|MP Loc HighStreet Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($housekeeping or 0) gte 220 or ($willpower or 0) gte 420>><<link [[擦拭拱廊橱窗 (0:12)|MP Loc HighStreet Surface]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[擦拭拱廊橱窗 (0:12)|MP Loc HighStreet Surface]]>><<pass 12>><<set $mpHighStreetSetback to Time.days + 1>><<set $mpLocProgress_HighStreet to Math.max(0, ($mpLocProgress_HighStreet or 0) - 1)>><<mpStandingAdd "guilds" -2>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[核对价签暗码 (0:12)|MP Loc HighStreet Hub]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<tiredness 2>><</link>>
 
 :: MP Loc HighStreet Event 2 [nobr]
@@ -147,7 +157,7 @@
 街面上开始有卸货的板车经过，轮子碾过石板，发出闷钝的响。湿石板被夜露浸过，鞋底一沾就打滑。你可以抱起那摞报纸，从拱廊东头一路跑到西头，赶在每家铺子落闩前把早报塞进门缝；也可以钻进夹层，把传单按街区分成几摞。前者要抢时间，跑急了容易在湿石板上打滑；后者不体面，却也不会误了谁的早报。
 <br><br>
 <<getouticon>><<link [[返回高街表层 (0:02)|MP Loc HighStreet Surface]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($athletics or 0) gte 220 or ($willpower or 0) gte 420>><<link [[协助分发早报 (0:12)|MP Loc HighStreet Surface]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[协助分发早报 (0:12)|MP Loc HighStreet Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($athletics or 0) gte 220 or ($willpower or 0) gte 420>><<link [[协助分发早报 (0:12)|MP Loc HighStreet Surface]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[协助分发早报 (0:12)|MP Loc HighStreet Surface]]>><<pass 12>><<set $mpHighStreetSetback to Time.days + 1>><<set $mpLocProgress_HighStreet to Math.max(0, ($mpLocProgress_HighStreet or 0) - 1)>><<mpStandingAdd "guilds" -2>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[收集夹层传单 (0:12)|MP Loc HighStreet Hub]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<tiredness 2>><</link>>
 
 :: MP Loc HighStreet Event 3 [nobr]
@@ -163,7 +173,7 @@
 你坐在茶座外侧的条凳上，背对着他们。茶炉的白汽正好在你与长桌之间拉起一道薄幕。再往里挪半步，就能听清账房先生压在算盘声底下的那几句话；退回来，也可以把自己面前的物价板抄完——那上面写着今日的公开行情，抄下来交给谁都不会出错。巷口有巡夜的脚步声经过，很轻，停了一下，又走远。林恩没有进来，但你知道他在外面。
 <br><br>
 <<getouticon>><<link [[返回高街中层 (0:02)|MP Loc HighStreet Mid]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($skulduggery or 0) gte 240 or ($willpower or 0) gte 420>><<link [[旁听账房议价 (0:12)|MP Loc HighStreet Mid]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[旁听账房议价 (0:12)|MP Loc HighStreet Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($skulduggery or 0) gte 240 or ($willpower or 0) gte 420>><<link [[旁听账房议价 (0:12)|MP Loc HighStreet Mid]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[旁听账房议价 (0:12)|MP Loc HighStreet Mid]]>><<pass 12>><<set $mpHighStreetSetback to Time.days + 1>><<set $mpLocProgress_HighStreet to Math.max(0, ($mpLocProgress_HighStreet or 0) - 1)>><<mpStandingAdd "guilds" -2>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[记录物价波动 (0:12)|MP Loc HighStreet Hub]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<tiredness 2>><</link>>
 
 :: MP Loc HighStreet Event 4 [nobr]
@@ -172,14 +182,14 @@
 <br><br>
 「旧表？」他把一只绒布托盘推到窗口前。托盘里躺着一只银壳怀表，表盖上有细密的錾花，边缘却有一道新磨的划痕。「客人说是祖上传下来的，急着出手。我看这后盖的铰链换过，机芯的螺丝也不成套。你要是看得出成色，替我掌一掌眼；看不出来，就帮我把典当簿上的编号核一遍，省得我又写错行。」
 <br><br>
-绿玻璃灯把表壳照得发青。你想起塞拉教过你的次序：先看壳，再看盘，最后才动机芯；后配的零件颜色总差半度，錾花的新旧也能摸出来。掌眼要担干系，说错了，当铺要赔钱，掌眼的人也要在这条街上丢名；核编号则只是坐冷板凳的活，费眼，却不出错。窗外有雾时，暗柜前的队伍会排到巷口，今天却只有你一个人。
+绿玻璃灯把表壳照得发青。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>你想起塞拉教过你的次序：先看壳，再看盘，最后才动机芯；后配的零件颜色总差半度，錾花的新旧也能摸出来。<<else>>你只认得出壳旧、盘面磨过，再细的地方不敢下断。<</if>>掌眼要担干系，说错了，当铺要赔钱，掌眼的人也要在这条街上丢名；核编号则只是坐冷板凳的活，费眼，却不出错。窗外有雾时，暗柜前的队伍会排到巷口，今天却只有你一个人。
 <br><br>
 暗柜的规矩是只认物，不认人。老经纪人说，前些年有个掌柜拿假表来当，被他一眼看穿，第二天整条街都知道了，铺子从此没再开过门。他说这话时没有看你，只把绿玻璃灯往表盘上挪了挪，好让那道划痕更清楚些。
 <br><br>
 老经纪人把镊子和小油石一并推出来，又把典当簿翻到夹着布条的那一页，不催你。门外有人咳嗽了一声，又走开了；簿子的纸边卷起，最上面一行写着一个被划掉的名字。他把选择摆得很清楚，就像把表放在灯下一样。
 <br><br>
 <<getouticon>><<link [[返回高街中层 (0:02)|MP Loc HighStreet Mid]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($science or 0) gte 220 or ($willpower or 0) gte 420>><<link [[鉴别旧表成色 (0:12)|MP Loc HighStreet Mid]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[鉴别旧表成色 (0:12)|MP Loc HighStreet Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<if ($science or 0) gte 220 or ($willpower or 0) gte 420>><<link [[鉴别旧表成色 (0:12)|MP Loc HighStreet Mid]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[鉴别旧表成色 (0:12)|MP Loc HighStreet Mid]]>><<pass 12>><<set $mpHighStreetSetback to Time.days + 1>><<set $mpLocProgress_HighStreet to Math.max(0, ($mpLocProgress_HighStreet or 0) - 1)>><<mpStandingAdd "guilds" -2>><<stress 5>><<tiredness 3>><</link>><</if>><<else>><span class="disabled">鉴别旧表成色 (0:12)（没人教过你看表）</span><</if>><br>
 <<socialiseicon>><<link [[核验典当编号 (0:12)|MP Loc HighStreet Hub]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<tiredness 2>><</link>>
 
 :: MP Loc HighStreet Event 5 [nobr]
@@ -195,7 +205,7 @@
 桌上的墨水瓶剩个底，笔尖有点开叉。你把椅子往后挪了半寸，免得椅脚在石板上刮出声响。楼上那双靴子又停了一回，这回停得比先前久。
 <br><br>
 <<getouticon>><<link [[返回高街深层 (0:02)|MP Loc HighStreet Deep]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($skulduggery or 0) gte 260 or ($willpower or 0) gte 420>><<link [[排查通风铁栅 (0:12)|MP Loc HighStreet Deep]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[排查通风铁栅 (0:12)|MP Loc HighStreet Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($skulduggery or 0) gte 260 or ($willpower or 0) gte 420>><<link [[排查通风铁栅 (0:12)|MP Loc HighStreet Deep]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[排查通风铁栅 (0:12)|MP Loc HighStreet Deep]]>><<pass 12>><<set $mpHighStreetSetback to Time.days + 1>><<set $mpLocProgress_HighStreet to Math.max(0, ($mpLocProgress_HighStreet or 0) - 1)>><<mpStandingAdd "guilds" -2>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[抄录税册摘要 (0:12)|MP Loc HighStreet Hub]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<tiredness 2>><</link>>
 
 :: MP Loc HighStreet Event 6 [nobr]
@@ -211,12 +221,12 @@
 塞拉曾说，钟楼的铜针走得很准，准到能拿它校表。此刻铜针就在你头顶，走得不急不缓，齿轮咬合的细响被风撕成一段一段。钟声要到整点才响，离整点还有一段安静的时间，风把远处的市声一阵一阵送上来。楼下有人抬头朝钟楼望了一眼，又低下头继续走。
 <br><br>
 <<getouticon>><<link [[返回高街深层 (0:02)|MP Loc HighStreet Deep]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($willpower or 0) gte 400 or ($willpower or 0) gte 420>><<link [[观测高街灯火 (0:12)|MP Loc HighStreet Deep]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[观测高街灯火 (0:12)|MP Loc HighStreet Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
+<<investigateicon>><<if ($willpower or 0) gte 400 or ($willpower or 0) gte 420>><<link [[观测高街灯火 (0:12)|MP Loc HighStreet Deep]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<set $mpLocProgress_HighStreet to Math.min(5, $mpLocProgress_HighStreet + 1)>><<stress -3>><</link>><<else>><<link [[观测高街灯火 (0:12)|MP Loc HighStreet Deep]]>><<pass 12>><<set $mpHighStreetSetback to Time.days + 1>><<set $mpLocProgress_HighStreet to Math.max(0, ($mpLocProgress_HighStreet or 0) - 1)>><<mpStandingAdd "guilds" -2>><<stress 5>><<tiredness 3>><</link>><</if>><br>
 <<socialiseicon>><<link [[传递商会信号 (0:12)|MP Loc HighStreet Hub]]>><<pass 12>><<set $mpLocEvents_HighStreet += 1>><<tiredness 2>><</link>>
 
 :: MP Loc HighStreet Ending A [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>>
-<<set $mpWorldHighStreetOutcome to "guildpact">><<set $mpLocProgress_HighStreet to 5>>
+<<if !$mpHighStreetEnded>><<set $mpHighStreetEnded to 1>><<set $mpWorldPriceMod to Math.min(160, ($mpWorldPriceMod or 100) + 4)>><<mpStandingAdd "guilds" 6>><</if>><<set $mpWorldHighStreetOutcome to "guildpact">><<set $mpLocProgress_HighStreet to 5>>
 会馆议事厅的窗子全开着，风把账册的纸角吹得翻卷。十二把椅子头一回坐得这样满，面包行的胖掌柜、铁匠铺的独臂师傅、裁缝铺的老板娘都到了。行会执事把商盟自治的草约铺在长桌中央，草约末尾是一排预留的签名格，格子上压着一方还温热的火漆。
 <br><br>
 「从今天起，高街的价牌自己定，巡夜的班表自己排，拱廊的排水沟自己修。」执事把铜印从绒盒里取出来，印面在灯下泛着暗金，「税留三成给街面，其余照旧上交。谁要是拿这条街当自家的钱袋，行会第一个不答应。」他说完，先在自己的名字旁按了指印，然后把印递给下一个人。
@@ -230,7 +240,7 @@
 
 :: MP Loc HighStreet Ending B [nobr]
 <<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<set $mpLocProgress_HighStreet to ($mpLocProgress_HighStreet or 0)>><<set $mpLocEvents_HighStreet to ($mpLocEvents_HighStreet or 0)>>
-<<set $mpWorldHighStreetOutcome to "nightmarket">><<set $mpLocProgress_HighStreet to 5>>
+<<if !$mpHighStreetEnded>><<set $mpHighStreetEnded to 1>><<mpStandingAdd "guilds" -4>><<mpStandingAdd "underworld" 6>><<stress 2>><</if>><<set $mpWorldHighStreetOutcome to "nightmarket">><<set $mpLocProgress_HighStreet to 5>>
 入夜后的高街第一次没有落灯。拱廊的铁钩上挂满了纸灯笼，红的、黄的、画着鱼和麦穗的，一串接一串垂到人头顶。摊子从拱廊里一直摆到石板路上，卖热栗子的、修伞的、替人写信的，还有把旧书摊在油布上、自己蹲在旁边打盹的老头。空气里混着糖霜、灯油和湿石板被踩热后的气味。
 <br><br>
 行会执事站在会馆台阶上，手里捏着那张夜市开埠的地界图，脸色不算好看。地界图上的红线圈了三道，他一道一道看过去，最后把图卷起来：「门开到后半夜，地租压下来，账要照记。出了事，别怪行会不替谁兜着。」说完还是把铜印盖了下去，蜡油在纸上摊开一朵暗红的花。
@@ -243,3 +253,21 @@
 <br><br>
 <<getouticon>><<link [[返回高街总枢 (0:04)|MP Loc HighStreet Hub]]>><<pass 4>><<stress -6>><</link>><br>
 <<walkicon>><<link [[返回高街深层 (0:04)|MP Loc HighStreet Deep]]>><<pass 4>><</link>>
+
+:: Widgets MP HighStreet Event [widget nobr]
+<<widget "mpHighStreetEventRoll">>
+	<<set _day to (window.Time ? Time.days : 0)>>
+	<<if not ($daily and $daily.mpHighStreetEnter is _day)>>
+		<<set $daily to ($daily or {})>><<set $daily.mpHighStreetEnter to _day>>
+		<<set _roll to random(1, 100)>>
+		<<if _roll lte 25>>
+			<br><span class="blue">【巡查价牌】</span>行会执事领着两名账房沿拱廊核对今日盐价与煤油牌。<<if ($maths or 0) gte 200 or ($mpLocProgress_HighStreet or 0) gte 2>>你替杂货行报出折算后的基准数，执事颔首记下。<<stress -1>><<else>>你被挤在柜台外等了一刻钟，衣角沾了粉笔灰。<<stress 1>><</if>>
+		<<elseif _roll lte 50>>
+			<br><span class="blue">【后巷擦肩】</span>茶座拐角有人故意撞向你的衣袋。<<if ($skulduggery or 0) gte 200 or ($athletics or 0) gte 200>>你反手按住对方手腕，那人讪笑着缩回暗巷。<<stress -1>><<else>>虽然护住了钱袋，但被撞得肩膀生疼。<<pain 1>><<stress 2>><</if>>
+		<<elseif _roll lte 75>>
+			<br><span class="blue">【钟楼报时】</span>头顶钟楼的铜针整点合拢，震落檐角一层细霜。<<if ($willpower or 0) gte 320>>你借着钟声校准了步子，心神安定。<<stress -1>><<else>>低沉的钟鸣震得耳膜发麻。<<stress 1>><</if>>
+		<<else>>
+			<br><span class="blue">【熟人照面】</span><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉隔着钟表铺玻璃窗朝你点了点头。<<stress -1>><<elseif $mpNpcs and $mpNpcs.lin and $mpNpcs.lin.hasMet>>林恩在街角岗棚下整理护腕，见你经过便让出半步。<<stress -1>><<else>>报童塞给你一张印花边角料。<<stress -1>><</if>>
+		<</if>>
+	<</if>>
+<</widget>>

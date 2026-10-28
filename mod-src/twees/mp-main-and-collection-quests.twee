@@ -14,11 +14,11 @@
 	<<getouticon>><<link [[离开此地 (0:08)|_exitPas]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 	<br>
 	<<if _stg is 0>>
-		高街与孤儿院交界的石墙下，<<if $NPCNameList and $NPCNameList.includes("Robin")>>罗宾<<else>>熟识的院童<</if>>朝新刻的新月记号努了努嘴：「昨晚有人在这儿翻出半页旧账册。」基石缝里塞着泡软的纸角。
+		高街与孤儿院交界的石墙下，<<if mpNpcMet("Robin")>>罗宾<<else>>熟识的院童<</if>>朝新刻的新月记号努了努嘴：「昨晚有人在这儿翻出半页旧账册。」基石缝里塞着泡软的纸角。
 		<br><br>
 		<<mplockpickicon>><<if ($history or 0) gte 260 or ($skulduggery or 0) gte 280>><<link [[撬开松动基石 (0:05)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_1"]>><<set $mpClues["main_eclipse_1"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 1>><<pass 5>><</link>><<else>><<link [[撬开松动基石 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "撬开松动基石">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
 		<br>
-		<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Robin")>><<link [[问罗宾细节 (0:03)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_1"]>><<set $mpClues["main_eclipse_1"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 1>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Robin")>><<npcincr Robin love 1>><</if>><<pass 3>><</link>><<else>><span class="disabled">问罗宾细节 (0:03)（尚未结识）</span><</if>>
+		<<socialiseicon>><<if mpNpcMet("Robin")>><<link [[问罗宾细节 (0:03)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_1"]>><<set $mpClues["main_eclipse_1"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 1>><<if $NPCName and mpNpcMet("Robin")>><<npcincr Robin love 1>><</if>><<pass 3>><</link>><<else>><</if>>
 	<<else>>
 		<<if Time.hour gte 8 and Time.hour lt 21>>
 		<<set $outside to 0>><<set $location to "cabin">>
@@ -30,8 +30,6 @@
 		<</if>>
 	<</if>>
 <</if>>
-
-<br><<link [[翻看旧港深区海图 (0:04)|MP Deep Locations Directory]]>><<pass 4>><</link>>
 :: MP Main Story Eclipse Early 2 [nobr]
 <<set _stg to ($mpMainStoryEclipse or 2)>>
 <<set _exitPas to ($mpReturnPassage or "Orphanage")>>
@@ -49,7 +47,7 @@
 	<</if>>
 <<else>>
 	<<set $outside to 0>><<set $location to "temple">>
-	地下修道院藏经阁门前，<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>把小灯留给你：「账册与这里的碑文能对上，进去拓下来吧。」
+	地下修道院藏经阁门前，<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>把小灯留给你：「账册与这里的碑文能对上，进去拓下来吧。」
 	<br><br>
 	<<mptranslateicon>><<if ($history or 0) gte 260 or ($english or 0) gte 260>><<link [[拓下藏经阁碑文 (0:12)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_4"]>><<set $mpClues["main_eclipse_4"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 4>><<pass 12>><</link>><<else>><<link [[拓下藏经阁碑文 (0:12)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "拓下藏经阁碑文">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 英语等级：<span class='purple'>D</span>">><<pass 12>><</link>><</if>>
 	<br>
@@ -75,12 +73,12 @@
 <<mpritualicon>><<link [[前往深林石环 (0:12)|MP Main Story Eclipse Resolve]]>><<if !$mpClues or !$mpClues["main_eclipse_6"]>><<set $mpClues["main_eclipse_6"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 6>><<pass 12>><</link>>
 <<elseif _stg is 6>>
 	<<set $outside to 1>><<set $location to "forest">>
-	深林月泉边，<<if $NPCNameList and $NPCNameList.includes("Eden")>>伊甸<<else>>林间猎人<</if>>用刀尖指了指水面：「半枚徽章在泉底，另外半枚今晚在峭壁天鹅绒拍卖会。」
+	深林月泉边，<<if mpNpcMet("Eden")>>伊甸<<else>>林间猎人<</if>>用刀尖指了指水面：「半枚徽章在泉底，另外半枚今晚在峭壁天鹅绒拍卖会。」
 	<br><br>
 <<walkicon>><<if ($swimmingskill or 0) gte 250>><<link [[潜入月泉底 (0:08)|MP Main Story Eclipse Resolve]]>><<pass 8>><<if ($swimmingskill or 0) gte 250>><<if !$mpClues or !$mpClues["main_eclipse_7"]>><<set $mpClues["main_eclipse_7"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 7>><<else>><<stress 3>><</if>><</link>><<else>><<link [[潜入月泉底 (0:08)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "潜入月泉底">><<set $mpInsuffReq to "游泳等级：<span class='purple'>D</span>">><<pass 8>><</link>><</if>>
 <<else>>
 	<<set $outside to 0>><<set $location to "brothel">>
-	天鹅绒暗层拍卖厅里，<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>朝你举杯低语：「压轴拍品在我后廊保险柜，能混进后台我就当没看见。」
+	天鹅绒暗层拍卖厅里，<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>朝你举杯低语：「压轴拍品在我后廊保险柜，能混进后台我就当没看见。」
 	<br><br>
 <<if Time.dayState is "night" or Time.dayState is "dusk">><<if ($seductionskill or 0) gte 250 or ($skulduggery or 0) gte 250>><<link [[混进拍卖后台 (0:10)|MP Main Story Eclipse Resolve]]>><<pass 10>><<if ($seductionskill or 0) gte 350 or ($skulduggery or 0) gte 350>><<if !$mpClues or !$mpClues["main_eclipse_8"]>><<set $mpClues["main_eclipse_8"] to 1>><span class="blue">线索已记录</span><</if>><<set $mpMainStoryEclipse to 8>><<else>><<stress 3>><</if>><</link>><<else>><<link [[混进拍卖后台 (0:10)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "混进拍卖后台">><<set $mpInsuffReq to "魅力等级：<span class='purple'>D</span> 或 诡术等级：<span class='purple'>D</span>">><<pass 10>><</link>><</if>><<else>><span class="disabled">混进拍卖后台 (0:10)（拍卖只在夜里开场）</span><</if>>
 	<br>
@@ -239,7 +237,7 @@
 	<br><br>
 	<<link [[回机括城 (0:08)|MP Collection Resolve CrownGear Step3]]>><<pass 8>><</link>>
 	<br>
-	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[听齿轮咬合 (0:08)|MP Collection Resolve CrownGear Step3]]>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera love 1>><</if>><<stress -3>><<pass 8>><</link>><<else>><span class="disabled">听齿轮咬合 (0:08)（尚未结识）</span><</if>>
+	<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[听齿轮咬合 (0:08)|MP Collection Resolve CrownGear Step3]]>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera love 1>><</if>><<stress -3>><<pass 8>><</link>><<else>><</if>>
 <<else>>
 	偏心轴在你手里多转了半圈，薄齿轮崩掉一个角。<<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>>塞拉<<else>>修表师<</if>>用拇指按住飞出的碎屑，没说话，只把锉刀递给你。
 	<<pain 2>><<stress 4>>
@@ -259,7 +257,7 @@
 机括城的主泵房里，三枚齿轮终于套进王冠状的传动架。配重缓缓抬起，暗河的水位在刻度管里一格一格退下去。可主发条还在回弹，你必须在它咬死之前把锁销插进轴心。
 <<set _ok to 0>>
 <br><br>
-<<mpcarryicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[托塞拉保管 (0:08)|MP Collection Quests Hub]]>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><span class="disabled">托塞拉保管 (0:08)（尚未结识）</span><</if>>
+<<mpcarryicon>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<link [[托塞拉保管 (0:08)|MP Collection Quests Hub]]>><<if $mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet>><<mpnpcincr Sera trust 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><</if>>
 <br>
 <div id="act-mp-collection-resolve-crowngear-step3">
 <<crimeicon "safe">><<if ($willpower or 0) gte 650 or ($science or 0) gte 650>><<link "拆解暗槽 (0:05)">><<pass 5>><<replace "#act-mp-collection-resolve-crowngear-step3">>
@@ -305,27 +303,27 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Temple">>
 <</if>>
-圣堂地下修道院的抄经室里，三张羊皮残页的切口能对上，字序却是断的。<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>说这不是祷词，是老教团封存地窖的清单：哪只箱子装过谁的姓名，哪块基石后面还有暗龛。念错顺序，墙里的铜钟会先响。
+圣堂地下修道院的抄经室里，三张羊皮残页的切口能对上，字序却是断的。<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>说这不是祷词，是老教团封存地窖的清单：哪只箱子装过谁的姓名，哪块基石后面还有暗龛。念错顺序，墙里的铜钟会先响。
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
 <div id="act-mp-collection-resolve-abysspage">
-<<socialiseicon>><<if ($history or 0) gte 280 or ($english or 0) gte 280>><<if $NPCNameList and $NPCNameList.includes("Jordan")>><<link "问旧修院编号 (0:05)">><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<pass 5>><<replace "#act-mp-collection-resolve-abysspage">>
+<<socialiseicon>><<if ($history or 0) gte 280 or ($english or 0) gte 280>><<if mpNpcMet("Jordan")>><<link "问旧修院编号 (0:05)">><<if $NPCName and mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>><<pass 5>><<replace "#act-mp-collection-resolve-abysspage">>
 <<if ($history or 0) gte 320 or ($english or 0) gte 320>>
 	<<if !$mpClues or !$mpClues["collect_abyss_page_order"]>><<set $mpClues["collect_abyss_page_order"] to 1>><span class="blue">线索已记录</span><</if>>
 	你按羊皮背后的针孔把三页排成回环，启句与应答终于接上。乔丹在旁轻轻呼出一口气。
 	<<stress -2>>
 	<br><br>
-	<<if $NPCNameList and $NPCNameList.includes("Jordan")>><<link [[询问旧修院编号 (0:08)|MP Collection Resolve AbyssPage Step2]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<pass 8>><</link>><<else>><span class="disabled">询问旧修院编号 (0:08)（尚未结识）</span><</if>>
+	<<if mpNpcMet("Jordan")>><<link [[询问旧修院编号 (0:08)|MP Collection Resolve AbyssPage Step2]]>><<if $NPCName and mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>><<pass 8>><</link>><<else>><</if>>
 	<br>
 	<<link [[拓下三页 (0:08)|MP Collection Resolve AbyssPage Step2]]>><<stress -1>><<pass 8>><</link>>
 <<else>>
-	你把应答页放反了。灯焰一歪，蜡油滴在边角，焦味立刻漫开。<<if $NPCNameList and $NPCNameList.includes("Jordan")>>乔丹<<else>>神殿修士<</if>>伸手把灯移远。
+	你把应答页放反了。灯焰一歪，蜡油滴在边角，焦味立刻漫开。<<if mpNpcMet("Jordan")>>乔丹<<else>>神殿修士<</if>>伸手把灯移远。
 	<<stress 4>><<pain 1>>
 	<br><br>
 	<<link [[蹲身再问旧编号 (0:04)|MP Collection Resolve AbyssPage]]>><<pass 4>><</link>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">问旧修院编号 (0:05)（尚未结识）</span><</if>><<else>><<link [[问旧修院编号 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "问旧修院编号">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 英语等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
+<</replace>><</link>><<else>><</if>><<else>><<link [[问旧修院编号 (0:05)|MP Insufficient]]>><<set $mpInsuffRet to (State.passage)>><<set $mpInsuffLabel to "问旧修院编号">><<set $mpInsuffReq to "历史等级：<span class='purple'>D</span> 或 英语等级：<span class='purple'>D</span>">><<pass 5>><</link>><</if>>
 </div>
 :: MP Collection Resolve AbyssPage Step2 [nobr]
 <<set $outside to 0>><<set $location to "school">>
@@ -335,8 +333,8 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Temple">>
 <</if>>
-学校旧档案室的最里排，<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>正把一摞发脆的抄本搬上桌。你摊开拓片，页脚的修院编号与档案柜侧面那排褪色标签一一对上。
-「这半行不是缺字，」<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>用铅笔尖点了点，「是被人用同色墨水涂掉了。底下的压痕还在。」
+学校旧档案室的最里排，<<if mpNpcMet("Sydney")>>悉尼<<else>>图书馆助手<</if>>正把一摞发脆的抄本搬上桌。你摊开拓片，页脚的修院编号与档案柜侧面那排褪色标签一一对上。
+「这半行不是缺字，」<<if mpNpcMet("Sydney")>>悉尼<<else>>图书馆助手<</if>>用铅笔尖点了点，「是被人用同色墨水涂掉了。底下的压痕还在。」
 <br><br>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -349,9 +347,9 @@
 	<br><br>
 	<<link [[回神殿 (0:08)|MP Collection Resolve AbyssPage Step3]]>><<pass 8>><</link>>
 	<br>
-	<<if $NPCNameList and $NPCNameList.includes("Sydney")>><<link [[请悉尼抄页 (0:08)|MP Collection Resolve AbyssPage Step3]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Sydney")>><<npcincr Sydney love 1>><</if>><<stress -3>><<pass 8>><</link>><<else>><span class="disabled">请悉尼抄页 (0:08)（尚未结识）</span><</if>>
+	<<if mpNpcMet("Sydney")>><<link [[请悉尼抄页 (0:08)|MP Collection Resolve AbyssPage Step3]]>><<if $NPCName and mpNpcMet("Sydney")>><<npcincr Sydney love 1>><</if>><<stress -3>><<pass 8>><</link>><<else>><</if>>
 <<else>>
-	你辨认太久，铅笔在拓片边缘划出一道灰痕。<<if $NPCNameList and $NPCNameList.includes("Sydney")>>悉尼<<else>>图书馆助手<</if>>摇头，把抄本收回柜里。
+	你辨认太久，铅笔在拓片边缘划出一道灰痕。<<if mpNpcMet("Sydney")>>悉尼<<else>>图书馆助手<</if>>摇头，把抄本收回柜里。
 	<<tiredness 2>><<stress 4>>
 	<br><br>
 	<<link [[拢袖再返回神殿 (0:04)|MP Collection Resolve AbyssPage Step2]]>><<pass 4>><</link>>
@@ -369,7 +367,7 @@
 神殿祭坛后的暗龛前，三张残页按补好的顺序铺在石台上。你念出启句，墙里的铜钟没有响；应答句接上去时，祭坛基石下方传来一声很轻的金属错位。
 <<set _ok to 0>>
 <br><br>
-<<mpreadicon>><<if $NPCNameList and $NPCNameList.includes("Jordan")>><<link [[交还残页 (0:08)|MP Collection Quests Hub]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Jordan")>><<npcincr Jordan love 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><span class="disabled">交还残页 (0:08)（尚未结识）</span><</if>>
+<<mpreadicon>><<if mpNpcMet("Jordan")>><<link [[交还残页 (0:08)|MP Collection Quests Hub]]>><<if $NPCName and mpNpcMet("Jordan")>><<npcincr Jordan love 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><</if>>
 <br>
 <div id="act-mp-collection-resolve-abysspage-step3">
 <<investigateicon>><<if ($willpower or 0) gte 650 or ($english or 0) gte 650>><<link "上前应对 (0:05)">><<pass 5>><<replace "#act-mp-collection-resolve-abysspage-step3">>
@@ -445,8 +443,8 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Docks">>
 <</if>>
-干船坞的闸门只开了一条缝。<<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>蹲在龙骨阴影里补网，见你摊开三块印面，便把手里那截旧缆绳递过来。
-「蜡锁不怕火，怕潮，」<<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>说，「旧港的箱子只在退潮后半个时辰能开。你得先算准下一次。」
+干船坞的闸门只开了一条缝。<<if mpNpcMet("Gwylan")>>格威岚<<else>>杂货店主<</if>>蹲在龙骨阴影里补网，见你摊开三块印面，便把手里那截旧缆绳递过来。
+「蜡锁不怕火，怕潮，」<<if mpNpcMet("Gwylan")>>格威岚<<else>>杂货店主<</if>>说，「旧港的箱子只在退潮后半个时辰能开。你得先算准下一次。」
 <<if $mpClues["collect_smuggler_ring_hull"]>><span class="teal">借着先前摸清的船首印面弧度，你很快看出了干船坞旧缆绳的盘结法。</span><</if>>
 <br><br>
 <<getouticon>><<link [[离开 (0:02)|_exitPas]]>><<pass 2>><<set $eventskip to 1>><<endevent>><</link>>
@@ -456,13 +454,13 @@
 <<if (($maths or 0) + ($mpClues['collect_smuggler_ring_hull'] ? 60 : 0)) gte 420 or ($english or 0) gte 420>>
 	<<if !$mpClues or !$mpClues["collect_smuggler_ring_tide"]>><<set $mpClues["collect_smuggler_ring_tide"] to 1>><span class="blue">线索已记录</span><</if>>
 	你把潮表与舱单上的吃水线对上，算出明早退潮的空档。格威岚用刀尖在木板上划了个记号。
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Gwylan")>><<npcincr Gwylan love 1>><</if>><<stress -2>>
+	<<if $NPCName and mpNpcMet("Gwylan")>><<npcincr Gwylan love 1>><</if>><<stress -2>>
 	<br><br>
 	<<link [[回沉船滩 (0:09)|MP Collection Resolve SmugglerRing Step3]]>><<pass 9>><</link>>
 	<br>
-	<<link [[守到退潮 (0:12)|MP Collection Resolve SmugglerRing Step3]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Gwylan")>><<npcincr Gwylan love 1>><</if>><<stress -3>><<pass 12>><</link>>
+	<<link [[守到退潮 (0:12)|MP Collection Resolve SmugglerRing Step3]]>><<if $NPCName and mpNpcMet("Gwylan")>><<npcincr Gwylan love 1>><</if>><<stress -3>><<pass 12>><</link>>
 <<else>>
-	你把潮汐时辰记错了半刻。<<if $NPCNameList and $NPCNameList.includes("Gwylan")>>格威岚<<else>>杂货店主<</if>>没说什么，只把缆绳收回去，指了指坞门外已经漫上来的水线。
+	你把潮汐时辰记错了半刻。<<if mpNpcMet("Gwylan")>>格威岚<<else>>杂货店主<</if>>没说什么，只把缆绳收回去，指了指坞门外已经漫上来的水线。
 	<<tiredness 2>><<stress 4>>
 	<br><br>
 	<<link [[蹲身再回沉开箱 (0:04)|MP Collection Resolve SmugglerRing Step2]]>><<pass 4>><</link>>
@@ -480,7 +478,7 @@
 退潮后的沉船滩露出半截铁箱。你把三块印面依次按进蜡锁，船首朝外，浪脊朝上，王冠压在最后。蜡层裂开一道细缝，箱盖里的海水开始往外渗。
 <<set _ok to 0>>
 <br><br>
-<<socialiseicon>><<link [[交印面 (0:12)|MP Collection Quests Hub]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Gwylan")>><<npcincr Gwylan love 1>><</if>><<stress -4>><<pass 12>><</link>>
+<<socialiseicon>><<link [[交印面 (0:12)|MP Collection Quests Hub]]>><<if $NPCName and mpNpcMet("Gwylan")>><<npcincr Gwylan love 1>><</if>><<stress -4>><<pass 12>><</link>>
 <br>
 <div id="act-mp-collection-resolve-smugglerring-step3">
 <<investigateicon>><<if ($willpower or 0) gte 650 or ($skulduggery or 0) gte 650>><<link "上前处置 (0:05)">><<pass 5>><<replace "#act-mp-collection-resolve-smugglerring-step3">>
@@ -539,7 +537,7 @@
 	<br><br>
 	<<link [[前往深林石环 (0:09)|MP Collection Resolve BrideFlower Step2]]>><<pass 9>><</link>>
 	<br>
-	<<if $NPCNameList and $NPCNameList.includes("Avery")>><<link [[问花的来历 (0:12)|MP Collection Resolve BrideFlower Step2]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>><<stress -1>><<pass 12>><</link>><<else>><span class="disabled">问花的来历 (0:12)（尚未结识）</span><</if>>
+	<<if mpNpcMet("Avery")>><<link [[问花的来历 (0:12)|MP Collection Resolve BrideFlower Step2]]>><<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><</if>><<stress -1>><<pass 12>><</link>><<else>><</if>>
 <<else>>
 	瓶塞一松，细白的花粉扑上你的脸。温室忽然安静得过分，你扶着花架等眼前的颜色慢慢退回去。
 	<<stress 6>><<trauma 2>>
@@ -591,7 +589,7 @@
 提纯要控火。火大一分，银丝就焦；火小一分，花液不肯离析。窗外传来巡夜人的脚步声。
 <<set _ok to 0>>
 <br><br>
-<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Avery")>><<link [[交银花簪 (0:08)|MP Collection Quests Hub]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><span class="disabled">交银花簪 (0:08)（尚未结识）</span><</if>>
+<<socialiseicon>><<if mpNpcMet("Avery")>><<link [[交银花簪 (0:08)|MP Collection Quests Hub]]>><<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><</if>>
 <br>
 <div id="act-mp-collection-resolve-brideflower-step3">
 <<investigateicon>><<if ($science or 0) gte 650 or ($willpower or 0) gte 650>><<link "稳住心神 (0:05)">><<pass 5>><<replace "#act-mp-collection-resolve-brideflower-step3">>
@@ -637,7 +635,7 @@
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>>
 	<<set _exitPas to "Connudatus Street">>
 <</if>>
-天鹅绒暗层后廊的试衣间里，三枚暗金徽章摊在丝绒托盘上。边齿能互相咬合，叠在一起时，背面浮出一朵完整的黑鸢尾。<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>说，这是三年舞会的贵宾徽章，凑齐的人能进画库；画库里挂着什么，得自己去看。
+天鹅绒暗层后廊的试衣间里，三枚暗金徽章摊在丝绒托盘上。边齿能互相咬合，叠在一起时，背面浮出一朵完整的黑鸢尾。<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>说，这是三年舞会的贵宾徽章，凑齐的人能进画库；画库里挂着什么，得自己去看。
 <br><br>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<pass 8>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
@@ -646,13 +644,13 @@
 <<if ($seductionskill or 0) gte 300 or ($skulduggery or 0) gte 300>>
 	<<if !$mpClues or !$mpClues["collect_velvet_crest_pattern"]>><<set $mpClues["collect_velvet_crest_pattern"] to 1>><span class="blue">线索已记录</span><</if>>
 	你顺着布莱尔的话尾接下去，让她把托盘往你这边推了半寸。黑鸢尾的轮廓在灯下完全合拢。
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><</if>><<stress -2>>
+	<<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><</if>><<stress -2>>
 	<br><br>
 	<<link [[前往康努斯街 (0:08)|MP Collection Resolve VelvetCrest Step2]]>><<pass 8>><</link>>
 	<br>
-	<<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[听完提醒 (0:08)|MP Collection Resolve VelvetCrest Step2]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><</if>><<stress -3>><<pass 8>><</link>><<else>><span class="disabled">听完提醒 (0:08)（尚未结识）</span><</if>>
+	<<if mpNpcMet("Briar")>><<link [[听完提醒 (0:08)|MP Collection Resolve VelvetCrest Step2]]>><<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><</if>><<stress -3>><<pass 8>><</link>><<else>><</if>>
 <<else>>
-	你的目光在徽章上停得太久。门外传来高跟鞋声，<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>随手盖上丝绒布，朝你摇了摇头。
+	你的目光在徽章上停得太久。门外传来高跟鞋声，<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>随手盖上丝绒布，朝你摇了摇头。
 	<<stress 4>>
 	<br><br>
 	<<link [[拢袖再找刻印师 (0:04)|MP Collection Resolve VelvetCrest]]>><<pass 4>><</link>>
@@ -699,10 +697,10 @@
 	<<set _exitPas to "Connudatus Street">>
 <</if>>
 画库的铁门藏在暗层尽头的镜墙后面。三枚徽章嵌进门边的三个凹槽，黑鸢尾的轮廓在铜面上合拢。门锁里传来一声很轻的咔哒。
-门后是一间没有窗的小厅，墙上挂着几幅蒙布的画。<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>靠在门框上，没有进来。
+门后是一间没有窗的小厅，墙上挂着几幅蒙布的画。<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>靠在门框上，没有进来。
 <<set _ok to 0>>
 <br><br>
-<<keepsakeicon>><<if $NPCNameList and $NPCNameList.includes("Briar")>><<link [[交还徽章 (0:08)|MP Collection Quests Hub]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><span class="disabled">交还徽章 (0:08)（尚未结识）</span><</if>>
+<<keepsakeicon>><<if mpNpcMet("Briar")>><<link [[交还徽章 (0:08)|MP Collection Quests Hub]]>><<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><</if>>
 <br>
 <div id="act-mp-collection-resolve-velvetcrest-step3">
 <<crimeicon "safe">><<if ($seductionskill or 0) gte 650 or ($willpower or 0) gte 650>><<link "拆解暗槽 (0:05)">><<pass 5>><<replace "#act-mp-collection-resolve-velvetcrest-step3">>
@@ -793,7 +791,7 @@
 	<br><br>
 	<<link [[细看铅封铁匣 (0:07)|MP Collection Resolve LedgerKey Step3]]>><<pass 7>><</link>>
 	<br>
-	<<if $NPCNameList and $NPCNameList.includes("Leighton")>><<link [[问建院账目 (0:06)|MP Collection Resolve LedgerKey Step3]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -3>><<pass 6>><</link>><<else>><span class="disabled">问建院账目 (0:06)（尚未结识）</span><</if>>
+	<<if mpNpcMet("Leighton")>><<link [[问建院账目 (0:06)|MP Collection Resolve LedgerKey Step3]]>><<if $NPCName and mpNpcMet("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -3>><<pass 6>><</link>><<else>><</if>>
 <<else>>
 	霉味呛得你眼睛发酸。你翻了几页，字母在昏暗里糊成一片，只记得那几个反复出现的编号。
 	<<tiredness 2>><<stress 4>>
@@ -814,7 +812,7 @@
 匣盖弹开一条缝，里面不是金币，是一册用油布包好的建院总账和几叠旧存单。
 <<set _ok to 0>>
 <br><br>
-<<socialiseicon>><<if $NPCNameList and $NPCNameList.includes("Leighton")>><<link [[交密匙拓本 (0:08)|MP Collection Quests Hub]]>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><span class="disabled">交密匙拓本 (0:08)（尚未结识）</span><</if>>
+<<socialiseicon>><<if mpNpcMet("Leighton")>><<link [[交密匙拓本 (0:08)|MP Collection Quests Hub]]>><<if $NPCName and mpNpcMet("Leighton")>><<npcincr Leighton love 1>><</if>><<stress -4>><<pass 8>><</link>><<else>><</if>>
 <br>
 <div id="act-mp-collection-resolve-ledgerkey-step3">
 <<investigateicon>><<if ($skulduggery or 0) gte 650 or ($willpower or 0) gte 650>><<link "上前应对 (0:05)">><<pass 5>><<replace "#act-mp-collection-resolve-ledgerkey-step3">>

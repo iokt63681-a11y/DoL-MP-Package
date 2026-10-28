@@ -6,10 +6,14 @@
 <br><br>
 里间玻璃门后的母株垂着发黄的叶子，这排苗是它入秋后分出的最后一批。暖床的温盘还没烧热，霜一落，根就冻坏了。她把围裙口袋里的干花摸出来，掰下第一瓣，嘴里轻轻念着数，数到第五瓣才想起你还站着，耳根一红，把花萼塞回去：「左边那排归你，右边归我。一趟三钵，别贪多。搬完我教你认根。」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_1 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第1幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_1 is 1>>
 暖床的温盘烧起来了，苗盘整整齐齐排在架子上，土面还带着潮气。今天该做的都做完了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 2]]>><<pass 4>><</link>>
@@ -17,7 +21,7 @@
 <div id="relday-noel-1">
 <<mpcarryicon>><<link "抱苗盘进暖床 (0:08)">><<pass 8>><<replace "#relday-noel-1">>
 <<if ($athletics or 0) gte 240 or ($tending or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_noel_1 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_1 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你一趟只抱三钵，脚掌落在砖缝最实的地方，连最细的须根都没晃断。最后一钵进暖床时，她蹲下来把根须一根根拨开看过，才抬头：「手不抖，心也不浮。」她起身拍了拍膝上的土，又补一句，语气平得像在念方子，「晚上来喝一碗姜枣汤。不是谢你，是怕你冻出病来，我还得再配一副药。」
 	<<stress -2>><<lstress>>
@@ -25,7 +29,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 2]]>><<pass 5>><</link>>
 <<else>>
 	第四趟时筐沿磕在门槛上，一钵苗翻倒，湿土洒了满地。你伸手去扶，手腕在木架上别了一下，酸得半天使不上力。她先接过那钵苗，看了看断掉的须根，才拉起你的手，指腹压了压你的腕骨：「别动。扭着了。」她没责怪，只是把碎土一点点拢回钵里。
-	<<stress 3>><<tiredness 1>><<pain 1>><<gstress>><<gtiredness>><<gpain>>
+	<<stress 3>><<tiredness 1>><<pain 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>><<gpain>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -33,7 +37,7 @@
 <br>
 <<mpfarmicon>><<link "加固防寒帘 (0:08)">><<pass 8>><<replace "#relday-noel-1">>
 <<if ($housekeeping or 0) gte 240 or ($tending or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_1 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_1 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你把草帘一层层压到暖床外沿，绳结打在背风的角上，最后一道帘脚用砖压实。风从走廊灌过来，帘面只轻轻鼓了一下就贴住了。她把一只裹着旧布的暖砖塞进你手里：「手怎么凉成这样。拿着，不是给你捂手，是怕你指头僵了，等会儿分苗捏不住根。」
 	<<stress -2>><<lstress>>
@@ -41,7 +45,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	麻绳勒进掌心，冻硬的草秆又扎手，你打了三个结都系不牢。风一掀，帘角翻起来，碎霜扑了你一脸。她过来重新系，边系边小声数着打结的次数，数完才说：「先缓一缓。手冻木了，越急越系不牢。」
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -57,10 +61,14 @@
 <br><br>
 她说这话时，屋外正起风，玻璃顶被吹得嗡嗡响。她把梯子搬到檐下，自己先踩上两级试了试稳不稳，才让开位置。瓦面是湿的，沟沿被雾糊着，看不真切。她仰头看了看，又低头把围裙里那朵残花掏出来，掐着一片片数，数到第六片停住：「水尺今天不低。你要是上去，脚只踩瓦棱，别踩沟底。」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_2 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第2幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_2 is 1>>
 图鉴里第一味已经压进册子，页脚注着采集的时辰与雾的厚度。今天不必再上屋顶了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 3]]>><<pass 4>><</link>>
@@ -68,7 +76,7 @@
 <div id="relday-noel-2">
 <<mpclimbicon>><<link "爬上瓦沟铲苔 (0:08)">><<pass 8>><<replace "#relday-noel-2">>
 <<if ($athletics or 0) gte 250 or ($skulduggery or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_noel_2 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_2 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你踩着瓦棱一路挪到背阴那侧，铲下的苔藓连着薄薄一层瓦灰，整块落进布袋，一点没散。下来时梯脚在砖上轻轻一响，她的手一直没离开梯身，仰着的脖子都僵了。她接过布袋掂了掂，才慢慢吐出一口气：「够了。这一味够压三页。」说完又补，「你膝盖磕青了没有？卷起来我看看。」
 	<<stress -2>><<lstress>>
@@ -76,7 +84,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 3]]>><<pass 5>><</link>>
 <<else>>
 	沟沿的苔比看上去滑。你脚下一虚，膝盖磕在瓦棱上，布袋脱手，小半袋苔藓洒进了檐沟。她在下面一把扶住梯子，声音第一次带了急：「别动，慢慢下来。」她没看那只布袋，先卷起你的裤脚查看膝盖。
-	<<stress 3>><<tiredness 1>><<pain 1>><<gstress>><<gtiredness>><<gpain>>
+	<<stress 3>><<tiredness 1>><<pain 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>><<gpain>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -84,7 +92,7 @@
 <br>
 <<mpwatchicon>><<link "扶稳梯子记水尺 (0:08)">><<pass 8>><<replace "#relday-noel-2">>
 <<if ($willpower or 0) gte 420 or ($tending or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_2 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_2 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你双手扣住梯身，把梯脚死死踩在砖缝里，每隔一会儿就报一次水尺，声音不高，但够她听见。她在瓦沟上挪一步，你就跟着挪半步。等她抱着布袋下来，手指冻得发红，第一件事却是把你的手翻过来看：「梯子被你按出印子了。回去抹点油。」
 	<<stress -2>><<lstress>>
@@ -92,7 +100,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	雾越来越厚，你报的水尺她听不清，只能一遍遍喊。嗓子哑了，梯子也开始在湿砖上打滑。她提前下来，把布袋口扎紧，说：「今天到此为止。再站下去，你我都要着凉。」
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -110,10 +118,14 @@
 <br><br>
 碟边压着一张写满小字的纸，三味药的分量、下锅的次序、忌口的日子，一行行排得极密。她把这些写给你看，却不肯先说自己熬了几个通宵。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_3 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第3幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_3 is 1>>
 那只瓷碟已经洗净倒扣在架子上，册子边多了一行记录。今天不试了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 4]]>><<pass 4>><</link>>
@@ -121,7 +133,7 @@
 <div id="relday-noel-3">
 <<mpfirstaidicon>><<link "伸手腕试药 (0:08)">><<pass 8>><<replace "#relday-noel-3">>
 <<if ($willpower or 0) gte 420 or (_npc.trust or 0) gte 8 or ($science or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_3 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_3 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你把手腕搁在碟边。她用细笔蘸了一点，抹在脉门内侧，然后按住你的手不许动，另一只手数着数。皮肤先是凉，接着微微发热，没有红，也没有痒。她盯着看足了一百下，才松开，在册子边上写下时辰，又在你的名字旁添了两个字：「耐受。」她收笔时指尖有点抖，嘴上却说：「意料之中。你的底子我早摸清了。」
 	<<stress -2>><<lstress>>
@@ -129,7 +141,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 4]]>><<pass 5>><</link>>
 <<else>>
 	液体抹上去不到片刻，脉门周围就浮起一层细红，微微发痒。她脸色一变，立刻用清水替你擦，擦了三遍还不放心，又把你的手举到灯下细看。她一句话也没说，只是数花瓣数得很快，一瓣接一瓣，数到第十瓣才停下来：「是我配得急了。」
-	<<stress 3>><<pain 1>><<gstress>><<gpain>>
+	<<stress 3>><<pain 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gpain>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -137,7 +149,7 @@
 <br>
 <<mpreadicon>><<link "先问清配比 (0:08)">><<pass 8>><<replace "#relday-noel-3">>
 <<if ($science or 0) gte 250 or ($maths or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_noel_3 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_3 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你没伸手，先问那三味各占多少。她愣了一下，随即一五一十地讲，讲到第三味时停了停，说自己昨晚把蜂蜜减了半勺，怕你空腹喝了反胃。你顺着问下去，发现有一味的分量对空肚子的人来说还是重了些。她低头看了半晌，拿笔把那行划掉，重写了一个数：「你说得对。方子是死的，人是活的。」
 	<<stress -2>><<lstress>>
@@ -145,7 +157,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	你问到第二味时记混了分量，越说越乱。她没有笑你，只把那张纸收回去，压平，说：「没关系。配方这种东西，记不住就是记不住，硬记反而害人。」屋里安静下来，只剩雨声。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -163,10 +175,14 @@
 <br><br>
 你站在走廊里，能听见门后极轻的水声，和她偶尔碰到玻璃的声响。抽屉合上的声音从门缝里漏出来，和你听过的、她合上图鉴册的声音一模一样。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_4 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第4幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_4 is 1>>
 玻璃门后的灯还亮着，门缝底下透出一线暖光。今天她不会再开门了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 5]]>><<pass 4>><</link>>
@@ -174,7 +190,7 @@
 <div id="relday-noel-4">
 <<mpeavesdropicon>><<link "追问玻璃间的事 (0:08)">><<pass 8>><<replace "#relday-noel-4">>
 <<if ($willpower or 0) gte 430 or ($english or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_4 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_4 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你没有再追问，只把手掌贴在玻璃门上，隔着水汽看里面。过了很久，门开了一条更宽的缝。她没让开，也没再拦，只是侧过身，让你看见那株垂着叶子的母株，和盆边一圈新换的湿苔。「看可以。」她说，「别出声，别伸手。」你看见了她眼下的青影，也看见她攥着花萼的那只手一直没松。
 	<<stress -2>><<lstress>>
@@ -182,7 +198,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 5]]>><<pass 5>><</link>>
 <<else>>
 	你又问了一句，她的肩背绷紧了。门在她身后合严，插销落下的声音不重，却很清楚。走廊里的灯没点，你站了一会儿，指尖被玻璃上的凉气浸得发麻，才想起该走。门后一直没有声音。
-	<<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -190,7 +206,7 @@
 <br>
 <<mpwatchicon>><<link "退开替她守门 (0:08)">><<pass 8>><<replace "#relday-noel-4">>
 <<if ($housekeeping or 0) gte 250 or (_npc.trust or 0) gte 10>>
-	<<set $daily.mpRelDay_mp_relday_noel_4 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_4 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你退开两步，在门外的长凳上坐下，顺手把走廊那头的窗掩严，免得穿堂风灌进去。门后的水声响了很久。等你几乎要睡着时，门开了，她端着空铜盆出来，在你身边坐下，什么也没说。她的手很凉，坐下后往你这边靠了半寸，又停住。
 	<<stress -2>><<lstress>>
@@ -198,7 +214,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	你在门外等得太久，起身时带起一阵风，门缝里的水汽晃了一下。她在里面说了一句「把门关上」，声音很轻，却让你脸上发热。你退出去，替她把门带严，走的时候听见里面又响起了数花瓣的低声。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -216,10 +232,14 @@
 <br><br>
 你放轻脚步。她没有醒，呼吸浅而长，眉心还蹙着，像在梦里也在想那株母株。窗外起了风，玻璃轻轻一震，她的手指动了动，捏紧了那半朵花。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_5 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第5幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_5 is 1>>
 图鉴册合得整整齐齐，标签码成一摞。她今天不会再熬到这么晚了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 6]]>><<pass 4>><</link>>
@@ -227,7 +247,7 @@
 <div id="relday-noel-5">
 <<mpreadicon>><<link "替她抄完标签 (0:08)">><<pass 8>><<replace "#relday-noel-5">>
 <<if ($english or 0) gte 250 or ($housekeeping or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_5 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_5 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把她的册子小心抽出来，照着她的小字一笔一笔往下抄。她的字瘦，起笔轻，收笔爱往回带一下，你学了半页才学像。写完最后一张标签，天边已经泛白。她醒的时候，先看见的是整整齐齐码好的纸，然后才看见你。她没道谢，只起身去烧水，往两只杯子里各放了三朵甘菊，给你的那杯少放了半勺蜜。
 	<<stress -2>><<lstress>>
@@ -235,7 +255,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 6]]>><<pass 5>><</link>>
 <<else>>
 	你抽册子时带倒了墨水瓶。她一下子惊醒，先看的是册子，再看的才是你。半页小字被墨浸花了，她伸手去擦，越擦越糊。她没说什么，只把湿掉的那页揭起来，压到一边。你站在桌边，听见外面的风比刚才更紧了。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -243,7 +263,7 @@
 <br>
 <<mpfirstaidicon>><<link "给她披上外衣 (0:08)">><<pass 8>><<replace "#relday-noel-5">>
 <<if ($tending or 0) gte 240 or ($willpower or 0) gte 400>>
-	<<set $daily.mpRelDay_mp_relday_noel_5 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_5 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把炉子重新添了炭，又把自己的外衣解下来，轻轻搭在她肩上。她动了一下，没醒，只把脸往衣领里埋了埋。你在旁边坐下，守着那点火光。天亮时她醒来，外衣已经叠得方方正正放在椅背上。你的座位上多了一块用布包着的暖砖，还温着。
 	<<stress -2>><<lstress>>
@@ -251,7 +271,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	外衣刚搭上去，她就醒了，肩一缩，像被烫到。看清是你之后，她才慢慢松下来，却把外衣递还给你，说：「我不冷。你穿着。」她起身去看炉子，背影有点僵，显是没睡够。你在门口站了一会儿，终究没好意思再留。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -269,10 +289,14 @@
 <br><br>
 她没有提那天关上的门。桌上那半朵干花不在，抽屉也关着。你忽然明白，这张笺就是她能说出口的那句话。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_6 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第6幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_6 is 1>>
 配方笺压在册子最上面，杯子已经洗好倒扣着。她今天的气色比前几天好一些。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 7]]>><<pass 4>><</link>>
@@ -280,7 +304,7 @@
 <div id="relday-noel-6">
 <<mpcookicon>><<link "按方煎一壶 (0:08)">><<pass 8>><<replace "#relday-noel-6">>
 <<if ($science or 0) gte 250 or ($tending or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_noel_6 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_6 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你照笺上的次序煎了一壶。水开两遍，三味按先后下，火候压在最小，屋里慢慢漫开一股暖甜的香。她捧着杯子喝了半杯，忽然低下头：「那天……是我不对。」声音很轻，说完就去拨炉盖，像怕你接话。你没急着应，只把她的杯子添满。她捧着杯沿，半天才又开口：「下回你要进玻璃间，先跟我说一声。」
 	<<stress -2>><<lstress>>
@@ -288,7 +312,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 7]]>><<pass 5>><</link>>
 <<else>>
 	火急了些，壶底结了一层焦。倒出来是浑的，苦味压过了甘菊香。她端起来喝了一口，说：「焦了也能安神。」然后就着那杯苦茶把剩下的半张笺叠好，夹进册子里。你看着她的手，忽然觉得这张方子比什么道歉都难堪。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -296,7 +320,7 @@
 <br>
 <<mpfirstaidicon>><<link "先替她量脉 (0:08)">><<pass 8>><<replace "#relday-noel-6">>
 <<if ($willpower or 0) gte 420 or ($tending or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_6 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_6 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你没接茶，先拉过她的手腕。她挣了一下，没挣开。脉又细又快，跳得浮，是连着几夜没睡实的相。你把她的手按回桌上，说今天该歇的是她。她张了张嘴，到底没反驳，过了一会儿才低声笑：「我自己是配药的，倒要你来替我把脉。」她把手腕往你这边送了送，没再抽回去。
 	<<stress -2>><<lstress>>
@@ -304,7 +328,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	她把手抽了回去，说：「我没事，你别学他们。」语气不重，却把话封死了。她转身去洗瓶子，水声开得很大。你伸出去的手停在半空，最后落到桌上，把那张配方笺的边角按平。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -320,10 +344,14 @@
 <br><br>
 说这话时，她把镊子在袖口上蹭了两下，蹭得很慢。池边那道石阶又窄又滑，水底的青苔看不见。她低头把残花捏出来，掐了四片，忽然停住，把花收回去：「不数了。你下去，我数你的呼吸。」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_7 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第7幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_7 is 1>>
 图鉴的最后一页也已经填满，页脚的墨迹干透了。今天不必再下水。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 8]]>><<pass 4>><</link>>
@@ -331,7 +359,7 @@
 <div id="relday-noel-7">
 <<mpswimicon>><<link "下池刮荧光菌 (0:08)">><<pass 8>><<replace "#relday-noel-7">>
 <<if ($athletics or 0) gte 250 or ($swimmingskill or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_noel_7 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_7 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你踩着石阶下到水里，寒气顺着裤脚一直爬到腰。镊子贴着石壁，连薄薄一层石皮一起刮下来，青白的菌丝在暗处亮了一亮。她在上面举着灯，光照得很稳。瓶子递上去时，她两只手一起接，接住了才说话：「没散。一根都没散。」回到桌上，她把那最后一页填满，在页脚用极小的字添了你的名字。
 	<<stress -2>><<lstress>>
@@ -339,7 +367,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 8]]>><<pass 5>><</link>>
 <<else>>
 	脚底一滑，你整个人歪进水里，瓶子磕在池壁上，青白的碎光散进池底。她一把拽住你的胳膊，把你拖上石阶，第一句话是「有没有磕到头」，第二句才看向那只空瓶。回去的路上你没说话，她也没提标本，只把干花攥在手里，一瓣也没掰。
-	<<stress 3>><<tiredness 2>><<pain 1>><<gstress>><<gtiredness>><<gpain>>
+	<<stress 3>><<tiredness 2>><<pain 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>><<gpain>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -347,7 +375,7 @@
 <br>
 <<mpwatchicon>><<link "池边举灯照壁 (0:08)">><<pass 8>><<replace "#relday-noel-7">>
 <<if ($willpower or 0) gte 420 or ($tending or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_noel_7 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_7 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你在池边举灯，手臂从酸到麻，硬是没换手。她蹲在水里刮得极慢，每刮一下都要停一停看菌丝的方向。上岸时她的裙摆滴着水，先接过灯，再把自己冻红的手揣进袖子里，说：「回去我给你冲一盏姜茶。这不是谢，是怕你手臂酸得抬不起来。」
 	<<stress -2>><<lstress>>
@@ -355,7 +383,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	灯芯被水汽打湿，火苗矮下去，光一晃，她就停手。等灯重新亮起来，石壁上的菌丝已经散了大半。她把剩下的刮进瓶里，看了看，说：「够了。剩下的改天。」上岸时她的嘴唇发白，你却想不起该递什么给她。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -373,10 +401,14 @@
 <br><br>
 等了很久，根须才动了一下。她的肩一松，随即又绷起来，把围裙里那朵残花掏出来，一片一片掐着数——数到第三片，根须又动了第二下，她把花攥住了。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_8 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第8幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_8 is 1>>
 玻璃间里的灯调到最暗，母株的根球已经重新埋好。她今天不会再让人进去了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 9]]>><<pass 4>><</link>>
@@ -384,7 +416,7 @@
 <div id="relday-noel-8">
 <<mpherbicon>><<link "稳稳举灯 (0:08)">><<pass 8>><<replace "#relday-noel-8">>
 <<if ($willpower or 0) gte 430 or ($athletics or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_8 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_8 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你举着灯，一动不动。手臂从酸到麻，你就换个姿势，让光始终落在同一个地方。她送了七勺，每一勺之间都停一停，看根须认不认。最后一勺落下去，暗色的根尖浮起一层细细的白绒。她直起腰，额角全是汗，看了你很久才说：「你别动。就这样，再站一会儿。」那声音软得几乎不像她。
 	<<stress -2>><<lstress>>
@@ -392,7 +424,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 9]]>><<pass 5>><</link>>
 <<else>>
 	灯举得久了，手腕一沉，光晃了一下。她正送第三勺，手跟着一抖，营养液泼在根球外的苔上，屋里顿时漫开一股发苦的味道。她放下勺子，先接过灯搁稳，才说：「不怪你。是我没让你歇。」她蹲回去收拾，背影很久没动。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -400,7 +432,7 @@
 <br>
 <<mpcalculateicon>><<link "按册调酸碱 (0:08)">><<pass 8>><<replace "#relday-noel-8">>
 <<if ($science or 0) gte 250 or ($maths or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_8 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_8 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把灯架在铁架上，腾出手来对着册子读酸碱。读到第三格时你觉得不对，又倒回去重看，果然是她记串了一行。她凑过来核对，眉头先是皱起，接着慢慢舒开，把那一行划掉重记：「幸好你多看了一眼。照错的数配下去，这一罐就白熬了。」她说完，把册子往你手边挪了挪，让你接着读。
 	<<stress -2>><<lstress>>
@@ -408,7 +440,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	你读错了一格，等发现时她已经照那个数送了两勺。她把勺子放下，闭了闭眼，说：「重来。」重新配一罐花了很久，灯下的水面一直泛着细细的泡。她没催你，也没再说话，只是把册子上的错处一遍遍描深。
-	<<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -426,10 +458,14 @@
 <br><br>
 那低年级生见没人应，耸耸肩走了。走廊重新安静下来。她还在擦那只瓶子，指节因为用力泛着白。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_9 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第9幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_9 is 1>>
 门开着，架子上的瓶子排得整整齐齐。走廊里没有别人。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 10]]>><<pass 4>><</link>>
@@ -437,7 +473,7 @@
 <div id="relday-noel-9">
 <<mpreadicon>><<link "当面把话说开 (0:08)">><<pass 8>><<replace "#relday-noel-9">>
 <<if ($english or 0) gte 250 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_noel_9 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_9 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把瓶子放回架子，转过身，声音不高，把话说得很清楚：你来这里是为了什么，她给过你什么，你又还了她什么。你没有提高嗓门，也没有看她。那人脸上的笑挂不住，含糊两句就走了。门里安静了一阵。她终于放下那块布，低声说：「你没必要替我说话。」停了停，又补一句，「不过，谢谢。」
 	<<stress -2>><<lstress>>
@@ -445,7 +481,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 10]]>><<pass 5>><</link>>
 <<else>>
 	你话说得急，反倒显得心虚。那低年级生笑得更响，临走还丢下一句。你想再追，被门槛绊了一下。回头时，她已经把门关上了，只留一条缝。你站在门外，听见里面传来很轻的、数花瓣的声音。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -453,7 +489,7 @@
 <br>
 <<mpcleanicon>><<link "不辩替她干活 (0:08)">><<pass 8>><<replace "#relday-noel-9">>
 <<if ($housekeeping or 0) gte 250 or ($tending or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_9 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_9 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你什么也没辩，走进去，从她手里把布接过来，把剩下半排瓶子擦完，一只一只摆正，瓶口朝同一个方向。她站在旁边看了一会儿，开始把擦好的瓶子往你手边递。两个人一句话也没说。摆到最后一排时，她的肩膀慢慢落了下来，轻轻呼出一口气。
 	<<stress -2>><<lstress>>
@@ -461,7 +497,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	你伸手去接布，手肘碰倒了架子边的一只空瓶。瓶子没碎，滚出去老远，在走廊里响得刺耳。她弯腰去捡，你先一步拾起来，递过去。她接过瓶子，轻声说「没事」，可那声音比刚才更低了。
-	<<stress 3>><<gstress>>
+	<<stress 3>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -479,10 +515,14 @@
 <br><br>
 这是她头一回开口向你要东西。说完她就低下头，把围裙里那朵残花掏出来，一片一片掐着数，数到第五片，手停在半空，忘了下一片该往哪边掐。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_10 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第10幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_10 is 1>>
 药圃的菌瓶今天都添过水了，母株那边也看过了。她睡了一下午，脸色缓过来一些。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 11]]>><<pass 4>><</link>>
@@ -490,7 +530,7 @@
 <div id="relday-noel-10">
 <<mpfirstaidicon>><<link "按住脉劝她歇 (0:08)">><<pass 8>><<replace "#relday-noel-10">>
 <<if ($tending or 0) gte 250 or ($willpower or 0) gte 430>>
-	<<set $daily.mpRelDay_mp_relday_noel_10 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_10 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你把手按在她腕上。脉浮而快，指下发烫，是熬出来的虚火。你把她的肩按回椅子上，说今天母株那边也归你，她只需要坐着。她皱着眉要反驳，话没说完就咳起来，最后只好靠在椅背上闭了眼。你替她把外衣盖好，出门前回头看了一眼，她已经睡着了，手里还捏着那半朵花。
 	<<stress -2>><<lstress>>
@@ -498,7 +538,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 11]]>><<pass 5>><</link>>
 <<else>>
 	她不肯坐，撑着架子还要往里间走。你跟上去拦，她的手一软，半个身子歪下来，你扶住时，她已经喘得说不出话。好不容易劝她坐下，她却一直盯着玻璃间的方向，眼睛睁得很大，怎么也睡不实。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -506,7 +546,7 @@
 <br>
 <<mpfarmicon>><<link "替她浇完菌瓶 (0:08)">><<pass 8>><<replace "#relday-noel-10">>
 <<if ($housekeeping or 0) gte 250 or ($athletics or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_10 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_10 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你拿着单子下到药圃，一排一排地走。竹管的接口挨个拧过，菌瓶按单子上的数添水，多的倒掉，少的补足。做完一遍又从头核了一遍，才回屋。她靠在椅背上睡着了，膝上摊着图鉴册。你把册子抽出来放好，她动了一下，没醒，眉头却松开了。
 	<<stress -2>><<lstress>>
@@ -514,7 +554,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	水添急了，有一只瓶漫了出来，菌丝漂起来一小片。你手忙脚乱地倒掉重添，再去核单子时已经乱了次序。她不知什么时候醒了，站在门口看着你，说了句「没事，明天再理」，可你看见她扶门框的手在抖。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -532,10 +572,14 @@
 <br><br>
 屋里很静。窗外的药圃刚浇过水，土是深色的。她把一支笔搁在册子边上，笔尖朝你，自己往后退了半步，像是要把这一页完全让出来。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_11 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第11幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_11 is 1>>
 册子最后那页已经写上了名字，压着一片新采的叶子。今天不必再添什么了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 12]]>><<pass 4>><</link>>
@@ -543,7 +587,7 @@
 <div id="relday-noel-11">
 <<mpreadicon>><<link "提笔写下名字 (0:08)">><<pass 8>><<replace "#relday-noel-11">>
 <<if ($english or 0) gte 250 or ($science or 0) gte 250>>
-	<<set $daily.mpRelDay_mp_relday_noel_11 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_11 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你提笔，想了一会儿，写下一个名字。她凑过来看，看了两遍，又用手指顺着笔画描了一遍，才轻声念出来。念完她没有评价好不好，只把册子转回去，在名字旁边用更小的字添了采集的日子和地点，末了写下两个字：「共记。」她收笔时，耳根是红的，嘴上却只说：「行。就这么定了。」
 	<<stress -2>><<lstress>>
@@ -551,7 +595,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 12]]>><<pass 5>><</link>>
 <<else>>
 	笔尖在纸上洇开一小团墨。你怔住，想换一张纸，她却摇头，说册子是装订好的，抽不出来。那团墨就留在名字旁边，像一块小小的阴影。她把册子合上，动作很轻，说：「不改了。留着吧。」你听着，心里却堵得慌。
-	<<stress 3>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 3>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -559,7 +603,7 @@
 <br>
 <<mpherbicon>><<link "把笔递还给她 (0:08)">><<pass 8>><<replace "#relday-noel-11">>
 <<if ($seductionskill or 0) gte 240 or ($willpower or 0) gte 430>>
-	<<set $daily.mpRelDay_mp_relday_noel_11 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_11 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你把笔推回她面前，说这一页该她写。她怔了一下，推辞了两句，最后还是拿起了笔。她写得很慢，先写了一个名字，又在旁边添上你的名字，一笔一画，写完还端详了很久。她合上册子时轻轻按了按那页，说：「这样也行。反正往后谁翻到，都看得见。」
 	<<stress -2>><<lstress>>
@@ -567,7 +611,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	她把笔放下，说这名字她还没想好，不能随便落笔。白纸又空了一晚。她合上册子的时候，指尖在那页上停了停，终究什么也没写。窗外的水声一直响到天黑。
-	<<stress 3>><<gstress>>
+	<<stress 3>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -585,10 +629,14 @@
 <br><br>
 你想起册子上那行小字：菌丝只认这个数，少一份就发霉，多一份就烧根。你把册子翻到那一页，指给她看。她看了一眼，别开脸，说：「我知道。可我等不起了。」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_12 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第12幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_12 is 1>>
 那罐浓液已经倒掉了，桌上重新摆着一只配好的淡色陶罐。今天不再动它。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 13]]>><<pass 4>><</link>>
@@ -596,7 +644,7 @@
 <div id="relday-noel-12">
 <<mpcarryicon>><<link "按住那瓶浓液 (0:08)">><<pass 8>><<replace "#relday-noel-12">>
 <<if ($athletics or 0) gte 260 or (_npc.trust or 0) gte 14>>
-	<<set $daily.mpRelDay_mp_relday_noel_12 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_12 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你把那罐液体端开，放到她够不着的地方。她站起来要抢，被你挡了一下，忽然就不动了，肩膀塌下去，站在灯下，像一根绷断了又没倒下的线。过了很久，她伸手把册子拿过去，一页一页翻，翻到那行小字，盯着看。然后她自己拿起笔，重新算了一遍，算完把笔放下，声音很轻：「是我算错了。我怕它死，怕到不敢算。」
 	<<stress -2>><<lstress>>
@@ -604,7 +652,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 13]]>><<pass 5>><</link>>
 <<else>>
 	她趁你转身，把罐子抢了回去。你伸手去拦，罐沿磕在盆边，浓液泼出来，淌了一桌。那股苦味一下子冲上来，呛得人眼睛发酸。她怔怔看着桌上的液体，忽然蹲下去，用手去捧，捧不住，全从指缝里流走了。
-	<<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -612,7 +660,7 @@
 <br>
 <<mpcalculateicon>><<link "陪她重算配比 (0:08)">><<pass 8>><<replace "#relday-noel-12">>
 <<if ($maths or 0) gte 250 or ($science or 0) gte 260>>
-	<<set $daily.mpRelDay_mp_relday_noel_12 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_12 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你没有拦她，只把册子摊开，拉她坐下来，一行一行陪她重算。前两遍都不对，第三遍时你发现她把一味的分量记成了两倍。她盯着那个数看了很久，忽然笑了一下，笑得很难看。等新配的液体调好，天已经蒙蒙亮，浓度只有册子上的一半。她捧着罐子，说：「慢一点，也许反而活得久。」
 	<<stress -2>><<lstress>>
@@ -620,7 +668,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	你们算到第二遍，她已经困得睁不开眼，报错了一个数，你也跟着错了下去。等发现时天快亮了，那罐液体废了，母株的叶子又黄了一片。她合上册子，说：「明天再说。」声音平得没有起伏，反而让人难受。
-	<<stress 4>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 4>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -638,10 +686,14 @@
 <br><br>
 等她站起来，从围裙内袋里摸出一把小铜钥匙，穿了根旧绳，递到你面前：「玻璃间的。以后你不用敲门。」
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_13 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第13幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_13 is 1>>
 玻璃间的门虚掩着，母株的新叶又展开了一点。今天的事已经说定了。
 <br>
 <<investigateicon>><<link [[去下一处 (0:04)|MP RelDay Noel 14]]>><<pass 4>><</link>>
@@ -649,7 +701,7 @@
 <div id="relday-noel-13">
 <<keepsakeicon>><<link "接过那把钥匙 (0:08)">><<pass 8>><<replace "#relday-noel-13">>
 <<if (_npc.trust or 0) gte 12 or ($willpower or 0) gte 430>>
-	<<set $daily.mpRelDay_mp_relday_noel_13 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_13 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你接过钥匙。铜是暖的，带着她身上的体温。她看着你把绳子挂好，才别开脸，说：「别弄丢。丢了我也能再配一把，就是懒得配。」她说着走到架子边去抚平标签，手指却一直没停稳。你握了握那把钥匙，齿口在掌心硌出一道浅浅的印。
 	<<stress -2>><<lstress>>
@@ -657,7 +709,7 @@
 	<<link [[继续同行 (0:05)|MP RelDay Noel 14]]>><<pass 5>><</link>>
 <<else>>
 	钥匙没接稳，从指缝里滑下去，正掉进墙边那条排水沟的格栅里。你们俩一起蹲下去看，沟底很黑，什么也看不见。她伸手进去摸，摸到一半停住，说：「算了。」可你没让她停，最后是她先把钥匙捞上来，手指冻得通红。
-	<<stress 3>><<tiredness 1>><<pain 1>><<gstress>><<gtiredness>><<gpain>>
+	<<stress 3>><<tiredness 1>><<pain 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>><<gpain>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -665,7 +717,7 @@
 <br>
 <<socialiseicon>><<link "让她留着钥匙 (0:08)">><<pass 8>><<replace "#relday-noel-13">>
 <<if ($seductionskill or 0) gte 240 or ($willpower or 0) gte 420>>
-	<<set $daily.mpRelDay_mp_relday_noel_13 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_13 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你把钥匙推回去，说你还是想敲门。她愣了愣，抬头看你，眼神有点复杂。过了几息，她抓住你的手，把钥匙塞进你掌心，又把你的手指一根根合拢：「敲门也行。」她说，「但钥匙你拿着。我不想到时候还要起身给你开门。」她的手指在你手背上压了一下，才松开。
 	<<stress -2>><<lstress>>
@@ -673,7 +725,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	你说错了话，她的脸慢慢冷下去，把钥匙收回内袋，说：「当我没说过。」她转身去整理架子，背对着你，一下一下地抚平标签。屋里只有母株叶片轻轻相碰的声音。
-	<<stress 3>><<gstress>>
+	<<stress 3>><<set _npc.relDay to Time.days + 1>><<gstress>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -693,10 +745,14 @@
 <br><br>
 第一次见面那天，她数到第五瓣才想起你还站着；今天，她数到第三瓣就停了。
 <br><br>
-<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><span class="disabled">回诺艾尔身边 (0:03)（尚未结识）</span><</if>>
+<<getouticon>><<if $mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet>><<link [[回诺艾尔身边 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>><<else>><</if>>
 <br>
 <br>
-<<if $daily.mpRelDay_mp_relday_noel_14 is 1>>
+<<if (_npc.relDay or 0) gt Time.days>>
+第14幕同行已毕，明日再叙。
+<br>
+<<mplettericon>><<link [[明日再来同行 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
+<<elseif $daily.mpRelDay_mp_relday_noel_14 is 1>>
 茶还温着，苗床的土是湿的。今天该做的都做完了。
 <br>
 <<walkicon>><<link [[回到外间 (0:04)|MP NPC Noel Hub]]>><<pass 4>><</link>>
@@ -704,7 +760,7 @@
 <div id="relday-noel-14">
 <<mpdrinkicon>><<link "坐下喝那杯茶 (0:08)">><<pass 8>><<replace "#relday-noel-14">>
 <<if ($willpower or 0) gte 420 or (_npc.trust or 0) gte 10>>
-	<<set $daily.mpRelDay_mp_relday_noel_14 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_14 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>>
 	你坐下来喝茶。茶的味道和第一次她给你的那杯不一样了：蜜少了，甘草多了一片，喝下去胃里暖得很慢，却很稳。她坐在对面，也端着一杯，看你喝完，才慢慢开口：「昨晚睡了几个时辰？」问完她自己先笑了，说：「算了。看你脸色就知道。」她把第二杯推过来，没等你回答。
 	<<stress -2>><<lstress>>
@@ -712,7 +768,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	茶刚端起来，走廊上有人喊你的名字。你把杯子放下，说去去就回。走出门才想起该说一声，回头时她正把那杯茶挪到桌角，拿一只小碟盖上，免得凉透。她没有留你，只是在你走远之后，才低头去掰剩下的那几片残瓣。
-	<<stress 2>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 2>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>
@@ -720,7 +776,7 @@
 <br>
 <<mpfarmicon>><<link "帮她给新苗换盆 (0:08)">><<pass 8>><<replace "#relday-noel-14">>
 <<if ($tending or 0) gte 250 or ($housekeeping or 0) gte 240>>
-	<<set $daily.mpRelDay_mp_relday_noel_14 to 1>>
+	<<set $daily.mpRelDay_mp_relday_noel_14 to 1>><<set _npc.relDay to Time.days + 1>>
 	<<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>>
 	你放下杯子，去帮她给新苗换盆。土是她昨夜里调好的，湿而不黏。你托着苗，她填土，谁也没说话，手却一直没碰上。换到第三盆时，她的手指擦过你的手背，停了一下，又若无其事地继续。窗外的光落在两个人手上，土是暖的。
 	<<stress -2>><<lstress>>
@@ -728,7 +784,7 @@
 	<<link [[道别离开 (0:05)|MP NPC Noel Hub]]>><<pass 5>><</link>>
 <<else>>
 	土填到一半，陶盆沿上出现一道细裂。你手上加了点力，裂纹一下贯到底。她接过盆看了看，说：「这盆本来就旧了。」换了新盆，苗却蔫了一阵。她没说什么，只把碎盆片收进角落的筐里，动作很轻。
-	<<stress 2>><<tiredness 1>><<gstress>><<gtiredness>>
+	<<stress 2>><<tiredness 1>><<set _npc.relDay to Time.days + 1>><<gstress>><<gtiredness>>
 	<br><br>
 	<<link [[离开此地 (0:03)|MP NPC Noel Hub]]>><<pass 3>><</link>>
 <</if>>

@@ -6,123 +6,155 @@
 
 :: MP Region Pool Foghorn [nobr]
 <<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
-<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
-<<set _regionScenes to ["MP Region Foghorn CompassBox", "MP Region Foghorn SmugglerRope", "MP Region Foghorn OneEyedGull", "MP Region Foghorn SignalBarrel", "MP Region Foghorn WhaleOilCan", "MP Region Foghorn StormBarometer", "MP Region Foghorn SailorTrunk", "MP Region Foghorn CharredLogbook", "MP Region Foghorn FigureheadGem", "MP Region Foghorn CrossedMasts", "MP Region Foghorn BilgeFlask", "MP Region Foghorn GiltSextant", "MP Region Foghorn SaltStalactite", "MP Region Foghorn BlackMotherPearl", "MP Region Foghorn TideNicheChain", "MP Region Foghorn FoghornReedWrap", "MP Region Foghorn CrabPotCigarBox", "MP Region Foghorn OiledCoatPocket", "MP Region Foghorn SaltJarSeaChart", "MP Region Foghorn LoftRungChain", "MP Region Foghorn CaptainDoorWallet", "MP Region Foghorn RustedCannonTube", "MP Region Foghorn DivingHelmetGlint", "MP Region Foghorn SpiralWaveGroove", "MP Region Foghorn ObsidianSeaChess", "MP Region Foghorn StarfishBronzeKey"]>>
-<<set _pool to _regionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
-<<if _pool.length is 0>>
-	<<run _regionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
-	<<set _pick to _regionScenes[0]>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpFogChainDone to ($mpFogChainDone or {})>>
+<<set _mpFogDay to ((window.Time and Time.days) or 0)>><<if $mpFogLamp is undefined>><<set $mpFogLamp to 2>><</if>><<if $mpFogLamp lte 0 and $mpFogOilDay isnot _mpFogDay>><<set $mpFogLamp to 1>><<set $mpFogOilDay to _mpFogDay>><</if>><<set $mpFogLamp to Math.clamp($mpFogLamp, 0, 5)>>
+<<set $mpFogAlert to Math.clamp(($mpFogAlert or 0), 0, 10)>><<set $mpFogDepth to Math.clamp(($mpFogDepth or 0), 0, 3)>>
+海雾裹着咸腥的浪沫漫过雾角礁盘，灯塔底座与栈桥在灰白水汽中若隐若现。<<if $mpFogLamp lte 0>>手里的防风灯已经断油，暗处危机四伏。<<else>>防风灯里尚有余油，火苗在雾中透出暖黄微光。<</if>><<if $mpFogAlert gte 6>>岸阶旁晃动着巡逻灯影，稽查正盘问过往行迹。<<elseif $mpFogDepth gte 2>>你这一趟已走入雾角深处，潮水正漫上退路。<</if>><<if $mpFogChainDone["pier"] and $mpFogChainDone["wreck"] and $mpFogChainDone["tower"] and $mpFogChainDone["echo"]>>栈桥、外礁、灯塔与回音廊都已探过，只余海风拍岸的余波。<<else>>近处栈桥通向守塔旧居，退潮外礁则露出了商船残骸。<</if>>
+<br><br>
+<<getouticon>><<link [[回雾角岛 (0:03)|MP Region Foghorn Island]]>><<pass 3>><<set $mpFogDepth to 0>><</link>>
+<br>
+<<mpropeicon>><<link [[探栈桥旧居 (0:06)|MP Region Foghorn Pier Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Foghorn Pier Chain"] to 1>><</link>>
+<br>
+<<mpboaticon>><<link [[涉水去沉船外礁 (0:07)|MP Region Foghorn Wreck Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Foghorn Wreck Chain"] to 1>><</link>>
+<br>
+<<if !$mpFogChainDone["tower"]>>
+<<mplampicon>><<link [[攀登灯塔旋梯 (0:08)|MP Region Foghorn Tower Chain]]>><<pass 8>><<set $mpFogLamp to Math.max(0, ($mpFogLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Foghorn Tower Chain"] to 1>><</link>>
 <<else>>
-	<<set _pick to _pool.random()>>
+<<link [[寻回音廊守塔遗物 (0:08)|MP Region Foghorn Echo Chain]]>><<pass 8>><<set $mpFogLamp to Math.max(0, ($mpFogLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Foghorn Echo Chain"] to 1>><</link>>
 <</if>>
-<<set $mpSeenScenes[_pick] to 1>>
-<<include _pick>>
-
 
 :: MP Region Pool Clockwork [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
-<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
-<<set _regionScenes to ["MP Region Clockwork MainEscapement", "MP Region Clockwork BrassSpeakTube", "MP Region Clockwork GasLampWeight", "MP Region Clockwork RubyBearing", "MP Region Clockwork BoilerRedline", "MP Region Clockwork SteamHammock", "MP Region Clockwork CondenserLeadBox", "MP Region Clockwork SpiralStepChain", "MP Region Clockwork TiltedArmillary", "MP Region Clockwork CrystalLensBench", "MP Region Clockwork ScorpioPearl", "MP Region Clockwork GrandfatherDraft", "MP Region Clockwork BlastDoorFiles", "MP Region Clockwork DifferenceEngine", "MP Region Clockwork VentCipherTube", "MP Region Clockwork DryOilCupKey", "MP Region Clockwork PulleyMeshBasket", "MP Region Clockwork CoolingTowerTube", "MP Region Clockwork BrokenGaugeTin", "MP Region Clockwork QuartzSandSundial", "MP Region Clockwork CometChartWax", "MP Region Clockwork HalfOpenSafe12", "MP Region Clockwork LampshadeMicrofilm", "MP Region Clockwork DatedLeadSealBox"]>>
-<<set _pool to _regionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
-<<if _pool.length is 0>>
-	<<run _regionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
-	<<set _pick to _regionScenes[0]>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpClockChainDone to ($mpClockChainDone or {})>>
+<<set _mpClockDay to ((window.Time and Time.days) or 0)>><<if $mpClockLamp is undefined>><<set $mpClockLamp to 2>><</if>><<if $mpClockLamp lte 0 and $mpClockOilDay isnot _mpClockDay>><<set $mpClockLamp to 1>><<set $mpClockOilDay to _mpClockDay>><</if>><<set $mpClockLamp to Math.clamp($mpClockLamp, 0, 5)>>
+<<set $mpClockAlert to Math.clamp(($mpClockAlert or 0), 0, 10)>><<set $mpClockDepth to Math.clamp(($mpClockDepth or 0), 0, 3)>>
+温热油雾漫过地下机括城的铸铁格栅，主擒纵轮与蒸汽铜管在幽暗拱顶下发出规律的咬合低鸣。<<if $mpClockLamp lte 0>>手里的防风提灯已经断油，齿轮阴影里危机四伏。<<else>>提灯里尚有余油，暖黄光晕照亮了脚下的排油槽。<</if>><<if $mpClockAlert gte 6>>上层回廊传来扳手敲击铜管的巡检警讯，机匠正盘查异响来源。<<elseif $mpClockDepth gte 2>>你这一趟已深入机括腹地，齿轮轰鸣声震得耳膜发麻。<</if>><<if $mpClockChainDone["escapement"] and $mpClockChainDone["steam"] and $mpClockChainDone["armillary"] and $mpClockChainDone["vault"]>>主擒纵轮、冷却塔、星象台与密库保险柜都已探过，只余齿轮咬合的余音。<<else>>近处回廊通向主擒纵轮轴，西侧暗门则透出冷却塔的白雾。<</if>>
+<br><br>
+<<getouticon>><<link [[回机括城 (0:03)|MP Region Clockwork Undercity]]>><<pass 3>><<set $mpClockDepth to 0>><</link>>
+<br>
+<<mpclockworkicon>><<link [[探主擒纵轮廊 (0:06)|MP Region Clockwork Escapement Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Clockwork Escapement Chain"] to 1>><</link>>
+<br>
+<<mprepairicon>><<link [[钻蒸汽冷却塔道 (0:07)|MP Region Clockwork Steam Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Clockwork Steam Chain"] to 1>><</link>>
+<br>
+<<if !$mpClockChainDone["armillary"]>>
+<<mpastroicon>><<link [[登星象仪台 (0:08)|MP Region Clockwork Armillary Chain]]>><<pass 8>><<set $mpClockLamp to Math.max(0, ($mpClockLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Clockwork Armillary Chain"] to 1>><</link>>
 <<else>>
-	<<set _pick to _pool.random()>>
+<<link [[摸进密库保险柜群 (0:08)|MP Region Clockwork Vault Chain]]>><<pass 8>><<set $mpClockLamp to Math.max(0, ($mpClockLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Clockwork Vault Chain"] to 1>><</link>>
 <</if>>
-<<set $mpSeenScenes[_pick] to 1>>
-<<include _pick>>
-
 
 :: MP Region Pool Abbey [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
-<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
-<<set _regionScenes to ["MP Region Abbey MossyGargoyleRing", "MP Region Abbey HeadlessMonkBowl", "MP Region Abbey RedThreadBells", "MP Region Abbey WalnutLetterKnife", "MP Region Abbey PrayerBenchSilk", "MP Region Abbey FrescoWhisperPassage", "MP Region Abbey OctagonPitchDisc", "MP Region Abbey SilverPsalter", "MP Region Abbey CollapsedShelfCoffer", "MP Region Abbey FluoriteRailLamp", "MP Region Abbey BrickedHearthStone", "MP Region Abbey HornLanternSkiff", "MP Region Abbey SubmergedMailbag", "MP Region Abbey SluiceWinchPack", "MP Region Abbey EddyGlassFloat", "MP Region Abbey BrokenWingCoin", "MP Region Abbey HollowBalusterStove", "MP Region Abbey ObsidianRosarySlot", "MP Region Abbey SoothingDewVial", "MP Region Abbey BookpressParchment", "MP Region Abbey StoneLanternRoll", "MP Region Abbey RotatableCandelabra", "MP Region Abbey MyrrhBadgeCase"]>>
-<<set _pool to _regionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
-<<if _pool.length is 0>>
-	<<run _regionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
-	<<set _pick to _regionScenes[0]>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpAbbeyChainDone to ($mpAbbeyChainDone or {})>>
+<<set _mpAbbeyDay to ((window.Time and Time.days) or 0)>><<if $mpAbbeyLamp is undefined>><<set $mpAbbeyLamp to 2>><</if>><<if $mpAbbeyLamp lte 0 and $mpAbbeyOilDay isnot _mpAbbeyDay>><<set $mpAbbeyLamp to 1>><<set $mpAbbeyOilDay to _mpAbbeyDay>><</if>><<set $mpAbbeyLamp to Math.clamp($mpAbbeyLamp, 0, 5)>>
+<<set $mpAbbeyAlert to Math.clamp(($mpAbbeyAlert or 0), 0, 10)>><<set $mpAbbeyDepth to Math.clamp(($mpAbbeyDepth or 0), 0, 3)>>
+冷雾混着没药残香漫过沉没修道院的断柱外庭，暗河水声在青石台阶下低沉回荡。<<if $mpAbbeyLamp lte 0>>手里的牛角提灯已经油尽，幽暗拱廊里一步一滑。<<else>>提灯里尚存灯油，微光映出石壁上的苦修浮雕。<</if>><<if $mpAbbeyAlert gte 6>>回廊深处铜钟急响，守院僧侣正提灯巡查各处暗门。<<elseif $mpAbbeyDepth gte 2>>你这一趟已走入古院深处，脚下暗河正悄然涨水。<</if>><<if $mpAbbeyChainDone["cloister"] and $mpAbbeyChainDone["waterway"] and $mpAbbeyChainDone["scriptorium"] and $mpAbbeyChainDone["belfry"]>>回廊祷告席、地窖水道、抄经室与钟楼烛台都已探明，只剩钟声散尽后的余波。<<else>>北侧拱门连着回廊祷告席，下层石阶则没入地窖暗河水道。<</if>>
+<br><br>
+<<getouticon>><<link [[回古修道院 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><<set $mpAbbeyDepth to 0>><</link>>
+<br>
+<<templeicon>><<link [[探回廊祷告席 (0:06)|MP Region Abbey Cloister Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Abbey Cloister Chain"] to 1>><</link>>
+<br>
+<<mpboaticon>><<link [[入地窖暗河水道 (0:07)|MP Region Abbey Waterway Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Abbey Waterway Chain"] to 1>><</link>>
+<br>
+<<if !$mpAbbeyChainDone["scriptorium"]>>
+<<mpreadicon>><<link [[进抄经室 (0:08)|MP Region Abbey Scriptorium Chain]]>><<pass 8>><<set $mpAbbeyLamp to Math.max(0, ($mpAbbeyLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Abbey Scriptorium Chain"] to 1>><</link>>
 <<else>>
-	<<set _pick to _pool.random()>>
+<<link [[登残破钟楼探烛台 (0:08)|MP Region Abbey Belfry Chain]]>><<pass 8>><<set $mpAbbeyLamp to Math.max(0, ($mpAbbeyLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Abbey Belfry Chain"] to 1>><</link>>
 <</if>>
-<<set $mpSeenScenes[_pick] to 1>>
-<<include _pick>>
-
 
 :: MP Region Pool Glasshouse [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
-<<set _regionScenes to ["MP Region Glasshouse SilverVeinOrchid", "MP Region Glasshouse GiltCagePitcher", "MP Region Glasshouse BreedingDiaryBox", "MP Region Glasshouse TiltedFloraStatue", "MP Region Glasshouse UnsealedAmberJar", "MP Region Glasshouse BinocularPetal", "MP Region Glasshouse WhaleRibCasket", "MP Region Glasshouse EarlGreyTeapot", "MP Region Glasshouse RosemarySpyglass", "MP Region Glasshouse WeathervaneCanvas", "MP Region Glasshouse LooseBungCask", "MP Region Glasshouse AlembicSilverChain", "MP Region Glasshouse UnlabeledGreenBottle", "MP Region Glasshouse GardenerApron", "MP Region Glasshouse NurseryWaterValve", "MP Region Glasshouse SpecimenTagNine", "MP Region Glasshouse FunnelGoldRing", "MP Region Glasshouse TerraceSundialLetter", "MP Region Glasshouse IceCellarBrassCan", "MP Region Glasshouse HygrometerHiddenBox"]>>
-<<set _pool to _regionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
-<<if _pool.length is 0>>
-	<<run _regionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
-	<<set _pick to _regionScenes[0]>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpGlassChainDone to ($mpGlassChainDone or {})>>
+<<set _mpGlassDay to ((window.Time and Time.days) or 0)>><<if $mpGlassLamp is undefined>><<set $mpGlassLamp to 2>><</if>><<if $mpGlassLamp lte 0 and $mpGlassOilDay isnot _mpGlassDay>><<set $mpGlassLamp to 1>><<set $mpGlassOilDay to _mpGlassDay>><</if>><<set $mpGlassLamp to Math.clamp($mpGlassLamp, 0, 5)>>
+<<set $mpGlassAlert to Math.clamp(($mpGlassAlert or 0), 0, 10)>><<set $mpGlassDepth to Math.clamp(($mpGlassDepth or 0), 0, 3)>>
+温润水雾裹着夜光兰的幽香漫过玻璃温室的雕花铁廊，恒温铜管在藤蔓间发出细微嘶鸣。<<if $mpGlassLamp lte 0>>手里的黄铜风灯已经断油，花影深处真假难辨。<<else>>风灯里还有余油，暖光映亮了雾气凝成的露珠。<</if>><<if $mpGlassAlert gte 6>>外围回廊响起护院犬的低吠，庄园守卫正沿着花径搜检。<<elseif $mpGlassDepth gte 2>>你这一趟已走入温室深处，湿热雾气闷得人胸口微紧。<</if>><<if $mpGlassChainDone["orchid"] and $mpGlassChainDone["cellar"] and $mpGlassChainDone["terrace"] and $mpGlassChainDone["dome"]>>兰花标本厅、地下冰窖、露台日晷与穹顶阀门都已探遍，只余水雾滴落的余响。<<else>>东侧玻璃门通向兰花标本厅，砖砌暗阶则直通地下酿造冰窖。<</if>>
+<br><br>
+<<getouticon>><<link [[回秘密温室 (0:03)|MP Region Glasshouse Manor]]>><<pass 3>><<set $mpGlassDepth to 0>><</link>>
+<br>
+<<gardenicon>><<link [[探兰花标本厅 (0:06)|MP Region Glasshouse Orchid Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Glasshouse Orchid Chain"] to 1>><</link>>
+<br>
+<<mpcellaricon>><<link [[下探酿造室冰窖 (0:07)|MP Region Glasshouse Cellar Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Glasshouse Cellar Chain"] to 1>><</link>>
+<br>
+<<if !$mpGlassChainDone["terrace"]>>
+<<mpastroicon>><<link [[登露台查石雕日晷 (0:08)|MP Region Glasshouse Terrace Chain]]>><<pass 8>><<set $mpGlassLamp to Math.max(0, ($mpGlassLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Glasshouse Terrace Chain"] to 1>><</link>>
 <<else>>
-	<<set _pick to _pool.random()>>
+<<link [[拧穹顶阀 (0:08)|MP Region Glasshouse Dome Chain]]>><<pass 8>><<set $mpGlassLamp to Math.max(0, ($mpGlassLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Glasshouse Dome Chain"] to 1>><</link>>
 <</if>>
-<<set $mpSeenScenes[_pick] to 1>>
-<<include _pick>>
-
 
 :: MP Region Pool Blackiron [nobr]
 <<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
-<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
-<<set _regionScenes to ["MP Region Blackiron RustedSwitchWatch", "MP Region Blackiron DerailedCoalTarp", "MP Region Blackiron BufferSignalLamp", "MP Region Blackiron BumperOiledPipe", "MP Region Blackiron RifleRackGap", "MP Region Blackiron EscortCotBriefcase", "MP Region Blackiron AxleMeshCrates", "MP Region Blackiron RedClothLever", "MP Region Blackiron WarmTelegraphKey", "MP Region Blackiron ArcSearchlightLatch", "MP Region Blackiron CamphorHerbCart", "MP Region Blackiron SewerSluiceBell", "MP Region Blackiron WetFootprintKeys", "MP Region Blackiron WaterTowerToolbag", "MP Region Blackiron PriedWeaponLocker", "MP Region Blackiron LouverAnchorFlask", "MP Region Blackiron StoppedClockKey", "MP Region Blackiron LeadSealedOakBarrel", "MP Region Blackiron DeadEndFlagTube"]>>
-<<set _pool to _regionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
-<<if _pool.length is 0>>
-	<<run _regionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
-	<<set _pick to _regionScenes[0]>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpIronChainDone to ($mpIronChainDone or {})>>
+<<set _mpIronDay to ((window.Time and Time.days) or 0)>><<if $mpIronLamp is undefined>><<set $mpIronLamp to 2>><</if>><<if $mpIronLamp lte 0 and $mpIronOilDay isnot _mpIronDay>><<set $mpIronLamp to 1>><<set $mpIronOilDay to _mpIronDay>><</if>><<set $mpIronLamp to Math.clamp($mpIronLamp, 0, 5)>>
+<<set $mpIronAlert to Math.clamp(($mpIronAlert or 0), 0, 10)>><<set $mpIronDepth to Math.clamp(($mpIronDepth or 0), 0, 3)>>
+煤烟味混着铁锈气息笼罩着黑铁货站的废弃股道，生锈的枕木与闷罐车厢在夜风里嘎吱作响。<<if $mpIronLamp lte 0>>手里的铁路信号提灯已经断油，车厢夹缝黑得不见五指。<<else>>信号提灯尚存余油，红绿滤镜透出微弱光斑。<</if>><<if $mpIronAlert gte 6>>塔台弧光探照灯正来回扫射股道，铁路护卫吹响了警哨。<<elseif $mpIronDepth gte 2>>你这一趟已深入调车场腹地，四周尽是封存的军械车皮。<</if>><<if $mpIronChainDone["platform"] and $mpIronChainDone["armored"] and $mpIronChainDone["watertower"] and $mpIronChainDone["sluice"]>>站台信号灯、军械煤车、给水塔与下水闸钟表都已摸清，只余风吹铁轨的余音。<<else>>近处枕木通向废弃站台，北侧股道则停着覆满煤布的军械车。<</if>>
+<br><br>
+<<getouticon>><<link [[回黑铁货站 (0:03)|MP Region Blackiron Yard]]>><<pass 3>><<set $mpIronDepth to 0>><</link>>
+<br>
+<<mplampicon>><<link [[探站台信号灯 (0:06)|MP Region Blackiron Platform Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Blackiron Platform Chain"] to 1>><</link>>
+<br>
+<<mpcarryicon>><<link [[摸进军械煤车股道 (0:07)|MP Region Blackiron Armored Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Blackiron Armored Chain"] to 1>><</link>>
+<br>
+<<if !$mpIronChainDone["watertower"]>>
+<<mprepairicon>><<link [[攀给水塔 (0:08)|MP Region Blackiron Watertower Chain]]>><<pass 8>><<set $mpIronLamp to Math.max(0, ($mpIronLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Blackiron Watertower Chain"] to 1>><</link>>
 <<else>>
-	<<set _pick to _pool.random()>>
+<<link [[探下水闸信号钟 (0:08)|MP Region Blackiron Sluice Chain]]>><<pass 8>><<set $mpIronLamp to Math.max(0, ($mpIronLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Blackiron Sluice Chain"] to 1>><</link>>
 <</if>>
-<<set $mpSeenScenes[_pick] to 1>>
-<<include _pick>>
-
 
 :: MP Region Pool Druid [nobr]
 <<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
-<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
-<<set _regionScenes to ["MP Region Druid CleftStoneSickle", "MP Region Druid RavenNestChain", "MP Region Druid MistletoePouch", "MP Region Druid StarPointerSlab", "MP Region Druid TwinSilverfloraPool", "MP Region Druid MeadBronzeJue", "MP Region Druid BoneChimeHollow", "MP Region Druid RootFluoriteOrb", "MP Region Druid MossyBronzeShield", "MP Region Druid WhiteFeatherUrn", "MP Region Druid HomingPigeonLoft", "MP Region Druid WolfskinHuntingKnife", "MP Region Druid CrouchingStoneHilt", "MP Region Druid JadeCicadaSpout", "MP Region Druid WaxSealedGourd", "MP Region Druid FirewoodBiscuitTin", "MP Region Druid ShutterEagleWhistle"]>>
-<<set _pool to _regionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
-<<if _pool.length is 0>>
-	<<run _regionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
-	<<set _pick to _regionScenes[0]>>
-<<else>>
-	<<set _pick to _pool.random()>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpDruidChainDone to ($mpDruidChainDone or {})>>
+<<set _mpDruidDay to ((window.Time and Time.days) or 0)>><<if $mpDruidLamp is undefined>><<set $mpDruidLamp to 2>><</if>><<if $mpDruidLamp lte 0 and $mpDruidOilDay isnot _mpDruidDay>><<set $mpDruidLamp to 1>><<set $mpDruidOilDay to _mpDruidDay>><</if>><<set $mpDruidLamp to Math.clamp($mpDruidLamp, 0, 5)>>
+<<set $mpDruidAlert to Math.clamp(($mpDruidAlert or 0), 0, 10)>><<set $mpDruidDepth to Math.clamp(($mpDruidDepth or 0), 0, 3)>>
+浓重的松脂寒雾漫过古德鲁伊石环的十二根风化石柱，腐殖土下的暗泉发出低沉呜咽。<<if $mpDruidLamp lte 0>>手里的松脂风灯已经断油，盘错的古树根间一步一陷。<<else>>风灯里尚存松脂灯膏，暖黄光晕照亮了石柱上的螺旋刻痕。<</if>><<if $mpDruidAlert gte 6>>外围密林传来狼群的呼应低嚎与银鹰哨响，巡林哨兵正沿着兽径搜寻。<<elseif $mpDruidDepth gte 2>>你这一趟已深入石环腹地，林冠遮蔽了天光。<</if>><<if $mpDruidChainDone["stones"] and $mpDruidChainDone["rootcave"] and $mpDruidChainDone["watchtower"] and $mpDruidChainDone["altar"]>>石阵月井、根窟地脉、瞭望木塔与白鹿祭坛都已探明，只余林风拂过槲寄生的余响。<<else>>北侧苔径通往石阵月井，东侧泥壁则露出根窟暗渠的入口。<</if>>
+<br><br>
+<<getouticon>><<link [[回古石环 (0:03)|MP Region Druid Circle]]>><<pass 3>><<set $mpDruidDepth to 0>><</link>>
+<br>
+<<mpherbicon>><<if $mpDruidChainDone["stones"]>><<link [[石阵月井余波 (0:06)|MP Region Druid Stones Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Druid Stones Chain"] to 1>><</link>><<else>><<link [[探石阵与月井 (0:06)|MP Region Druid Stones Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Druid Stones Chain"] to 1>><</link>><</if>>
+<br>
+<<caveicon>><<if $mpDruidChainDone["rootcave"]>><<link [[根窟地脉的余波 (0:07)|MP Region Druid Rootcave Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Druid Rootcave Chain"] to 1>><</link>><<else>><<link [[下古根地脉洞窟 (0:07)|MP Region Druid Rootcave Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Druid Rootcave Chain"] to 1>><</link>><</if>>
+<br>
+<<mpanimalicon>><<if $mpDruidChainDone["watchtower"]>><<link [[听塔上余音 (0:08)|MP Region Druid Watchtower Chain]]>><<pass 8>><<set $mpDruidLamp to Math.max(0, ($mpDruidLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Druid Watchtower Chain"] to 1>><</link>><<else>><<link [[登塔听狼嚎 (0:08)|MP Region Druid Watchtower Chain]]>><<pass 8>><<set $mpDruidLamp to Math.max(0, ($mpDruidLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Druid Watchtower Chain"] to 1>><</link>><</if>>
+<<if $mpDruidChainDone["watchtower"]>>
+<br>
+<<link [[寻林间白鹿古祭坛 (0:08)|MP Region Druid Altar Chain]]>><<pass 8>><<set $mpDruidLamp to Math.max(0, ($mpDruidLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Druid Altar Chain"] to 1>><</link>>
 <</if>>
-<<set $mpSeenScenes[_pick] to 1>>
-<<include _pick>>
-
 
 :: MP Region Pool Velvet [nobr]
 <<set $outside to 0>><<set $location to "brothel">><<effects>><<mpAmbient>>
-<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
-<<set _regionScenes to ["MP Region Velvet SilverFoxMaskGlint", "MP Region Velvet CarpetFloorLock", "MP Region Velvet ChampagneCartInvite", "MP Region Velvet SableShawlFan", "MP Region Velvet RotatingDaisBox", "MP Region Velvet MannequinGoldThread", "MP Region Velvet AmethystAtomiser", "MP Region Velvet BalustradeCatalogue", "MP Region Velvet SilverCharcoalBrazier", "MP Region Velvet CliffGateNecktie", "MP Region Velvet VelvetCoveredPodium", "MP Region Velvet VIPBoxAshtrayNote", "MP Region Velvet CupidQuiverFoil", "MP Region Velvet ChaiseCoralPurse", "MP Region Velvet PlanterSilverCase", "MP Region Velvet AbacusWaxLetter", "MP Region Velvet DumbwaiterRosewoodBox", "MP Region Velvet HollowCrystalTassel"]>>
-<<set _pool to _regionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
-<<if _pool.length is 0>>
-	<<run _regionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
-	<<set _pick to _regionScenes[0]>>
-<<else>>
-	<<set _pick to _pool.random()>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpVelvetChainDone to ($mpVelvetChainDone or {})>>
+<<set _mpVelvetDay to ((window.Time and Time.days) or 0)>><<if $mpVelvetLamp is undefined>><<set $mpVelvetLamp to 2>><</if>><<if $mpVelvetLamp lte 0 and $mpVelvetOilDay isnot _mpVelvetDay>><<set $mpVelvetLamp to 1>><<set $mpVelvetOilDay to _mpVelvetDay>><</if>><<set $mpVelvetLamp to Math.clamp($mpVelvetLamp, 0, 5)>>
+<<set $mpVelvetAlert to Math.clamp(($mpVelvetAlert or 0), 0, 10)>><<set $mpVelvetDepth to Math.clamp(($mpVelvetDepth or 0), 0, 3)>>
+白麝香与陈年香槟的甜腻气息萦绕在天鹅绒暗层的波斯地毯上，帷幔后隐约漏出低沉的大提琴弦音。<<if $mpVelvetLamp lte 0>>手里的紫晶暗灯已经燃尽，屏风夹道里黑影重重。<<else>>暗灯里尚存香蜡，微光映亮了壁龛里的羽毛假面。<</if>><<if $mpVelvetAlert gte 6>>走廊两头响起银狐执事的皮靴声，侍者正逐间核查贵宾请柬。<<elseif $mpVelvetDepth gte 2>>你这一趟已深入暗层腹地，连廊外的海浪声清晰可闻。<</if>><<if $mpVelvetChainDone["masque"] and $mpVelvetChainDone["salon"] and $mpVelvetChainDone["terrace"] and $mpVelvetChainDone["cellar"]>>假面回廊、试衣拍卖厅、观海露台与地锁暗窖都已探遍，只余弦音散去后的余波。<<else>>前廊壁龛陈列着银狐假面，东侧屏风则连着旋转试衣台与拍卖暗厅。<</if>>
+<br><br>
+<<getouticon>><<link [[回天鹅绒 (0:03)|MP Region Velvet Mirage]]>><<pass 3>><<set $mpVelvetDepth to 0>><</link>>
+<br>
+<<cosmeticsicon>><<if $mpVelvetChainDone["masque"]>><<link [[丝绒假面余波 (0:06)|MP Region Velvet Masque Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Velvet Masque Chain"] to 1>><</link>><<else>><<link [[探丝绒假面厅 (0:06)|MP Region Velvet Masque Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Velvet Masque Chain"] to 1>><</link>><</if>>
+<br>
+<<mptailoricon>><<if $mpVelvetChainDone["salon"]>><<link [[试衣拍卖暗厅余波 (0:07)|MP Region Velvet Salon Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Velvet Salon Chain"] to 1>><</link>><<else>><<link [[进试衣与拍卖暗厅 (0:07)|MP Region Velvet Salon Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Velvet Salon Chain"] to 1>><</link>><</if>>
+<br>
+<<windowicon>><<if $mpVelvetChainDone["terrace"]>><<link [[峭壁观海台余波 (0:08)|MP Region Velvet Terrace Chain]]>><<pass 8>><<set $mpVelvetLamp to Math.max(0, ($mpVelvetLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Velvet Terrace Chain"] to 1>><</link>><<else>><<link [[登峭壁观海露台 (0:08)|MP Region Velvet Terrace Chain]]>><<pass 8>><<set $mpVelvetLamp to Math.max(0, ($mpVelvetLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Velvet Terrace Chain"] to 1>><</link>><</if>>
+<<if $mpVelvetChainDone["terrace"]>>
+<br>
+<<link [[探地窖暗门 (0:08)|MP Region Velvet Cellar Chain]]>><<pass 8>><<set $mpVelvetLamp to Math.max(0, ($mpVelvetLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Velvet Cellar Chain"] to 1>><</link>>
 <</if>>
-<<set $mpSeenScenes[_pick] to 1>>
-<<include _pick>>
-
 
 :: MP Region Pool Observatory [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>>
-<<set _curDay to ((window.Time and Time.days) or 0)>><<if $mpSeenScenesDay isnot _curDay>><<set $mpSeenScenes to {}>><<set $mpSeenScenesDay to _curDay>><<else>><<set $mpSeenScenes to ($mpSeenScenes or {})>><</if>>
-<<set _regionScenes to ["MP Region Observatory EquatorialBookmark", "MP Region Observatory SlideRailSchoolBadge", "MP Region Observatory AstrolabeSealingWax", "MP Region Observatory Tube1894Cap", "MP Region Observatory EclipseMapKey", "MP Region Observatory GlobeEquatorialCrack", "MP Region Observatory MicrofilmStandbyReel", "MP Region Observatory UnlockedAmethystBase", "MP Region Observatory TiltedFossilPlaque", "MP Region Observatory AmberJarSignet", "MP Region Observatory GargoyleTinBox", "MP Region Observatory CeilingHatchCord", "MP Region Observatory CounterweightStarMap", "MP Region Observatory FoghornIndexCard", "MP Region Observatory NautilusVelvetPlug", "MP Region Observatory BottomShelfLeadBox", "MP Region Observatory AnemometerLeatherCase", "MP Region Observatory LooseStepRedRibbon"]>>
-<<set _pool to _regionScenes.filter(function (n) { return !$mpSeenScenes[n]; })>>
-<<if _pool.length is 0>>
-	<<run _regionScenes.forEach(function (n) { delete $mpSeenScenes[n]; })>>
-	<<set _pick to _regionScenes[0]>>
-<<else>>
-	<<set _pick to _pool.random()>>
+<<set $mpSeenScenes to ($mpSeenScenes or {})>><<set $mpObsChainDone to ($mpObsChainDone or {})>>
+<<set _mpObsDay to ((window.Time and Time.days) or 0)>><<if $mpObsLamp is undefined>><<set $mpObsLamp to 2>><</if>><<if $mpObsLamp lte 0 and $mpObsOilDay isnot _mpObsDay>><<set $mpObsLamp to 1>><<set $mpObsOilDay to _mpObsDay>><</if>><<set $mpObsLamp to Math.clamp($mpObsLamp, 0, 5)>>
+<<set $mpObsAlert to Math.clamp(($mpObsAlert or 0), 0, 10)>><<set $mpObsDepth to Math.clamp(($mpObsDepth or 0), 0, 3)>>
+樟木与陈年羊皮星图的清香在旧天文翼楼的木拱廊间浮动，屋顶风速计随夜风发出细碎轻响。<<if $mpObsLamp lte 0>>手里的黄铜阅读灯已经断油，高耸的画筒架间伸手不见五指。<<else>>阅读灯里尚存精馏灯油，暖光映出地板滑轨上的刻度。<</if>><<if $mpObsAlert gte 6>>连廊尽头晃动着手电光柱，守夜教工与值日学长正挨间查锁。<<elseif $mpObsDepth gte 2>>你这一趟已走入翼楼深处，脚下木梁随钟摆微微共振。<</if>><<if $mpObsChainDone["dome"] and $mpObsChainDone["starmap"] and $mpObsChainDone["pendulum"] and $mpObsChainDone["meteorite"]>>折光穹顶、星图档案室、连廊钟摆与陨石密室都已探过，只余风吹拱窗的余音。<<else>>北侧滑轨直通折光穹顶室，樟木暗门后则是高耸的星图档案架。<</if>>
+<br><br>
+<<getouticon>><<link [[回旧翼楼 (0:03)|MP Region Observatory Wing]]>><<pass 3>><<set $mpObsDepth to 0>><</link>>
+<br>
+<<mpastroicon>><<if $mpObsChainDone["dome"]>><<link [[折光穹顶余波 (0:06)|MP Region Observatory Dome Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Observatory Dome Chain"] to 1>><</link>><<else>><<link [[探折光穹顶室 (0:06)|MP Region Observatory Dome Chain]]>><<pass 6>><<set $mpSeenScenes["MP Region Observatory Dome Chain"] to 1>><</link>><</if>>
+<br>
+<<mpreadicon>><<if $mpObsChainDone["starmap"]>><<link [[星图档案室余波 (0:07)|MP Region Observatory Starmap Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Observatory Starmap Chain"] to 1>><</link>><<else>><<link [[进星图档案查卷 (0:07)|MP Region Observatory Starmap Chain]]>><<pass 7>><<set $mpSeenScenes["MP Region Observatory Starmap Chain"] to 1>><</link>><</if>>
+<br>
+<<mpwatchicon>><<if $mpObsChainDone["pendulum"]>><<link [[听连廊钟摆 (0:08)|MP Region Observatory Pendulum Chain]]>><<pass 8>><<set $mpObsLamp to Math.max(0, ($mpObsLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Observatory Pendulum Chain"] to 1>><</link>><<else>><<link [[走连廊钟摆 (0:08)|MP Region Observatory Pendulum Chain]]>><<pass 8>><<set $mpObsLamp to Math.max(0, ($mpObsLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Observatory Pendulum Chain"] to 1>><</link>><</if>>
+<<if $mpObsChainDone["pendulum"]>>
+<br>
+<<link [[探标本暗阁与陨石 (0:08)|MP Region Observatory Meteorite Chain]]>><<pass 8>><<set $mpObsLamp to Math.max(0, ($mpObsLamp or 0) - 1)>><<set $mpSeenScenes["MP Region Observatory Meteorite Chain"] to 1>><</link>>
 <</if>>
-<<set $mpSeenScenes[_pick] to 1>>
-<<include _pick>>
-
 
 :: MP Region Foghorn Island [nobr]
 <<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
@@ -133,7 +165,7 @@
 <br><br>
 <<getouticon>><<link [[返回海礁 (0:18)|Sea Rocks]]>><<set $outside to 1>><<set $location to "searocks">><<pass 18>><<set $eventskip to 1>><<endevent>><</link>>
 <br>
-<<walkicon>><<link [[去雾角栈桥 (0:06)|MP Region Foghorn Pier]]>><<pass 6>><</link>>
+<<walkicon>><<link [[沿栈桥探雾角 (0:06)|MP Region Foghorn Pier Chain]]>><<pass 6>><<set $mpFogDepth to 0>><</link>>
 <br>
 <<mpeavesdropicon>><<link [[留意礁岸动静 (0:06)|MP Region Foghorn Island Scout]]>><<pass 6>><</link>>
 <br>
@@ -207,401 +239,40 @@
 :: MP Region Foghorn Pier [nobr]
 <<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["foghorn_pier"] to 1>>
-青石垒成的古老栈桥延伸入迷雾笼罩的海面，系船柱上缠绕着潮湿的缆绳与墨绿海草。浪涌拍击着桥墩木桩，激起一阵细碎的白色水沫。
-<<if $athletics gte 260 or $physique gte 11000>>你踩稳湿滑的青石条，任凭海风吹拂衣角。<<else>>湿滑的青苔让你每迈一步都不得不抓紧系船铁环。<</if>>
+青石垒成的古老栈桥延伸入迷雾笼罩的海面，系船石柱上缠着潮湿的旧缆绳与墨绿海草。浪涌拍击着桥墩木桩激起细碎白沫，栈桥各处早已被你寻访过，只余海风吹拂衣角与远处海鸟掠过的余音。
 <br><br>
-<<getouticon>><<link [[返回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
+<<getouticon>><<link [[回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
 <br>
-<<crimeicon "safe">><<link [[蹲下细查暗槽 (0:08)|MP Region Foghorn Pier Search]]>><<pass 8>><</link>>
+<<mpropeicon>><<link [[顺石阶去旧居外 (0:05)|MP Region Foghorn Keeper]]>><<pass 5>><</link>>
 <br>
-<<bedicon>><<link [[返回雾角栈桥 (0:08)|MP Region Foghorn Pier Rest]]>><<pass 8>><</link>>
-<br>
-<<if $mpKnown["foghorn_keeper"]>>
-<<walkicon>><<link [[去守塔旧居 (0:06)|MP Region Foghorn Keeper]]>><<pass 6>><</link>>
-<<else>>
-<<link "比对系船柱刻痕 (0:03)">><<pass 3>><<replace "#obs-foghorn-pier">>
-<<if $athletics gte 260 or $skulduggery gte 240>>
-你抹开青苔，看见柱身上六道新刻的粉笔痕，绳结是走私船惯用的双套结。刻痕末端指向半山腰的守塔人旧居。
-<<set $mpKnown["foghorn_keeper"] to 1>><br><<link [[去守塔旧居 (0:06)|MP Region Foghorn Keeper]]>><<pass 6>><</link>>
-<<else>>
-海风把粉笔灰吹得干干净净，你只摸到一手湿滑苔藓，没看出绳结的门道。
-<<tiredness 1>><<stress 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-foghorn-pier"></div>
-<</if>>
-<br>
-<<link [[探看海鸟 (0:04)|MP Region Moment Foghorn 1]]>><<pass 4>><</link>>
-
-
-:: MP Region Foghorn Pier Search [nobr]
-<<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你蹲在栈桥第三根系船石柱旁，伸手探向覆满牡蛎壳的暗槽。
-<br><br>
-<<walkicon>><<link [[返回雾角栈桥 (0:02)|MP Region Foghorn Pier]]>><<pass 2>><</link>>
-<br>
-<div id="foghorn-pier-choices">
-<<mplockpickicon>><<link "撬开牡蛎暗槽 (0:08)">><<pass 8>><<replace "#foghorn-pier-choices">>
-<<set $skulduggerydifficulty to 300>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["foghorn_keeper"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Foghorn_Pier")>>
-		你避开壳缘掀开黄铜匣，取出一枚船锚徽记、半枚印戒和一叠旧港银币，约 <span class="gold">£3</span>。匣盖内侧还刻着守塔人的姓。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragSmugglerRing or 0) lt 3>><<set $mpFragSmugglerRing to ($mpFragSmugglerRing or 0) + 1>><</if>>
-		<<money 300>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_foghorn_pier>>
-			<<set $daily.mpRegionLoot_foghorn_pier to 1>>
-			你从槽底拈出一只铜扣皮袋，里面是两枚磨亮的旧港银币；袋口沾着守塔人常用的松脂，说明有人常来这里。<span class="green">你将系船柱暗槽里的铜扣皮袋妥善收进贴身衣袋。</span>
-			<<money 200>><<stress -2>>
-		<<else>>
-			<span class="teal">暗槽今日已被你翻检过，只剩潮湿的牡蛎碎壳与松脂印痕。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	浪头漫过台阶，牡蛎壳在你指腹上划开一道口子。你缩回手，暗槽里的匣子仍卡在原处。
-	<<stress 5>><<pain 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpfishicon>><<link "比对缆绳系法 (0:06)">><<pass 6>><<replace "#foghorn-pier-choices">>
-<<if $science gte 240 or $athletics gte 260>>
-	<<set $mpKnown["foghorn_keeper"] to 1>>
-	你认出这是走私船的双套结，绳尾的六道刻痕与守塔人旧居门框上的划痕一致。
-	<<stress -1>>
-<<else>>
-	湿绳在掌心打转，你只看出这是普通系船结，没能读出更多东西。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
-
-
-:: MP Region Foghorn Pier Rest [nobr]
-<<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
-你退到栈桥背风侧的青石高阶上坐下，拉紧衣领抵御海面吹来的潮气。
-<br><br>
-<<walkicon>><<link [[返回雾角栈桥 (0:02)|MP Region Foghorn Pier]]>><<pass 2>><</link>>
-<br>
-<div id="mp-region-foghorn-pier-rest-choices">
-<<bedicon>><<link "拢紧衣领背风调息 (0:10)">><<pass 10>><<replace "#mp-region-foghorn-pier-rest-choices">>
-<<if $willpower gte 420 or $physique gte 11500>>
-你随着潮水拍岸的节拍放缓呼吸，冰凉的海风渐渐吹散了额角的燥热。紧绷的肩背松弛下来，<span class="green">四肢恢复了不少力气。</span>
-<<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
-<<else>>
-咸湿的冷风顺着石缝直往领口里灌，冻得你指尖发麻。你缩在石阶上打了个寒颤，<span class="red">反而觉得更加疲乏。</span>
-<<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpcarryicon>><<link "拧干裤脚沾染浪沫 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-pier-rest-choices">>
-你把裤脚溅上的咸水拧净，<span class="teal">借着桥墩挡风处活动了发酸的脚踝。</span>
-<<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
-<</replace>><</link>>
-</div>
-
+<<link [[驻足探看礁石海鸟 (0:04)|MP Region Moment Foghorn 1]]>><<pass 4>><</link>>
 
 :: MP Region Foghorn Keeper [nobr]
 <<set $outside to 0>><<set $location to "sea">><<effects>><<mpAmbient>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["foghorn_keeper"] to 1>>
-半嵌在岩壁里的守塔人石屋隔绝了外海的风浪，石砌壁炉旁摆放着防风煤油灯与历年的潮汐手札。厚重的橡木窗板合拢着，屋里留着淡淡的松木烟气。
-<<if $history gte 260 or $housekeeping gte 240>>你扫了一眼桌上的值班记录，立刻看出了壁炉砖缝里的异样。<<else>>昏暗的石屋陈设简陋，壁炉角落积着一层薄灰。<</if>>
+半嵌在断崖岩壁里的守塔人旧居静悄悄的，厚重的橡木窗板挡住了外海的风浪。壁炉与木桌抽屉都已被你检视过，屋里只留着淡淡的松木烟气与窗外低沉的潮声。
 <br><br>
-<<getouticon>><<link [[返回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
+<<getouticon>><<link [[回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
 <br>
-<<mpsewicon>><<link [[细查壁炉砖缝 (0:10)|MP Region Foghorn Keeper Search]]>><<pass 10>><</link>>
-<br>
-<<bedicon>><<link [[去守塔旧居 (0:08)|MP Region Foghorn Keeper Rest]]>><<pass 8>><</link>>
-<br>
-<<if $mpKnown["foghorn_wreck"]>>
-<<walkicon>><<link [[去断桅滩 (0:08)|MP Region Foghorn Wreck]]>><<pass 8>><</link>>
-<<else>>
-<<link "翻看潮汐手札 (0:03)">><<pass 3>><<replace "#obs-foghorn-keeper">>
-<<if $history gte 260 or $housekeeping gte 240>>
-你翻到一页被撕去大半的潮汐记录，残角写着「退潮后把箱子挪去断桅滩」。炉灰里还埋着半枚黄铜星盘。
-<<set $mpKnown["foghorn_wreck"] to 1>><br><<link [[去断桅滩 (0:08)|MP Region Foghorn Wreck]]>><<pass 8>><</link>>
-<<else>>
-手札受潮粘成一叠，你只辨认出几个模糊日期，没能串起完整的去向。
-<<tiredness 1>><<stress 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-foghorn-keeper"></div>
-<</if>>
-
-
-:: MP Region Foghorn Keeper Search [nobr]
-<<set $outside to 0>><<set $location to "sea">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你凑到石屋壁炉上方，用指节轻轻叩击烟道侧面的青石砖。
-<br><br>
-<<walkicon>><<link [[返回守塔旧居 (0:02)|MP Region Foghorn Keeper]]>><<pass 2>><</link>>
-<br>
-<div id="foghorn-keeper-choices">
-<<mpcookicon>><<link "叩壁炉活砖 (0:10)">><<pass 10>><<replace "#foghorn-keeper-choices">>
-<<set $skulduggerydifficulty to 340>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["foghorn_wreck"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Foghorn_Keeper")>>
-		你抽出松动的青砖，从烟道侧取出油纸包：一只黄铜星盘、半枚印戒残片和一张写有「断桅滩」的油纸。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragSmugglerRing or 0) lt 3>><<set $mpFragSmugglerRing to ($mpFragSmugglerRing or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_foghorn_keeper>>
-			<<set $daily.mpRegionLoot_foghorn_keeper to 1>>
-			你拉开木桌暗抽屉，在旧海图下找到一本被海水泡皱的潮汐簿，夹着半张标有断桅滩的草图。<span class="green">你将木桌暗抽屉里的潮汐簿与草图妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">木桌暗抽屉今日已被你翻过，只余下几片潮湿的旧海图纸屑。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	烟道里落下一蓬陈年煤灰，迷得眼眶发酸，手背也在石棱上蹭破了皮。你空手退回屋中央。
-	<<stress 5>><<pain 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpreadicon>><<link "读值班记录 (0:06)">><<pass 6>><<replace "#foghorn-keeper-choices">>
-<<if $history gte 260 or $english gte 240>>
-	<<set $mpKnown["foghorn_wreck"] to 1>>
-	你顺着墨迹读出一行交接记录：守塔人把几只锡箱搬去了东边的断桅沉船滩。
-	<<stress -1>>
-<<else>>
-	纸页被炉烟熏得发脆，关键词句一碰就碎，你只读到半句没头没尾的潮位。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
-
-
-:: MP Region Foghorn Keeper Rest [nobr]
-<<set $outside to 0>><<set $location to "sea">><<effects>><<mpAmbient>>
-你拉过壁炉旁的旧帆布矮凳坐下，把冻僵的双手拢在尚存余温的炉石边。
-<br><br>
-<<walkicon>><<link [[返回守塔旧居 (0:02)|MP Region Foghorn Keeper]]>><<pass 2>><</link>>
-<br>
-<div id="mp-region-foghorn-keeper-rest-choices">
-<<bedicon>><<link "拨拢炉膛残余木炭 (0:10)">><<pass 10>><<replace "#mp-region-foghorn-keeper-rest-choices">>
-<<if $housekeeping gte 220 or $willpower gte 400>>
-你顺手拨拢炉膛里的余烬，让干燥的暖意在石屋内重新弥漫开来。厚实的岩墙挡住了外海的风啸，<span class="green">你的困倦消退了大半。</span>
-<<tiredness -5>><<stress -5>><<ltiredness>><<lstress>>
-<<else>>
-炉膛里的余烬很快彻底冷透，窗板缝隙漏进来的阴冷穿堂风吹得你脖子发僵。你坐立不安地熬了一会儿，<span class="red">精神愈发紧绷。</span>
-<<stress 4>><<pain 1>><<gstress>><<gpain>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpcookicon>><<link "烘烤微潮的袖口 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-keeper-rest-choices">>
-你将微潮的袖口凑在壁炉余温旁烘干，<span class="teal">松木烟香让呼吸平顺下来。</span>
-<<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
-<</replace>><</link>>
-</div>
-
+<<walkicon>><<link [[顺岩径去断桅滩 (0:06)|MP Region Foghorn Wreck]]>><<pass 6>><</link>>
 
 :: MP Region Foghorn Wreck [nobr]
 <<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["foghorn_wreck"] to 1>>
-退潮后露出的弧形卵石滩上，几艘早年触礁的商船肋木斜插在黑色湿沙之中。断裂的橡木船舷挂满藤壶，浅水洼里倒映着铅灰色的天光。
-<<if $athletics gte 300 or $swimmingskill gte 280>>你轻巧地跃过积水的礁石坑，稳稳落在一截干燥的龙骨旁。<<else>>松散的湿卵石在脚下滚动，走起来颇费力气。<</if>>
+退潮后的弧形卵石滩上，早年触礁商船的腐朽肋木斜插在黑色湿沙里。挂满藤壶的断桅与底舱都已探明，浅水洼里倒映着铅灰色的天光，只剩浪花一趟趟漫过沙面。
 <br><br>
-<<getouticon>><<link [[返回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
+<<getouticon>><<link [[回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
 <br>
-<<investigateicon>><<link [[去断桅滩 (0:12)|MP Region Foghorn Wreck Search]]>><<pass 12>><</link>>
-<br>
-<<bedicon>><<link [[返回断桅滩 (0:08)|MP Region Foghorn Wreck Rest]]>><<pass 8>><</link>>
-<br>
-<<if $mpKnown["foghorn_echo"]>>
-<<walkicon>><<link [[返回回音廊 (0:09)|MP Region Foghorn Echo]]>><<pass 9>><</link>>
-<<else>>
-<<link "眺望退潮礁脊 (0:03)">><<pass 3>><<replace "#obs-foghorn-wreck">>
-<<if $swimmingskill gte 260 or $athletics gte 300>>
-退潮后的礁脊上留着一串新鲜靴印，径直通向崖底的海蚀回音廊；印边还有一小片被踩碎的白色盐晶。
-<<set $mpKnown["foghorn_echo"] to 1>><br><<link [[返回回音廊 (0:09)|MP Region Foghorn Echo]]>><<pass 9>><</link>>
-<<else>>
-浪沫不断抹平湿沙，你只看见几只海鸥在礁石上起落，没找到可跟的痕迹。
-<<tiredness 1>><<stress 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-foghorn-wreck"></div>
-<</if>>
-
-
-:: MP Region Foghorn Wreck Search [nobr]
-<<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你弯腰钻进倾斜的船长室残骸下，用铁片去起肋木夹缝里的密封锡盒。
-<br><br>
-<<walkicon>><<link [[返回断桅滩 (0:02)|MP Region Foghorn Wreck]]>><<pass 2>><</link>>
-<br>
-<div id="foghorn-wreck-choices">
-<<mplockpickicon>><<link "撬开肋木锡盒 (0:12)">><<pass 12>><<replace "#foghorn-wreck-choices">>
-<<set $skulduggerydifficulty to 380>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["foghorn_echo"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Foghorn_Wreck")>>
-		你发力撬开藤壶包裹的锡盒：一枚航海古物、半枚印戒残片，以及约 <span class="gold">£4</span> 的银元。盒盖内侧刻着走私船的编号。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragSmugglerRing or 0) lt 3>><<set $mpFragSmugglerRing to ($mpFragSmugglerRing or 0) + 1>><</if>>
-		<<money 400>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_foghorn_wreck>>
-			<<set $daily.mpRegionLoot_foghorn_wreck to 1>>
-			你从底舱湿沙槽里扒出一只铜扣皮袋，里面是几枚被海水洗亮的旧银币，约 <span class="gold">£3</span>；袋里还夹着一小片舱单。<span class="green">你将收获收好。</span>
-			<<money 250>><<stress -2>>
-		<<else>>
-			<span class="teal">底舱湿沙槽今日已被你淘过一遍，只剩被浪冲刷的碎贝壳。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	腐朽的橡木横梁突然下沉，你连忙抽身，手腕还是被生锈船钉刮出一道红痕。锡盒没能取出来。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpsewicon>><<link "辨湿沙靴印 (0:06)">><<pass 6>><<replace "#foghorn-wreck-choices">>
-<<if $athletics gte 280 or $swimmingskill gte 240>>
-	<<set $mpKnown["foghorn_echo"] to 1>>
-	你蹲下比对靴印深浅，顺着退潮水线一路追到回音廊入口，还在石缝里捡到一枚铜扣。
-	<<stress -1>>
-<<else>>
-	下一波浪头漫过沙面，靴印边缘立刻糊成一片，你只来得及看清半步。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
-
-
-:: MP Region Foghorn Wreck Rest [nobr]
-<<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
-你挑了半截干燥的橡木船舷坐进内侧，借着倾斜的船壳遮挡海面吹来的横风。
-<br><br>
-<<walkicon>><<link [[返回断桅滩 (0:02)|MP Region Foghorn Wreck]]>><<pass 2>><</link>>
-<br>
-<div id="mp-region-foghorn-wreck-rest-choices">
-<<bedicon>><<link "垫平船舷内侧干沙 (0:10)">><<pass 10>><<replace "#mp-region-foghorn-wreck-rest-choices">>
-<<if $athletics gte 260 or $willpower gte 440>>
-你把酸痛的双腿伸展在细沙上，<span class="green">听着头顶海鸥掠过薄雾的鸣叫。均匀的呼吸渐渐驱散了跋涉的酸楚。</span>
-<<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
-<<else>>
-涨潮的冷浪突然漫过船舷底部，冰凉的海水浸湿了你的鞋跟。你狼狈地起身挪开，非但没歇好，<span class="red">反而平添了几分烦躁。</span>
-<<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<fenceicon>><<link "抖落鞋里的湿沙粒 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-wreck-rest-choices">>
-你解开鞋扣抖净里面的细黑湿沙，<span class="teal">靠着厚实的橡木肋骨缓过一口气。</span>
-<<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
-<</replace>><</link>>
-</div>
-
+<<walkicon>><<link [[沿水线去回音廊 (0:06)|MP Region Foghorn Echo]]>><<pass 6>><</link>>
 
 :: MP Region Foghorn Echo [nobr]
 <<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
 <<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["foghorn_echo"] to 1>>
-海浪常年冲刷而成的天然石拱长廊蜿蜒深入崖底，穿堂风在蜂窝状的孔洞间激起管风琴般的低鸣。拱顶垂落着细长的白色盐晶，水洼清可见底。
-<<if $willpower gte 460 or $science gte 260>>你分辨出风声共鸣的方位，没有被重叠的回音扰乱心神。<<else>>层层叠叠的空灵回响在耳畔盘旋，令人有些头晕目眩。<</if>>
+海浪冲刷而成的天然石拱长廊蜿蜒深入崖底，穿堂风在蜂窝状的盐晶孔洞间激起管风琴般的低鸣。廊内的气孔与石龛都已被你探过，水洼清澈见底，只留层层叠叠的潮音回响。
 <br><br>
-<<getouticon>><<link [[返回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
+<<getouticon>><<link [[回雾角岛 (0:04)|MP Region Foghorn Island]]>><<pass 4>><</link>>
 <br>
-<<mpeavesdropicon>><<link [[听声探气孔 (0:12)|MP Region Foghorn Echo Search]]>><<pass 12>><</link>>
-<br>
-<<investigateicon>><<link [[返回回音廊 (0:08)|MP Region Foghorn Echo Rest]]>><<pass 8>><</link>>
-<br>
-<<caveicon "torch">><<link [[听潮音探暗穴 (0:08)|MP Extra Deep Foghorn 1]]>><<pass 8>><</link>>
-<br>
-<<link "贴壁辨听回声 (0:03)">><<pass 3>><<replace "#obs-foghorn-echo">>
-<<if $willpower gte 460 or $science gte 260>>
-你避开层层叠叠的假回声，听出最深处有一处干燥石龛；风从龛口灌入时，会带出一声极轻的金属颤音。
-<<else>>
-重叠的回声在耳畔打转，你分不清哪一道来自气孔、哪一道只是自己的脚步。
-<<tiredness 1>><<stress 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<div id="obs-foghorn-echo"></div>
-
-
-:: MP Region Foghorn Echo Search [nobr]
-<<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你顺着海蚀回音廊共鸣最响的气孔走过去，把手指探进石壁内侧的螺旋暗槽。
-<br><br>
-<<walkicon>><<link [[返回回音廊 (0:02)|MP Region Foghorn Echo]]>><<pass 2>><</link>>
-<br>
-<div id="foghorn-echo-choices">
-<<investigateicon>><<link "探螺旋气孔 (0:12)">><<pass 12>><<replace "#foghorn-echo-choices">>
-<<set $skulduggerydifficulty to 360>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Foghorn_Echo")>>
-		你抠开蜂蜡封口，取出一支完好的定音古音叉和半枚印戒残片；暗槽底部压着一小片写着「六响」的铜牌。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragSmugglerRing or 0) lt 3>><<set $mpFragSmugglerRing to ($mpFragSmugglerRing or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_foghorn_echo>>
-			<<set $daily.mpRegionLoot_foghorn_echo to 1>>
-			你从气孔内侧夹出几枚黑珍珠母贝与一枚旧钱币；槽壁上还留着指甲划出的六道短痕。<span class="green">你将收获收好。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">螺旋气孔内侧今日已被你探过，只留下湿咸的海风回响。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	气孔里骤然喷出一股夹着盐粒的水雾，啸声震得耳膜生疼。你踉跄后退，没能取出槽里的东西。
-	<<stress 5>><<pain 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpeavesdropicon>><<link "听辨风鸣方位 (0:06)">><<pass 6>><<replace "#foghorn-echo-choices">>
-<<if $science gte 260 or $willpower gte 460>>
-	你顺着共鸣最稳的那道石缝摸过去，发现一处被盐晶半封的干龛，里面有一枚刻着船锚的铜扣。
-	<<stress -1>>
-<<else>>
-	回声忽高忽低，你贴壁听了半晌，只落得满耳嗡鸣，没找到干龛。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
-
-
-:: MP Region Foghorn Echo Rest [nobr]
-<<set $outside to 1>><<set $location to "sea">><<effects>><<mpAmbient>>
-你登上回音廊中央高出潮水线的平石台，盘腿坐下闭目养神。
-<br><br>
-<<walkicon>><<link [[返回回音廊 (0:02)|MP Region Foghorn Echo]]>><<pass 2>><</link>>
-<br>
-<div id="mp-region-foghorn-echo-rest-choices">
-<<bedicon>><<link "迎风吐纳 (0:10)">><<pass 10>><<replace "#mp-region-foghorn-echo-rest-choices">>
-<<if $willpower gte 450 or $danceskill gte 260>>
-你顺应着石拱间悠长的风鸣节律吐纳，<span class="green">杂乱的思绪随着潮音一点点沉淀下来。紧绷的心弦随之舒展。</span>
-<<tiredness -4>><<stress -5>><<ltiredness>><<lstress>>
-<<else>>
-石壁间忽高忽低的怪异风声像有人在耳边低语，<span class="red">吵得你心烦意乱。你勉强坐了片刻便匆匆起身。</span>
-<<stress 5>><<tiredness 1>><<gstress>><<gtiredness>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpcleanicon>><<link "擦净脸颊上的盐霜 (0:06)">><<pass 6>><<replace "#mp-region-foghorn-echo-rest-choices">>
-你用干净手帕抹去脸颊上的海雾盐霜，<span class="teal">在平石台上舒展了紧绷的肩背。</span>
-<<tiredness -3>><<stress -3>><<ltiredness>><<lstress>>
-<</replace>><</link>>
-</div>
-
+<<caveicon "torch">><<link [[循潮音探深处暗穴 (0:08)|MP Extra Deep Foghorn 1]]>><<pass 8>><</link>>
 
 :: MP Region Clockwork Undercity [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
@@ -716,49 +387,11 @@
 
 :: MP Region Clockwork Corridor Search [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你半跪在齿轮回廊主传动轴旁，看准大齿轮转过缺口的瞬间将手探入检修槽。
+你再次半跪在主传动轴旁，检修槽的盖板早被人掀开，槽底只剩一层温热的润滑油渍与几粒崩落的铁屑。齿轮依旧按着老节拍咬合，可这一处已经被翻检得干干净净，再没有可拿走的东西了。
 <br><br>
-<<mpclockworkicon>><<link [[返回齿轮回廊 (0:02)|MP Region Clockwork Corridor]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回回廊 (0:02)|MP Region Clockwork Corridor]]>><<pass 2>><</link>>
 <br>
-<div id="clockwork-corridor-choices">
-<<investigateicon>><<link "摸主轴检修槽 (0:09)">><<pass 9>><<replace "#clockwork-corridor-choices">>
-<<set $skulduggerydifficulty to 330>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["clockwork_steam"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Clockwork_Corridor")>>
-		你趁大齿轮转过缺口的瞬间勾出绒布匣：一枚精密擒纵轮、半枚王冠齿轮残片和一张工坊收据。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragCrownGear or 0) lt 3>><<set $mpFragCrownGear to ($mpFragCrownGear or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_clockwork_corridor>>
-			<<set $daily.mpRegionLoot_clockwork_corridor to 1>>
-			你用铁钩从排油槽滤网上挑起一只油纸包，里面是两枚机工藏起的银币和一小截刻着编号的铜丝。<span class="green">你将排油槽滤网上的油纸包妥善收进贴身衣袋。</span>
-			<<money 200>><<stress -2>>
-		<<else>>
-			<span class="teal">排油槽滤网今日已被你挑检过，只余下温热的润滑油渍。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	从动轮突然加速回咬，滚烫的润滑油溅在手背上，你猛地抽手后退，槽底的东西没摸到。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpreadicon>><<link "读检修铭牌 (0:06)">><<pass 6>><<replace "#clockwork-corridor-choices">>
-<<if $science gte 260 or $maths gte 260>>
-	<<set $mpKnown["clockwork_steam"] to 1>>
-	你顺着铭牌上的红色箭头读出管线走向，确认西侧阀门通道通向蒸汽压力室。
-	<<stress -1>>
-<<else>>
-	铭牌被油泥糊住大半，你只认出几个互相矛盾的箭头。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[返回机括城 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
 
 
 :: MP Region Clockwork Corridor Rest [nobr]
@@ -816,50 +449,11 @@
 
 :: MP Region Clockwork Steam Search [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你握住扳手凑近备用冷凝管的盲端法兰盖，屏住呼吸逆时针发力旋动螺栓。
+你拍了拍备用冷凝管的盲端法兰，螺栓外壳上留着几道旧扳手咬出的白痕，干燥的管腔里空空荡荡。白雾一阵阵漫过脚背，只有水银表的指针还在轻微颤动。
 <br><br>
-<<walkicon>><<link [[返回蒸汽室 (0:02)|MP Region Clockwork Steam]]>><<pass 2>><</link>>
+<<getouticon>><<link [[返回蒸汽室 (0:02)|MP Region Clockwork Steam]]>><<pass 2>><</link>>
 <br>
-<div id="clockwork-steam-choices">
-<<mpherbicon>><<link "拧盲端法兰 (0:10)">><<pass 10>><<replace "#clockwork-steam-choices">>
-<<set $skulduggerydifficulty to 360>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["clockwork_astro"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Clockwork_Steam")>>
-		你卸下法兰盖，从干燥管腔里抽出一卷黄铜蓝图和半枚王冠齿轮残片；图纸筒底还塞着约 <span class="gold">£4</span> 的工程备用金。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragCrownGear or 0) lt 3>><<set $mpFragCrownGear to ($mpFragCrownGear or 0) + 1>><</if>>
-		<<money 400>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_clockwork_steam>>
-			<<set $daily.mpRegionLoot_clockwork_steam to 1>>
-			你从仪表墙后的锡盒里翻出两枚封装完好的旧银元和一张标着「天文台」的管线草图。<span class="green">你将仪表墙后锡盒里的旧银元与管线图妥善收进贴身衣袋。</span>
-			<<money 200>><<stress -2>>
-		<<else>>
-			<span class="teal">仪表墙后的锡盒今日已被你翻过，里面只剩几圈旧垫片。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	法兰接缝里窜出一股滚烫余压，灼得手指剧痛，扳手也砸在脚背上。你只好退回来。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpsmokeicon>><<link "对照管线图 (0:06)">><<pass 6>><<replace "#clockwork-steam-choices">>
-<<if $science gte 280 or $maths gte 260>>
-	<<set $mpKnown["clockwork_astro"] to 1>>
-	你把冷凝水痕和管线图对上，找到了通往停摆天文台的升降暗门。
-	<<stress -1>>
-<<else>>
-	图上的管线交叉太多，你看了半天仍不敢确定哪一根通往上层。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[回机括城 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
 
 
 :: MP Region Clockwork Steam Rest [nobr]
@@ -918,49 +512,11 @@
 
 :: MP Region Clockwork Astro Search [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你走到停摆的黄铜浑天仪底座前，按着星图角度拨动外圈的赤纬铜环。
+你抬手抚过浑天仪外圈的赤纬铜环，黄道暗格的缝隙里只剩一点陈年绒絮。星轨在穹顶下缓慢游移，那些刻度看久了竟像在悄悄改变，可这里再没有藏着的东西。
 <br><br>
-<<walkicon>><<link [[返回停摆天文台 (0:02)|MP Region Clockwork Astro]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回天文台 (0:02)|MP Region Clockwork Astro]]>><<pass 2>><</link>>
 <br>
-<div id="clockwork-astro-choices">
-<<investigateicon>><<link "拨赤纬铜环 (0:13)">><<pass 13>><<replace "#clockwork-astro-choices">>
-<<set $skulduggerydifficulty to 400>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["clockwork_vault"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Clockwork_Astro")>>
-		黄道暗格应声弹开，你取出一枚镶水晶的古星象仪和半枚王冠齿轮残片；绒垫下压着一张标着密库编号的卡片。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragCrownGear or 0) lt 3>><<set $mpFragCrownGear to ($mpFragCrownGear or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_clockwork_astro>>
-			<<set $daily.mpRegionLoot_clockwork_astro to 1>>
-			你旋开观测台扶手下的黄铜储物筒，倒出两枚成色极好的银币和一小卷画着齿轮比的手稿。<span class="green">你将观测台黄铜储物筒里的银币与手稿妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">观测台扶手下的黄铜筒今日已空，只剩一点细碎铜屑。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	断裂的发条钢带从主轴上弹开，抽在手腕上，底座机括死死卡住。你揉着手腕退回来。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpastroicon>><<link "比照星图底稿 (0:07)">><<pass 7>><<replace "#clockwork-astro-choices">>
-<<if $maths gte 280 or $history gte 280>>
-	<<set $mpKnown["clockwork_vault"] to 1>>
-	你把星图底稿和铜环刻度对上，推出一组开锁顺序，尽头正是档案馆密库的十二号柜。
-	<<stress -1>>
-<<else>>
-	两张星图的岁差标法不同，你算到一半便推不下去。
-	<<tiredness 3>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[回机括城 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
 
 
 :: MP Region Clockwork Astro Rest [nobr]
@@ -1020,48 +576,11 @@
 
 :: MP Region Clockwork Vault Search [nobr]
 <<set $outside to 0>><<set $location to "underground">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你蹲在档案馆密库最里侧的十二号黑铁卷宗柜前，借着台灯微光拨动双层底板的暗簧。
+你蹲到十二号卷宗柜前，双层底板的暗簧已经松脱，夹层里只落着一层薄灰与半截空白纸带。密库安静得能听见自己的呼吸，这一柜再没有什么值得翻找的了。
 <br><br>
-<<walkicon>><<link [[返回档案馆密库 (0:02)|MP Region Clockwork Vault]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回密库 (0:02)|MP Region Clockwork Vault]]>><<pass 2>><</link>>
 <br>
-<div id="clockwork-vault-choices">
-<<investigateicon>><<link "拨十二号底板 (0:14)">><<pass 14>><<replace "#clockwork-vault-choices">>
-<<set $skulduggerydifficulty to 440>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Clockwork_Vault")>>
-		底板咔哒弹起，你取出未公开的市政厅古物和半枚王冠齿轮残片；夹层信封里还有一张约 <span class="gold">£5</span> 的不记名银票。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragCrownGear or 0) lt 3>><<set $mpFragCrownGear to ($mpFragCrownGear or 0) + 1>><</if>>
-		<<money 500>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_clockwork_vault>>
-			<<set $daily.mpRegionLoot_clockwork_vault to 1>>
-			你从差分机摇柄旁的铁盒里摸出两张早年兑付券和一枚旧银币，券面盖着市政厅的褪色印章。<span class="green">你将差分机旁铁盒里的兑付券与旧银币妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">差分机旁的铁盒今日已被你查过，只余下几截空白纸带。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	双层底板的防盗弹簧回弹夹住指尖，密库顶部的警报铜铃轻响一声。你连忙抽手退到门边。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpreadicon>><<link "摇差分机手柄 (0:08)">><<pass 8>><<replace "#clockwork-vault-choices">>
-<<if $maths gte 300 or $science gte 280>>
-	差分机咔嗒吐出一截纸带，上面打着一组柜号和一个人名，末尾还标着「未归档」。
-	<<stress -1>>
-<<else>>
-	手柄摇到一半便卡死，纸带只吐出半行乱码。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[返回机括城 (0:04)|MP Region Clockwork Undercity]]>><<pass 4>><</link>>
 
 
 :: MP Region Clockwork Vault Rest [nobr]
@@ -1091,84 +610,254 @@
 :: MP Region Sunken Abbey [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["abbey_steps"] to 1>>
-顺着坍塌石廊后的古老旋梯拾级而下，百年前因地基沉降而没入地底的哥特式修道院外庭映入眼帘。长明石灯在潮湿的柱廊间投下肃穆的光影。
-<<if $willpower gte 450 or $history gte 260>>你借着石灯微光看清了脚下的青苔石阶，心神保持着笃定。<<else>>幽暗石廊间回荡的水滴声让你不自觉屏住了呼吸。<</if>>
-<<if Time.dayState is "night">>地底深处隐约传来低沉的晚祷余音，石龛里的没药残香愈发幽冷。<</if>>
+<<set $mpKnown to ($mpKnown or {})>><<set $mpKnown["abbey_steps"] to 1>><<set $mpClues to ($mpClues or {})>>
+<<set $mpAbbeyTorch to ($mpAbbeyTorch or 3)>><<set $mpAbbeyWater to ($mpAbbeyWater or 0)>>
+<<if $mpAbbeyVisited>>
+你再次顺着坍塌的旋梯步入沉没修道院外庭。潮湿的哥特式柱廊间滴着冷水，上次留下的脚印早已被渗出的泥水漫过，石龛里的没药残香比初来时更冷了几分。
+<<else>>
+顺着坍塌石廊后的古老旋梯拾级而下，百年前因地基沉降而没入地底的哥特式修道院外庭映入眼帘。长明石灯在潮湿的柱廊间投下森冷光影，深处传来空洞的水滴回响。
+<</if>>
+<<if Time.dayState is "night">>地底深处隐约飘来低沉的晚祷余音，守墓苦修士的脚步声在长廊尽头回荡。<</if>>
 <br><br>
-<<getouticon>><<link [[返回狼街神殿 (0:12)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<pass 12>><<set $eventskip to 1>><<endevent>><<mpalertclear>><<set $mpAlertArea to "">><</link>>
+<<getouticon>><<link [[返回狼街神殿 (0:12)|Temple]]>><<set $outside to 0>><<set $location to "temple">><<set $mpAbbeyVisited to 1>><<pass 12>><<set $eventskip to 1>><<endevent>><<mpalertclear>><<set $mpAlertArea to "">><</link>>
 <br>
-<<mpclimbicon>><<link [[去静默石阶 (0:06)|MP Region Abbey Steps]]>><<pass 6>><</link>>
+<<mplampicon>><<link [[举起石龛火把探路 (0:05)|MP Region Sunken Abbey Torch]]>><<set $mpAbbeyVisited to 1>><<set $mpAbbeyTorch to 3>><<set $mpAbbeyWater to 0>><<pass 5>><</link>>
 <br>
-<<socialiseicon>><<link [[辨认石廊痕迹 (0:06)|MP Region Sunken Abbey Scout]]>><<pass 6>><</link>>
-<br>
-<<link [[问守墓苦修 (0:05)|MP Region Sunken Abbey Ask]]>><<pass 5>><</link>>
+<<mpclimbicon>><<link [[走去静默石阶 (0:06)|MP Region Abbey Steps]]>><<set $mpAbbeyVisited to 1>><<pass 6>><</link>>
 <br>
 <<if $mpMicroNotice and $mpMicroNotice["abbey_wick"]>>
-	<<investigateicon>><<link [[挑亮灯芯 (0:04)|MP Region Micro Abbey Wick]]>><<pass 4>><</link>>
+<<investigateicon>><<link [[挑亮残灯芯 (0:04)|MP Region Micro Abbey Wick]]>><<pass 4>><</link>>
 <<else>>
-	<<set $mpCurrentRegion to "Abbey">><<link [[巡看石殿四周 (0:05)|MP Region Pool Abbey]]>><<pass 5>><</link>>
+<<set $mpCurrentRegion to "Abbey">><<link [[巡看外庭四周 (0:05)|MP Region Pool Abbey]]>><<pass 5>><</link>>
 <</if>>
+<<if $mpClues and $mpClues["abbey_prayer"] and $mpClues["abbey_timber"] and $mpClues["abbey_sarcophagus"]>>
+<br>
+<<mpreadicon>><<link "比对三处线索 (0:06)">><<pass 6>><<set $mpClues["abbey_deep"] to 1>><<stress -3>><<replace "#abbey-clue-out">>
+你把祷文、船木烙印与石棺刻痕摊在长明灯下，一处一处对过去。祷文说暗流连着圣堂地基，船木证明它通向海湾礁洞，石棺上的日期又正好对上铁栅门锁芯的齿位。三处指向同一条水路，也指向同一批把东西从地底运出去的人。<span class="teal">这条线现在有了名字。</span>
+<</replace>><</link>>
+<div id="abbey-clue-out"></div>
+<<elseif $mpClues and $mpClues["abbey_deep"]>>
+<br>
+<span class="teal">三处线索已经对上了，暗河的走向你心里有数。</span>
+<</if>>
+
+
+:: MP Region Sunken Abbey Torch [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpAbbeyTorch to Math.max(0, ($mpAbbeyTorch or 3) - 1)>>
+你从石龛中拔出一支浸过松脂的火把。橘红的火苗噼啪作响，松烟味驱散了面前的寒气，照亮了外庭尽头一处半塌的尖拱暗道。脚下的石缝正缓缓往外渗着凉水，火把的油脂在阴风里消耗得很快，前方很快分成一高一低两条去路。
+<br><br>
+<<getouticon>><<link [[退回修道院外庭 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><</link>>
+<br>
+<<walkicon>><<link [[走向尖拱岔路 (0:05)|MP Region Sunken Abbey Fork]]>><<pass 5>><</link>>
+<br>
+<<mpropeicon>><<link [[摸索断壁刮痕 (0:06)|MP Region Sunken Abbey Scout]]>><<tiredness 1>><<pass 6>><</link>>
+<br>
+<<link [[问守墓苦修 (0:05)|MP Region Sunken Abbey Ask]]>><<tiredness 1>><<pass 5>><</link>>
 
 
 :: MP Region Sunken Abbey Scout [nobr]
-<<set $outside to 1>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你举起石龛残灯，顺着断壁浮雕与地面刮痕仔细摸索。
+<<set $mpKnown to ($mpKnown or {})>><<set $mpAbbeyWater to ($mpAbbeyWater or 0) + 1>>
+你举高火把，顺着断壁浮雕与地面的铁器刮痕摸索。头顶拱券忽然掉下几块碎石，暗河涌上来的潮气已经漫过了鞋底。
+<<if ($skulduggery or 0) gte 220 or ($athletics or 0) gte 240>>
+<<if !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>>你在枯藤后摸到一道虚掩的侧门，<span class="green">记下了通往告解回音壁的暗径。</span><<elseif !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>>你循着石阶折痕往里看，<span class="green">看清了通往灰烬藏经阁的走法。</span><<elseif !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>>你听清了水声来向，<span class="green">摸准了地下暗河渡口的位置。</span><<else>>四周的暗道走向都已印在脑海里。<</if>>
+<<else>>
+枯藤后的碎石冷不防滑落砸在脚背上，你脚下一滑，被呛人的灰尘逼退了半步。<<pain 2>><<stress 3>><<gpain>><<gstress>>
+<</if>>
 <br><br>
-<<getouticon>><<link [[返回古修道院 (0:02)|MP Region Sunken Abbey]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回外庭入口处 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><</link>>
 <br>
-<div id="mp-region-sunken-abbey-scout">
-<<investigateicon>><<link "拨开断壁藤蔓 (0:06)">><<mpalert 8>><<pass 6>><<replace "#mp-region-sunken-abbey-scout">>
-<<set $skulduggerydifficulty to 300>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<if !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>>你拨开枯藤发现一道石拱侧门，<span class="green">发现了通往告解回音壁的路径。</span><<elseif !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>><span class="green">发现了通往灰烬藏经阁的路径。</span><<elseif !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>><span class="green">发现了通往地下暗河渡口的路径。</span>
-	<<else>>你绕着外围暗道查看了一番，<span class="teal">四周一切平顺如常。</span><</if>><<stress -2>><<lstress>>
-<<else>>
-	枯藤后的碎石坍落砸在脚背上，<span class="red">只能先行退回。</span><<stress 4>><<pain 2>><<gstress>><<gpain>>
-<</if>>
-<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
+<<walkicon>><<link [[转入尖拱岔路 (0:04)|MP Region Sunken Abbey Fork]]>><<pass 4>><</link>>
 <br>
-<<sneakicon>><<link "登上残破钟廊眺望 (0:06)">><<mpalert 12>><<pass 6>><<replace "#mp-region-sunken-abbey-scout">>
-<<if ($athletics or 0) gte 260 or ($physique or 10000) gte 11500>>
-	<<if !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>>你从残廊高处看清了地底水声的来向，<span class="green">锁定了地下暗河渡口的入口。</span><<elseif !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>><span class="green">锁定了灰烬藏经阁的入口。</span><<elseif !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>><span class="green">锁定了告解回音壁的入口。</span>
-	<<else>>高处视野开阔，<span class="teal">蜿蜒的暗道走向已尽收眼底。</span><</if>><<stress -2>><<lstress>>
-<<else>>
-	残廊石阶松动摇晃，你只得退回地面，<span class="red">没敢贸然越过前方的暗障。</span><<stress 4>><<tiredness 2>><<gstress>><<gtiredness>>
-<</if>>
-<</replace>><</link>><<mpalertgain "石阶上的脚步">>
-</div>
+<<mpropeicon>><<link [[攀向断壁高梁之上 (0:06)|MP Region Sunken Abbey Climb]]>><<mpalert 6>><<tiredness 1>><<pass 6>><</link>>
 
 
 :: MP Region Sunken Abbey Ask [nobr]
-<<set $outside to 1>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set $mpKnown to ($mpKnown or {})>>
-柱廊阴影下立着添香油的守墓苦修士，你上前请教古修道院格局。
+柱廊阴影下立着一名添香油的守墓苦修士，宽大的灰袍遮住了面容。你压低声音上前打听地底旧殿的去路。
+<<if ($english or 0) gte 240 or ($history or 0) gte 220>>
+苦修士停下添油的铜壶，合十低语了几句古教团的祝词，抬指点向尖拱廊柱后方。<<stress -2>><<lstress>>
+<<if !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>><span class="green">你记下了前往告解回音壁的走法。</span><<elseif !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>><span class="green">你记下了前往灰烬藏经阁的走法。</span><<elseif !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>><span class="green">你记下了前往暗河渡口的走法。</span><</if>>
+<<else>>
+苦修士只是冷淡地摇了摇头，提着铜灯转身走向石廊深处，让你不要在禁地久留。<<stress 3>><<gstress>>
+<</if>>
 <br><br>
-<<getouticon>><<link [[返回古修道院 (0:02)|MP Region Sunken Abbey]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回修道院外庭去 (0:03)|MP Region Sunken Abbey]]>><<pass 3>><</link>>
 <br>
-<div id="mp-region-sunken-abbey-ask">
-<<socialiseicon>><<link "垂眸礼貌请教 (0:05)">><<pass 5>><<replace "#mp-region-sunken-abbey-ask">>
-<<set $seductiondifficulty to 4200>><<seductioncheck>>
-<<if $seductionrating gte $seductionrequired or ($english or 0) gte 250>>
-	<<if !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>>苦修士合十低语，指了指石阶深处：<span class="green">告诉了你告解回音壁的走法。</span><<elseif !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>><span class="green">告诉了你灰烬藏经阁的走法。</span><<elseif !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>><span class="green">告诉了你地下暗河渡口的走法。</span>
-	<<else>>对方笑了笑，<span class="teal">说这里的关窍你已经全盘掌握。</span><</if>><<stress -2>><<lstress>>
-<<else>>
-	苦修士闭目诵经不予理会，<span class="red">毫不客气地拒绝了你的打探。</span><<stress 4>><<gstress>>
-<</if>>
-<</replace>><</link>>
+<<mpbellicon>><<link [[循着钟声寻出口 (0:05)|MP Region Sunken Abbey Return]]>><<pass 5>><</link>>
 <br>
-<<mpritualicon>><<link "背诵古圣咏尾句 (0:05)">><<pass 5>><<replace "#mp-region-sunken-abbey-ask">>
-<<if ($skulduggery or 0) gte 250 or ($history or 0) gte 240>>
-	<<if !$mpKnown["abbey_scriptorium"]>><<set $mpKnown["abbey_scriptorium"] to 1>>苦修士听出古教团祝词，侧身指路：<span class="green">为你指明了灰烬藏经阁的暗径。</span><<elseif !$mpKnown["abbey_ferry"]>><<set $mpKnown["abbey_ferry"] to 1>><span class="green">为你指明了地下暗河渡口的暗径。</span><<elseif !$mpKnown["abbey_confess"]>><<set $mpKnown["abbey_confess"] to 1>><span class="green">为你指明了告解回音壁的暗径。</span>
-	<<else>>对方冲你点点头，<span class="teal">说内里并无新的变化。</span><</if>><<stress -2>><<lstress>>
-<<else>>
-	你念错了音节，苦修士冷淡地请你就此止步，<span class="red">冷冷叮嘱你安分守己。</span><<stress 3>><<tiredness 1>><<gstress>>
+<<walkicon>><<link [[迈入尖拱岔路 (0:04)|MP Region Sunken Abbey Fork]]>><<pass 4>><</link>>
+
+
+:: MP Region Sunken Abbey Fork [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpAbbeyWater to ($mpAbbeyWater or 0) + 1>>
+尖拱暗道在这里裂成三条去向。上方的断壁横梁挂着半截旧麻绳，隐约能看见旧礼拜龛；右侧是一扇生满铜绿的铁栅暗门，锁孔细密；下方则是不断涨水的石砌暗渠，冷冽的暗河水已经漫上了第三级台阶，黑暗中传来沉重的呼吸声与碎石滚落的轻响。
+<br><br>
+<<getouticon>><<link [[退回火把龛 (0:03)|MP Region Sunken Abbey Torch]]>><<pass 3>><</link>>
+<br>
+<<mpropeicon>><<link [[抓绳攀上断壁横梁 (0:06)|MP Region Sunken Abbey Climb]]>><<mpalert 5>><<tiredness 1>><<pass 6>><</link>>
+<br>
+<<if ($skulduggery or 0) gte 250>>
+<<mpdooricon>><<link [[撬开铁栅门锁芯 (0:06)|MP Region Sunken Abbey Vault]]>><<mpalert 6>><<pass 6>><</link>>
+<br>
+<<elseif $mpClues and $mpClues["abbey_sarcophagus"]>>
+<<mpdooricon>><<link [[按刻痕暗号开门 (0:06)|MP Region Sunken Abbey Vault]]>><<mpalert 4>><<pass 6>><</link>>
+<br>
 <</if>>
-<</replace>><</link>>
-</div>
+<<mpdiveicon>><<link [[涉水走进暗渠 (0:06)|MP Region Sunken Abbey Wade]]>><<tiredness 1>><<stress 1>><<pass 6>><</link>>
+
+
+:: MP Region Sunken Abbey Climb [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpAbbeyTorch to Math.max(0, ($mpAbbeyTorch or 2) - 1)>>
+你攥紧垂下的旧麻绳，踩着湿滑的凸起石砖往断壁高处攀爬。头顶的石拱忽然咔嚓作响，几块松动的灰岩擦着肩膀坠入下方的黑水里。
+<<if ($athletics or 0) gte 240 or ($physique or 10000) gte 11000>>
+<<set _climbOk to 1>>
+你借着腰腹力道一跃翻上横梁，稳稳落在一处干燥的残破礼拜龛前，石壁上刻满了褪色的古字。<<tiredness 1>><<gtiredness>>
+<<else>>
+<<set _climbOk to 0>>
+脚下的青苔石砖猛地崩裂，你手上一滑，整个人顺着倾斜的断坡直接摔进了下方的坍塌泥坑里。<<pain 3>><<stress 4>><<tiredness 2>><<gpain>><<gstress>><<gtiredness>>
+<</if>>
+<br><br>
+<<if _climbOk is 1>>
+<<mpbellicon>><<link [[退回侧廊壁道 (0:06)|MP Region Sunken Abbey Return]]>><<pass 6>><</link>>
+<br>
+<<mplampicon>><<link [[走近残破礼拜龛 (0:05)|MP Region Sunken Abbey Prayer]]>><<tiredness 1>><<pass 5>><</link>>
+<<else>>
+<<mpropeicon>><<link [[撑身爬出泥坑 (0:05)|MP Region Sunken Abbey Mud]]>><<pass 5>><</link>>
+<br>
+<<mpdiveicon>><<link [[滑进下方暗渠 (0:05)|MP Region Sunken Abbey Wade]]>><<pass 5>><</link>>
+<</if>>
+
+
+:: MP Region Sunken Abbey Mud [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpAbbeyWater to ($mpAbbeyWater or 0) + 1>>
+<<set _deep to (($mpAbbeyWater or 0) gte 4)>>
+冰冷刺骨的淤泥没过了小腿，上方不时有细碎的塌方石块砸落。黑暗深处传来守墓人提灯巡视的铁链声与低促的呼吸声，水位正肉眼可见地往上漫。
+<<if ($willpower or 0) gte 300>>
+你咬紧牙关屏住呼吸，借着石缝里的树根一点点把腿从淤泥里拔了出来。<<tiredness 2>><<gtiredness>>
+<<if _deep>>水已经漫到膝弯，你每拔出一条腿，另一条就往下陷得更深，等爬上浅滩时两条腿都在抖。<<stress 2>><<tiredness 1>><<gstress>><<gtiredness>><</if>>
+<<else>>
+你在湿冷的淤泥里越陷越深，衣摆被泥水浸透，好不容易才扒住一块凸起的断碑爬上浅滩。<<pain 2>><<stress 5>><<tiredness 3>><<upperwet 60>><<lowerwet 60>><<gpain>><<gstress>><<gtiredness>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[钻出排水阶 (0:06)|MP Region Sunken Abbey Return]]>><<pass 6>><</link>>
+<br>
+<<mpdiveicon>><<link [[爬向浅滩沉船木 (0:06)|MP Region Sunken Abbey Timber]]>><<tiredness 1>><<pass 6>><</link>>
+<br>
+<<mpcellaricon>><<link [[钻进偏殿石棺暗廊 (0:07)|MP Region Sunken Abbey Sarcophagus]]>><<mpalert 5>><<tiredness 1>><<pass 7>><</link>>
+
+
+:: MP Region Sunken Abbey Vault [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpAbbeyTorch to Math.max(0, ($mpAbbeyTorch or 2) - 1)>>
+你用细铁丝抵住铜锁簧片轻轻一挑，锈蚀的铁栅暗门应声弹开一条窄缝。门后是一条干爽的夹壁密道，避开了下方湍急的涨水。走廊两侧立着历代苦修士的石棺，墙角的巡夜铜铃随穿堂风轻轻晃动，远处隐约传来守墓人规律的脚步声。
+<br><br>
+<<getouticon>><<link [[退回夹壁门 (0:05)|MP Region Sunken Abbey Return]]>><<pass 5>><</link>>
+<br>
+<<mpcellaricon>><<link [[查看偏殿石棺刻痕 (0:06)|MP Region Sunken Abbey Sarcophagus]]>><<tiredness 1>><<pass 6>><</link>>
+<br>
+<<mplampicon>><<link [[登上内侧礼拜龛 (0:05)|MP Region Sunken Abbey Prayer]]>><<tiredness 1>><<pass 5>><</link>>
+
+
+:: MP Region Sunken Abbey Wade [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpAbbeyWater to ($mpAbbeyWater or 0) + 1>>
+<<set _deep to (($mpAbbeyWater or 0) gte 4)>>
+你踏进齐腰深的地下暗渠，冰冷的暗河水立刻浸透了裤脚。水底暗流湍急，上方石拱不时落下一阵水珠。
+<<if ($swimmingskill or 0) gte 220 or ($athletics or 0) gte 250>>
+你稳住重心贴着石壁逆流前行，将手中的火把高高举过水面，顺利摸到了暗河拐角处的搁浅木块。<<tiredness 2>><<gtiredness>>
+<<if _deep>>水位比上次高了一截，暗流几次把你往石壁上推，你不得不把火把换到外侧手，肩膀被冷水泡得发麻。<<stress 2>><<tiredness 1>><<gstress>><<gtiredness>><</if>>
+<<else>>
+<<set $mpAbbeyTorch to 0>><<upperwet 100>><<lowerwet 100>>
+一股暗流猛地卷过脚踝，你脚下一软呛了一口冷水，手中的火把啪地掉进水里熄灭了，浑身上下湿透得直打寒颤。<<stress 5>><<pain 2>><<tiredness 3>><<gstress>><<gpain>><<gtiredness>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[游向暗渠出口 (0:06)|MP Region Sunken Abbey Return]]>><<pass 6>><</link>>
+<br>
+<<mpdiveicon>><<link [[摸索搁浅的沉船木 (0:06)|MP Region Sunken Abbey Timber]]>><<tiredness 1>><<pass 6>><</link>>
+<br>
+<<mpropeicon>><<link [[爬向泥坑浅滩 (0:05)|MP Region Sunken Abbey Mud]]>><<tiredness 1>><<pass 5>><</link>>
+
+
+:: MP Region Sunken Abbey Prayer [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpClues to ($mpClues or {})>>
+<<if $mpClues["abbey_prayer"]>>
+礼拜龛的石壁上留着你上次拓印过的灰白指痕。那些关于旧钟塔与海潮献祭的残缺古祷文静静隐在阴影里，你没有再重复翻动，只听见下方水位上涨的哗哗声越来越近。
+<<else>>
+<<set $mpClues["abbey_prayer"] to 1>>
+你凑近残破的礼拜龛，吹开石碑上的浮灰。碑面刻着一段百年前修道院沉没前夜的旧祷文，记载着钟塔底部的暗流与圣堂地基相连。你用炭条将祷文关键词拓在纸角贴身收好。<span class="blue">已记下旧祷文线索。</span><<stress -2>><<lstress>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[退回高处回廊 (0:05)|MP Region Sunken Abbey Return]]>><<pass 5>><</link>>
+<br>
+<<mpcellaricon>><<link [[转去偏殿查看石棺 (0:06)|MP Region Sunken Abbey Sarcophagus]]>><<tiredness 1>><<pass 6>><</link>>
+
+
+:: MP Region Sunken Abbey Timber [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpClues to ($mpClues or {})>>
+<<if $mpClues["abbey_timber"]>>
+搁浅在暗河浅滩上的那截沉船肋木已经被涨上来的黑水淹了大半。木面上的铜字船名与水道烙印你早已记熟，四周的岩石缝隙里传来阵阵阴冷的穿堂风。
+<<else>>
+<<set $mpClues["abbey_timber"] to 1>>
+你在暗河浅滩的乱石间摸到一截覆满藤壶的沉船木。腐朽的橡木内侧烙着海港走私船的暗记与年份，证明这条地下暗河直通海湾礁洞。你将木片上的烙印走向仔细记下。<span class="blue">已记下沉船木线索。</span><<stress -2>><<lstress>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[钻出泄水暗槽 (0:05)|MP Region Sunken Abbey Return]]>><<pass 5>><</link>>
+<br>
+<<mpcellaricon>><<link [[攀上偏殿石棺暗廊 (0:06)|MP Region Sunken Abbey Sarcophagus]]>><<tiredness 1>><<pass 6>><</link>>
+
+
+:: MP Region Sunken Abbey Sarcophagus [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<set $mpClues to ($mpClues or {})>><<set $mpAbbeyWater to ($mpAbbeyWater or 0) + 1>>
+<<if $mpClues["abbey_sarcophagus"]>>
+偏殿中央的无名石棺盖板依然留着一道窄缝，刻在棺沿内侧的名单缩写与齿轮徽记你已经拓录完毕。走廊尽头传来守墓人提灯逼近的脚步声，不宜久留。
+<<else>>
+<<set $mpClues["abbey_sarcophagus"] to 1>>
+你借着微光俯身查看偏殿中央的石棺。棺盖边缘有一排后人用利器新添的刻痕，记录着几次秘密转运旧账册的日期与暗号。其中一组日期反复出现，齿位正好对上外头那扇铁栅门的锁芯。你将这串石棺刻痕默默背熟。<span class="blue">已记下石棺刻痕线索。</span><<stress -2>><<lstress>>
+<</if>>
+<br><br>
+<<getouticon>><<link [[推开通风口脱身 (0:05)|MP Region Sunken Abbey Return]]>><<pass 5>><</link>>
+<br>
+<<mpdiveicon>><<link [[滑入下方浅滩查看 (0:06)|MP Region Sunken Abbey Timber]]>><<tiredness 1>><<pass 6>><</link>>
+
+
+:: MP Region Sunken Abbey Return [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
+<<if ($mpAbbeyWater or 0) gte 4>>
+潮水已经漫过排水回廊，你是踩着齐膝的冷水一步步挪出去的，靴子里灌满了冰水，走一步响一声。<<tiredness 2>><<stress 2>><<gtiredness>><<gstress>>
+<<elseif ($mpAbbeyTorch or 0) lte 0 and (($upperwet or 0) gte 50 or ($lowerwet or 0) gte 50)>>
+火把已在暗流中熄灭，你浑身湿透、扶着冰冷石壁在黑暗里摸索前行，直到望见外庭长明灯的微光才松了口气。
+<<elseif ($pain or 0) gte 20>>
+你捂着磕碰发痛的伤口，避开身后塌方碎石与守墓人路线，一瘸一拐地穿出狭窄通风阶回到了外庭。
+<<elseif ($mpAbbeyTorch or 0) lte 0>>
+手中的火把已经燃尽，你借着石缝微弱冷光贴墙绕过巡夜脚步声，安全退回了修道院外庭。
+<<else>>
+你举着仅剩半截的火把，沿着干燥的排水回廊快步穿行，赶在潮水漫过石阶前推开偏门回到了入口外庭。
+<</if>>
+<br><br>
+<<getouticon>><<link [[回到修道院外庭 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
+<br>
+<<mpclimbicon>><<link [[转往静默石阶 (0:05)|MP Region Abbey Steps]]>><<pass 5>><</link>>
 
 
 :: MP Region Abbey Steps [nobr]
@@ -1206,49 +895,11 @@
 :: MP Region Abbey Steps Search [nobr]
 <<set $outside to 1>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你停在静默石阶转角的石雕排水兽前，将手伸进干燥的石兽腹腔深处摸索。
+你伸手又探了探石兽腹腔，干燥的暗槽里只积着薄薄一层香灰，蛛网也早已被人扫落。长明灯在无面石像脚下轻轻摇晃，四周静得只剩风吹过石阶的细响。
 <br><br>
-<<walkicon>><<link [[返回静默石阶 (0:02)|MP Region Abbey Steps]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回石阶 (0:02)|MP Region Abbey Steps]]>><<pass 2>><</link>>
 <br>
-<div id="abbey-steps-choices">
-<<mpanimalicon>><<link "摸石兽腹腔 (0:10)">><<mpalert 8>><<pass 10>><<replace "#abbey-steps-choices">>
-<<set $skulduggerydifficulty to 320>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["abbey_confess"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Abbey_Steps")>>
-		你从石兽腹腔暗槽里取出一只鹿皮袋：古教团圣徽、半页深渊羊皮残片和一枚奉纳银币。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragAbyssPage or 0) lt 3>><<set $mpFragAbyssPage to ($mpFragAbyssPage or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_abbey_steps>>
-			<<set $daily.mpRegionLoot_abbey_steps to 1>>
-			你在石像底座的奉纳钵下翻出两枚旧银币和一张写着「回音壁」的蜡封纸条。<span class="green">你将奉纳钵下的旧银币与蜡封纸条妥善收进贴身衣袋。</span>
-			<<money 200>><<stress -2>>
-		<<else>>
-			<span class="teal">奉纳钵底座下今日已被你摸索过，只剩冰凉的陈年香灰。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	石兽口中的断齿刮伤手腕，腹腔里的冷蜘蛛网粘了一手。你急忙缩手，没摸到暗槽里的东西。
-	<<stress 5>><<pain 2>>
-<</if>>
-<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
-<br>
-<<mptranslateicon>><<link "辨认奉纳铭文 (0:06)">><<pass 6>><<replace "#abbey-steps-choices">>
-<<if $history gte 260 or $purity gte 500>>
-	<<set $mpKnown["abbey_confess"] to 1>>
-	你读懂了奉纳钵上的拉丁短句，末尾提到「西侧告解隔扇」，并画着一个小小的十字。
-	<<stress -1>>
-<<else>>
-	铭文被香灰磨平了大半，你只认出两个不成句的词。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[返回修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
 
 
 :: MP Region Abbey Steps Rest [nobr]
@@ -1328,52 +979,13 @@
 
 
 :: MP Region Abbey Confess Search [nobr]
-<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你闪身进入第三间胡桃木告解室，用银质拆信刀探入跪凳下方的木榫暗槽。
+你掀开第三间告解室的丝绒跪垫，木榫暗槽敞着口，里面只剩几缕没药残香与碎布屑。声学穹顶把远处一声轻叹放大，随后又慢慢归于沉寂，你在隔间里站了一会儿才退出去。
 <br><br>
-<<walkicon>><<link [[返回告解回音壁 (0:02)|MP Region Abbey Confess]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回回音壁 (0:02)|MP Region Abbey Confess]]>><<pass 2>><</link>>
 <br>
-<div id="abbey-confess-choices">
-<<mplockpickicon>><<link "撬跪凳暗槽 (0:10)">><<mpalert 8>><<pass 10>><<replace "#abbey-confess-choices">>
-<<set $skulduggerydifficulty to 350>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["abbey_scriptorium"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Abbey_Confess")>>
-		木榫弹开，你取出一枚纯银十字架和半页深渊古卷残片；绒布下压着约 <span class="gold">£3</span> 的赎罪银币。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragAbyssPage or 0) lt 3>><<set $mpFragAbyssPage to ($mpFragAbyssPage or 0) + 1>><</if>>
-		<<money 300>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_abbey_confess>>
-			<<set $daily.mpRegionLoot_abbey_confess to 1>>
-			你在隔间丝绒跪垫夹层里摸出两枚信徒遗落的旧银币和一张写着「北侧书架」的纸条。<span class="green">你将跪垫夹层里的旧银币与纸条妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">丝绒跪垫夹层今日已被你翻过，只余下淡淡的没药残香。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	木榫卡得极紧，刀尖一滑在胡桃木板上刮出刺耳锐响，声学穹顶把声音传遍四方。你连忙收手。
-	<<stress 5>><<pain 2>>
-<</if>>
-<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
-<br>
-<<mpreadicon>><<link "查看告解残页 (0:07)">><<mpalert 8>><<pass 7>><<replace "#abbey-confess-choices">>
-<<if $history gte 260 or $english gte 240>>
-	<<set $mpKnown["abbey_scriptorium"] to 1>>
-	你在传声孔后找到半张告解记录，末尾写着「灰烬藏经阁的抄经台」，墨迹被水晕开。
-	<<stress -1>>
-<<else>>
-	纸页一碰就碎，你只读到半句没有主语的祷告。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
-</div>
+<<walkicon>><<link [[回修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
 
 
 :: MP Region Abbey Confess Rest [nobr]
@@ -1433,51 +1045,13 @@
 
 
 :: MP Region Abbey Scriptorium Search [nobr]
-<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你走近橡木长桌上的青铜抄经台，双手握住雕花底座尝试逆向旋开空心立柱。
+你扶住青铜抄经台的雕花底座，空心立柱的暗格早已被人旋开过，内壁只留下一圈发暗的指痕。藏经阁里只剩羊皮卷受潮的轻响，再没有藏起来的东西。
 <br><br>
-<<mpsneakicon>><<link [[返回灰烬藏经阁 (0:02)|MP Region Abbey Scriptorium]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回藏经阁 (0:02)|MP Region Abbey Scriptorium]]>><<pass 2>><</link>>
 <br>
-<div id="abbey-scriptorium-choices">
-<<investigateicon>><<link "旋抄经立柱 (0:12)">><<mpalert 8>><<pass 12>><<replace "#abbey-scriptorium-choices">>
-<<set $skulduggerydifficulty to 380>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["abbey_ferry"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Abbey_Scriptorium")>>
-		立柱暗格缓缓旋开，你抽出半部金粉誊写的秘典和半页深渊羊皮残片；底座下压着一枚旧藏银币。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragAbyssPage or 0) lt 3>><<set $mpFragAbyssPage to ($mpFragAbyssPage or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_abbey_scriptorium>>
-			<<set $daily.mpRegionLoot_abbey_scriptorium to 1>>
-			你在压书机下方的木匣里翻出两枚未受火损的银币和一张标着「暗河渡口」的书签。<span class="green">你将压书机木匣里的银币与渡口书签妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">压书机下的木匣今日已被你检视过，只剩干脆的焦木碎屑。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	生锈铜螺杆纹丝不动，反倒震落书架顶层一块焦木，擦着肩膀砸在脚边。你惊魂未定地退开。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
-<br>
-<<mpreadicon>><<link "查书架编号 (0:07)">><<mpalert 8>><<pass 7>><<replace "#abbey-scriptorium-choices">>
-<<if $history gte 280 or $english gte 280>>
-	<<set $mpKnown["abbey_ferry"] to 1>>
-	你按古拉丁文编号排出书架顺序，末端的空档后藏着通往暗河渡口的石阶。
-	<<stress -1>>
-<<else>>
-	编号被火烤得卷曲，你拼不出完整的排序。
-	<<tiredness 3>><<stress 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
-</div>
+<<walkicon>><<link [[回修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
 
 
 :: MP Region Abbey Scriptorium Rest [nobr]
@@ -1535,48 +1109,11 @@
 :: MP Region Abbey Ferry Search [nobr]
 <<set $outside to 1>><<set $location to "temple">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "abbey">><<mpalertinit "abbey">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你俯身趴在渡口系船石桩边，挽起袖子探入水面以下的石壁暗龛。
+你伏在系船石桩边向水里看，水面下的石壁暗龛敞着口，河泥与碎贝壳正慢慢把它填满。暗河从平底渡船底下静静流过，再没有值得打捞的物件，只剩水声在石壁之间来回。
 <br><br>
-<<walkicon>><<link [[返回暗河渡口 (0:02)|MP Region Abbey Ferry]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回渡口 (0:02)|MP Region Abbey Ferry]]>><<pass 2>><</link>>
 <br>
-<div id="abbey-ferry-choices">
-<<mpswimicon>><<link "捞水下暗龛 (0:12)">><<mpalert 8>><<pass 12>><<replace "#abbey-ferry-choices">>
-<<set $skulduggerydifficulty to 360>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Abbey_Ferry")>>
-		你顶着暗流捞起防水铅盒，里面封着古教团印章和半页深渊羊皮残片；盒底压着约 <span class="gold">£4</span> 的渡船买路银币。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragAbyssPage or 0) lt 3>><<set $mpFragAbyssPage to ($mpFragAbyssPage or 0) + 1>><</if>>
-		<<money 400>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_abbey_ferry>>
-			<<set $daily.mpRegionLoot_abbey_ferry to 1>>
-			你从回水湾鹅卵石缝里摸出两枚沉底旧港银币和一小截刻着渡口编号的铜链。<span class="green">你将鹅卵石缝里的旧港银币与编号铜链妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">回水湾卵石缝今日已被你摸过一遍，只余下冰冷的河泥。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	湍急暗流猛地拽偏手臂，冰冷河水冻得手指痉挛，小臂也在石桩青苔上擦破了皮。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
-<br>
-<<mpwatchicon>><<link "查看船头风灯 (0:06)">><<mpalert 8>><<pass 6>><<replace "#abbey-ferry-choices">>
-<<if $swimmingskill gte 240 or $housekeeping gte 240>>
-	你拨亮牛角风灯，在灯座下找到一张渡船排班纸，背面画着水下暗龛的位置。
-	<<stress -1>>
-<<else>>
-	灯芯受潮，你擦了几次只冒出呛人的黑烟。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "锁簧与石面的回声">>
-</div>
+<<walkicon>><<link [[返回修道院 (0:04)|MP Region Sunken Abbey]]>><<pass 4>><</link>>
 
 
 :: MP Region Abbey Ferry Rest [nobr]
@@ -1717,49 +1254,11 @@
 
 :: MP Region Glasshouse Orchid Search [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你蹲在大理石花坛背阴侧，伸手探向覆着白石英砂的排水暗格。
+你拨开排水暗格上的白石英砂，格栅下只剩潮湿的腐叶与一截断掉的园艺麻绳。水雾从铜管里丝丝喷出，兰花在暖光里安静地开着，这里已经没有新东西了。
 <br><br>
-<<mpherbicon>><<link [[返回兰花温室 (0:02)|MP Region Glasshouse Orchid]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回兰花厅 (0:02)|MP Region Glasshouse Orchid]]>><<pass 2>><</link>>
 <br>
-<div id="glasshouse-orchid-choices">
-<<crimeicon "safe">><<link "拨花坛暗格 (0:10)">><<pass 10>><<replace "#glasshouse-orchid-choices">>
-<<set $skulduggerydifficulty to 320>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["glasshouse_specimen"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Glasshouse_Orchid")>>
-		你拨开石英砂取出密封锦盒：一只古董玉瓶、一朵双生银丝花标本和一枚沙龙赏金银币。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragBrideFlower or 0) lt 3>><<set $mpFragBrideFlower to ($mpFragBrideFlower or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_glasshouse_orchid>>
-			<<set $daily.mpRegionLoot_glasshouse_orchid to 1>>
-			你在花神像倾斜的底座下摸出两枚宾客遗落的银币和一张写着「标本廊」的铜牌。<span class="green">你将花神像底座下的银币与标本廊铜牌妥善收进贴身衣袋。</span>
-			<<money 200>><<stress -2>>
-		<<else>>
-			<span class="teal">花神像底座今日已被你探过，只剩湿润的白石英砂。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	花架上的血色猪笼草突然倾倒，粘稠液滴和花刺一起落在手背上。你连忙缩手退开。
-	<<stress 5>><<pain 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpcarryicon>><<link "比对兰花标签 (0:06)">><<pass 6>><<replace "#glasshouse-orchid-choices">>
-<<if $tending gte 260 or $science gte 260>>
-	<<set $mpKnown["glasshouse_specimen"] to 1>>
-	你读出一张标签背面的育种编号，和夜光标本廊门牌上的编号只差一位。
-	<<stress -1>>
-<<else>>
-	标签被水雾泡得发白，你只看清半个拉丁学名。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[返回温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
 
 
 :: MP Region Glasshouse Orchid Rest [nobr]
@@ -1821,50 +1320,11 @@
 
 :: MP Region Glasshouse Specimen Search [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你停在第七号琥珀展柜前，用薄铜片轻轻挑起玻璃钟罩底部的丝绒夹层。
+你挑起七号展柜的丝绒夹层，钟罩底下空无一物，只压着一圈浅浅的旧痕。幽蓝荧光在玻璃瓶之间来回晃动，你放轻呼吸仔细看了一遍，确实什么也没有留下。
 <br><br>
-<<walkicon>><<link [[返回夜光标本廊 (0:02)|MP Region Glasshouse Specimen]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回标本廊 (0:02)|MP Region Glasshouse Specimen]]>><<pass 2>><</link>>
 <br>
-<div id="glasshouse-specimen-choices">
-<<crimeicon "black box">><<link "挑琥珀夹层 (0:11)">><<pass 11>><<replace "#glasshouse-specimen-choices">>
-<<set $skulduggerydifficulty to 350>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["glasshouse_dome"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Glasshouse_Specimen")>>
-		你稳稳托住钟罩，从绒布下取出一枚镶金古昆虫琥珀和一朵银丝花标本；夹层里还有约 <span class="gold">£3</span> 的购藏经费。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragBrideFlower or 0) lt 3>><<set $mpFragBrideFlower to ($mpFragBrideFlower or 0) + 1>><</if>>
-		<<money 300>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_glasshouse_specimen>>
-			<<set $daily.mpRegionLoot_glasshouse_specimen to 1>>
-			你在解剖台抽屉的标本签盒里翻出两枚备用银元和一张写着「穹顶茶会」的请柬残页。<span class="green">你将标本签盒里的备用银元与请柬残页妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">解剖台抽屉的签盒今日已被你翻过，只剩几枚空白标本签。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	玻璃钟罩在底座上滑了一下，保存液挥发出的刺鼻药味呛得眼角泛泪。你连忙把钟罩按回原处。
-	<<stress 5>><<pain 2>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpreadicon>><<link "读第七号标签 (0:06)">><<pass 6>><<replace "#glasshouse-specimen-choices">>
-<<if $science gte 280 or $history gte 240>>
-	<<set $mpKnown["glasshouse_dome"] to 1>>
-	你认出七号标签背面有一行铅笔字：「穹顶茶会，风向标座」，字迹和园丁的登记簿一致。
-	<<stress -1>>
-<<else>>
-	标签上的墨水被酒精晕开，你只读出半个日期。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[返回温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
 
 
 :: MP Region Glasshouse Specimen Rest [nobr]
@@ -1922,49 +1382,11 @@
 
 :: MP Region Glasshouse Dome Search [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你攀上旋梯顶端，伸手拧动天窗下方铜风向标底座的活扣。
+你拧了拧风向标的铜活扣，底座暗格应声张开，里面只剩几片干枯的迷迭香与一张褪色的旧礼单。风从弧形穹顶边缘掠过，那场茶会早已散场很久了。
 <br><br>
-<<walkicon>><<link [[返回穹顶露台 (0:02)|MP Region Glasshouse Dome]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回露台 (0:02)|MP Region Glasshouse Dome]]>><<pass 2>><</link>>
 <br>
-<div id="glasshouse-dome-choices">
-<<mprepairicon>><<link "拧风向标活扣 (0:12)">><<pass 12>><<replace "#glasshouse-dome-choices">>
-<<set $skulduggerydifficulty to 370>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["glasshouse_cellar"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Glasshouse_Dome")>>
-		底座暗格应声开启，你取出一枚古董望远镜片和一朵花嫁银丝花标本；铜盒夹层里压着一张茶会礼单。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragBrideFlower or 0) lt 3>><<set $mpFragBrideFlower to ($mpFragBrideFlower or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_glasshouse_dome>>
-			<<set $daily.mpRegionLoot_glasshouse_dome to 1>>
-			你在藤编茶几托盘暗层下摸出两枚贵客留下的小费银币和一张写着「地窖」的卡片。<span class="green">你将茶几托盘暗层下的银币与地窖卡片妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">藤编茶几暗层今日已被你查过，只余下一点干枯的茶末。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	旋梯最高一级铁踏板突然打滑，手肘磕在铸铁雕花栏杆上。你只好扶着栏杆退回露台。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<mpclimbicon>><<link "查茶会礼单 (0:06)">><<pass 6>><<replace "#glasshouse-dome-choices">>
-<<if $housekeeping gte 250 or $history gte 240>>
-	<<set $mpKnown["glasshouse_cellar"] to 1>>
-	你在礼单末页找到一行小字：「酒窖第三桶，地窖暗梯」，旁边还画着风向标的简笔。
-	<<stress -1>>
-<<else>>
-	茶渍把下半页糊成褐色，你只认出几个宾客姓氏。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[返回秘密温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
 
 
 :: MP Region Glasshouse Dome Rest [nobr]
@@ -2022,48 +1444,11 @@
 
 :: MP Region Glasshouse Cellar Search [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
-<<set $mpKnown to ($mpKnown or {})>>
-你走到第三只法国橡木桶前，用木槌轻轻敲击没有栓紧的副木塞与底箍夹层。
+你轻叩第三只橡木桶的底箍，桶身暗格的挡板早被卸下，只剩潮湿的软木屑与一股发酵过头的酒气。紫铜蒸馏器还在角落滴答作响，地窖里再没有藏着的东西。
 <br><br>
-<<walkicon>><<link [[返回地下酿造室 (0:02)|MP Region Glasshouse Cellar]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回酒窖 (0:02)|MP Region Glasshouse Cellar]]>><<pass 2>><</link>>
 <br>
-<div id="glasshouse-cellar-choices">
-<<investigateicon>><<link "敲橡木桶塞 (0:14)">><<pass 14>><<replace "#glasshouse-cellar-choices">>
-<<set $skulduggerydifficulty to 400>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Glasshouse_Cellar")>>
-		你抽出桶身暗格里的防水铅筒，取得百年秘酿原液和一朵双生银丝花标本；桶底暗袋里还有约 <span class="gold">£5</span> 的酒庄私账银币。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragBrideFlower or 0) lt 3>><<set $mpFragBrideFlower to ($mpFragBrideFlower or 0) + 1>><</if>>
-		<<money 500>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_glasshouse_cellar>>
-			<<set $daily.mpRegionLoot_glasshouse_cellar to 1>>
-			你在实木酒架最底层的铁盒里翻出两枚酒窖管事藏起的银币和一张标着「第三桶」的私账页。<span class="green">你将酒架底层铁盒里的银币与私账页妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">酒架底层的铁盒今日已被你翻检过，只剩潮湿的软木塞屑。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	木塞突然崩开，喷出一股辛辣发酵酒气，铜蒸馏器的热水管也烫到手腕。你呛得连连后退。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>>
-<br>
-<<crimeicon "black box">><<link "看桶箍年份 (0:07)">><<pass 7>><<replace "#glasshouse-cellar-choices">>
-<<if $science gte 280 or $housekeeping gte 260>>
-	你发现第三只桶的 1889 年箍圈和其余十二只不是同一批，箍下还塞着一小卷私账纸。
-	<<stress -1>>
-<<else>>
-	霉斑盖住烙印，你只认出两个模糊的数字。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[返回秘密温室 (0:04)|MP Region Glasshouse Manor]]>><<pass 4>><</link>>
 
 
 :: MP Region Glasshouse Cellar Rest [nobr]
@@ -2229,49 +1614,11 @@
 :: MP Region Blackiron Siding Search [nobr]
 <<set $outside to 1>><<set $location to "elk">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "blackiron">><<mpalertinit "blackiron">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你蹲在七号道岔扳道器旁，用铁片去别铸铁基座侧面的检修暗盒。
+你蹲回七号道岔旁，扳道器的铸铁暗盒敞着盖，里面只剩干硬的油泥和几截断掉的铁丝。碎石道砟被风卷起细尘，这条侧线上再没有可捡的东西了。
 <br><br>
-<<walkicon>><<link [[返回蒸汽侧线 (0:02)|MP Region Blackiron Siding]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回侧线 (0:02)|MP Region Blackiron Siding]]>><<pass 2>><</link>>
 <br>
-<div id="blackiron-siding-choices">
-<<investigateicon>><<link "别开扳道暗盒 (0:10)">><<mpalert 8>><<pass 10>><<replace "#blackiron-siding-choices">>
-<<set $skulduggerydifficulty to 330>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["blackiron_armored"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Blackiron_Siding")>>
-		暗盒铁盖崩开，你取出一枚早期铁路纪念金章和半枚孤儿院账册铜匙；油布包里还有一枚押车银币。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragLedgerKey or 0) lt 3>><<set $mpFragLedgerKey to ($mpFragLedgerKey or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_blackiron_siding>>
-			<<set $daily.mpRegionLoot_blackiron_siding to 1>>
-			你在缓冲器下方的防水布袋里翻出两枚铁路工人的银币和一张写着「三号车」的油污纸条。<span class="green">你将缓冲器防水袋里的银币与油污纸条妥善收进贴身衣袋。</span>
-			<<money 200>><<stress -2>>
-		<<else>>
-			<span class="teal">缓冲器下的防水袋今日已被你翻过，只余下半块干硬油泥。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	生锈的扳道弹簧突然回弹，沉重铁柄擦着膝盖砸下，虎口震得发麻。你只好空手退开。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "铁件与道砟的响动">>
-<br>
-<<mpfishicon>><<link "比对车皮编号 (0:06)">><<mpalert 8>><<pass 6>><<replace "#blackiron-siding-choices">>
-<<if $maths gte 240 or $science gte 240>>
-	<<set $mpKnown["blackiron_armored"] to 1>>
-	你发现脱轨煤车的编号跳过了三号，而棚下那节铆钢板的货车正挂着缺失的号牌。
-	<<stress -1>>
-<<else>>
-	锈迹把钢印糊住，你只认出两个歪斜的数字。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "铁件与道砟的响动">>
-</div>
+<<walkicon>><<link [[返回黑铁货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
 
 
 :: MP Region Blackiron Siding Rest [nobr]
@@ -2332,50 +1679,11 @@
 :: MP Region Blackiron Armored Search [nobr]
 <<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "blackiron">><<mpalertinit "blackiron">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你凑到三号装甲货车内壁的铁枪架前，用细钢丝探入备用保险箱的铅封锁孔。
+你凑近三号装甲车的铁枪架，保险箱铅封的位置只留着一圈新擦痕，暗格早已空了。车壁里还浮着淡淡的枪油味，百叶窗滤下的光落在积灰的地板上。
 <br><br>
-<<walkicon>><<link [[返回三号装甲车 (0:02)|MP Region Blackiron Armored]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回车皮 (0:02)|MP Region Blackiron Armored]]>><<pass 2>><</link>>
 <br>
-<div id="blackiron-armored-choices">
-<<crimeicon "safe">><<link "探枪架暗格 (0:12)">><<mpalert 8>><<pass 12>><<replace "#blackiron-armored-choices">>
-<<set $skulduggerydifficulty to 380>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["blackiron_signal"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Blackiron_Armored")>>
-		锁舌咔哒滑开，你取出贴着铅封的黑市银箱和半枚孤儿院编号铜匙；箱底压着约 <span class="gold">£4</span> 的押运现钞。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragLedgerKey or 0) lt 3>><<set $mpFragLedgerKey to ($mpFragLedgerKey or 0) + 1>><</if>>
-		<<money 400>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_blackiron_armored>>
-			<<set $daily.mpRegionLoot_blackiron_armored to 1>>
-			你在押运员折叠床下的帆布包里摸出两张零钞和一张写着「信号室」的交接单。<span class="green">你将折叠床帆布包里的零钞与交接单妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">折叠床下的帆布包今日已被你查过，只剩几枚生锈铁钉。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	枪架上的防盗铁链突然哗啦作响，沉重铁锁砸在手背上。你疼得松手退向车门。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "铁件与道砟的响动">>
-<br>
-<<caveicon "torch">><<link "查押运交接单 (0:07)">><<mpalert 8>><<pass 7>><<replace "#blackiron-armored-choices">>
-<<if $maths gte 260 or $history gte 240>>
-	<<set $mpKnown["blackiron_signal"] to 1>>
-	你从交接单的复写纸痕迹里读出一组信号室呼号，末尾写着「夜间发报」。
-	<<stress -1>>
-<<else>>
-	复写纸被汗浸花，你只认出半个呼号。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "铁件与道砟的响动">>
-</div>
+<<walkicon>><<link [[返回黑铁货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
 
 
 :: MP Region Blackiron Armored Rest [nobr]
@@ -2436,49 +1744,11 @@
 :: MP Region Blackiron Signal Search [nobr]
 <<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "blackiron">><<mpalertinit "blackiron">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你蹲在二楼联锁机箱前，用小改锥拨开底层配线槽的活动挡板。
+你拨开联锁机箱底层的挡板，配线槽里的锡盒盖歪着，只剩几截废电报纸带。楼下调车场一片安静，电报机偶尔自己敲出一两个没有意义的短音，你站着听了一会儿才动身。
 <br><br>
-<<walkicon>><<link [[返回信号塔 (0:02)|MP Region Blackiron Signal]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回信号塔 (0:02)|MP Region Blackiron Signal]]>><<pass 2>><</link>>
 <br>
-<div id="blackiron-signal-choices">
-<<mpsewicon>><<link "掏取机箱夹缝 (0:10)">><<mpalert 8>><<pass 10>><<replace "#blackiron-signal-choices">>
-<<set $skulduggerydifficulty to 360>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<set $mpKnown["blackiron_platform"] to 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Blackiron_Signal")>>
-		你避开裸露铜线，从机箱夹缝摸出一卷秘密车次底单、一只古董铁路怀表和半枚账册铜匙；旁边还有一枚值班银币。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragLedgerKey or 0) lt 3>><<set $mpFragLedgerKey to ($mpFragLedgerKey or 0) + 1>><</if>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_blackiron_signal>>
-			<<set $daily.mpRegionLoot_blackiron_signal to 1>>
-			你在电报机抽屉底层锡盒里找到两枚值班员银币和一张写着「三号仓库滑道」的纸带。<span class="green">你将电报机锡盒里的银币与滑道纸带妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">电报机抽屉底层的锡盒今日已空，只剩几截废电报纸带。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	改锥碰到电报机蓄电铜片，一串电火花麻得指尖剧痛。你立刻甩手后退。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "铁件与道砟的响动">>
-<br>
-<<crimeicon "safe">><<link "梳理拉杆编号 (0:07)">><<mpalert 8>><<pass 7>><<replace "#blackiron-signal-choices">>
-<<if $maths gte 260 or $science gte 260>>
-	<<set $mpKnown["blackiron_platform"] to 1>>
-	你把十六根联锁拉杆的编号排开，发现第 12 与 13 号之间多出一组不在图上的道岔，正通地下月台。
-	<<stress -1>>
-<<else>>
-	编号牌被煤灰盖住，你排到一半便乱了顺序。
-	<<tiredness 2>><<stress 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "铁件与道砟的响动">>
-</div>
+<<walkicon>><<link [[回黑铁站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
 
 
 :: MP Region Blackiron Signal Rest [nobr]
@@ -2557,48 +1827,11 @@
 :: MP Region Blackiron Platform Search [nobr]
 <<set $outside to 0>><<set $location to "elk">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "blackiron">><<mpalertinit "blackiron">><</if>><<mpalerttext>><<mpalertcheck>>
-<<set $mpKnown to ($mpKnown or {})>>
-你绕到地下走私月台的起重滑轮后方，伸手撬动配重铁箱侧面的活扣。
+你绕到起重滑轮后面，配重铁箱的盖板敞着，夹层里只剩一层樟木屑和半截浸潮的油纸。水闸门外暗河低沉地流淌，月台上再没有值得撬开的东西。
 <br><br>
-<<walkicon>><<link [[返回走私月台 (0:02)|MP Region Blackiron Platform]]>><<pass 2>><</link>>
+<<getouticon>><<link [[退回月台 (0:02)|MP Region Blackiron Platform]]>><<pass 2>><</link>>
 <br>
-<div id="blackiron-platform-choices">
-<<mplockpickicon>><<link "撬配重铁箱 (0:14)">><<mpalert 8>><<pass 14>><<replace "#blackiron-platform-choices">>
-<<set $skulduggerydifficulty to 410>><<skulduggerycheck "silent">>
-<<if $skulduggerysuccess is 1>>
-	<<if currentSkillValue("skulduggery") gte 600 and window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("region_unique_MP_Region_Blackiron_Platform")>>
-		你稳住滑轮铁索掀开箱盖，取出未拆封的古董货包和半枚孤儿院账册密匙；夹层里还有约 <span class="gold">£5</span> 的走私分红。
-		<<set $mpAntiquesUnappraised to ($mpAntiquesUnappraised or 0) + 1>><span class="blue">获得未鉴定古董 ×1</span>
-		<<if ($mpFragLedgerKey or 0) lt 3>><<set $mpFragLedgerKey to ($mpFragLedgerKey or 0) + 1>><</if>>
-		<<money 500>>
-		<<stress -3>>
-	<<else>>
-		<<if !$daily>><<set $daily to {}>><</if>>
-		<<if !$daily.mpRegionLoot_blackiron_platform>>
-			<<set $daily.mpRegionLoot_blackiron_platform to 1>>
-			你在樟木货箱底部的防潮袋里摸出两枚暗市银元和一张写着「账册在城里」的油纸。<span class="green">你将货箱防潮袋里的暗市银元与油纸妥善收进贴身衣袋。</span>
-			<<stress -2>>
-		<<else>>
-			<span class="teal">樟木货箱底部的防潮袋今日已被你翻过，只余下干燥木屑。</span>
-			<<stress -1>>
-		<</if>>
-	<</if>>
-<<else>>
-	起重滑轮铁链猛地滑脱一寸，配重铁箱重重磕在石台上，夹伤手指。你忍痛退到立柱后。
-	<<stress 5>><<pain 3>>
-<</if>>
-<</replace>><</link>><<mpalertgain "铁件与道砟的响动">>
-<br>
-<<mpeavesdropicon>><<link "听水闸铜钟 (0:07)">><<pass 7>><<replace "#blackiron-platform-choices">>
-<<if $athletics gte 280 or $swimmingskill gte 240>>
-	你数准暗浪撞钟的间隔，在两次钟声之间摸到水闸后一处干燥石台，台上放着一枚铜扣。
-	<<stress -1>>
-<<else>>
-	冷水漫过鞋面，你被钟声震得心慌，没能找到落脚处。
-	<<tiredness 3>><<stress 3>>
-<</if>>
-<</replace>><</link>>
-</div>
+<<walkicon>><<link [[返回黑铁货站 (0:04)|MP Region Blackiron Yard]]>><<pass 4>><</link>>
 
 
 :: MP Region Blackiron Platform Rest [nobr]
@@ -4292,3 +3525,56 @@
 <</if>>
 
 
+
+:: MP Secret Discover [nobr]
+<<set _link to true>><<set $outside to 1>><<effects>><<mpAmbient>>
+<<set _key to ($mpSecretKey or "elk")>>
+<<set _ret to ($mpSecretReturn or "High Street")>>
+<<set _target to ($mpSecretTarget or _ret)>>
+<<set $mpSecretSeen to ($mpSecretSeen or {})>><<set $mpSecretSeen[_key] to 1>>
+<<switch _key>>
+<<case "elk">>
+成人店后巷的尽头比街上冷。排气扇把一股皮革和金属抛光膏的气味压下来，墙脚的积水泛着一层薄油。你贴着砖墙走，指尖在缝里摸到一处比别处凉的地方——门框上没有把手，只有一圈被摸得发亮的铜环，环后头隐约有人说话。
+<br><br>
+你把耳朵贴上去。里面的人停了半拍，接着是一声很轻的椅子响：「门外那位，要么敲三下，要么走。」
+<<case "harvest">>
+酒馆后院的橡木桶被雨打湿，桶箍上有一道新撬痕。你蹲下去，看见桶底压着半截铁环，环口朝上，像是有人刚拉开又放下，怕被雨灌进去。
+<br><br>
+地窖里透出一点酒糟和潮土的气味。你把铁环提起来一寸，底下传来脚步声，不慌不忙，像早就听见你来了。
+<<case "cellar">>
+走廊尽头的旧储物室木门虚掩着，门轴上涂过一层厚油脂。你顺着冷风吹来的方向蹲下身，看见踢脚线内侧的暗栓被人拨开了半格。
+<br><br>
+门板下方的石阶深处传来纸页翻动与火柴擦亮的轻响，有人在底下压低嗓音数着旧账页码。
+<<case "attic">>
+卧室天花板角落的活板门嵌在阴影里，垂下的麻绳末端打着一个新结。你轻轻拽了一下绳头，木板缝隙里落下一撮干草屑。
+<br><br>
+阁楼上方传来木箱挪动的闷响，随后是一阵压抑的呼吸声，有人在上面屏息听着梯口的动静。
+<<case "catacomb">>
+石廊侧壁的黄铜烛台底座有一圈新鲜的刮痕。你握住烛台轻轻旋动半圈，内侧的石砖向后退开一寸，露出一条阴冷的夹壁阶梯。
+<br><br>
+夹壁深处飘出陈年没药与冷水的气味，底下隐约传来低沉的铁链拖拽声与诵经余音。
+<<case "sewers">>
+排水渠拱顶下的石壁上留着一道粉笔三岔记号。你顺着记号摸向砖缝，发现一扇被苔藓遮住的生锈铁栅门并未锁死。
+<br><br>
+铁栅后方的干涸暗渠里透出昏黄的提灯光亮，隐约有人在里面低声核对货箱暗号。
+<<case "arcade">>
+游戏厅最里侧的黑屏街机与墙面之间留着一道三指宽的缝隙。你侧身探手进去，摸到了机身背后隐藏的铁门拉环。
+<br><br>
+暗门后方传来低沉的电流嗡鸣与筹码碰撞的脆响，门内看守的人轻咳了一声。
+<<case "schoolbell">>
+教学楼旧钟塔的螺旋铁梯入口处挂着一把松动的铜锁。你轻轻拨开锁扣，木门后方立刻涌出一股带着铁锈与鸽羽味的高处冷风。
+<br><br>
+上方的钟楼夹层里传来齿轮走动的咔嗒声，似乎有人刚在上面翻动过木箱。
+<<case "gardenwell">>
+孤儿院花园角落的枯井被浓密的常春藤掩盖。你拨开藤蔓探头往下看，井壁内侧整齐地嵌着一排被人踩磨发亮的铁脚蹬。
+<br><br>
+井底深处的横洞里传来水滴落入木桶的回声，还有人用火石打火的细碎声响。
+<<case "bathpipe">>
+浴室黄铜热水管后方的白瓷砖有一块边缘发空。你用指尖扣住瓷砖轻轻挪开，露出夹墙里一方用油布包裹的暗格与窄道。
+<br><br>
+夹墙另一侧传来管道震动的嗡鸣与极轻的脚步声，有人刚从隔间暗道里经过。
+<</switch>>
+<br><br>
+<<mpdooricon>><<link "下去看看 (0:03)">><<pass 3>><<goto _target>><</link>>
+<br>
+<<link "记住这处入口 (0:02)">><<pass 2>><<goto _ret>><</link>>

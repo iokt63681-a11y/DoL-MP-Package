@@ -1,247 +1,245 @@
 :: MP Loc School Hub [nobr]
+<<set _sera to (($mpNpcs and $mpNpcs.sera and $mpNpcs.sera.hasMet) ? "塞拉" : "标本室的那个人")>>
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-牛津街尽头的铁栅校门只开了一扇，门轴缺油，推起来会拖出一声长响。门房窗台上搁着半杯凉茶和一本翻烂的访客簿，操场方向的风穿过走廊，把布告栏上层层叠叠的旧通知掀起一角，露出底下一张更早的纸，边角已经发黄。空气里混着粉笔灰、湿拖把和食堂煮卷心菜的味道，锅炉房顺着管道爬上来的铁腥气也在其中。
+牛津街尽头的铁栅校门只开了一扇，门房窗台上搁着凉茶和访客簿。空气里混着粉笔灰、湿拖把和食堂煮卷心菜的味道。值日生抱着作业本挤过去，没人多看你一眼。<<if $mpLocProgress_School gte 3>>布告栏最上面的旧通知被风掀起，底下新贴的纸露出大半。<<elseif $mpLocProgress_School gte 1>>布告栏一角旧纸被掀开，露出下面稍新的一张。<<else>>布告栏最上面那张卷了边，底下的纸还压在下面。<</if>>
 <br><br>
-你靠在门柱边，把学园眼下的底细过了一遍：明面上能走的路已经探到 <<print $mpLocProgress_School>> 这一步，手上真正了结的麻烦有 <<print $mpLocEvents_School>> 桩；雾潮的水尺停在 <<print ($mpFogTide or 0)>>，这个刻度再往上抬，最先遭殃的总是地下那几间屋子。门厅的钟比街上早响半拍，值日生抱着成摞的作业本从你身边挤过去，谁也没空多看一眼。
+<<if $mpSchoolEnded>>旧馆的事已有定论：<<if $mpWorldSchoolOutcome is "openarchive">>卷宗公开，谁都能翻。<<else>>卷宗封存，借阅要签字。<</if>><<elseif $mpWorldSchoolOutcome is "openarchive">>旧馆的档案已经搬进阅览室，谁都能翻。<<elseif $mpWorldSchoolOutcome is "curated">>旧馆的卷宗被学会重新编号，借阅要两道签字。<</if>>
 <br><br>
-<<if $mpWorldSchoolOutcome is "openarchive">>旧馆的档案已经搬到阅览室正中，谁都能翻，走廊里少了耳语，多了当面的质问。<<elseif $mpWorldSchoolOutcome is "curated">>旧馆的卷宗被学会的人重新编了号，借阅要两道签字，知情的人各自把话咽回肚里。<</if>><<if $mpWorldSeraEnding>>塞拉那边的结局也隐隐牵动着这里的气氛，有人提起她时，办公室里会忽然安静半拍。<</if>>
+这栋楼不肯把事都摆在同一层。你抬脚往里走。
 <br><br>
-学园是分层的地方。表层是每日的钟声与课表，教室、食堂、图书室，人按部就班地走，最多在走廊上撞见一点小摩擦。中层开始不同：成绩、社团、科学展，还有体育馆背后那些老师宁可没看见的事。深层则压在钟塔与锅炉房底下，建校以来的账、旧馆封存的卷宗、学期末要在礼堂上演的那出戏，都随雾潮一起浮上来。
-<br><br>
-这里的常驻面孔各有各的活法。诺艾尔把标本室当半个家，进门先看人的手腕再看脸；梅森在泳池边站一整个下午，哨子挂在脖子上很少吹响；礼顿先生管着全校的章和处分单，走路时总把文件抱在胸前，像抱着一道挡箭牌。学生们在这些人之间穿行，学会看脸色，也学会在钟声与钟声之间找空隙。
-<br><br>
-季节在这里比别处更像一把尺。开学那几天校门挤得水泄不通，考试周走廊安静到能听见翻页声，文化祭时连围墙外都摆满摊子；连日阴雨和涨起来的雾会让钟点变得不可靠，也会让某些平时锁着的门显得没那么严。你把手从冰凉的门柱上收回来，抬脚往里走。
-<br><br>
-<<getouticon>><<link [[返回街尾启事 (0:04)|MP Town Side Stories Corner Hub 2]]>><<pass 4>><</link>><br>
-<<walkicon>><<link [[探索学园表层 (0:06)|MP Loc School Surface]]>><<pass 6>><</link>><br>
-<<investigateicon>><<link [[深入学园中层 (0:08)|MP Loc School Mid]]>><<pass 8>><</link>><br>
-<<sneakicon>><<link [[潜入学园深层 (0:10)|MP Loc School Deep]]>><<pass 10>><</link>><br>
-<<link [[观测季节异象 (0:06)|MP Loc School Season]]>><<pass 6>><</link>>
-<br><<link [[查看四季活动 (0:03)|MP Loc School Festival Hub]]>><<pass 3>><</link>>
-<br><<link [[更多日常 (0:03)|MP Loc School More Hub]]>><<pass 3>><</link>>
+<<mpSchoolEventRoll "enter">>
+<<getouticon>><<link [[返回校门 (0:02)|School]]>><<pass 2>><</link>><br>
+<<mplettericon>><<link [[去教室上课 (0:03)|MP Loc School Class]]>><<pass 3>><</link>><br>
+<<if (Time.hour gte 15 and Time.hour lt 18) and ($delinquency or 0) gte 3 and not ($mpDetentionDay is Time.days and $mpDetentionServed is 1)>><<mpcleanicon>><<link [[到留堂教室去 (0:03)|MP Loc School Detention]]>><<pass 3>><</link>><br><</if>>
+<<walkicon>><<link [[去学园表层看看 (0:06)|MP Loc School Surface]]>><<pass 6>><</link>><br>
+<<link [[翻看更多日常杂事 (0:03)|MP Loc School More Hub]]>><<pass 3>><</link>>
 
 :: MP Loc School Surface [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-上午第二节课刚下，走廊像被谁拧开了阀门。学生从教室里涌出来，鞋底在打过蜡的木地板上打滑，有人把书包甩上肩，有人趴在窗台上分一块面包。尽头那间教室的门还开着，里面飘出粉笔和旧课本的气味；楼梯拐角的水房传来拖把撞桶的钝响，一下一下，听着像有人在敲门。
-<br><br>
-你在楼梯口停了停，把表层这几条路在心里排开：走廊归值日生和巡课的人管，出了岔子当场就要收拾；图书室的借阅台永远堆着逾期没还的书卡，管理员乐意有人替她理；食堂后门通着一整条送菜与洗刷的动线，谁都能进去搭把手，也谁都能在那儿听见半句不该听的话。眼下这一层的进度是 <<print $mpLocProgress_School>>，当面收拾过的插曲有 <<print $mpLocEvents_School>> 桩。
-<br><br>
-人群里认得的面孔不少。惠特尼靠在储物柜上，用鞋尖一下下踢着柜门，旁边两个跟班笑得很大声；罗宾抱着一摞餐盘从食堂方向过来，看见你，隔着人堆点了点头，脚步没停；凯拉尔独自缩在窗台最里头，膝盖上摊着一本翻旧的书，谁经过都往阴影里让一让。礼顿先生从办公室出来，手里那叠纸被风掀得哗哗响，他谁也不看，径直往教务处去。
-<br><br>
-第四节课前的走廊最挤。食堂的餐车从后门推进来，铁轮在地砖上轧出吱嘎声，帮工把一桶桶汤抬上台阶，热气在冷空气里翻成白雾。排队的人从窗口一直甩到楼梯口，有人插队，有人骂，有人把餐盘顶在头上挤过去。值日老师吹了两声哨，队伍勉强直了一点，很快又歪了。
-<br><br>
-墙上的钟走得很慢。走廊尽头的黑板今天格外脏，图书室的门也虚掩着，像是在等谁去推。这些事都不大，可学园的日子就是由这些不大不小的事攒起来的：一张贴歪的课表能让半个班走错教室，一本放错架的书能让某个学生背上不该背的罚单。
-<br><br>
-窗外的操场上有人在跑圈，哨声断断续续。你决定先做哪一件。
+<<set _leighton to (mpNpcMet("Leighton") ? "礼顿先生" : "教务处的老师")>><<set _whitney to (mpNpcMet("Whitney") ? "惠特尼" : "那个大孩子")>><<set _kylar to (mpNpcMet("Kylar") ? "凯拉尔" : "那个瘦小的学生")>><<set _robin to (mpNpcMet("Robin") ? "罗宾" : "食堂帮工的孩子")>>
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+上午第二节课刚下，走廊像被谁拧开了阀门。学生从教室里涌出来，鞋底在打过蜡的木地板上打滑；尽头那间教室还飘着粉笔和旧课本的气味，水房传来拖把撞桶的钝响。人群里撞见几张脸：<<print _whitney>>靠在储物柜上踢柜门，<<print _robin>>抱着餐盘从食堂过来，<<print _kylar>>缩在窗台最里头看书，<<print _leighton>>夹着一叠纸往教务处去。走廊尽头的黑板今天格外脏，图书室的门虚掩着，像是在等谁去推。窗外操场上有人跑圈，哨声断断续续。你决定先做哪一件。
 <br><br>
 <<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[走廊黑板擦拭 (0:10)|MP Loc School Event 1]]>><<pass 10>><</link>><br>
-<<shopicon>><<link [[图书室借阅台 (0:10)|MP Loc School Event 2]]>><<pass 10>><</link>><br>
-<<walkicon>><<link [[前往学园中层 (0:06)|MP Loc School Mid]]>><<pass 6>><<set $mpLocProgress_School to Math.max($mpLocProgress_School, 1)>><</link>>
+<<if _choreOpen>><<investigateicon>><<link [[擦净黑板 (0:10)|MP Loc School Event 1]]>><<pass 10>><</link>><br><<else>><span class="disabled">走廊黑板擦拭（午休 12–13 或放学 15–18）</span><br><</if>>
+<<if _choreOpen>><<mplettericon>><<link [[整理借阅台 (0:10)|MP Loc School Event 2]]>><<pass 10>><</link>><br><<else>><span class="disabled">图书室借阅台（午休 12–13 或放学 15–18）</span><br><</if>>
+<<walkicon>><<link [[动身去学园中层 (0:06)|MP Loc School Mid]]>><<pass 6>><<set $mpLocProgress_School to Math.max($mpLocProgress_School, 1)>><</link>>
+<br><<link [[到操场边看看天色 (0:06)|MP Loc School Season]]>><<pass 6>><</link>>
 
 :: MP Loc School Mid [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-穿过走廊尽头那扇防火门，楼梯陡了一截，台阶边缘被几十届学生踩出浅浅的凹痕。上到中层，空气先变了：漆味、旧木头的霉味，还有一股从理科教室飘出来的醋酸。墙上钉着一排玻璃框，里头是历年的成绩榜和社团合影，照片里的人一年比一年穿得整齐，笑容却越来越像同一个模子刻出来的。
-<br><br>
-这一层管的事比走廊上的摩擦要紧得多。分数与课程表决定谁能在放学后去接零工、谁有资格报名考试；社团活动占着下午的教室与场地，谁批的条子、谁盖的章，都记在教务处的本子上；而霸凌这种事，往往就发生在体育馆背风的墙根下，老师们从旁边经过，眼睛看着别处。科学展的展板已经搬进了大厅，几块拼错的标题还空着。
-<br><br>
-眼下的进度是 <<print $mpLocProgress_School>>，已经了结的插曲有 <<print $mpLocEvents_School>> 桩。楼梯口那扇通往钟塔方向的铁门半掩着，门后是另一段更暗的台阶；门边的告示写着非授权人员不得入内，纸角被人撕掉了一块。若是手上的底子还不够，硬往里闯只会被值班的人拦回来，少不了一顿盘问与一身疲惫。
-<br><br>
-成绩榜前永远有人站着。名次用红黑两色写，红的是前十，黑的往后排，纸边被人用指甲掐出很多印子。旁边的社团招新板上钉着五颜六色的纸条：篮球社要人，戏剧社要人，读书会也要人，条件写在最下面一行小字里——出席、会费、指导老师的签字。有人靠这些纸条换到放学后的去处，有人因为缺一张签字，被留在教室里抄整个下午的课文。
-<br><br>
-走廊另一头，诺艾尔抱着两只贴着标签的玻璃罐从理科教室出来，罐里的液体晃出一圈暗绿。她看见你，先皱眉打量了一下你的脸色，才开口：「你眼下有青影，别在楼梯上跑。标本室那边今天要清点，缺人手，你要是来，先洗……算了，我看你已经洗过了。」她说完就往里走，没等你答话，但门给你留着了。
-<br><br>
-操场方向传来哨声，是体育课在集合。旧体育馆的木门在风里吱呀作响，理科教室的玻璃柜反射着下午偏斜的光。你站在楼梯中层，左边是摊开的课本与成绩单，右边是锁着的器械间与那道通往下面的铁门。
+<<set _noel to (($mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet) ? "诺艾尔" : "标本室的管理员")>>
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+穿过走廊尽头的防火门，楼梯陡了一截，台阶边缘被几十届学生踩出浅凹。空气里有漆味、旧木头的霉味和理科教室飘出的醋酸；墙上钉着历年成绩榜和社团合影，照片里的人一年比一年整齐。这一层管着分数、课程表和社团场地，霸凌常发生在体育馆背风的墙根，老师经过时眼睛看着别处。<<print _noel>>抱着贴标签的玻璃罐从理科教室出来，看见你先打量脸色：「标本室今天要清点，缺人手。你要来，先洗……算了，我看你已经洗过了。」她往里走，门给你留着。
 <br><br>
 <<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[理科标本陈列 (0:12)|MP Loc School Event 3]]>><<pass 12>><</link>><br>
-<<socialiseicon>><<link [[旧体育馆器材 (0:12)|MP Loc School Event 4]]>><<pass 12>><</link>><br>
-<<sneakicon>><<if $mpLocProgress_School gte 2 or $mpLocEvents_School gte 2>><<link [[进入学园深层 (0:08)|MP Loc School Deep]]>><<pass 8>><<set $mpLocProgress_School to Math.max($mpLocProgress_School, 3)>><</link>><<else>><<link [[贸然硬闯深层 (0:08)|MP Loc School Hub]]>><<pass 8>><<stress 4>><<tiredness 2>><</link>><</if>>
+<<if _choreOpen>><<investigateicon>><<link [[理科标本 (0:12)|MP Loc School Event 3]]>><<pass 12>><</link>><br><<else>><span class="disabled">理科标本陈列（午休 12–13 或放学 15–18）</span><br><</if>>
+<<if _choreOpen>><<mpgearicon>><<link [[体育馆器材 (0:12)|MP Loc School Event 4]]>><<pass 12>><</link>><br><<else>><span class="disabled">旧体育馆器材（午休 12–13 或放学 15–18）</span><br><</if>>
+<<sneakicon>><<if $mpLocProgress_School gte 2 or $mpLocEvents_School gte 2>><<link [[下到学园深层去 (0:08)|MP Loc School Deep]]>><<pass 8>><<set $mpLocProgress_School to Math.max($mpLocProgress_School, 3)>><</link>><<else>><<link [[不管不顾往里闯 (0:08)|MP Loc School Hub]]>><<pass 8>><<stress 4>><<tiredness 2>><</link>><</if>>
 
 :: MP Loc School Deep [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-铁门后面是没有窗的一段路。墙皮剥落处露出更早一层的砖，砖缝里嵌着干掉的灰浆；头顶的灯每隔几步才有一盏，光落在脚下，照不出三步远。越往里走，声音越清楚：钟塔方向传来齿轮咬合的闷响，锅炉房的蒸汽在管道里撞出空洞的回声，水珠从穹顶滴下来，砸在铁皮上，一下，又一下。
-<br><br>
-这里是学园真正的底子。学期进度压在教务处的抽屉里，考试排名决定谁的名字被念出来、谁的名字被划掉；礼堂后台堆着上一出戏的道具，幕布上还留着没洗掉的粉笔线；神殿与行会联合办的活动，通知从来不贴在外面的布告栏，而是由人亲手送到这一层。雾潮一旦漫过水尺上那道刻痕，停课的通知也是从这里发出去的。
-<br><br>
-当前进度 <<print $mpLocProgress_School>>，已经了结的插曲 <<print $mpLocEvents_School>> 桩，区域的终局记为 <<print ($mpWorldSchoolOutcome or "未定")>>。钟塔底下的旧档案室门锁锈得厉害，锁眼里塞过东西又被掏出来；锅炉暗廊的铁栅后面水汽翻涌，墙上的水位线一道比一道高。旧馆那批卷宗就摊在不远的推车上，谁先动手，谁就替这所学校定下往后的规矩。
-<br><br>
-礼堂在走廊的另一侧，门是双开的，铜把手磨得发亮。门缝里漏出排练的声音：一个学生念台词，念到一半忘了词，后台有人提词，声音从幕布后面传出来，闷闷的。从门缝看进去，台下的椅子只摆了一半，另一半堆着拆下来的布景板。神殿与行会联合办的那场活动，海报就贴在后台的化妆镜上，日期被人用铅笔改过一次。
-<br><br>
-雾潮真漫上来的时候，这里最先有反应。暗渠的水位一夜能涨两拃，锅炉房的值班表会临时加人，教务处的灯亮到很晚，第二天早上校门口就挂出停课的牌子。停课不等于放假：该补的课要补，该交的作业照交，只是走廊里多了些无处可去的人，聚在窗边看水。
-<br><br>
-推车旁站着两个不认识的人，一个袖口别着学会的铜章，一个抱着一摞空白封条，谁都没先开口。远处礼堂里传来排练的声音，一句台词反复念了三遍，还是不对。你听见锅炉那边有阀门在叫，声音细而急，像被掐住喉咙。
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+铁门后面是没有窗的一段路。墙皮剥落处露出更早一层的砖，头顶的灯每隔几步才有一盏。越往里走声音越清楚：钟塔齿轮的闷响、锅炉蒸汽撞管道的回声、水珠砸在铁皮上的滴答。这里是学园真正的底子：学期安排、考试排名、礼堂后台的旧道具、雾潮停课的通知，都从这一层发出去。钟塔下的旧档案室门锁锈得厉害，锅炉暗廊的水位线一道比一道高，旧馆那批卷宗就摊在不远的推车上。推车旁站着两个别着学会铜章的人，谁都没先开口。
 <br><br>
 <<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<link [[钟塔旧档案室 (0:15)|MP Loc School Event 5]]>><<pass 15>><</link>><br>
-<<sneakicon>><<link [[地下锅炉暗廊 (0:15)|MP Loc School Event 6]]>><<pass 15>><</link>><br>
-<<socialiseicon>><<link [[公开旧馆档案 (0:20)|MP Loc School Ending A]]>><<pass 20>><<set $mpWorldSchoolOutcome to "openarchive">><<set $mpLocProgress_School to 5>><</link>><br>
-<<link [[移交学会监管 (0:20)|MP Loc School Ending B]]>><<pass 20>><<set $mpWorldSchoolOutcome to "curated">><<set $mpLocProgress_School to 5>><</link>>
+<<link [[回中层看看 (0:04)|MP Loc School Mid]]>><<pass 4>><</link>><br>
+<<if _choreOpen>><<mplettericon>><<link [[走进钟塔旧档案室 (0:15)|MP Loc School Event 5]]>><<pass 15>><</link>><br><<else>><span class="disabled">钟塔旧档案室（午休 12–13 或放学 15–18）</span><br><</if>>
+<<if _choreOpen>><<mpcellaricon>><<link [[去地下锅炉暗廊 (0:15)|MP Loc School Event 6]]>><<pass 15>><</link>><br><<else>><span class="disabled">地下锅炉暗廊（午休 12–13 或放学 15–18）</span><br><</if>>
+<<if $mpSchoolEnded>>
+<<if $mpWorldSchoolOutcome is "openarchive">><<socialiseicon>><<link [[公开卷宗 (0:05)|MP Loc School Ending A]]>><<pass 5>><</link>>
+<<else>><<link [[封存卷宗 (0:05)|MP Loc School Ending B]]>><<pass 5>><</link>><</if>>
+<<elseif ($schoolrep or 0) gte 5 and ($delinquency or 0) lte 2>>
+<<socialiseicon>><<link [[公开档案 (0:20)|MP Loc School Ending A]]>><<pass 20>><</link>>
+<<elseif ($schoolrep or 0) lte 0 or ($delinquency or 0) gte 5>>
+<<link [[移交监管 (0:20)|MP Loc School Ending B]]>><<pass 20>><</link>>
+<</if>>
 
 :: MP Loc School Season [nobr]
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-时令是 <<if Time.season is "spring">>春<<elseif Time.season is "summer">>夏<<elseif Time.season is "autumn">>秋<<elseif Time.season is "winter">>冬<<else>>当季<</if>>，天色报的是 <<if Weather.precipitation is "rain">>有雨<<elseif Weather.precipitation is "snow">>有雪<<elseif Weather.precipitation is "none">>晴好<<else>>薄雾<</if>>，雾潮水尺在 <<print ($mpFogTide or 0)>>。学园对天气的反应比街上明显：风一大，操场上的旗绳就整夜敲着旗杆；雨一下，走廊立刻变成晾衣绳的天下，湿外套挂满窗框，水顺着墙根淌成一道道细流。锅炉房在这种日子里烧得最凶，铁管烫手，地下那层却还是阴冷。
+时令是 <<if Time.season is "spring">>春<<elseif Time.season is "summer">>夏<<elseif Time.season is "autumn">>秋<<elseif Time.season is "winter">>冬<<else>>当季<</if>>，天色是 <<if Weather.precipitation is "rain">>有雨<<elseif Weather.precipitation is "snow">>有雪<<elseif Weather.precipitation is "none">>晴好<<else>>薄雾<</if>>。地下水跟着天气走，暗廊水线一天能挪两回。风大时旗绳整夜敲着旗杆，雨天走廊挂满湿外套；锅炉房烧得最凶，铁管烫手，地下那层却还是阴冷。
 <br><br>
-季节一变，楼里最先变的是作息。冬天早晨天还黑着，教室里却已经坐满，窗玻璃上结着白霜，学生轮流用袖口抹出一小块能看清黑板的地方；夏天日头长，下午的课拖到很晚，吊扇转得吱呀作响，纸页被风翻来翻去。春秋两季风大，走廊的窗户只开一条缝，值日生整天在关窗和开窗之间来回。
+季节一变，作息也跟着变：冬天早晨教室里已经坐满，夏天下午的课拖得很晚，春秋值日生整天在开关窗之间来回。考试周整栋楼忽然安静，文化祭前后走廊又摆满摊子。
 <br><br>
-开学那阵子校门从早堵到晚，转学生、补考的学生、来送东西的家长挤在一处，布告栏上的名单一天换三回。考试周一到，整栋楼忽然安静，连食堂都压低了说话声，只有翻页和笔尖刮纸的动静。文化祭前后又是另一副样子：礼堂连夜搭台，社团在走廊上摆摊，彩纸屑粘在湿鞋底上，一路带进教室。
-<br><br>
-学期末的最后一周，教室后墙的板报要换，桌椅要搬去礼堂，储物柜清空，走廊上堆满捆好的旧课本。假期一开始，校门就锁了，只有门房偶尔出来扫台阶；操场上的草长得很快，旗绳在风里空响，整栋楼像被人按下了暂停。
-<br><br>
-雨雾天里，有些痕迹会浮出来。墙根的水渍显出平时看不见的走向，旧馆外墙的裂缝吸饱了水，颜色变深；钟塔的齿轮受潮，报时的声音会晚半拍；锅炉暗廊的水位涨得快，铁栅后面漂着不该在那儿的东西。这种时候去查，往往能摸到些晴天里被晒干、被扫掉的线索。
-<br><br>
-天晴则另一回事。日头把操场晒得发白，走廊里的潮气收了，值日生把窗户全推开，风把粉笔灰吹得满屋都是。适合绕着围墙走一圈，看看哪扇门没关严、哪面墙的灰是新补的、哪个班的窗户后面有人在抽烟。进度眼下是 <<print $mpLocProgress_School>>，走这一趟还能往前挪一格，人也会松快些。
-<br><br>
-无论外头是雨是晴，学园都照常上课，钟照常敲。你在门厅下站了一会儿，听着雨点打在铁皮雨棚上的声音，或者看着晴光里的灰尘慢慢飘。
+雨雾天里墙根的水渍会显出走向，晴天则适合绕围墙走一圈。你决定先做哪一件。
 <br><br>
 <<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if Weather.precipitation is "rain" or ($mpFogTide or 0) gte 3>><<link [[趁雨雾查暗迹 (0:12)|MP Loc School Event 4]]>><<pass 12>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -2>><</link>><<else>><<link [[晴日巡视外围 (0:12)|MP Loc School Event 1]]>><<pass 12>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -2>><</link>><</if>><br>
-<<walkicon>><<link [[转入学园表层 (0:04)|MP Loc School Surface]]>><<pass 4>><</link>>
+<<mpcloudicon>><<if Weather.precipitation is "rain" or ($mpFogTide or 0) gte 3>><<link [[趁雨雾查迹 (0:12)|MP Loc School Event 4]]>><<pass 12>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -2>><</link>><<else>><<link [[晴日巡视 (0:12)|MP Loc School Event 1]]>><<pass 12>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -2>><</link>><</if>><br>
+<<walkicon>><<link [[转到学园表层去 (0:04)|MP Loc School Surface]]>><<pass 4>><</link>>
+<br><<link [[翻看整本节历总览 (0:03)|MP Loc School Festival Hub]]>><<pass 3>><</link>>
 
 :: MP Loc School Event 1 [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-午休前的走廊空了一阵，值日生把水桶搁在楼梯口就没了影。尽头那块黑板还留着上一节课的板书：一道没解完的方程，半行被袖子抹花的日期，右下角有人用粉笔头画了个歪斜的小人。板擦泡在浑水里，槽沿结了一圈白碱，抹布硬得能立起来。
-<br><br>
-礼顿先生从办公室出来，腋下夹着一叠还没盖章的处分单，扫了黑板一眼：「放学前要清出来。上面那张表下午就贴，写歪一个字，明天就有人来问我。」他说完便走，皮鞋跟在走廊里敲得很规整，留下你对着满板灰白的字迹。
-<br><br>
-这块黑板其实是全校最诚实的一块地方。谁被留下，谁被调班，哪间教室的暖气坏了要换地方上课，全都写在这里；字一擦，消息就只剩口耳相传。值日生换了一茬又一茬，槽里的粉笔头攒了半槽，没有人记得最早是谁开始把变动写上去的。
-<br><br>
-黑板擦干净之后，还得照着一张揉皱的课表把当天的变动誊上去：哪节课换了教室，哪位老师请了假，哪个班提前放学。粉笔受潮会打滑，字写重了又擦不掉，站在矮脚凳上伸手够最上面一行时，凳腿还会轻轻晃。槽里的水得换两遍，抹布拧干再擦一遍，玻璃似的板面才能照出人影。
-<br><br>
-也可以什么都不动，只把课表上改过的几处抄进自己的本子。这事不费什么力气，顶多站久了腿酸，抄完合上本子就能走。只是那些被改动的地方往往藏着当天真正要紧的消息：哪个时段哪条走廊会锁，哪位老师不在，谁被留堂，谁的名字从名单上被悄悄挪走了。
-<br><br>
-走廊尽头的窗子开着，风把黑板槽里的粉笔灰吹起来，在斜光里浮成一层白雾。楼下传来餐车的轮子声，午休就快到了。抹布拧干后还会滴几滴水，落在鞋面上，凉得人一激灵；你退后两步看了看整块板面，字迹在斜光里一半清楚一半模糊，像还没决定要不要被人看见。
+<<set _leighton to (mpNpcMet("Leighton") ? "礼顿先生" : "教务处的老师")>>
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+午休前的走廊空了一阵。尽头那块黑板还留着上一节课的板书：一道没解完的方程，半行被袖子抹花的日期，右下角一个歪斜的小人。板擦泡在浑水里，槽沿结着白碱。<<print _leighton>>从办公室出来，扫了黑板一眼：「放学前要清出来。写歪一个字，明天就有人来问我。」这块黑板记着谁被留下、谁被调班、哪间教室的暖气坏了；字一擦，消息就只剩口耳相传。也可以只把改过的课表抄进本子，费不了多少力气，却能看到当天真正要紧的消息。
 <br><br>
 <<getouticon>><<link [[返回学园表层 (0:02)|MP Loc School Surface]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($housekeeping or 0) gte 220 or ($willpower or 0) gte 420>><<link [[整理值日黑板 (0:12)|MP Loc School Surface]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[整理值日黑板 (0:12)|MP Loc School Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[抄下课表变动 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
+<<if _choreOpen>><<investigateicon>><<if ($housekeeping or 0) gte 220 or ($willpower or 0) gte 420>><<link [[擦净黑板 (0:12)|MP Loc School Surface]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[擦净黑板 (0:12)|MP Loc School Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br><<else>><span class="disabled">整理值日黑板（午休 12–13 或放学 15–18）</span><br><</if>>
+<<mplettericon>><<link [[抄课表变动 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
 
 :: MP Loc School Event 2 [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-图书室在走廊西头，门上的毛玻璃把光滤成一层旧象牙色。推门进去，先闻到纸、胶水和地板蜡的味道，然后是灰尘在光柱里慢慢翻卷。借阅台后面的管理员正踮脚够最上层的还书箱，听见脚步也不回头，只说了一句：「逾期的书卡在第二个抽屉，按班级分，别弄乱。」
-<br><br>
-抽屉一拉开，卡片挤得发胀。有的边角卷起，有的被水浸过又晒干，字迹晕成一团；日期一栏最要紧，写错一天，罚单就会落到不相干的人头上。要把它们按班级、按借出顺序重新排好，得有点耐心，也得看得懂那些潦草的编号。柜子背后的书架上还夹着几张没归档的借书单，纸边露在外面，像没藏好的秘密。
-<br><br>
-旧纸的酸味在桌面上散开。你把一摞卡片墩齐，边缘扬起的灰在光里悬着，久久不落。卡片上有些名字被反复划改，纸都快磨破；有些借阅记录停在同一天，之后再也没有下文。管理员说，每年都有几个学生忽然不来，书却还留着，逾期一天天累积，最后记在谁头上也没人追究。她说话时手没停，印章一下下砸在卡片上，声音很闷。
-<br><br>
-管理员把印章往你手边推了推：「理完了盖这个，别盖歪。」她顿了顿，又补一句，「有几张卡我拿不准，你看着办。」这话说得含糊，可意思很清楚：有些名字不该出现在罚单上，有些日期也许本来就是错的。
-<br><br>
-也可以不去动那些卡片，只翻一翻书页里夹着的东西。旧书里常有意外的夹页：一片压平的叶子，一张写了一半的便条，某个学生在页边跟另一个学生隔空吵架的字迹。诺艾尔前阵子借过的一本植物图鉴还回来时，里面就多了几行铅笔小字，写着某种根须的浸泡时辰。把这些零碎的批注抄下来，不费什么力气，只是蹲久了腰会酸。
-<br><br>
-窗外的光慢慢移过桌面，落到那摞卡片上。远处教室传来齐读的声音，起落很整齐，像一阵阵潮水。
+<<set _noel to (($mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet) ? "诺艾尔" : "标本室的管理员")>>
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+图书室在走廊西头，毛玻璃把光滤成旧象牙色。推门进去，先闻到纸、胶水和地板蜡的味道。借阅台后的管理员踮脚够最上层的还书箱，头也不回：「逾期的书卡在第二个抽屉，按班级分，别弄乱。」抽屉一拉开，卡片挤得发胀，有的边角卷起，有的被水浸过又晒干；日期写错一天，罚单就会落到不相干的人头上。柜子背后的书架上还夹着几张没归档的借书单。<<print _noel>>前阵子借过的一本植物图鉴里多了几行铅笔小字，写着某种根须的浸泡时辰。
 <br><br>
 <<getouticon>><<link [[返回学园表层 (0:02)|MP Loc School Surface]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($science or 0) gte 220 or ($willpower or 0) gte 420>><<link [[归档逾期书卡 (0:12)|MP Loc School Surface]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[归档逾期书卡 (0:12)|MP Loc School Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[查找夹页批注 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
+<<if _choreOpen>><<mplettericon>><<if ($science or 0) gte 220 or ($willpower or 0) gte 420>><<link [[归档书卡 (0:12)|MP Loc School Surface]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[归档书卡 (0:12)|MP Loc School Surface]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br><<else>><span class="disabled">归档逾期书卡（午休 12–13 或放学 15–18）</span><br><</if>>
+<<socialiseicon>><<link [[查夹页批注 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
 
 :: MP Loc School Event 3 [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-理科教室后面那间陈列室平时锁着，今天门开着一条缝，里头亮着一盏罩了绿纸的台灯。三面墙的玻璃柜里排满标本：泡在福尔马林里的蛇，钉在软木板上的蝶，切开的种子横截面像一枚枚小小的星图。柜子底层空了一格，标签还在，玻璃上留下一圈干净的圆印，说明有东西被拿走了，而且拿走的人擦过灰。
-<br><br>
-诺艾尔站在长桌旁，袖口卷到手肘，正用镊子把一片发黑的根须翻过来看。她没抬头：「你来得正好，别碰柜门，玻璃松。」停了两秒，又说，「清点从左边开始，编号对柜子，缺的记在本子上。手稳一点，别把标签蹭掉——蹭掉了就没人知道那是哪一年的东西。」
-<br><br>
-柜子里的标本按年份排，越往后标签上的字越潦草，最后几排干脆只剩编号。有一罐里泡着的东西已经散了形，封口的蜡裂了一道细缝，气味渗出来，混在醋味里几乎闻不出。册子上的登记停在去年冬天，之后是空白，像有人忽然懒得再写。
-<br><br>
-清点是件细活。每个玻璃罐都要提起来对着灯看封口有没有裂，每张标签都要跟册子上的字迹比对，有的字被药水熏得发黄，得凑得很近才认得出。柜子高，最上面几层要踩凳子；罐子沉，提久了手指会发抖。清到一半，你发现缺的不止一件，而册子上那几行字被人用同一种墨水改过，改得很轻，不细看根本察觉不出。
-<br><br>
-也可以先不管柜子，去校准角落里那台落灰的天平。砝码少了一枚，游码卡在刻度上不动，托盘上还有干掉的水渍。这活不赶时间，调平、擦拭、归零，做完把罩子盖回去就行，只是站久了脚底发麻，指关节也会酸。科学展的展板明天就要搬进大厅，这台天平大概会被摆到最显眼的位置。
-<br><br>
-走廊那头传来学生打闹的声音，隔着一道门，忽远忽近。诺艾尔把镊子放下，捏了捏鼻梁，声音低了些：「缺的东西，先别声张。等我核完册子。」
+<<set _noel to (($mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet) ? "诺艾尔" : "标本室的管理员")>>
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+理科教室后面那间陈列室平时锁着，今天门开着一条缝。三面墙的玻璃柜里排满标本：泡在福尔马林里的蛇，钉在软木板上的蝶，切开的种子横截面像一枚枚小小的星图。柜子底层空了一格，标签还在，玻璃上留下一圈干净的圆印。<<print _noel>>站在长桌旁，袖口卷到手肘，正用镊子翻一片发黑的根须：「清点从左边开始，编号对柜子，缺的记在本子上。手稳一点，别把标签蹭掉。」册子上的登记停在去年冬天，之后是空白。角落里那台落灰的天平也缺了一枚砝码。
 <br><br>
 <<getouticon>><<link [[返回学园中层 (0:02)|MP Loc School Mid]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($science or 0) gte 240 or ($willpower or 0) gte 420>><<link [[清点玻璃标本 (0:12)|MP Loc School Mid]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[清点玻璃标本 (0:12)|MP Loc School Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[校准天平砝码 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
+<<if _choreOpen>><<investigateicon>><<if ($science or 0) gte 240 or ($willpower or 0) gte 420>><<link [[清点标本 (0:12)|MP Loc School Mid]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[清点标本 (0:12)|MP Loc School Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br><<else>><span class="disabled">清点玻璃标本（午休 12–13 或放学 15–18）</span><br><</if>>
+<<mpscaleicon>><<link [[校准旧天平 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
 
 :: MP Loc School Event 4 [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-旧体育馆在操场东侧，屋顶的铅皮被风掀开过一角，雨天里能听见水在铁皮后面走。器械间在馆内最深处，门上是老式的搭扣锁，锁鼻上缠着一圈生锈的铁丝。推开门，一股橡胶、汗和霉木头的混合气味涌出来：跳箱叠在墙角，肋木架缺了两根横杆，成卷的旧垫子靠墙立着，边缘被磨出棉絮。
-<br><br>
-馆内另一头有动静。惠特尼把一个小个子学生堵在跳箱后面，手里晃着一只运动鞋，鞋带在她指间绕了两圈。那学生背贴着墙，校服下摆被扯出来一截，嘴上还在硬撑，声音却发虚。梅森站在场边，脖子上挂着哨子，手里捏着秒表，眼睛盯着地面上的白线，像在数什么。他没有吹哨，也没有走开。
-<br><br>
-你可以进器械间清点锁闭的储物柜：登记编号、核对钥匙、把还能用的球和垫子分出来，坏的堆到门口等人来修。这活要搬要抬，柜子后面的灰尘厚得能写字，抬久了手臂会酸，蹲久了膝盖发麻。清到最里面那排时，你听见柜板后面有东西在轻轻碰响，像是藏着什么。
-<br><br>
-器械间的窗子糊着报纸，光只能从边角漏进来，照见空气里浮动的灰。柜底压着一只旧球，球面上印着很多年前的校徽，漆掉得只剩轮廓。走廊那头传来上课铃，隔着馆门听，像从很远的地方响起。
-<br><br>
-也可以检查地板暗格。旧馆的木地板有几块是活的，边缘的漆磨没了，踩上去声音发空。撬开来看，底下塞着旧球网、断了的跳绳、几张卷起来的纸条，还有一只铁皮盒，锁扣早就锈死。这活不用花太多力气，只要肯伏在地上一点点敲过去；只是地板缝里的灰会钻进袖口，起身时眼前发黑。
-<br><br>
-梅森终于把哨子从脖子上取下来，在掌心掂了掂，仍没吹。他朝你这边的方向看了一眼，很短，然后低下头继续看秒表。惠特尼的笑声在空馆里撞出回音，跳箱后面的学生把脸别向墙。
+<<set _mason to (mpNpcMet("Mason") ? "梅森" : "泳池边的教练")>><<set _whitney to (mpNpcMet("Whitney") ? "惠特尼" : "那个大孩子")>>
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+旧体育馆在操场东侧，屋顶的铅皮被风掀开过一角。器械间的门上是老式搭扣锁，锁鼻缠着生锈的铁丝。推开门，一股橡胶、汗和霉木头的混合气味涌出来：跳箱叠在墙角，肋木架缺了两根横杆，成卷的旧垫子靠墙立着。馆内另一头，<<print _whitney>>把一个小个子学生堵在跳箱后面，手里晃着对方的运动鞋；<<print _mason>>站在场边，脖子上挂着哨子，眼睛盯着地上的白线，没有吹哨，也没有走开。你可以清点储物柜，也可以检查地板暗格。
 <br><br>
 <<getouticon>><<link [[返回学园中层 (0:02)|MP Loc School Mid]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[清点锁闭储物 (0:12)|MP Loc School Mid]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[清点锁闭储物 (0:12)|MP Loc School Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[检查地板暗格 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
+<<if _choreOpen>><<investigateicon>><<if ($athletics or 0) gte 240 or ($willpower or 0) gte 420>><<link [[清点储物 (0:12)|MP Loc School Mid]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[清点储物 (0:12)|MP Loc School Mid]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br><<else>><span class="disabled">清点锁闭储物（午休 12–13 或放学 15–18）</span><br><</if>>
+<<mpveilicon>><<link [[查地板暗格 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
 
 :: MP Loc School Event 5 [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-钟塔的楼梯是石头的，转着圈往上，越走越窄。旧档案室在钟室下面一层，门上的铜牌被摸得发亮，字却磨平了，只剩几道浅浅的凹痕。屋里没有窗，靠墙一排铁皮柜，柜顶堆着落满灰的卷宗，绳子捆着，绳结是很多年前打的，已经硬得像木头。
-<br><br>
-这里的纸比人活得久。建校志书摊在最上面的架子上，皮面裂开，露出底下发黄的纸芯；翻开来看，最早的几页记着捐地人的名字、第一批教员的数目、钟塔落成那天的天气。再往后翻，字迹换了几个人的手，有些段落被墨水涂掉，涂得很用力，纸都起了毛；有些页整张不见了，只剩下参差的纸根。
-<br><br>
-台灯的光圈很小，只够罩住一页纸。其余的架子都沉在暗处，卷宗的影子在墙上叠成一片。你听见自己的呼吸声，也听见钟塔里某根轴转动时发出的干涩摩擦，一声长，一声短。
-<br><br>
-你可以就着台灯一页页读下去。灰尘呛人，翻页要轻，纸一碰就碎；读到关键处，得把涂掉的字对着光辨认，或者从前后文的称呼里推断被删去的是谁。这活耗神，读到后面眼睛发涩，太阳穴一跳一跳地疼。可只要读通了，那些被藏起来的事就会连成一条线：谁在什么时候买下了这块地，谁签的字，谁后来又把它从记录里抹掉。
-<br><br>
-纸背面的透痕也值得留意：有些字是正面写不下才转到背面的，有些则是先写了别的内容，又被人划掉重新利用。两种痕迹混在一起，像两层不同年份的雨。
-<br><br>
-也可以去做另一件更琐碎的事：把散落的撕页按纸边的毛口拼回去。有的页被撕成三四片，混在不同的卷宗里；有的只剩半张，另一半怎么也找不到。拼的时候要把纸片摊平、对纹路、看背面的印痕，拼错一片，后面的全对不上。跪在地上久了，膝盖会硌得生疼，手指也会被纸边割出细口子。
-<br><br>
-钟室那边传来齿轮转动的闷响，整间屋子跟着轻轻一震，柜顶的灰簌簌落下来。你听见楼下有人在走动，脚步停在楼梯中段，又折了回去。
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+钟塔的楼梯是石头的，转着圈往上，越走越窄。旧档案室在钟室下面一层，屋里没有窗，靠墙一排铁皮柜，柜顶堆着落满灰的卷宗，绳子捆着，绳结硬得像木头。建校志书摊在最上面的架子上，皮面裂开，露出底下发黄的纸芯；最早的几页记着捐地人的名字、第一批教员的数目、钟塔落成那天的天气。再往后翻，有些段落被墨水涂掉，有些页整张不见了，只剩参差的纸根。台灯的光圈很小，只够罩住一页纸。
 <br><br>
 <<getouticon>><<link [[返回学园深层 (0:02)|MP Loc School Deep]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($skulduggery or 0) gte 250 or ($willpower or 0) gte 420>><<link [[翻阅建校志书 (0:12)|MP Loc School Deep]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[翻阅建校志书 (0:12)|MP Loc School Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[拼合撕页目录 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
+<<if _choreOpen>><<mplettericon>><<if ($skulduggery or 0) gte 250 or ($willpower or 0) gte 420>><<link [[翻阅志书 (0:12)|MP Loc School Deep]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[翻阅志书 (0:12)|MP Loc School Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br><<else>><span class="disabled">翻阅建校志书（午休 12–13 或放学 15–18）</span><br><</if>>
+<<socialiseicon>><<link [[拼撕页目录 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
 
 :: MP Loc School Event 6 [nobr]
-<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-地下锅炉暗廊的入口在食堂后厨的杂物间后面，铁栅门虚掩着，门轴上的油早干了。往下走，温度一层层升上来，空气变得又湿又重，呼吸时能尝到铁锈味。锅炉本体在暗廊尽头，外壳包着石棉，接缝处噗噗地冒白汽；管道沿着穹顶铺开，像一堆盘起来的旧蛇，每隔一段就有一只阀门，手轮上缠着褪色的红漆。
-<br><br>
-地面是湿的。靠墙那侧的水位线一道比一道高，最新的那道还挂着水珠；雾潮涨起来的时候，外面的水会顺着暗渠倒灌，先漫过脚踝，再漫过膝弯。铁栅后面另有一条更窄的通道，尽头是一扇封存的铁门，门缝里塞过麻絮，又被水泡得发黑。墙上用粉笔写着几个日期，最后那个日期后面画了一道横线，没有下文。
-<br><br>
-管道上挂着一盏防爆灯，玻璃罩被熏得发黄，光落在水面上，晃成一片碎金。你的影子被拉得很长，投在湿墙上，随着蒸汽的晃动一伸一缩。暗廊深处传来一声闷响，像有什么重物在水里翻了个身；你停下来听，声音又没了。
-<br><br>
-蒸汽阀门在叫，声音细而急。要排查它，得先关掉上游的总阀，等压力降下来，再用扳手一点点松开压盖，换掉里面硬化的垫圈。暗廊里闷热，站一会儿汗就顺着脊背往下淌；扳手打滑时，滚烫的蒸汽会从缝里喷出来，手背立刻红一片。这活靠的是耐性和胆子，越急越容易出错。
-<br><br>
-也可以去开那扇封存的铁门。门后的搭扣锈死了，得用撬棍一点点别开，或者从侧面把合页的销子敲出来。门一开，里面的气味会先涌出来——不是霉，是更旧的东西。你不知道门后有什么，只知道墙上那些日期停在这里，而学校最老的几份图纸上，这条通道的尽头是空白的。
-<br><br>
-锅炉发出一声长长的泄压鸣响，白汽顺着穹顶铺开，灯被遮得只剩一团昏黄。头顶传来上课铃，隔着一层层楼板，闷得像从水底传来。
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>><<set _choreOpen to ((Time.hour gte 12 and Time.hour lt 13) or (Time.hour gte 15 and Time.hour lt 18))>>
+地下锅炉暗廊的入口在食堂后厨的杂物间后面，铁栅门虚掩着。往下走，温度一层层升上来，空气又湿又重，呼吸时能尝到铁锈味。锅炉本体在暗廊尽头，外壳包着石棉，接缝处噗噗地冒白汽；管道沿着穹顶铺开，像一堆盘起来的旧蛇。靠墙那侧的水位线一道比一道高，最新的那道还挂着水珠。铁栅后面另有一条更窄的通道，尽头是一扇封存的铁门，门缝里塞过麻絮，又被水泡得发黑。管道上的防爆灯被熏得发黄，光落在水面上，晃成一片碎金。
 <br><br>
 <<getouticon>><<link [[返回学园深层 (0:02)|MP Loc School Deep]]>><<pass 2>><</link>><br>
-<<investigateicon>><<if ($willpower or 0) gte 400>><<link [[排查蒸汽阀门 (0:12)|MP Loc School Deep]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[排查蒸汽阀门 (0:12)|MP Loc School Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<socialiseicon>><<link [[开启封存铁门 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
+<<if _choreOpen>><<mpgearicon>><<if ($willpower or 0) gte 400>><<link [[排查阀门 (0:12)|MP Loc School Deep]]>><<pass 12>><<set $mpLocEvents_School += 1>><<set $mpLocProgress_School to Math.min(5, $mpLocProgress_School + 1)>><<stress -3>><</link>><<else>><<link [[排查阀门 (0:12)|MP Loc School Deep]]>><<pass 12>><<stress 4>><<tiredness 2>><</link>><</if>><br><<else>><span class="disabled">排查蒸汽阀门（午休 12–13 或放学 15–18）</span><br><</if>>
+<<mpdooricon>><<link [[开封印铁门 (0:12)|MP Loc School Hub]]>><<pass 12>><<set $mpLocEvents_School += 1>><<tiredness 2>><</link>>
 
 :: MP Loc School Ending A [nobr]
+<<set _noel to (($mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet) ? "诺艾尔" : "标本室的管理员")>><<set _leighton to (mpNpcMet("Leighton") ? "礼顿先生" : "教务处的老师")>>
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-<<set $mpWorldSchoolOutcome to "openarchive">><<set $mpLocProgress_School to 5>>
-旧馆的卷宗是在一个没有课的下午搬进阅览室的。推车来回走了七趟，最后一趟卸完，窗外的光已经斜到桌脚。你和几个学生把长桌拼起来，卷宗按年份摊开，绳子剪断，硬纸封皮一掀，几十年的灰尘同时扬起来，在光柱里翻滚了很久才落定。
+<<set $mpSchoolEnded to 1>><<set $mpWorldSchoolOutcome to "openarchive">><<set $mpLocProgress_School to 5>><<set $schoolrep to Math.max(0, ($schoolrep or 0) - 1)>>
+旧馆的卷宗在一个没有课的下午搬进阅览室。卷宗按年份摊开，绳子剪断，硬纸封皮一掀，灰尘同时扬起来。消息传得比预想快：高年级的挤在门口看，老师来了，连食堂帮工都端着盆过来问。<<print _leighton>>站在人群外，脸色一阵白一阵青，最后只把纸边捏出一道深折痕。<<print _noel>>来得晚，站在窗边说：「原来那几年缺的标本，是这么没的。公开了也好。」往后那些纸不再锁在铁皮柜里，谁能翻、谁不能翻，也不再由某一个人决定。
 <br><br>
-消息传得比预想快。先是几个高年级的挤在门口看，后来是老师，再后来连食堂的帮工都端着盆过来问了一句。有人蹲在桌边一页页翻，翻到某个名字时忽然不出声；有人把同伴叫过来，指着同一行字，两个人都不说话。礼顿先生站在人群外面，手里那叠处分单还夹在腋下，脸色一阵白一阵青，最后什么也没说，只把纸边捏出一道深折痕。
+<span class="red">校方记下了你这次越界，往后在教务处说话要多费些口舌。校誉 -1。</span>
 <br><br>
-有人把问题直接问到礼顿脸上，他没答，只是把处分单往腋下塞得更紧。也有人翻到跟自己家有关的记录，脸色变了，合上卷宗就往外走，走到门口又折回来。争论从下午持续到掌灯，声音时高时低，最后谁也没说服谁，但每个人都记住了几行字。
-<br><br>
-诺艾尔来得晚。她没挤到桌前，只站在窗边看了很久，然后说：「原来那几年缺的标本，是这么没的。」她把袖口放下来，理了理，「公开了也好。烂在柜子里，谁都不会认。」她说完看了你一眼，那一眼比平时长，「你今天最好去吃点东西，别又空着肚子。」
-<br><br>
-天黑以后，阅览室只剩几盏灯。你帮着把翻乱的卷宗按年份收回推车，指尖沾满灰，怎么也拍不干净。窗外操场的灯灭了一盏，另一盏还亮着，照着一小片空荡荡的跑道。
-<br><br>
-阅览室的灯一直亮到很晚。有学生在抄，有老师在争论，有人把卷宗抱到角落单独看。院子里风很大，钟塔照常报时，只是这一次，很多人抬起头听了。往后学校会变成什么样，谁也说不准，但至少那些纸不再锁在铁皮柜里，谁能翻、谁不能翻，也不再由某一个人决定。你把最后一捆绳子收进抽屉，铁皮柜门合上时发出一声轻响。
-<br><br>
-<<getouticon>><<link [[返回学园总枢 (0:04)|MP Loc School Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<getouticon>><<link [[回学园总枢 (0:04)|MP Loc School Hub]]>><<pass 4>><<stress -6>><</link>><br>
 <<walkicon>><<link [[返回学园深层 (0:04)|MP Loc School Deep]]>><<pass 4>><</link>>
 
 :: MP Loc School Ending B [nobr]
+<<set _noel to (($mpNpcs and $mpNpcs.noel and $mpNpcs.noel.hasMet) ? "诺艾尔" : "标本室的管理员")>><<set _leighton to (mpNpcMet("Leighton") ? "礼顿先生" : "教务处的老师")>><<set _whitney to (mpNpcMet("Whitney") ? "惠特尼" : "那个大孩子")>><<set _kylar to (mpNpcMet("Kylar") ? "凯拉尔" : "那个瘦小的学生")>>
 <<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
-<<set $mpWorldSchoolOutcome to "curated">><<set $mpLocProgress_School to 5>>
-学会的人来得很准时，三个人，两辆车，车上装着木箱、封条和一罐浆糊。卷宗没有搬进阅览室，而是就地清点：一本本摊开，编上号，装进箱子，箱口贴上盖了铜章的纸条。他们做事很安静，翻页轻，写字也轻，偶尔低声交换一两个词，像在核对一份早就拟好的清单。
+<<set $mpSchoolEnded to 1>><<set $mpWorldSchoolOutcome to "curated">><<set $mpLocProgress_School to 5>><<set $delinquency to Math.min(99, ($delinquency or 0) + 1)>>
+学会的人来得很准时，三个人，两辆车，车上装着木箱和封条。卷宗就地清点：编上号，装进箱子，箱口贴上盖了铜章的纸条。<<print _leighton>>全程陪着，脸色比前几天松快；他给来人倒茶，又亲手搬上最后一箱：「这样最好，东西有人管，规矩也就立起来了。」车开走后，学会在门厅留下一张编号空着的收据。<<print _noel>>在标本室门口拦住你：「我数了箱子，比册子上记的少一箱。少的那箱，编号是最后几页的。」
 <br><br>
-礼顿先生全程陪着，脸色比前几天松快不少。他给来人倒茶，又亲自把最后一箱搬上车，回来时还整了整领口。「这样最好，」他对围观的老师说，「东西有人管，规矩也就立起来了。学生该念书就念书。」话说得四平八稳，没人接。
+<span class="red">有学生看见你站在学会的车旁，走廊里的招呼少了，违纪的帽子却更容易扣到你头上。违纪 +1。</span>
 <br><br>
-车开走后，学会的人在门厅留下一张收据，编号一栏空着，只盖了章。礼顿把收据折好收进内袋，回头吩咐门房换一把旧馆的新锁。浆糊的味道还没散，混着旧纸的霉味，在走廊里飘了很久。
-<br><br>
-走廊上，几个学生趴在窗台看车开走。有人小声说了一句什么，另一个人笑了一下，笑得很短。惠特尼抱着手臂站在人群外，什么也没说，转身踢了一脚储物柜。凯拉尔从窗台最里头探出头，看了一眼空掉的推车，又缩回去。
-<br><br>
-诺艾尔在标本室门口拦住你。她没提高声音：「他们搬走的时候，我数了箱子。比册子上记的少一箱。」她把手在围裙上擦了擦，垂着眼，「少的那箱，编号是最后几页的。你以后要是还想看，得知道该问谁。」她顿了顿，「别空着肚子去问。」
-<br><br>
-那天下课后，阅览室的门锁着，窗子却开了一条缝。风把桌上的灰吹出几道纹路，像有人用手指划过又抹平。
-<br><br>
-傍晚的校园安静得有些过分。钟塔照常报时，齿轮咬合的声音传下来，一下一下。阅览室的长桌上什么也没留下，只有桌角一小片没擦净的灰，和几道箱子压出的浅痕。往后借阅要两道签字，知情的人把话咽了回去；至于那些咽下去的话会不会在别处发芽，现在还没人知道。走廊尽头的钟又敲了一下，声音在空楼里散得很慢，门口的地垫上留着几个带灰的鞋印。
-<br><br>
-<<getouticon>><<link [[返回学园总枢 (0:04)|MP Loc School Hub]]>><<pass 4>><<stress -6>><</link>><br>
+<<getouticon>><<link [[回学园总枢 (0:04)|MP Loc School Hub]]>><<pass 4>><<stress -6>><</link>><br>
 <<walkicon>><<link [[返回学园深层 (0:04)|MP Loc School Deep]]>><<pass 4>><</link>>
+
+:: MP Loc School Class [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
+<<set $schoolrep to ($schoolrep or 0)>><<set $delinquency to ($delinquency or 0)>><<set $schoolstate to ($schoolstate or 0)>>
+<<set $mpSchoolClassCount to (Number($mpSchoolClassDay) is Number(Time.days) ? ($mpSchoolClassCount or 0) : 0)>><<set $mpSchoolClassDay to Time.days>>
+<<set _schoolDay to (Time.weekDay gte 1 and Time.weekDay lte 5)>>
+<<set _inClass to (_schoolDay and ((Time.hour gte 9 and Time.hour lt 12) or (Time.hour gte 13 and Time.hour lt 15)))>>
+<<set _lunch to (Time.hour gte 12 and Time.hour lt 13)>>
+<<set _period to (Time.hour gte 13 ? (Time.hour gte 14 ? 5 : 4) : (Time.hour gte 11 ? 3 : (Time.hour gte 10 ? 2 : 1)))>>
+<<set _subject to ((_period is 2 or _period is 5) ? "english" : ((_period is 3) ? "science" : "maths"))>>
+<<set _skill to ((_subject is "english") ? ($english or 0) : ((_subject is "science") ? ($science or 0) : ($maths or 0)))>>
+<<set _subjName to ((_subject is "english") ? "文法" : ((_subject is "science") ? "自然" : "算术"))>>
+<<if _inClass and $mpSchoolClassCount lt 5>>
+这一节是第 <<print _period>> 节的 <<print _subjName>> 课。粉笔灰浮在窗光里，前排的笔记翻得哗哗响，后排有人把课本立起来挡着脸。你摊开练习册，先生讲的每一句都要当场记下；答不上来的时候，走廊尽头的钟会替你数着停顿。<<if Number($schoolstate) lte 0>>你的名字还不在册上，只能站在后排旁听。<<else>>先生点名时跳过了你，却把目光在你身上多停了一息。<</if>>
+<<mpSchoolEventRoll "break">>
+<br><br>
+<<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
+<<investigateicon>><<link [[认真听课 (1:00)|MP Loc School Class]]>><<pass 60>><<set $mpSchoolClassDay to Time.days>><<set $mpSchoolClassCount to ($mpSchoolClassCount or 0) + 1>><<set $schoolrep to Math.min(100, ($schoolrep or 0) + 1)>><<set $delinquency to Math.max(0, ($delinquency or 0) - 1)>><<stress -1>><<if _skill gte 200>><<set $schoolrep to Math.min(100, $schoolrep + 1)>><span class="green">你把先生的板书和例题都记了下来，答问时没有卡壳。校誉 +1。</span><<else>><<set $schoolrep to Math.max(-5, $schoolrep - 2)>><<stress 2>><span class="red">有一道题你没跟上，先生的粉笔在讲台上敲了两下。校誉净 -1。</span><</if>><</link>><br>
+<<mplettericon>><<link [[翘掉这节课 (1:00)|MP Loc School Class]]>><<pass 60>><<set $mpSchoolClassDay to Time.days>><<set $mpSchoolClassCount to ($mpSchoolClassCount or 0) + 1>><<set $delinquency to Math.min(99, ($delinquency or 0) + 1)>><<set $schoolrep to Math.max(-5, ($schoolrep or 0) - 1)>><<stress 1>><span class="red">你从后门溜了出去，值日生把你的空位记在了考勤表上。违纪 +1，校誉 -1。</span><</link>>
+<<elseif _lunch>>
+午休的铃一响，走廊立刻被人潮填满。食堂的餐车从后门推上来，热气在冷空气里翻成白雾；教室这边却安静下来，几张课桌拼在一起，有人趴着补觉，有人翻着下午的课本。你还有一刻钟可以喘口气，下午的课一点准时开始。
+<br><br>
+<<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
+<<mpcleanicon>><<link [[午休打个盹 (1:00)|MP Loc School Class]]>><<pass 60>><<stress -2>><<tiredness -1>><<set $mpSchoolClassDay to Time.days>><</link>>
+<<elseif _schoolDay and Time.hour gte 6 and Time.hour lt 9>>
+校门刚开，走廊里还带着夜里的凉气。值日生拖着水桶从你身边过去，教室的门一扇扇打开，早读的声音还没起来。第一节课九点开始，来早了只能在门厅里等，或者翻翻昨天没看完的课本。
+<br><br>
+<<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
+<<if not ($daily and $daily.mpSchoolWait is Time.days)>><<mplettericon>><<link [[翻翻旧课本 (0:10)|MP Loc School Class]]>><<pass 10>><<set $daily to ($daily or {})>><<set $daily.mpSchoolWait to Time.days>><<stress -1>><</link>><<else>><<mplettericon>><<link [[在门厅等到上课 (0:10)|MP Loc School Class]]>><<pass 10>><</link>><</if>>
+<<elseif _inClass>>
+五节课都已经过去了，教室的灯关了一半，黑板上只剩值日生没擦净的边角。你把课本收进包里，走廊里的人在往校门走，钟塔的指针已经越过放学的刻度。
+<br><br>
+<<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
+<<walkicon>><<link [[去操场边 (0:06)|MP Loc School Season]]>><<pass 6>><</link>>
+<<else>>
+今天没有课。教室的门锁着，窗帘拉了一半，走廊里只有门房拖地的声音。操场那边偶尔传来哨响，钟塔照常报时，学园的日子按钟点走，错过这一节就只能等下一个上学的日子。
+<br><br>
+<<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
+<<walkicon>><<link [[去操场边 (0:06)|MP Loc School Season]]>><<pass 6>><</link>>
+<</if>>
+
+:: MP Loc School Detention [nobr]
+<<set $outside to 0>><<set $location to "school">><<effects>><<mpAmbient>><<set $mpLocProgress_School to ($mpLocProgress_School or 0)>><<set $mpLocEvents_School to ($mpLocEvents_School or 0)>>
+<<set $mpDetentionServed to (Number($mpDetentionDay) is Number(Time.days) ? ($mpDetentionServed or 0) : 0)>><<set $mpDetentionDay to Time.days>>
+<<set $delinquency to ($delinquency or 0)>><<set $schoolrep to ($schoolrep or 0)>><<set $detention to ($detention or 0)>>
+<<set _canDetain to ((Time.weekDay gte 1 and Time.weekDay lte 5) and Time.hour gte 15 and Time.hour lt 18 and $delinquency gte 3 and $mpDetentionServed is 0)>>
+<<if _canDetain>>
+放学的铃已经响过，走廊里的人散得很快，只有留堂教室的灯还亮着。黑板上写着一行抄写范围，讲台边摆着一摞裁好的纸和一支蘸水笔。先生把名册翻到你的名字，指尖在违纪次数上停了一下：「规矩写在那儿，抄完再走。」
+<br><br>
+<<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
+<<mpcleanicon>><<link [[留下抄写 (1:00)|MP Loc School Detention]]>><<pass 60>><<set $detention to ($detention or 0) + 1>><<set $delinquency to Math.max(0, ($delinquency or 0) - 2)>><<set $mpDetentionServed to 1>><<stress 2>><span class="green">你把抄写交上去，先生核过遍数，在名册上划了一道。留堂记录 +1，违纪 -2。</span><</link>><br>
+<<mplettericon>><<link [[甩下笔就走 (0:10)|MP Loc School Hub]]>><<pass 10>><<set $delinquency to Math.min(99, ($delinquency or 0) + 2)>><<set $schoolrep to Math.max(-5, ($schoolrep or 0) - 2)>><<stress 2>><span class="red">你拉开教室门走了出去，先生没有追，只在名册上又添了一笔。违纪 +2，校誉 -2。</span><</link>>
+<<else>>
+留堂教室的灯亮着，门却从里面锁上了。名册摊在讲台上，今天这一栏已经画过线；走廊尽头传来门房锁校门的声音。今天没有再要你留下的事，回总枢去吧。
+<br><br>
+<<getouticon>><<link [[返回学园总枢 (0:02)|MP Loc School Hub]]>><<pass 2>><</link>><br>
+<<walkicon>><<link [[去学园表层看看 (0:04)|MP Loc School Surface]]>><<pass 4>><</link>>
+<</if>>
+
+:: Widgets MP School Event [widget nobr]
+<<widget "mpSchoolEventRoll">>
+	<<set _slot to (String(_args[0] || "enter") is "break" ? "mpSchoolBreak" : "mpSchoolEnter")>>
+	<<set _day to (window.Time ? Time.days : 0)>>
+	<<if not ($daily and $daily[_slot] is _day)>>
+		<<set $daily to ($daily or {})>>
+		<<set $daily[_slot] to _day>>
+		<<set _roll to random(1, 100)>>
+		<<if _roll lte 24>>
+			<br><span class="blue">【迟到】</span>校门的铁栅已经合上一半，走廊里传来第一遍铃声。你贴着墙根往里走，鞋底在光亮的木地板上打滑，回声一路追到楼梯口。
+			<<if (($athletics or 0) gte 200 or random(1, 100) lte 55)>>
+				你赶在先生转身之前溜进后门，没人抬头。<<stress 1>>
+			<<else>>
+				值日生把你的名字记在门边的小本上，先生隔着讲台看了你一眼。<<set $delinquency to ($delinquency or 0) + 1>><<set $schoolrep to Math.max(-5, ($schoolrep or 0) - 1)>><<stress 2>><span class="red">违纪 +1，校誉 -1。</span>
+			<</if>>
+		<<elseif _roll lte 44>>
+			<br><span class="blue">【告状】</span>两个学生堵在楼梯口，说昨天走廊上的事是你起的头。围观的人越聚越多，谁也没把话说明白。
+			<<if (($english or 0) gte 250 or ($willpower or 0) gte 300 or random(1, 100) lte 45)>>
+				你把前后经过讲清楚，先生摆摆手让众人散了。<<stress 1>>
+			<<else>>
+				话传到教务处时已经变了样，先生在你的名字旁画了个圈。<<set $schoolrep to Math.max(-5, ($schoolrep or 0) - 1)>><<stress 2>><span class="red">校誉 -1。</span>
+			<</if>>
+		<<elseif _roll lte 64>>
+			<br><span class="blue">【争执】</span>操场边的两个人从推搡变成扭打，书包甩在地上，围观的人自动让出一圈。
+			<<if (($physique or 0) gte 3000 or ($willpower or 0) gte 350 or random(1, 100) lte 40)>>
+				你挤进去把两个人分开，顺手把书包踢还给主人。<<stress 1>>
+			<<else>>
+				你被卷进人堆，等先生赶来时，三个人一起被记了名。<<set $delinquency to ($delinquency or 0) + 1>><<stress 2>><span class="red">违纪 +1。</span>
+			<</if>>
+		<<elseif _roll lte 84>>
+			<br><span class="blue">【偶遇】</span>图书室最里面那排书架后有人影。<<if mpNpcMet("Noel")>>诺艾尔抱着一摞标本册，正踮脚够最上层的书。<<elseif mpNpcMet("Lin")>>林恩把一本旧地图摊在窗台上，手指压着折角。<<elseif mpNpcMet("Monet")>>莫奈靠在书架边，翻着一本边角起毛的账册。<<else>>管理员在梯子上整理书脊，听见脚步也没回头。<</if>>
+			<<if mpNpcMet("Noel") or mpNpcMet("Lin") or mpNpcMet("Monet")>>
+				对方替你抽出够不着的书，又低声说了两句旧馆的事。<<set $schoolrep to Math.min(100, ($schoolrep or 0) + 1)>><<stress -1>><span class="green">校誉 +1。</span>
+			<<else>>
+				你在书架间转了一圈，只找到一本被翻烂的旧课本。<<set $schoolrep to Math.max(-5, ($schoolrep or 0) - 1)>><<stress 1>><span class="red">校誉 -1。</span>
+			<</if>>
+		<<else>>
+			<br><span class="blue">【积水】</span>雨水把门厅前的砖地浸得反光，几步远的地方积了一汪水。学生踮着脚从边上绕，有人踩翻木板，溅起一片。
+			<<if (($athletics or 0) gte 200 or random(1, 100) lte 50)>>
+				你踩着干处绕过去，裤脚只湿了一点。<<stress -1>>
+			<<else>>
+				你一脚踩进水里，鞋袜全湿，走到教室时地上留下一串水印。<<set $schoolrep to Math.max(-5, ($schoolrep or 0) - 1)>><<stress 2>><span class="red">校誉 -1。</span>
+			<</if>>
+		<</if>>
+	<</if>>
+<</widget>>

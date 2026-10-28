@@ -16,7 +16,8 @@
 他打量你片刻，目光在你鞋底停了一下。你没沾河泥，是从石径来的。他没说什么，只把火拨旺，往你这边推了推。那点火光落在两人之间，把各自的脸照出一半，另一半还沉在暗里。他的回答一句是一句，句句落在路上，别的一个字也不多。你要问什么，他会答；你不问，他就安静地擦弓弦，擦完一段，抬头看看天，再擦下一段。
 <</if>>
 <br><br>
-【<<print (_npc.axisLabel or "火种")>>】<<print _axis>>/100 —— 他肯把多少条路交到你脚下
+<<set _axisC to (_axis >= 80 ? "mp-ro-c-gold" : _axis >= 60 ? "mp-ro-c-green" : _axis >= 35 ? "mp-ro-c-teal" : _axis >= 15 ? "mp-ro-c-blue" : "mp-ro-c-grey")>>
+<div class="mp-ro"><<print '<div class="mp-ro-row"><span class="mp-ro-k">' + (_npc.axisLabel || "火种") + '</span><span class="mp-ro-v ' + _axisC + '">' + _axis + '/100</span><span class="mp-ro-note">他肯把多少条路交到你脚下</span></div>'>></div>
 <br><br>
 猎犬从石径那头跑回来，在火边转了两圈，把鼻子埋进阿什的靴缝里。他伸手替它摘掉耳后的一根刺果，动作比说话慢。远处林冠翻了一下，他抬眼确认只是风，才继续低头拨火。
 <br><br>
@@ -336,7 +337,7 @@
 <<getouticon>><<link [[回林间营地 (0:02)|MP NPC Ash Daily Hub]]>><<pass 2>><</link>>
 
 :: MP NPC Ash Street 1 [nobr]
-<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.ash>><<set $mpNpcs.ash to {}>><</if>>
 <<set _npc to $mpNpcs.ash>>
@@ -353,19 +354,19 @@
 界石上的铜牌被日头晒得发烫，三根布条垂在石头侧面，风一过就轻轻碰一下。阿什把布条捋直，说这条溪每年都要带走一两个人，多半是觉得自己走得快。他说完把布条末端在指间捻了捻，确认结扣没有松。
 <br><br>
 <div id="ash-street-1">
-<<socialiseicon>><<link "站在界外喊他 (0:05)">><<pass 5>><<if ($english or 0) gte 220 or ($willpower or 0) gte 260>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -1>><<replace "#ash-street-1">>
+<<socialiseicon>><<link "站在界外喊他 (0:05)">><<pass 5>><<if ($english or 0) gte 220 or ($willpower or 0) gte 260>><<if !$daily.mpLock_MPNPCAshStreet1_1>><<set $daily.mpLock_MPNPCAshStreet1_1 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-1">>
 你蹲下来，让自己的声音比溪水低。你叫孩子先看脚下，再看你，一步一步往后退，不要跑。孩子抽着鼻子照做了，退到界石边时，阿什伸手把他拎过刻线。风筝还挂在对岸，他没去捡，只蹲下来替孩子把鞋带系紧，说：「线断了可以再买。脚滑了，买不回来。」孩子点点头。阿什站起来时望了你一会儿，比平时多停了两息。
 <</replace>><<else>><<stress 2>><<tiredness 1>><<replace "#ash-street-1">>
 你喊得太急，孩子吓了一跳，往后一退，脚正好踩在那块活石上。石头一翻，他整个人往溪里滑。阿什冲过界石，一把抓住孩子的后领，自己的靴子也踩进了水里。孩子被拎回岸上，哭得更大声，阿什的裤腿湿到膝盖。他把孩子交给赶来的镇上妇人，回头看你，没说什么，只把湿靴子在石头上磕了磕。
 <</replace>><</if>><</link>>
 <br>
-<<walkicon>><<link "涉水过去牵他 (0:08)">><<pass 8>><<if ($athletics or 0) gte 240 or ($tending or 0) gte 240>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 1)>><<stress -1>><<replace "#ash-street-1">>
+<<walkicon>><<link "涉水过去牵他 (0:08)">><<pass 8>><<if ($athletics or 0) gte 240 or ($tending or 0) gte 240>><<if !$daily.mpLock_MPNPCAshStreet1_2>><<set $daily.mpLock_MPNPCAshStreet1_2 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-1">>
 你踩着露头的三块石头过了溪，水漫到小腿，凉得发麻。孩子看见你过来，主动伸出手。你把他抱回岸上，阿什在界石边接过去，先摸孩子的脚，确认没冻僵，才让他站好。风筝没捡，阿什说那根枝太细，不值当。孩子走的时候回头挥了挥手。阿什看着孩子跑远，才低声说：「水不深。可你刚才踩的那块石头，去年淹死过一个人。」他说完把绳头收好，没再多讲。
 <</replace>><<else>><<pain 1>><<tiredness 2>><<stress 2>><<replace "#ash-street-1">>
 你走到溪中间，脚下一块石头翻了。水一下子漫到腰，你伸手去抓岸边的草，草根却被拽断了。阿什把绳子甩过来，喊你抓住。你抓住绳头，被他一点点拖回岸上，膝盖在石头上磕出了血。孩子倒是没再往前走，站在原地看傻了。阿什先把你按在界石边坐下，才过去把孩子带回来。他回来时脸色不好，只说：「我说过石头是活的。」
 <</replace>><</if>><</link>>
 <br>
-<<mpanimalicon>><<link "放狗去引他 (0:07)">><<pass 7>><<if ($tending or 0) gte 240 or ($willpower or 0) gte 300>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -1>><<replace "#ash-street-1">>
+<<mpanimalicon>><<link "放狗去引他 (0:07)">><<pass 7>><<if ($tending or 0) gte 240 or ($willpower or 0) gte 300>><<if !$daily.mpLock_MPNPCAshStreet1_3>><<set $daily.mpLock_MPNPCAshStreet1_3 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-1">>
 阿什俯身在猎犬耳边说了句什么，狗就沿着溪岸慢慢跑过去。它没有叫，跑到孩子身边停下，用鼻子碰了碰孩子的膝盖，然后转身往回走，走两步回头看一眼。孩子犹豫了一下，跟着它退回界石边。阿什蹲下来，让孩子摸了摸狗脖子，说：「它认得路。你跟着它，就不会踩错。」孩子走的时候，狗一直把他送到镇上来的妇人身边才回来。阿什在它背上拍了拍，没夸，只把绳头重新系好。
 <</replace>><<else>><<stress 2>><<tiredness 1>><<replace "#ash-street-1">>
 猎犬跑过去时太急，孩子吓得往后退，一脚踩进溪边的软泥里。狗围着他转圈，孩子哭得更凶，怎么也不肯动。阿什只好自己过去，把孩子从泥里拔出来，靴子都陷掉了一只。回来时他一手拎着孩子，一手拎着那只泥靴，猎犬垂着尾巴跟在后面。他把孩子交给妇人，回头看了狗一眼，没骂，只叹了口气。
@@ -375,7 +376,7 @@
 <<getouticon>><<link [[回界石边 (0:02)|MP NPC Ash Street Hub]]>><<pass 2>><</link>>
 
 :: MP NPC Ash Street 2 [nobr]
-<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "town">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.ash>><<set $mpNpcs.ash to {}>><</if>>
 <<set _npc to $mpNpcs.ash>>
@@ -388,19 +389,19 @@
 老板不肯，秤砣在手里一上一下地颠。坡上有人停下来看热闹，没人搭手。阿什的肩膀还顶着车架，额角已经见了汗。他偏头看你一眼：「你想先弄车，还是先弄秤？两样我都能应付，就是得分个先后。」
 <br><br>
 <div id="ash-street-2">
-<<mpcarryicon>><<link "帮他抬住车轴 (0:08)">><<pass 8>><<if ($athletics or 0) gte 250 or ($physique or 10000) gte 11000>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -1>><<replace "#ash-street-2">>
+<<mpcarryicon>><<link "帮他抬住车轴 (0:08)">><<pass 8>><<if ($athletics or 0) gte 250 or ($physique or 10000) gte 11000>><<if !$daily.mpLock_MPNPCAshStreet2_1>><<set $daily.mpLock_MPNPCAshStreet2_1 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-2">>
 你蹲到车轴下面，用肩膀顶住，阿什腾出手把卡住的轮子往外掰。车轴响了一声，轮子终于从石缝里出来。你们一鼓作气把车推上坡，炭筐晃了晃，没翻。阿什直起腰，活动了一下肩膀，才对老板说：「车到了。秤呢？」老板看了看围过来的人，把秤砣放平，按原价称了。阿什收钱时数都没数，只把铜板塞进腰袋，回头对你说：「下回别用肩膀顶轴。轴断的时候，先退。」
 <</replace>><<else>><<pain 1>><<tiredness 2>><<stress 2>><<replace "#ash-street-2">>
 你肩膀刚顶上去，车轴就发出一声脆响，断成两截。车架往一边歪，炭筐翻下来，黑灰扬了半条街。阿什一把把你拽开，自己的手背被车架擦出一道口子。老板站在门口直跺脚，说炭撒了要扣钱。阿什没理他，蹲下去把还能用的炭一块块捡回筐里，捡完才说：「轴断了，车今天上不去。你扣吧。」他说话时很平静，你肩膀却疼得抬不起来。
 <</replace>><</if>><</link>>
 <br>
-<<mpbargainicon>><<link "替他跟老板论秤 (0:06)">><<pass 6>><<if ($english or 0) gte 240 or ($willpower or 0) gte 280>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -1>><<replace "#ash-street-2">>
+<<mpbargainicon>><<link "替他跟老板论秤 (0:06)">><<pass 6>><<if ($english or 0) gte 240 or ($willpower or 0) gte 280>><<if !$daily.mpLock_MPNPCAshStreet2_2>><<set $daily.mpLock_MPNPCAshStreet2_2 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-2">>
 你把老板的秤砣拿过来，放在手心里掂了掂，又让他把秤杆放平。秤砣底下沾着一层湿泥，重量不对。你没提高声音，只把秤杆指给围观的人看。老板的脸涨红了，嘴上还硬，手却把秤砣擦了。阿什在旁边看着，没插话，等价钱说定了才把车往前推。走的时候他对你说：「秤可以论。人不可以逼。你刚才留了半步，很好。」这话听着像评路，其实是在夸你。
 <</replace>><<else>><<stress 3>><<tiredness 1>><<replace "#ash-street-2">>
 你说得急了，老板把秤砣往台上一拍，说你们是一伙的，想讹他。围观的人议论起来，阿什把车架放下，走过来站在你旁边，没有帮你说话，只把炭筐的布掀开，让众人看里头的炭。炭是干的，断面发亮。老板还想争，阿什却把布盖回去，说：「不卖了。」他推着车往回走，你跟在后头，脸上发烫。走到坡下，他才说：「论不赢就走。跟秤较劲，费的是自己的气。」
 <</replace>><</if>><</link>>
 <br>
-<<shopicon>><<link "先卸半车炭 (0:10)">><<pass 10>><<tiredness 2>><<if ($athletics or 0) gte 230>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 1)>><<stress -1>><<replace "#ash-street-2">>
+<<shopicon>><<link "先卸半车炭 (0:10)">><<pass 10>><<tiredness 2>><<if ($athletics or 0) gte 230>><<if !$daily.mpLock_MPNPCAshStreet2_3>><<set $daily.mpLock_MPNPCAshStreet2_3 to 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-2">>
 你和阿什把上面半车炭先卸到路边，车架轻了，轮子从石缝里抬出来。他没有急着走，先把卸下的炭重新码好，用布盖严，才对老板说：「半车先称。剩下半车，等轴修好再送。」老板还想压价，阿什把秤杆一扶，说：「你称多少，我认多少。多一两我也不要。」称完，他把铜板收好，回头把空筐递给你。你们推着空车回去，路上他说，重车下坡，先卸后推，这是老规矩。
 <</replace>><<else>><<pain 1>><<tiredness 2>><<stress 2>><<replace "#ash-street-2">>
 炭筐比看上去沉。你搬第三筐时腰一闪，筐沿磕在膝盖上，炭块滚了一地。阿什把车架重新顶住，过来扶你坐下，自己把撒出来的炭一块块捡回去。老板在旁边催，他没应，捡完才直起腰，说今天不卖了。回程你走得很慢，腰上一阵一阵地抽。阿什推着车，没让你再碰筐。
@@ -410,7 +411,7 @@
 <<getouticon>><<link [[回界石边 (0:02)|MP NPC Ash Street Hub]]>><<pass 2>><</link>>
 
 :: MP NPC Ash Street 3 [nobr]
-<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.ash>><<set $mpNpcs.ash to {}>><</if>>
 <<set _npc to $mpNpcs.ash>>
@@ -425,19 +426,19 @@
 他把绳头递给你，又指了指坡下：「扶住树干，或者去把老妇引到能过的地方。你挑。」
 <br><br>
 <div id="ash-street-3">
-<<mprepairicon>><<link "扶稳树干让他锯 (0:08)">><<pass 8>><<tiredness 1>><<if ($athletics or 0) gte 220 or ($physique or 10000) gte 10500>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -1>><<replace "#ash-street-3">>
+<<mprepairicon>><<link "扶稳树干让他锯 (0:08)">><<pass 8>><<tiredness 1>><<if ($athletics or 0) gte 220 or ($physique or 10000) gte 10500>><<if !$daily.mpLock_MPNPCAshStreet3_1>><<set $daily.mpLock_MPNPCAshStreet3_1 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-3">>
 你顶住树干，阿什顺着断口往下锯。木屑飞起来，落在你们肩上。锯到最后一寸，树干往下一沉，你膝盖一弯，硬是顶住了。阿什把锯子抽出来，和你一起把树干挪到路边。老妇这才从坡下过来，朝你们点了点头。阿什把横在路上的枝杈一根根折掉，说这条路今天还能走。他回头看你时，目光在你发抖的腿上停了一下，说：「回去用热水敷。」
 <</replace>><<else>><<pain 2>><<tiredness 2>><<stress 2>><<replace "#ash-street-3">>
 树干比看上去沉。锯到一半，你脚下一滑，树干往坡下滚了半圈，枝杈扫过来，在你小臂上划出一道长口子。阿什一把把你拉到树根后面，自己用肩膀顶住树干，等它停稳才松气。老妇吓得退回了坡下。阿什先看你的胳膊，再从腰袋里摸出布条替你缠上，缠完才回去重新锯。那条路多堵了半个时辰。
 <</replace>><</if>><</link>>
 <br>
-<<investigateicon>><<link "引老妇绕过去 (0:10)">><<pass 10>><<tiredness 1>><<if ($tending or 0) gte 220 or ($willpower or 0) gte 260>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 1)>><<stress -1>><<replace "#ash-street-3">>
+<<investigateicon>><<link "引老妇绕过去 (0:10)">><<pass 10>><<tiredness 1>><<if ($tending or 0) gte 220 or ($willpower or 0) gte 260>><<if !$daily.mpLock_MPNPCAshStreet3_2>><<set $daily.mpLock_MPNPCAshStreet3_2 to 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-3">>
 你沿坡下走了一段，找到一条被落叶盖住的旧岔道。岔道窄，可不用翻树，绕过去只多走几十步。你先把落叶踢开，试了试脚下的土，才回头招呼老妇。她走得很慢，你走在外侧，遇到湿滑的地方就伸手扶一下。等她过了那段路，阿什已经把树干锯开了一半。他远远看见你们，点了一下头，继续锯。后来他说，清路不只是把树挪开，有时候是给人找一条能走的路。
 <</replace>><<else>><<stress 3>><<tiredness 1>><<replace "#ash-street-3">>
 你找的那条岔道走到一半就断了，尽头是一片被雨水泡软的洼地。老妇踩进去，鞋陷在泥里，药篓也歪了。你扶她退回来，绕了一大圈，还是回到断树前。阿什已经锯开了树干，看见你们，把锯子放下，过来替老妇拎药篓。他没怪你，只说：「先试路，再叫人。顺序反了。」老妇走后，你把沾满泥的鞋在草上蹭了半天。
 <</replace>><</if>><</link>>
 <br>
-<<fisticon>><<link "合力把树拖开 (0:06)">><<pass 6>><<tiredness 1>><<if ($physique or 10000) gte 11200 or ($athletics or 0) gte 260>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -1>><<replace "#ash-street-3">>
+<<fisticon>><<link "合力把树拖开 (0:06)">><<pass 6>><<tiredness 1>><<if ($physique or 10000) gte 11200 or ($athletics or 0) gte 260>><<if !$daily.mpLock_MPNPCAshStreet3_3>><<set $daily.mpLock_MPNPCAshStreet3_3 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -1>><<replace "#ash-street-3">>
 你和阿什一人抬树梢，一人抬树根，喊着号子把树干往路边挪。树干比看上去重，抬到第三步时你的胳膊已经开始抖，可到底把它挪开了。阿什用脚把路上的碎枝扫到一边，又蹲下去看了看被压坏的土，说这条路明天还能走。他直起腰时喘得厉害，却先问你手有没有事。你说没事，他点点头，把锯子收进腰袋，说：「两个人抬，比一个人锯快。可要是抬不动，别硬抬。」
 <</replace>><<else>><<pain 2>><<tiredness 2>><<stress 3>><<replace "#ash-street-3">>
 树干刚离地，你的腰就使不上力了。树根那头一沉，整棵树往你这边歪，阿什赶紧撒手把你推开。树砸在地上，震起一片泥点。你的手掌被树皮磨破了，腰也扭了一下，站直都费劲。阿什没再让你碰树，自己把枝杈锯掉，一段一段拖到路边。等他弄完，天已经擦黑。他走过来看了看你的手，说：「重的活，先看自己的腰，再看树。」
@@ -447,7 +448,7 @@
 <<getouticon>><<link [[回界石边 (0:02)|MP NPC Ash Street Hub]]>><<pass 2>><</link>>
 
 :: MP NPC Ash Season [nobr]
-<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>>
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<if !$daily>><<set $daily to {}>><</if>>
 <<if !$mpNpcs>><<set $mpNpcs to {}>><</if>>
 <<if !$mpNpcs.ash>><<set $mpNpcs.ash to {}>><</if>>
 <<set _npc to $mpNpcs.ash>>
@@ -470,11 +471,11 @@
 「搭把手，」他说，「还是陪我多走一段？」
 <br><br>
 <div id="ash-season">
-<<mpastroicon>><<link "照他说的收尾 (0:10)">><<pass 10>><<tiredness 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -1>><<replace "#ash-season">>
+<<mpastroicon>><<link "照他说的收尾 (0:10)">><<pass 10>><<tiredness 1>><<if !$daily.mpLock_MPNPCAshSeason_1>><<set $daily.mpLock_MPNPCAshSeason_1 to 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -1>><<replace "#ash-season">>
 你按他说的顺序收：先把工具一件件擦净归位，再把火塘边的碎石码回圈里，最后把明天要用的柴搬到棚下。阿什在旁边看着，偶尔伸手把一件放歪的工具摆正，不催也不夸。活干完，火压好了，营地干净得像没人来过。他站在棚口看了一圈，说这样明天起来，手一伸就能摸到该摸的东西。这句话他说得很轻，却是他少有的满意。
 <</replace>><</link>>
 <br>
-<<walkicon>><<link "陪他多走一段 (0:12)">><<pass 12>><<tiredness 2>><<if ($athletics or 0) gte 250 or ($tending or 0) gte 250>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<replace "#ash-season">>
+<<walkicon>><<link "陪他多走一段 (0:12)">><<pass 12>><<tiredness 2>><<if ($athletics or 0) gte 250 or ($tending or 0) gte 250>><<if !$daily.mpLock_MPNPCAshSeason_2>><<set $daily.mpLock_MPNPCAshSeason_2 to 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><</if>><<stress -2>><<replace "#ash-season">>
 你跟他沿林缘又走了一段。他不走大路，专挑那些刚被风改过样子的地方：一段塌了半边的兽径、一棵新倒的树、一片被雪或落叶盖住的旧刻痕。每走到一处，他就停下来，用靴尖拨开覆盖物，让你看底下还认不认得出方向。走到界石时天已经暗了，他站在铜牌旁边，把三根布条逐一捋直，说：「路会变。记住怎么认，比记住路本身有用。」回程他走得很慢，正好让你跟得上。
 <</replace>><<else>><<pain 1>><<tiredness 2>><<stress 3>><<replace "#ash-season">>
 你跟到半路就跟不上了。脚下的路被落叶或雪盖着，看不出深浅，你一脚踩进一个被掏空的树根坑，脚踝别了一下。阿什回身把你拉出来，蹲下去捏了捏你的脚踝，说没伤到骨头，但今天不能再走。他扶你回营地，一路上把回程的每一处落脚点都指给你看。到火边，他拿雪或凉水替你敷了敷，没再多说什么。

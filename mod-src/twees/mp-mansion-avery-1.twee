@@ -10,7 +10,7 @@
 	"MP Mansion Briar VelvetLedger",
 	"MP Mansion Servant SilverTray",
 	"MP Mansion Gate GuardRain",
-	"MP Mansion Kitchen SculleryShift",
+	"MP Mansion Kitchen Scullery Duty",
 	"MP Mansion Conservatory ColdDraft",
 	"MP Mansion Bailey DebtEnvoy",
 	"MP Mansion Auction GuestList",
@@ -38,7 +38,7 @@
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set _exitPas to ($mpReturnPassage or "Danube Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
-<<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>>多瑙河街十八号铁门前停着黑色轿车。车窗半降，艾弗里看了一眼金表：「站在我身边别让我丢脸，先把衣领理好。」
+<<if $NPCName and mpNpcMet("Avery")>>多瑙河街十八号铁门前停着黑色轿车。车窗半降，艾弗里看了一眼金表：「站在我身边别让我丢脸，先把衣领理好。」
 <<if ($exposed or 0) gte 1>>见你衣衫不整，艾弗里脸色一沉，将后座羊绒大衣甩在你肩上。<<else>>艾弗里探身推开副驾车门，拨正你的领口。<</if>>
 <<else>>多瑙河街十八号雕花铁门外停着一辆黑漆轿车。车窗半降，一个戴金表的人打量你一眼：「新来的？上车，别多话。」<<if ($exposed or 0) gte 1>>见你衣衫不整，对方皱了皱眉，将后座羊绒大衣甩在你肩上。<<else>>对方探身推开副驾车门，朝座位抬了抬下巴。<</if>><</if>><br><br>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
@@ -46,22 +46,22 @@
 <div id="mansion-carinvite-choices">
 <<socialiseicon>><<link "坐进副驾 (0:08)">><<pass 8>><<replace "#mansion-carinvite-choices">>
 <<if ($english or 0) gte 240 or ($seductionskill or 0) gte 240 or ($willpower or 0) gte 400>>
-<span class="green">你稳稳坐进真皮座椅，将烫金席位卡上的议员座次核对得一清二楚。</span><<stress -4>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
+<span class="green">你稳稳坐进真皮座椅，将烫金席位卡上的议员座次核对得一清二楚。</span><<stress -4>><<lstress>><<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
 <<else>>
-<span class="red">你衣角带翻了银雪茄剪，又念错了两位商会的头衔。</span><<stress 5>><<gstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery rage 1>><</if>>
+<span class="red">你衣角带翻了银雪茄剪，又念错了两位商会的头衔。</span><<stress 5>><<gstress>><<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery rage 1>><</if>>
 <</if>>
 <</replace>><</link>>
 <br>
 <<if ($mpAveryCufflinkFound or 0) is 1 and ($mpAveryCufflinkReturned or 0) is 0>>
 	<<mptailoricon>><<link "递还袖扣 (0:05)">><<pass 5>><<replace "#mansion-carinvite-choices">>
-	<<set $mpAveryCufflinkReturned to 1>>你取出刻着字母『A』的纯银蓝宝袖扣递还。<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_avery_cufflink_return")>><<money 1000>><</if>><<stress -6>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 2>><<glove>><</if>>
+	<<set $mpAveryCufflinkReturned to 1>>你取出刻着字母『A』的纯银蓝宝袖扣递还。<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_avery_cufflink_return")>><<money 1000>><</if>><<stress -6>><<lstress>><<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 2>><<glove>><</if>>
 	<</replace>><</link>><br>
 <</if>>
 <<walkicon>><<link "婉拒同乘 (0:04)">><<pass 4>><<replace "#mansion-carinvite-choices">>
 <<if ($willpower or 0) gte 480>>
 <span class="green">你以晚间课业为由不卑不亢地推辞了同乘。</span><<willpower 2>><<stress -2>><<gwillpower>><<lstress>>
 <<else>>
-<span class="red">你退避时眼神闪烁，被艾弗里冷淡的目光钉在原地。</span><<stress 5>><<gstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery rage 1>><</if>>
+<span class="red">你退避时眼神闪烁，被艾弗里冷淡的目光钉在原地。</span><<stress 5>><<gstress>><<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery rage 1>><</if>>
 <</if>>
 <</replace>><</link>>
 </div>
@@ -71,7 +71,7 @@
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set _exitPas to ($mpReturnPassage or "Danube Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
-宅邸一楼门厅水晶灯通明，穿衣镜旁立着丝绸礼服衣架。<<if $NPCNameList and $NPCNameList.includes("Avery")>>艾弗里<<else>>多瑙河富商<</if>>按住你的肩膀对着镜面冷声道：「今晚楼上都是名流，别让我丢脸。」
+宅邸一楼门厅水晶灯通明，穿衣镜旁立着丝绸礼服衣架。<<if mpNpcMet("Avery")>>艾弗里<<else>>多瑙河富商<</if>>按住你的肩膀对着镜面冷声道：「今晚楼上都是名流，别让我丢脸。」
 <<if (($worn.upper.integrity or 100) lte 60) or (($worn.lower.integrity or 100) lte 60)>>你的衣角还留着撕裂的线头，在光洁如镜的门厅里显得格格不入。<<else>>你在穿衣镜前站定，将袖口与腰侧的折痕一一抚平。<</if>>
 <br><br>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
@@ -79,7 +79,7 @@
 <div id="mansion-gowncheck-choices">
 <<mptailoricon>><<link "换上衬领 (0:10)">><<mpalert -10>><<pass 10>><<replace "#mansion-gowncheck-choices">>
 <<if ($danceskill or 0) gte 240 or ($beauty or 0) gte 3200 or ($housekeeping or 0) gte 240>>
-<span class="green">你利落地换上挺括丝绸衬领，对着铜镜把胸针调整得端庄得体。</span><<stress -4>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
+<span class="green">你利落地换上挺括丝绸衬领，对着铜镜把胸针调整得端庄得体。</span><<stress -4>><<lstress>><<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
 <<else>>
 <span class="red">丝绸暗扣繁琐难系，你在侍女注视下把领花别歪了半寸。</span><<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
@@ -99,20 +99,20 @@
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set _exitPas to ($mpReturnPassage or "Danube Street")>>
 <<if _exitPas is "Start" or _exitPas is "Start2" or _exitPas.startsWith("MP ")>><<set _exitPas to "Danube Street">><</if>>
-二楼弧形露台正对着温室玻璃穹顶，冰桶里的香槟冒着细泡。<<if $NPCNameList and $NPCNameList.includes("Avery")>>艾弗里<<else>>多瑙河富商<</if>>递给你高脚杯：「待会儿奎因过来敬酒，你知道该怎么应对。」
+二楼弧形露台正对着温室玻璃穹顶，冰桶里的香槟冒着细泡。<<if mpNpcMet("Avery")>>艾弗里<<else>>多瑙河富商<</if>>递给你高脚杯：「待会儿奎因过来敬酒，你知道该怎么应对。」
 <br><br>
 <<gardenicon "water">><<set $mpDiscovered to ($mpDiscovered or {})>><<set $mpDiscovered["glasshouse"] to 1>><<link [[去秘密温室 (0:08)|MP Region Glasshouse Manor]]>><<pass 8>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <<getouticon>><<link [[离开 (0:08)|_exitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
 <div id="mansion-champagne-choices">
-<<if $NPCNameList and $NPCNameList.includes("Avery")>><<socialiseicon>><<link "举杯致意 (0:09)">><<pass 9>><<replace "#mansion-champagne-choices">>
+<<if mpNpcMet("Avery")>><<socialiseicon>><<link "举杯致意 (0:09)">><<pass 9>><<replace "#mansion-champagne-choices">>
 <<if ($english or 0) gte 250 or ($danceskill or 0) gte 250 or ($seductionskill or 0) gte 260>>
-<span class="green">你自然挽住艾弗里小臂微笑颔首，巧妙避开了关于孤儿院的试探。</span><<stress -5>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
+<span class="green">你自然挽住艾弗里小臂微笑颔首，巧妙避开了关于孤儿院的试探。</span><<stress -5>><<lstress>><<if $NPCName and mpNpcMet("Avery")>><<npcincr Avery love 1>><<glove>><</if>>
 <<else>>
 <span class="red">面对名流寒暄你手指发僵，回答慢了半拍。</span><<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
-<</replace>><</link>><<else>><span class="disabled">举杯致意 (0:09)（尚未结识）</span><</if>>
+<</replace>><</link>><<else>><</if>>
 <br>
 <<mpdrinkicon>><<link "倒酒入花盆 (0:04)">><<mpalert 6>><<pass 4>><<replace "#mansion-champagne-choices">>
 <<set $skulduggerydifficulty to 260>><<skulduggerycheck "silent">>
@@ -139,7 +139,7 @@
 <div id="mansion-quinn-choices">
 <<mpdrinkicon>><<link "帮奎因醒酒 (0:07)">><<pass 7>><<replace "#mansion-quinn-choices">>
 <<if ($english or 0) gte 250 or ($housekeeping or 0) gte 250 or ($willpower or 0) gte 440>>
-<span class="green">你稳重地将红酒注入醒酒器，垂眸表示自己只看酒标不识账目。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_quinn_wine_hush")>><<money 1000>><span class="gold">你收下桌角 £10 封口钱。</span><</if>><<stress -2>><<lstress>><<if $NPCName and $NPCNameList and $NPCNameList.includes("Quinn")>><<npcincr Quinn love 1>><<glove>><</if>>
+<span class="green">你稳重地将红酒注入醒酒器，垂眸表示自己只看酒标不识账目。</span><<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_quinn_wine_hush")>><<money 1000>><span class="gold">你收下桌角 £10 封口钱。</span><</if>><<stress -2>><<lstress>><<if $NPCName and mpNpcMet("Quinn")>><<npcincr Quinn love 1>><<glove>><</if>>
 <<else>>
 <span class="red">起塞器带落半块碎木屑掉进酒液，引得奎因冷哼。</span><<stress 5>><<tiredness 2>><<gstress>><<gtiredness>>
 <</if>>
@@ -178,9 +178,9 @@
 <<if $mpBriarExit is "Start" or $mpBriarExit is "Start2" or $mpBriarExit.startsWith("MP ")>>
 	<<set $mpBriarExit to "Danube Street">>
 <</if>>
-宅邸西侧偏厅的丝绒屏风后燃着甜腻的龙涎香。<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>翘着腿坐在高背扶手椅上，指尖转着一支镶金钢笔。
-「来得正好。」<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>把一叠洒金请柬推到你面前，「今晚的贵客散场后要去天鹅绒暗层，替我把这些塞进他们的大衣口袋。」
-<<if ($exposed or 0) gte 1>>你衣衫不整地站在屏风边，<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>的目光在你肩上停了停。<<else>><<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>替你抚平袖口，指尖在你腕上轻轻一按。<</if>>
+宅邸西侧偏厅的丝绒屏风后燃着甜腻的龙涎香。<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>翘着腿坐在高背扶手椅上，指尖转着一支镶金钢笔。
+「来得正好。」<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>把一叠洒金请柬推到你面前，「今晚的贵客散场后要去天鹅绒暗层，替我把这些塞进他们的大衣口袋。」
+<<if ($exposed or 0) gte 1>>你衣衫不整地站在屏风边，<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>的目光在你肩上停了停。<<else>><<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>替你抚平袖口，指尖在你腕上轻轻一按。<</if>>
 <br><br>
 <<getouticon>><<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[离开 (0:08)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 8>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
@@ -220,7 +220,7 @@
 		<<money _reward>><span class="gold">你摸出布莱尔预留的赏金袋，约有 £<<print Math.floor(_reward / 100)>>。</span>
 	<</if>>
 	<<stress -3>><<lstress>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
+	<<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
 	<br><br>
 	<<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[退出 (0:03)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 3>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <<else>>
@@ -294,7 +294,7 @@
 <<if _sk gte 600>>
 	你趁他走远，把剩下的请柬塞进最近两件大衣。
 	<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("mansion_briar_hide_reward")>>
-		你顺手从托盘底摸到<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>留的备用零钞。<<money 500>>
+		你顺手从托盘底摸到<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>留的备用零钞。<<money 500>>
 	<</if>>
 	<<stress -2>><<lstress>>
 <<elseif _sk gte 300>>
@@ -313,7 +313,7 @@
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
-「报酬呢？」你没有立刻接那叠请柬。<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>笑了一声，把钢笔搁在茶几上：「先让我看看你值不值这个价。」
+「报酬呢？」你没有立刻接那叠请柬。<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>笑了一声，把钢笔搁在茶几上：「先让我看看你值不值这个价。」
 <br><br>
 <<getouticon>><<set _mpExitPas to ($mpBriarExit or "Danube Street")>><<link [[离开 (0:02)|_mpExitPas]]>><<set $outside to 1>><<set $location to "avery_mansion">><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>
@@ -323,7 +323,7 @@
 <<set $outside to 0>><<set $location to "avery_mansion">>
 <<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
-你把声音压低，替他把话说完。<<if $NPCNameList and $NPCNameList.includes("Briar")>>布莱尔<<else>>俱乐部东家<</if>>的笑意慢慢收了，改成一种审视。
+你把声音压低，替他把话说完。<<if mpNpcMet("Briar")>>布莱尔<<else>>俱乐部东家<</if>>的笑意慢慢收了，改成一种审视。
 <<set _sk to Math.max(currentSkillValue("seductionskill"), currentSkillValue("skulduggery"))>>
 <<if _sk gte 1000>>
 	<<set _reward to 2000>><<set _crest to 1>>
@@ -343,7 +343,7 @@
 		他点了点头，认可了你先前的开价。
 	<</if>>
 	<<if _crest is 1>>他顿了顿，又摸出一枚天鹅绒暗层通行徽记，一起推到你手边。<<set $mpFragVelvetCrest to Math.min(3, ($mpFragVelvetCrest or 0) + 1)>><</if>>
-	<<if $NPCName and $NPCNameList and $NPCNameList.includes("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
+	<<if $NPCName and mpNpcMet("Briar")>><<npcincr Briar love 1>><<glove>><</if>>
 <<else>>
 	他摇了摇头，把请柬收回抽屉。你在偏厅里站了片刻，只能离开。<<stress 4>><<gstress>>
 <</if>>
@@ -419,7 +419,7 @@
 </div>
 <</if>>
 
-:: MP Mansion Kitchen SculleryShift [nobr]
+:: MP Mansion Kitchen Scullery Duty [nobr]
 <<set $outside to 0>><<set $location to "avery_mansion">><<effects>><<mpAmbient>>
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set $daily to ($daily or {})>>
@@ -562,7 +562,7 @@
 <<if ($mpAlertArea or "") isnot "velvet">><<mpalertinit "velvet">><</if>><<mpalerttext>><<mpalertcheck>>
 <<set _exitPas to ($mpReturnPassage or "MP Region Glasshouse Orchid")>>
 <<if _exitPas is "Start" or _exitPas is "Start2">><<set _exitPas to "MP Region Glasshouse Orchid">><</if>>
-兰花厅大理石排水槽边闪着银光，一枚刻有花体字母『A』的纯银蓝宝袖扣卡在青苔石缝里，正是<<if $NPCNameList and $NPCNameList.includes("Avery")>>艾弗里<<else>>多瑙河富商<</if>>常戴的款式。
+兰花厅大理石排水槽边闪着银光，一枚刻有花体字母『A』的纯银蓝宝袖扣卡在青苔石缝里，正是<<if mpNpcMet("Avery")>>艾弗里<<else>>多瑙河富商<</if>>常戴的款式。
 <br><br>
 <<mpherbicon>><<link [[返回兰花温室 (0:02)|MP Region Glasshouse Orchid]]>><<pass 2>><<set $eventskip to 1>><<endevent>><<mpalertclear>><</link>>
 <br>

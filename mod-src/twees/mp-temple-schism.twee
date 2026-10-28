@@ -3,6 +3,7 @@
 <<if !$mpTempleOrder>><<set $mpTempleOrder to "neutral">><</if>>
 <<set $mpTempleRites to ($mpTempleRites or 0)>>
 <<set $mpGrace to ($mpGrace or 0)>>
+<<if $mpTempleNextStageDay is undefined>><<set $mpTempleNextStageDay to 0>><</if>>
 <</widget>>
 <<widget "mpTempleRite">>
 <<mpTempleSchismInit>>
@@ -25,114 +26,151 @@
 	<<stress -2>>
 <</if>>
 <</widget>>
+<<widget "mpTempleTitleCn">>
+<<if $mpTempleNpcTitleMode is "orthodox_canon">>净火司铎与守律学侣<<elseif $mpTempleNpcTitleMode is "reform_relief">>慈悲司铎与济世执事<<elseif $mpTempleNpcTitleMode is "schism_dual_chairs">>北座戒首与南座慈首<<else>>尚未定名的旧称<</if>>
+<</widget>>
+<<widget "mpTempleScheduleCn">>
+<<if $mpTempleNpcScheduleMode is "dawn_midnight_watch">>破晓晨祷与子夜封炉两班<<elseif $mpTempleNpcScheduleMode is "day_clinic_open_night">>白昼施粥义诊、入夜敞门留宿<<elseif $mpTempleNpcScheduleMode is "split_odd_even_hours">>单数时辰归北座、双数时辰归南座<<else>>尚未排定的旧钟点<</if>>
+<</widget>>
+<<widget "mpTemplePostResidue">>
+<<if $mpTempleNpcTitleMode is "orthodox_canon">>长厅里只剩净火一册还摊着，回廊钥匙仍挂在主教腰间。<<elseif $mpTempleNpcTitleMode is "reform_relief">>长厅里只剩慈悲一册还摊着，白昼的粥桌支在侧门边。<<elseif $mpTempleNpcTitleMode is "schism_dual_chairs">>长厅里并排立着两册，单双时辰分占南北回廊。<<else>>长厅里的封蜡还没有落定。<</if>>
+<</widget>>
 
 :: MP Temple Schism Hub [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
-裂缝总枢没有正式的名字。它只是回廊与钟塔之间一段被两派共同占用的窄厅，石墙从拱顶裂到踢脚，风穿过时发出吹空瓶似的低鸣。左边墙上钉着黑漆木牌，写满斋期、禁食与贞洁审查的条款；右边墙上是一整面软木，插着领粮条、借宿申请和写给病家的便笺，纸角都被翻得起了毛。两派的人每天从同一道门进来，各自在自己的板前停下，谁也不看对方，却都听得见对方翻纸的声音。
+<<if !$daily>><<set $daily to {}>><</if>>
+回廊与钟塔之间的窄厅从拱顶裂到踢脚，左墙钉着净火戒律的黑漆木牌，右墙插满慈悲圣所的领粮条与病家便笺。旧书桌上的六瓣铜环亮着 <<print $mpTempleRites>> 粒石子，恩典记着 <<print $mpGrace>>。你眼下归属<<if $mpTempleSchismEnded>>已封蜡定局的<</if>><<if $mpTempleOrder is "orthodox">>净火正统<<elseif $mpTempleOrder is "reform">>慈悲圣所<<elseif $mpTempleOrder is "concord">>双生调和<<else>>尚未落印的中立位<</if>>。<<if Time.days lt ($mpTempleNextStageDay or 0)>>下一场仪轨要等到第 <<print $mpTempleNextStageDay>> 日。<</if>>
 <br><br>
-厅中央摆一张旧书桌，桌面被烛泪烫出许多白点。摊开的册子没有封面，只压着一枚六瓣铜环：环上嵌着六粒磨圆的石子，亮着几粒，仪轨就走到几分。眼下亮着 <<print $mpTempleRites>> 粒，满打满算六粒。另一页记恩典，用红黑两色墨水分开正负，此刻是 <<print $mpGrace>>。这两栏从不单独看——每完成一段仪轨，铜环亮一格，恩典也跟着涨落；恩典跌到红线以下时，连递经本的人都会绕开你。册子最下方是今日香油折算：一百钱的供品，在这里实付 <<mpWorldPrice 100>>。
-<br><br>
-<<if $mpTempleOrder is "orthodox">>你眼下按的是净火戒律那一册。津贴只发登册的人，数目稳，领时须当众复诵戒条；回廊钥匙由主教的人掌管，拿到后权限极硬；庇护所只收通过审查的人，床板干、门闩厚；净火石脂优先灌进暗渠，雾潮压得低，全城物价却随之上浮，门外的人常常空手回去。<<elseif $mpTempleOrder is "reform">>你眼下按的是慈悲圣所那一册。津贴按人头散，手续简单而数额薄，这周发完下周又要重募；回廊几乎不锁，旧谱室与侧廊长椅都让出来；庇护所收没有推荐信的人，地铺挤、夜里杂；净火省下来熬药点灯，雾潮退得慢、暗渠水位偏高，街面物价却回落，门口的粥桶总有人守着。<<else>>你还没有在两种誓词上按手印。两边都愿意给你方便，也都在等你先开口：戒律派许你一条将来能拿钥匙的路，慈悲派许你一张今晚就能躺下的铺位。没有归属的时候，仪轨只记在你自己名下，恩典涨得慢，香油折算停在中间；雾潮不退，也没有被哪一派的火催得更急。<</if>>
-<br><br>
-铜环的六粒石子各有名字，据说是按晨祷、告解、巡礼、夜守、封炉、开钟的顺序嵌进去的。<<if $mpTempleRites gte 6>>如今六粒全亮，册页边缘被翻得发黑，两派都默认你能在仪式里站到前排；再往下做，石子不会更亮，只会把恩典继续往上推。<</if>><<if $mpTempleRites gte 2 and $mpTempleRites lt 6>>已经亮起的几粒足以让你进夜守的名单，但暗渠最深处那道封炉礼仍锁着，守门人只肯让你在门外递灯。<</if>><<if $mpTempleRites lt 2>>铜环大半是暗的，你目前只够在前殿与侧廊帮忙；夜守的名单还轮不到你，回廊的钥匙更不必提。<</if>>
-<br><br>
-恩典那一栏比铜环更难伺候。<<if $mpGrace lt 0>>红色的一侧已经压过黑色，账房看你的眼神像在看一笔坏账；仪轨的领唱会故意错开你的节拍，告解的隔栅也会提前落下帘子。<</if>><<if $mpGrace gte 0 and $mpGrace lt 20>>黑色的一侧刚压住红线，够你在仪式里站稳，却不够让任何一派替你说话。<</if>><<if $mpGrace gte 20>>黑色的一侧写得满满当当，执事开始把你的名字念得清楚些，两派的门房也愿意多听你讲两句。<</if>>
-<br><br>
-你可以从这道裂缝分别走进两场仪式，也可以留在这里，看两派怎样把同一份香火拆成两本账。无论往哪边走，册子都会记住你今日的脚印。
-<br><br>
-<<getouticon>><<link [[返回神殿深区 (0:02)|MP Loc Temple Hub]]>><<pass 2>><</link>><br>
-<<templeicon>><<link [[参与晨祷告解 (0:08)|MP Temple Rites 1]]>><<pass 8>><</link>><br>
-<<mpritualicon>><<link [[参与巡礼夜守 (0:10)|MP Temple Rites 2]]>><<pass 10>><</link>><br>
-<<socialiseicon>><<link [[审视两派之争 (0:08)|MP Temple Factions]]>><<pass 8>><</link>>
-<br><<link [[更多事务 (0:03)|MP Temple Schism More Hub]]>><<pass 3>><</link>>
+<<getouticon>><<link [[返回神殿 (0:02)|MP Loc Temple Hub]]>><<pass 2>><</link>><br>
+<<if Time.days lt ($mpTempleNextStageDay or 0)>>
+<<walkicon>><<link [[等仪轨日再来 (0:02)|MP Loc Temple Hub]]>><<pass 2>><</link>><br>
+<<elseif ($mpTempleRites or 0) lt 1>>
+<<templeicon>><<link [[跟唱晨祷圣咏 (0:12)|MP Temple Rites 1]]>><<pass 12>><</link>><br>
+<<socialiseicon>><<link [[去长厅旁听两派 (0:08)|MP Temple Factions]]>><<pass 8>><</link>><br>
+<<elseif ($mpTempleRites or 0) lt 3>>
+<<mpritualicon>><<link [[守暗渠口夜守 (0:15)|MP Temple Rites 2]]>><<pass 15>><</link>><br>
+<<socialiseicon>><<link [[去长厅旁听两派 (0:08)|MP Temple Factions]]>><<pass 8>><</link>><br>
+<<else>>
+<<socialiseicon>><<link [[去长厅听两派 (0:08)|MP Temple Factions]]>><<pass 8>><</link>><br>
+<<mpritualicon>><<link [[进裂后教务司 (0:10)|MP Temple Post Hub]]>><<pass 10>><</link>><br>
+<</if>>
 
 :: MP Temple Rites 1 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
-天还没亮透，前殿的长椅上已经坐了一排人。值夜的修士把最后一盏守夜灯掐灭，换上一排细白的新烛；晨钟从塔顶落下来，震得彩窗上的灰簌簌往下掉。约旦站在祭坛侧阶，白袍下摆沾着夜里的潮气，正把圣典翻到当日那一页。他/她没有催人，只等殿里的咳嗽声慢慢低下去，才抬手起了第一个音。
+天还没亮透，前殿长椅上已经坐了一排晨祷的人，值夜修士换上一排细白新烛。约旦站在祭坛侧阶翻开圣典，等你手里的铜牌（当前仪轨 <<print $mpTempleRites>> 格、恩典 <<print $mpGrace>>）跟上第一个音；侧廊右手的告解木栅也掀开了半寸帘子。晨祷靠的是沉稳心神，听告解则要在木栅后默默担下旁人的苦楚。
 <br><br>
-你手里的铜牌记着仪轨进度 <<print $mpTempleRites>>，恩典 <<print $mpGrace>>。晨祷不是随便哼两句就算数：调子要跟住领唱，气要沉到腹底，唱错一个转折，旁边的人立刻能听出来。只要你还有一分稳得住的心神，或者恩典没有跌成负数，就能把整段唱完；若两样都不占，唱到中段便会胸口发紧，被管仪的修士客客气气地请到侧廊坐下，灌一杯温水，再听一段不轻不重的诫。
-<br><br>
-唱完一整段，若铜环还没满，会再亮起一格；恩典随之添上五缕。若你已经在某一派名下，服事的回响还会另算：净火戒律那边会把唱诗剩下的热意引进暗渠，水尺退下一指；慈悲圣所那边则把这段合唱当成轮值后的静息，肩背的酸胀会松开一些；两派都不靠的人只得到一点说不清来源的轻松。仪轨满六格之后不会继续变亮，但恩典仍会一格一格往上走，直到红黑两色都不再有人敢小看。
-<br><br>
-侧廊右手的告解隔栅今日开着。木栅上的漆早已磨得发乌，栅缝里积着一层洗不掉的旧尘，帘子只掀开一条缝，里面的人不必报名字，你也看不见对方的脸。你要做的不是回答，而是听：听一个母亲反复念同一个孩子的名字，听一个船工把同一句谎话说上三遍，听最后那个声音低得像从墙里传出来。听完一整场，铜环同样推进一格，恩典添五缕；满六格后便只记恩典。可你的耳朵会嗡嗡作响，腿也发沉——隔栅后面压过来的东西，比唱一整段圣咏更耗人。这里没有本派的额外回响，只有疲惫，以及一本不肯告诉你名字的册子。
-<br><br>
-晨祷散场后，长椅间留下麦饼碎与冷掉的蜡味。你可以把这段仪轨记在自己名下，也可以顺着侧廊继续往里，去听下一场告解；若心里已经发闷，退回裂缝总枢，让铜环在暗处自己冷却一会儿也好。
-<br><br>
-<<getouticon>><<link [[返回裂缝总枢 (0:02)|MP Temple Schism Hub]]>><<pass 2>><</link>><br>
-<<templeicon>><<if ($willpower or 0) gte 340 or $mpGrace gte 0>><<link [[诵念晨祷圣咏 (0:12)|MP Temple Schism Hub]]>><<pass 12>><<mpTempleRite 1>><<mpTempleService>><</link>><<else>><<link [[心神散乱受诫 (0:12)|MP Temple Schism Hub]]>><<pass 12>><<stress 3>><<tiredness 1>><</link>><</if>><br>
-<<socialiseicon>><<link [[听取隔栅告解 (0:12)|MP Temple Rites 2]]>><<pass 12>><<mpTempleRite 1>><<tiredness 1>><</link>>
+<<getouticon>><<link [[回裂缝总枢 (0:02)|MP Temple Schism Hub]]>><<pass 2>><</link>><br>
+<<templeicon>><<link [[跟唱晨祷圣咏 (0:12)|MP Temple Rites 1 After]]>><<pass 12>><<if !$daily>><<set $daily to {}>><</if>><<if $daily.mpTempleRite1Fail>><<set $mpTempleRiteRes to "chant_fail">><<stress 2>><<elseif Time.days gte ($mpTempleNextStageDay or 0) and (($willpower or 0) gte 320 or $mpGrace gte 1)>><<set $mpTempleNextStageDay to Time.days + 3>><<mpTempleRite 1>><<mpTempleService>><<set $mpTempleRiteRes to "chant_ok">><<else>><<set $daily.mpTempleRite1Fail to 1>><<set $mpTempleNextStageDay to Time.days + 3>><<set $mpGrace to Math.max(-100, ($mpGrace or 0) - 3)>><<set $mpTempleRiteRes to "chant_fail">><</if>><</link>><br>
+<<socialiseicon>><<link [[守在隔栅后听告解 (0:12)|MP Temple Rites 2]]>><<pass 12>><<set $mpTempleNextStageDay to Time.days + 3>><<mpTempleRite 1>><<tiredness 1>><</link>>
+
+:: MP Temple Rites 1 After [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
+<<if $mpTempleRiteRes is "chant_ok">>
+你沉住腹底气息跟住领唱的每一个转折，晨钟余音在彩窗间回荡。铜环随之再亮一格，恩典添上新墨，散场后连管仪的修士也向你微微颔首。
+<<stress -3>>
+<<else>>
+唱到中段高音时你胸口发紧，节拍慢了半拍，被管仪修士客客气气请到侧廊长椅坐下喝温水休整，本轮未能添上仪轨。
+<<stress 2>><<tiredness 1>>
+<</if>>
+回廊高处的彩窗透下微凉天光，铜环上的石子在烛影里泛着温润光泽。<br><br>
+<<getouticon>><<link [[回裂缝总枢 (0:02)|MP Temple Schism Hub]]>><<pass 2>><</link>><br>
+<<mpritualicon>><<link [[转往暗渠口夜守 (0:06)|MP Temple Rites 2]]>><<pass 6>><</link>>
 
 :: MP Temple Rites 2 [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
-圣物平时锁在中层回廊的铜柜里，只有巡礼日才请出来。那是一具不大的银匣，四角包着磨亮的铜皮，匣面刻的纹样已被历代的掌心磨得只剩浅沟。抬匣的人要走在前殿与外廊之间那条固定的路线上，脚步不能乱，转弯时匣身不能晃；跟在后头的人捧着长明灯，灯油要添到齐沿，风一吹就往里侧护。整条路线走完，灯不能灭，匣不能落地，这才算一段完整的巡礼。
+入夜后的巡礼沿着回廊石阶向下，直抵暗渠入口的长明灯座。当前铜环仪轨为 <<print $mpTempleRites>> 格，雾潮水尺停在 <<print ($mpFogTide or 0)>> 格。夜守比晨祷更苛刻，人得在潮湿的石阶上坐满整夜，听着水声涨落按时添入净火石脂；只有仪轨够深或惯于照料活物的人，守门修士才敢放你下去。
 <br><br>
-铜牌上的仪轨进度是 <<print $mpTempleRites>>，雾潮水尺停在 <<print ($mpFogTide or 0)>>。夜守比巡礼更苛刻：人要在暗渠入口坐上一整夜，盯着长明灯，听水声涨落，每隔一段时辰往灯里添一次油。仪轨走到两格以上，或者你平日照料活物、病人已经攒下足够的手感，守门人才会放你下去；两样都不够，夜里湿冷会顺着石阶往上爬，你坐不到半夜就得被人搀回前殿，膝盖僵得弯不下来。
-<br><br>
-守住一夜，铜环一次推进两格；若只差一格，便补满最后一粒。恩典添十缕。净火戒律的人会把灯焰里炼出的石脂刮进暗渠闸口，水尺当场退下一格；慈悲圣所的人把夜守当成轮值的延长，替下困倦的同伴，自己只留一点腰背的酸；两边都不靠的人得到的是一段安静，以及天亮时手指上洗不掉的灯油味。仪轨一旦满六格，铜环不再添亮，可这一夜的恩典照旧记进册子，守门人也会把最里侧那把钥匙往你这边推半寸。
-<br><br>
-夜守的代价不在钱上。暗渠的水汽会钻进衣缝，灯油会熏得人头晕，坐到后半夜，墙里的骨龛偶尔会发出像叹息一样的回响。你可以把这些当成错觉，也可以在添油时把灯芯挑亮一点，让光多照住半步石阶。天快亮时，巡礼的队伍会在回廊尽头等你；若你还能站起来，就跟着他们去两派议事，把这一夜听见的东西说出来。若实在撑不住，退回裂缝总枢也不会有人拦你，只是铜环上那两粒石子仍旧暗着，得等下一个月夜再补。
-<br><br>
-<<getouticon>><<link [[返回裂缝总枢 (0:02)|MP Temple Schism Hub]]>><<pass 2>><</link>><br>
-<<mpritualicon>><<if $mpTempleRites gte 2 or ($tending or 0) gte 220>><<link [[护持圣物夜守 (0:15)|MP Temple Factions]]>><<pass 15>><<mpTempleRite 2>><<mpTempleService>><</link>><<else>><<link [[夜寒侵体暂退 (0:15)|MP Temple Schism Hub]]>><<pass 15>><<stress 4>><<tiredness 2>><</link>><</if>><br>
-<<walkicon>><<link [[前往两派议事 (0:06)|MP Temple Factions]]>><<pass 6>><</link>>
+<<getouticon>><<link [[回裂缝总枢 (0:02)|MP Temple Schism Hub]]>><<pass 2>><</link>><br>
+<<mpritualicon>><<if Time.days gte ($mpTempleNextStageDay or 0) and ($mpTempleRites gte 2 or ($tending or 0) gte 220)>><<link [[守暗渠口夜守 (0:15)|MP Temple Factions]]>><<pass 15>><<set $mpTempleNextStageDay to Time.days + 4>><<mpTempleRite 2>><<mpTempleService>><<tiredness 2>><</link>><<else>><<link [[夜寒暂退 (0:15)|MP Temple Schism Hub]]>><<pass 15>><<if !$daily>><<set $daily to {}>><</if>><<set $daily.mpTempleRite2Fail to 1>><<set $mpTempleNextStageDay to Time.days + 4>><<set $mpGrace to Math.max(-100, ($mpGrace or 0) - 2)>><<stress 3>><<tiredness 2>><</link>><</if>><br>
+<<walkicon>><<link [[去长厅旁听两派议 (0:06)|MP Temple Factions]]>><<pass 6>><</link>>
 
 :: MP Temple Factions [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
-两派议事用的是回廊尽头那间长厅。两张长桌面对面摆着，中间只隔一条窄走道，走道上铺的毡子已经磨出经纬。戒律派那边坐得笔直，面前摊着名册、封蜡和一把黄铜钥匙；慈悲派那边坐得松散，桌上堆着药包、领粮条和几只缺口的水罐。主教把念珠绕在腕上，先开口，声音温和；约旦把布巾叠好放在膝上，等他说完才接话，语速不快，却一句也不让。
+回廊尽头的长厅里，净火正统与慈悲圣所面对面摊开名册与领粮条。铜牌上记着仪轨 <<print $mpTempleRites>> 格、恩典 <<print $mpGrace>>，归属为<<if $mpTempleOrder is "orthodox">>净火正统<<elseif $mpTempleOrder is "reform">>慈悲圣所<<elseif $mpTempleOrder is "concord">>双生调和<<else>>尚未落定<</if>>。三枚封蜡要仪轨满三格、恩典够五分（或备下£2.00调和底金），且不在仪轨冷却期内，管仪修士才肯递蜡勺；你也可先下钟塔改称谓与轮值。
 <br><br>
-净火正统的说法很直接：神殿的资源有限，必须先用在自己人身上。登册的信徒按月领津贴，数目不大，却从不断顿；回廊只对通过审查的人开放，钥匙不外借；庇护所收的是守得住戒条的人，床铺与门闩都按最厚的做；净火石脂优先灌进暗渠，把雾潮压在城墙外。代价也摆在明处：门槛一高，穷人就进不来；净火要烧油，油价一起，全城的物价跟着往上走；与码头、行会那边的往来也会冷下来，因为他们的人多半拿不到登册资格。
-<br><br>
-慈悲圣所把账本翻到另一页：先救人，再谈规矩。津贴按人头散，谁排到谁领，手续简单到不识字也能按手印；回廊不锁，旧谱室、忏悔隔栅、侧廊的长椅都让出来给需要歇脚的人；庇护所收没有推荐信的人，地铺挤一点，夜里总比街上暖；净火省下来熬药、点灯、烧热水，雾潮退得慢，暗渠水位常年偏高。代价同样清楚：粥桶见底得快，募捐册上的名字总不够；门开得大，混进来的人也杂，东西丢过，守夜的人手也紧；净火一省，暗渠的潮气就压不干净，低洼处的墙根年年返潮。
-<br><br>
-两边都没有把话讲死。主教说旧调慢，可旧调稳；约旦说新调亮，可新调要人守着。长厅中央那条窄走道上，摆着三枚封蜡：一枚刻着净火的纹样，一枚刻着张开的手，第三枚什么也没刻，只在边缘留了一道细细的接缝。无论你按哪一枚，名册上的归属、明日的津贴、回廊的钥匙、暗渠的石脂都会随之改道；全城的香油折算也会跟着挪——净火一侧往上，圣所一侧往下，两不相帮则停在原处。你眼下的归属是 <<if $mpTempleOrder is "orthodox">>净火戒律<<elseif $mpTempleOrder is "reform">>慈悲圣所<<else>>尚未落定<</if>>，铜环亮着 <<print $mpTempleRites>> 粒，恩典记着 <<print $mpGrace>>。
-<br><br>
-<<if $mpTempleRites gte 6 and $mpGrace gte 20>>你已经把六格铜环走满，恩典也厚到两派都不好当面驳你。此时无论替哪一边说话，长厅里的人都会先安静下来听；第三枚封蜡上的接缝，也第一次有人愿意伸手去碰。<</if>><<if $mpTempleRites lt 6 or $mpGrace lt 20>>你的铜环还没有走满，恩典也谈不上厚。两派仍会让你把话说完，但说完之后，他们更在意的还是各自桌上的名册与药包；第三枚封蜡看着近，真要去碰，得先让两边都相信你不是来拆台的。<</if>>
-<br><br>
-你可以退回裂缝总枢再攒几段仪轨，也可以就在这间长厅里落定。毡子上的三枚封蜡都不收回，落下去的火漆会一直留在册页上。
-<br><br>
-<<getouticon>><<link [[返回裂缝总枢 (0:02)|MP Temple Schism Hub]]>><<pass 2>><</link>><br>
-<<templeicon>><<link [[支持净火正统 (0:15)|MP Temple Ending Orthodoxy]]>><<pass 15>><<mpTempleAlign "orthodox">><</link>><br>
+<<set _templeEndOpen to (($mpTempleRites or 0) gte 3 and (($mpGrace or 0) gte 5 or ($money or 0) gte 200) and Time.days gte ($mpTempleNextStageDay or 0))>>
+<<getouticon>><<link [[返回总枢 (0:02)|MP Temple Schism Hub]]>><<pass 2>><</link>><br>
+<<if $mpTempleSchismEnded>>
+<<if $mpTempleOrder is "orthodox">><<templeicon>><<link [[重温净火正统约 (0:06)|MP Temple Ending Orthodoxy]]>><<pass 6>><</link>><<elseif $mpTempleOrder is "reform">><<socialiseicon>><<link [[重温慈悲圣所约 (0:06)|MP Temple Ending Sanctuary]]>><<pass 6>><</link>><<else>><<mpritualicon>><<link [[重温双生调和约 (0:06)|MP Temple Ending Concord]]>><<pass 6>><</link>><</if>><br>
+<<elseif _templeEndOpen>>
+<<templeicon>><<link [[支持净火派 (0:15)|MP Temple Ending Orthodoxy]]>><<pass 15>><<mpTempleAlign "orthodox">><</link>><br>
 <<socialiseicon>><<link [[支持慈悲圣所 (0:15)|MP Temple Ending Sanctuary]]>><<pass 15>><<mpTempleAlign "reform">><</link>><br>
-<<mpritualicon>><<link [[促成双生和解 (0:15)|MP Temple Ending Concord]]>><<pass 15>><<mpTempleAlign "concord">><</link>>
+<<mpritualicon>><<link [[促成双生圣咏和 (0:15)|MP Temple Ending Concord]]>><<pass 15>><<mpTempleAlign "concord">><</link>><br>
+<<else>><span class="disabled">支持净火 / 慈悲 / 双生调和 (0:15)（需仪轨≥3、恩典≥5或£2.00底金，且无仪轨冷却）</span><br>
+<</if>>
+<<link [[进裂后教务司改制 (0:10)|MP Temple Post Hub]]>><<pass 10>><</link>>
 
 :: MP Temple Ending Orthodoxy [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
-<<mpTempleAlign "orthodox">><<set $mpWorldTempleOutcome to "orthodox">>
-净火正统的落定是在封炉那天完成的。枢轮室换回了旧配重，钟摆重新按慢调走，声音沉得像从水底传上来；暗渠闸口灌进新炼的石脂，火舌贴着水面烧了一夜，第二天清早，水尺退到多年未见的低处。主教把黑漆名册摊在祭坛侧阶，一页页念过去，念到的人上前按手印，领一枚薄薄的铜牌；没有念到的人站在门外，隔着门槛看里面的烛火，谁也没有出声。
-<br><br>
-<<if $mpTempleOrder is "orthodox">>从这天起，神殿的账目分得清清楚楚。津贴只走登册名册，按月发放，数额稳，领取时要复诵戒条；回廊的钥匙重新挂回主教腰间那串铜环上，只有通过审查的人能拿到，拿到之后通行无阻；庇护所的门闩加厚了一层，床铺留给守得住戒条的人；净火石脂优先供给暗渠，雾潮被压得低，低洼处的墙根难得干爽。代价也一并落进账里：净火要烧油，全城物价随之上浮，百钱供品如今实付 <<mpWorldPrice 100>>；码头与行会的信来得少了，穷人排到门口，多半只能领到一句下次再来。<</if>><<if $mpWorldTempleOutcome is "orthodox">>铜牌上的终局栏已经錾下「古礼封存」四个字，字口还带着新鲜的铜屑。往后你从神殿深区或裂缝总枢回来，读到的都会是这一行；全城的香油折算、回廊的准入、净火的拨付，也都按这一册走。<</if>>
-<br><br>
-约旦没有离开神殿。他/她仍旧每天清晨到祭坛前跪一会儿，起身后照常去侧廊看告解的队伍，只是不再提新调的事。有一回你在回廊遇见他/她，他/她把手里的布巾叠了又叠，才说：「门关小一点，里面是干净了。可门外的人，也还是人。」说完便走了，白袍扫过石阶，没有回头。悉尼来过一次，站在门槛外看了很久，最后把手里那本新抄的谱子塞进包里，转身下了台阶。学园方向托人捎来一句话，说诺艾尔听完新调被封存的消息，只是把母株的灯又调暗了一格。
-<br><br>
-夜里旧钟响起来时，仍有年轻人站在阶下听，听一会儿便散了；雾潮伏在城墙外，像一头被旧调安抚住的兽，暂时没有往前挪。神殿还是那座神殿，只是名册更厚，门槛更高，门外的队伍更长。你可以回裂缝总枢，看铜环在两派共用的桌上冷下去；也可以回神殿深区，从那条熟悉的侧廊重新走一遍。封蜡已经干了，册页不会再改，除非有人再把三枚封蜡摆上长桌。
+<<if !$mpTempleSchismEnded>><<set $mpTempleSchismEnded to 1>><<set $mpWorldPriceMod to Math.min(160, ($mpWorldPriceMod or 100) + 3)>><</if>><<mpTempleAlign "orthodox">><<set $mpWorldTempleOutcome to "orthodox">>
+黑漆戒律名册在主祭坛上正式落印，神殿账目从此只认登册审查。回廊钥匙重新挂回主教腰间的铜环，庇护所门闩加厚，净火石脂优先灌入地下暗渠压低雾潮，全城百钱供品实付 <<mpWorldPrice 100>>。侧廊的喧哗被彻底肃清，晨钟与晚祷恢复了毫厘不差的严苛旧制。
 <br><br>
 <<getouticon>><<link [[返回裂缝总枢 (0:04)|MP Temple Schism Hub]]>><<pass 4>><<stress -5>><</link>><br>
-<<templeicon>><<link [[返回神殿深区 (0:04)|MP Loc Temple Hub]]>><<pass 4>><</link>>
+<<templeicon>><<link [[返回神殿深区总枢 (0:04)|MP Loc Temple Hub]]>><<pass 4>><</link>>
 
 :: MP Temple Ending Sanctuary [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
-<<mpTempleAlign "reform">><<set $mpWorldTempleOutcome to "reformed">>
-慈悲圣所的落定没有封炉，也没有换配重。约旦让人把前殿的门槛凿低一寸，把回廊的灯往外挪了一盏，又在侧门边支起一张长桌，摆上领粮条、药包和一壶热水。主教没有到场，只托人送来一串乌木念珠，念珠底下压着一张字条，写着「门开得大，风也进得来」。约旦看完，把字条折好收进袖中，照旧去给排队的人分粥。
-<br><br>
-<<if $mpTempleOrder is "reform">>从这天起，神殿的账目换了算法。津贴按人头散，手续简单，数额薄，募捐册上的名字总在变动；回廊不再上锁，旧谱室、忏悔隔栅和侧廊的长椅都向需要的人敞开，谁都能进去坐一会儿；庇护所收没有推荐信的人，地铺挤，夜里有人打鼾，也有人偷偷哭，但总比街上暖；净火省下来熬药、点灯、烧热水，雾潮退得慢，暗渠水位常年偏高，低洼处的墙根又开始返潮。街面上的物价却因此回落，百钱供品如今实付 <<mpWorldPrice 100>>，门口的粥桶从早到晚都有人守着。<</if>><<if $mpWorldTempleOutcome is "reformed">>铜牌上的终局栏錾着「钟律革新」，字口比旧字浅，像是刻的人手不太稳。往后你从神殿深区或裂缝总枢回来，读到的都会是这一行；全城的香油折算、回廊的准入、净火的拨付，也都按这一册走。<</if>>
-<br><br>
-门开得大，麻烦也来得快。有人在庇护所里顺走了别人的鞋，有人在告解隔栅后头冒充执事，还有人把领粮条转手卖到巷子里。约旦没有把门重新关上，只加了一条规矩：领东西的人要留下一个能找得到的名字。主教那边虽不阻拦，却把净火的配额卡得很紧，暗渠的石脂常常只够烧半夜；管钟的老匠人抱怨新调走得太急，配重换过两回，钟声还是偶尔发飘。维斯从码头送来两桶灯油，没多说什么，只让人把桶放在侧门边；孤儿院来的孩子排在最前头，捧着碗，谁也不肯先走。
-<br><br>
-夜里新钟响起来时，狼街的石板路上会有人放慢脚步，仰着脸听上一阵；雾潮退得比往年慢，却没有再漫过防波堤。悉尼在凿低的门槛前停了停，手指在门框新削出的斜面上摸了一下，才低声说：「原来把门放大，风也不会把殿里吹空。」说完他/她便抱着书册走了进去。你可以回裂缝总枢，看两派的账本怎样并排摆着；也可以回神殿深区，从凿低的门槛重新走一遍。火漆已经干了，粥桶还热着。
+<<if !$mpTempleSchismEnded>><<set $mpTempleSchismEnded to 1>><<set $mpFogTide to Math.min(7, ($mpFogTide or 0) + 1)>><</if>><<mpTempleAlign "reform">><<set $mpWorldTempleOutcome to "reformed">>
+慈悲圣所的领粮册取代了黑漆木牌，回廊不再落锁，旧谱室与侧廊长椅向所有没有推荐信的夜归人敞开。净火石脂省下来熬药温粥，街面物价随之回落，百钱实付 <<mpWorldPrice 100>>。虽然暗渠水位退得慢了些，但神殿前殿门口的粥桶整夜冒着白汽。
 <br><br>
 <<getouticon>><<link [[返回裂缝总枢 (0:04)|MP Temple Schism Hub]]>><<pass 4>><<stress -5>><</link>><br>
-<<socialiseicon>><<link [[返回神殿深区 (0:04)|MP Loc Temple Hub]]>><<pass 4>><</link>>
+<<socialiseicon>><<link [[返回神殿深区总枢 (0:04)|MP Loc Temple Hub]]>><<pass 4>><</link>>
 
 :: MP Temple Ending Concord [nobr]
 <<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
-<<mpTempleAlign "concord">><<set $mpGrace to Math.min(100, ($mpGrace or 0) + 10)>>
-双生圣咏的和解没有落在任何一方的册子上。那天长厅里的两张长桌被并到了一处，中间那条磨旧的毡子卷起来靠在墙边。主教把黑漆名册推到桌子中央，约旦把领粮条压在名册旁边，两叠纸挨着，谁也没有先收回去。有人起了一个旧调，戒律派的人先跟上，慈悲派的人慢了半拍，后来不知谁把新调叠进去，两个声部在拱顶下面绕了一阵，竟没有打架。
-<br><br>
-<<if $mpTempleOrder is "neutral">>从这天起，神殿的账目分成两栏并排记。津贴一边按月发给登册的人，一边按人头散给排队的人，两笔钱走两个抽屉，谁也不吞谁的；回廊的钥匙由两派各持一把，开锁要两个人同时到场，旧谱室与忏悔隔栅轮流开放；庇护所分出里外两间，里间给守戒条的人，外间给没有推荐信的人，中间只隔一道布帘；净火的石脂按班次分给暗渠，戒律派守上半夜，慈悲派守下半夜，雾潮被压得不算低，也没有再往上爬。全城的香油折算停在中间，没有往任何一边偏。<</if>>
-<br><br>
-这套办法并不牢靠。两本账并排放着，谁多领了一勺粥，另一边就会有人记在心里；钥匙要两个人同时到场，急事便常常耽误在等人上；夜里守渠的班次交接，偶尔会空出一段没人添油的时候。可它也真的让两边都留了下来：主教的人还在，约旦的人也在，门没有重新关上，旧调也没有被彻底埋掉。你的恩典记在册页最后一行，此刻是 <<print $mpGrace>>；这一笔不归任何一派，只归你自己。塞拉托人送来一小盒校好的钟摆零件，说两个声部若再错开，可以照这个分量重新配一次。
-<br><br>
-神殿深区那块铜牌的终局栏还空着。两派说，等下一个节庆再决定要不要落字；可回廊的灯已经重新排过，名单也并成了一册，连门口卖花的孩子都知道，如今进殿不必先问自己属于哪一边。雾潮还在城墙外，退得不远，也没有逼近；夜里钟声响起时，两个声部偶尔还会错开，但过了一会儿，总能重新合上。你可以回裂缝总枢，看那枚六瓣铜环被两双手同时按下；也可以回神殿深区，从并排的两块木板前重新走一遍。接缝没有消失，只是暂时没人去掰它。
+<<if !$mpTempleSchismEnded>><<set $mpTempleSchismEnded to 1>><<set $mpWorldTempleOutcome to "concord">><<set $money to Math.max(0, ($money or 0) - 200)>><<tiredness 2>><</if>><<mpTempleAlign "concord">><<set $mpGrace to Math.min(100, ($mpGrace or 0) + 10)>>
+两派在双生圣咏的尾音里各退半步，神殿账目分作左右两栏并排记账：回廊钥匙由两派各持一半，同时到场方能开锁；庇护所分出里外两间，兼顾守戒学侣与街坊病家。你的恩典升至 <<print $mpGrace>>，主教与约旦的人都留在了同一座屋檐下。
 <br><br>
 <<getouticon>><<link [[返回裂缝总枢 (0:04)|MP Temple Schism Hub]]>><<pass 4>><<stress -5>><</link>><br>
-<<mpritualicon>><<link [[返回神殿深区 (0:04)|MP Loc Temple Hub]]>><<pass 4>><</link>>
+<<mpritualicon>><<link [[返回神殿深区总枢 (0:04)|MP Loc Temple Hub]]>><<pass 4>><</link>>
+
+:: MP Temple Post Hub [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
+<<set $mpTempleNpcTitleMode to ($mpTempleNpcTitleMode or "")>><<set $mpTempleNpcScheduleMode to ($mpTempleNpcScheduleMode or "")>>
+钟塔下的裂后教务司守着神殿的称谓谱与轮值钟点。铜牌上雾潮水尺停在 <<print ($mpFogTide or 0)>> 格，行会宵禁修正记着 <<print ($mpGuildStanding and $mpGuildStanding.curfewMod) or 0>>，长厅门缝里透出封蜡气味。眼下殿里互称<<mpTempleTitleCn>>，轮值按<<mpTempleScheduleCn>>走。<<if $mpWorldTempleSchismLocked>><br><br><<mpTemplePostResidue>><</if>>
+<br><br>
+<<getouticon>><<link [[返回议事 (0:02)|MP Temple Factions]]>><<pass 2>><</link>><br>
+<<if !$mpWorldTempleSchismLocked>>
+<<templeicon>><<link [[去净火教宪卷 (0:10)|MP Temple Post Orthodox 1]]>><<pass 10>><</link>><br>
+<<socialiseicon>><<link [[去慈悲新制案卷 (0:10)|MP Temple Post Reform 1]]>><<pass 10>><</link>><br>
+<<mpritualicon>><<link [[翻看双座分廊断章 (0:10)|MP Temple Post Schism 1]]>><<pass 10>><</link>>
+<<elseif $mpTempleNpcTitleMode is "orthodox_canon">>
+<<templeicon>><<link [[去净火教宪卷 (0:10)|MP Temple Post Orthodox 1]]>><<pass 10>><</link>>
+<<elseif $mpTempleNpcTitleMode is "reform_relief">>
+<<socialiseicon>><<link [[去慈悲新制案卷 (0:10)|MP Temple Post Reform 1]]>><<pass 10>><</link>>
+<<elseif $mpTempleNpcTitleMode is "schism_dual_chairs">>
+<<mpritualicon>><<link [[翻看双座分廊断章 (0:10)|MP Temple Post Schism 1]]>><<pass 10>><</link>>
+<<else>>
+<<mplettericon>><<link [[翻看裂后余档 (0:06)|MP Temple Schism More Hub B]]>><<pass 6>><</link>>
+<</if>>
+
+:: MP Temple Post Orthodox 1 [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
+戒律长老把黑漆名册搬上主祭坛，提议将神殿神职统一改称为「净火司铎」与「守律学侣」，全殿作息改为破晓晨祷与子夜封炉两班。铜牌上的水尺停在 <<print ($mpFogTide or 0)>> 格，恩典记着 <<print $mpGrace>>。正统派要求先灌石脂封死暗渠，再用严苛戒条弹压侧廊异议，彻底废除夜间散漫的留宿旧例。
+<br><br>
+<<getouticon>><<link [[返回教务 (0:02)|MP Temple Post Hub]]>><<pass 2>><</link>><br>
+<<templeicon>><<link [[颁行净火司铎称谓 (0:14)|MP Temple Post Orthodox 2]]>><<pass 14>><<if $mpGrace gte 5 or $mpTempleOrder is "orthodox">><<set $mpTemplePChoice to "ok">><<else>><<set $mpTemplePChoice to "fail">><</if>><</link>><br>
+<<mpritualicon>><<link [[强排子夜守炉班 (0:14)|MP Temple Post Orthodox 2]]>><<pass 14>><<set $mpTemplePChoice to "force">><</link>>
+
+:: MP Temple Post Orthodox 2 [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
+<<if $mpWorldTempleSchismLocked>>
+教务司的封蜡早已落定，这一卷章程只在首次落印时改过殿内称谓与排班，此后不再改动。
+<<elseif $mpTemplePChoice is "fail">>
+<<set $mpGrace to Math.max(-100, ($mpGrace or 0) - 4)>><<set $mpTempleRites to Math.max(0, ($mpTempleRites or 0) - 1)>><<set $mpTempleNextStageDay to Time.days + 2>>你的恩典尚不足以服众，执事们拒绝附署并扣减了一格仪轨石子，长老合上黑漆名册让你隔日再议。
+<<else>>
+<<set $mpWorldTempleSchismLocked to 1>><<set $mpTempleNpcTitleMode to "orthodox_canon">><<set $mpTempleNpcScheduleMode to "dawn_midnight_watch">><<mpTempleAlign "orthodox">><<set $mpFogTide to Math.max(0, ($mpFogTide or 0) - 2)>>
+红蜡落定，全殿神职正式改称「净火司铎」与「守律学侣」，轮值锁死为破晓晨祷与子夜封炉两班，另两条改制路线就此封存。<<if window.dolmp && window.dolmp.claimUniqueReward && window.dolmp.claimUniqueReward("temple_post_v47")>><<money 1000>><</if>><<stress -4>>
+<</if>>
+回廊高处的彩窗透下微凉天光，铜环上的石子在烛影里泛着温润光泽。<br><br>
+<<getouticon>><<link [[返回教务 (0:02)|MP Temple Post Hub]]>><<pass 2>><</link>><br>
+<<walkicon>><<link [[转入软结局静修 (0:06)|MP Temple Post Soft End]]>><<pass 6>><<if $mpTemplePChoice is "fail">><<stress 3>><<tiredness 2>><</if>><</link>><br>
+<<templeicon>><<link [[回看神殿裂缝总枢 (0:04)|MP Temple Schism Hub]]>><<pass 4>><</link>>
+
+:: MP Temple Post Soft End [nobr]
+<<set $outside to 0>><<set $location to "temple">><<effects>><<mpAmbient>><<mpTempleSchismInit>>
+你退到侧廊安静的长椅上饮下一杯温水，听着钟塔上传来的风声。本轮裂后改制暂未合拢，也未发放任何香油津贴，但你已摸清正统、改革与裂宗三套称谓及作息班表的症结所在。手里的铜牌上仪轨记着 <<print $mpTempleRites>> 格，恩典记着 <<print $mpGrace>>，稍事休整后即可重返教务司再度议定。
+<br><br>
+<<getouticon>><<link [[返回总枢 (0:02)|MP Temple Schism Hub]]>><<pass 2>><</link>><br>
+<<templeicon>><<link [[重返裂后教务司 (0:04)|MP Temple Post Hub]]>><<pass 4>><</link>><br>
+<<mplettericon>><<link [[翻阅神殿裂缝副页 (0:04)|MP Temple Schism More Hub]]>><<pass 4>><</link>>

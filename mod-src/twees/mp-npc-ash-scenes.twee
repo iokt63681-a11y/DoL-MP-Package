@@ -1,0 +1,268 @@
+:: MP NPC Ash Scene Frost [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+北岭兽径的木牌结着一层白霜。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>蹲在坡侧，骨刀刮过盐渍，猎犬在脚边打着哈欠。山风把松针吹进领口，他抬手示意你别踩松动的石棱。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScFrostFail>>
+今日刮霜失手，他让你先歇着，别再碰这截路标。
+<br>
+<<walkicon>><<link [[先回火塘 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<elseif $daily.mpAshScFrost>>
+这段兽径今天已经刮过，木牌边只剩干盐末。
+<br>
+<<walkicon>><<link [[先回火塘 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<investigateicon>><<link [[刮净盐霜 (0:15)|MP NPC Ash Schedule]]>><<pass 15>><<if ($tending or 0) gte 200 or (_npc.axis or 0) gte 10 or (_npc.trust or 0) gte 8>><<set $daily.mpAshScFrost to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -2>><<else>><<set $daily.mpAshScFrostFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 3)>><<set _npc.firewood to Math.max(0, (_npc.firewood or 0) - 1)>><<stress 2>><</if>><</link>><br>
+<<walkicon>><<link [[拨开腐叶细查 (0:12)|MP NPC Ash Schedule]]>><<pass 12>><<if ($athletics or 0) gte 200 or (_npc.trust or 0) gte 10>><<set $daily.mpAshScFrost to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<tiredness 2>><<else>><<set $daily.mpAshScFrostFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 3)>><<stress 2>><<tiredness 1>><</if>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Shed [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+溪谷木棚里松脂味很重。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>把斧头搁在木墩上，油布棚下堆着半干的松明。他用袖口擦了擦额角的汗，指了指需要捆扎的那一摞。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScShedFail>>
+今日劈柴失手，他收起斧头，示意你先别碰刀刃。
+<br>
+<<walkicon>><<link [[先回火塘 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<elseif $daily.mpAshScShed>>
+这批松明已经捆好，棚里只剩锯末味。
+<br>
+<<walkicon>><<link [[先回火塘 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<mpcarryicon>><<link [[捆好松明 (0:15)|MP NPC Ash Schedule]]>><<pass 15>><<if ($athletics or 0) gte 210 or (_npc.axis or 0) gte 12>><<set $daily.mpAshScShed to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.firewood to (_npc.firewood or 0) + 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 2)>><<tiredness 2>><<stress -2>><<else>><<set $daily.mpAshScShedFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 3)>><<pain 1>><<stress 2>><</if>><</link>><br>
+<<mprepairicon>><<link [[补钉油布棚 (0:12)|MP NPC Ash Schedule]]>><<pass 12>><<if ($housekeeping or 0) gte 200 or (_npc.trust or 0) gte 12>><<set $daily.mpAshScShed to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -3>><<else>><<set $daily.mpAshScShedFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 3)>><<stress 2>><</if>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Night [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+界石旁的夜风发凉。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>提着防风灯沿石棱走，灯罩里的火苗被风扯歪。远处有树枝断裂的声响，猎犬竖起耳朵，他抬手让你停步。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScNightFail>>
+今晚巡路惊动了林鸟，他扣上灯罩，让你先回棚下。
+<br>
+<<walkicon>><<link [[先回火塘 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<elseif $daily.mpAshScNight>>
+这段夜路已经巡过，界石上只剩冷露。
+<br>
+<<walkicon>><<link [[先回火塘 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<mplampicon>><<link [[稳住风灯 (0:15)|MP NPC Ash Schedule]]>><<pass 15>><<if ($willpower or 0) gte 320 or (_npc.axis or 0) gte 15>><<set $daily.mpAshScNight to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 3)>><<stress -2>><<else>><<set $daily.mpAshScNightFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 4)>><<stress 3>><</if>><</link>><br>
+<<investigateicon>><<link [[记下夜路脚印 (0:12)|MP NPC Ash Schedule]]>><<pass 12>><<if ($tending or 0) gte 210 or (_npc.trust or 0) gte 14>><<set $daily.mpAshScNight to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<tiredness 2>><<else>><<set $daily.mpAshScNightFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 3)>><<set _npc.setback to Time.days + 1>><<stress 3>><</if>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Camp [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+火塘石圈里还剩半截松柴。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>把铁壶架上，热水冒着细白汽。他给你腾出一块干青石，猎犬把鼻子搁到你靴边。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScCamp>>
+今日火塘边的闲话已经说完，壶水仍温。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<socialiseicon>><<link [[添柴续火 (0:10)|MP NPC Ash Schedule]]>><<pass 10>><<set $daily.mpAshScCamp to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 1)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 1)>><<stress -3>><</link>><br>
+<<mpcookicon>><<link [[分一碗姜汤 (0:12)|MP NPC Ash Schedule]]>><<pass 12>><<set $daily.mpAshScCamp to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<stress -4>><<tiredness -1>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Soft [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+火光把<<if _npc.hasMet>>阿什<<else>>守林人<</if>>的侧脸照得很暖。他话仍不多，却把备用手套推到你手边，说北坡风硬，指节裂了不好握刀。猎犬打了个呵欠，把下巴搁上他的靴面。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScSoft>>
+今晚的低声话已经说过，火塘只剩余烬。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<socialiseicon>><<link [[接过手套 (0:10)|MP NPC Ash Schedule]]>><<pass 10>><<set $daily.mpAshScSoft to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<stress -3>><</link>><br>
+<<investigateicon>><<link [[问起旧灯名 (0:14)|MP NPC Ash Schedule]]>><<pass 14>><<if (_npc.trust or 0) gte 10 or (_npc.love or 0) gte 10>><<set $daily.mpAshScSoft to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>><<stress -2>><<else>><<set $daily.mpAshScSoftFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 2)>><<stress 2>><</if>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Oil [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+<<if _npc.hasMet>>阿什<<else>>守林人<</if>>把温热的松脂油倒进两只小铜壶，壶壁烫手。他教你用拇指压住壶嘴防溢，指节偶尔擦过你的指腹，又很快收回，像怕惊动火塘边的猎犬。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScOil>>
+今日油壶已经分装停当，铜盖扣得严实。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<mplampicon>><<link [[压稳壶嘴 (0:12)|MP NPC Ash Schedule]]>><<pass 12>><<set $daily.mpAshScOil to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 2)>><<stress -3>><</link>><br>
+<<socialiseicon>><<link [[靠肩听松涛 (0:15)|MP NPC Ash Schedule]]>><<pass 15>><<set $daily.mpAshScOil to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 3)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 3)>><<stress -4>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Close [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+夜火把木棚内侧照得很暗。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>解开斗篷边扣，把你拉进防风的阴影里。他的呼吸带着松脂与烟火味，手掌贴在你后腰，问你要不要再靠近些——猎犬被他低声哄到棚外守夜。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScClose>>
+今夜的体温已经交换过，他只把斗篷重新裹紧你肩头。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<socialiseicon>><<link [[吻他喉结 (0:15)|MP NPC Ash Schedule]]>><<pass 15>><<set $daily.mpAshScClose to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 4)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 8)>><<arousal 400>><<stress -6>><</link>><br>
+<<mpveilicon>><<link [[解开他腰带 (0:18)|MP NPC Ash Scene Close Bed]]>><<pass 18>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Close Bed [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+草垫上还留着白日晒过的暖意。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>把你压进他的斗篷里，唇瓣先触到你的锁骨，再往下。他的掌心粗糙却很稳，每一下都先问你的眼神；你点头时，他才把膝盖顶进你的腿间，用体重与体温把寒气彻底隔开。交合时棚外只剩风声，他咬着你耳廓低喘，射精前仍抽身问你要不要他留在里面——你收紧腿，他才深深埋进来，松脂味的喘息打在你颈侧。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:03)|MP NPC Ash Schedule]]>><<pass 3>><<set $daily.mpAshScClose to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 5)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 10)>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>><<arousal 800>><<orgasm 1>><<stress -8>><<tiredness 2>><</link>><br>
+<<socialiseicon>><<link [[靠着他睡会儿 (0:20)|MP NPC Ash Deep Hub]]>><<pass 20>><<set $daily.mpAshScClose to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 4)>><<set _npc.lust to Math.min(100, (_npc.lust or 0) + 6)>><<arousal 200>><<stress -10>><<tiredness -2>><</link>>
+
+:: MP NPC Ash Scene Ember2 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+油布册摊开两页焦边残纸。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>用炭笔标出北坡废灯座的方位，说这两页只能证明旧油路还在，不能证明谁毁了第七盏。火塘烟往上飘，纸角微微卷起。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScEmber2Fail>>
+今日对页出错，他把册子合上，不让你再摸。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<elseif $daily.mpAshScEmber2>>
+这两页残迹今天已经核对过。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<investigateicon>><<link [[对照北坡方位 (0:14)|MP NPC Ash Schedule]]>><<pass 14>><<if (_npc.emberPages or 0) gte 2>><<set $daily.mpAshScEmber2 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 3)>><<stress -2>><<else>><<set $daily.mpAshScEmber2Fail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 3)>><<stress 2>><</if>><</link>><br>
+<<mplettericon>><<link [[抄下焦边字迹 (0:12)|MP NPC Ash Schedule]]>><<pass 12>><<if ($english or 0) gte 200 or (_npc.trust or 0) gte 16>><<set $daily.mpAshScEmber2 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 2)>><<else>><<set $daily.mpAshScEmber2Fail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 3)>><<stress 2>><</if>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Ember4 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+四页残油账并在一起时，哨棚旧编号露了出来。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>沉默片刻，说有人把松脂油挪去了低谷暗哨，高塔才熄了这么多年。他问你要不要把这件事说给林场听。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScEmber4Fail>>
+今日账页对错了位，他收起炭笔不让你再翻。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<elseif $daily.mpAshScEmber4>>
+四页残油今天已经核对完毕。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<mplettericon>><<link [[记下暗哨编号 (0:14)|MP NPC Ash Schedule]]>><<pass 14>><<set $mpAshBetrayal to "cover">><<set $daily.mpAshScEmber4 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 3)>><<stress -2>><</link>><br>
+<<investigateicon>><<link [[准备日后揭开 (0:15)|MP NPC Ash Schedule]]>><<pass 15>><<set $mpAshBetrayal to "expose">><<set $daily.mpAshScEmber4 to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 4)>><<stress 1>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Ember6 [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+六页余烬终于凑齐。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>把石洞油窖的方位画在最后一页空白处，说油量只够走一条路：要么灌满北岭石塔，要么拆进地下暗哨。他看你很久，才把铜漏斗放上石台。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScEmber6>>
+全份残页今天已经对齐，铜漏斗还搁在石台上。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<mplampicon>><<link [[清点油窖存量 (0:15)|MP NPC Ash Schedule]]>><<pass 15>><<if (_npc.emberPages or 0) gte 6 and ((_npc.axis or 0) gte 25 or (_npc.trust or 0) gte 25)>><<set $daily.mpAshScEmber6 to 1>><<set $mpAshReady to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<stress -3>><<else>><<set $daily.mpAshScEmber6Fail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 4)>><<set _npc.firewood to Math.max(0, (_npc.firewood or 0) - 1)>><<stress 3>><</if>><</link>><br>
+<<mpcarryicon>><<link [[分装进皮囊 (0:14)|MP NPC Ash Schedule]]>><<pass 14>><<if (_npc.emberPages or 0) gte 6>><<set $daily.mpAshScEmber6 to 1>><<set $mpAshReady to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<tiredness 2>><<else>><<set $daily.mpAshScEmber6Fail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 4)>><<stress 2>><</if>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene RepLow [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+林场巡哨的闲话传到火塘边：有人说你们惊动了走私脚夫，声望掉了一截。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>把骨刀插回鞘里，问你要不要当面去把话说清，还是先避几天风头。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScRepLowFail>>
+今日解释失败，他不愿再提巡哨的事。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<elseif $daily.mpAshScRepLow>>
+这桩口舌今天已经压下去。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<socialiseicon>><<link [[上门把话说清 (0:15)|MP NPC Ash Schedule]]>><<pass 15>><<if ($willpower or 0) gte 340 or (_npc.trust or 0) gte 20>><<set $daily.mpAshScRepLow to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.rep to Math.min(100, (_npc.rep or 50) + 8)>><<stress -2>><<else>><<set $daily.mpAshScRepLowFail to 1>><<set _npc.rep to Math.max(0, (_npc.rep or 50) - 5)>><<set _npc.setback to Time.days + 1>><<stress 4>><</if>><</link>><br>
+<<walkicon>><<link [[先避几天风头 (0:10)|MP NPC Ash Schedule]]>><<pass 10>><<set $daily.mpAshScRepLow to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.rep to Math.min(100, (_npc.rep or 50) + 3)>><<stress 1>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene RepHigh [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+采樵人路过界石时朝你们点头，说北岭路标比往年清楚。<<if _npc.hasMet>>阿什<<else>>守林人<</if>>把干粮袋往你怀里塞了半份，声望高了，巡哨也不再拦路。他问你要不要把这份人情记进灯簿。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScRepHigh>>
+今日口碑已经听过，干粮袋还搁在石台上。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<mplettericon>><<link [[记入灯簿 (0:10)|MP NPC Ash Schedule]]>><<pass 10>><<set $daily.mpAshScRepHigh to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 3)>><<set _npc.rep to Math.min(100, (_npc.rep or 50) + 2)>><<stress -2>><</link>><br>
+<<socialiseicon>><<link [[把干粮分人 (0:12)|MP NPC Ash Schedule]]>><<pass 12>><<set $daily.mpAshScRepHigh to 1>><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.nextStepDay to Time.days + 1>><<set _npc.love to Math.min(100, (_npc.love or 0) + 2)>><<set _npc.rep to Math.min(100, (_npc.rep or 50) + 3)>><<stress -3>><</link>>
+<</if>>
+
+:: MP NPC Ash Scene Finale [nobr]
+<<set $outside to 1>><<set $location to "forest">><<effects>><<mpAmbient>><<mpInitNpcAsh>>
+<<set _npc to $mpNpcs.ash>>
+<<if !$daily>><<set $daily to {}>><</if>>
+<<if $mpAshEnded>><<if $mpWorldAshEnding is "hidden">><<goto "MP NPC Ash Ending B">><<else>><<goto "MP NPC Ash Ending A">><</if>><</if>>
+<<if Time.days lt (_npc.setback or 0)>><<goto "MP NPC Ash Quest Closed">><</if>>
+<<if Time.days lt (_npc.nextStepDay or 0)>><<goto "MP NPC Ash Quest Waiting">><</if>>
+<<if (_npc.deepStage or 0) lt 5 or (_npc.emberPages or 0) lt 6>><<goto "MP NPC Ash Quest Waiting">><</if>>
+石洞口的分岔石阶被苔藓染绿。<<if $mpAshBetrayal is "expose">>账页摊开后，每一步都像踩在别人的眼皮底下。<<elseif $mpAshBetrayal is "cover">>鞍袋里那页账还烫着掌心。<<else>>北岭的风把旧事吹得很淡。<</if>><<if _npc.hasMet>>阿什<<else>>守林人<</if>>把整瓮老松油搁在你脚边：灌满石塔，火光能穿十里雾，低谷暗哨会断油；拆进地下，石塔便要亲手砸封。
+<br><br>
+<<getouticon>><<link [[返回作息 (0:02)|MP NPC Ash Schedule]]>><<pass 2>><</link>><br>
+<<if $daily.mpAshScFinale>>
+这个抉择今天已经想过，他让你回去再睡一晚。
+<br>
+<<walkicon>><<link [[先回深枢 (0:05)|MP NPC Ash Deep Hub]]>><<pass 5>><</link>>
+<<else>>
+<<mplampicon>><<link [[灌满北岭石塔 (0:20)|MP NPC Ash Ending A]]>><<pass 20>><<set $daily.mpAshScFinale to 1>><<set $mpAshIrreversibleChoice to "beacon">><<set $mpAshEnded to 1>><<set $mpWorldAshEnding to "beacon">><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.axis to Math.min(100, (_npc.axis or 0) + 10)>><</link>><br>
+<<mpcellaricon>><<link [[砸槽转地下哨 (0:20)|MP NPC Ash Ending B]]>><<pass 20>><<set $daily.mpAshScFinale to 1>><<set $mpAshIrreversibleChoice to "hidden">><<set $mpAshEnded to 1>><<set $mpWorldAshEnding to "hidden">><<set _npc.deepStage to (_npc.deepStage or 0) + 1>><<set _npc.trust to Math.min(100, (_npc.trust or 0) + 8)>><<stress 2>><</link>>
+<</if>>
